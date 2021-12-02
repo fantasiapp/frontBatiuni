@@ -1,3 +1,4 @@
+@import 'mixins.scss';
 @import 'responsive.scss';
 
 * {
@@ -7,8 +8,9 @@
 }
 
 body {
-  font-family: "Roboto", non-serif;
+  font-family: "Nunito", sans-serif;
   font-size: 16px;
+  margin: 0 20px;
 
   @include breakpoint(tablet) {
     font-size: 18px;
@@ -17,4 +19,15 @@ body {
   @include breakpoint(desktop) {
     font-size: 20px;
   }
+}
+
+button {
+  font-size: inherit;
+  display: inline-block;
+  outline: none;
+  border: none;
+  background-color: #0F557D;
+  color: white;
+  padding: 8px;
+  border-radius: 5px;
 }

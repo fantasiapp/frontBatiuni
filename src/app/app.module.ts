@@ -5,18 +5,23 @@ import { NgxsModule } from '@ngxs/store';
 import { NgxsRouterPluginModule } from '@ngxs/router-plugin';
 import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
 import { AppRoutingModule } from './app-routing.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppComponent } from './app.component';
 import { AuthState } from 'src/auth/auth.state';
 import { HttpClientModule } from '@angular/common/http';
+import { AppState } from './app.state';
+import { CommonModule } from '@angular/common';
+import { LandingPageComponent } from 'src/components/landing-page.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    LandingPageComponent
   ],
   imports: [
     //Ngxs imports
     NgxsModule.forRoot([
-      AuthState  
+      AppState, AuthState
     ], {
       developmentMode: !environment.production
     }),
@@ -25,9 +30,11 @@ import { HttpClientModule } from '@angular/common/http';
     }),
     NgxsRouterPluginModule.forRoot(),
     //Angular normal imports
+    CommonModule,
     HttpClientModule,
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    BrowserAnimationsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
