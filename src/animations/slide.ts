@@ -1,8 +1,10 @@
 import { trigger, transition, animate, style, state, } from '@angular/animations'
 
-export default function slide({direction, time = 1000}: {
+//refactor into keyframes
+
+export default function slide({direction, time = '1s'}: {
   direction: 'left' | 'right' | 'top' | 'bottom';
-  time?: number;
+  time?: string;
 }) {
   let transform = '';
   switch ( direction ) {
@@ -23,7 +25,7 @@ export default function slide({direction, time = 1000}: {
   return trigger('slide-' + direction, [
     state('void', style({transform})),
     transition(':enter, :leave', [
-      animate(1000)
+      animate(time)
     ])
   ]);
 };

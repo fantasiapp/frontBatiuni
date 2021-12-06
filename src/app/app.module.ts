@@ -11,12 +11,11 @@ import { AuthState } from 'src/auth/auth.state';
 import { HttpClientModule } from '@angular/common/http';
 import { AppState } from './app.state';
 import { CommonModule } from '@angular/common';
-import { LandingPageComponent } from 'src/components/landing-page.component';
+
 
 @NgModule({
   declarations: [
     AppComponent,
-    LandingPageComponent
   ],
   imports: [
     //Ngxs imports

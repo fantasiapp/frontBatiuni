@@ -1,0 +1,6 @@
+{
+	"appId": "com.batiuni.app",
+	"appName": "batiuni",
+	"webDir": "dist",
+	"bundledWebRuntime": false
+}
