@@ -1,0 +1,18 @@
+<main>
+  <div class="background-image" [style.background-image]="'url(assets/accueil-entreprise.png)'"></div>
+  <div class="center-text overlay">
+    Trouver le meilleur
+    <br/><span class="name">sous-traitant</span><br/>
+    pour mon chantier
+  </div>
+
+  <a class="arrow_right" [routerLink]="['', 'landing', 'sous-traitant']">
+    <img src="assets/Fleche.svg"/>
+  </a>
+
+  <div class="links">
+    <button class="gradient button discover">Découvrir le service PME</button><br/>
+    <a class="link" [routerLink]="['', 'login']">J'ai déjà un compte !</a>
+  </div>
+</main>
+

@@ -11,11 +11,17 @@ import { AuthState } from 'src/auth/auth.state';
 import { HttpClientModule } from '@angular/common/http';
 import { AppState } from './app.state';
 import { CommonModule } from '@angular/common';
+import { LandingPageComponent } from 'src/components/landing_page/landing-page.component';
+import { Entreprise as EntrepriseLandingPage } from 'src/components/landing_page/entreprise/entreprise.component';
+import { SousTraitant as LandingPageSousTraitant } from 'src/components/landing_page/sous-traitant/sous-traitant';
 
 
 @NgModule({
   declarations: [
     AppComponent,
+    LandingPageComponent,
+    EntrepriseLandingPage,
+    LandingPageSousTraitant
   ],
   imports: [
     //Ngxs imports

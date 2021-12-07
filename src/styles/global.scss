@@ -10,15 +10,16 @@
 
 body {
   font-family: "Nunito", sans-serif;
-  font-size: 16px;
-  margin: 0 20px;
+  font-size: 18px;
+  margin: 0;
+  color: var(--main-app-color);
 
   @include breakpoint(tablet) {
-    font-size: 18px;
+    font-size: 22px;
   }
 
   @include breakpoint(desktop) {
-    font-size: 20px;
+    font-size: 24px;
   }
 }
 
@@ -27,8 +28,26 @@ button {
   display: inline-block;
   outline: none;
   border: none;
-  background-color: #0F557D;
-  color: white;
-  padding: 8px;
-  border-radius: 5px;
+  padding: 12px;
+  border-radius: 8px;
+  font-family: inherit;
+
+  &.button {
+    background: linear-gradient(#134C6C, #0C5E8D);
+    color: white;
+  }
+}
+
+a {
+  font-family: inherit;
+  text-decoration: none;
+  color: inherit;
+}
+
+.background-image {
+  @include cover-background;
+}
+
+.center-text {
+  text-align: center;
 }

@@ -1,3 +1,12 @@
+@mixin cover-background {
+  position: absolute;
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+};
+
 @mixin circle($radius: 0) {
   border-radius: 50%;
   @if $radius != 0 {
@@ -5,3 +14,28 @@
     height: $radius;
   }
 };
+
+@mixin triangle($direction, $size, $color) {
+  content: ""; // ensures the arrows are visible
+
+  // ensures the size of the arrows is correct:
+  width: 0;
+  height: 0;
+
+  // Lists for positions/directions
+  $directions: ('down', 'left', 'up', 'right');
+  $positions: ('top', 'right', 'bottom', 'left');
+
+  // Loop through each position
+  @each $position in $positions {
+    // Calculate the index of the position in the list
+    $index: index($positions, $position);
+
+    // If the position matches the direction, render a colored border
+    @if nth($directions, $index) == $direction {
+      border-#{$position}: $size solid $color;
+    } @else {
+      border-#{$position}: $size solid transparent;
+    }
+  }
+}

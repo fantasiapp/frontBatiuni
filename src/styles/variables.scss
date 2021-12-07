@@ -1,13 +1,12 @@
-// l'ensemble des coleurs utilisés dans l'application
 
-$mainColor : #000000;
-$landingColor : #FFFFFF;
-$buttonColor : #0C5E8D;
-$buttonGradient : #134C6C;
+$mainColor: #000000;
+$landingColor: #ffffff;
+$buttonColor: #0C5E8D;
+$buttonGradient: #134C6C;
 
-:root{
-  --main-landing-color : $mainColor; 
-  --main-app-color : $landingColor;
-  --main-button-color : $buttonColor;
-  --main-button-gradient : $buttonGradient;
+:root {
+  --main-landing-color: $mainColor; 
+  --main-app-color: #{$landingColor};
+  --main-button-color: $buttonColor;
+  --main-button-gradient: $buttonGradient;
 }
