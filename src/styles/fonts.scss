@@ -1,0 +1,19 @@
+$ttf: format('truetype');
+
+@font-face {
+  font-family: 'Roboto';
+  src: url("assets/fonts/Roboto/Roboto-Regular.ttf") $ttf;
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: 'Roboto';
+  src: url("assets/fonts/Roboto/Roboto-Light.ttf") $ttf;
+  font-weight: 300;
+}
+
+@font-face {
+  font-family: 'Roboto';
+  src: url("assets/fonts/Roboto/Roboto-Bold.ttf") $ttf;
+  font-weight: bold;
+}

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, ElementRef } from "@angular/core";
+import { ChangeDetectionStrategy, Component } from "@angular/core";
 
 @Component({
   selector: 'landing-page',
