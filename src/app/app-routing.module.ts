@@ -1,10 +1,20 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LandingPageComponent } from 'src/components/landing-page.component';
-import { AppComponent } from './app.component';
 
-const routes: Routes = [
-  {path: '**', component: LandingPageComponent}
+const routes: Routes = [{
+  path: 'landing', component: LandingPageComponent,
+  children: [{
+    path: 'sous-traitant',
+    component: LandingPageComponent
+  }, {
+    path: 'entreprise',
+    component: LandingPageComponent
+  }]
+  }, {
+    path: '**',
+    redirectTo: 'landing'
+  }
 ];
 
 @NgModule({

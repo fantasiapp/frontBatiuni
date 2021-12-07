@@ -1,12 +1,18 @@
 import { Injectable } from "@angular/core";
-import { Selector, State } from "@ngxs/store";
+import { Device, DeviceInfo } from "@capacitor/device";
+import { Action, Selector, State, StateContext } from "@ngxs/store";
+import { from } from "rxjs";
+import { tap } from "rxjs/operators";
 import { AuthModel } from "src/auth/auth.model";
 import { AuthState } from "src/auth/auth.state";
+import { Load } from "./app.actions";
 import { AppModel } from "./app.model";
 
 @State<AppModel>({
   name: 'app',
-  defaults: {},
+  defaults: {
+    device: null
+  },
   children: [AuthState]
 })
 @Injectable()
@@ -14,5 +20,19 @@ export class AppState {
   @Selector([AuthState])
   static auth(state: AuthModel) {
     return state;
+  }
+
+  @Selector([AppState])
+  static device(state: AppModel) {
+    return state.device;
+  }
+
+  @Action(Load)
+  onLoad(ctx: StateContext<AppModel>, action: Load) {
+    return from(Device.getInfo()).pipe(
+      tap((device: DeviceInfo) => {
+        ctx.patchState({device})
+      })
+    );
   }
 };
