@@ -21,5 +21,5 @@ export class RegisterComponent {
     job: new FormControl([])
   });
 
-  
+
 };

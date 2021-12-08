@@ -7,6 +7,20 @@
   background-position: center;
 };
 
+@mixin absolute-center($direction: 'xy') {
+  position: absolute;
+  @if $direction == 'x' {
+    left: 50%;
+    transform: translateX(-50%);
+  } @else if $direction == 'y' {
+    top: 50%;
+    transform: translateY(-50%);
+  } @else {
+    left: 50%; top: 50%;
+    transform: translate(-50%, -50%);
+  }
+};
+
 @mixin circle($radius: 0) {
   border-radius: 50%;
   @if $radius != 0 {

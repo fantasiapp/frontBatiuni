@@ -1,4 +1,23 @@
 <main>
+  <!-- Background image-->
+  <div class="background-image" [style.background-image]="'url(assets/accueil-sous-traitant.png)'">
+  </div>
+  <!-- Landing text-->
+  <div class="center-text overlay">
+      Trouver le meilleur
+     <br/> <span class="name">chantier</span><br/>
+      & la meilleure
+      <br/><span class="name">entreprise</span><br/>
+      principale
+  </div>
+
+  <div class="links">
+    <button class="gradient button discover">Découvrir le service sous-traitance</button><br/>
+    <a class="link" [routerLink]="['', 'connexion']" >J’ai déjà un compte !</a>
+  </div>
+</main>
+
+<ng-template>
   <div class="formulaire">
     <!-- paging-->
     <div class="paging">
@@ -50,5 +69,5 @@
       </div>
 
     </form>
-  </div>
-</main>
+  </div>  
+</ng-template>

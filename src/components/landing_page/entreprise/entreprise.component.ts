@@ -1,11 +1,11 @@
-import { Component } from "@angular/core";
+import { Component, EventEmitter, HostListener, Output } from "@angular/core";
 
 @Component({
   templateUrl: 'entreprise.component.html',
   styleUrls: [
-    
+    '../landing-page.component.scss'
   ]
 })
-export class Entreprise {
-  
+export class LandingPageEntreprise {
+  constructor() {}
 };

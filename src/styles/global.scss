@@ -2,6 +2,7 @@
 @import 'responsive.scss';
 @import 'variables.scss';
 @import 'fonts.scss';
+@import 'animations.scss';
 
 * {
   margin: 0;
@@ -10,7 +11,7 @@
 }
 
 body {
-  font-family: "Nunito", sans-serif;
+  font-family: "Roboto", sans-serif;
   font-size: 18px;
   margin: 0;
   //color: var(--main-app-color);
@@ -34,8 +35,12 @@ button {
   font-family: inherit;
 
   &.button {
-    background: linear-gradient(#134C6C, #0C5E8D);
     color: white;
+
+    &.gradient {
+      background: linear-gradient(#134C6C, #0C5E8D);
+
+    }
   }
 }
 
