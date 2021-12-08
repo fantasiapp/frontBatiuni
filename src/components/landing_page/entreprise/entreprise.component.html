@@ -1,18 +1,43 @@
 <main>
-  <div class="background-image" [style.background-image]="'url(assets/accueil-entreprise.png)'"></div>
-  <div class="center-text overlay">
-    Trouver le meilleur
-    <br/><span class="name">sous-traitant</span><br/>
-    pour mon chantier
-  </div>
-
-  <a class="arrow_right" [routerLink]="['', 'landing', 'sous-traitant']">
-    <img src="assets/Fleche.svg"/>
-  </a>
-
-  <div class="links">
-    <button class="gradient button discover">Découvrir le service PME</button><br/>
-    <a class="link" [routerLink]="['', 'login']">J'ai déjà un compte !</a>
+  <div class="formulaire">
+    <!-- paging-->
+    <div class="paging">
+      <div class="suivante">
+        <a>
+          <img class="arrow_left" src="assets/Fleche.svg" />
+          <p>Page d'acceuil</p>
+        </a>
+      </div>
+      <div class="precedente">
+        <a>
+          <p>Étape suivante</p>
+          <img class="arrow_right" src="assets/Fleche.svg" />
+        </a>
+      </div>
+    </div>
+    <!-- Form -->
+    <form class="form-control">
+    <!-- Main title ex: Je me connecte, Créer un compte  -->
+      <h3 class="form-title">Je me connecte</h3>
+      <div class="form-input">
+          <label >Adresse e-mail contact</label>
+          <input class="form-element" />
+      </div>
+      <div class="form-input">
+          <label >Mot de passe</label>
+          <input type="password" class="form-element" />
+      </div>
+      <a class="externel-links form-links">
+        Mot de passe oublié !
+      </a><br/>
+      <br/>
+      <br/>
+      <div class="form-action">
+        <button class="button discover gradient">Se connecter</button>
+        <a class="externel-links form-links">
+          Je créer un compte !
+        </a>
+      </div>
+    </form>
   </div>
 </main>
-
