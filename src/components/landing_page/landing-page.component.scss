@@ -1,0 +1,53 @@
+@import '../../styles/mixins.scss';
+
+:host {
+  display: block;
+  width: 100%;
+}
+
+main {
+  position: relative;
+  color: inherit;
+  height: 100vh;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.background-image {
+  z-index: -1;
+}
+
+.overlay {
+  font-size: 28px;
+  padding-bottom: 20px;
+  span.name {
+    font-size: 36px;
+    font-weight: bold;
+  }
+}
+
+.arrow_right, .arrow_left {
+  transform-origin: center center;
+  @include absolute-center('y');
+}
+
+.arrow_right {
+  right: 20px;
+}
+
+.arrow_left {
+  left: 20px;
+  transform: rotate(180deg);
+}
+
+.links {
+  text-align: center;
+  position: absolute;
+  bottom: 60px;
+
+  .discover {
+    margin-bottom: 15px;
+  }
+}

@@ -1,0 +1,13 @@
+@import '../../styles/mixins.scss'; 
+
+.arrow_right {
+  transform: scale(0.6);
+};
+
+.arrow_left {
+  transform: scale(0.6) rotate(180deg);
+};
+
+.arrow_right, .arrow_left {
+  margin: 0 8px;
+}

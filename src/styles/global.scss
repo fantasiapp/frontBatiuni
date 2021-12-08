@@ -1,6 +1,7 @@
 @import 'mixins.scss';
 @import 'responsive.scss';
 @import 'variables.scss';
+@import 'fonts.scss';
 
 * {
   margin: 0;
@@ -51,3 +52,117 @@ a {
 .center-text {
   text-align: center;
 }
+
+.text-right {
+  text-align: right;
+}
+
+.block {
+  display: block;
+}
+
+
+//------------------------------------------------
+// FORMULAIRES
+.half-rotation {
+  transform: rotate(180deg);
+}
+
+.links {
+  text-align: center;
+  position: absolute;
+  bottom: 60px;
+
+  .discover {
+    margin-bottom: 15px;
+  }
+}
+
+.formulaire {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient($buttonGradient, $buttonColor);
+}
+
+.paging {
+  list-style-type: none;
+  color: $landingColor;
+  font-size: 0.9rem;
+  padding: 25px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  & li a > * {
+    display: inline-block;
+    vertical-align: middle;
+  }
+}
+
+.form-control {
+  background-color: $landingColor;
+  color: $formulaireMainColor;
+  border-radius: 15px 15px 0 0;
+  padding: 30px 30px;
+  .form-title {
+    font-size: 1.1rem;
+    margin-bottom: 30px;
+  }
+}
+
+.form-input {
+  font-family: "Poppins";
+  & > * {
+    display: block;
+  }
+
+  label {
+    font-size: 0.8rem;
+    margin-bottom: 5px;
+  }
+
+  .form-element {
+    width: 100%;
+    height: 30px;
+    outline: none;
+    border: none;
+    border-bottom: 2px solid #cdcfd0;
+    margin-bottom: 20px;
+    font-family: "Poppins";
+  }
+}
+
+.externel-links {
+  color: $externelLinks;
+  font-family: "Poppins Light";
+  font-size: 15px;
+  margin: 25px 0 25px 0;
+}
+
+.form-action {
+  margin: 25px 0;
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+}
+
+.form-step {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  div {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin: 3px;
+  }
+}
+.start {
+  background: linear-gradient($buttonGradient, $buttonColor);
+}
+.end {
+  background-color: #f2f2f2;
+}
+
+//------------------------------------------------

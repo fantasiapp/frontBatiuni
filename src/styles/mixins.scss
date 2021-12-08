@@ -15,6 +15,14 @@
   }
 };
 
+@mixin zoom($amount: 1) {
+  transform: scale($amount);
+}
+
+@mixin rotate($angle: 0deg) {
+  transform: rotate($angle);
+};
+
 @mixin triangle($direction, $size, $color) {
   content: ""; // ensures the arrows are visible
 

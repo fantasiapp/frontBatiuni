@@ -1,0 +1,24 @@
+<div class="container"
+  [slides]="slides"
+></div>
+
+<a *ngIf="slidesContainer.index == 0" class="arrow_right" (click)="onSwipeLeft()">
+  <img src="assets/Fleche.svg"/>
+</a>
+
+<a *ngIf="slidesContainer.index == 1" class="arrow_left" (click)="onSwipeRight()">
+  <img src="assets/Fleche.svg"/>
+</a>
+
+<ng-template #tp1>
+  <div style="display: block; width: 100%; height: 100%; color: black;">
+    Hello world 1
+  </div>
+  
+</ng-template>
+
+<ng-template #tp2>
+  <div style="display: block; width: 100%; height: 100%; color: black;">
+    Hello world 2
+  </div>
+</ng-template>

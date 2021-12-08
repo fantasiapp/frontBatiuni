@@ -14,14 +14,15 @@ import { CommonModule } from '@angular/common';
 import { LandingPageComponent } from 'src/components/landing_page/landing-page.component';
 import { Entreprise as EntrepriseLandingPage } from 'src/components/landing_page/entreprise/entreprise.component';
 import { SousTraitant as LandingPageSousTraitant } from 'src/components/landing_page/sous-traitant/sous-traitant';
-
+import { ConnexionComponent } from 'src/components/connexion/connexion.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LandingPageComponent,
     EntrepriseLandingPage,
-    LandingPageSousTraitant
+    LandingPageSousTraitant,
+    ConnexionComponent
   ],
   imports: [
     //Ngxs imports
