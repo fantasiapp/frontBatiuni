@@ -15,9 +15,7 @@ export class LandingPageComponent {
   @ViewChild(SlidesDirective, {static: true})
   slidesContainer!: SlidesDirective;
 
-  constructor() {
-    (window as any).landing = this;
-  }
+  constructor() { }
 
   @HostListener('swiperight')
   onSwipeRight() {
