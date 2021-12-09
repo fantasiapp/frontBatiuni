@@ -20,7 +20,8 @@ import { ConnexionComponent } from 'src/components/connexion/connexion.component
 import { RegisterComponent } from 'src/components/register/register.component';
 import { LandingPageEntreprise } from 'src/components/landing_page/entreprise/entreprise.component';
 import { LandingPageSousTraitant } from 'src/components/landing_page/sous-traitant/sous-traitant';
-
+import { emailConfirmation } from 'src/components/validator/email_confirmation/emailconfirmation';
+import { RegistrationSuccess } from 'src/components/validator/registration_success/registrationsuccess';
 @NgModule({
   declarations: [
     AppComponent,
@@ -29,6 +30,8 @@ import { LandingPageSousTraitant } from 'src/components/landing_page/sous-traita
     RegisterComponent,
     LandingPageEntreprise,
     LandingPageSousTraitant,
+    emailConfirmation,
+    RegistrationSuccess,
     SlidesDirective
   ],
   imports: [

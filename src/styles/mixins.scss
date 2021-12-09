@@ -21,8 +21,9 @@
   }
 };
 
-@mixin circle($radius: 0) {
+@mixin circle($radius: 0, $color: #FFFFFF) {
   border-radius: 50%;
+  background-color: $color;
   @if $radius != 0 {
     width: $radius;
     height: $radius;
