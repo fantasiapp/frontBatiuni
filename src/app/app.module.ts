@@ -15,9 +15,9 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 import { LandingPageComponent } from 'src/components/landing_page/landing-page.component';
 import { SlidesDirective } from 'src/directives/slides.directive';
-import { RegistrationState } from 'src/components/register/register.state';
 import { ConnexionComponent } from 'src/components/connexion/connexion.component';
 import { RegisterComponent } from 'src/components/register/register.component';
+import { SliderComponent } from 'src/components/slider/slider.component';
 
 @NgModule({
   declarations: [
@@ -25,12 +25,13 @@ import { RegisterComponent } from 'src/components/register/register.component';
     LandingPageComponent,
     ConnexionComponent,
     RegisterComponent,
-    SlidesDirective
+    SlidesDirective,
+    SliderComponent,
   ],
   imports: [
     //Ngxs imports
     NgxsModule.forRoot([
-      AppState, AuthState, RegistrationState
+      AppState, AuthState
     ], {
       developmentMode: !environment.production
     }),

@@ -7,6 +7,7 @@ import { ConnexionComponent } from 'src/components/connexion/connexion.component
 const routes: Routes = [{
     path: 'landing',
     component: LandingPageComponent,
+    data: { animation: 'LandingPage' }
   }, {
     path: 'connexion',
     component: ConnexionComponent
@@ -15,8 +16,8 @@ const routes: Routes = [{
     component: RegisterComponent
   }, {
     path: '**',
-    redirectTo: 'landing'
-  }
+    redirectTo: 'landing',
+  },
 ];
 
 @NgModule({
