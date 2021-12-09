@@ -2,7 +2,7 @@
   <ng-template>
     <div class="formulaire">
       <!-- Form -->
-      <form class="form-control" [formGroup]="loginForm" (ngSubmit)="onSubmit($event)">
+      <form class="form-control" [formGroup]="loginForm" (ngSubmit)="onSubmit($event)" (change)="onChange()">
       <!-- Main title ex: Je me connecte, Créer un compte  -->
         <h3 class="form-title">Je me connecte</h3>
         <div class="form-input">
@@ -17,7 +17,12 @@
           Mot de passe oublié !
         </a>
         <div class="form-action" style="margin-top: auto;">
-          <button class="button discover gradient" style="width: 250px;">Se connecter</button>
+          <div *ngIf="errors.length">
+            <ul class="error-list">
+              <li *ngFor="let error of errors"> {{ error }} </li>
+            </ul>
+          </div>
+          <button class="button discover gradient" style="width: 250px;" [disabled]="!loginForm.touched || loginForm.status === 'INVALID'">Se connecter</button>
         </div>
         <a class="externel-links form-links block center-text" [routerLink]="['', 'register']">
           Je crée un compte !

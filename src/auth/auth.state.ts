@@ -4,8 +4,8 @@ import { Injectable } from "@angular/core";
 import { AuthModel } from "./auth.model";
 import { environment } from 'src/environments/environment';
 import { Login, Logout } from "./auth.actions";
-import { tap } from "rxjs/operators";
-import { of } from "rxjs";
+import { catchError, tap } from "rxjs/operators";
+import { of, throwError } from "rxjs";
 
 @State<AuthModel>({
   name: 'auth',
@@ -25,8 +25,11 @@ export class AuthState {
   login(ctx: StateContext<AuthModel>, action: Login) {
     let {username, password} = action;
     let req = this.http.post(environment.backUrl + 'visioServer/api-token-auth/', {username, password});
-
+    
     return req.pipe(
+      catchError((err) => {
+        return throwError(err.error);
+      }),
       tap((response: any) => {
         let token = response['token'];
         ctx.setState({

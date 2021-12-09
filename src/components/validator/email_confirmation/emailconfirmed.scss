@@ -2,41 +2,36 @@
 @import "../../../styles/mixins.scss";
 
 :host {
-    font-family: "Poppins";
+  font-family: "Poppins";
+  display: block;
+  height: 100%;
 }
 
 .confirmation-pages { 
-    background-repeat: no-repeat;
-    background-size: cover;
-    width: 100%;
-    height: 100%;
+  &.bg-blue {
+    background-color: $buttonGradient;
+  }
+  &.bg-white {
+    background-color: $landingColor;
+  }
+  .success-circle {
     display: flex;
-    flex-flow: column nowrap;
-    align-items: center;
     justify-content: center;
-    &.bg-blue {
-        background-color: $buttonGradient;
-    }
-    &.bg-white {
-        background-color: $landingColor;
-    }
-    .success-circle {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        @include circle(80px, $landingColor);
-        box-shadow: rgba(0, 0, 0, 0.25) 0px 70px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
-        text-align: center;
-    }
+    align-items: center;
+    @include circle(80px, $landingColor);
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 70px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+    text-align: center;
+  }
 }
 // Success Circle with the  confirmation SVG
 button{
-    background-color: $infosColor;
-    color:#FFFFFF;
-    width: 60%;
+  background-color: $infosColor;
+  color:#FFFFFF;
+  width: 60%;
 }
+
 p{
-    color: #FFFFFF;
-    margin-top: 25px;
-    margin-bottom: 100px;
+  color: #FFFFFF;
+  margin-top: 25px;
+  margin-bottom: 100px;
 }

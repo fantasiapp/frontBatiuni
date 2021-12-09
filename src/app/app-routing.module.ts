@@ -17,10 +17,12 @@ const routes: Routes = [{
     component: RegisterComponent
   }, {
     path: 'confirmed',
-    component: emailConfirmation
+    component: emailConfirmation,
+    data: { animation: 'Confirmed' }
   }, {
     path: 'success',
-    component: RegistrationSuccess
+    component: RegistrationSuccess,
+    data: { animation: 'Success' }
   }, {
     path: '**',
     redirectTo: 'landing',

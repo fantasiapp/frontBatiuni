@@ -39,6 +39,10 @@ button {
   &.button {
     color: white;
 
+    &:disabled {
+      background: #aaa !important;
+    }
+
     &.gradient {
       background: linear-gradient(#134C6C, #0C5E8D);
 
@@ -70,6 +74,36 @@ a {
 
 .half-rotation {
   transform: rotate(180deg);
+}
+
+.cover-parent {
+  width: 100%;
+  height: 100%;
+}
+
+.flex {
+  display: flex;
+
+  &.row {
+    flex-flow: row nowrap;
+  }
+
+  &.column {
+    flex-flow: column nowrap;
+  }
+
+  &.center-main {
+    justify-content: center;
+  }
+
+  &.center-cross {
+    align-items: center;
+  }
+
+  &.center {
+    @extend .center-main;
+    @extend .center-cross;
+  }
 }
 
 
