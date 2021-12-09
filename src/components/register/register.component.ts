@@ -1,6 +1,6 @@
-import { Component, HostListener, ViewChild } from "@angular/core";
-import { FormControl, FormGroup } from "@angular/forms";
-import { SlidesDirective } from "src/directives/slides.directive";
+import { Component } from "@angular/core";
+import { FormControl, FormGroup, Validators } from "@angular/forms";
+import { VerifyField } from "src/validators/verify";
 
 @Component({
   selector: 'register',
@@ -11,10 +11,20 @@ import { SlidesDirective } from "src/directives/slides.directive";
 })
 export class RegisterComponent {
   registerForm = new FormGroup({
-    lastname: new FormControl(''),
-    firstname: new FormControl(''),
-    email: new FormControl(''),
-    emailVerifier: new FormControl(''),
+    lastname: new FormControl('', [
+      Validators.required
+    ]),
+    firstname: new FormControl('', [
+      Validators.required
+    ]),
+    email: new FormControl('', [
+      Validators.required,
+      VerifyField('email', 'emailVerifier')
+    ]),
+    emailVerifier: new FormControl('', [
+      Validators.required,
+      VerifyField('email', 'emailVerifier')
+    ]),
     password: new FormControl(''),
     parrain: new FormControl(''),
     role: new FormControl(''),
@@ -22,20 +32,7 @@ export class RegisterComponent {
     job: new FormControl('')
   });
 
-  @ViewChild(SlidesDirective, {static: true})
-  slidesContainer!: SlidesDirective;
-
   constructor() {
-    (window as any).landing = this;
-  }
 
-  @HostListener('swiperight')
-  onSwipeRight() {
-    this.slidesContainer.right();
-  }
-
-  @HostListener('swipeleft')
-  onSwipeLeft() {
-    this.slidesContainer.left();
   }
 };

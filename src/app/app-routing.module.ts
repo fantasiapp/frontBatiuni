@@ -8,6 +8,7 @@ import { RegistrationSuccess } from 'src/components/validator/registration_succe
 const routes: Routes = [{
     path: 'landing',
     component: LandingPageComponent,
+    data: { animation: 'LandingPage' }
   }, {
     path: 'connexion',
     component: ConnexionComponent
@@ -22,8 +23,8 @@ const routes: Routes = [{
     component: RegistrationSuccess
   }, {
     path: '**',
-    redirectTo: 'landing'
-  }
+    redirectTo: 'landing',
+  },
 ];
 
 @NgModule({

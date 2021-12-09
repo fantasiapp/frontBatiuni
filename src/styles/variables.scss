@@ -2,14 +2,20 @@
 $mainColor: #000000;
 $landingColor: #ffffff;
 $buttonColor: #0C5E8D;
+$secondaryBackground: #134C6C;
 $buttonGradient: #134C6C;
 $formulaireMainColor : #080F18;
 $externelLinks : #0F557C;
+<<<<<<< HEAD
 $succesCircleShadow : #CDCFD0;
 $infosColor : #52D1BD;
+=======
+$pagination-height: 75px;
+
+>>>>>>> de39ae25f552d653e9fd1c78bf821f19b913e0d0
 :root {
-  --main-landing-color: $mainColor; 
+  --main-landing-color: #{$mainColor}; 
   --main-app-color: #{$landingColor};
-  --main-button-color: $buttonColor;
-  --main-button-gradient: $buttonGradient;
+  --main-button-color: #{$buttonColor};
+  --main-button-gradient: #{$buttonGradient};
 }
