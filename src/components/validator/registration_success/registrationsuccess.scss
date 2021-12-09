@@ -6,32 +6,21 @@
 }
 
 .confirmation-pages { 
-    background-repeat: no-repeat;
-    background-size: cover;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-flow: column nowrap;
-    align-items: center;
+    padding: 30px;
     text-align: center;
-    &.bg-blue {
-        background-color: $buttonGradient;
-    }
-    &.bg-white {
-        background-color: $landingColor;
-    }
-    
+    background-color: $landingColor;
 }
-p:first-of-type{
+
+p {
     margin-top: 25%;
     font-size: 1rem;
-    
 }
-p{
-    color : $externelLinks;
+
+.help a {
     font-size: 0.9rem;
 }
+
 // Success Circle with the  confirmation SVG
-span{
+.email {
     color : $infosColor;
 }

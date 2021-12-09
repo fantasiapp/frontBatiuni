@@ -19,20 +19,24 @@ export class RegisterComponent {
     ]),
     email: new FormControl('', [
       Validators.required,
-      VerifyField('email', 'emailVerifier')
     ]),
-    emailVerifier: new FormControl('', [
+    emailVerification: new FormControl('', [
       Validators.required,
-      VerifyField('email', 'emailVerifier')
     ]),
-    password: new FormControl(''),
+    password: new FormControl('', [
+      Validators.minLength(8)
+    ]),
     parrain: new FormControl(''),
     role: new FormControl(''),
     company: new FormControl(''),
     job: new FormControl('')
-  });
+  }, {validators: VerifyField('email', 'emailVerification')});
 
   constructor() {
 
+  }
+
+  onSubmit(f: any) {
+    console.log(f);
   }
 };

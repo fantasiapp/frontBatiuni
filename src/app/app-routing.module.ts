@@ -19,13 +19,15 @@ const routes: Routes = [{
     component: RegisterComponent
   }, {
     path: 'confirmed',
-    component: emailConfirmation
+    component: emailConfirmation,
+    data: { animation: 'Confirmed' }
   }, {
     path: 'testmodel',
     component: OptionsModel
   }, {
     path: 'success',
-    component: RegistrationSuccess
+    component: RegistrationSuccess,
+    data: { animation: 'Success' }
   }, {
     path: '**',
     redirectTo: 'landing',
