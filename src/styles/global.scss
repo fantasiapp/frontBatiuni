@@ -89,17 +89,20 @@ a {
 }
 
 .formulaire {
-  width: 100%; height: 100%;
+  width: 100%;
   display: flex;
   flex-direction: column;
-  background: linear-gradient($buttonGradient, $buttonColor);
+  background: $secondaryBackground;
+  height: calc(100% - #{$pagination-height});
 }
 
 .paging {
   list-style-type: none;
-  color: $landingColor;
   font-size: 0.9rem;
   padding: 25px 0;
+  height: $pagination-height;
+  background: $secondaryBackground;
+  color: $landingColor;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -159,7 +162,6 @@ a {
   color: $externelLinks;
   font-family: "Poppins Light";
   font-size: 15px;
-  margin: 25px 0 25px 0;
 }
 
 .form-action {
