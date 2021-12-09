@@ -5,6 +5,8 @@ import { RegisterComponent } from 'src/components/register/register.component';
 import { ConnexionComponent } from 'src/components/connexion/connexion.component';
 import { emailConfirmation } from 'src/components/validator/email_confirmation/emailconfirmation';
 import { RegistrationSuccess } from 'src/components/validator/registration_success/registrationsuccess';
+import { OptionsModel } from 'src/components/options/options';
+
 const routes: Routes = [{
     path: 'landing',
     component: LandingPageComponent,
@@ -18,6 +20,9 @@ const routes: Routes = [{
   }, {
     path: 'confirmed',
     component: emailConfirmation
+  }, {
+    path: 'testmodel',
+    component: OptionsModel
   }, {
     path: 'success',
     component: RegistrationSuccess

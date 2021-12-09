@@ -1,0 +1,15 @@
+<main>
+    <div class="form-select">
+        <div class="form-filter">
+            <img src="/assets/confirmation.svg" />
+            <input (input)="filterOptions($event)" class="icon" type="text" placeholder="Rechercher un métier" />
+        </div>
+        <div class="form-option ">
+            <ul>
+               
+                <li *ngFor=" let num of filtred" >{{num}} <input class="option-selected" type="checkbox" /></li>
+            </ul>
+           
+        </div>
+    </div>
+</main>
