@@ -1,7 +1,5 @@
 import { ChangeDetectionStrategy, Component, HostListener, ViewChild } from "@angular/core";
 import { SlidesDirective } from "src/directives/slides.directive";
-import { LandingPageEntreprise } from "./entreprise/entreprise.component";
-import { LandingPageSousTraitant } from "./sous-traitant/sous-traitant";
 
 @Component({
   selector: 'landing-page',
@@ -10,8 +8,6 @@ import { LandingPageSousTraitant } from "./sous-traitant/sous-traitant";
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LandingPageComponent {
-  slides = [LandingPageEntreprise, LandingPageSousTraitant];
-
   @ViewChild(SlidesDirective, {static: true})
   slidesContainer!: SlidesDirective;
 

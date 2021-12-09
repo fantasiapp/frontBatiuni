@@ -96,14 +96,6 @@ export class SlidesDirective {
       this.cd.detectChanges();
     }
   }
-
-  get canSlideLeft() {
-    return (!this.index);
-  }
-
-  get canSlideRight() {
-    return this.index < this.components.length - 1;
-  }
 };
 
 

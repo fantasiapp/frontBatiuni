@@ -1,7 +1,3 @@
-<div class="container"
-  [slides]="slides"
-></div>
-
 <a *ngIf="slidesContainer.index == 0" class="arrow_right" (click)="onSwipeLeft()">
   <img src="assets/Fleche.svg"/>
 </a>
@@ -9,3 +5,48 @@
 <a *ngIf="slidesContainer.index == 1" class="arrow_left" (click)="onSwipeRight()">
   <img src="assets/Fleche.svg"/>
 </a>
+
+<div class="container"
+  type="template"
+  [slides]="[entreprise, sousTraitant]"
+></div>
+
+<ng-template #sousTraitant>
+  <div class="main">
+    <!-- Background image-->
+    <div class="background-image" [style.background-image]="'url(assets/accueil-sous-traitant.png)'">
+    </div>
+    <!-- Landing text-->
+    <div class="center-text overlay">
+        Trouver le meilleur
+       <br/> <span class="name">chantier</span><br/>
+        & la meilleure
+        <br/><span class="name">entreprise</span><br/>
+        principale
+    </div>
+  
+    <div class="links">
+      <button class="gradient button discover" [routerLink]="['', 'register']">Découvrir le service sous-traitance</button><br/>
+      <a class="link" [routerLink]="['', 'connexion']" >J’ai déjà un compte !</a>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #entreprise>
+  <div class="main">
+    <!-- Background image-->
+    <div class="background-image" [style.background-image]="'url(assets/accueil-entreprise.png)'">
+    </div>
+    <!-- Landing text-->
+    <div class="center-text overlay">
+        Trouver le meilleur<br/>
+        <span class="name">sous-traitant</span><br/>
+        principale
+    </div>
+  
+    <div class="links">
+      <button class="gradient button discover">Découvrir le service sous-traitance</button><br/>
+      <a class="link" [routerLink]="['', 'connexion']" >J’ai déjà un compte !</a>
+    </div>
+  </div>  
+</ng-template>

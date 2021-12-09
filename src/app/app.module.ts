@@ -18,8 +18,6 @@ import { SlidesDirective } from 'src/directives/slides.directive';
 import { RegistrationState } from 'src/components/register/register.state';
 import { ConnexionComponent } from 'src/components/connexion/connexion.component';
 import { RegisterComponent } from 'src/components/register/register.component';
-import { LandingPageEntreprise } from 'src/components/landing_page/entreprise/entreprise.component';
-import { LandingPageSousTraitant } from 'src/components/landing_page/sous-traitant/sous-traitant';
 
 @NgModule({
   declarations: [
@@ -27,8 +25,6 @@ import { LandingPageSousTraitant } from 'src/components/landing_page/sous-traita
     LandingPageComponent,
     ConnexionComponent,
     RegisterComponent,
-    LandingPageEntreprise,
-    LandingPageSousTraitant,
     SlidesDirective
   ],
   imports: [

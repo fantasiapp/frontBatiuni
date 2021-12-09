@@ -33,7 +33,7 @@
       <h3 class="form-title">Créer un compte !</h3>
       <h3 class="form-subtitle">Informations contact</h3>
       <div class="form-input">
-        <label>Nom du contact</label> <input type="text" formControlName="lastname"/>
+        <label>Nom du contact</label> <input type="text" formControlName="lastname" required/>
       </div>
     
       <div class="form-input">
@@ -41,11 +41,11 @@
       </div>
     
       <div class="form-input">
-        <label>Adresse e-mail contact</label> <input type="text" formControlName="email"/>
+        <label>Adresse e-mail contact</label> <input type="email" formControlName="email"/>
       </div>
     
       <div class="form-input">
-        <label>Vérification addresse e-mail</label> <input type="text" formControlName="emailVerifier"/>
+        <label>Vérification addresse e-mail</label> <input type="email" formControlName="emailVerifier"/>
       </div>
     
       <div class="form-input">
@@ -65,15 +65,6 @@
     </form>
   </div>
 </ng-template>
-<!-- 
-  <ul class="paging">
-    <li>
-      <a (click)="onSwipeRight()">
-        <img class="arrow_left" src="assets/Fleche.svg" />
-        <span>Etape précedente</span>
-      </a>
-    </li>
-  </ul> -->
 
 <ng-template #tp2>
   <div class="formulaire">
