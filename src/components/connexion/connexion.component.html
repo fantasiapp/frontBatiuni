@@ -13,7 +13,7 @@
             <label >Mot de passe</label>
             <input type="password" class="form-element" formControlName="password"/>
         </div>
-        <a class="externel-links form-links block text-right">
+        <a class="external-links form-links block text-right">
           Mot de passe oublié !
         </a>
         <div class="form-action" style="margin-top: auto;">
@@ -24,7 +24,7 @@
           </div>
           <button class="button discover gradient" style="width: 250px;" [disabled]="!loginForm.touched || loginForm.status === 'INVALID'">Se connecter</button>
         </div>
-        <a class="externel-links form-links block center-text" [routerLink]="['', 'register']">
+        <a class="external-links form-links block center-text" [routerLink]="['', 'register']">
           Je crée un compte !
         </a>
       </form>

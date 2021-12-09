@@ -1,5 +1,4 @@
 import {  Component } from "@angular/core";
-import { Router } from "@angular/router";
 
 @Component({
   selector: 'emailConfirmed',
@@ -7,9 +6,5 @@ import { Router } from "@angular/router";
   styleUrls: ['emailconfirmed.scss'],
 })
 export class emailConfirmation {
-  constructor(private router:Router){}
-  // On click redirect user to login page
-  redirect() {
-    this.router.navigate(['success']);
-  }
+  constructor() { }
 };

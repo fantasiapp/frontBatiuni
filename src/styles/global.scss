@@ -60,6 +60,10 @@ a {
   @include cover-background;
 }
 
+.text-left {
+  text-align: left;
+}
+
 .center-text {
   text-align: center;
 }
@@ -192,7 +196,7 @@ a {
   }
 }
 
-.externel-links {
+.external-links {
   color: $externelLinks;
   font-family: "Poppins Light";
   font-size: 15px;
