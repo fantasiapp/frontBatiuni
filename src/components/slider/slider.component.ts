@@ -1,8 +1,4 @@
 import { ChangeDetectorRef, Component, ContentChildren, HostListener, Input, QueryList, TemplateRef, ViewChild } from "@angular/core";
-import { Select, Selector, Store } from "@ngxs/store";
-import { Observable } from "rxjs";
-import { AppModel } from "src/app/app.model";
-import { AppState } from "src/app/app.state";
 import { SlidesDirective } from "src/directives/slides.directive";
 
 @Component({
@@ -26,6 +22,12 @@ export class SliderComponent {
 
   @Input()
   pagination: boolean = true;
+
+  @Input()
+  showPageName: boolean = true;
+
+  @Input()
+  showNext: boolean = true;
   
   @Input()
   set type(type: 'component' | 'template') {
@@ -42,13 +44,21 @@ export class SliderComponent {
     this._slides = this.components.toArray();
   }
 
+  slideLeft() {
+    this.container?.left();
+  }
+
+  slideRight() {
+    this.container?.right();
+  }
+
   @HostListener('swipeleft')
   onSwipeLeft() {
-    this.container?.left();
+    this.slideLeft();
   }
 
   @HostListener('swiperight')
   onSwipeRight() {
-    this.container?.right();
+    this.slideRight();
   }
 };

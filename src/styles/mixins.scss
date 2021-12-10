@@ -7,8 +7,13 @@
   background-position: center;
 };
 
-@mixin absolute-center($direction: 'xy') {
-  position: absolute;
+@mixin absolute-center($direction: 'xy', $position: absolute) {
+  @if $position == absolute {
+    position: absolute;
+  } @else if $position == relative {
+    position: relative;
+  } @else { }
+
   @if $direction == 'x' {
     left: 50%;
     transform: translateX(-50%);

@@ -34,7 +34,6 @@ export class ConnexionComponent {
     this.cd.markForCheck();
   }
 
-
   constructor(private router: Router, private store: Store, private cd: ChangeDetectorRef) {
     
   }

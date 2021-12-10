@@ -5,6 +5,7 @@ import { RegisterComponent } from 'src/components/register/register.component';
 import { ConnexionComponent } from 'src/components/connexion/connexion.component';
 import { emailConfirmation } from 'src/components/validator/email_confirmation/emailconfirmation';
 import { RegistrationSuccess } from 'src/components/validator/registration_success/registrationsuccess';
+import { DiscoverComponent } from 'src/components/discover_page/discover-page.component';
 const routes: Routes = [{
     path: 'landing',
     component: LandingPageComponent,
@@ -12,6 +13,12 @@ const routes: Routes = [{
   }, {
     path: 'connexion',
     component: ConnexionComponent
+  }, {
+    path: 'discover',
+    redirectTo: 'discover/entreprise'
+  }, {
+    path: 'discover/:subject',
+    component: DiscoverComponent
   }, {
     path: 'register',
     component: RegisterComponent

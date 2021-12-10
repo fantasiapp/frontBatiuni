@@ -68,7 +68,7 @@ export class SlidesDirective {
     if ( this.componentRef )
       this.animateWithClass(this.componentRef.element, 'slide-out-' + direction, () => {
         this.view.remove(0);
-        this.cd.detectChanges();
+        this.cd.markForCheck();
       });
   }
 
@@ -81,7 +81,7 @@ export class SlidesDirective {
       this.slideIn(componentRef, "left");
       this.componentRef = componentRef;
       this.view.insert(componentRef.view);
-      this.cd.detectChanges();
+      this.cd.markForCheck();
     }
   }
 
@@ -93,7 +93,7 @@ export class SlidesDirective {
       this.slideIn(componentRef, "right");
       this.componentRef = componentRef;
       this.view.insert(componentRef.view);
-      this.cd.detectChanges();
+      this.cd.markForCheck();
     }
   }
 };

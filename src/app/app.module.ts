@@ -20,6 +20,7 @@ import { RegisterComponent } from 'src/components/register/register.component';
 import { emailConfirmation } from 'src/components/validator/email_confirmation/emailconfirmation';
 import { RegistrationSuccess } from 'src/components/validator/registration_success/registrationsuccess';
 import { SliderComponent } from 'src/components/slider/slider.component';
+import { DiscoverComponent, DiscoverComponentEntreprise, DiscoverComponentSousTraitant } from 'src/components/discover_page/discover-page.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,10 @@ import { SliderComponent } from 'src/components/slider/slider.component';
     emailConfirmation,
     RegistrationSuccess,
     SlidesDirective,
-    SliderComponent
+    SliderComponent,
+    DiscoverComponent,
+    DiscoverComponentEntreprise,
+    DiscoverComponentSousTraitant
   ],
   imports: [
     //Ngxs imports
