@@ -1,30 +1,3 @@
-<<<<<<< HEAD
-<main>
-    <div class="form-select" (mouseleave)="showDropDown = false">
-        <div class="input-select" (click)="showDropDown=!showDropDown">
-            <div class="choosen-job">
-                <li (click)="delete($event,choix.id)" *ngFor=" let choix of userChoices">{{choix?.job}}
-                </li>
-            </div>
-            <img src="../../assets/arrowdown.svg" />
-
-        </div>
-
-        <div class="dropdown" *ngIf="showDropDown">
-            <div class="dropdown-choices">
-                <img src="../../assets/Rechercher.svg">
-
-                <input class="form-search" (input)="filterOptions($event)" type="text"
-                    placeholder="Rechercher un métier" />
-
-            </div>
-            <div class="dropdown-content">
-                <ul>
-                    <li *ngFor="let text of optionsSearch">
-                        {{text.job}}
-                        <input (input)="added($event,text.id)" class="option-selected" type="checkbox"
-                            [attr.checked]="text.isChecked || null" />
-=======
 <main class="cover-parent flex column center-cross">
     <div class="form-select full-width">
         <div class="input-select full-width flex row center-cross" (click)="showDropDown=!showDropDown">  
@@ -44,7 +17,6 @@
                     <li *ngFor="let text of optionsSearch" class="flex center-cross">
                         {{text.job}} 
                         <input (input)="added($event,text.id)" class="option-selected" type="checkbox" [attr.checked]="text.isChecked || null"/>
->>>>>>> 6d39097eb6483eedf33d282384ed29a9d33ca68e
                     </li>
                 </ul>
             </div>
