@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="23.383" height="23.383" viewBox="0 0 23.383 23.383">
+  <defs>
+    <clipPath id="clip-path">
+      <rect id="keyboard_arrow_left_Background_Mask_" data-name="keyboard_arrow_left (Background/Mask)" width="23.383" height="23.383" fill="none"/>
+    </clipPath>
+  </defs>
+  <g id="keyboard_arrow_left" transform="translate(0 23.383) rotate(-90)" clip-path="url(#clip-path)">
+    <path id="Vector" d="M2.757,5.846,7.219,1.374,5.846,0,0,5.846l5.846,5.846,1.374-1.374Z" transform="translate(7.794 5.846)"/>
+    <path id="Vector-2" data-name="Vector" d="M23.383,0V23.383H0V0Z" fill="none"/>
+  </g>
+</svg>

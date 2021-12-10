@@ -1,15 +1,34 @@
 <main>
-    <div class="form-select">
-        <div class="form-filter">
-            <img src="/assets/confirmation.svg" />
-            <input (input)="filterOptions($event)" class="icon" type="text" placeholder="Rechercher un métier" />
+    <div class="form-select"(mouseleave)="showDropDown = false">
+        <div class="form-input" (click)="showDropDown=!showDropDown">  
+             <div class="choosen-job" >
+                 <li (click)="delete($event,choix.id)"*ngFor=" let choix of userChoices">{{choix?.job}}
+                 </li>
+             </div>
+             <img  src="../../assets/arrowdown.svg"/>
+            
         </div>
-        <div class="form-option ">
-            <ul>
-               
-                <li *ngFor=" let num of filtred" >{{num}} <input class="option-selected" type="checkbox" /></li>
-            </ul>
-           
+     
+        <div class="dropdown" *ngIf="showDropDown" >
+                <div class="dropdown-choices">
+                    <img src="../../assets/Rechercher.svg">
+                   
+                    <input class="form-search" 
+                    (input)="filterOptions($event)" 
+                     type="text" placeholder="Rechercher un métier"/>
+
+                </div>
+            <div class="dropdown-content" >
+                <ul>
+                    <li *ngFor="let text of optionsSearch">
+                        {{text.job}} 
+                        <input 
+                    (input)="added($event,text.id)" 
+
+                    class="option-selected" type="checkbox" [attr.checked]="text.isChecked || null"/>
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
 </main>
