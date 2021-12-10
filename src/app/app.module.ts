@@ -21,6 +21,7 @@ import { emailConfirmation } from 'src/components/validator/email_confirmation/e
 import { RegistrationSuccess } from 'src/components/validator/registration_success/registrationsuccess';
 import { SliderComponent } from 'src/components/slider/slider.component';
 import { DiscoverComponent, DiscoverComponentEntreprise, DiscoverComponentSousTraitant } from 'src/components/discover_page/discover-page.component';
+import { OptionsModel } from 'src/components/options/options';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { DiscoverComponent, DiscoverComponentEntreprise, DiscoverComponentSousTr
     SliderComponent,
     DiscoverComponent,
     DiscoverComponentEntreprise,
-    DiscoverComponentSousTraitant
+    DiscoverComponentSousTraitant,
+    OptionsModel
   ],
   imports: [
     //Ngxs imports

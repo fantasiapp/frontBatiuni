@@ -6,6 +6,8 @@ import { ConnexionComponent } from 'src/components/connexion/connexion.component
 import { emailConfirmation } from 'src/components/validator/email_confirmation/emailconfirmation';
 import { RegistrationSuccess } from 'src/components/validator/registration_success/registrationsuccess';
 import { DiscoverComponent } from 'src/components/discover_page/discover-page.component';
+import { OptionsModel } from 'src/components/options/options';
+
 const routes: Routes = [{
     path: 'landing',
     component: LandingPageComponent,
@@ -26,6 +28,9 @@ const routes: Routes = [{
     path: 'confirmed',
     component: emailConfirmation,
     data: { animation: 'Confirmed' }
+  }, {
+    path: 'testmodel',
+    component: OptionsModel
   }, {
     path: 'success',
     component: RegistrationSuccess,
