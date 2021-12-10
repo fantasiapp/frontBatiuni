@@ -1,11 +1,12 @@
-import { ChangeDetectorRef, Component, ViewChild } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewChild } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { SliderComponent } from "../slider/slider.component";
 
 @Component({
   selector: 'discover-entreprise',
   templateUrl: './discover-page-entreprise.component.html',
-  styleUrls: ['./discover-page.component.scss']
+  styleUrls: ['./discover-page.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DiscoverComponentEntreprise {
   @ViewChild(SliderComponent, {static: true})
@@ -21,7 +22,8 @@ export class DiscoverComponentEntreprise {
 @Component({
   selector: 'discover-sous-traitant',
   templateUrl: './discover-page-sous-traitant.component.html',
-  styleUrls: ['./discover-page.component.scss']
+  styleUrls: ['./discover-page.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DiscoverComponentSousTraitant {
   @ViewChild(SliderComponent, {static: true})
@@ -37,7 +39,8 @@ export class DiscoverComponentSousTraitant {
 @Component({
   selector: 'discover',
   templateUrl: './discover-page.component.html',
-  styleUrls: ['./discover-page.component.scss']
+  styleUrls: ['./discover-page.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DiscoverComponent {
   subject: string = '';

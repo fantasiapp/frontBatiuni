@@ -44,24 +44,21 @@
         <h3 class="form-title">Créer un compte !</h3>
         <h3 class="form-subtitle">Informations entreprise</h3>
         <div class="form-input">
-          <label>Je suis</label> <input type="text" formControlName="role"/>
+          <label>Je suis</label>
+          <select formControlName="role">
+            <option value="0">Une entreprise à la recherche de sous-traitances</option>
+            <option value="1">Un sous-traitant à la recerche d'une entreprise</option>
+            <option value="2">Les deux</option>
+          </select>
         </div>
     
         <div class="form-input">
-          <label>Nom de l'entreprise</label> <input type="text" formControlName="company"/>
+          <label>Nom de l'entreprise</label><input type="text" formControlName="company"/>
         </div>
       
-        <div class="form-input ">
-          <label>Métier</label> 
-          <select><option></option></select>
-        </div>
         <div class="form-input">
-         <div class="form-select-filter">
-           <input class="icon" type="text" placeholder="Rechercher un métier"/>
-          </div>
-          <div class="form-select">
-
-          </div>
+          <label>Métier</label>
+          <options [options]="jobs"></options>
         </div>
         <div class="form-action" style="margin-top: auto;">
           <button class="button discover gradient" style="width: 250px">Valider</button>
