@@ -1,0 +1,85 @@
+<slider [showPageName]="false" [showNext]="false">
+  <ng-template>
+    <div class="hosted-page include-pagination">
+      <header>
+        <h3 class="title">Nos services PME</h3>
+        <p class="font-Poppins">
+          Accédez
+          <span class="emphasis">aux offres</span>
+          PME et filtrez selon
+          <span class="emphasis">vos préferences</span>.
+        </p>
+      </header>
+
+      <div class="main center-text">
+        <img src="assets/PME1.svg">
+      </div>
+    </div>
+  </ng-template>
+
+  <ng-template>
+    <div class="hosted-page include-pagination">
+      <header>
+        <h3 class="title">Nos services PME</h3>
+        <p class="font-Poppins">
+          Soyez facilement
+          <span class="emphasis">organisés</span>.
+        </p>
+      </header>
+
+      <div class="main full-width center-text">
+        <img src="assets/PME2.svg">
+      </div>
+    </div>
+  </ng-template>
+
+  <ng-template>
+    <div class="hosted-page include-pagination">
+      <header>
+        <h3 class="title">Nos services PME</h3>
+        <p class="font-Poppins">
+          <span class="emphasis">Communiquez</span>
+          et
+          <span class="emphasis">suivez</span>
+          vos chantier efficacement.
+        </p>
+      </header>
+
+      <div class="main full-width center-text">
+        <img src="assets/PME3.svg">
+      </div>
+    </div>
+  </ng-template>
+
+  <ng-template>
+    <div class="hosted-page include-pagination">
+      <header>
+        <h3 class="title">Nos services PME</h3>
+        <p class="font-Poppins">
+          Recevez des
+          <span class="emphasis">offres d'emplois</span>.
+          intéressantes selon vos
+          <span class="emphasis">disponibilités</span>.
+        </p>
+      </header>
+
+      <div class="main full-width center-text">
+        <img src="assets/PME4.svg">
+      </div>
+    </div>
+  </ng-template>
+
+  <div class="pagination full-width" pagination>
+    <a *ngIf="slider.index > 0" class="arrow_left" (click)="slider.slideRight()">
+      <img src="assets/Fleche2.svg"/>
+    </a>  
+
+    <a *ngIf="slider.index < 3" class="arrow_right" (click)="slider.slideLeft()">
+      <img src="assets/Fleche2.svg"/>
+    </a>
+  </div>
+
+  <div class="create-account full-width" footer>
+    <button class="button gradient full-width" [routerLink]="['', 'register']">Créer un compte</button>
+  </div>
+</slider>

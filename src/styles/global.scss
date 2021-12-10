@@ -10,20 +10,27 @@
   box-sizing: border-box;
 }
 
+:root {
+  --main-landing-color: #{$mainColor}; 
+  --main-app-color: #{$landingColor};
+  --main-button-color: #{$buttonColor};
+  --main-button-gradient: #{$buttonGradient};
+}
+
 body {
   font-family: "Roboto", sans-serif;
-  font-size: 18px;
+  font-size: 16px;
   margin: 0;
   min-height: 100vh;
   height: 100vh;
   //color: var(--main-app-color);
 
   @include breakpoint(tablet) {
-    font-size: 22px;
+    font-size: 20px;
   }
 
   @include breakpoint(desktop) {
-    font-size: 24px;
+    font-size: 22px;
   }
 }
 
@@ -80,11 +87,6 @@ a {
   transform: rotate(180deg);
 }
 
-.cover-parent {
-  width: 100%;
-  height: 100%;
-}
-
 .flex {
   display: flex;
 
@@ -109,7 +111,20 @@ a {
     @extend .center-cross;
   }
 }
+//-----------------------------------------------
+//Size
+.full-width { width: 100%; }
+.full-height { height: 100% }
+.cover-parent {
+  @extend .full-width;
+  @extend .full-height;
+}
 
+//-----------------------------------------------
+//Colors
+.background-white {
+  background-color: $landingColor;
+}
 
 //------------------------------------------------
 // FORMULAIRES
@@ -126,6 +141,21 @@ a {
   margin: 0 8px;
 }
 
+.curved-border {
+  border-radius: 15px 15px 0 0;
+}
+
+.hosted-page {
+  @extend .curved-border;
+  @extend .background-white;
+  width: 100%;
+  padding: 30px; 
+
+  &.include-pagination {
+    min-height: calc(100% - 75px);
+  }
+}
+
 .formulaire {
   width: 100%;
   display: flex;
@@ -136,7 +166,7 @@ a {
 
 .paging {
   list-style-type: none;
-  font-size: 0.9rem;
+  font-size: 0.9em;
   padding: 25px 0;
   height: $pagination-height;
   background: $secondaryBackground;
@@ -151,26 +181,33 @@ a {
   }
 }
 
+.title {
+  font-size: 1.1em;
+  font-weight: bold;
+  margin-bottom: 30px;
+}
+
+.subtitle {
+  font-size: 0.85em;
+  font-weight: normal;
+  margin-bottom: 30px;
+}
+
 .form-control {
   background-color: $landingColor;
   color: $formulaireMainColor;
-  border-radius: 15px 15px 0 0;
   height: 100%;
-  padding: 30px 30px;
+  padding: 30px;
   font-family: "Poppins";
-  display: flex;
-  flex-flow: column nowrap;
+  @extend .flex;
+  @extend .column;
+  
   .form-title {
-    font-family: "Roboto";
-    font-size: 1.1rem;
-    font-size: bold;
-    margin-bottom: 30px;
+    @extend .title;
   }
 
   .form-subtitle {
-    font-size: 0.85rem;
-    font-weight: normal;
-    margin-bottom: 30px;
+    @extend .subtitle;
   }
 }
 
@@ -181,11 +218,11 @@ a {
   }
 
   label {
-    font-size: 0.8rem;
+    font-size: 0.8em;
     margin-bottom: 5px;
   }
 
-  input {
+  & > input {
     width: 100%;
     height: 30px;
     outline: none;
@@ -241,7 +278,25 @@ a {
 //------------------------------------------------
 
 //-------------------------------------------------
-//FORMS
+//ANGULAR FORMS
 .ng-invalid:not(.ng-untouched) {
   border-color: red;
+}
+//--------------------------------------------------
+//fonts
+.font-Poppins {
+  font-family: "Poppins";
+}
+//--------------------------------------------------
+//Text states
+.emphasis {
+  @extend .font-Poppins;
+  font-weight: bold;
+}
+
+//---------------------------------------------------
+//Inputs
+input {
+  outline: none;
+  border: none;
 }

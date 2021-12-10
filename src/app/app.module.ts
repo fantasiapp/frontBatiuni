@@ -17,9 +17,10 @@ import { LandingPageComponent } from 'src/components/landing_page/landing-page.c
 import { SlidesDirective } from 'src/directives/slides.directive';
 import { ConnexionComponent } from 'src/components/connexion/connexion.component';
 import { RegisterComponent } from 'src/components/register/register.component';
-import { SliderComponent } from 'src/components/slider/slider.component';
 import { emailConfirmation } from 'src/components/validator/email_confirmation/emailconfirmation';
 import { RegistrationSuccess } from 'src/components/validator/registration_success/registrationsuccess';
+import { SliderComponent } from 'src/components/slider/slider.component';
+import { DiscoverComponent, DiscoverComponentEntreprise, DiscoverComponentSousTraitant } from 'src/components/discover_page/discover-page.component';
 import { OptionsModel } from 'src/components/options/options';
 
 @NgModule({
@@ -32,6 +33,9 @@ import { OptionsModel } from 'src/components/options/options';
     RegistrationSuccess,
     SlidesDirective,
     SliderComponent,
+    DiscoverComponent,
+    DiscoverComponentEntreprise,
+    DiscoverComponentSousTraitant,
     OptionsModel
   ],
   imports: [

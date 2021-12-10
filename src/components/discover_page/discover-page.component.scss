@@ -1,0 +1,48 @@
+@import '../../styles/mixins.scss';
+
+:host {
+  display: block;
+  height: 100%;
+  font-size: inherit;
+}
+.create-account {
+  position: absolute;
+  bottom: 0;
+  padding: 0 30px;
+  box-shadow: 0 -2px 5px 0 #aaa;
+}
+
+.create-account button {
+  margin: 10px 0;
+  @include absolute-center('x', relative);
+}
+
+.main {
+  padding: 20px 0;
+  bottom: 100px;
+  @include absolute-center('x', absolute);
+}
+
+.main img {
+  max-height: 50vh;
+}
+
+.pagination {
+  z-index: 1;
+  @include absolute-center('y', absolute);
+}
+
+.arrow_left, .arrow_right {
+  position: absolute;
+}
+
+.arrow_right {
+  right: 0;
+  transform: scale(0.8);
+}
+
+.arrow_left {
+  left: 0;
+  transform-origin: center center;
+  transform: scale(0.8) rotate(180deg);
+}
