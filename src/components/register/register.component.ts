@@ -32,6 +32,7 @@ export class RegisterComponent {
     job: new FormControl('')
   }, {validators: VerifyField('email', 'emailVerification')});
 
+  
   constructor() {
 
   }
