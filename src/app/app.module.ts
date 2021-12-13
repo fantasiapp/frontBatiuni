@@ -22,6 +22,8 @@ import { RegistrationSuccess } from 'src/components/validator/registration_succe
 import { SliderComponent } from 'src/components/slider/slider.component';
 import { DiscoverComponent, DiscoverComponentEntreprise, DiscoverComponentSousTraitant } from 'src/components/discover_page/discover-page.component';
 import { OptionsModel } from 'src/components/options/options';
+import { GoogleMapsModule } from '@angular/google-maps';
+import { Googlemaps } from 'src/components/maps/map.component';
 
 import { HAMMER_GESTURE_CONFIG, HammerGestureConfig } from '@angular/platform-browser';
 import { TabComponent, TabsComponent } from 'src/components/tabs/tabs.component';
@@ -50,7 +52,8 @@ export class CustomConfig extends HammerGestureConfig {
     DiscoverComponentSousTraitant,
     OptionsModel,
     TabComponent,
-    TabsComponent
+    TabsComponent,
+    Googlemaps
   ],
   imports: [
     //Ngxs imports
@@ -70,7 +73,8 @@ export class CustomConfig extends HammerGestureConfig {
     AppRoutingModule,
     BrowserAnimationsModule,
     HammerModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    GoogleMapsModule
   ],
   providers: [{
     provide: HAMMER_GESTURE_CONFIG,
