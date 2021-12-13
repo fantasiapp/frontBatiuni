@@ -110,6 +110,10 @@ a {
     @extend .center-main;
     @extend .center-cross;
   }
+
+  & > .grow {
+    flex: 1;
+  }
 }
 //-----------------------------------------------
 //Size

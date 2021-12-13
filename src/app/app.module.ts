@@ -1,5 +1,5 @@
 import { environment } from 'src/environments/environment';
-import { NgModule } from '@angular/core';
+import { Injectable, NgModule } from '@angular/core';
 import { BrowserModule, HammerModule } from '@angular/platform-browser';
 import { NgxsModule } from '@ngxs/store';
 import { NgxsRouterPluginModule } from '@ngxs/router-plugin';
@@ -24,11 +24,14 @@ import { DiscoverComponent, DiscoverComponentEntreprise, DiscoverComponentSousTr
 import { OptionsModel } from 'src/components/options/options';
 
 import { HAMMER_GESTURE_CONFIG, HammerGestureConfig } from '@angular/platform-browser';
+import { TabComponent, TabsComponent } from 'src/components/tabs/tabs.component';
 
+@Injectable()
 export class CustomConfig extends HammerGestureConfig {
   overrides: { [key: string]: Object; } = {
     'pinch': { enable: false },
-    'rotate': { enable: false }
+    'rotate': { enable: false },
+    'swipe': { enable: true, direction: Hammer.DIRECTION_HORIZONTAL }
   };
 }
 
@@ -45,7 +48,9 @@ export class CustomConfig extends HammerGestureConfig {
     DiscoverComponent,
     DiscoverComponentEntreprise,
     DiscoverComponentSousTraitant,
-    OptionsModel
+    OptionsModel,
+    TabComponent,
+    TabsComponent
   ],
   imports: [
     //Ngxs imports

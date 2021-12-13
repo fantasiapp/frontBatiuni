@@ -12,11 +12,7 @@ export class DiscoverComponentEntreprise {
   @ViewChild(SliderComponent, {static: true})
   slider!: SliderComponent;
 
-  constructor(private cd: ChangeDetectorRef) { }
-
-  ngAfterContentInit() {
-    this.cd.markForCheck();
-  }
+  constructor() { }
 };
 
 @Component({
@@ -29,11 +25,7 @@ export class DiscoverComponentSousTraitant {
   @ViewChild(SliderComponent, {static: true})
   slider!: SliderComponent;
 
-  constructor(private cd: ChangeDetectorRef) { }
-
-  ngAfterContentInit() {
-    this.cd.markForCheck();
-  }
+  constructor() { }
 };
 
 @Component({
@@ -49,15 +41,11 @@ export class DiscoverComponent {
   @ViewChild(SliderComponent, {static: true})
   slider!: SliderComponent;
 
-  constructor(private router: Router, private route: ActivatedRoute, private cd: ChangeDetectorRef) { }
+  constructor(private router: Router, private route: ActivatedRoute) { }
 
   ngOnInit() {
     this.subject = this.route.snapshot.params['subject'] || 'entreprise';
     if ( !DiscoverComponent.subjects.includes(this.subject))
       this.router.navigate(['', 'discover', this.subject = 'entreprise']);
-  }
-
-  ngAfterContentInit() {
-    this.cd.markForCheck();
   }
 };

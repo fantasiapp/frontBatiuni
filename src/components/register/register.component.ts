@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { ChangeDetectionStrategy, Component } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { VerifyField } from "src/validators/verify";
 import { Job } from "../options/options";
@@ -6,9 +6,8 @@ import { Job } from "../options/options";
 @Component({
   selector: 'register',
   templateUrl: './register.component.html',
-  styleUrls: [
-    './register.component.scss'
-  ]
+  styleUrls: ['./register.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RegisterComponent {
   registerForm = new FormGroup({
