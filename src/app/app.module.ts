@@ -23,6 +23,15 @@ import { SliderComponent } from 'src/components/slider/slider.component';
 import { DiscoverComponent, DiscoverComponentEntreprise, DiscoverComponentSousTraitant } from 'src/components/discover_page/discover-page.component';
 import { OptionsModel } from 'src/components/options/options';
 
+import { HAMMER_GESTURE_CONFIG, HammerGestureConfig } from '@angular/platform-browser';
+
+export class CustomConfig extends HammerGestureConfig {
+  overrides: { [key: string]: Object; } = {
+    'pinch': { enable: false },
+    'rotate': { enable: false }
+  };
+}
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -58,7 +67,10 @@ import { OptionsModel } from 'src/components/options/options';
     HammerModule,
     ReactiveFormsModule
   ],
-  providers: [],
+  providers: [{
+    provide: HAMMER_GESTURE_CONFIG,
+    useClass: CustomConfig
+  }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

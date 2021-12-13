@@ -22,7 +22,7 @@ body {
   font-size: 16px;
   margin: 0;
   min-height: 100vh;
-  height: 100vh;
+  overflow-y: auto;
   //color: var(--main-app-color);
 
   @include breakpoint(tablet) {
@@ -161,7 +161,9 @@ a {
   display: flex;
   flex-direction: column;
   background: $secondaryBackground;
-  height: calc(100% - #{$pagination-height});
+  min-height: calc(100vh - #{$pagination-height});
+  overflow-y: auto;
+  touch-action: pan-y !important;
 }
 
 .paging {
@@ -196,7 +198,7 @@ a {
 .form-control {
   background-color: $landingColor;
   color: $formulaireMainColor;
-  height: 100%;
+  flex: 1;
   padding: 30px;
   font-family: "Poppins";
   @extend .flex;
