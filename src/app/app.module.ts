@@ -22,17 +22,8 @@ import { RegistrationSuccess } from 'src/components/validator/registration_succe
 import { SliderComponent } from 'src/components/slider/slider.component';
 import { DiscoverComponent, DiscoverComponentEntreprise, DiscoverComponentSousTraitant } from 'src/components/discover_page/discover-page.component';
 import { OptionsModel } from 'src/components/options/options';
-import { GoogleMapsModule } from '@angular/google-maps';
-import { Googlemaps } from 'src/components/maps/map.component';
-
-import { HAMMER_GESTURE_CONFIG, HammerGestureConfig } from '@angular/platform-browser';
-
-export class CustomConfig extends HammerGestureConfig {
-  overrides: { [key: string]: Object; } = {
-    'pinch': { enable: false },
-    'rotate': { enable: false }
-  };
-}
+import { RangeComponent } from 'src/components/ui_component/range/range.component';
+import { OfferComponent } from 'src/components/ui_component/offer/offer.compnent';
 
 @NgModule({
   declarations: [
@@ -48,7 +39,8 @@ export class CustomConfig extends HammerGestureConfig {
     DiscoverComponentEntreprise,
     DiscoverComponentSousTraitant,
     OptionsModel,
-    Googlemaps
+    RangeComponent,
+    OfferComponent
   ],
   imports: [
     //Ngxs imports
@@ -68,13 +60,9 @@ export class CustomConfig extends HammerGestureConfig {
     AppRoutingModule,
     BrowserAnimationsModule,
     HammerModule,
-    ReactiveFormsModule,
-    GoogleMapsModule
+    ReactiveFormsModule
   ],
-  providers: [{
-    provide: HAMMER_GESTURE_CONFIG,
-    useClass: CustomConfig
-  }],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

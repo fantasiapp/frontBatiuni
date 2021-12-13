@@ -1,5 +1,6 @@
-@import "../../styles/fonts.scss";
-@import "../../styles//mixins";
+@import "../../../styles/fonts.scss";
+@import "../../../styles/mixins";
+@import "../../../styles/variables";
 
 :host {
     font-family: "Roboto Regular";
@@ -12,6 +13,9 @@
     padding: 1.5em;
     color: #999999;
     font-size: 15px;
+    .offres-infos {
+        flex : 1;
+    }
     p{
         margin: 0.6em;
     }
@@ -28,5 +32,5 @@
 }
 
 .offres-logo {
-    @include circle(70px, rgb(241, 241, 241));
+    @include circle(80px, rgb(241, 241, 241));
 }

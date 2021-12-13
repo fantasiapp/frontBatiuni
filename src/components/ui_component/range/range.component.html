@@ -1,0 +1,13 @@
+<main class="cover-parent">
+    
+    <div class="slide-component">
+        <div>
+            <input type="range" (change)="Slidevalue($event)" value="0" min="0" max="100" />
+
+        </div>
+        <div class="slide-value">
+            <p class="slid-min-value">{{min}}</p>
+            <p class="slid-max-value">{{max}} {{unit}}</p>
+        </div>
+</div>
+</main>
