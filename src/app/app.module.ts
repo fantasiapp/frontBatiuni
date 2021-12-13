@@ -24,6 +24,16 @@ import { DiscoverComponent, DiscoverComponentEntreprise, DiscoverComponentSousTr
 import { OptionsModel } from 'src/components/options/options';
 import { GoogleMapsModule } from '@angular/google-maps';
 import { Googlemaps } from 'src/components/maps/map.component';
+
+import { HAMMER_GESTURE_CONFIG, HammerGestureConfig } from '@angular/platform-browser';
+
+export class CustomConfig extends HammerGestureConfig {
+  overrides: { [key: string]: Object; } = {
+    'pinch': { enable: false },
+    'rotate': { enable: false }
+  };
+}
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -61,7 +71,10 @@ import { Googlemaps } from 'src/components/maps/map.component';
     ReactiveFormsModule,
     GoogleMapsModule
   ],
-  providers: [],
+  providers: [{
+    provide: HAMMER_GESTURE_CONFIG,
+    useClass: CustomConfig
+  }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
