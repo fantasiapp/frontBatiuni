@@ -23,7 +23,8 @@ import { SliderComponent } from 'src/components/slider/slider.component';
 import { DiscoverComponent, DiscoverComponentEntreprise, DiscoverComponentSousTraitant } from 'src/components/discover_page/discover-page.component';
 import { OptionsModel } from 'src/components/options/options';
 import { GoogleMapsModule } from '@angular/google-maps';
-import { Googlemaps } from 'src/components/maps/map.component';
+import { RangeComponent } from 'src/components/ui_component/range/range.component';
+import { OfferComponent } from 'src/components/ui_component/offer/offer.compnent';
 
 import { HAMMER_GESTURE_CONFIG, HammerGestureConfig } from '@angular/platform-browser';
 import { TabComponent, TabsComponent } from 'src/components/tabs/tabs.component';
@@ -53,7 +54,8 @@ export class CustomConfig extends HammerGestureConfig {
     OptionsModel,
     TabComponent,
     TabsComponent,
-    Googlemaps
+    RangeComponent,
+    OfferComponent
   ],
   imports: [
     //Ngxs imports
@@ -73,13 +75,9 @@ export class CustomConfig extends HammerGestureConfig {
     AppRoutingModule,
     BrowserAnimationsModule,
     HammerModule,
-    ReactiveFormsModule,
-    GoogleMapsModule
+    ReactiveFormsModule
   ],
-  providers: [{
-    provide: HAMMER_GESTURE_CONFIG,
-    useClass: CustomConfig
-  }],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
