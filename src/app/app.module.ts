@@ -22,7 +22,8 @@ import { RegistrationSuccess } from 'src/components/validator/registration_succe
 import { SliderComponent } from 'src/components/slider/slider.component';
 import { DiscoverComponent, DiscoverComponentEntreprise, DiscoverComponentSousTraitant } from 'src/components/discover_page/discover-page.component';
 import { OptionsModel } from 'src/components/options/options';
-
+import { GoogleMapsModule } from '@angular/google-maps';
+import { Googlemaps } from 'src/components/maps/map.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -36,7 +37,8 @@ import { OptionsModel } from 'src/components/options/options';
     DiscoverComponent,
     DiscoverComponentEntreprise,
     DiscoverComponentSousTraitant,
-    OptionsModel
+    OptionsModel,
+    Googlemaps
   ],
   imports: [
     //Ngxs imports
@@ -56,7 +58,8 @@ import { OptionsModel } from 'src/components/options/options';
     AppRoutingModule,
     BrowserAnimationsModule,
     HammerModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    GoogleMapsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

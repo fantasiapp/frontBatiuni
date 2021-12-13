@@ -1,0 +1,32 @@
+@import "../../styles/fonts.scss";
+@import "../../styles//mixins";
+
+:host {
+    font-family: "Roboto Regular";
+}
+
+.offres {
+    width: 80%;
+    justify-content: space-between;
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 25px 24px;
+    padding: 1.5em;
+    color: #999999;
+    font-size: 15px;
+    p{
+        margin: 0.6em;
+    }
+    .entreprise , .adresse {
+        font-size: 13px;
+    }
+    .metier, .date {
+        color: #333333;
+    }
+    .adresse {
+        font-family: "Roboto Light";
+    }
+    
+}
+
+.offres-logo {
+    @include circle(70px, rgb(241, 241, 241));
+}

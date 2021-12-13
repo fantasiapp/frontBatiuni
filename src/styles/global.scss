@@ -111,6 +111,9 @@ a {
     @extend .center-cross;
   }
 }
+.auto-margin-x {
+  margin: 0 auto;
+}
 //-----------------------------------------------
 //Size
 .full-width { width: 100%; }

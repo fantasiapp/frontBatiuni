@@ -7,7 +7,7 @@ import { emailConfirmation } from 'src/components/validator/email_confirmation/e
 import { RegistrationSuccess } from 'src/components/validator/registration_success/registrationsuccess';
 import { DiscoverComponent } from 'src/components/discover_page/discover-page.component';
 import { OptionsModel } from 'src/components/options/options';
-
+import { Googlemaps } from 'src/components/maps/map.component';
 const routes: Routes = [{
     path: 'landing',
     component: LandingPageComponent,
@@ -29,6 +29,9 @@ const routes: Routes = [{
     component: emailConfirmation,
     data: { animation: 'Confirmed' }
   }, {
+    path: 'maps',
+    component: Googlemaps,
+  },{
     path: 'testmodel',
     component: OptionsModel
   }, {
