@@ -1,4 +1,5 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
+import { Router } from "@angular/router";
 
 @Component({
   selector: 'paging',
@@ -6,6 +7,8 @@ import { Component, Input, Output, EventEmitter } from "@angular/core";
   styleUrls: ['./paging.component.scss']
 })
 export class PagingComponent {
+
+  constructor(private router: Router) {}
 
   @Input()
   showNext: boolean = true;
@@ -26,8 +29,13 @@ export class PagingComponent {
   indexChange = new EventEmitter<number>();
 
   onClick(dx: number) {
+    console.log(this.index, dx);
     this.index += dx;
-    console.log('clicks')
+    if ( this.index < 0 ) {
+      this.router.navigate(['', 'landing']);
+      return;
+    }
+
     this.indexChange.emit(this.index);
     this.navigate.emit(dx);
   }

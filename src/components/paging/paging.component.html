@@ -1,21 +1,13 @@
-<ul class="paging">
-  <li *ngIf="!showNext || !index; else lastPage">
-    <a [routerLink]="['', 'landing']">
+<ul class="paging flex row">
+  <li>
+    <a (click)="onClick(-1)">
       <img class="arrow_left" src="assets/Fleche.svg" />
-      <span *ngIf="showPageName">Accueil</span>
+      <span> {{ showPageName ? (!index ? 'Acceuil' : 'Etape précedente') : '' }} </span>
     </a>
   </li>
-  <ng-template #lastPage>
-    <li>
-      <a (click)="onClick(-1)">
-        <img class="arrow_left" src="assets/Fleche.svg" />
-        <span *ngIf="showPageName">Etape précedente</span>
-      </a>
-    </li>
-  </ng-template>
-  <li *ngIf="showNext && (index < length-1)">
+  <li *ngIf="showNext && (index < length-1)" style="text-align: right;">
     <a (click)="onClick(1)">
-      <span *ngIf="showPageName">Etape suivante</span>
+      <span>{{ showPageName ? 'Etape suivante' : '' }}</span>
       <img class="arrow_right" src="assets/Fleche.svg" />
     </a>
   </li>

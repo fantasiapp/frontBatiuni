@@ -197,6 +197,7 @@ a {
 
 .hosted-view {
   width: 100%;
+  overflow-y: auto;
 }
 
 .formulaire {
@@ -212,13 +213,16 @@ a {
 .paging {
   list-style-type: none;
   font-size: 0.9em;
-  padding: 25px 0;
   height: $paging-height;
+  line-height: $paging-height;
   background: $secondaryBackground;
   color: $landingColor;
-  display: flex;
-  align-items: center;
   justify-content: space-between;
+
+  & > li {
+    flex-grow: 1;
+    height: 100%;
+  }
   
   & li a > * {
     display: inline-block;
