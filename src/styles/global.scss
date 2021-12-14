@@ -158,8 +158,9 @@ a {
   width: 100%;
   padding: 30px; 
 
-  &.include-pagination {
-    min-height: calc(100% - 75px);
+  &.include-paging {
+    top: 75px;
+    min-height: calc(100vh - 75px);
   }
 }
 
@@ -168,7 +169,7 @@ a {
   display: flex;
   flex-direction: column;
   background: $secondaryBackground;
-  min-height: calc(100vh - #{$pagination-height});
+  min-height: calc(100vh - #{$paging-height});
   overflow-y: auto;
   touch-action: pan-y !important;
 }
@@ -177,17 +178,21 @@ a {
   list-style-type: none;
   font-size: 0.9em;
   padding: 25px 0;
-  height: $pagination-height;
+  height: $paging-height;
   background: $secondaryBackground;
   color: $landingColor;
   display: flex;
   align-items: center;
   justify-content: space-between;
-
+  
   & li a > * {
     display: inline-block;
     vertical-align: middle;
   }
+}
+
+.no-background {
+  background: none !important;
 }
 
 .title {

@@ -11,23 +11,13 @@ import { SlidesDirective } from "src/directives/slides.directive";
 export class SliderComponent {
   private _type: 'component' | 'template' = 'template';
 
-  constructor(private cd: ChangeDetectorRef) {
-  };
+  constructor() {}
 
   @ContentChildren(TemplateRef)
   components!: QueryList<TemplateRef<any>>;
 
   @ViewChild(SlidesDirective, {static: true})
   container?: SlidesDirective;
-
-  @Input()
-  pagination: boolean = true;
-
-  @Input()
-  showPageName: boolean = true;
-
-  @Input()
-  showNext: boolean = true;
   
   @Input()
   set type(type: 'component' | 'template') {

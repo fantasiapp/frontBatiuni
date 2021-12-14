@@ -20,7 +20,7 @@ import { RegisterComponent } from 'src/components/register/register.component';
 import { emailConfirmation } from 'src/components/validator/email_confirmation/emailconfirmation';
 import { RegistrationSuccess } from 'src/components/validator/registration_success/registrationsuccess';
 import { SliderComponent } from 'src/components/slider/slider.component';
-import { DiscoverComponent, DiscoverComponentEntreprise, DiscoverComponentSousTraitant } from 'src/components/discover_page/discover-page.component';
+import { DiscoverComponent } from 'src/components/discover_page/discover-page.component';
 import { OptionsModel } from 'src/components/options/options';
 import { GoogleMapsModule } from '@angular/google-maps';
 import { RangeComponent } from 'src/components/ui_component/range/range.component';
@@ -28,13 +28,14 @@ import { OfferComponent } from 'src/components/ui_component/offer/offer.compnent
 
 import { HAMMER_GESTURE_CONFIG, HammerGestureConfig } from '@angular/platform-browser';
 import { TabComponent, TabsComponent } from 'src/components/tabs/tabs.component';
+import { SlideTemplate } from 'src/directives/slideTemplate.directive';
+import { PagingComponent } from 'src/components/paging/paging.component';
 
 @Injectable()
 export class CustomConfig extends HammerGestureConfig {
   overrides: { [key: string]: Object; } = {
-    'pinch': { enable: false },
     'rotate': { enable: false },
-    'swipe': { enable: true, direction: Hammer.DIRECTION_HORIZONTAL }
+    'swipe': { enable: true, direction: Hammer.DIRECTION_HORIZONTAL },
   };
 }
 
@@ -49,13 +50,13 @@ export class CustomConfig extends HammerGestureConfig {
     SlidesDirective,
     SliderComponent,
     DiscoverComponent,
-    DiscoverComponentEntreprise,
-    DiscoverComponentSousTraitant,
     OptionsModel,
     TabComponent,
     TabsComponent,
     RangeComponent,
-    OfferComponent
+    OfferComponent,
+    SlideTemplate,
+    PagingComponent
   ],
   imports: [
     //Ngxs imports
@@ -77,7 +78,10 @@ export class CustomConfig extends HammerGestureConfig {
     HammerModule,
     ReactiveFormsModule
   ],
-  providers: [],
+  providers: [{
+    provide: HAMMER_GESTURE_CONFIG,
+    useClass: CustomConfig
+  }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

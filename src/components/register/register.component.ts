@@ -1,7 +1,8 @@
-import { ChangeDetectionStrategy, Component } from "@angular/core";
+import { ChangeDetectionStrategy, Component, ViewChild } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { VerifyField } from "src/validators/verify";
 import { Job } from "../options/options";
+import { SliderComponent } from "../slider/slider.component";
 
 @Component({
   selector: 'register',
@@ -76,11 +77,20 @@ export class RegisterComponent {
     {id:41,job:"Ferronnier d’art", isChecked:false}
   ];
 
+  @ViewChild(SliderComponent, {static: true})
+  slider!: SliderComponent;
+
   constructor() {
 
   }
 
   onSubmit(f: any) {
     console.log(f);
+  }
+
+  onNavigate(dx: number) {
+    console.log('navgation', dx);
+    if ( dx > 0 ) this.slider.slideLeft();
+    else this.slider.slideRight();
   }
 };
