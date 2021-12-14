@@ -31,32 +31,39 @@ $fade: 250ms ease-out;
   100% { opacity: 0; }
 }
 
-.slide-in-right {
+.animating {
   position: absolute;
+  left: 0; top: 0;
+  padding: inherit;
+  height: 100%;
+}
+
+.slide-in-right {
+  @extend .animating;
   animation: $slide 0s normal forwards slide-in-right;
 }
 
 .slide-out-right {
-  position: absolute;
+  @extend .animating;
   animation: $slide 0s normal forwards slide-out-right;
 }
 
 .slide-in-left {
-  position: absolute;
+  @extend .animating;
   animation: $slide 0s normal forwards slide-in-left;
 }
 
 .slide-out-left {
-  position: absolute;
+  @extend .animating;
   animation: $slide 0s normal forwards slide-out-left;
 }
 
 .fade-in {
-  position: absolute;
+  @extend .animating;
   animation: $fade normal forwards fade-in;
 }
 
 .fade-out {
-  position: absolute;
+  @extend .animating;
   animation: $fade normal forwards fade-out;
 }

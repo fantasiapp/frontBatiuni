@@ -1,4 +1,7 @@
-@import '../../styles/mixins.scss';
+@import '../../styles/mixins';
+@import '../../styles/variables';
+
+$buttonHeight: 60px;
 
 :host {
   display: block;
@@ -8,8 +11,10 @@
 .create-account {
   position: absolute;
   bottom: 0;
+  height: $buttonHeight;
   padding: 0 30px;
   box-shadow: 0 -2px 5px 0 #aaa;
+  background: white;;
 }
 
 .create-account button {
@@ -17,14 +22,14 @@
 }
 
 .section {
-  min-height: calc(100vh - 200px);
-  max-height: 80vh;
+  $offset: $buttonHeight + $paging-height + $page-padding-y;
+  height: calc(100vh - #{$offset});
 }
 
 .image-container {
 
   img {
-    max-height: 55vh;
+    max-height: 50vh;
   }
 }
 

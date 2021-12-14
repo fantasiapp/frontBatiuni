@@ -186,20 +186,17 @@ a {
   @extend .curved-border;
   @extend .background-white;
   width: 100%;
-  padding: 30px; 
+  padding: $page-padding-y;
+  padding-bottom: 0 !important;
+  position: relative;
 
   &.include-paging {
-    top: 75px;
     min-height: calc(100vh - 75px);
   }
 }
 
 .hosted-view {
   width: 100%;
-  &.animating {
-    max-width: calc(100% - 60px) !important;
-    min-height: calc(100% - 135px);
-  }
 }
 
 .formulaire {
