@@ -183,14 +183,14 @@ a {
 }
 
 .hosted-page {
-  @extend .curved-border;
   @extend .background-white;
   width: 100%;
-  padding: $page-padding-y;
+  padding: $page-padding;
+  padding-top: $page-padding - $paging-decoration-height !important;
   position: relative;
 
   &.include-paging {
-    min-height: calc(100vh - 75px);
+    min-height: calc(100vh - #{$paging-height + $paging-decoration-height});
   }
 }
 

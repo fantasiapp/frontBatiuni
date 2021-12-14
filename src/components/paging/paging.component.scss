@@ -1,3 +1,20 @@
+@import '../../styles/variables';
+
 :host {
   display: block;
+  position: sticky;
+  top: 0;
+  z-index: 9999;
+  height: $paging-height + $paging-decoration-height;
+  overflow: hidden;
+}
+
+.decoration-cover {
+  background-color: $buttonGradient;
+}
+
+.decoration {
+  height: $paging-decoration-height;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
 }

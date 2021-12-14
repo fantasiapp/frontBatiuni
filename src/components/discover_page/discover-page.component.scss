@@ -22,14 +22,14 @@ $buttonHeight: 60px;
 }
 
 .section {
-  $offset: $buttonHeight + $paging-height + $page-padding-y;
+  $offset: $buttonHeight + $paging-height + $page-padding;
   height: calc(100vh - #{$offset});
 }
 
 .image-container {
 
   img {
-    max-height: 50vh;
+    max-height: 40vh;
   }
 }
 
