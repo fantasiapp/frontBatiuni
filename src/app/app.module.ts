@@ -24,6 +24,8 @@ import { DiscoverComponent, DiscoverComponentEntreprise, DiscoverComponentSousTr
 import { OptionsModel } from 'src/components/options/options';
 import { RangeComponent } from 'src/components/ui_component/range/range.component';
 import { OfferComponent } from 'src/components/ui_component/offer/offer.compnent';
+import { HomeMenu } from 'src/components/ui_component/homeMenu/home.menu';
+import { GoogleMapsModule } from '@angular/google-maps';
 
 @NgModule({
   declarations: [
@@ -40,7 +42,7 @@ import { OfferComponent } from 'src/components/ui_component/offer/offer.compnent
     DiscoverComponentSousTraitant,
     OptionsModel,
     RangeComponent,
-    OfferComponent
+    OfferComponent,
   ],
   imports: [
     //Ngxs imports
@@ -60,7 +62,8 @@ import { OfferComponent } from 'src/components/ui_component/offer/offer.compnent
     AppRoutingModule,
     BrowserAnimationsModule,
     HammerModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    GoogleMapsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
