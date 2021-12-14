@@ -67,7 +67,7 @@ const STContexts: DiscoveryContext[] = [
       {content: 'de sous-traitances et filtrez selon', emphasis: false},
       {content: 'vos préferences', emphasis: true}
     ],
-    image: 'assets/ST1.svg'
+    image: 'assets/ST1.png'
   }},
   //Page 2
   {$implicit: {
@@ -76,7 +76,7 @@ const STContexts: DiscoveryContext[] = [
       {content: 'Soyez facilement', emphasis: false},
       {content: 'organisés', emphasis: true}
     ],
-    image: 'assets/ST2.svg'
+    image: 'assets/ST2.png'
   }},
   //Page 3
   {$implicit: {
