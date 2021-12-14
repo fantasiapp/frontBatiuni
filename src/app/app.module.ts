@@ -36,6 +36,7 @@ import { FadeTemplate } from 'src/directives/fadeTemplate.directive';
 @Injectable()
 export class CustomConfig extends HammerGestureConfig {
   overrides: { [key: string]: Object; } = {
+    'pinch': { enabled: false },
     'rotate': { enable: false },
     'swipe': { enable: true, direction: Hammer.DIRECTION_HORIZONTAL },
   };
