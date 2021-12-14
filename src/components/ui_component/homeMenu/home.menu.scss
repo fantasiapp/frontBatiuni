@@ -1,0 +1,19 @@
+@import "../../../styles/variables";
+
+
+.home-button {
+    position: fixed;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.7em;
+    bottom: 0;
+    z-index: 999;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 0px 8px;
+    .active{
+       img{
+        filter: invert(28%) sepia(14%) saturate(2310%) hue-rotate(158deg) brightness(90%) contrast(101%);
+       } 
+    }
+}

@@ -25,6 +25,7 @@ import { OptionsModel } from 'src/components/options/options';
 import { GoogleMapsModule } from '@angular/google-maps';
 import { RangeComponent } from 'src/components/ui_component/range/range.component';
 import { OfferComponent } from 'src/components/ui_component/offer/offer.compnent';
+import { HomeMenu } from 'src/components/ui_component/homeMenu/home.menu';
 
 import { HAMMER_GESTURE_CONFIG, HammerGestureConfig } from '@angular/platform-browser';
 import { TabComponent, TabsComponent } from 'src/components/tabs/tabs.component';
@@ -78,7 +79,8 @@ export class CustomConfig extends HammerGestureConfig {
     AppRoutingModule,
     BrowserAnimationsModule,
     HammerModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    GoogleMapsModule
   ],
   providers: [{
     provide: HAMMER_GESTURE_CONFIG,
