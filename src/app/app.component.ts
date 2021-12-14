@@ -15,8 +15,8 @@ import { SlideChildrenLeft, SlideChildrenRight } from 'src/animations/slide.anim
   changeDetection: ChangeDetectionStrategy.OnPush,
   animations: [
     trigger('routeAnimation', [
-      transition('* => LandingPage, * => Confirmed, * => Success', SlideChildrenLeft),
-      transition('LandingPage => *, Confirmed => *, Success => *', SlideChildrenRight)
+      transition('LandingPage => Discover, * => Confirmed, * => Success', SlideChildrenRight),
+      transition('Discover => LandingPage, Confirmed => *, Success => *', SlideChildrenLeft)
     ])
   ]
 })

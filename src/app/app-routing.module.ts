@@ -20,7 +20,8 @@ const routes: Routes = [{
     redirectTo: 'discover/entreprise'
   }, {
     path: 'discover/:subject',
-    component: DiscoverComponent
+    component: DiscoverComponent,
+    data: { animation: 'Discover' }
   }, {
     path: 'register',
     component: RegisterComponent

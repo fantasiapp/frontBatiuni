@@ -29,7 +29,7 @@ $buttonHeight: 60px;
 .image-container {
 
   img {
-    max-height: 40vh;
+    max-height: 45vh;
   }
 }
 
@@ -49,7 +49,7 @@ $buttonHeight: 60px;
 .arrow_left {
   left: 0;
   transform-origin: center center;
-  transform: scale(0.8) rotate(180deg);
+  transform: scale(0.8) scaleX(-1);
 }
 
 .emphasis {

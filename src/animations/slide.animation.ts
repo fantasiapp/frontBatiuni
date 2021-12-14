@@ -32,14 +32,14 @@ export const SlideChildrenRight = [
   group([
     query(
       ':enter', [
-        style({ transform: 'translateX(-100%)' }),
+        style({ transform: 'translateX(100%)' }),
         animate('200ms ease-out', style({ transform: 'translateX(0%)' })),], {
         optional: true,
       }
     ), query(
       ':leave', [
         style({ transform: 'translateX(0%)' }),
-        animate('200ms ease-out', style({ transform: 'translateX(100%)' })),], {
+        animate('200ms ease-out', style({ transform: 'translateX(-100%)' })),], {
         optional: true,
       }
     )

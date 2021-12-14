@@ -8,7 +8,7 @@
         </span>
       </p>
     </header>
-    <div class="image-container center-text" style="margin-top: 50px">
+    <div class="image-container center-text" style="margin-top: 40px; margin-bottom: auto">
       <img [src]="ctx.image"/>
     </div>
   </section>
@@ -24,12 +24,12 @@
   </ng-container> 
 </div>
 
-<div class="paging full-width absolute-center-y no-background">
-  <a *ngIf="slider.index > 0" class="arrow_left" (click)="slider.slide('right')">
+<div class="full-width no-background">
+  <a *ngIf="slider.index > 0" class="arrow_left absolute-center-y" (click)="slider.slide('right')">
     <img src="assets/Fleche2.svg"/>
   </a>  
 
-  <a *ngIf="slider.index < slider.length - 1" class="arrow_right" (click)="slider.slide('left')">
+  <a *ngIf="slider.index < slider.length - 1" class="arrow_right absolute-center-y" (click)="slider.slide('left')">
     <img src="assets/Fleche2.svg"/>
   </a>
 </div>
