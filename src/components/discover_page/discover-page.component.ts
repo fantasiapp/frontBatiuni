@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewChild } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, ViewChild } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { FadeTemplate } from "src/directives/fadeTemplate.directive";
 import { SlideTemplate } from "src/directives/slideTemplate.directive";
@@ -128,5 +128,16 @@ export class DiscoverComponent {
       this.router.navigate(['', 'discover', this.subject = 'entreprise']);
 
     console.log(this.subject, this.contexts, this.contexts[this.subject])
+  }
+
+  @HostListener('swipeleft')
+  onSwipeLeft() {
+    this.slider.slide('left');
+  }
+
+  
+  @HostListener('swiperight')
+  onSwipeRight() {
+    this.slider.slide('right');
   }
 };

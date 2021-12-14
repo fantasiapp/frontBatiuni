@@ -187,7 +187,6 @@ a {
   @extend .background-white;
   width: 100%;
   padding: $page-padding-y;
-  padding-bottom: 0 !important;
   position: relative;
 
   &.include-paging {
