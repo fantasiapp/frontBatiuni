@@ -1,4 +1,5 @@
 import { ChangeDetectorRef, Component, ContentChildren, HostListener, Input, QueryList, TemplateRef, ViewChild } from "@angular/core";
+import { Router } from "@angular/router";
 import { SlidesDirective } from "src/directives/slides.directive";
 
 @Component({
@@ -11,7 +12,7 @@ import { SlidesDirective } from "src/directives/slides.directive";
 export class SliderComponent {
   private _type: 'component' | 'template' = 'template';
 
-  constructor() {}
+  constructor(private router: Router) {}
 
   @ContentChildren(TemplateRef)
   components!: QueryList<TemplateRef<any>>;
@@ -45,6 +46,8 @@ export class SliderComponent {
   @HostListener('swipeleft')
   onSwipeLeft() {
     this.slideLeft();
+    if ( !this.index )
+      this.router.navigate(['', 'landing']);
   }
 
   @HostListener('swiperight')
