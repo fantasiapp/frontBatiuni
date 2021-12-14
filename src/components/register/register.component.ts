@@ -1,5 +1,6 @@
-import { ChangeDetectionStrategy, Component, ViewChild } from "@angular/core";
+import { ChangeDetectionStrategy, Component, ContentChildren, HostBinding, HostListener, QueryList, TemplateRef, ViewChild } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
+import { SlidesDirective } from "src/directives/slides.directive";
 import { VerifyField } from "src/validators/verify";
 import { Job } from "../options/options";
 import { SliderComponent } from "../slider/slider.component";
@@ -32,6 +33,29 @@ export class RegisterComponent {
     company: new FormControl(''),
     job: new FormControl('')
   }, {validators: VerifyField('email', 'emailVerification')});
+
+  @ViewChild(SlidesDirective, {static: true})
+  slider!: SlidesDirective;
+
+
+  onSubmit(f: any) {
+
+  }
+
+  onNavigate(dx: number) {
+    if ( dx > 0 ) this.slider.left();
+    else this.slider.right();
+  }
+
+  @HostListener('swipeleft')
+  onSwipeLeft() {
+    this.onNavigate(1);
+  }
+
+  @HostListener('swiperight')
+  onSwipeRight() {
+    this.onNavigate(-1);
+  }
 
   jobs: Job[] = [
     {id:1,job:"TCE", isChecked:false},
@@ -76,21 +100,4 @@ export class RegisterComponent {
     {id:40,job:"Designer", isChecked:false},
     {id:41,job:"Ferronnier d’art", isChecked:false}
   ];
-
-  @ViewChild(SliderComponent, {static: true})
-  slider!: SliderComponent;
-
-  constructor() {
-
-  }
-
-  onSubmit(f: any) {
-    console.log(f);
-  }
-
-  onNavigate(dx: number) {
-    console.log('navgation', dx);
-    if ( dx > 0 ) this.slider.slideLeft();
-    else this.slider.slideRight();
-  }
 };

@@ -23,6 +23,7 @@ body {
   margin: 0;
   min-height: 100vh;
   overflow-y: auto;
+  background: $buttonGradient;
   //color: var(--main-app-color);
 
   @include breakpoint(tablet) {
@@ -115,8 +116,13 @@ a {
     flex: 1;
   }
 }
+
 .auto-margin-x {
   margin: 0 auto;
+}
+
+.auto-margin-y {
+  margin: auto 0;
 }
 //-----------------------------------------------
 //Size
@@ -131,6 +137,28 @@ a {
 //Colors
 .background-white {
   background-color: $landingColor;
+}
+
+//------------------------------------------------
+// POSITIONING
+.position-absolute {
+  position: absolute;
+}
+
+.absolute-center-x {
+  @include absolute-center('x', absolute);
+}
+
+.absolute-center-y {
+  @include absolute-center('y', absolute);
+}
+
+.relative-center-x {
+  @include absolute-center('x', relative);
+}
+
+.relative-center-y {
+  @include absolute-center('y', relative);
 }
 
 //------------------------------------------------
@@ -161,6 +189,14 @@ a {
   &.include-paging {
     top: 75px;
     min-height: calc(100vh - 75px);
+  }
+}
+
+.hosted-view {
+  width: 100%;
+  &.animating {
+    max-width: calc(100% - 60px) !important;
+    min-height: calc(100% - 135px);
   }
 }
 
@@ -211,7 +247,6 @@ a {
   background-color: $landingColor;
   color: $formulaireMainColor;
   flex: 1;
-  padding: 30px;
   font-family: "Poppins";
   @extend .flex;
   @extend .column;

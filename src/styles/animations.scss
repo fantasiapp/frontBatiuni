@@ -1,4 +1,5 @@
 $slide: 200ms ease-out;
+$fade: 200ms ease-out;
 
 @keyframes slide-in-right {
   0% { transform: translateX(-100%); }
@@ -20,6 +21,16 @@ $slide: 200ms ease-out;
   100% { transform: translateX(-100%); }  
 };
 
+@keyframes fade-in {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@keyframes fade-out {
+  0% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
 .slide-in-right {
   position: absolute;
   animation: $slide 0s normal forwards slide-in-right;
@@ -38,4 +49,14 @@ $slide: 200ms ease-out;
 .slide-out-left {
   position: absolute;
   animation: $slide 0s normal forwards slide-out-left;
+}
+
+.fade-in {
+  position: absolute;
+  animation: $fade normal forwards fade-in;
+}
+
+.fade-out {
+  position: absolute;
+  animation: $fade normal forwards fade-out;
 }

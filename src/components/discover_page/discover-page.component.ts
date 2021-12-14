@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewChild } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
+import { FadeTemplate } from "src/directives/fadeTemplate.directive";
 import { SlideTemplate } from "src/directives/slideTemplate.directive";
 import { SliderComponent } from "../slider/slider.component";
 

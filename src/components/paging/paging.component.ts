@@ -19,10 +19,16 @@ export class PagingComponent {
   @Input()
   length: number = 0;
 
+  @Input()
   index: number = 0;
+
+  @Output()
+  indexChange = new EventEmitter<number>();
 
   onClick(dx: number) {
     this.index += dx;
+    console.log('clicks')
+    this.indexChange.emit(this.index);
     this.navigate.emit(dx);
   }
 };

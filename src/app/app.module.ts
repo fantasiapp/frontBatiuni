@@ -30,6 +30,7 @@ import { HAMMER_GESTURE_CONFIG, HammerGestureConfig } from '@angular/platform-br
 import { TabComponent, TabsComponent } from 'src/components/tabs/tabs.component';
 import { SlideTemplate } from 'src/directives/slideTemplate.directive';
 import { PagingComponent } from 'src/components/paging/paging.component';
+import { FadeTemplate } from 'src/directives/fadeTemplate.directive';
 
 @Injectable()
 export class CustomConfig extends HammerGestureConfig {
@@ -55,8 +56,9 @@ export class CustomConfig extends HammerGestureConfig {
     TabsComponent,
     RangeComponent,
     OfferComponent,
+    PagingComponent,
     SlideTemplate,
-    PagingComponent
+    FadeTemplate
   ],
   imports: [
     //Ngxs imports

@@ -1,76 +1,78 @@
-<paging [length]="2" (navigate)="onNavigate($event)"></paging>
+<paging [length]="2" [(index)]="slider.index" (navigate)="onNavigate($event)"></paging>
 
-<slider class="background-white">
-  <ng-template>
-    <div class="formulaire">
-      <form class="form-control curved-border" [formGroup]="registerForm">
-        <h3 class="form-title">Créer un compte !</h3>
-        <h3 class="form-subtitle">Informations contact</h3>
-        <div class="form-input">
-          <label>Nom du contact</label> <input type="text" formControlName="lastname" required/>
-        </div>
-      
-        <div class="form-input">
-          <label>Prénom du contact</label> <input type="text" formControlName="firstname"/>
-        </div>
-      
-        <div class="form-input">
-          <label>Adresse e-mail contact</label> <input type="email" formControlName="email"/>
-        </div>
-      
-        <div class="form-input">
-          <label>Vérification addresse e-mail</label> <input type="email" formControlName="emailVerification"/>
-        </div>
-      
-        <div class="form-input">
-          <label>Mot de passe</label> <input type="password" formControlName="password"/>
-        </div>
-      
-        <div class="form-input">
-          <label>Code parrain ?</label> <input type="password" formControlName="parrain"/>
-        </div>
-        <a class="external-links form-links block center-text" style="margin-top: auto;" [routerLink]="['', 'register']">
-          Je créer un compte !
-        </a>
-        <div class="form-step">
-          <div class="active"></div>
-          <div></div>
-        </div>
-      </form>
-    </div>
-  </ng-template>
-  
-  <ng-template>
-    <div class="formulaire">
-      <form class="form-control curved-border" [formGroup]="registerForm" (ngSubmit)="onSubmit($event)">
-        <h3 class="form-title">Créer un compte !</h3>
-        <h3 class="form-subtitle">Informations entreprise</h3>
-        <div class="form-input">
-          <label>Je suis</label>
-          <select formControlName="role">
-            <option value="0">Une entreprise à la recherche de sous-traitances</option>
-            <option value="1">Un sous-traitant à la recerche d'une entreprise</option>
-            <option value="2">Les deux</option>
-          </select>
-        </div>
+<div class="hosted-page include-paging flex column">
+  <div class="content" type="template" [slides]="[page1, page2]"></div>
+</div>
+
+<ng-template #page1>
+  <div class="hosted-view flex column grow">
+    <form class="grow form-control curved-border" [formGroup]="registerForm">
+      <h3 class="form-title">Créer un compte !</h3>
+      <h3 class="form-subtitle">Informations contact</h3>
+      <div class="form-input">
+        <label>Nom du contact</label> <input type="text" formControlName="lastname" required/>
+      </div>
     
-        <div class="form-input">
-          <label>Nom de l'entreprise</label><input type="text" formControlName="company"/>
-        </div>
-      
-        <div class="form-input">
-          <label>Métier</label>
-          <options [options]="jobs"></options>
-        </div>
-        <div class="form-action" style="margin-top: auto;">
-          <button class="button discover gradient" style="width: 250px">Valider</button>
-        </div>
-      
-        <div class="form-step">
-          <div></div>
-          <div class="active"></div>
-        </div>
-      </form>
-    </div>
-  </ng-template>
-</slider>
+      <div class="form-input">
+        <label>Prénom du contact</label> <input type="text" formControlName="firstname"/>
+      </div>
+    
+      <div class="form-input">
+        <label>Adresse e-mail contact</label> <input type="email" formControlName="email"/>
+      </div>
+    
+      <div class="form-input">
+        <label>Vérification addresse e-mail</label> <input type="email" formControlName="emailVerification"/>
+      </div>
+    
+      <div class="form-input">
+        <label>Mot de passe</label> <input type="password" formControlName="password"/>
+      </div>
+    
+      <div class="form-input">
+        <label>Code parrain ?</label> <input type="password" formControlName="parrain"/>
+      </div>
+      <a class="external-links form-links block center-text" style="margin-top: auto;" [routerLink]="['', 'register']">
+        Je créer un compte !
+      </a>
+      <div class="form-step">
+        <div class="active"></div>
+        <div></div>
+      </div>
+    </form>
+  </div>
+</ng-template>
+
+<ng-template #page2>
+  <div class="hosted-view flex column grow">
+    <form class="grow form-control curved-border" [formGroup]="registerForm" (ngSubmit)="onSubmit($event)">
+      <h3 class="form-title">Créer un compte !</h3>
+      <h3 class="form-subtitle">Informations entreprise</h3>
+      <div class="form-input">
+        <label>Je suis</label>
+        <select formControlName="role">
+          <option value="0">Une entreprise à la recherche de sous-traitances</option>
+          <option value="1">Un sous-traitant à la recerche d'une entreprise</option>
+          <option value="2">Les deux</option>
+        </select>
+      </div>
+  
+      <div class="form-input">
+        <label>Nom de l'entreprise</label><input type="text" formControlName="company"/>
+      </div>
+    
+      <div class="form-input">
+        <label>Métier</label>
+        <options [options]="jobs"></options>
+      </div>
+      <div class="form-action" style="margin-top: auto;">
+        <button class="button discover gradient" style="width: 250px">Valider</button>
+      </div>
+    
+      <div class="form-step">
+        <div></div>
+        <div class="active"></div>
+      </div>
+    </form>
+  </div>
+</ng-template>

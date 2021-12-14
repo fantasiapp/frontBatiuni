@@ -1,21 +1,23 @@
 import { ChangeDetectorRef, ComponentFactoryResolver, ComponentRef, Directive, HostBinding, Input, TemplateRef, ViewContainerRef } from "@angular/core";
-import { Ref } from "./slideTemplate.directive";
+import { IndexBased } from "src/common/classes";
+import { Ref } from "src/common/types";
 
 @Directive({
   selector: '[slides]'
 })
-export class SlidesDirective {
-  constructor(private factoryResolver: ComponentFactoryResolver, private view: ViewContainerRef, private cd: ChangeDetectorRef) {}
-  
-  index: number = 0;
-  componentRef: Ref = {element: null, view: null};
-  private components: any[] = [];
-  private _type: 'component' | 'template' = 'component';
+export class SlidesDirective extends IndexBased {
+  constructor(private factoryResolver: ComponentFactoryResolver, private view: ViewContainerRef, private cd: ChangeDetectorRef) {
+    super();
+  }
 
   ngOnInit() {
     let ref = this.componentRef = this.create(0);
     this.view.insert(ref.view);
   }
+  
+  componentRef: Ref = {element: null, view: null};
+  private components: any[] = [];
+  private _type: 'component' | 'template' = 'component';
 
   @Input('slides')
   set slide(components: any[]) {
@@ -46,13 +48,13 @@ export class SlidesDirective {
   };
 
   private animateWithClass(element: HTMLElement, className: string, callback?: Function) {
-    element.classList.add(className);
+    element.classList.add(className, 'animating');
     let save = element.onanimationend;
     element.onanimationend = (e: AnimationEvent) => {
       save && save.call(element, e);
       element.onanimationend = save;
       callback?.(element, e);
-      element.classList.remove(className);
+      element.classList.remove(className, 'animating');
     };
   }
 
@@ -68,11 +70,14 @@ export class SlidesDirective {
       });
   }
 
+  indexChanged(k: number): void {
+    k > 0 ? this.left(k) : this.right(-k);
+  }
 
-  left() {
-    let next = Math.min(this.components.length-1, this.index + 1);
+  left(k = 1) {
+    let next = Math.min(this.components.length-1, this.index + k);
     if ( this.index != next ) {
-      this.index = next;
+      this._index = next;
       let componentRef = this.create(this.index);
       this.slideIn(componentRef, "left");
       this.componentRef = componentRef;
@@ -81,10 +86,10 @@ export class SlidesDirective {
     }
   }
 
-  right() {
-    let next = Math.max(0, this.index - 1);
+  right(k = 1) {
+    let next = Math.max(0, this.index - k);
     if ( this.index != next ) {
-      this.index = next;
+      this._index = next;
       let componentRef = this.create(this.index);
       this.slideIn(componentRef, "right");
       this.componentRef = componentRef;

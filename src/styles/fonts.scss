@@ -1,19 +1,19 @@
 $ttf: format('truetype');
 
 @font-face {
-  font-family: 'Roboto Regular';
+  font-family: 'Roboto';
   src: url("../assets/fonts/Roboto/Roboto-Regular.ttf") $ttf;
   font-weight: normal;
 }
 
 @font-face {
-  font-family: 'Roboto Light';
+  font-family: 'Roboto';
   src: url("/assets/fonts/Roboto/Roboto-Light.ttf") $ttf;
   font-weight: 300;
 }
 
 @font-face {
-  font-family: 'Roboto Bold';
+  font-family: 'Roboto';
   src: url("/assets/fonts/Roboto/Roboto-Bold.ttf") $ttf;
   font-weight: bold;
 }
@@ -25,7 +25,7 @@ $ttf: format('truetype');
 }
 
 @font-face {
-  font-family: 'Poppins Bold';
+  font-family: 'Poppins';
   src: url("/assets/fonts/Poppins/Poppins-Bold.ttf") $ttf;
   font-weight: bold;
 }

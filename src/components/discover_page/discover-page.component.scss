@@ -14,22 +14,22 @@
 
 .create-account button {
   margin: 10px 0;
-  @include absolute-center('x', relative);
 }
 
-.main {
-  padding: 20px 0;
-  bottom: 100px;
-  @include absolute-center('x', absolute);
+.section {
+  min-height: calc(100vh - 200px);
+  max-height: 80vh;
 }
 
-.main img {
-  max-height: 50vh;
+.image-container {
+
+  img {
+    max-height: 55vh;
+  }
 }
 
 .paging {
   z-index: 1;
-  @include absolute-center('y', absolute);
 }
 
 .arrow_left, .arrow_right {
