@@ -1,28 +1,4 @@
-<!-- Paging section -->
-<ng-content select="[pagination]"></ng-content>
-
-<ul *ngIf="pagination && slides.length" class="paging">
-  <li *ngIf="!showNext || !index; else pagePrecedente">
-    <a [routerLink]="['', 'landing']">
-      <img class="arrow_left" src="assets/Fleche.svg" />
-      <span *ngIf="showPageName">Page d'acceuil</span>
-    </a>
-  </li>
-  <ng-template #pagePrecedente>
-    <li>
-      <a (click)="onSwipeRight()">
-        <img class="arrow_left" src="assets/Fleche.svg" />
-        <span *ngIf="showPageName">Page précedente</span>
-      </a>
-    </li>
-  </ng-template>
-  <li *ngIf="showNext && (index < length-1)">
-    <a (click)="onSwipeLeft()">
-      <span *ngIf="showPageName">Page suivante</span>
-      <img class="arrow_right" src="assets/Fleche.svg" />
-    </a>
-  </li>
-</ul>
+<ng-content select="[paging]"></ng-content>
 
 <!-- Slides -->
 <div class="content" [type]="type" [slides]="slides" #container></div>

@@ -1,9 +1,5 @@
 import { ChangeDetectorRef, ComponentFactoryResolver, ComponentRef, Directive, HostBinding, Input, TemplateRef, ViewContainerRef } from "@angular/core";
-
-export type Ref = {
-  element: any;
-  view: any;
-};
+import { Ref } from "./slideTemplate.directive";
 
 @Directive({
   selector: '[slides]'

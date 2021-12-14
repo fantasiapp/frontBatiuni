@@ -27,7 +27,7 @@
   max-height: 50vh;
 }
 
-.pagination {
+.paging {
   z-index: 1;
   @include absolute-center('y', absolute);
 }
@@ -45,4 +45,8 @@
   left: 0;
   transform-origin: center center;
   transform: scale(0.8) rotate(180deg);
+}
+
+.emphasis {
+  font-weight: 600;
 }

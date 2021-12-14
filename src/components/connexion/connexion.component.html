@@ -1,31 +1,28 @@
-<slider [pagination]="true">
-  <ng-template>
-    <div class="formulaire">
-      <!-- Form -->
-      <form class="form-control curved-border" [formGroup]="loginForm" (ngSubmit)="onSubmit($event)" (change)="onChange()">
-      <!-- Main title ex: Je me connecte, Créer un compte  -->
-        <h3 class="form-title">Je me connecte</h3>
-        <div class="form-input">
-            <label >Adresse e-mail contact</label>
-            <input class="form-element" type="email" formControlName="email"/>
-        </div>
-        <div class="form-input">
-            <label >Mot de passe</label>
-            <input type="password" class="form-element" formControlName="password"/>
-        </div>
-        <a class="external-links form-links block text-right">
-          Mot de passe oublié !
-        </a>
-        <div class="form-action" style="margin-top: auto;">
-          <ul class="error-list">
-            <li *ngFor="let error of errors"> {{ error }} </li>
-          </ul>
-          <button class="button discover gradient" style="width: 250px;" [disabled]="!loginForm.touched || loginForm.status === 'INVALID'">Se connecter</button>
-        </div>
-        <a class="external-links form-links block center-text" [routerLink]="['', 'register']">
-          Je crée un compte !
-        </a>
-      </form>
+<paging></paging>
+<div class="formulaire">
+  <!-- Form -->
+  <form class="form-control curved-border" [formGroup]="loginForm" (ngSubmit)="onSubmit($event)" (change)="onChange()">
+  <!-- Main title ex: Je me connecte, Créer un compte  -->
+    <h3 class="form-title">Je me connecte</h3>
+    <div class="form-input">
+        <label >Adresse e-mail contact</label>
+        <input class="form-element" type="email" formControlName="email"/>
     </div>
-  </ng-template>
-</slider>
+    <div class="form-input">
+        <label >Mot de passe</label>
+        <input type="password" class="form-element" formControlName="password"/>
+    </div>
+    <a class="external-links form-links block text-right">
+      Mot de passe oublié !
+    </a>
+    <div class="form-action" style="margin-top: auto;">
+      <ul class="error-list">
+        <li *ngFor="let error of errors"> {{ error }} </li>
+      </ul>
+      <button class="button discover gradient" style="width: 250px;" [disabled]="!loginForm.touched || loginForm.status === 'INVALID'">Se connecter</button>
+    </div>
+    <a class="external-links form-links block center-text" [routerLink]="['', 'register']">
+      Je crée un compte !
+    </a>
+  </form>
+</div>

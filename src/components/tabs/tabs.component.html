@@ -1,0 +1,5 @@
+<ul class="tabs flex row">
+  <li *ngFor="let tab of tabs; let i = index" (click)="setView(i)" class="tab grow" [class.active]="index == i">
+    {{ tab.name }}
+  </li>
+</ul>

@@ -1,2 +1,35 @@
-<discover-entreprise *ngIf="subject === 'entreprise'"></discover-entreprise>
-<discover-sous-traitant *ngIf="subject === 'sous-traitant'"></discover-sous-traitant>
+<ng-template #page let-ctx>
+  <div class="hosted-page include-paging">
+    <header>
+      <h3 class="title">{{ ctx.title }}</h3>
+      <p class="font-Poppins">
+        <span *ngFor="let text of ctx.texts" [class.emphasis]="text.emphasis">
+          {{ text.content }}
+        </span>
+      </p>
+    </header>
+    <div class="main center-text">
+      <img [src]="ctx.image"/>
+    </div>
+  </div>
+</ng-template>
+
+<div class="formulaire">
+  <paging [showPageName]="false" [length]="4" [showNext]="false"></paging>
+  <ng-container [slide-template]="page" [contexts]="contexts[subject]">
+
+  </ng-container>
+  <div class="paging full-width no-background">
+    <a *ngIf="slider.index > 0" class="arrow_left" (click)="slider.slide('right')">
+      <img src="assets/Fleche2.svg"/>
+    </a>  
+
+    <a *ngIf="slider.index < slider.length" class="arrow_right" (click)="slider.slide('left')">
+      <img src="assets/Fleche2.svg"/>
+    </a>
+  </div>
+
+  <div class="create-account full-width">
+    <button class="button gradient full-width" [routerLink]="['', 'register']">Créer un compte</button>
+  </div>
+</div>
