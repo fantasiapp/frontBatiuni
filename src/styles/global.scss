@@ -211,7 +211,7 @@ a {
 }
 
 .space-children-margin {
-  & > *:not(:first-child), *:not(:last-child) {
+  & > *:not(:first-child), & > *:not(:last-child) {
     margin-bottom: $spacing-margin;
   }
 }

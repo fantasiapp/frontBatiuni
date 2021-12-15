@@ -12,7 +12,7 @@ import { ProfileComponent } from 'src/components/profile/profile.component';
 
 const routes: Routes = [{
     path: 'landing',
-    component: LandingPageComponent,
+    component: HomeComponent,
     data: { animation: 'LandingPage' }
   }, {
     path: 'connexion',
