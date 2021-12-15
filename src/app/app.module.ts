@@ -32,6 +32,7 @@ import { TabComponent, TabsComponent } from 'src/components/tabs/tabs.component'
 import { SlideTemplate } from 'src/directives/slideTemplate.directive';
 import { PagingComponent } from 'src/components/paging/paging.component';
 import { FadeTemplate } from 'src/directives/fadeTemplate.directive';
+import { CalendarUI } from 'src/components/ui_component/calendar/calendar.ui';
 
 @Injectable()
 export class CustomConfig extends HammerGestureConfig {
@@ -60,7 +61,8 @@ export class CustomConfig extends HammerGestureConfig {
     OfferComponent,
     PagingComponent,
     SlideTemplate,
-    FadeTemplate
+    FadeTemplate,
+    CalendarUI
   ],
   imports: [
     //Ngxs imports
