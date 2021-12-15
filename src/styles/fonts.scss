@@ -2,36 +2,48 @@ $ttf: format('truetype');
 
 @font-face {
   font-family: 'Roboto';
-  src: url("../assets/fonts/Roboto/Roboto-Regular.ttf") $ttf;
-  font-weight: normal;
+  src: url("/assets/fonts/Roboto/Roboto-Regular.ttf") $ttf;
+  font-weight: 400;
 }
 
 @font-face {
   font-family: 'Roboto';
   src: url("/assets/fonts/Roboto/Roboto-Light.ttf") $ttf;
-  font-weight: 300;
+  font-weight: 100;
+}
+
+@font-face {
+  font-family: 'Roboto';
+  src: url("/assets/fonts/Roboto/Roboto-Medium.ttf") $ttf;
+  font-weight: 500;
 }
 
 @font-face {
   font-family: 'Roboto';
   src: url("/assets/fonts/Roboto/Roboto-Bold.ttf") $ttf;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 @font-face {
   font-family: 'Poppins';
   src: url("/assets/fonts/Poppins/Poppins-Regular.ttf") $ttf;
-  font-weight: normal;
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: 'Poppins';
+  src: url("/assets/fonts/Poppins/Poppins-Light.ttf") $ttf;
+  font-weight: 100;
 }
 
 @font-face {
   font-family: 'Poppins';
   src: url("/assets/fonts/Poppins/Poppins-Bold.ttf") $ttf;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 @font-face {
-  font-family: 'Poppins light';
-  src: url("/assets/fonts/Poppins/Poppins-Light.ttf") $ttf;
-  font-weight: 200;
+  font-family: 'Poppins';
+  src: url("/assets/fonts/Poppins/Poppins-Medium.ttf") $ttf;
+  font-weight: 500;
 }

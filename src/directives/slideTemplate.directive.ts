@@ -6,12 +6,14 @@ import { Ref } from "src/common/types";
   selector: '[slide-template]'
 })
 export class SlideTemplate<T> extends AnimateCSS {
-  index: number = 0;
   ref: Ref = {element: null, view: null};
 
   constructor(protected factoryResolver: ComponentFactoryResolver, protected view: ViewContainerRef, protected cd: ChangeDetectorRef) {
     super(factoryResolver, view);
-    (window as any).test = this;
+  }
+
+  indexChanged(k: number): void {
+    k > 0 ? this.slide("left", k) : this.slide("right", -k);
   }
   
   @Input()
@@ -45,7 +47,7 @@ export class SlideTemplate<T> extends AnimateCSS {
       Math.min(this.contexts.length-1, this.index + dx) : Math.max(0, this.index - dx);
     
      if ( this.index == next ) return;
-    this.index = next;
+    this._index = next;
     let ref = this.createTemplate(this.template, this.contexts[this.index]);
     this.view.insert(ref.view);
     this.slideIn(ref, direction);

@@ -3,7 +3,6 @@ import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { SlidesDirective } from "src/directives/slides.directive";
 import { VerifyField } from "src/validators/verify";
 import { Job } from "../options/options";
-import { SliderComponent } from "../slider/slider.component";
 
 @Component({
   selector: 'register',

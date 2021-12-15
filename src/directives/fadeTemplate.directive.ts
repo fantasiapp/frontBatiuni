@@ -6,12 +6,14 @@ import { Ref } from "src/common/types";
   selector: '[fade-template]'
 })
 export class FadeTemplate<T> extends AnimateCSS {
-  index: number = 0;
   ref: Ref = {element: null, view: null};
+
+  indexChanged(k: number): void {
+    k > 0 ? this.fadeTo("left", k) : this.fadeTo("right", -k);
+  }
 
   constructor(protected factoryResolver: ComponentFactoryResolver, protected view: ViewContainerRef, protected cd: ChangeDetectorRef) {
     super(factoryResolver, view);
-    (window as any).test = this;
   }
   
   @Input()
@@ -43,12 +45,12 @@ export class FadeTemplate<T> extends AnimateCSS {
     this.ref = ref;
   }
 
-  fadeTo(direction: 'left' | 'right') {
+  fadeTo(direction: 'left' | 'right', dx: number = 1) {
     let next = direction == 'left' ?
-      Math.min(this.contexts.length-1, this.index + 1) : Math.max(0, this.index - 1);
+      Math.min(this.contexts.length-1, this.index + dx) : Math.max(0, this.index - dx);
     
      if ( this.index == next ) return;
-    this.index = next;
+    this._index = next;
     let ref = this.createTemplate(this.template, this.contexts[this.index]);
     this.view.insert(ref.view);
     this.fadeIn(ref);

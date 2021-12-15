@@ -1,0 +1,11 @@
+@import '../../styles/variables';
+
+:host {
+  display: block;
+  min-height: calc(100vh - #{$navigation-height});
+  background-color: white;
+}
+
+.router {
+  min-height: calc(100vh - #{$navigation-height});
+}
