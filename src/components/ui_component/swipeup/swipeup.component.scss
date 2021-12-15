@@ -1,0 +1,60 @@
+@import '../../../styles/variables';
+@import '../../../styles/mixins';
+
+
+:host {
+  position: absolute;
+  top: 0; left: 0;
+  z-index: 10;
+  width: 100vw;
+  height: 0;
+  visibility: hidden;
+}
+
+:host(.open) {
+  height: 100vh;
+  visibility: visible;
+}
+
+.cover-parent {
+  background-color: #ddd;
+  opacity: 0.5;
+}
+
+.menu {
+  position: absolute;
+  bottom: 0;
+  transform: translateY(100%);
+  transition: transform 250ms ease-out 0s;
+
+  &.open {
+    transform: translateY(0);
+  }
+}
+
+.decoration {
+  position: relative;
+  height: $swipeup-decoration-height;
+  border-top-left-radius: $swipeup-decoration-height;
+  border-top-right-radius: $swipeup-decoration-height;
+}
+
+.decoration::after {
+  content: '';
+  display: block;
+  position: absolute;
+  background-color: #aaa;
+  height: 3px;
+  width: 40px;
+  @include absolute-center('xy', absolute);
+}
+
+.list {
+  font-size: 0.9em;
+  list-style-type: none;
+  padding: 20px 60px;
+
+  li:not(:last-of-type) {
+    margin-bottom: 15px;
+  }
+}

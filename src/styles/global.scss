@@ -33,6 +33,10 @@ body {
   @include breakpoint(desktop) {
     font-size: 22px;
   }
+
+  &.blocked {
+    overflow: hidden;
+  }
 }
 
 button {
@@ -193,11 +197,11 @@ a {
   @extend .background-white;
   width: 100%;
   padding: $page-padding;
-  padding-top: $page-padding - $paging-decoration-height !important;
   position: relative;
   font-size: 0.95em;
 
   &.include-paging {
+    padding-top: $page-padding - $paging-decoration-height !important;
     min-height: calc(100vh - #{$paging-height + $paging-decoration-height});
   }
 

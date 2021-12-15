@@ -1,0 +1,19 @@
+<div class="cover-parent" (click)="close()"></div>
+
+<div class="menu full-width" [class.open]="open && !willClose" (transitionend)="onTransitionEnd()">
+  <div class="decoration background-white" (click)="close()">
+  </div>
+
+  <ul class="hosed-page list background-white font-Poppins text-light-emphasis">
+    <li>Modifier mon profil</li>
+    <li>Candidatures en cours</li>
+    <li>Gérer mes abonnements</li>
+    <li>Mes factures</li>
+    <li>Partager l'application</li>
+    <li>Noter l'application</li>
+    <li>Nous contacter</li>
+    <li>FAQ</li>
+    <li>Mentions légales</li>
+    <li>Se déconnecter</li>
+  </ul>
+</div>

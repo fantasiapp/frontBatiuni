@@ -2,7 +2,7 @@
   <header class="full-width header flex center-cross">
     <span class="grow text-emphasis">Mon Profil</span>
     <img src="assets/notification.svg"/>
-    <img src="assets/menu.svg"/>
+    <img src="assets/menu.svg" (click)="openMenu = true"/>
   </header>
 
   <div class="image-container position-relative">
@@ -49,3 +49,5 @@
     </div>
   </section>
 </div>
+
+<swipeup [(open)]="openMenu"></swipeup>

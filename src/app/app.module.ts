@@ -34,6 +34,7 @@ import { FadeTemplate } from 'src/directives/fadeTemplate.directive';
 import { HomeComponent } from 'src/components/home_page/home.component';
 import { ProfileComponent } from 'src/components/profile/profile.component';
 import { UISwitchComponent } from 'src/components/ui_component/switch/switch.component';
+import { UISwipeupComponent } from 'src/components/ui_component/swipeup/swipeup.component';
 
 @Injectable()
 export class CustomConfig extends HammerGestureConfig {
@@ -65,7 +66,8 @@ export class CustomConfig extends HammerGestureConfig {
     HomeComponent,
     NavigationMenu,
     ProfileComponent,
-    UISwitchComponent
+    UISwitchComponent,
+    UISwipeupComponent
   ],
   imports: [
     //Ngxs imports
