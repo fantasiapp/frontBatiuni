@@ -31,6 +31,7 @@ import { TabComponent, TabsComponent } from 'src/components/tabs/tabs.component'
 import { SlideTemplate } from 'src/directives/slideTemplate.directive';
 import { PagingComponent } from 'src/components/paging/paging.component';
 import { FadeTemplate } from 'src/directives/fadeTemplate.directive';
+import { CalendarUI } from 'src/components/ui_component/calendar/calendar.ui';
 import { HomeComponent } from 'src/components/home_page/home.component';
 import { ProfileComponent } from 'src/components/profile/profile.component';
 import { UISwitchComponent } from 'src/components/ui_component/switch/switch.component';
@@ -64,6 +65,7 @@ export class CustomConfig extends HammerGestureConfig {
     PagingComponent,
     SlideTemplate,
     FadeTemplate,
+    CalendarUI,
     HomeComponent,
     NavigationMenu,
     ProfileComponent,
