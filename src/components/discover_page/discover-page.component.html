@@ -3,7 +3,7 @@
     <header style="flex-grow: 0;">
       <h3 class="title">{{ ctx.title }}</h3>
       <p class="font-Poppins">
-        <span *ngFor="let text of ctx.texts" [class.emphasis]="text.emphasis">
+        <span *ngFor="let text of ctx.texts" [class.text-emphasis]="text.emphasis">
           {{ text.content }}
         </span>
       </p>

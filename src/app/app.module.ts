@@ -19,13 +19,12 @@ import { ConnexionComponent } from 'src/components/connexion/connexion.component
 import { RegisterComponent } from 'src/components/register/register.component';
 import { emailConfirmation } from 'src/components/validator/email_confirmation/emailconfirmation';
 import { RegistrationSuccess } from 'src/components/validator/registration_success/registrationsuccess';
-import { SliderComponent } from 'src/components/slider/slider.component';
 import { DiscoverComponent } from 'src/components/discover_page/discover-page.component';
 import { OptionsModel } from 'src/components/options/options';
 import { GoogleMapsModule } from '@angular/google-maps';
 import { RangeComponent } from 'src/components/ui_component/range/range.component';
 import { OfferComponent } from 'src/components/ui_component/offer/offer.compnent';
-import { HomeMenu } from 'src/components/ui_component/homeMenu/home.menu';
+import { NavigationMenu } from 'src/components/ui_component/navigation/navigation.component';
 
 import { HAMMER_GESTURE_CONFIG, HammerGestureConfig } from '@angular/platform-browser';
 import { TabComponent, TabsComponent } from 'src/components/tabs/tabs.component';
@@ -33,6 +32,10 @@ import { SlideTemplate } from 'src/directives/slideTemplate.directive';
 import { PagingComponent } from 'src/components/paging/paging.component';
 import { FadeTemplate } from 'src/directives/fadeTemplate.directive';
 import { CalendarUI } from 'src/components/ui_component/calendar/calendar.ui';
+import { HomeComponent } from 'src/components/home_page/home.component';
+import { ProfileComponent } from 'src/components/profile/profile.component';
+import { UISwitchComponent } from 'src/components/ui_component/switch/switch.component';
+import { UISwipeupComponent } from 'src/components/ui_component/swipeup/swipeup.component';
 
 @Injectable()
 export class CustomConfig extends HammerGestureConfig {
@@ -52,7 +55,6 @@ export class CustomConfig extends HammerGestureConfig {
     emailConfirmation,
     RegistrationSuccess,
     SlidesDirective,
-    SliderComponent,
     DiscoverComponent,
     OptionsModel,
     TabComponent,
@@ -62,7 +64,12 @@ export class CustomConfig extends HammerGestureConfig {
     PagingComponent,
     SlideTemplate,
     FadeTemplate,
-    CalendarUI
+    CalendarUI,
+    HomeComponent,
+    NavigationMenu,
+    ProfileComponent,
+    UISwitchComponent,
+    UISwipeupComponent
   ],
   imports: [
     //Ngxs imports

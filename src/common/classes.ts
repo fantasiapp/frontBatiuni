@@ -12,9 +12,22 @@ export class Destroy$ {
   }
 }
 
+export abstract class IndexBased {
+  protected _index = 0;
+  get index() { return this._index; }
+  set index(value: number) {
+    if ( this._index == value ) return;
+    this.indexChanged(value - this.index);
+  };
+
+  abstract indexChanged(k: number): void;
+};
+
 @Directive()
-export abstract class AnimateCSS {
-  constructor(protected factoryResolver: ComponentFactoryResolver, protected view: ViewContainerRef) {}
+export abstract class AnimateCSS extends IndexBased {
+  constructor(protected factoryResolver: ComponentFactoryResolver, protected view: ViewContainerRef) {
+    super();
+  }
 
   create(what: any, type: 'template' | 'component', ctx = {}) {
     return type == 'component' ? this.createComponent(what) : this.createTemplate(what, ctx);
@@ -22,7 +35,6 @@ export abstract class AnimateCSS {
   
   protected createTemplate(template: any, ctx = {}): Ref {
     let view = this.view.createEmbeddedView(template, ctx);
-    console.log(view.rootNodes);
     return {element: view.rootNodes[0], view};
   }
 
@@ -43,15 +55,4 @@ export abstract class AnimateCSS {
       element.classList.remove('animating', className);
     };
   }
-};
-
-export abstract class IndexBased {
-  protected _index = 0;
-  get index() { return this._index; }
-  set index(value: number) {
-    if ( this._index == value ) return;
-    this.indexChanged(value - this.index);
-  };
-
-  abstract indexChanged(k: number): void;
 };

@@ -1,8 +1,0 @@
-<main class="cover-parent flex "><br /><br />
-    <div class="home-button">
-        <a *ngFor="let src of HomeButton; let index = index"  
-        [class.active]="index == currentIndex" (click)="currentIndex = index"> 
-            <img  [src]="index == currentIndex ? src.activeSrc : src.src" />
-        </a>
-        </div>
-</main>

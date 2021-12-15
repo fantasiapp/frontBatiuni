@@ -1,0 +1,53 @@
+<div class="hosted-page include-navigation flex column center-cross space-children-margin">
+  <header class="full-width header flex center-cross">
+    <span class="grow text-emphasis">Mon Profil</span>
+    <img src="assets/notification.svg"/>
+    <img src="assets/menu.svg" (click)="openMenu = true"/>
+  </header>
+
+  <div class="image-container position-relative">
+    <img src="assets/profile.png"/>
+    <div class="ticks position-absolute">
+      <div class="position-absolute absolute-center-x top"></div>
+      <div class="position-absolute absolute-center-y left"></div>
+      <div class="position-absolute absolute-center-y right"></div>
+      <div class="position-absolute absolute-center-x bottom"></div>
+    </div>
+  </div>
+
+  <switch style="text-align: center;"></switch>
+
+  <section class="quick-intro flex column center-cross">
+    <span class="text-emphasis">Gabriel Dubois</span>
+    <span>Gabriel_Dubois@gmail.com</span>
+    <span>06 21 95 34 29</span>
+    <!-- <stars value="4"></stars> -->
+  </section>
+
+  <section class="job-description flex column space-children-margin">
+    <span>
+      <span class="text-light-emphasis font-Poppins">Nom de l'entreprise : </span> <span class="value">Fantasiapp SARL</span>
+    </span>
+    <span>
+      <span class="text-light-emphasis font-Poppins">N SIRET : </span> <span class="value">362 521 879 00034</span>
+    </span>
+    <span>
+      <span class="text-light-emphasis font-Poppins">Métier : </span> <span class="value">1 Chef de chantier, 1 Maître d'oeuvre</span>
+    </span>
+    <span>
+      <span class="text-light-emphasis font-Poppins">Chiffres d'affaires : </span> <span class="value">77 584 €</span>
+    </span>
+  </section>
+
+  <section class="documents">
+    <h4>Documents imporants</h4>
+    <div class="flex images">
+      <img src="assets/files/Impot.svg"/>
+      <img src="assets/files/KBIS.svg"/>
+      <img src="assets/files/qualibat.svg"/>
+      <img src="assets/files/urssaf.svg"/>
+    </div>
+  </section>
+</div>
+
+<swipeup [(open)]="openMenu"></swipeup>

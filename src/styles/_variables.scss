@@ -9,7 +9,34 @@ $externelLinks : #0F557C;
 $succesCircleShadow : #CDCFD0;
 $infosColor : #52D1BD;
 
-$page-padding: 30px;
-
 $paging-height: 75px;
 $paging-decoration-height: 12px;
+
+$navigation-height: 70px;
+
+// spacing
+$item-padding: 10px;
+$page-padding: 30px;
+$section-margin: 30px;
+$highlight-margin: 20px;
+$spacing-margin: 10px;
+
+// Switch checkbox
+$switch-size-x: 40px;
+$switch-size-y: 20px;
+$switch-padding: 2px;
+$switch-button-size: min($switch-size-x, $switch-size-y) - 2 * $switch-padding;
+$switch-gradient-start: #009BE0;
+$switch-gradient-end: #69F0AE;
+
+//Profile page
+$tick-size-x: 3px;
+$tick-size-y: 15px;
+$profile-level-thickness: 8px;
+$profile-image-size: 150px - 2 * $profile-level-thickness;
+
+//Swipe up
+$swipeup-decoration-height: 50px;
+
+// Media
+$document-image-size-x: 90px;

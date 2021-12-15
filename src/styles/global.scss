@@ -33,6 +33,10 @@ body {
   @include breakpoint(desktop) {
     font-size: 22px;
   }
+
+  &.blocked {
+    overflow: hidden;
+  }
 }
 
 button {
@@ -59,11 +63,10 @@ button {
 }
 
 a {
-  font-family: inherit;
+  font-family: 'Poppins' !important;
   text-decoration: none;
   color: inherit;
   cursor: pointer;
-
 }
 
 .background-image {
@@ -109,6 +112,10 @@ a {
     align-items: center;
   }
 
+  &.strech-children {
+    align-items: stretch;
+  }
+
   &.center {
     @extend .center-main;
     @extend .center-cross;
@@ -145,6 +152,10 @@ a {
 // POSITIONING
 .position-absolute {
   position: absolute;
+}
+
+.position-relative {
+  position: relative;
 }
 
 .absolute-center-x {
@@ -186,11 +197,22 @@ a {
   @extend .background-white;
   width: 100%;
   padding: $page-padding;
-  padding-top: $page-padding - $paging-decoration-height !important;
   position: relative;
+  font-size: 0.95em;
 
   &.include-paging {
+    padding-top: $page-padding - $paging-decoration-height !important;
     min-height: calc(100vh - #{$paging-height + $paging-decoration-height});
+  }
+
+  &.include-navigation {
+    min-height: calc(100vh - #{$navigation-height});
+  }
+}
+
+.space-children-margin {
+  & > *:not(:first-child), *:not(:last-child) {
+    margin-bottom: $spacing-margin;
   }
 }
 
@@ -282,6 +304,7 @@ a {
     margin-bottom: 20px;
     font-family: "Poppins";
   }
+  
   select{
     width: 100%;
     height: 30px;
@@ -340,9 +363,12 @@ a {
 }
 //--------------------------------------------------
 //Text states
-.emphasis {
-  @extend .font-Poppins;
+.text-emphasis {
   font-weight: bold;
+}
+
+.text-light-emphasis {
+  font-weight: 500;
 }
 
 //---------------------------------------------------
@@ -352,98 +378,4 @@ input {
   border: none;
 }
 
-//---------------------------------------------------
-// Checkbox  + Radio ====>Styling : 
-.checkbox-styling {
-  height: 25px;
-  width: 25px;
-  border: 1px solid   #bbb;
-  -webkit-appearance: none;
-  border-radius: 50%;
-  padding: 1px;
-  box-shadow: rgba(0, 0, 0, 0.17) 0px -5px 10px 0px inset;
-}
-.checkbox-styling::before{
-  background-image: url('/assets/confirmation.svg');
-  background-repeat: no-repeat;
-  content: "";
-  border-radius: 50%;
-  display: block;
-  opacity: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: $buttonColor;
-  background-size: cover ;
-}
-.checkbox-styling:checked::before{
-  height: 100%;
-  opacity: 1;
-}
-//---------------------------------------------------
-// Switch box slider ===> 
-//---------------------------------------------------
-
-// <label class="switch">
-//         <input class="switch-checkbox" type="checkbox">
-//         <span class="slider round"></span>
-//     </label>
-
-.switch {
-  position: relative;
-  display: inline-block;
-  width: 60px;
-  height: 28px;
-}
-
-.switch input { 
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-
-.slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #707070;
-  -webkit-transition: .4s;
-  transition: .4s;
-}
-
-.slider:before {
-  position: absolute;
-  content: "";
-  height: 22px;
-  width: 22px;
-  right: 4px;
-  bottom: 3px;
-  background-color: $landingColor;
-  -webkit-transition: .4s;
-  transition: .4s;
-}
-
-.switch-checkbox:checked + .slider {
-  background-color: $buttonColor;
-}
-
-
-
-.switch-checkbox:checked + .slider:before {
-  -webkit-transform: translateX(-30px);
-  -ms-transform: translateX(-30px);
-  transform: translateX(-30px);
-}
-
-/* Rounded sliders */
-.slider.round {
-  border-radius: 34px;
-}
-
-.slider.round:before {
-  border-radius: 50%;
-}
 //---------------------------------------------------

@@ -8,10 +8,12 @@ import { RegistrationSuccess } from 'src/components/validator/registration_succe
 import { DiscoverComponent } from 'src/components/discover_page/discover-page.component';
 import { OptionsModel } from 'src/components/options/options';
 import { CalendarUI } from 'src/components/ui_component/calendar/calendar.ui';
+import { HomeComponent } from 'src/components/home_page/home.component';
+import { ProfileComponent } from 'src/components/profile/profile.component';
 
 const routes: Routes = [{
     path: 'landing',
-    component: CalendarUI,
+    component: LandingPageComponent,
     data: { animation: 'LandingPage' }
   }, {
     path: 'connexion',
@@ -37,6 +39,13 @@ const routes: Routes = [{
     path: 'success',
     component: RegistrationSuccess,
     data: { animation: 'Success' }
+  }, {
+    path: 'home',
+    component: HomeComponent,
+    children: [
+      {path: 'profile', component: ProfileComponent, data: { animation: 'profile' }},
+      {path: '**', component: ProfileComponent}
+    ]
   }, {
     path: '**',
     redirectTo: 'landing',
