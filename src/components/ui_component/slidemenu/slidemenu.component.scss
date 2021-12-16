@@ -31,5 +31,7 @@
 
 .content {
   margin-top: $sticky-header-height;
-  min-height: calc(100vh - #{$sticky-header-height});
+  height: calc(100vh - #{$sticky-header-height});
+  overflow-y: scroll;
+  background: white;
 }

@@ -6,16 +6,16 @@
   img {
     width: $profile-image-size; height: $profile-image-size;
     border-radius: 50%;
+    border: $profile-level-thickness solid #aaa;
   }
   border-radius: 50%;
-  border: $profile-level-thickness solid #aaa;
   margin: $highlight-margin 0;
 }
 
 .ticks {
-  top: -$profile-level-thickness; left: -$profile-level-thickness;
-  width: calc(100% + #{2 * $profile-level-thickness});
-  height: calc(100% + #{2 * $profile-level-thickness});
+  width: $profile-image-size;
+  height: $profile-image-size;
+  top: 0; left: 0;
 
 
   .top, .bottom {

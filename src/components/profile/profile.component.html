@@ -4,7 +4,7 @@
   <img src="assets/menu.svg" (click)="openMenu = true"/>
 </header>
 
-<div class="hosted-page include-navigation flex column center-cross space-children-margin">
+<div class="hosted-page flex column center-cross space-children-margin">
   <profile-image></profile-image>
   <switch style="text-align: center;"></switch>
   <section class="quick-intro flex column center-cross">
@@ -55,37 +55,91 @@
 
 <slidemenu [(open)]="openModifyMenu">
   <div class="full-width center-text text-emphasis" header>Modifier mon Profil</div>
-  <div class="hosted-page include-navigation flex column center-cross space-children-margin" content>
+  <div class="hosted-page include-header flex column center-cross space-children-margin" content>
     <section class="section">
       <profile-image></profile-image>
-      <img src="assets/icons/modify.png" class="modify-icon image"/>
+      <img src="assets/icons/modify.svg" class="modify-icon image" (click)="openModifyPictureMenu()"/>
     </section>
 
     <switch style="text-align: center;"></switch>
+    <stars value="3.9"></stars>
 
-    <section class="full-width section modify-profile">
+    <ng-container *ngIf="!modifyPassword; else modifyPasswordPage">
+      <section class="full-width section modify-profile">
+        <form class="form-control">
+          <h3 class="form-title font-Roboto">
+            Infos personelles: 
+            <img src="assets/icons/modify.svg" class="modify-icon text"/>
+          </h3>
+          <div class="form-input">
+            <label>Prénom du contact</label>
+            <input class="form-element" type="text" disabled/>
+          </div>
+          <div class="form-input">
+            <label>Adresse e-mail contact</label>
+            <input class="form-element" type="text" disabled/>
+          </div>
+          <div class="form-input">
+            <label>Telephone fixe</label>
+            <input class="form-element" type="text" disabled/>
+          </div>
+          <div class="form-input">
+            <label>Téléphone portable</label>
+            <input class="form-element" type="text" disabled/>
+          </div>
+        </form>
+      </section>
+  
+      <section class="full-width section modify-profile">
+        <form class="form-control">
+          <h3 class="form-title font-Roboto">
+            Modifier le mot de passe: 
+            <img src="assets/icons/modify.svg" (click)="modifyPassword = true" class="modify-icon text"/>
+          </h3>
+          <div class="form-input">
+            <label></label>
+            <input class="form-element" value="********" type="text" disabled/>
+          </div>
+          <div class="form-input">
+            <label></label>
+            <input class="form-element" value="********" type="text" disabled/>
+          </div>
+          <div class="form-input">
+            <label></label>
+            <input class="form-element" value="********" type="text" disabled/>
+          </div>
+          <div class="form-input">
+            <label></label>
+            <input class="form-element" value="********" type="text" disabled/>
+          </div>
+        </form>
+      </section>
+    </ng-container>
+    
+    <ng-template #modifyPasswordPage>
       <form class="form-control">
-        <h3 class="form-title font-Roboto">
-          Infos personelles: 
-          <img src="assets/icons/modify.png" class="modify-icon text"/>
-        </h3>
         <div class="form-input">
-          <label >Prénom du contact</label>
-          <input class="form-element" type="text" disabled/>
+          <label>Ancien mot de passe</label>
+          <input class="form-element" type="text"/>
         </div>
         <div class="form-input">
-          <label >Adresse e-mail contact</label>
-          <input class="form-element" type="text" disabled/>
+          <label>Nouveau mot de passe</label>
+          <input class="form-element" type="text"/>
         </div>
         <div class="form-input">
-          <label >Telephone fixe</label>
-          <input class="form-element" type="text" disabled/>
-        </div>
-        <div class="form-input">
-          <label >Téléphone portable</label>
-          <input class="form-element" type="text" disabled/>
+          <label>Confirmation nouveau mot de passe</label>
+          <input class="form-element" type="text"/>
         </div>
       </form>
-    </section>
+
+      <button class="button gradient full-width" (click)="modifyPassword = false">
+        Enregistrer
+      </button>
+    </ng-template>
   </div>
+
+  <swipeup [(open)]="openModifyPicture">
+    <li>Accédez à l'appareil photo</li>
+    <li>Télécharger une image</li>
+  </swipeup>  
 </slidemenu>
