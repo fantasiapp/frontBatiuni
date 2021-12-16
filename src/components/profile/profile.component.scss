@@ -3,6 +3,7 @@
 :host {
   display: block;
   width: 100%;
+  margin-top: $sticky-header-height;
 }
 
 .sticky-header {
@@ -39,4 +40,27 @@
 
 .documents img {
   width: $document-image-size-x;
+}
+
+$icon-padding: 2px;
+.modify-icon {
+  position: absolute;
+  width: $icon-size + 2 * $icon-padding;
+  height: $icon-size + 2 * $icon-padding;
+  border-radius: 50%;
+  padding: $icon-padding;
+  background: white;
+  box-shadow: 0 -1px 5px 0 #333;
+
+  &.image {
+    bottom: $icon-size; right: $icon-size;
+  }
+
+  &.text {
+    margin-left: 20px;
+  }
+}
+
+.form-title, .form-input label {
+  font-size: 1em;
 }

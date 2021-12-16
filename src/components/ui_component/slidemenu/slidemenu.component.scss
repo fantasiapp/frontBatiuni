@@ -1,7 +1,7 @@
 @import '../../../styles/variables';
 
 :host {
-  position: absolute;
+  position: fixed;
   top: 0;
   width: 100vw;
   height: 0;
@@ -30,5 +30,6 @@
 }
 
 .content {
+  margin-top: $sticky-header-height;
   min-height: calc(100vh - #{$sticky-header-height});
 }

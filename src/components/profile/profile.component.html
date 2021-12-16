@@ -6,9 +6,7 @@
 
 <div class="hosted-page include-navigation flex column center-cross space-children-margin">
   <profile-image></profile-image>
-
   <switch style="text-align: center;"></switch>
-
   <section class="quick-intro flex column center-cross">
     <span class="text-emphasis">Gabriel Dubois</span>
     <span>Gabriel_Dubois@gmail.com</span>
@@ -57,7 +55,37 @@
 
 <slidemenu [(open)]="openModifyMenu">
   <div class="full-width center-text text-emphasis" header>Modifier mon Profil</div>
-  <div content>
-    Hello world !
+  <div class="hosted-page include-navigation flex column center-cross space-children-margin" content>
+    <section class="section">
+      <profile-image></profile-image>
+      <img src="assets/icons/modify.png" class="modify-icon image"/>
+    </section>
+
+    <switch style="text-align: center;"></switch>
+
+    <section class="full-width section modify-profile">
+      <form class="form-control">
+        <h3 class="form-title font-Roboto">
+          Infos personelles: 
+          <img src="assets/icons/modify.png" class="modify-icon text"/>
+        </h3>
+        <div class="form-input">
+          <label >Prénom du contact</label>
+          <input class="form-element" type="text" disabled/>
+        </div>
+        <div class="form-input">
+          <label >Adresse e-mail contact</label>
+          <input class="form-element" type="text" disabled/>
+        </div>
+        <div class="form-input">
+          <label >Telephone fixe</label>
+          <input class="form-element" type="text" disabled/>
+        </div>
+        <div class="form-input">
+          <label >Téléphone portable</label>
+          <input class="form-element" type="text" disabled/>
+        </div>
+      </form>
+    </section>
   </div>
 </slidemenu>

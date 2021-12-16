@@ -368,6 +368,10 @@ a {
 }
 //--------------------------------------------------
 //fonts
+.font-Roboto {
+  font-family: "Roboto";
+}
+
 .font-Poppins {
   font-family: "Poppins";
 }
@@ -394,8 +398,12 @@ input {
   padding: $highlight-margin $page-padding;
   margin: 0;
   height: $sticky-header-height;
-  position: sticky;
+  position: fixed;
   top: 0;
   background: white;
   z-index: 10;
+}
+
+.section {
+  position: relative;
 }
