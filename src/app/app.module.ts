@@ -38,6 +38,7 @@ import { UISwitchComponent } from 'src/components/ui_component/switch/switch.com
 import { UISwipeupComponent } from 'src/components/ui_component/swipeup/swipeup.component';
 import { UIStarsComponent } from 'src/components/ui_component/stars/stars.component';
 import { UISlideMenuComponent } from 'src/components/ui_component/slidemenu/slidemenu.component';
+import { UIProfileImageComponent } from 'src/components/ui_component/profile-image/profile-image.component';
 
 @Injectable()
 export class CustomConfig extends HammerGestureConfig {
@@ -73,7 +74,8 @@ export class CustomConfig extends HammerGestureConfig {
     UISwitchComponent,
     UISwipeupComponent,
     UIStarsComponent,
-    UISlideMenuComponent
+    UISlideMenuComponent,
+    UIProfileImageComponent
   ],
   imports: [
     //Ngxs imports
