@@ -46,3 +46,9 @@ Thumbs.db
 
 android
 ios
+
+
+# Config files
+angular.json
+package.json
+package-lock.json

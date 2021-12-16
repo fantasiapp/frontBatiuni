@@ -4,18 +4,27 @@
 @import 'fonts.scss';
 @import 'animations.scss';
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
 :root {
   --main-landing-color: #{$mainColor}; 
   --main-app-color: #{$landingColor};
   --main-button-color: #{$buttonColor};
   --main-button-gradient: #{$buttonGradient};
 }
+
+.clear-margin {
+  margin: 0;
+}
+
+.clear-padding {
+  padding: 0;
+}
+
+* {
+  @extend .clear-margin;
+  @extend .clear-padding;
+  box-sizing: border-box;
+}
+
 
 body {
   font-family: "Roboto", sans-serif;
@@ -216,6 +225,7 @@ a {
   }
 }
 
+
 .hosted-view {
   width: 100%;
   overflow-y: auto;
@@ -379,3 +389,13 @@ input {
 }
 
 //---------------------------------------------------
+//Page layouts
+.sticky-header {
+  padding: $highlight-margin $page-padding;
+  margin: 0;
+  height: $sticky-header-height;
+  position: sticky;
+  top: 0;
+  background: white;
+  z-index: 10;
+}

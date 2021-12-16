@@ -8,4 +8,10 @@ import { Component } from "@angular/core";
 export class ProfileComponent {
 
   openMenu: boolean = false;
+  openModifyMenu: boolean = false;
+
+  slideModifyMenu() {
+    this.openMenu = false;
+    this.openModifyMenu = true;
+  }
 };

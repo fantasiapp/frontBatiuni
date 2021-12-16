@@ -5,13 +5,14 @@
   width: 100%;
 }
 
-
-.header {
-  margin-bottom: $highlight-margin;
+.sticky-header {
   img {
     padding: 0 $item-padding;
   }
+}
 
+.hosted-page {
+  padding-top: 0;
 }
 
 .image-container {

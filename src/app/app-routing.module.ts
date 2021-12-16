@@ -9,10 +9,11 @@ import { DiscoverComponent } from 'src/components/discover_page/discover-page.co
 import { OptionsModel } from 'src/components/options/options';
 import { HomeComponent } from 'src/components/home_page/home.component';
 import { ProfileComponent } from 'src/components/profile/profile.component';
+import { UISlideMenuComponent } from 'src/components/ui_component/slidemenu/slidemenu.component';
 
 const routes: Routes = [{
     path: 'landing',
-    component: LandingPageComponent,
+    component: UISlideMenuComponent,
     data: { animation: 'LandingPage' }
   }, {
     path: 'connexion',

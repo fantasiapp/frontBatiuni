@@ -1,10 +1,10 @@
-<div class="hosted-page include-navigation flex column center-cross space-children-margin">
-  <header class="full-width header flex center-cross">
-    <span class="grow text-emphasis">Mon Profil</span>
-    <img src="assets/notification.svg"/>
-    <img src="assets/menu.svg" (click)="openMenu = true"/>
-  </header>
+<header class="clear-margin full-width sticky-header flex center-cross">
+  <span class="grow text-emphasis">Mon Profil</span>
+  <img src="assets/notification.svg"/>
+  <img src="assets/menu.svg" (click)="openMenu = true"/>
+</header>
 
+<div class="hosted-page include-navigation flex column center-cross space-children-margin">
   <div class="image-container position-relative">
     <img src="assets/profile.png"/>
     <div class="ticks position-absolute">
@@ -50,4 +50,22 @@
   </section>
 </div>
 
-<swipeup [(open)]="openMenu"></swipeup>
+<swipeup [(open)]="openMenu">
+  <li (click)="slideModifyMenu()">Modifier mon profil</li>
+  <li>Candidatures en cours</li>
+  <li>Gérer mes abonnements</li>
+  <li>Mes factures</li>
+  <li>Partager l'application</li>
+  <li>Noter l'application</li>
+  <li>Nous contacter</li>
+  <li>FAQ</li>
+  <li>Mentions légales</li>
+  <li>Se déconnecter</li>
+</swipeup>
+
+<slidemenu [(open)]="openModifyMenu">
+  <div class="full-width center-text text-emphasis" header>Modifier mon Profil</div>
+  <div content>
+    Hello world !
+  </div>
+</slidemenu>

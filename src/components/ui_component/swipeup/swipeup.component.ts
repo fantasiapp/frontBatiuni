@@ -1,30 +1,18 @@
-import { Component, EventEmitter, HostBinding, Input, Output } from "@angular/core";
+import { Component } from "@angular/core";
+import { UIOpenMenu } from "src/common/classes";
 
 @Component({
   selector: 'swipeup',
   templateUrl: './swipeup.component.html',
   styleUrls: ['./swipeup.component.scss']
 })
-export class UISwipeupComponent {
-  @HostBinding('class.open')
-  private _open: boolean = false;
-  willClose = false;
-
-  get open() { return this._open; }
-
-  @Input()
-  set open(value: boolean) {
-    this._open = value;
-    if ( value )
-      document.body.classList.add('blocked')
-    else
-      document.body.classList.remove('blocked');
+export class UISwipeupComponent extends UIOpenMenu {
+  constructor() {
+    super();
   }
 
-  @Output()
-  openChange = new EventEmitter<boolean>();
-
-
+  
+  willClose = false;
   close() {
     this.willClose = true;
   }

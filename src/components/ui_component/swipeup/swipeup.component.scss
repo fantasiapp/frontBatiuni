@@ -53,8 +53,8 @@
   font-size: 0.9em;
   list-style-type: none;
   padding: 20px 60px;
+}
 
-  li:not(:last-of-type) {
-    margin-bottom: 15px;
-  }
+.list::ng-deep li:not(:last-of-type) {
+  margin-bottom: 15px;
 }
