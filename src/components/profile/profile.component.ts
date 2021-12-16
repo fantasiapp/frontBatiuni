@@ -17,14 +17,20 @@ export class ProfileComponent {
   openMenu: boolean = false;
   openModifyMenu: boolean = false;
   openRatings: boolean = false;
+  modifyPassword: boolean = false;
+  openModifyPicture: boolean = false;
 
   constructor(private ref: ElementRef) {
     (window as any).profile = this;
   }
 
   slideModifyMenu() {
-    this.ref.nativeElement.scrollTop = 0;
     this.openMenu = false;
     this.openModifyMenu = true;
+  }
+
+  openModifyPictureMenu() {
+    console.log('yeah', this.openModifyPicture)
+    this.openModifyPicture = true;
   }
 };

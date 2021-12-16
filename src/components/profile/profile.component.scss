@@ -45,19 +45,17 @@
 
 $icon-padding: 2px;
 .modify-icon {
-  position: absolute;
   width: $icon-size + 2 * $icon-padding;
   height: $icon-size + 2 * $icon-padding;
-  border-radius: 50%;
-  padding: $icon-padding;
-  background: white;
-  box-shadow: 0 -1px 5px 0 #333;
-
+  
   &.image {
-    bottom: $icon-size; right: $icon-size;
+    position: absolute;
+    bottom: $icon-size; left: $profile-image-size - $highlight-margin - $icon-size;
   }
-
+  
   &.text {
+    position: relative;
+    vertical-align: middle;
     margin-left: 20px;
   }
 }
@@ -69,6 +67,7 @@ $icon-padding: 2px;
   font-family:  "Roboto";
   box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
   padding : 10px;
+  margin: 10px;
  
 }
 .company-name {
@@ -88,5 +87,6 @@ $icon-padding: 2px;
   }
   span{
     color :#999999;
+    white-space: normal;
   }
 }

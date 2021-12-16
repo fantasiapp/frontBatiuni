@@ -41,6 +41,7 @@ import { Notifications } from 'src/components/notifications/notifications';
 import { UIStarsComponent } from 'src/components/ui_component/stars/stars.component';
 import { UISlideMenuComponent } from 'src/components/ui_component/slidemenu/slidemenu.component';
 import { UIProfileImageComponent } from 'src/components/ui_component/profile-image/profile-image.component';
+import { FileUI } from 'src/components/ui_component/filesUI/files.ui';
 
 @Injectable()
 export class CustomConfig extends HammerGestureConfig {
@@ -79,7 +80,8 @@ export class CustomConfig extends HammerGestureConfig {
     Notifications,
     UIStarsComponent,
     UISlideMenuComponent,
-    UIProfileImageComponent
+    UIProfileImageComponent,
+    FileUI
   ],
   imports: [
     //Ngxs imports

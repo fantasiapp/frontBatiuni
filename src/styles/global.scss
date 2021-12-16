@@ -226,6 +226,10 @@ a {
   &.include-navigation {
     min-height: calc(100vh - #{$navigation-height});
   }
+
+  &.include-header {
+    min-height: calc(100vh - #{$sticky-header-height});
+  }
 }
 
 .space-children-margin {

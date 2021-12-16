@@ -11,13 +11,13 @@ import { HomeComponent } from 'src/components/home_page/home.component';
 import { ProfileComponent } from 'src/components/profile/profile.component';
 import { MissionsPage } from 'src/components/ui_component/missions/missions.ui';
 import { Notifications } from 'src/components/notifications/notifications';
-
+import { FileUI } from 'src/components/ui_component/filesUI/files.ui';
 
 import { UISlideMenuComponent } from 'src/components/ui_component/slidemenu/slidemenu.component';
 
 const routes: Routes = [{
     path: 'landing',
-    component: LandingPageComponent,
+    component: FileUI,
     data: { animation: 'LandingPage' }
   }, {
     path: 'connexion',

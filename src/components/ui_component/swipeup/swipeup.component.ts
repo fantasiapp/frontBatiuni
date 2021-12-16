@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, Input, SimpleChange, SimpleChanges } from "@angular/core";
 import { UIOpenMenu } from "src/common/classes";
 
 @Component({
@@ -11,6 +11,9 @@ export class UISwipeupComponent extends UIOpenMenu {
     super();
   }
 
+  ngOnChanges(changes: SimpleChanges) {
+    console.log(changes);
+  }
   
   willClose = false;
   close() {
