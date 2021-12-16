@@ -1,0 +1,8 @@
+<header class="clear-margin full-width sticky-header flex center-cross">
+  <img class="return" src="assets/arrowdown.svg" (click)="close()"><img>
+  <ng-content select='[header]'></ng-content>
+</header>
+
+<div class="content flex column">
+  <ng-content select='[content]'></ng-content>
+</div>

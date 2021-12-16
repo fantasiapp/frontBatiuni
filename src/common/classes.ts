@@ -1,4 +1,4 @@
-import { ComponentFactoryResolver, Directive, ViewContainerRef } from "@angular/core";
+import { ComponentFactoryResolver, Directive, EventEmitter, HostBinding, Input, Output, ViewContainerRef } from "@angular/core";
 import { Subject } from "rxjs";
 import { Ref } from "./types";
 
@@ -55,4 +55,25 @@ export abstract class AnimateCSS extends IndexBased {
       element.classList.remove('animating', className);
     };
   }
+};
+
+@Directive()
+export abstract class UIOpenMenu {
+  @HostBinding('class.open')
+  protected _open: boolean = false;
+
+  get open() { return this._open; }
+  @Input()
+  set open(value: boolean) {
+    this._open = value;
+    if ( value )
+      document.body.classList.add('blocked')
+    else
+      document.body.classList.remove('blocked');
+  }
+
+  @Output()
+  openChange = new EventEmitter<boolean>();
+
+  abstract close(): void;
 };

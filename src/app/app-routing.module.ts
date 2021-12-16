@@ -7,15 +7,17 @@ import { emailConfirmation } from 'src/components/validator/email_confirmation/e
 import { RegistrationSuccess } from 'src/components/validator/registration_success/registrationsuccess';
 import { DiscoverComponent } from 'src/components/discover_page/discover-page.component';
 import { OptionsModel } from 'src/components/options/options';
-import { CalendarUI } from 'src/components/ui_component/calendar/calendar.ui';
 import { HomeComponent } from 'src/components/home_page/home.component';
 import { ProfileComponent } from 'src/components/profile/profile.component';
 import { MissionsPage } from 'src/components/ui_component/missions/missions.ui';
 import { Notifications } from 'src/components/notifications/notifications';
 
+
+import { UISlideMenuComponent } from 'src/components/ui_component/slidemenu/slidemenu.component';
+
 const routes: Routes = [{
     path: 'landing',
-    component: Notifications,
+    component: LandingPageComponent,
     data: { animation: 'LandingPage' }
   }, {
     path: 'connexion',

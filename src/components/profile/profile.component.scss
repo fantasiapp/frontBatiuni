@@ -1,59 +1,20 @@
 @import '../../styles/variables';
+@import '../../styles/fonts';
 
 :host {
   display: block;
   width: 100%;
+  margin-top: $sticky-header-height;
 }
 
-
-.header {
-  padding: 20px 0;
+.sticky-header {
   img {
     padding: 0 $item-padding;
   }
-
-  
 }
 
-.image-container {
-  img {
-    width: $profile-image-size; height: $profile-image-size;
-    border-radius: 50%;
-  }
-  border-radius: 50%;
-  border: $profile-level-thickness solid #aaa;
-  margin: $highlight-margin 0;
-}
-
-.ticks {
-  top: -$profile-level-thickness; left: -$profile-level-thickness;
-  width: calc(100% + #{2 * $profile-level-thickness});
-  height: calc(100% + #{2 * $profile-level-thickness});
-
-
-  .top, .bottom {
-    height: $tick-size-y;
-    width: $tick-size-x;
-  }
-
-  .left, .right {
-    width: $tick-size-y;
-    height: $tick-size-x;
-  }
-}
-
-.ticks .bottom {
-  top: 100%;
-  transform: translateY(-100%);
-}
-
-.ticks .right {
-  left: 100%;
-  transform: translateX(-100%);
-}
-
-.ticks > div {
-  background-color: white;
+.hosted-page {
+  padding-top: 0;
 }
 
 .quick-intro {
@@ -80,4 +41,52 @@
 
 .documents img {
   width: $document-image-size-x;
+}
+
+$icon-padding: 2px;
+.modify-icon {
+  position: absolute;
+  width: $icon-size + 2 * $icon-padding;
+  height: $icon-size + 2 * $icon-padding;
+  border-radius: 50%;
+  padding: $icon-padding;
+  background: white;
+  box-shadow: 0 -1px 5px 0 #333;
+
+  &.image {
+    bottom: $icon-size; right: $icon-size;
+  }
+
+  &.text {
+    margin-left: 20px;
+  }
+}
+
+.form-title, .form-input label {
+  font-size: 1em;
+}
+.company-rate{
+  font-family:  "Roboto";
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+  padding : 10px;
+ 
+}
+.company-name {
+  font-weight: 800;
+  color : #333333;
+}
+
+.criterion {
+  margin: 10px;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+  padding: 10px;
+  .criterion-stars {
+    font-size: 14px;
+  }
+  .stars {
+    transform: scale(0.7);
+  }
+  span{
+    color :#999999;
+  }
 }

@@ -1,38 +1,30 @@
+<header class="clear-margin full-width sticky-header flex center-cross">
+  <span class="grow text-emphasis">Mon Profil</span>
+  <img src="assets/notification.svg" />
+  <img src="assets/menu.svg" (click)="openMenu = true" />
+</header>
+
 <div class="hosted-page include-navigation flex column center-cross space-children-margin">
-  <header class="full-width header flex center-cross">
-    <span class="grow text-emphasis">Mon Profil</span>
-    <img src="assets/notification.svg"/>
-    <img src="assets/menu.svg" (click)="openMenu = true"/>
-  </header>
-
-  <div class="image-container position-relative">
-    <img src="assets/profile.png"/>
-    <div class="ticks position-absolute">
-      <div class="position-absolute absolute-center-x top"></div>
-      <div class="position-absolute absolute-center-y left"></div>
-      <div class="position-absolute absolute-center-y right"></div>
-      <div class="position-absolute absolute-center-x bottom"></div>
-    </div>
-  </div>
-
+  <profile-image></profile-image>
   <switch style="text-align: center;"></switch>
-
   <section class="quick-intro flex column center-cross">
     <span class="text-emphasis">Gabriel Dubois</span>
     <span>Gabriel_Dubois@gmail.com</span>
     <span>06 21 95 34 29</span>
-    <!-- <stars value="4"></stars> -->
+    <stars (click)="openRatings = true" value="3.9"></stars>
   </section>
 
-  <section class="job-description flex column space-children-margin">
+  <section class="job-description full-width flex column space-children-margin">
     <span>
-      <span class="text-light-emphasis font-Poppins">Nom de l'entreprise : </span> <span class="value">Fantasiapp SARL</span>
+      <span class="text-light-emphasis font-Poppins">Nom de l'entreprise : </span> <span class="value">Fantasiapp
+        SARL</span>
     </span>
     <span>
       <span class="text-light-emphasis font-Poppins">N SIRET : </span> <span class="value">362 521 879 00034</span>
     </span>
     <span>
-      <span class="text-light-emphasis font-Poppins">Métier : </span> <span class="value">1 Chef de chantier, 1 Maître d'oeuvre</span>
+      <span class="text-light-emphasis font-Poppins">Métier : </span> <span class="value">1 Chef de chantier, 1 Maître
+        d'oeuvre</span>
     </span>
     <span>
       <span class="text-light-emphasis font-Poppins">Chiffres d'affaires : </span> <span class="value">77 584 €</span>
@@ -42,12 +34,115 @@
   <section class="documents">
     <h4>Documents imporants</h4>
     <div class="flex images">
-      <img src="assets/files/Impot.svg"/>
-      <img src="assets/files/KBIS.svg"/>
-      <img src="assets/files/qualibat.svg"/>
-      <img src="assets/files/urssaf.svg"/>
+      <img src="assets/files/Impot.svg" />
+      <img src="assets/files/KBIS.svg" />
+      <img src="assets/files/qualibat.svg" />
+      <img src="assets/files/urssaf.svg" />
     </div>
   </section>
 </div>
 
-<swipeup [(open)]="openMenu"></swipeup>
+<swipeup [(open)]="openMenu">
+  <li (click)="slideModifyMenu()">Modifier mon profil</li>
+  <li>Candidatures en cours</li>
+  <li>Gérer mes abonnements</li>
+  <li>Mes factures</li>
+  <li>Partager l'application</li>
+  <li>Noter l'application</li>
+  <li>Nous contacter</li>
+  <li>FAQ</li>
+  <li>Mentions légales</li>
+  <li>Se déconnecter</li>
+</swipeup>
+
+<slidemenu [(open)]="openModifyMenu">
+  <div class="full-width center-text text-emphasis" header>Modifier mon Profil</div>
+  <div class="hosted-page include-navigation flex column center-cross space-children-margin" content>
+    <section class="section">
+      <profile-image></profile-image>
+      <img src="assets/icons/modify.png" class="modify-icon image" />
+    </section>
+
+    <switch style="text-align: center;"></switch>
+
+    <section class="full-width section modify-profile">
+      <form class="form-control">
+        <h3 class="form-title font-Roboto">
+          Infos personelles:
+          <img src="assets/icons/modify.png" class="modify-icon text" />
+        </h3>
+        <div class="form-input">
+          <label>Prénom du contact</label>
+          <input class="form-element" type="text" disabled />
+        </div>
+        <div class="form-input">
+          <label>Adresse e-mail contact</label>
+          <input class="form-element" type="text" disabled />
+        </div>
+        <div class="form-input">
+          <label>Telephone fixe</label>
+          <input class="form-element" type="text" disabled />
+        </div>
+        <div class="form-input">
+          <label>Téléphone portable</label>
+          <input class="form-element" type="text" disabled />
+        </div>
+      </form>
+    </section>
+  </div>
+</slidemenu>
+
+<slidemenu [(open)]="openRatings">
+  <div class="full-width center-text text-emphasis" header>Mes notes</div>
+  <div class="hosted-page include-navigation flex column center-cross space-children-margin" content>
+
+    <profile-image></profile-image>
+    <switch style="text-align: center;"></switch>
+
+    <stars value="3.9"></stars>
+    <span class="full-width section " style="text-align: center;font-size: 12px; margin-bottom: 10px;">Demander une recommandation</span>
+    <section class="full-width section modify-profile">
+      <div class="company-rate">
+        <span class="company-name">SARL</span>
+        <div class="criterion ">
+          <div class="flex center-cross"> 
+            <span class="criterion-stars">CRITERE 1
+            </span>
+            <stars class="stars" value="3.9"></stars>
+          </div>
+
+          <span>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+            dolore Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
+            et dolore</span>
+
+        </div>
+        <div class="criterion ">
+          <div class="flex center-cross"> 
+            <span class="criterion-stars">CRITERE 1
+            </span>
+            <stars class="stars" value="3.9"></stars>
+          </div>
+
+          <span>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+            dolore Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
+            et dolore</span>
+
+        </div>
+        <div class="criterion ">
+          <div class="flex center-cross"> 
+            <span class="criterion-stars">CRITERE 1
+            </span>
+            <stars class="stars" value="3.9"></stars>
+          </div>
+
+          <span>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+            dolore Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
+            et dolore</span>
+
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+</slidemenu>

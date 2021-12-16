@@ -18,6 +18,21 @@
   --main-button-gradient: #{$buttonGradient};
 }
 
+.clear-margin {
+  margin: 0;
+}
+
+.clear-padding {
+  padding: 0;
+}
+
+* {
+  @extend .clear-margin;
+  @extend .clear-padding;
+  box-sizing: border-box;
+}
+
+
 body {
   padding: env(0-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
 
@@ -214,10 +229,11 @@ a {
 }
 
 .space-children-margin {
-  & > *:not(:first-child), *:not(:last-child) {
+  & > *:not(:first-child), & > *:not(:last-child) {
     margin-bottom: $spacing-margin;
   }
 }
+
 
 .hosted-view {
   width: 100%;
@@ -361,6 +377,10 @@ a {
 }
 //--------------------------------------------------
 //fonts
+.font-Roboto {
+  font-family: "Roboto";
+}
+
 .font-Poppins {
   font-family: "Poppins";
 }
@@ -395,24 +415,37 @@ input {
 // <span class="sticky-header-title">MES MISSIONS</span>
 
 // </div>
-.sticky-header {
-  background-color: white;
-  padding: 20px 0;
-  position: fixed;
-  display: inline-block;
-  width: 100%;
-  top: 0;
-  padding: 1.5em;
-  height: 10%;
-  z-index: 999;
-  text-align: center;
-  color: #333333;
-  font-weight: 500;
-  a {
-      float: left;
-      .return {
-          transform: rotate(90deg);
-      }
-  }
-}
+// .sticky-header {
+//   background-color: white;
+//   padding: 20px 0;
+//   position: fixed;
+//   display: inline-block;
+//   width: 100%;
+//   top: 0;
+//   padding: 1.5em;
+//   height: $sticky-header-height;
+//   z-index: 999;
+//   text-align: center;
+//   font-weight: 500;
+//   a {
+//       float: left;
+//       .return {
+//           transform: rotate(90deg);
+//       }
+//   }
+// }
   
+//Page layouts
+.sticky-header {
+  padding: $highlight-margin $page-padding;
+  margin: 0;
+  height: $sticky-header-height;
+  position: fixed;
+  top: 0;
+  background: white;
+  z-index: 10;
+}
+
+.section {
+  position: relative;
+}

@@ -1,0 +1,44 @@
+@import '../../../styles/variables';
+
+:host {
+  display: block;
+  position: relative; 
+  img {
+    width: $profile-image-size; height: $profile-image-size;
+    border-radius: 50%;
+  }
+  border-radius: 50%;
+  border: $profile-level-thickness solid #aaa;
+  margin: $highlight-margin 0;
+}
+
+.ticks {
+  top: -$profile-level-thickness; left: -$profile-level-thickness;
+  width: calc(100% + #{2 * $profile-level-thickness});
+  height: calc(100% + #{2 * $profile-level-thickness});
+
+
+  .top, .bottom {
+    height: $tick-size-y;
+    width: $tick-size-x;
+  }
+
+  .left, .right {
+    width: $tick-size-y;
+    height: $tick-size-x;
+  }
+}
+
+.ticks .bottom {
+  top: 100%;
+  transform: translateY(-100%);
+}
+
+.ticks .right {
+  left: 100%;
+  transform: translateX(-100%);
+}
+
+.ticks > div {
+  background-color: white;
+}
