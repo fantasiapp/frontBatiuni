@@ -1,0 +1,31 @@
+<div class="sticky-header">
+    <!-- NEED TO ADD ROUTER LINK TO THE MAIN PAGE -->
+    <a><img class="return" src="/assets/arrowdown.svg" /></a>
+    <span class="sticky-header-title">Notifications</span>
+</div>
+<div class="notifications">
+    <div class="today">
+        <span>Aujourd'hui</span>
+        <div *ngFor="let today of today;let index = index" class="todays-notifications flex ">
+            <div class="offres-logo flex center">
+                <img [src]="today.imgSrc" />
+            </div>
+                <span class="infos">
+                    {{today.text}}. <span class="timer">{{timer[index]}}</span>
+                </span>
+        </div>
+    </div>
+
+    <div class="month">
+        <span class="month-notification">Ce mois</span>
+        <div *ngFor="let month of month" class="monthly-notifications flex ">
+            <div class="offres-logo flex center">
+                <img [src]="month.imgSrc" />
+            </div>
+                <span class="infos">
+                    {{month.text}}
+                </span>
+        </div>
+       
+    </div>
+</div>

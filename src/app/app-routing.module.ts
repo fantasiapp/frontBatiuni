@@ -10,10 +10,12 @@ import { OptionsModel } from 'src/components/options/options';
 import { CalendarUI } from 'src/components/ui_component/calendar/calendar.ui';
 import { HomeComponent } from 'src/components/home_page/home.component';
 import { ProfileComponent } from 'src/components/profile/profile.component';
+import { MissionsPage } from 'src/components/ui_component/missions/missions.ui';
+import { Notifications } from 'src/components/notifications/notifications';
 
 const routes: Routes = [{
     path: 'landing',
-    component: LandingPageComponent,
+    component: Notifications,
     data: { animation: 'LandingPage' }
   }, {
     path: 'connexion',

@@ -5,6 +5,8 @@
 .calendar {
     flex-flow: column;
     width: 100%;
+    padding: 20px 0;
+    
 }
 .header-calendar {
     width: 80%;
@@ -26,8 +28,9 @@
 ol {
     list-style: none;
     display: grid;
+
     margin-bottom: 5px;
-    grid-template-columns: repeat(7, 1fr);
+    grid-template-columns:  repeat(7, 1fr);
     margin: 0;
     padding: 0;
 }

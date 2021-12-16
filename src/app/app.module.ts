@@ -36,6 +36,8 @@ import { HomeComponent } from 'src/components/home_page/home.component';
 import { ProfileComponent } from 'src/components/profile/profile.component';
 import { UISwitchComponent } from 'src/components/ui_component/switch/switch.component';
 import { UISwipeupComponent } from 'src/components/ui_component/swipeup/swipeup.component';
+import { MissionsPage } from 'src/components/ui_component/missions/missions.ui';
+import { Notifications } from 'src/components/notifications/notifications';
 
 @Injectable()
 export class CustomConfig extends HammerGestureConfig {
@@ -69,7 +71,9 @@ export class CustomConfig extends HammerGestureConfig {
     NavigationMenu,
     ProfileComponent,
     UISwitchComponent,
-    UISwipeupComponent
+    UISwipeupComponent,
+    MissionsPage,
+    Notifications
   ],
   imports: [
     //Ngxs imports
