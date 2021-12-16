@@ -100,18 +100,6 @@
             <label></label>
             <input class="form-element" value="********" type="text" disabled/>
           </div>
-          <div class="form-input">
-            <label></label>
-            <input class="form-element" value="********" type="text" disabled/>
-          </div>
-          <div class="form-input">
-            <label></label>
-            <input class="form-element" value="********" type="text" disabled/>
-          </div>
-          <div class="form-input">
-            <label></label>
-            <input class="form-element" value="********" type="text" disabled/>
-          </div>
         </form>
       </section>
     </ng-container>
@@ -136,10 +124,9 @@
         Enregistrer
       </button>
     </ng-template>
+    <swipeup [(open)]="openModifyPicture">
+      <li>Accédez à l'appareil photo</li>
+      <li>Télécharger une image</li>
+    </swipeup>
   </div>
-
-  <swipeup [(open)]="openModifyPicture">
-    <li>Accédez à l'appareil photo</li>
-    <li>Télécharger une image</li>
-  </swipeup>  
 </slidemenu>
