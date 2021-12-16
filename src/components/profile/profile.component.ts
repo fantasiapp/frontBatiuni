@@ -1,4 +1,5 @@
-import { Component, ElementRef, ViewChild } from "@angular/core";
+import { ChangeDetectorRef, Component, ElementRef, ViewChild } from "@angular/core";
+import { SlidesDirective } from "src/directives/slides.directive";
 import { UISlideMenuComponent } from "../ui_component/slidemenu/slidemenu.component";
 import { UISwipeupComponent } from "../ui_component/swipeup/swipeup.component";
 
@@ -19,7 +20,7 @@ export class ProfileComponent {
   modifyPassword: boolean = false;
   openModifyPicture: boolean = false;
 
-  constructor(private ref: ElementRef) {
+  constructor(private cd: ChangeDetectorRef) {
     (window as any).profile = this;
   }
 
@@ -29,7 +30,12 @@ export class ProfileComponent {
   }
 
   openModifyPictureMenu() {
-    console.log('yeah', this.openModifyPicture)
     this.openModifyPicture = true;
   }
+
+  @ViewChild(SlidesDirective, {static: true})
+  slider!: SlidesDirective;
+
+  labels = ["Qualibat", "RGE", "RGE Eco Artisan", "NF", "Effinergie", "Handibat"]
+    .map((name, id) => ({id, name, isChecked: false}))
 };

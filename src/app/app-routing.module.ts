@@ -13,7 +13,7 @@ import { UISlideMenuComponent } from 'src/components/ui_component/slidemenu/slid
 
 const routes: Routes = [{
     path: 'landing',
-    component: UISlideMenuComponent,
+    component: LandingPageComponent,
     data: { animation: 'LandingPage' }
   }, {
     path: 'connexion',

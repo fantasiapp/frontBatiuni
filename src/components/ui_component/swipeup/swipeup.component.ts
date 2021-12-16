@@ -1,18 +1,15 @@
-import { Component, Input, SimpleChange, SimpleChanges } from "@angular/core";
+import { ChangeDetectionStrategy, Component, Input, SimpleChange, SimpleChanges } from "@angular/core";
 import { UIOpenMenu } from "src/common/classes";
 
 @Component({
   selector: 'swipeup',
   templateUrl: './swipeup.component.html',
-  styleUrls: ['./swipeup.component.scss']
+  styleUrls: ['./swipeup.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UISwipeupComponent extends UIOpenMenu {
   constructor() {
     super();
-  }
-
-  ngOnChanges(changes: SimpleChanges) {
-    console.log(changes);
   }
   
   willClose = false;
