@@ -15,6 +15,10 @@ export class FileUI {
     @Input()
     imgsrc : string = "/assets/files/Impot.svg";
 
+
+    show(e : any) {
+    console.log(e.view.Capacitor.platform)
+        }
     // Edit true or false
     // @Input()
     // Edit : boolean = true

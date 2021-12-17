@@ -1,6 +1,6 @@
 <header class="clear-margin full-width sticky-header flex center-cross">
   <span class="grow text-emphasis">Mon Profil</span>
-  <img src="assets/notification.svg" />
+  <img src="assets/notification.svg" (click)="openNotifications = true"/>
   <img src="assets/menu.svg" (click)="openMenu = true" />
 </header>
 
@@ -102,7 +102,6 @@
             <label></label>
             <input class="form-element" value="********" type="text" disabled/>
           </div>
-
         </form>
       </section>
     </ng-container>
@@ -127,99 +126,104 @@
         Enregistrer
       </button>
     </ng-template>
+    <swipeup [(open)]="openModifyPicture">
+      <li>Accédez à l'appareil photo</li>
+      <li>Télécharger une image</li>
+    </swipeup>
   </div>
 </slidemenu>
 
 <slidemenu [(open)]="openRatings">
   <div class="full-width center-text text-emphasis" header>Mes notes</div>
-  <div class="hosted-page include-navigation flex column center-cross space-children-margin" content>
+ <div class="hosted-page include-navigation flex column center-cross space-children-margin" content>
 
     <profile-image></profile-image>
-    <switch style="text-align: center;"></switch>
+     <switch style="text-align: center;"></switch>
 
-    <stars value="3.9"></stars>
-    <span class="full-width section " style="text-align: center;font-size: 12px; margin-bottom: 10px;">Demander une recommandation</span>
-    <section class="full-width section modify-profile">
-      <div class="company-rate">
-        <span class="company-name">SARL</span>
-        <div class="criterion ">
+     <stars value="3.9"></stars>
+     <span class="full-width section " style="text-align: center;font-size: 12px; margin-bottom: 10px;">Demander une recommandation</span>
+     <section class="full-width section modify-profile">
+       <div class="company-rate">
+         <span class="company-name">SARL</span>
+         <div class="criterion ">
           <div class="flex center-cross"> 
+            <span class="criterion-stars">CRITERE 1
+           </span>
+           <stars class="stars" value="3.9"></stars>
+       </div>
+
+         <span>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+          dolore Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
+         et dolore</span>
+
+        </div>
+        <div class="criterion ">
+         <div class="flex center-cross"> 
             <span class="criterion-stars">CRITERE 1
             </span>
             <stars class="stars" value="3.9"></stars>
           </div>
 
-          <span>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+           <span>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
             dolore Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
-            et dolore</span>
+           et dolore</span>
 
-        </div>
-        <div class="criterion ">
-          <div class="flex center-cross"> 
-            <span class="criterion-stars">CRITERE 1
-            </span>
-            <stars class="stars" value="3.9"></stars>
-          </div>
-
-          <span>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-            dolore Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
-            et dolore</span>
-
-        </div>
-        <div class="criterion ">
-          <div class="flex center-cross"> 
-            <span class="criterion-stars">CRITERE 1
-            </span>
-            <stars class="stars" value="3.9"></stars>
-          </div>
-
-          <span>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-            dolore Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
-            et dolore</span>
-
-        </div>
       </div>
-      <div class="company-rate">
-        <span class="company-name">SARL</span>
         <div class="criterion ">
-          <div class="flex center-cross"> 
-            <span class="criterion-stars">CRITERE 1
-            </span>
-            <stars class="stars" value="3.9"></stars>
+         <div class="flex center-cross"> 
+          <span class="criterion-stars">CRITERE 1
+           </span>
+          <stars class="stars" value="3.9"></stars>
           </div>
 
           <span>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-            dolore Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
+         dolore Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
             et dolore</span>
-
-        </div>
-        <div class="criterion ">
-          <div class="flex center-cross"> 
-            <span class="criterion-stars">CRITERE 1
-            </span>
-            <stars class="stars" value="3.9"></stars>
-          </div>
-
-          <span>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-            dolore Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
-            et dolore</span>
-
-        </div>
-        <div class="criterion ">
-          <div class="flex center-cross"> 
-            <span class="criterion-stars">CRITERE 1
-            </span>
-            <stars class="stars" value="3.9"></stars>
-          </div>
-
-          <span>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-            dolore Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
-            et dolore</span>
-
-        </div>
+         </div>
       </div>
-    </section>
+       <div class="company-rate">
+         <span class="company-name">SARL</span>
+         <div class="criterion ">
+          <div class="flex center-cross"> 
+            <span class="criterion-stars">CRITERE 1
+           </span>
+           <stars class="stars" value="3.9"></stars>
+       </div>
 
-  </div>
+         <span>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+          dolore Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
+         et dolore</span>
 
+        </div>
+        <div class="criterion ">
+         <div class="flex center-cross"> 
+            <span class="criterion-stars">CRITERE 1
+            </span>
+            <stars class="stars" value="3.9"></stars>
+          </div>
+
+           <span>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+            dolore Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
+           et dolore</span>
+
+      </div>
+        <div class="criterion ">
+         <div class="flex center-cross"> 
+          <span class="criterion-stars">CRITERE 1
+           </span>
+          <stars class="stars" value="3.9"></stars>
+          </div>
+
+          <span>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+         dolore Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
+            et dolore</span>
+         </div>
+      </div>
+   </section>
+ </div>
+</slidemenu>
+   <slidemenu [(open)]="openNotifications">
+    <div class="full-width center-text text-emphasis" header>Notifications</div>
+
+     <notifications  content> </notifications>
 </slidemenu>

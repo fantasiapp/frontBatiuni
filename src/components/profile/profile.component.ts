@@ -19,6 +19,7 @@ export class ProfileComponent {
   openRatings: boolean = false;
   modifyPassword: boolean = false;
   openModifyPicture: boolean = false;
+  openNotifications : boolean = false;
 
   constructor(private ref: ElementRef) {
     (window as any).profile = this;

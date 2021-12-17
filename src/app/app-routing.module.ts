@@ -14,6 +14,7 @@ import { Notifications } from 'src/components/notifications/notifications';
 import { FileUI } from 'src/components/ui_component/filesUI/files.ui';
 
 import { UISlideMenuComponent } from 'src/components/ui_component/slidemenu/slidemenu.component';
+import { CalendarUI } from 'src/components/ui_component/calendar/calendar.ui';
 
 const routes: Routes = [{
     path: 'landing',
