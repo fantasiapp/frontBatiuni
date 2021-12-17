@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">batiuni</string>
+    <string name="title_activity_main">batiuni</string>
+    <string name="package_name">com.batiuni.app</string>
+    <string name="custom_url_scheme">com.batiuni.app</string>
+</resources>
