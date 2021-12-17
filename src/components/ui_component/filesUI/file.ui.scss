@@ -29,6 +29,13 @@ label {
   }
 }
 
+.placeholder {
+  font-size: 0.9em;
+  left: 0;
+  top: 5px;
+  pointer-events: none;
+}
+
 .file-date {
   justify-content: space-around;
   div {

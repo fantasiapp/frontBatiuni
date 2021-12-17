@@ -1,7 +1,10 @@
 <label>{{filename}} {{comment}}</label>
 <label *ngIf="showtitle"  class="label-input" for="filename">Télécharger la certification {{filename}}</label>
 <div class="file-form flex grow">
-    <input class="form-search" type="file"/>
+    <span class="file-input position-relative">
+        <input class="form-search" (change)="onChange($event)" type="file"/>
+        <span class="placeholder full-width text-ellipsis position-absolute"> {{ files && files.length && files[0].name || placeholder }} </span>
+    </span>
     <img src="assets/Attachement.svg">
 </div>
 <div class="file-date flex">

@@ -404,6 +404,12 @@ a {
   font-weight: 500;
 }
 
+.text-ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 //---------------------------------------------------
 //Inputs
 input {
