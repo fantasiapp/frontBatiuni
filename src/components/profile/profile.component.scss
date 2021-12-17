@@ -96,10 +96,13 @@ $icon-padding: 2px;
   right: $item-padding;
 }
 
+.add-field {
+  margin-bottom: $form-item-spacing;
+}
+
 .add-field > * {
   display: inline-block;
   vertical-align: middle;
-  margin-bottom: $form-item-spacing;
 
   img {
     margin: 0 10px;

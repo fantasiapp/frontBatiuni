@@ -82,7 +82,8 @@ export class CustomConfig extends HammerGestureConfig {
     UIStarsComponent,
     UISlideMenuComponent,
     UIProfileImageComponent,
-    UINumberComponent
+    UINumberComponent,
+    FileUI
   ],
   imports: [
     //Ngxs imports
