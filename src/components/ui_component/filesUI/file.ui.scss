@@ -1,49 +1,52 @@
 @import "../../../styles/variables";
 
+:host {
+  display: inline-block;
+  margin-bottom: $form-item-spacing;
+}
+
 .file-input  {
-    width: 100%;
-    margin : 25px;
-    display: grid;
-    label {
-        color: $buttonColor;
-        font-weight: 500;
-        margin-bottom: 10px;
+  width: 100%;
+
+  label {
+  color: $buttonColor;
+  font-weight: 500;
+  margin-bottom: 10px;
+}
+
+.label-input {
+  color : black;
+  font-size: 14px;
+  font-weight: 200;
+}
+
+.file-form { 
+  border-bottom: 2px solid #cdcfd0;
+  
+  img {
+    margin: 0.5rem;
+    height: 15px;
+  }
+}
+
+.file-date {
+    margin-top: 1rem;
+    justify-content: space-between;
+    width: 80%;
+    div {
+      flex: auto;
+      input {
+        border-bottom: 2px solid #cdcfd0;    
+      }
     }
-    .label-input {
-        color : black;
-        font-size: 14px;
-        font-weight: 200;
+    img {
+      flex: 2;
+      height: 50px;
     }
-    .file-form {
-        margin-top: 1rem ;
-        justify-content: space-between;
-        width: 80%;
-        border-bottom: 2px solid #cdcfd0;
-        
-        img {
-            margin: 0.5rem;
-            height: 15px;
-          }
-    }
-    .file-date {
-        margin-top: 1rem;
-        justify-content: space-between;
-        width: 80%;
-        div {
-            flex: auto;
-            display: grid;
-            input {
-                border-bottom: 2px solid #cdcfd0;    
-            }
-        }
-        img {
-            flex: 2;
-            height: 50px;
-          }
-    }
+  }
 }
 input[type="date"]::-webkit-inner-spin-button,
 input[type="date"]::-webkit-calendar-picker-indicator {
-    display: none;
-    -webkit-appearance: none;
+  display: none;
+  -webkit-appearance: none;
 }
