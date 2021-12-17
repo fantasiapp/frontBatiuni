@@ -14,11 +14,12 @@ import { Notifications } from 'src/components/notifications/notifications';
 import { FileUI } from 'src/components/ui_component/filesUI/files.ui';
 
 import { UISlideMenuComponent } from 'src/components/ui_component/slidemenu/slidemenu.component';
-import { CalendarUI } from 'src/components/ui_component/calendar/calendar.ui';
+import { UINumberComponent } from 'src/components/ui_component/number/number.component';
+import { RangeComponent } from 'src/components/ui_component/range/range.component';
 
 const routes: Routes = [{
     path: 'landing',
-    component: FileUI,
+    component: LandingPageComponent,
     data: { animation: 'LandingPage' }
   }, {
     path: 'connexion',

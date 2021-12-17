@@ -3,19 +3,28 @@
 :host {
   display: block;
   position: relative; 
-  img {
-    width: $profile-image-size; height: $profile-image-size;
-    border-radius: 50%;
-    border: $profile-level-thickness solid #aaa;
-  }
+  width: $profile-image-size;
+  height: $profile-image-size;
+  
   border-radius: 50%;
   margin: $highlight-margin 0;
+  border: $profile-level-thickness solid #aaa;
+  transform: rotate(45deg);
+
+  img {
+    width: 100%; height: 100%;
+    border-radius: 50%;
+  }
+
+  & > * {
+    transform: rotate(-45deg);
+  }
 }
 
 .ticks {
   width: $profile-image-size;
   height: $profile-image-size;
-  top: 0; left: 0;
+  top: -$profile-level-thickness; left: -$profile-level-thickness;
 
 
   .top, .bottom {
