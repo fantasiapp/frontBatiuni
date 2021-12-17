@@ -1,4 +1,4 @@
-type Optional<T> = T | null;
+import { Optional } from "../common/types";
 
 export interface AuthModel {
   token: Optional<string>;

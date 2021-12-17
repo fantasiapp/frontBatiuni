@@ -1,0 +1,53 @@
+@import '../../styles/mixins';
+@import '../../styles/variables';
+
+$buttonHeight: 60px;
+
+:host {
+  display: block;
+  height: 100%;
+  font-size: inherit;
+}
+.create-account {
+  position: absolute;
+  bottom: 0;
+  height: $buttonHeight;
+  padding: 0 30px;
+  box-shadow: 0 -2px 5px 0 #aaa;
+  background: white;;
+}
+
+.create-account button {
+  margin: 10px 0;
+}
+
+.section {
+  $offset: $buttonHeight + $paging-height + $page-padding;
+  height: calc(100vh - #{$offset});
+}
+
+.image-container {
+
+  img {
+    max-height: 45vh;
+  }
+}
+
+.paging {
+  z-index: 1;
+}
+
+.arrow_left, .arrow_right {
+  position: absolute;
+}
+
+.arrow_right {
+  right: 0;
+  transform: scale(0.8);
+}
+
+.arrow_left {
+  left: 0;
+  transform-origin: center center;
+  transform: scale(0.8) scaleX(-1);
+}

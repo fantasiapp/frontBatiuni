@@ -1,0 +1,10 @@
+<div class="cover-parent" (click)="close()"></div>
+
+<div class="menu full-width" [class.open]="open && !willClose" (transitionend)="onTransitionEnd()">
+  <div class="decoration background-white" (click)="close()">
+  </div>
+
+  <ul class="hosed-page list background-white font-Poppins text-light-emphasis">
+    <ng-content list></ng-content>
+  </ul>
+</div>

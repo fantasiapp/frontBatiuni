@@ -1,0 +1,4 @@
+<div [@routeAnimation]="prepareRoute(outlet)" class="router">
+  <router-outlet #outlet="outlet"></router-outlet>
+</div>
+<navigation (routeChange)="routeTo($event)"></navigation>

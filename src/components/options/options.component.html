@@ -1,0 +1,25 @@
+<main class="cover-parent flex column center-cross">
+  <div class="form-select full-width">
+    <div class="input-select full-width flex row center-cross" (click)="showDropDown=!showDropDown">  
+      <ul *ngIf="showChosenItems" class="chosen-items">
+        <li *ngFor="let choice of userChoices; let i = index" (click)="delete($event, i, choice.id)">{{choice.name}}</li>
+      </ul>
+      <img src="assets/arrowdown.svg"/>
+    </div>
+  
+    <div class="dropdown" *ngIf="showDropDown" >
+      <div class="dropdown-choices full-width flex row center-cross">
+          <img src="assets/Rechercher.svg">
+          <input class="form-search"  (input)="filterOptions($event)" type="text" placeholder="Rechercher un métier"/>
+      </div>
+      <div *ngIf="options.length" class="dropdown-content" >
+        <ul>
+          <li *ngFor="let option of options" class="flex center-cross">
+            {{option.name}} 
+            <input (change)="toggle($event, option.id)" class="option-selected" type="checkbox" [attr.checked]="option.isChecked || null"/>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</main>

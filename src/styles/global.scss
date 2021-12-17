@@ -1,23 +1,61 @@
 @import 'mixins.scss';
 @import 'responsive.scss';
+@import 'variables.scss';
+@import 'fonts.scss';
+@import 'animations.scss';
 
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+
 }
 
+:root {
+  --main-landing-color: #{$mainColor}; 
+  --main-app-color: #{$landingColor};
+  --main-button-color: #{$buttonColor};
+  --main-button-gradient: #{$buttonGradient};
+}
+
+.clear-margin {
+  margin: 0;
+}
+
+.clear-padding {
+  padding: 0;
+}
+
+* {
+  @extend .clear-margin;
+  @extend .clear-padding;
+  box-sizing: border-box;
+}
+
+
 body {
-  font-family: "Nunito", sans-serif;
+  font-family: "Roboto", sans-serif;
   font-size: 16px;
-  margin: 0 20px;
+  margin: 0;
+  min-height: calc(100% + env(safe-area-inset-top));
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  overflow-y: auto;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+  touch-action: pan-y !important;
+  // background: $buttonGradient;
+  //color: var(--main-app-color);
 
   @include breakpoint(tablet) {
-    font-size: 18px;
+    font-size: 20px;
   }
 
   @include breakpoint(desktop) {
-    font-size: 20px;
+    font-size: 22px;
+  }
+
+  &.blocked {
+    overflow: hidden;
   }
 }
 
@@ -26,8 +64,404 @@ button {
   display: inline-block;
   outline: none;
   border: none;
-  background-color: #0F557D;
-  color: white;
-  padding: 8px;
-  border-radius: 5px;
+  padding: 12px;
+  border-radius: 8px;
+  font-family: inherit;
+
+  &.button {
+    color: white;
+
+    &:disabled {
+      background: #aaa !important;
+    }
+
+    &.gradient {
+      background: linear-gradient(#134C6C, #0C5E8D);
+
+    }
+  }
+}
+
+a {
+  font-family: 'Poppins' !important;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+.background-image {
+  @include cover-background;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.center-text {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.block {
+  display: block;
+}
+
+.half-rotation {
+  transform: rotate(180deg);
+}
+
+.flex {
+  display: flex;
+
+  &.row {
+    flex-flow: row nowrap;
+  }
+
+  &.column {
+    flex-flow: column nowrap;
+  }
+
+  &.center-main {
+    justify-content: center;
+  }
+
+  &.center-cross {
+    align-items: center;
+  }
+
+  &.strech-children {
+    align-items: stretch;
+  }
+
+  &.center {
+    @extend .center-main;
+    @extend .center-cross;
+  }
+
+  & > .grow {
+    flex: 1;
+  }
+}
+
+.auto-margin-x {
+  margin: 0 auto;
+}
+
+.auto-margin-y {
+  margin: auto 0;
+}
+//-----------------------------------------------
+//Size
+.full-width { width: 100%; }
+.full-height { height: 100% }
+.cover-parent {
+  @extend .full-width;
+  @extend .full-height;
+}
+
+//-----------------------------------------------
+//Colors
+.background-white {
+  background-color: $landingColor;
+}
+
+//------------------------------------------------
+// POSITIONING
+.position-absolute {
+  position: absolute;
+}
+
+.position-relative {
+  position: relative;
+}
+
+.absolute-center-x {
+  @include absolute-center('x', absolute);
+}
+
+.absolute-center-y {
+  @include absolute-center('y', absolute);
+}
+
+.relative-center-x {
+  @include absolute-center('x', relative);
+}
+
+.relative-center-y {
+  @include absolute-center('y', relative);
+}
+
+//------------------------------------------------
+// FORMULAIRES
+
+.arrow_right {
+  transform: scale(0.6);
+};
+
+.arrow_left {
+  transform: scale(0.6) rotate(180deg);
+};
+
+.arrow_right, .arrow_left {
+  margin: 0 8px;
+}
+
+.curved-border {
+  border-radius: 15px 15px 0 0;
+}
+
+.hosted-page {
+  @extend .background-white;
+  width: 100%;
+  padding: $page-padding;
+  position: relative;
+  font-size: 0.95em;
+  overflow-x: hidden;
+  overflow-y: auto;
+  touch-action: pan-y !important;
+
+  &.include-paging {
+    padding-top: $page-padding - $paging-decoration-height !important;
+    min-height: calc(100vh - #{$paging-height + $paging-decoration-height});
+  }
+
+  &.include-navigation {
+    min-height: calc(100vh - #{$navigation-height});
+  }
+
+  &.include-header {
+    height: calc(100vh - #{$sticky-header-height});
+  }
+}
+
+.space-children-margin {
+  & > *:not(:first-child), & > *:not(:last-child) {
+    margin-bottom: $spacing-margin;
+  }
+}
+
+
+.hosted-view {
+  width: 100%;
+  overflow-y: auto;
+  touch-action: pan-y !important;
+}
+
+.formulaire {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  background: $secondaryBackground;
+  min-height: calc(100vh - #{$paging-height});
+  overflow-y: auto;
+  touch-action: pan-y !important;
+}
+
+.paging {
+  list-style-type: none;
+  font-size: 0.9em;
+  height: $paging-height;
+  line-height: $paging-height;
+  background: $secondaryBackground;
+  color: $landingColor;
+  justify-content: space-between;
+
+  & > li {
+    flex-grow: 1;
+    height: 100%;
+  }
+  
+  & li a > * {
+    display: inline-block;
+    vertical-align: middle;
+  }
+}
+
+.no-background {
+  background: none !important;
+}
+
+.title {
+  font-size: 1.1em;
+  font-weight: bold;
+  margin-bottom: 30px;
+}
+
+.subtitle {
+  font-size: 0.85em;
+  font-weight: normal;
+  margin-bottom: 30px;
+}
+
+.form-control {
+  background-color: $landingColor;
+  color: $formulaireMainColor;
+  flex: 1;
+  font-family: "Poppins";
+  @extend .flex;
+  @extend .column;
+  
+  .form-title {
+    @extend .title;
+  }
+
+  .form-subtitle {
+    @extend .subtitle;
+  }
+}
+
+.form-input {
+  font-family: inherit;
+  & > * {
+    display: block;
+  }
+
+  label {
+    font-size: 0.8em;
+    margin-bottom: 5px;
+  }
+
+  & > input, & > span > input {
+    width: 100%;
+    height: 30px;
+    outline: none;
+    border: none;
+    border-bottom: 2px solid #cdcfd0;
+    margin-bottom: $form-item-spacing;
+    font-family: "Poppins";
+  }
+  
+  select{
+    width: 100%;
+    height: 30px;
+    outline: none;
+    border: none;
+    border-bottom: 2px solid #cdcfd0;
+    margin-bottom: 20px;
+    font-family: "Poppins";
+  }
+}
+
+.external-links {
+  color: $externelLinks;
+  font-family: "Poppins Light";
+  font-size: 15px;
+}
+
+.form-action {
+  margin: 25px 0;
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+}
+
+.form-step {
+  background-color: $landingColor;
+  width: 100%;
+  text-align: center;
+
+  & > * {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin: 5px;
+    background-color: #f2f2f2;
+
+  }
+  
+  .active {
+    background-color: $buttonColor;
+  }
+}
+
+//------------------------------------------------
+
+//-------------------------------------------------
+//ANGULAR FORMS
+.ng-invalid:not(.ng-untouched) {
+  border-color: red;
+}
+//--------------------------------------------------
+//fonts
+.font-Roboto {
+  font-family: "Roboto";
+}
+
+.font-Poppins {
+  font-family: "Poppins";
+}
+//--------------------------------------------------
+//Text states
+.text-emphasis {
+  font-weight: bold;
+}
+
+.text-light-emphasis {
+  font-weight: 500;
+}
+
+.text-ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+//---------------------------------------------------
+//Inputs
+input {
+  outline: none;
+  border: none;
+}
+
+//---------------------------------------------------
+//Offre Logo circle arround company logo
+//used for offer and offfer pages
+.offres-logo {
+  @include circle(80px, rgb(241, 241, 241));
+}
+//--------------------------------------------------
+//--------------------------------------------------
+// Sticky header : 
+// <div class="sticky-header">
+// <a><img class="return" src="/assets/arrowdown.svg"/></a>
+// <span class="sticky-header-title">MES MISSIONS</span>
+
+// </div>
+// .sticky-header {
+//   background-color: white;
+//   padding: 20px 0;
+//   position: fixed;
+//   display: inline-block;
+//   width: 100%;
+//   top: 0;
+//   padding: 1.5em;
+//   height: $sticky-header-height;
+//   z-index: 999;
+//   text-align: center;
+//   font-weight: 500;
+//   a {
+//       float: left;
+//       .return {
+//           transform: rotate(90deg);
+//       }
+//   }
+// }
+  
+//Page layouts
+.sticky-header {
+  padding: $highlight-margin $page-padding;
+  margin: 0;
+  height: $sticky-header-height;
+  position: fixed;
+  top: 0;
+  background: white;
+  z-index: 10;
+}
+
+.section {
+  position: relative;
 }

@@ -1,0 +1,297 @@
+<header class="clear-margin full-width sticky-header flex center-cross">
+  <span class="grow text-emphasis">Mon Profil</span>
+  <img src="assets/notification.svg" (click)="openNotifications = true"/>
+  <img src="assets/menu.svg" (click)="openMenu = true" />
+</header>
+
+<div class="hosted-page flex column center-cross space-children-margin">
+  <profile-image></profile-image>
+  <switch style="text-align: center;"></switch>
+  <section class="quick-intro flex column center-cross">
+    <span class="text-emphasis">Gabriel Dubois</span>
+    <span>Gabriel_Dubois@gmail.com</span>
+    <span>06 21 95 34 29</span>
+    <stars (click)="openRatings = true" value="3.9"></stars>
+  </section>
+
+  <section class="job-description full-width flex column space-children-margin">
+    <span>
+      <span class="text-light-emphasis font-Poppins">Nom de l'entreprise : </span> <span class="value">Fantasiapp
+        SARL</span>
+    </span>
+    <span>
+      <span class="text-light-emphasis font-Poppins">N SIRET : </span> <span class="value">362 521 879 00034</span>
+    </span>
+    <span>
+      <span class="text-light-emphasis font-Poppins">Métier : </span> <span class="value">1 Chef de chantier, 1 Maître
+        d'oeuvre</span>
+    </span>
+    <span>
+      <span class="text-light-emphasis font-Poppins">Chiffres d'affaires : </span> <span class="value">77 584 €</span>
+    </span>
+  </section>
+
+  <section class="documents">
+    <h4>Documents imporants</h4>
+    <div class="flex images">
+      <img src="assets/files/Impot.svg" />
+      <img src="assets/files/KBIS.svg" />
+      <img src="assets/files/qualibat.svg" />
+      <img src="assets/files/urssaf.svg" />
+    </div>
+  </section>
+</div>
+
+<swipeup [(open)]="openMenu">
+  <li (click)="slideModifyMenu()">Modifier mon profil</li>
+  <li>Candidatures en cours</li>
+  <li>Gérer mes abonnements</li>
+  <li>Mes factures</li>
+  <li>Partager l'application</li>
+  <li>Noter l'application</li>
+  <li>Nous contacter</li>
+  <li>FAQ</li>
+  <li>Mentions légales</li>
+  <li>Se déconnecter</li>
+</swipeup>
+
+<slidemenu [(open)]="openModifyMenu">
+  <div class="full-width center-text text-emphasis" header>Modifier mon Profil</div>
+  <div class="hosted-page include-header flex column center-cross space-children-margin" content>
+    <section class="section">
+      <profile-image></profile-image>
+      <img src="assets/icons/modify.svg" class="modify-icon image" (click)="openModifyPictureMenu()"/>
+    </section>
+
+    <switch style="text-align: center;"></switch>
+    <stars value="3.9"></stars>
+
+    
+    <div class="full-width hosted-view grow flex column position-relative">
+      <div [slides]="[modifyPage1, modifyPage2, modifyPage3]" type="template" [animate]="true"></div>
+      <ng-template #modifyPage1>
+        <section class="full-width section modify-profile">
+          <form class="form-control" [style.display]="modifyPassword ? 'none' : 'initial'">
+            <h3 class="form-title font-Roboto">
+              Infos personelles: 
+              <img src="assets/icons/modify.svg" class="modify-icon text"/>
+            </h3>
+            <div class="form-input">
+              <label>Prénom du contact</label>
+              <input class="form-element" type="text" disabled/>
+            </div>
+            <div class="form-input">
+              <label>Adresse e-mail contact</label>
+              <input class="form-element" type="text" disabled/>
+            </div>
+            <div class="form-input">
+              <label>Telephone fixe</label>
+              <input class="form-element" type="text" disabled/>
+            </div>
+            <div class="form-input">
+              <label>Téléphone portable</label>
+              <input class="form-element" type="text" disabled/>
+            </div>
+    
+            <h3 class="form-title font-Roboto">
+              Modifier le mot de passe: 
+              <img src="assets/icons/modify.svg" (click)="modifyPassword = true" class="modify-icon text"/>
+            </h3>
+            <div class="form-input">
+              <label></label>
+              <input class="form-element" value="********" type="text" disabled/>
+            </div>
+          </form>
+      
+          <form class="form-control" [style.display]="!modifyPassword ? 'none' : 'initial'">
+            <div class="form-input">
+              <label>Ancien mot de passe</label>
+              <input class="form-element" type="text"/>
+            </div>
+            <div class="form-input">
+              <label>Nouveau mot de passe</label>
+              <input class="form-element" type="text"/>
+            </div>
+            <div class="form-input">
+              <label>Confirmation nouveau mot de passe</label>
+              <input class="form-element" type="text"/>
+            </div>
+          </form>
+        </section>
+      </ng-template>
+
+      <ng-template #modifyPage2>
+        <form class="full-width form-control">
+          <h3 class="form-title font-Roboto">
+            Infos entreprise: 
+            <img src="assets/icons/modify.svg" (click)="modifyPassword = true" class="modify-icon text"/>
+          </h3>
+          <div class="form-input">
+            <label>Nom de l'entreprise</label>
+            <input class="form-element" type="text"/>
+          </div>
+          <div class="form-input">
+            <label>N SIRET</label>
+            <input class="form-element" type="text"/>
+          </div>
+          <div class="form-input">
+            <label>Métiers</label>
+            <span class="position-relative">
+              <input placeholder="Chef de chantier" class="form-element" type="text" disabled/>
+              <number class="position-absolute"></number>
+            </span>
+
+            <span class="position-relative">
+              <input placeholder="Maître d'oeuvre" class="form-element" type="text" disabled/>
+              <number class="position-absolute"></number>
+            </span>
+          </div>
+
+          <div class="form-input center-text add-field">
+            <img src="assets/icons/add.svg"/>
+            <span>Ajouter une métier</span>
+          </div>
+
+          <div class="form-input">
+            <label>Site internet</label>
+            <input class="form-element" type="text"/>
+          </div>
+          <div class="form-input">
+            <label>Chiffres d'affaires</label>
+            <input class="form-element" type="text"/>
+          </div>
+
+          <fileinput class="flex column" [showtitle]="false" filename="Kbis" imgsrc="assets/files/KBIS.svg"></fileinput>
+          <fileinput class="flex column" [showtitle]="false" filename="Attestation travail dissimulé" imgsrc="assets/files/Trav. Dis..svg"></fileinput>
+          <fileinput class="flex column" [showtitle]="false" filename="Attestation RC + DC" imgsrc="assets/files/RC + DC.svg"></fileinput>
+          <fileinput class="flex column" [showtitle]="false" filename="URSSAF" imgsrc="assets/files/urssaf.svg"></fileinput>
+          <fileinput class="flex column" [showtitle]="false" filename="Impôts" imgsrc="assets/files/Impot.svg"></fileinput>
+          <fileinput class="flex column" [showtitle]="false" filename="Congés payés" imgsrc="assets/files/Cong.Payés.svg"></fileinput>
+        </form> 
+      </ng-template>
+
+      <ng-template #modifyPage3>
+        <form class="full-width form-control">
+          <h3 class="form-title font-Roboto">
+            Certifications & labels: 
+            <img src="assets/icons/modify.svg" (click)="modifyPassword = true" class="modify-icon text"/>
+          </h3>
+          <div class="form-input">
+            <label>Vos labels</label>
+            <options [showChosenItems]="false" [options]="allLabels" (userChoice)="labels = $event"></options>
+          </div>
+          <fileinput class="flex column" *ngFor="let label of labels" [filename]="label.name"></fileinput>
+        </form>
+      </ng-template>
+    </div>
+    
+    <div class="form-step" style="margin-top: auto;">
+      <div (click)="modifySlider.index = 0"[class.active]="modifySlider.index == 0"></div>
+      <div (click)="modifySlider.index = 1"[class.active]="modifySlider.index == 1"></div>
+      <div (click)="modifySlider.index = 2"[class.active]="modifySlider.index == 2"></div>
+    </div>
+    <button class="button gradient full-width" (click)="modifyPassword = false">
+      Enregistrer
+    </button>
+
+    <swipeup [(open)]="openModifyPicture">
+      <li>Accédez à l'appareil photo</li>
+      <li>Télécharger une image</li>
+    </swipeup>
+  </div>
+</slidemenu>
+
+<slidemenu [(open)]="openRatings">
+  <div class="full-width center-text text-emphasis" header>Mes notes</div>
+ <div class="hosted-page include-navigation flex column center-cross space-children-margin" content>
+
+    <profile-image></profile-image>
+     <switch style="text-align: center;"></switch>
+
+     <stars value="3.9"></stars>
+     <span class="full-width section " style="text-align: center;font-size: 12px; margin-bottom: 10px;">Demander une recommandation</span>
+     <section class="full-width section modify-profile">
+       <div class="company-rate">
+         <span class="company-name">SARL</span>
+         <div class="criterion ">
+          <div class="flex center-cross"> 
+            <span class="criterion-stars">CRITERE 1
+           </span>
+           <stars class="stars" value="3.9"></stars>
+       </div>
+
+         <span>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+          dolore Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
+         et dolore</span>
+
+        </div>
+        <div class="criterion ">
+         <div class="flex center-cross"> 
+            <span class="criterion-stars">CRITERE 1
+            </span>
+            <stars class="stars" value="3.9"></stars>
+          </div>
+
+           <span>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+            dolore Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
+           et dolore</span>
+
+      </div>
+        <div class="criterion ">
+         <div class="flex center-cross"> 
+          <span class="criterion-stars">CRITERE 1
+           </span>
+          <stars class="stars" value="3.9"></stars>
+          </div>
+
+          <span>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+         dolore Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
+            et dolore</span>
+         </div>
+      </div>
+       <div class="company-rate">
+         <span class="company-name">SARL</span>
+         <div class="criterion ">
+          <div class="flex center-cross"> 
+            <span class="criterion-stars">CRITERE 1
+           </span>
+           <stars class="stars" value="3.9"></stars>
+       </div>
+
+         <span>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+          dolore Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
+         et dolore</span>
+
+        </div>
+        <div class="criterion ">
+         <div class="flex center-cross"> 
+            <span class="criterion-stars">CRITERE 1
+            </span>
+            <stars class="stars" value="3.9"></stars>
+          </div>
+
+           <span>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+            dolore Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
+           et dolore</span>
+
+      </div>
+        <div class="criterion ">
+         <div class="flex center-cross"> 
+          <span class="criterion-stars">CRITERE 1
+           </span>
+          <stars class="stars" value="3.9"></stars>
+          </div>
+
+          <span>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+         dolore Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
+            et dolore</span>
+         </div>
+      </div>
+   </section>
+ </div>
+</slidemenu>
+   <slidemenu [(open)]="openNotifications">
+    <div class="full-width center-text text-emphasis" header>Notifications</div>
+
+     <notifications  content> </notifications>
+</slidemenu>

@@ -1,0 +1,24 @@
+<main class="cover-parent flex center">
+    <div class="calendar flex center">
+    <div class="header-calendar flex center">
+		
+		<h1>{{dateSelect | date:'MMMM, yyyy'}}</h1>
+        <div class="calendar-action flex">
+			<button (click)="changeMonth(-1)" class="btn-prev"><img src="/assets/arrowleft.svg"/> </button>
+		
+			<button (click)="changeMonth(1)" class="btn-next"><img src="/assets/arrowright.svg"/></button>
+		</div>
+	</div>
+<div class="wrapper-calendar ">
+	<ol>
+		<li *ngFor="let day of week; let index = index" class="day-name">{{day | slice:0:1}}</li>
+        <li (click)="clickDay(day,$event)"   [style.gridColumnStart]="first ? day?.indexWeek : 'auto'"
+         *ngFor="let day of monthSelect;let first = first">
+			<span>{{day?.value}}</span>
+		</li>
+	</ol>
+</div>
+</div>
+
+</main>
+

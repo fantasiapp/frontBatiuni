@@ -1,0 +1,31 @@
+@import "../../../styles/variables.scss";
+@import "../../../styles/mixins.scss";
+
+:host {
+  font-family: "Poppins";
+  display: block;
+  height: 100vh;
+  width: 100vw;
+}
+
+.confirmation-pages { 
+  background-color: $buttonGradient;
+
+  .success-circle {
+    @include circle(80px, $landingColor);
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 70px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+    text-align: center;
+  }
+}
+
+button {
+  background-color: $infosColor;
+  color:#FFFFFF;
+  width: 60%;
+}
+
+p {
+  color: #FFFFFF;
+  margin-top: 25px;
+  margin-bottom: 100px;
+}

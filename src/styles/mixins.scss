@@ -1,7 +1,0 @@
-@mixin circle($radius: 0) {
-  border-radius: 50%;
-  @if $radius != 0 {
-    width: $radius;
-    height: $radius;
-  }
-};

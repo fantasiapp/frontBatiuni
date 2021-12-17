@@ -1,0 +1,111 @@
+@import "../../../styles/mixins";
+:host {
+    font-family: "Roboto";
+}
+.calendar {
+    flex-flow: column;
+    width: 100%;
+    padding: 20px 0;
+    
+}
+.header-calendar {
+    width: 80%;
+    align-content: center;
+    justify-content: space-between;
+    h1 {
+        color: #1e2843;
+    }
+}
+.wrapper-calendar {
+    width: 80%;
+    margin: 0.25rem;
+    padding: 1rem;
+    border-radius: 15px;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    background-color: #fafafa;
+}
+
+ol {
+    list-style: none;
+    display: grid;
+
+    margin-bottom: 5px;
+    grid-template-columns:  repeat(7, 1fr);
+    margin: 0;
+    padding: 0;
+}
+
+li {
+    height: 1.5rem;
+    width: 1.5rem;
+    padding: 0.5rem;
+    font-size: 0.8rem;
+    cursor: pointer;
+    text-align: center;
+    span {
+        color: #1e2843;
+    }
+}
+h2 {
+    margin-bottom: 4px;
+    padding: 0;
+}
+
+.day-name {
+    font-size: 14px;
+    margin-bottom: 2px;
+    padding: 4px;
+    text-align: center;
+}
+
+.calendar-action {
+    justify-content: space-around;
+    img {
+        height: 1.5em;
+    }
+}
+
+.header-calendar h1 {
+    width: 100%;
+    font-size: 14px;
+}
+
+.header-calendar button {
+    cursor: pointer;
+    background-color: transparent;
+    border: 0;
+}
+
+.active {
+    margin: 1px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #52d1bd;
+    span {
+        color: #ffffff;
+    }
+}
+.secondtime {
+    background-color: #f9c067;
+    margin: 1px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    span {
+        color: #ffffff;
+    }
+}
+.lasttime {
+    background-color: #e82727;
+    margin: 1px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    span {
+        color: #ffffff;
+    }
+}

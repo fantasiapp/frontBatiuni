@@ -1,0 +1,69 @@
+@mixin cover-background {
+  position: absolute;
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+};
+
+@mixin absolute-center($direction: 'xy', $position: absolute) {
+  @if $position == absolute {
+    position: absolute;
+  } @else if $position == relative {
+    position: relative;
+  } @else { }
+
+  @if $direction == 'x' {
+    left: 50%;
+    transform: translateX(-50%);
+  } @else if $direction == 'y' {
+    top: 50%;
+    transform: translateY(-50%);
+  } @else {
+    left: 50%; top: 50%;
+    transform: translate(-50%, -50%);
+  }
+};
+
+@mixin circle($radius: 0, $color: #FFFFFF) {
+  border-radius: 50%;
+  background-color: $color;
+  @if $radius != 0 {
+    width: $radius;
+    height: $radius;
+  }
+};
+
+@mixin zoom($amount: 1) {
+  transform: scale($amount);
+}
+
+@mixin rotate($angle: 0deg) {
+  transform: rotate($angle);
+};
+
+@mixin triangle($direction, $size, $color) {
+  content: ""; // ensures the arrows are visible
+
+  // ensures the size of the arrows is correct:
+  width: 0;
+  height: 0;
+
+  // Lists for positions/directions
+  $directions: ('down', 'left', 'up', 'right');
+  $positions: ('top', 'right', 'bottom', 'left');
+
+  // Loop through each position
+  @each $position in $positions {
+    // Calculate the index of the position in the list
+    $index: index($positions, $position);
+
+    // If the position matches the direction, render a colored border
+    @if nth($directions, $index) == $direction {
+      border-#{$position}: $size solid $color;
+    } @else {
+      border-#{$position}: $size solid transparent;
+    }
+  }
+}

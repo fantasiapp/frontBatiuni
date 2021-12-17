@@ -1,0 +1,12 @@
+@import '../../styles/variables';
+
+:host {
+  display: block;
+  min-height: 100vh;
+  background-color: white;
+}
+
+.router {
+  height: calc(100vh - #{$navigation-height});
+  overflow: auto;
+}

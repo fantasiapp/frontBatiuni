@@ -1,0 +1,35 @@
+:host {
+  display: block;
+  padding: 20px;
+  font-size: 12px;
+  font-family: "Poppins Light";
+  color: black;
+}
+
+$border-width: 2px;
+$border-color: #777;
+$tabs-background-color: #ccc;
+$tab-background-color: #ccc;
+$tab-active-background-color: white;
+
+.tabs {
+  list-style-type: none;
+  background-color: $tabs-background-color;
+}
+
+.tab {
+  background-color: $tab-background-color;
+  padding: 8px;
+  border-bottom: $border-width solid $border-color;
+  text-align: center;
+}
+
+.tab.active {
+  background-color: $tab-active-background-color;
+  border: $border-width solid $border-color;
+  border-bottom: none !important;
+}
+
+.tab-content {
+  
+}

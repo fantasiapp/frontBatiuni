@@ -1,0 +1,71 @@
+@import '../styles/variables';
+
+$slide: 250ms ease-out;
+$fade: 250ms ease-out;
+
+@keyframes slide-in-right {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(0%); }  
+};
+
+@keyframes slide-out-right {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(100%); }  
+};
+
+@keyframes slide-in-left {
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(0%); }  
+};
+
+@keyframes slide-out-left {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-100%); }  
+};
+
+@keyframes fade-in {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@keyframes fade-out {
+  0% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+.animating {
+  position: absolute !important;
+  left: 0; top: 0;
+  padding: inherit;
+  height: 100% !important;
+}
+
+.slide-in-right {
+  @extend .animating;
+  animation: $slide 0s normal forwards slide-in-right;
+}
+
+.slide-out-right {
+  @extend .animating;
+  animation: $slide 0s normal forwards slide-out-right;
+}
+
+.slide-in-left {
+  @extend .animating;
+  animation: $slide 0s normal forwards slide-in-left;
+}
+
+.slide-out-left {
+  @extend .animating;
+  animation: $slide 0s normal forwards slide-out-left;
+}
+
+.fade-in {
+  @extend .animating;
+  animation: $fade normal forwards fade-in;
+}
+
+.fade-out {
+  @extend .animating;
+  animation: $fade normal forwards fade-out;
+}

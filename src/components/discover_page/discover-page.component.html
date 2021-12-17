@@ -1,0 +1,39 @@
+<ng-template #page let-ctx>
+  <section class="hosted-view section flex column">
+    <header style="flex-grow: 0;">
+      <h3 class="title">{{ ctx.title }}</h3>
+      <p class="font-Poppins">
+        <span *ngFor="let text of ctx.texts" [class.text-emphasis]="text.emphasis">
+          {{ text.content }}
+        </span>
+      </p>
+    </header>
+    <div class="image-container center-text" style="margin-top: 40px; margin-bottom: auto">
+      <img [src]="ctx.image"/>
+    </div>
+  </section>
+</ng-template>
+
+<div class="card">
+  
+</div>
+
+<paging [showPageName]="false" [length]="4" [showNext]="false"></paging>
+<div class="hosted-page include-paging">
+  <ng-container [slide-template]="page" [contexts]="contexts[subject]">
+  </ng-container> 
+</div>
+
+<div class="full-width no-background">
+  <a *ngIf="slider.index > 0" class="arrow_left absolute-center-y" (click)="slider.slide('right')">
+    <img src="assets/Fleche2.svg"/>
+  </a>  
+
+  <a *ngIf="slider.index < slider.length - 1" class="arrow_right absolute-center-y" (click)="slider.slide('left')">
+    <img src="assets/Fleche2.svg"/>
+  </a>
+</div>
+
+<div class="create-account background-white full-width">
+  <button class="button gradient full-width relative-center-x" [routerLink]="['', 'register']">Créer un compte</button>
+</div>
