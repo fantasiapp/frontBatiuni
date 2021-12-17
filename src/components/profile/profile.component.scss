@@ -90,3 +90,18 @@ $icon-padding: 2px;
     white-space: normal;
   }
 }
+
+.form-input number {
+  display: inline;
+  right: $item-padding;
+}
+
+.add-field > * {
+  display: inline-block;
+  vertical-align: middle;
+  margin-bottom: $form-item-spacing;
+
+  img {
+    margin: 0 10px;
+  }
+}

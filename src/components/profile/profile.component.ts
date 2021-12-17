@@ -1,5 +1,6 @@
 import { ChangeDetectorRef, Component, ElementRef, ViewChild } from "@angular/core";
 import { SlidesDirective } from "src/directives/slides.directive";
+import { Job } from "../options/options";
 import { UISlideMenuComponent } from "../ui_component/slidemenu/slidemenu.component";
 import { UISwipeupComponent } from "../ui_component/swipeup/swipeup.component";
 

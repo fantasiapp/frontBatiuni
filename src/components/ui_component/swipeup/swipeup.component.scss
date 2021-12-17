@@ -1,3 +1,4 @@
+@use "sass:math";
 @import '../../../styles/variables';
 @import '../../../styles/mixins';
 
@@ -35,8 +36,8 @@
 .decoration {
   position: relative;
   height: $swipeup-decoration-height;
-  border-top-left-radius: $swipeup-decoration-height;
-  border-top-right-radius: $swipeup-decoration-height;
+  border-top-left-radius: math.div($swipeup-decoration-height, 2);
+  border-top-right-radius: math.div($swipeup-decoration-height, 2);
 }
 
 .decoration::after {

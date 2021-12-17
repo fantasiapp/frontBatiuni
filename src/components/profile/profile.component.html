@@ -133,7 +133,47 @@
     </ng-template>
 
     <ng-template #modifyPage2>
-      Hello page 2
+      <form class="full-width form-control">
+        <h3 class="form-title font-Roboto">
+          Infos entreprise: 
+          <img src="assets/icons/modify.svg" (click)="modifyPassword = true" class="modify-icon text"/>
+        </h3>
+        <div class="form-input">
+          <label>Nom de l'entreprise</label>
+          <input class="form-element" type="text"/>
+        </div>
+        <div class="form-input">
+          <label>N SIRET</label>
+          <input class="form-element" type="text"/>
+        </div>
+        <div class="form-input">
+          <label>Métiers</label>
+          <span class="position-relative">
+            <input placeholder="Chef de chantier" class="form-element" type="text" disabled/>
+            <number class="position-absolute"></number>
+          </span>
+
+          <span class="position-relative">
+            <input placeholder="Maître d'oeuvre" class="form-element" type="text" disabled/>
+            <number class="position-absolute"></number>
+          </span>
+        </div>
+
+        <div class="form-input center-text add-field">
+          <img src="assets/icons/add.svg"/>
+          <span>Ajouter une métier</span>
+        </div>
+
+        <div class="form-input">
+          <label>Site internet</label>
+          <input class="form-element" type="text"/>
+        </div>
+        <div class="form-input">
+          <label>Chiffres d'affaires</label>
+          <input class="form-element" type="text"/>
+        </div>
+
+      </form> 
     </ng-template>
 
     <ng-template #modifyPage3>
