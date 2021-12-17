@@ -45,13 +45,13 @@ export class Notifications {
 
     today: any;
     month: any;
-    timer : any[] = [];
+    timer: any[] = [];
     ngOnInit() {
         let today = new Date(Date.now())
         this.month = this.notification.filter(notif => moment(moment(today).format('l')).isAfter(moment(notif.date).format('l')))
         this.today = this.notification.filter(notif => moment(moment(today).format('l')).isSame(moment(notif.date).format('l')))
-        
-        for(let i =0;i<this.today.length;i++){
+
+        for (let i = 0; i < this.today.length; i++) {
             this.timer.push(moment(moment(this.today[i].date)).startOf('hour').fromNow())
         }
         console.log(this.timer)

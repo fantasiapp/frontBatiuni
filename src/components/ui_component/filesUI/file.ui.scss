@@ -1,9 +1,5 @@
 @import "../../../styles/variables";
 
-.file-input  {
-    width: 100%;
-    margin : 25px;
-    display: grid;
     label {
         color: $buttonColor;
         font-weight: 500;
@@ -17,7 +13,6 @@
     .file-form {
         margin-top: 1rem ;
         justify-content: space-between;
-        width: 80%;
         border-bottom: 2px solid #cdcfd0;
         
         img {
@@ -27,21 +22,20 @@
     }
     .file-date {
         margin-top: 1rem;
-        justify-content: space-between;
-        width: 80%;
+        justify-content: space-around;
         div {
-            flex: auto;
             display: grid;
             input {
-                border-bottom: 2px solid #cdcfd0;    
+                border-bottom: 2px solid #cdcfd0;  
+                background-color: white;
+  
             }
         }
         img {
-            flex: 2;
             height: 50px;
           }
     }
-}
+
 input[type="date"]::-webkit-inner-spin-button,
 input[type="date"]::-webkit-calendar-picker-indicator {
     display: none;

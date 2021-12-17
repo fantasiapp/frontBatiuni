@@ -1,11 +1,10 @@
-<div class="file-input">
-    <label for="file">{{filename}}</label>
-    <label class="label-input" for="filename">Télécharger la certification {{filename}}</label>
-    <div class="file-form flex " id="file">
+    <label class="" for="file">{{filename}} {{comment}}</label>
+    <label *ngIf="showtitle"  class="label-input" for="filename">Télécharger la certification {{filename}}</label>
+    <div class="file-form flex grow" id="file">
         <input class="form-search" type="text" />
         <img src="assets/Attachement.svg">
     </div>
-    <div class="file-date  flex ">
+    <div class="file-date flex grow ">
         <img [src]="imgsrc">
         <div>
             <label class="label-input" for="filename">Date de fin de validité</label>
@@ -13,5 +12,4 @@
         </div>
     </div>
    
-</div>  
 

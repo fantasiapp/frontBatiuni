@@ -10,12 +10,13 @@ export class FileUI {
     filename : string = "Kbis ( Moins de 3 mois )";
 
     @Input()
-    expiry : Date = new Date(Date.now());
+    comment : string = "(Moins que 3 mois)"
 
     @Input()
     imgsrc : string = "";
 
-
+    @Input()
+    showtitle : boolean = false;
     show(e : any) {
     console.log(e.view.Capacitor.platform)
         }
