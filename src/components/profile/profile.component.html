@@ -192,9 +192,9 @@
         </h3>
         <div class="form-input">
           <label>Vos labels</label>
-          <options [options]="allLabels" (userChoice)="labels = $event"></options>
+          <options [showChosenItems]="false" [options]="allLabels" (userChoice)="labels = $event"></options>
         </div>
-        <fileinput class="flex column " *ngFor="let a of labels" [filename]="a.name"></fileinput>
+        <fileinput class="flex column" *ngFor="let label of labels" [filename]="label.name"></fileinput>
       </form>
     </ng-template>
 

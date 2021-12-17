@@ -27,6 +27,9 @@ export class OptionsModel {
     this._options = val;
   }
 
+  @Input()
+  showChosenItems: boolean = true;
+
   get options() { return this._options; }  
   userChoices : Job[] = [];
 
