@@ -3,10 +3,16 @@
 .file-input  {
     width: 100%;
     margin : 25px;
-
+    display: grid;
     label {
         color: $buttonColor;
         font-weight: 500;
+        margin-bottom: 10px;
+    }
+    .label-input {
+        color : black;
+        font-size: 14px;
+        font-weight: 200;
     }
     .file-form {
         margin-top: 1rem ;
@@ -23,10 +29,12 @@
         margin-top: 1rem;
         justify-content: space-between;
         width: 80%;
-        input {
-            border-bottom: 2px solid #cdcfd0;
-            flex : auto;
-
+        div {
+            flex: auto;
+            display: grid;
+            input {
+                border-bottom: 2px solid #cdcfd0;    
+            }
         }
         img {
             flex: 2;
