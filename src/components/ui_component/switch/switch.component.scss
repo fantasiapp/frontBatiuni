@@ -1,14 +1,33 @@
 @import '../../../styles/variables';
 
-:host, .switch {
+:host {
   display: inline-block;
-  position: relative;
-  width: $switch-size-x;
-  height: $switch-size-y;
+  
+}
+
+:host > * {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+span {
+  color: #aaa;
+  margin: 0 $item-padding;
+  transition: color 250ms ease-out 0s;
+}
+
+span.active {
+  color: black;
 }
 
 input {
   display: none;
+}
+
+.switch {
+  position: relative;
+  width: $switch-size-x;
+  height: $switch-size-y;
 }
 
 .slider {
