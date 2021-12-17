@@ -40,6 +40,9 @@ body {
   min-height: calc(100% + env(safe-area-inset-top));
   padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
   overflow-y: auto;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+  touch-action: pan-y !important;
   // background: $buttonGradient;
   //color: var(--main-app-color);
 
@@ -216,6 +219,9 @@ a {
   padding: $page-padding;
   position: relative;
   font-size: 0.95em;
+  overflow-x: hidden;
+  overflow-y: auto;
+  touch-action: pan-y !important;
 
   &.include-paging {
     padding-top: $page-padding - $paging-decoration-height !important;
@@ -228,7 +234,6 @@ a {
 
   &.include-header {
     height: calc(100vh - #{$sticky-header-height});
-    overflow-y: auto;
   }
 }
 
@@ -242,6 +247,7 @@ a {
 .hosted-view {
   width: 100%;
   overflow-y: auto;
+  touch-action: pan-y !important;
 }
 
 .formulaire {

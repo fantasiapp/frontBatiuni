@@ -34,7 +34,7 @@ $fade: 250ms ease-out;
 }
 
 .animating {
-  position: absolute;
+  position: absolute !important;
   left: 0; top: 0;
   padding: inherit;
   height: 100% !important;

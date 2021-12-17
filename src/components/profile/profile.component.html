@@ -125,9 +125,6 @@
             </div>
           </form>
     
-          <button class="button gradient full-width" (click)="modifyPassword = false" style="margin-top: auto">
-            Enregistrer
-          </button>
         </section>
       </ng-template>
     </ng-template>
@@ -198,11 +195,15 @@
       </form>
     </ng-template>
 
+    
     <div class="form-step" style="margin-top: auto;">
-      <div (click)="slider.index = 0"[class.active]="slider.index == 0"></div>
-      <div (click)="slider.index = 1"[class.active]="slider.index == 1"></div>
-      <div (click)="slider.index = 2"[class.active]="slider.index == 2"></div>
+      <div (click)="modifySlider.index = 0"[class.active]="modifySlider.index == 0"></div>
+      <div (click)="modifySlider.index = 1"[class.active]="modifySlider.index == 1"></div>
+      <div (click)="modifySlider.index = 2"[class.active]="modifySlider.index == 2"></div>
     </div>
+    <button class="button gradient full-width" (click)="modifyPassword = false">
+      Enregistrer
+    </button>
 
     <swipeup [(open)]="openModifyPicture">
       <li>Accédez à l'appareil photo</li>
