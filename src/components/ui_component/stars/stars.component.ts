@@ -1,4 +1,4 @@
-import { Component, HostBinding, Input } from "@angular/core";
+import { ChangeDetectionStrategy, Component, HostBinding, Input } from "@angular/core";
 
 export const ratingStarWidth = 25;
 
@@ -7,7 +7,8 @@ export const ratingStarWidth = 25;
   template: `
     <span [style.background-image]="this.fullStarUrl" [style.width]="spanWidth"></span>
   `,
-  styleUrls: ['./stars.component.scss']
+  styleUrls: ['./stars.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UIStarsComponent {
   @HostBinding('style.background-image')

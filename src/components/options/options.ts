@@ -1,8 +1,8 @@
-import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from "@angular/core";
 
 export type Job = {
   id: number 
-  job: string
+  name: string
   isChecked: boolean
 };
 
@@ -18,35 +18,38 @@ export class OptionsModel {
 
   private _options: Job[] = [];
 
+  @Output()
+  userChoice = new EventEmitter<Job[]>()
+
   @Input()
   set options(val: Job[]) {
     this.search = '';
-    this._options = this.optionsSearch = val;
+    this._options = val;
   }
 
-  get options() { return this._options; }
-  
-  optionsSearch  = this.options;
+  get options() { return this._options; }  
   userChoices : Job[] = [];
 
   filterOptions(e: Event) {
-    let search:string = (e.target as any).value
-    this.optionsSearch = this.options.filter(option => option.job.toLowerCase().includes(search.toLowerCase()))
+    let search: string = (e.target as any).value
+    this.options = this.options.filter(option => option.name.toLowerCase().includes(search.toLowerCase()))
   }
 
-  added(e: Event, id:number) {
-    if( (e.target as any).checked ){
-      this.options[id-1] = {...this.options[id-1], isChecked: true};
-      let listtt = this.options.filter(option => option.id == id)
-      this.userChoices.push(listtt[0])
-    }
+  toggle(e: Event, id: number) {
+    let target = e.target as HTMLInputElement;
+    this.options[id] = {...this.options[id], isChecked: target.checked};
+    if( target.checked )
+      this.userChoices.push(this.options[id]);
+    else
+      this.userChoices.splice(this.userChoices.findIndex(item => item.id == id), 1);
     
-    if(!(e.target as any).checked)
-      this.userChoices = this.userChoices.filter(option => option.id != id)
+    this.userChoice.emit(this.userChoices);
   }
 
-  delete(e:Event, id:number) {
-    this.options[id-1] = {...this.options[id-1], isChecked: false};
-    this.userChoices = this.userChoices.filter(option => option.id != id)
+  delete(e: Event, idx: number, id: number) {
+    e.stopPropagation();
+    this.options[id] = {...this.options[id], isChecked: false };
+    this.userChoices.splice(idx, 1);
+    this.userChoice.emit(this.userChoices);
   }
 };

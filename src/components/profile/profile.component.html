@@ -66,66 +66,95 @@
     <switch style="text-align: center;"></switch>
     <stars value="3.9"></stars>
 
-    <ng-container *ngIf="!modifyPassword; else modifyPasswordPage">
-      <section class="full-width section modify-profile">
-        <form class="form-control">
-          <h3 class="form-title font-Roboto">
-            Infos personelles: 
-            <img src="assets/icons/modify.svg" class="modify-icon text"/>
-          </h3>
-          <div class="form-input">
-            <label>Prénom du contact</label>
-            <input class="form-element" type="text" disabled/>
-          </div>
-          <div class="form-input">
-            <label>Adresse e-mail contact</label>
-            <input class="form-element" type="text" disabled/>
-          </div>
-          <div class="form-input">
-            <label>Telephone fixe</label>
-            <input class="form-element" type="text" disabled/>
-          </div>
-          <div class="form-input">
-            <label>Téléphone portable</label>
-            <input class="form-element" type="text" disabled/>
-          </div>
-        </form>
-      </section>
-  
-      <section class="full-width section modify-profile">
-        <form class="form-control">
-          <h3 class="form-title font-Roboto">
-            Modifier le mot de passe: 
-            <img src="assets/icons/modify.svg" (click)="modifyPassword = true" class="modify-icon text"/>
-          </h3>
-          <div class="form-input">
-            <label></label>
-            <input class="form-element" value="********" type="text" disabled/>
-          </div>
-        </form>
-      </section>
-    </ng-container>
+    <div [slides]="[modifyPage1, modifyPage2, modifyPage3]" type="template" [animate]="false"></div>
+    <ng-template #modifyPage1>
+      <ng-container *ngIf="!modifyPassword; else modifyPasswordPage">
+        <section class="full-width section modify-profile">
+          <form class="form-control">
+            <h3 class="form-title font-Roboto">
+              Infos personelles: 
+              <img src="assets/icons/modify.svg" class="modify-icon text"/>
+            </h3>
+            <div class="form-input">
+              <label>Prénom du contact</label>
+              <input class="form-element" type="text" disabled/>
+            </div>
+            <div class="form-input">
+              <label>Adresse e-mail contact</label>
+              <input class="form-element" type="text" disabled/>
+            </div>
+            <div class="form-input">
+              <label>Telephone fixe</label>
+              <input class="form-element" type="text" disabled/>
+            </div>
+            <div class="form-input">
+              <label>Téléphone portable</label>
+              <input class="form-element" type="text" disabled/>
+            </div>
+          </form>
+        </section>
     
-    <ng-template #modifyPasswordPage>
-      <form class="form-control">
+        <section class="full-width section modify-profile">
+          <form class="form-control">
+            <h3 class="form-title font-Roboto">
+              Modifier le mot de passe: 
+              <img src="assets/icons/modify.svg" (click)="modifyPassword = true" class="modify-icon text"/>
+            </h3>
+            <div class="form-input">
+              <label></label>
+              <input class="form-element" value="********" type="text" disabled/>
+            </div>
+          </form>
+        </section>
+      </ng-container>
+      
+      <ng-template #modifyPasswordPage>
+        <section class="full-width section modify-profile flex column grow">
+          <form class="form-control">
+            <div class="form-input">
+              <label>Ancien mot de passe</label>
+              <input class="form-element" type="text"/>
+            </div>
+            <div class="form-input">
+              <label>Nouveau mot de passe</label>
+              <input class="form-element" type="text"/>
+            </div>
+            <div class="form-input">
+              <label>Confirmation nouveau mot de passe</label>
+              <input class="form-element" type="text"/>
+            </div>
+          </form>
+    
+          <button class="button gradient full-width" (click)="modifyPassword = false" style="margin-top: auto">
+            Enregistrer
+          </button>
+        </section>
+      </ng-template>
+    </ng-template>
+
+    <ng-template #modifyPage2>
+      Hello page 2
+    </ng-template>
+
+    <ng-template #modifyPage3>
+      <form class="full-width form-control">
+        <h3 class="form-title font-Roboto">
+          Certifications & labels: 
+          <img src="assets/icons/modify.svg" (click)="modifyPassword = true" class="modify-icon text"/>
+        </h3>
         <div class="form-input">
-          <label>Ancien mot de passe</label>
-          <input class="form-element" type="text"/>
-        </div>
-        <div class="form-input">
-          <label>Nouveau mot de passe</label>
-          <input class="form-element" type="text"/>
-        </div>
-        <div class="form-input">
-          <label>Confirmation nouveau mot de passe</label>
-          <input class="form-element" type="text"/>
+          <label>Vos labels</label>
+          <options [options]="labels"></options>
         </div>
       </form>
-
-      <button class="button gradient full-width" (click)="modifyPassword = false">
-        Enregistrer
-      </button>
     </ng-template>
+
+    <div class="form-step" style="margin-top: auto;">
+      <div (click)="slider.index = 0"[class.active]="slider.index == 0"></div>
+      <div (click)="slider.index = 1"[class.active]="slider.index == 1"></div>
+      <div (click)="slider.index = 2"[class.active]="slider.index == 2"></div>
+    </div>
+
     <swipeup [(open)]="openModifyPicture">
       <li>Accédez à l'appareil photo</li>
       <li>Télécharger une image</li>

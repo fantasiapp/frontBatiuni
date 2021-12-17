@@ -1,4 +1,4 @@
-import { Component, EventEmitter, HostBinding, Input, Output } from "@angular/core";
+import { ChangeDetectionStrategy, Component, EventEmitter, HostBinding, Input, Output } from "@angular/core";
 
 @Component({
   selector: 'switch',
@@ -8,7 +8,8 @@ import { Component, EventEmitter, HostBinding, Input, Output } from "@angular/co
       <div class="slider" [class.round]="round"></div>
     </label>
 `,
-  styleUrls: [ './switch.component.scss' ]
+  styleUrls: [ './switch.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UISwitchComponent {
   @Input()

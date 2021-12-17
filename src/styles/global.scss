@@ -228,7 +228,8 @@ a {
   }
 
   &.include-header {
-    min-height: calc(100vh - #{$sticky-header-height});
+    height: calc(100vh - #{$sticky-header-height});
+    overflow-y: auto;
   }
 }
 

@@ -15,6 +15,9 @@ export class SlidesDirective extends IndexBased {
     this.view.insert(ref.view);
   }
   
+  @Input('animate')
+  animate: boolean = true;
+
   componentRef: Ref = {element: null, view: null};
   private components: any[] = [];
   private _type: 'component' | 'template' = 'component';
@@ -74,24 +77,26 @@ export class SlidesDirective extends IndexBased {
     k > 0 ? this.left(k) : this.right(-k);
   }
 
-  left(k = 1) {
+  left(k = 1, animate = this.animate) {
     let next = Math.min(this.components.length-1, this.index + k);
     if ( this.index != next ) {
       this._index = next;
       let componentRef = this.create(this.index);
-      this.slideIn(componentRef, "left");
+      if ( animate ) this.slideIn(componentRef, "left");
+      else this.view.remove(0);
       this.componentRef = componentRef;
       this.view.insert(componentRef.view);
       this.cd.markForCheck();
     }
   }
 
-  right(k = 1) {
+  right(k = 1, animate = this.animate) {
     let next = Math.max(0, this.index - k);
     if ( this.index != next ) {
       this._index = next;
       let componentRef = this.create(this.index);
-      this.slideIn(componentRef, "right");
+      if ( animate ) this.slideIn(componentRef, "right");
+      else this.view.remove(0);
       this.componentRef = componentRef;
       this.view.insert(componentRef.view);
       this.cd.markForCheck();
