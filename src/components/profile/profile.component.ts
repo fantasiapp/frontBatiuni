@@ -17,8 +17,10 @@ export class ProfileComponent {
 
   openMenu: boolean = false;
   openModifyMenu: boolean = false;
+  openRatings: boolean = false;
   modifyPassword: boolean = false;
   openModifyPicture: boolean = false;
+  openNotifications : boolean = false;
 
   constructor(private cd: ChangeDetectorRef) {
     (window as any).profile = this;

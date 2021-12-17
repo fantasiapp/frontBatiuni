@@ -36,10 +36,13 @@ import { HomeComponent } from 'src/components/home_page/home.component';
 import { ProfileComponent } from 'src/components/profile/profile.component';
 import { UISwitchComponent } from 'src/components/ui_component/switch/switch.component';
 import { UISwipeupComponent } from 'src/components/ui_component/swipeup/swipeup.component';
+import { MissionsPage } from 'src/components/ui_component/missions/missions.ui';
+import { Notifications } from 'src/components/notifications/notifications';
 import { UIStarsComponent } from 'src/components/ui_component/stars/stars.component';
 import { UISlideMenuComponent } from 'src/components/ui_component/slidemenu/slidemenu.component';
 import { UIProfileImageComponent } from 'src/components/ui_component/profile-image/profile-image.component';
 import { UINumberComponent } from 'src/components/ui_component/number/number.component';
+import { FileUI } from 'src/components/ui_component/filesUI/files.ui';
 
 @Injectable()
 export class CustomConfig extends HammerGestureConfig {
@@ -74,6 +77,8 @@ export class CustomConfig extends HammerGestureConfig {
     ProfileComponent,
     UISwitchComponent,
     UISwipeupComponent,
+    MissionsPage,
+    Notifications,
     UIStarsComponent,
     UISlideMenuComponent,
     UIProfileImageComponent,

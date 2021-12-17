@@ -1,0 +1,41 @@
+@import "../../../styles/variables";
+
+.file-input  {
+    width: 100%;
+    margin : 25px;
+
+    label {
+        color: $buttonColor;
+        font-weight: 500;
+    }
+    .file-form {
+        margin-top: 1rem ;
+        justify-content: space-between;
+        width: 80%;
+        border-bottom: 2px solid #cdcfd0;
+        
+        img {
+            margin: 0.5rem;
+            height: 15px;
+          }
+    }
+    .file-date {
+        margin-top: 1rem;
+        justify-content: space-between;
+        width: 80%;
+        input {
+            border-bottom: 2px solid #cdcfd0;
+            flex : auto;
+
+        }
+        img {
+            flex: 2;
+            height: 50px;
+          }
+    }
+}
+input[type="date"]::-webkit-inner-spin-button,
+input[type="date"]::-webkit-calendar-picker-indicator {
+    display: none;
+    -webkit-appearance: none;
+}

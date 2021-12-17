@@ -79,7 +79,6 @@ export class CalendarUI implements OnInit {
             this.dateValue = this.dateValue.filter(element => element != fullDate._i);
         }
 
-        let element = e.target as HTMLElement;
 
 
         if (!toggle.length) {
@@ -101,7 +100,6 @@ export class CalendarUI implements OnInit {
             }
         }
         console.log(this.dateValue)
-        //console.log(this.dateValue)
     }
 
 }

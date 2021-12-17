@@ -4,6 +4,13 @@
 @import 'fonts.scss';
 @import 'animations.scss';
 
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+
+}
+
 :root {
   --main-landing-color: #{$mainColor}; 
   --main-app-color: #{$landingColor};
@@ -27,6 +34,8 @@
 
 
 body {
+  padding: env(0-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+
   font-family: "Roboto", sans-serif;
   font-size: 16px;
   margin: 0;
@@ -399,6 +408,39 @@ input {
 }
 
 //---------------------------------------------------
+//Offre Logo circle arround company logo
+//used for offer and offfer pages
+.offres-logo {
+  @include circle(80px, rgb(241, 241, 241));
+}
+//--------------------------------------------------
+//--------------------------------------------------
+// Sticky header : 
+// <div class="sticky-header">
+// <a><img class="return" src="/assets/arrowdown.svg"/></a>
+// <span class="sticky-header-title">MES MISSIONS</span>
+
+// </div>
+// .sticky-header {
+//   background-color: white;
+//   padding: 20px 0;
+//   position: fixed;
+//   display: inline-block;
+//   width: 100%;
+//   top: 0;
+//   padding: 1.5em;
+//   height: $sticky-header-height;
+//   z-index: 999;
+//   text-align: center;
+//   font-weight: 500;
+//   a {
+//       float: left;
+//       .return {
+//           transform: rotate(90deg);
+//       }
+//   }
+// }
+  
 //Page layouts
 .sticky-header {
   padding: $highlight-margin $page-padding;
