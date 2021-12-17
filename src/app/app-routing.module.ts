@@ -50,7 +50,7 @@ const routes: Routes = [{
     component: HomeComponent,
     children: [
       {path: 'profile', component: ProfileComponent, data: { animation: 'profile' }},
-      {path: '**', component: ProfileComponent}
+      {path: '**', component: RegistrationSuccess}
     ]
   }, {
     path: '**',
