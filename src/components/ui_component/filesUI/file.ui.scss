@@ -1,43 +1,53 @@
 @import "../../../styles/variables";
 
-    label {
-        color: $buttonColor;
-        font-weight: 500;
-        margin-bottom: 10px;
+:host {
+  display: block;
+  margin-bottom: $form-item-spacing;
+}
+
+label {
+  color: $buttonColor;
+  font-weight: 500;
+  margin-bottom: $item-padding;
+}
+
+.label-input {
+  color : black;
+  font-size: 0.9em;
+  font-weight: 200;
+}
+
+.file-form {
+  justify-content: space-between;
+  border-bottom: 2px solid #CDCFD0;
+  img {
+    margin: 0.5rem;
+    height: 15px;
+  }
+}
+
+.file-date {
+  justify-content: space-around;
+  div {
+    input {
+      border-bottom: 2px solid #CDCFD0;
+      background-color: white;
     }
-    .label-input {
-        color : black;
-        font-size: 14px;
-        font-weight: 200;
-    }
-    .file-form {
-        margin-top: 1rem ;
-        justify-content: space-between;
-        border-bottom: 2px solid #cdcfd0;
-        
-        img {
-            margin: 0.5rem;
-            height: 15px;
-          }
-    }
-    .file-date {
-        margin-top: 1rem;
-        justify-content: space-around;
-        div {
-            display: grid;
-            input {
-                border-bottom: 2px solid #cdcfd0;  
-                background-color: white;
+  }
   
-            }
-        }
-        img {
-            height: 50px;
-          }
-    }
+  img {
+    width: 100px;
+    padding: 0 20px;
+  }
+}
+
+.date {
+  text-align: left;
+  label { font-weight: 500;  }
+}
 
 input[type="date"]::-webkit-inner-spin-button,
 input[type="date"]::-webkit-calendar-picker-indicator {
-    display: none;
-    -webkit-appearance: none;
+  display: none;
+  -webkit-appearance: none;
 }

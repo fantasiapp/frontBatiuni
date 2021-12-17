@@ -322,11 +322,11 @@ a {
 
   & > input, & > span > input {
     width: 100%;
-    height: $form-item-spacing;
+    height: 30px;
     outline: none;
     border: none;
     border-bottom: 2px solid #cdcfd0;
-    margin-bottom: 20px;
+    margin-bottom: $form-item-spacing;
     font-family: "Poppins";
   }
   

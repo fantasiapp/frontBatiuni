@@ -1,15 +1,15 @@
-    <label class="" for="file">{{filename}} {{comment}}</label>
-    <label *ngIf="showtitle"  class="label-input" for="filename">Télécharger la certification {{filename}}</label>
-    <div class="file-form flex grow" id="file">
-        <input class="form-search" type="text" />
-        <img src="assets/Attachement.svg">
+<label>{{filename}} {{comment}}</label>
+<label *ngIf="showtitle"  class="label-input" for="filename">Télécharger la certification {{filename}}</label>
+<div class="file-form flex grow">
+    <input class="form-search" type="text" />
+    <img src="assets/Attachement.svg">
+</div>
+<div class="file-date flex">
+    <img [src]="imgsrc">
+    <div class="date grow flex column center-main">
+        <label class="label-input text-emphasis">Date de fin de validité</label>
+        <input class="full-width" type="date"/>
     </div>
-    <div class="file-date flex grow ">
-        <img [src]="imgsrc">
-        <div>
-            <label class="label-input" for="filename">Date de fin de validité</label>
-            <input  type="date" />
-        </div>
-    </div>
+</div>
    
 
