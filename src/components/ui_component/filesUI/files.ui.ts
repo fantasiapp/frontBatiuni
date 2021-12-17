@@ -13,7 +13,7 @@ export class FileUI {
     expiry : Date = new Date(Date.now());
 
     @Input()
-    imgsrc : string = "/assets/files/Impot.svg";
+    imgsrc : string = "";
 
 
     show(e : any) {
