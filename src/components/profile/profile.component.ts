@@ -39,6 +39,9 @@ export class ProfileComponent {
   @ViewChild(SlidesDirective, {static: true})
   slider!: SlidesDirective;
 
-  labels = ["Qualibat", "RGE", "RGE Eco Artisan", "NF", "Effinergie", "Handibat"]
-    .map((name, id) => ({id, name, isChecked: false}))
+  allLabels = ["Qualibat", "RGE", "RGE Eco Artisan", "NF", "Effinergie", "Handibat"]
+    .map((name, id) => ({id, name, isChecked: false}));
+
+  labels: Job[] = [];
+  
 };

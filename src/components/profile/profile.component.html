@@ -184,8 +184,9 @@
         </h3>
         <div class="form-input">
           <label>Vos labels</label>
-          <options [options]="labels"></options>
+          <options [options]="allLabels" (userChoice)="labels = $event"></options>
         </div>
+        <fileinput class="flex column " *ngFor="let a of labels" [filename]="a.name"></fileinput>
       </form>
     </ng-template>
 
