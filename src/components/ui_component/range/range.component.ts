@@ -23,13 +23,37 @@ export class RangeComponent {
   @Input()
   unit : string = 'km';
 
-  lowerValue: number = 0;
-  uppervalue: number = 0;
+  lowerValue: number = this.min;
+  upperValue: number = this.max;
 
+  tolerance = 5;
+
+  inRange(x: number) {
+    return this.lowerValue <= x && x <= this.upperValue;
+  }
 
   onClick(e: any) {
-    e.preventDefault()
-    e.target.value = 0;
+    e.preventDefault();
+    let value = +e.target.value,
+      movingLower = (value - this.tolerance) <= this.lowerValue,
+      movingUpper = (value + this.tolerance) >= this.upperValue,
+      movingRange = this.lowerValue <= value && value <= this.upperValue;
+
+    console.log('movingLower:', (value - this.tolerance) <= this.lowerValue, '| movingUpper:', (value + this.tolerance) >= this.upperValue, '| value:', value, '| lowerValue:', this.lowerValue, '| upperValue:', this.upperValue);
+    
+    if ( movingLower ) {
+      //nothing
+      e.target.value = this.upperValue;
+      this.lowerValue = value;
+    } else if ( movingUpper ) {
+      
+    } else if ( movingRange ) {
+      //move the range
+      let diff = value - (movingUpper ? this.upperValue : this.lowerValue);
+      this.lowerValue = Math.min(this.max, Math.max(this.min, this.lowerValue + diff));
+      this.upperValue += Math.min(this.max, Math.max(this.min, this.lowerValue + diff));
+    }
+
   }
 } 
 
