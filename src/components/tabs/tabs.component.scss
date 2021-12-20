@@ -1,15 +1,13 @@
 :host {
   display: block;
-  padding: 20px;
-  font-size: 12px;
-  font-family: "Poppins Light";
-  color: black;
+  font-size: 16px;
+  font-family: "Roboto";
 }
 
-$border-width: 2px;
-$border-color: #777;
-$tabs-background-color: #ccc;
-$tab-background-color: #ccc;
+$border-width: 1px;
+$border-color: hsl(249, 20%, 86%);
+$tabs-background-color: hsl(220, 38%, 97%);
+$tab-background-color: hsl(220, 38%, 97%) ;
 $tab-active-background-color: white;
 
 .tabs {
@@ -18,18 +16,21 @@ $tab-active-background-color: white;
 }
 
 .tab {
+
   background-color: $tab-background-color;
   padding: 8px;
-  border-bottom: $border-width solid $border-color;
-  text-align: center;
-}
-
-.tab.active {
-  background-color: $tab-active-background-color;
-  border: $border-width solid $border-color;
+  border-left: none ;
+  border-right: none ;
   border-bottom: none !important;
+  text-align: center;
+  color :#454545;
+
 }
 
-.tab-content {
-  
+.active {
+  color : #1C110D;
+  background-color: $tab-active-background-color;
+  border-radius: 8px;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+  color: #0C5E8D;
 }

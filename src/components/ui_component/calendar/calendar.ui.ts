@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import * as moment from 'moment';
 
 @Component({
     selector: 'app-root',
     templateUrl: './calendar.ui.html',
-    styleUrls: ['./calendar.ui.scss']
+    styleUrls: ['./calendar.ui.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CalendarUI implements OnInit {
 
@@ -21,9 +22,9 @@ export class CalendarUI implements OnInit {
 
     monthSelect: any[] = [];
     dateSelect: any;
-    dateValue: string[] = [];
+    dateValue: Availibility[] = [];
     current: any;
-    manager: any;
+    openModal: boolean = false;
     constructor() {
 
     }
@@ -41,17 +42,21 @@ export class CalendarUI implements OnInit {
 
         const diffDays = endDate.diff(startDate, 'days', true)
         const numberDays = Math.round(diffDays);
-
         const arrayDays = Object.keys([...Array(numberDays)]).map((a: any) => {
             a = parseInt(a) + 1;
-            const dayObject = moment(`${year}-${month}-${a}`);
+            const dayObject = moment(`${year}/${month}/${a}`);
+            const compareDate = moment(`${year}-${month}-${a}`);
+            let flow :any = compareDate
+            let item = this.dateValue.filter(item => item.date == flow._i)
             return {
                 name: dayObject.format("dddd"),
                 value: a,
-                indexWeek: dayObject.isoWeekday()
+                date: flow._i,
+                indexWeek: dayObject.isoWeekday(),
+                availbility : item[0]?.availibility
             };
-        });
 
+        });
         this.monthSelect = arrayDays;
     }
 
@@ -62,44 +67,50 @@ export class CalendarUI implements OnInit {
         } else {
             const nextDate = this.dateSelect.clone().add(1, "month");
             this.getDaysFromDate(nextDate.format("MM"), nextDate.format("YYYY"));
+
         }
     }
 
-    clickDay(day: any, e: Event) {
+    
+    thisday: any;
+    eventt: any;
+    choseDay(day: any, e: Event) {
+        this.eventt = e;
         this.current = day;
         const monthYear = this.dateSelect.format('YYYY-MM')
         const parse = `${monthYear}-${day.value}`
         const objectDate = moment(parse)
         let fullDate: any = objectDate;
-        let toggle = this.dateValue.filter(element => element == fullDate._i);
-
-
-        if ((e.currentTarget as any).classList.contains("lasttime")) {
-            (e.currentTarget as any).classList.remove("lasttime");
-            this.dateValue = this.dateValue.filter(element => element != fullDate._i);
+        this.thisday = fullDate._i;
+    }
+    clickDay(text: string) {
+        let availability = ['available', 'availablelimits', 'unavailable']
+        this.dateValue = this.dateValue.filter(item => item.date != this.thisday)
+        if (text != 'nothing') {
+            this.dateValue  = [...this.dateValue,{
+                date: this.thisday,
+                availibility: text  
+            }]
         }
-
-
-
-        if (!toggle.length) {
-            (e.currentTarget as any).classList.add("active");
-            this.dateValue.push(fullDate._i)
-        }
-        else if ((e.currentTarget as any).classList.contains("active")) {
-            {
-                (e.currentTarget as any).classList.remove("active");
-
-                (e.currentTarget as any).classList.add("secondtime");
+        if (!this.eventt.target.classList.contains(`${text}`)) {
+            availability = availability.filter(item => item != text)
+            this.eventt.target.classList.add(`${text}`)
+            if (availability.length) {
+                for (let i = 0; i < availability.length; i++) {
+                    this.eventt.target.classList.remove(`${availability[i]}`)
+                }
+            } else {
+                for (let i = 0; i < availability.length; i++) {
+                    this.eventt.target.classList.remove(`${availability[i]}`)
+                }
             }
-        }
-        else if ((e.currentTarget as any).classList.contains("secondtime")) {
-            {
-                (e.currentTarget as any).classList.remove("secondtime");
 
-                (e.currentTarget as any).classList.add("lasttime");
-            }
         }
         console.log(this.dateValue)
     }
-
 }
+
+interface Availibility {
+    date: any
+    availibility: string
+} 

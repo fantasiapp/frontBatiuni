@@ -7,7 +7,7 @@ import { Component, Input } from "@angular/core";
     styleUrls:['./missions.page.scss']
 })
 
-export class MissionsPage {
+export class MissionsUI {
 
     @Input()
     company : string = "Nom de l'entreprise";

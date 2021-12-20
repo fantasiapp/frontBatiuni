@@ -11,14 +11,26 @@
 	</div>
 <div class="wrapper-calendar ">
 	<ol>
-		<li *ngFor="let day of week; let index = index" class="day-name">{{day | slice:0:1}}</li>
-        <li (click)="clickDay(day,$event)"   [style.gridColumnStart]="first ? day?.indexWeek : 'auto'"
-         *ngFor="let day of monthSelect;let first = first">
-			<span>{{day?.value}}</span>
+		<li *ngFor="let day of week; let index = index" 
+		
+		class="day-name">{{day | slice:0:1}}</li>
+        <li 
+		(click) ="openModal = true"
+		(click)="choseDay(day,$event)"   [style.gridColumnStart]="first ? day?.indexWeek : 'auto'"
+         *ngFor="let day of monthSelect;let first = first" 
+		 [class] = "day.availbility"
+		 >
+			{{day?.value}}
 		</li>
 	</ol>
 </div>
 </div>
+<swipeup [(open)]="openModal">
+	<li  (click)="clickDay('available')" class="disponible">Disponible</li>
+	<li (click)="clickDay('availablelimits')" class="sous-conditions">Disponible sous conditions</li>
+	<li (click)="clickDay('unavailable')" class="pas-disponible">Pas disponible</li>
+	<li (click)="clickDay('nothing')" class="non-renseigne">Non renseigné</li>
 
+</swipeup>
 </main>
 

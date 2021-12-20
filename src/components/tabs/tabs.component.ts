@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, ComponentRef, ContentChild, ContentChildren, Input, QueryList, TemplateRef, ViewContainerRef, ViewRef } from "@angular/core";
+import { ChangeDetectionStrategy, Component, ComponentRef, ContentChild, ContentChildren, Input, Optional, QueryList, TemplateRef, ViewContainerRef, ViewRef } from "@angular/core";
 
 //Use case
 
@@ -41,13 +41,15 @@ export class TabsComponent {
   setView(index: number) {
     if ( this.activeTab )
       this.view.remove(0);
-    
     index = index //% this.tabs.length;
     this.activeTab = this.tabs.get(this.index = index)!;
     let template = this.view.createEmbeddedView(this.activeTab.template, {$implicit: this});
-    template.rootNodes.forEach(node => node.classList.add('tab-content'));
+    template.rootNodes.forEach(node => {
+      node.classList.add('tab-content');
+    });
     this.view.insert(template, 0);
   }
+
 
   ngAfterContentInit() {
     this.setView(this.index);

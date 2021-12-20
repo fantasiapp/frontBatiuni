@@ -34,13 +34,14 @@
 
 
 body {
-  padding: env(0-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
 
   font-family: "Roboto", sans-serif;
   font-size: 16px;
   margin: 0;
+  min-height: calc(100% + constant(safe-area-inset-top));
   min-height: calc(100% + env(safe-area-inset-top));
-  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  padding: constant(safe-area-inset-top) constant(safe-area-inset-right) constant(safe-area-inset-bottom) constant(safe-area-inset-left) !important;
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left) !important;
   overflow-y: auto;
   // background: $buttonGradient;
   //color: var(--main-app-color);
@@ -447,7 +448,8 @@ input {
   margin: 0;
   height: $sticky-header-height;
   position: fixed;
-  top: 0;
+  top : constant(safe-area-inset-top);
+  top : env(safe-area-inset-top);
   background: white;
   z-index: 10;
 }

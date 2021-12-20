@@ -1,5 +1,10 @@
-<ul class="tabs flex row">
-  <li *ngFor="let tab of tabs; let i = index" (click)="setView(i)" class="tab grow" [class.active]="index == i">
+<div>Tabs ==></div><br/>
+<ul class="tabs  flex row">
+  <li *ngFor="let tab of tabs; let i = index"  (click)="setView(i)" class="tab grow" 
+  [class.active]="index == i"
+  >
+  <div class="slider"><div class="indicator"></div></div>
+
     {{ tab.name }}
   </li>
 </ul>

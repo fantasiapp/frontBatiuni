@@ -5,7 +5,10 @@
     <img src="assets/Attachement.svg">
 </div>
 <div class="file-date flex">
-    <img [src]="imgsrc">
+    <img *ngIf="imgsrc; else div"[src]="imgsrc">
+    <ng-template #div>
+        <div class="image"></div>
+    </ng-template>
     <div class="date grow flex column center-main">
         <label class="label-input text-emphasis">Date de fin de validité</label>
         <input class="full-width" type="date"/>

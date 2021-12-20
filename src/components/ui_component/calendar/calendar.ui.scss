@@ -1,4 +1,6 @@
 @import "../../../styles/mixins";
+@import "../../../styles/variables";
+
 :host {
     font-family: "Roboto";
 }
@@ -6,7 +8,6 @@
     flex-flow: column;
     width: 100%;
     padding: 20px 0;
-    
 }
 .header-calendar {
     width: 80%;
@@ -19,33 +20,31 @@
 .wrapper-calendar {
     width: 80%;
     margin: 0.25rem;
-    padding: 1rem;
     border-radius: 15px;
     box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
     background-color: #fafafa;
+    padding: 10px;
+    li {
+        height: 1.5rem;
+        width: 1.5rem;
+        font-size: 0.8rem;
+        cursor: pointer;
+        text-align: center;
+        line-height: 1.5rem;
+        color: #1e2843;                        
+    }
 }
 
 ol {
+    row-gap: 1rem;
     list-style: none;
     display: grid;
-
     margin-bottom: 5px;
-    grid-template-columns:  repeat(7, 1fr);
+    grid-template-columns: repeat(7, 1fr);
     margin: 0;
     padding: 0;
 }
 
-li {
-    height: 1.5rem;
-    width: 1.5rem;
-    padding: 0.5rem;
-    font-size: 0.8rem;
-    cursor: pointer;
-    text-align: center;
-    span {
-        color: #1e2843;
-    }
-}
 h2 {
     margin-bottom: 4px;
     padding: 0;
@@ -54,7 +53,6 @@ h2 {
 .day-name {
     font-size: 14px;
     margin-bottom: 2px;
-    padding: 4px;
     text-align: center;
 }
 
@@ -75,37 +73,45 @@ h2 {
     background-color: transparent;
     border: 0;
 }
+%bgcolor {
+    color: #ffffff;
+    border-radius: 50%;
+}
 
-.active {
-    margin: 1px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #52d1bd;
-    span {
-        color: #ffffff;
-    }
+.available {
+    background-color: $available;
+    @extend %bgcolor;
 }
-.secondtime {
-    background-color: #f9c067;
-    margin: 1px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    span {
-        color: #ffffff;
-    }
+.availablelimits {
+    background-color: $availableWithLimits;
+    @extend %bgcolor;
 }
-.lasttime {
-    background-color: #e82727;
-    margin: 1px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    span {
-        color: #ffffff;
-    }
+.unavailable {
+    background-color: $unAvailable;
+    @extend %bgcolor;
+}
+
+%before-element {
+    content: "";
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 10px;
+}
+
+.disponible::before {
+    @extend %before-element;
+    @include circle(1.2em, $available);
+}
+.sous-conditions::before {
+    @extend %before-element;
+    @include circle(1.2em, $availableWithLimits);
+}
+.pas-disponible::before {
+    @extend %before-element;
+    @include circle(1.2em, $unAvailable);
+}
+.non-renseigne::before {
+    @extend %before-element;
+    @include circle(1.1em, #fafafa);
+    border: 1px solid black;
 }
