@@ -3,7 +3,7 @@
 <div class="file-form flex grow">
     <span class="file-input position-relative">
         <input class="form-search" (change)="onChange($event)" type="file"/>
-        <span class="placeholder full-width text-ellipsis position-absolute"> {{ files && files.length && files[0].name || placeholder }} </span>
+        <span class="placeholder full-width text-ellipsis position-absolute"> {{ value && value.length && value[0].name || placeholder }} </span>
     </span>
     <img src="assets/Attachement.svg">
 </div>
@@ -17,5 +17,3 @@
         <input class="full-width" type="date"/>
     </div>
 </div>
-   
-

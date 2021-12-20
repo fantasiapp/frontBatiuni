@@ -43,7 +43,6 @@ import { UIProfileImageComponent } from 'src/components/ui_component/profile-ima
 import { UINumberComponent } from 'src/components/ui_component/number/number.component';
 import { FileUI } from 'src/components/ui_component/filesUI/files.ui';
 import { NgxSliderModule } from '@angular-slider/ngx-slider';
-import { CustomComponent } from 'src/components/ui_component/custom/custom.component';
 import { UIBoxComponent } from 'src/components/ui_component/box/box.component';
 
 @Injectable()
@@ -85,8 +84,7 @@ export class CustomConfig extends HammerGestureConfig {
     UIProfileImageComponent,
     UINumberComponent,
     FileUI,
-    UIBoxComponent,
-    CustomComponent
+    UIBoxComponent
   ],
   imports: [
     //Ngxs imports
