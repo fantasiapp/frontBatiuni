@@ -124,8 +124,6 @@ export class DiscoverComponent {
     this.subject = this.route.snapshot.params['subject'] || 'entreprise';
     if ( !DiscoverComponent.subjects.includes(this.subject))
       this.router.navigate(['', 'discover', this.subject = 'entreprise']);
-
-    console.log(this.subject, this.contexts, this.contexts[this.subject])
   }
 
   @HostListener('swipeleft')

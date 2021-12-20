@@ -9,17 +9,10 @@ import { DiscoverComponent } from 'src/components/discover_page/discover-page.co
 import { OptionsModel } from 'src/components/options/options';
 import { HomeComponent } from 'src/components/home_page/home.component';
 import { ProfileComponent } from 'src/components/profile/profile.component';
-import { MissionsPage } from 'src/components/ui_component/missions/missions.ui';
-import { Notifications } from 'src/components/notifications/notifications';
-import { FileUI } from 'src/components/ui_component/filesUI/files.ui';
-
-import { UISlideMenuComponent } from 'src/components/ui_component/slidemenu/slidemenu.component';
-import { UINumberComponent } from 'src/components/ui_component/number/number.component';
-import { RangeComponent } from 'src/components/ui_component/range/range.component';
 
 const routes: Routes = [{
     path: 'landing',
-    component: RangeComponent,
+    component: LandingPageComponent,
     data: { animation: 'LandingPage' }
   }, {
     path: 'connexion',

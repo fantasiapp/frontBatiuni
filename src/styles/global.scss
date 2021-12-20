@@ -32,21 +32,14 @@
   box-sizing: border-box;
 }
 
-
 body {
   font-family: "Roboto", sans-serif;
   font-size: 16px;
   margin: 0;
-  min-height: calc(100% + constant(safe-area-inset-top));
-  min-height: calc(100% + env(safe-area-inset-top));
-  padding: constant(safe-area-inset-top) constant(safe-area-inset-right) constant(safe-area-inset-bottom) constant(safe-area-inset-left);
-  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
-  overflow-y: auto;
-  overflow-x: hidden;
-  scroll-behavior: smooth;
-  touch-action: pan-y !important;
-  // background: $buttonGradient;
-  //color: var(--main-app-color);
+  @extend %safe-min-height;
+  @extend %safe-area-padding;
+  @extend %overflow-y;
+  background: $secondaryBackground;
 
   @include breakpoint(tablet) {
     font-size: 20px;
@@ -217,25 +210,21 @@ a {
 
 .hosted-page {
   @extend .background-white;
-  width: 100%;
+  @extend %overflow-y;
   padding: $page-padding;
   position: relative;
   font-size: 0.95em;
-  overflow-x: hidden;
-  overflow-y: auto;
-  touch-action: pan-y !important;
 
   &.include-paging {
-    padding-top: $page-padding - $paging-decoration-height !important;
-    min-height: calc(100vh - #{$paging-height + $paging-decoration-height});
+    @include with-safe-min-height($paging-height + $paging-decoration-height);
   }
 
   &.include-navigation {
-    min-height: calc(100vh - #{$navigation-height});
+    @include with-safe-min-height($navigation-height);
   }
 
   &.include-header {
-    height: calc(100vh - #{$sticky-header-height});
+    @include with-safe-min-height($sticky-header-height);
   }
 }
 
@@ -248,18 +237,15 @@ a {
 
 .hosted-view {
   width: 100%;
-  overflow-y: auto;
-  touch-action: pan-y !important;
+  @extend %overflow-y;
 }
 
 .formulaire {
-  width: 100%;
   display: flex;
   flex-direction: column;
   background: $secondaryBackground;
-  min-height: calc(100vh - #{$paging-height});
-  overflow-y: auto;
-  touch-action: pan-y !important;
+  @extend %overflow-y;
+  @include with-safe-min-height($paging-height);
 }
 
 .paging {
@@ -455,11 +441,10 @@ input {
   
 //Page layouts
 .sticky-header {
-  padding: $highlight-margin $page-padding;
-  margin: 0;
-  height: $sticky-header-height;
   position: fixed;
-  top: 0;
+  @include set-safe-area(top);
+  padding: $highlight-margin $page-padding;
+  height: $sticky-header-height;
   background: white;
   z-index: 10;
 }
