@@ -1,4 +1,5 @@
 import { ComponentFactoryResolver, Directive, EventEmitter, HostBinding, Input, Output, ViewContainerRef } from "@angular/core";
+import { ControlValueAccessor } from "@angular/forms";
 import { Subject } from "rxjs";
 import { Ref } from "./types";
 
@@ -78,4 +79,42 @@ export abstract class UIOpenMenu {
   openChange = new EventEmitter<boolean>();
 
   abstract close(): void;
+};
+
+@Directive()
+export abstract class UIDefaultAccessor<T> implements ControlValueAccessor {
+  @Input()
+  value: T | undefined;
+  
+  @Output()
+  valueChange = new EventEmitter<T>();
+
+  onChange(e: any) {
+    if ( this.disabled ) return;
+    let next = this.getInput(e);
+    if ( next != this.value ) {
+      this.valueChange.emit(this.value = next);
+      this.onChanged(this.value);
+    }
+    this.onTouched();
+  };
+
+  protected getInput(e: any): any { return e; };
+
+  disabled: boolean = false;
+  setDisabledState(isDisabled: boolean) { this.disabled = isDisabled; }
+
+  onTouched: Function = () => {};
+  registerOnTouched(onTouched: any): void {
+    this.onTouched = onTouched;
+  }
+
+  writeValue(value: T) {
+    this.valueChange.emit(this.value = value);
+  }
+
+  onChanged: Function = (value: boolean) => {};
+  registerOnChange(onChanged: any): void {
+    this.onChanged = onChanged;
+  }
 };

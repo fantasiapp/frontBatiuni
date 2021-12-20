@@ -52,7 +52,7 @@ input {
   width: $switch-button-size;
 }
 
-input + .slider {
+.slider {
   background: linear-gradient(to right, #{$switch-gradient-start}, #{$switch-gradient-end});
 }
 

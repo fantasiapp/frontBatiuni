@@ -22,7 +22,6 @@ import { RegistrationSuccess } from 'src/components/validator/registration_succe
 import { DiscoverComponent } from 'src/components/discover_page/discover-page.component';
 import { OptionsModel } from 'src/components/options/options';
 import { GoogleMapsModule } from '@angular/google-maps';
-import { RangeComponent } from 'src/components/ui_component/range/range.component';
 import { OfferComponent } from 'src/components/ui_component/offer/offer.compnent';
 import { NavigationMenu } from 'src/components/ui_component/navigation/navigation.component';
 
@@ -43,6 +42,9 @@ import { UISlideMenuComponent } from 'src/components/ui_component/slidemenu/slid
 import { UIProfileImageComponent } from 'src/components/ui_component/profile-image/profile-image.component';
 import { UINumberComponent } from 'src/components/ui_component/number/number.component';
 import { FileUI } from 'src/components/ui_component/filesUI/files.ui';
+import { NgxSliderModule } from '@angular-slider/ngx-slider';
+import { CustomComponent } from 'src/components/ui_component/custom/custom.component';
+import { UIBoxComponent } from 'src/components/ui_component/box/box.component';
 
 @Injectable()
 export class CustomConfig extends HammerGestureConfig {
@@ -66,7 +68,6 @@ export class CustomConfig extends HammerGestureConfig {
     OptionsModel,
     TabComponent,
     TabsComponent,
-    RangeComponent,
     OfferComponent,
     PagingComponent,
     SlideTemplate,
@@ -83,7 +84,9 @@ export class CustomConfig extends HammerGestureConfig {
     UISlideMenuComponent,
     UIProfileImageComponent,
     UINumberComponent,
-    FileUI
+    FileUI,
+    UIBoxComponent,
+    CustomComponent
   ],
   imports: [
     //Ngxs imports
@@ -104,7 +107,8 @@ export class CustomConfig extends HammerGestureConfig {
     BrowserAnimationsModule,
     HammerModule,
     ReactiveFormsModule,
-    GoogleMapsModule
+    GoogleMapsModule,
+    NgxSliderModule
   ],
   providers: [{
     provide: HAMMER_GESTURE_CONFIG,
