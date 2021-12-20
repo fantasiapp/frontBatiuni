@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, ElementRef, ViewChild } from "@angular/core";
+import { ChangeDetectorRef, Component, HostListener, ViewChild } from "@angular/core";
 import { SlidesDirective } from "src/directives/slides.directive";
 import { Job } from "../options/options";
 import { UISlideMenuComponent } from "../ui_component/slidemenu/slidemenu.component";
@@ -37,11 +37,23 @@ export class ProfileComponent {
   }
 
   @ViewChild(SlidesDirective, {static: true})
-  slider!: SlidesDirective;
+  modifySlider!: SlidesDirective;
 
   allLabels = ["Qualibat", "RGE", "RGE Eco Artisan", "NF", "Effinergie", "Handibat"]
     .map((name, id) => ({id, name, isChecked: false}));
 
   labels: Job[] = [];
   
+
+  @HostListener('swipeleft')
+  onSwipeLeft() {
+    if ( this.openModifyMenu )
+      this.modifySlider.left();
+  }
+  
+  @HostListener('swiperight')
+  onSwipeRight() {
+    if ( this.openModifyMenu )
+      this.modifySlider.right();
+  }
 };

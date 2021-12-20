@@ -43,6 +43,9 @@ body {
   padding: constant(safe-area-inset-top) constant(safe-area-inset-right) constant(safe-area-inset-bottom) constant(safe-area-inset-left) !important;
   padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left) !important;
   overflow-y: auto;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+  touch-action: pan-y !important;
   // background: $buttonGradient;
   //color: var(--main-app-color);
 
@@ -219,6 +222,9 @@ a {
   padding: $page-padding;
   position: relative;
   font-size: 0.95em;
+  overflow-x: hidden;
+  overflow-y: auto;
+  touch-action: pan-y !important;
 
   &.include-paging {
     padding-top: $page-padding - $paging-decoration-height !important;
@@ -231,7 +237,6 @@ a {
 
   &.include-header {
     height: calc(100vh - #{$sticky-header-height});
-    overflow-y: auto;
   }
 }
 
@@ -245,6 +250,7 @@ a {
 .hosted-view {
   width: 100%;
   overflow-y: auto;
+  touch-action: pan-y !important;
 }
 
 .formulaire {
@@ -399,6 +405,12 @@ a {
 
 .text-light-emphasis {
   font-weight: 500;
+}
+
+.text-ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 //---------------------------------------------------

@@ -1,10 +1,11 @@
-import { Component, Input } from "@angular/core";
+import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
 import * as moment from "moment";
 
 @Component({
-    selector: "notifications",
-    templateUrl: "./notifications.page.html",
-    styleUrls: ["./notification.page.scss"]
+  selector: "notifications",
+  templateUrl: "./notifications.page.html",
+  styleUrls: ["./notification.page.scss"],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class Notifications {
     @Input()

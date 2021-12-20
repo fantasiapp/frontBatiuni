@@ -1,7 +1,7 @@
 <main class="cover-parent flex column center-cross">
   <div class="form-select full-width">
     <div class="input-select full-width flex row center-cross" (click)="showDropDown=!showDropDown">  
-      <ul class="chosen-items">
+      <ul *ngIf="showChosenItems" class="chosen-items">
         <li *ngFor="let choice of userChoices; let i = index" (click)="delete($event, i, choice.id)">{{choice.name}}</li>
       </ul>
       <img src="assets/arrowdown.svg"/>

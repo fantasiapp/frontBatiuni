@@ -45,8 +45,10 @@ export abstract class AnimateCSS extends IndexBased {
   }
 
   protected animateWithClass(element: HTMLElement, className: string, callback?: Function) {
-    if ( ! element || !element.classList ) return;
-    element.classList.add('animating', className);
+    if ( element.parentElement )
+    element.parentElement.scrollTop = 0;
+    element.classList?.add(className, 'animating');    element.classList.add('animating', className);
+    
     let save = element.onanimationend;
     element.onanimationend = (e: AnimationEvent) => {
       save && save.call(element, e);

@@ -43,7 +43,6 @@
   width: $document-image-size-x;
 }
 
-$icon-padding: 2px;
 .modify-icon {
   width: $icon-size + 2 * $icon-padding;
   height: $icon-size + 2 * $icon-padding;
@@ -63,6 +62,7 @@ $icon-padding: 2px;
 .form-title, .form-input label {
   font-size: 1em;
 }
+
 .company-rate{
   font-family:  "Roboto";
   box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
@@ -98,6 +98,7 @@ $icon-padding: 2px;
 
 .add-field {
   margin-bottom: $form-item-spacing;
+  img { margin: 0 $item-padding; }
 }
 
 .add-field > * {
