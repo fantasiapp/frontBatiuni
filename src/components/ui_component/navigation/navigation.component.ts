@@ -11,10 +11,10 @@ export class NavigationMenu {
 
   @Input()
   menu: MenuItem[] = [
-    {name: "Home", src: "/assets/navigation/st/home.svg", route: ''},
-    {name: "Missions", src: "/assets/navigation/st/missions.svg", route: 'missions'},
-    {name: "Availibity", src: "/assets/navigation/st/availabilities.svg", route: 'availabilities'},
-    {name: "Profile", src: "/assets/navigation/st/profile.svg", route: 'profile'},
+    {name: "Home", src: "assets/navigation/st/home.svg", route: ''},
+    {name: "Missions", src: "assets/navigation/st/missions.svg", route: 'missions'},
+    {name: "Availibity", src: "assets/navigation/st/availabilities.svg", route: 'availabilities'},
+    {name: "Profile", src: "assets/navigation/st/profile.svg", route: 'profile'},
   ];
 
   @Output()
