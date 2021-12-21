@@ -111,9 +111,6 @@ export class CustomConfig extends HammerGestureConfig {
   providers: [{
     provide: HAMMER_GESTURE_CONFIG,
     useClass: CustomConfig
-  }, {
-    provide: APP_BASE_HREF,
-    useValue: '/' + environment.version
   }],
   bootstrap: [AppComponent]
 })
