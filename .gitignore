@@ -49,8 +49,6 @@ ios
 
 
 # Config files
-package.json
-package-lock.json
 build.sh
 /src/environments/
 /src/styles/fonts.scss
