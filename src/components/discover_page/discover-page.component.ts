@@ -114,13 +114,16 @@ export class DiscoverComponent {
   slider!: SlideTemplate<DiscoveryContext>;
 
   contexts: {[key: string]: DiscoveryContext[]} = {
-    entreprise: PMEContexts,
+    'entreprise': PMEContexts,
     'sous-traitant': STContexts
   };
 
-  constructor(private router: Router, private route: ActivatedRoute) { }
+  constructor(private router: Router, private route: ActivatedRoute) {
+    console.log('construct')
+  }
 
   ngOnInit() {
+    console.log('init');
     this.subject = this.route.snapshot.params['subject'] || 'entreprise';
     if ( !DiscoverComponent.subjects.includes(this.subject))
       this.router.navigate(['', 'discover', this.subject = 'entreprise']);

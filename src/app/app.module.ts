@@ -10,7 +10,7 @@ import { AppComponent } from './app.component';
 import { AuthState } from 'src/auth/auth.state';
 import { HttpClientModule } from '@angular/common/http';
 import { AppState } from './app.state';
-import { CommonModule } from '@angular/common';
+import { APP_BASE_HREF, CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { LandingPageComponent } from 'src/components/landing_page/landing-page.component';
@@ -111,6 +111,9 @@ export class CustomConfig extends HammerGestureConfig {
   providers: [{
     provide: HAMMER_GESTURE_CONFIG,
     useClass: CustomConfig
+  }, {
+    provide: APP_BASE_HREF,
+    useValue: '/' + environment.version
   }],
   bootstrap: [AppComponent]
 })
