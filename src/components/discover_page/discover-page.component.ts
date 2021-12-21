@@ -20,7 +20,7 @@ const PMEContexts: DiscoveryContext[] = [
       {content: 'PME et filtrez selon', emphasis: false},
       {content: 'vos préferences', emphasis: true}
     ],
-    image: 'assets/PME1.svg'
+    image: '/assets/PME1.svg'
   }},
   //Page 2
   {$implicit: {
@@ -29,7 +29,7 @@ const PMEContexts: DiscoveryContext[] = [
       {content: 'Soyez facilement', emphasis: false},
       {content: 'organisés', emphasis: true}
     ],
-    image: 'assets/PME2.svg'
+    image: '/assets/PME2.svg'
   }},
   //Page 3
   {$implicit: {
@@ -40,7 +40,7 @@ const PMEContexts: DiscoveryContext[] = [
       {content: 'suivez', emphasis: true},
       {content: 'vos chantiers efficacement', emphasis: false}
     ],
-    image: 'assets/PME3.svg'
+    image: '/assets/PME3.svg'
   }},
   //Page 4
   {$implicit: {
@@ -51,7 +51,7 @@ const PMEContexts: DiscoveryContext[] = [
       {content: 'intéressantes selon vos', emphasis: false},
       {content: 'disponibilités', emphasis: true}
     ],
-    image: 'assets/PME4.svg'
+    image: '/assets/PME4.svg'
   }}
 ];
 
@@ -65,7 +65,7 @@ const STContexts: DiscoveryContext[] = [
       {content: 'de sous-traitances et filtrez selon', emphasis: false},
       {content: 'vos préferences', emphasis: true}
     ],
-    image: 'assets/ST1.png'
+    image: '/assets/ST1.png'
   }},
   //Page 2
   {$implicit: {
@@ -74,7 +74,7 @@ const STContexts: DiscoveryContext[] = [
       {content: 'Soyez facilement', emphasis: false},
       {content: 'organisés', emphasis: true}
     ],
-    image: 'assets/ST2.png'
+    image: '/assets/ST2.png'
   }},
   //Page 3
   {$implicit: {
@@ -85,7 +85,7 @@ const STContexts: DiscoveryContext[] = [
       {content: 'suivez', emphasis: true},
       {content: 'vos chantiers efficacement', emphasis: false}
     ],
-    image: 'assets/ST3.svg'
+    image: '/assets/ST3.svg'
   }},
   //Page 4
   {$implicit: {
@@ -96,7 +96,7 @@ const STContexts: DiscoveryContext[] = [
       {content: 'intéressantes selon vos', emphasis: false},
       {content: 'disponibilités', emphasis: true}
     ],
-    image: 'assets/ST4.svg'
+    image: '/assets/ST4.svg'
   }}
 ];
 
@@ -114,18 +114,19 @@ export class DiscoverComponent {
   slider!: SlideTemplate<DiscoveryContext>;
 
   contexts: {[key: string]: DiscoveryContext[]} = {
-    entreprise: PMEContexts,
+    'entreprise': PMEContexts,
     'sous-traitant': STContexts
   };
 
-  constructor(private router: Router, private route: ActivatedRoute) { }
+  constructor(private router: Router, private route: ActivatedRoute) {
+    console.log('construct')
+  }
 
   ngOnInit() {
+    console.log('init');
     this.subject = this.route.snapshot.params['subject'] || 'entreprise';
     if ( !DiscoverComponent.subjects.includes(this.subject))
       this.router.navigate(['', 'discover', this.subject = 'entreprise']);
-
-    console.log(this.subject, this.contexts, this.contexts[this.subject])
   }
 
   @HostListener('swipeleft')

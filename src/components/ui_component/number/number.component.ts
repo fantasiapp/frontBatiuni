@@ -1,18 +1,28 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from "@angular/core";
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
+import { UIDefaultAccessor } from "src/common/classes";
 
 @Component({
   selector: 'number',
   template: `
-    <img (click)="add(-1)" src="assets/icons/minus.svg"/>
-    <input class="center-text" min="0" type="number" [value]="value"/>
-    <img (click)="add(1)" src="assets/icons/plus.svg"/>`,
+    <img (click)="onChange(-1)" src="assets/icons/minus.svg"/>
+    <input class="center-text" min="0" type="number" [value]="value" disabled/>
+    <img (click)="onChange(1)" src="assets/icons/plus.svg"/>`,
   styleUrls: ['./number.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [{
+    provide: NG_VALUE_ACCESSOR,
+    multi: true,
+    useExisting: UINumberComponent
+  }]
 })
-export class UINumberComponent {
-  @Input()
-  value: number = 1;
-
+export class UINumberComponent extends UIDefaultAccessor<number> {
+  
+  constructor() {
+    super();
+    this.value = this.min + (this.max + this.min) / 2;
+  }
+  
   @Input()
   min: number = 0;
 
@@ -22,13 +32,7 @@ export class UINumberComponent {
   @Output()
   valueChange = new EventEmitter<number>();
 
-  private clamp(n: number) {
-    return Math.min(this.max, Math.max(this.min, n));
-  }
-
-  add(k: number) {
-    let next = this.clamp(this.value + k);
-    if ( this.value != next )
-      this.valueChange.emit(this.value = next);
+  protected getInput(k: number) {
+    return Math.min(this.max, Math.max(this.min, this.value! + k));
   }
 };

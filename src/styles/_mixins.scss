@@ -67,3 +67,32 @@
     }
   }
 }
+
+@mixin with-safe-min-height($offset: 0) {
+  min-height: calc(100vh - #{$offset});
+  min-height: calc(100vh - constant(safe-area-inset-top) - #{$offset});
+  min-height: calc(100vh - env(safe-area-inset-top) - #{$offset});
+}
+
+%safe-min-height {
+  @include with-safe-min-height(0);
+}
+
+%safe-area-padding {
+  padding: constant(safe-area-inset-top) constant(safe-area-inset-right) constant(safe-area-inset-bottom) constant(safe-area-inset-left);
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+}
+
+@mixin set-safe-area($property, $direction: $property) {
+  #{$property}: 0;
+  #{$property}: constant(safe-area-inset-#{$direction});
+  #{$property}: env(safe-area-inset-#{$direction});
+}
+
+%overflow-y {
+  width: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  //scroll-behavior: smooth;
+  touch-action: pan-y !important;
+}

@@ -1,12 +1,19 @@
 import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from "@angular/core";
+import { NG_VALUE_ACCESSOR } from "@angular/forms";
+import { UIDefaultAccessor } from "src/common/classes";
 
 @Component({
   selector: "fileinput",
   templateUrl: "./file.ui.html",
   styleUrls: ["./file.ui.scss"],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [{
+    provide: NG_VALUE_ACCESSOR,
+    multi: true,
+    useExisting: FileUI
+  }]
 })
-export class FileUI {
+export class FileUI extends UIDefaultAccessor<FileList> {
   @Input()
   filename : string = "Kbis";
 
@@ -22,13 +29,12 @@ export class FileUI {
   @Input()
   showtitle : boolean = false;
 
-  @Output()
-  filesChange = new EventEmitter<FileList>();
-  files: FileList | undefined;
-
-  onChange(e: any) {
+  constructor() {
+    super();
+  }
+  
+  getInput(e: any) {
     let input = e.target as HTMLInputElement;
-    console.log(e, input.files);
-    this.filesChange.emit(this.files = input.files!);
+    return input.files;
   }
 }

@@ -1,59 +1,39 @@
-@import "../../styles/fonts.scss";
-:host{
-    padding: 20px 0;
+@import '../../styles/variables';
+
+:host {
+  font-family: "Roboto";
+  padding: $notifications-padding !important;
+  //less padding than normal padding
+  font-size: .9em;
 }
 
-.notifications {
-    width: 100%;
-    position: absolute;
-    top: 10%;
-    height: 100vh;
-    color: #000000;
-    font-family: "Roboto Regular";
-    .today , .month{
-        padding: 10px;
-    }
-    .month {
-        span {
-            color: #999999;
-            font-size: 14px;
-        }
-    }
-    .offres-logo {
-        margin-right: 0.5em;
-        height: 51px;
-        width: 51px;
-    }
+.infos .timer {
+  color: #999999;
+}
 
-    .todays-notifications,
-    .monthly-notifications {
-        width: 100%;
-        margin: 0.5em;
-        align-items: center;
-        white-space: normal;
-        box-shadow: rgba(0, 0, 0, 0.05) 0px 1px 2px 0px;
-        padding-bottom: 1em;
-        padding-top: 1em;
-        .infos {
-            color: inherit;
-        }
-    }
+.offres-logo {
+    margin-right: 0.5em;
+    height: 51px;
+    width: 51px;
+}
+
+.todays-notifications,
+.monthly-notifications {
+  box-shadow: rgba(0, 0, 0, 0.05) 0px 1px 2px 0px;
+  padding-bottom: 1em;
+  padding-top: 1em;
 }
 
 .infos {
-    font-size: 14px;
-    span {
-        margin-left: 0.5em ;
-        .timer {
-            color: yellow;
-        }
+  span {
+    margin-left: 5px ;
+    .timer {
+      color: yellow;
     }
-    
+  }
 }
+
 .timer {
-    font-size: 12px;
-    color : #999999;
-}
-.sticky-header {
-    justify-content: center;
+  font-size: 12px;
+  color : #999999;
 }

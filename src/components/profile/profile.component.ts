@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, HostListener, ViewChild } from "@angular/core";
 import { SlidesDirective } from "src/directives/slides.directive";
-import { Job } from "../options/options";
+import { Option } from "../options/options";
 import { UISlideMenuComponent } from "../ui_component/slidemenu/slidemenu.component";
 import { UISwipeupComponent } from "../ui_component/swipeup/swipeup.component";
 
@@ -40,9 +40,9 @@ export class ProfileComponent {
   modifySlider!: SlidesDirective;
 
   allLabels = ["Qualibat", "RGE", "RGE Eco Artisan", "NF", "Effinergie", "Handibat"]
-    .map((name, id) => ({id, name, isChecked: false}));
+    .map((name, id) => ({id, name, checked: false}));
 
-  labels: Job[] = [];
+  labels: Option[] = [];
   
 
   @HostListener('swipeleft')
