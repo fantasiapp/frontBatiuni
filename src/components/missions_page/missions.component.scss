@@ -2,17 +2,23 @@
 @import '../../styles/mixins';
 
 :host {
-  display: block;
-  width: 100%;
-  @extend %safe-min-height;
+  @extend %page;
 }
+
+$mission-header-height: 150px;
 
 header {
   @include set-safe-area(margin-top, top);
   @extend %header;
-  position: sticky;
-  height: auto;
+  position: fixed;
+  height: $mission-header-height;
   padding-bottom: 0;
+}
+
+
+.content {
+  @include with-set-safe-area(margin-top, top, $mission-header-height);
+  @include with-safe-height($mission-header-height + $navigation-height);
 }
 
 .pick {
@@ -24,6 +30,7 @@ header {
 .tabs {
   list-style-type: none;
   justify-content: space-between;
+  margin-top: auto;
 
   li {
     height: $tab-height;

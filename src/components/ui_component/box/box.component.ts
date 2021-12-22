@@ -29,7 +29,6 @@ export class UIBoxComponent extends UIDefaultAccessor<boolean> {
   }
 
   getInput(e: Event) {
-    console.log('yeah!!');
     let target = e.target as HTMLInputElement;
     return target.checked;
   }

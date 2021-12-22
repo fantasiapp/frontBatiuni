@@ -60,3 +60,8 @@
 .list::ng-deep li:not(:last-of-type) {
   margin-bottom: 15px;
 }
+
+.content {
+  max-height: 45vh;
+  @extend %overflow-y;
+}

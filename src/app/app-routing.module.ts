@@ -13,7 +13,7 @@ import { MissionsComponent } from 'src/components/missions_page/missions.compone
 
 const routes: Routes = [{
     path: 'landing',
-    component: OptionsModel,
+    component: LandingPageComponent,
     data: { animation: 'LandingPage' }
   }, {
     path: 'connexion',

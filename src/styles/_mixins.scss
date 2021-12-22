@@ -82,15 +82,28 @@
   min-height: calc(100vh - env(safe-area-inset-top));
 }
 
-%safe-area-padding {
-  padding: constant(safe-area-inset-top) constant(safe-area-inset-right) constant(safe-area-inset-bottom) constant(safe-area-inset-left);
-  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+@mixin with-safe-height($offset: 0) {
+  height: calc(100vh - #{$offset});
+  height: calc(100vh - constant(safe-area-inset-top) - #{$offset});
+  height: calc(100vh - env(safe-area-inset-top) - #{$offset});
+}
+
+%safe-height {
+  height: calc(100vh);
+  height: calc(100vh - constant(safe-area-inset-top));
+  height: calc(100vh - env(safe-area-inset-top));
 }
 
 @mixin set-safe-area($property, $direction: $property) {
   #{$property}: 0;
   #{$property}: constant(safe-area-inset-#{$direction});
   #{$property}: env(safe-area-inset-#{$direction});
+}
+
+@mixin with-set-safe-area($property, $direction: $property, $offset: 0px) {
+  #{$property}: $offset;
+  #{$property}: calc(constant(safe-area-inset-#{$direction}) + #{$offset});
+  #{$property}: calc(env(safe-area-inset-#{$direction}) + #{$offset});
 }
 
 %overflow-y {
@@ -109,3 +122,16 @@
   background: $secondaryBackground;
   color: white;
 };
+
+%page {
+  display: block;
+  width: 100%;
+  @include with-safe-height($navigation-height);
+  @extend %overflow-y;
+}
+
+%content-with-header {
+  @extend %overflow-y;
+  @include with-set-safe-area(margin-top, top, $sticky-header-height);
+  @include with-safe-height($sticky-header-height);
+}

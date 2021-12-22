@@ -2,8 +2,7 @@
 @import '../../styles/mixins';
 
 :host {
-  display: block;
-  width: 100%;
+  @extend %page;
 }
 
 header {
@@ -11,10 +10,12 @@ header {
   background: $secondaryBackground;
   color: white;
   img { padding: 0 $item-padding; }
-  position: sticky;
+  position: fixed;
 }
 
-.hosted-page {
+.content {
+  @include with-set-safe-area(margin-top, top, $sticky-header-height);
+  @include with-safe-height($sticky-header-height + $navigation-height);
   padding-top: 0;
 }
 
