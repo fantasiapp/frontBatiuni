@@ -15,7 +15,6 @@ import { FileUI } from 'src/components/ui_component/filesUI/files.ui';
 
 import { UISlideMenuComponent } from 'src/components/ui_component/slidemenu/slidemenu.component';
 import { UINumberComponent } from 'src/components/ui_component/number/number.component';
-import { RangeComponent } from 'src/components/ui_component/range/range.component';
 import { MissionsPages } from 'src/components/missions/missions.component';
 import { CalendarUI } from 'src/components/ui_component/calendar/calendar.ui';
 import { HorizantaleCalendar } from 'src/components/ui_component/hori_calendar/hozirantal.calendar';
