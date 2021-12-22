@@ -9,6 +9,7 @@
   z-index: 10;
   width: 100vw;
   height: 0;
+  @extend %safe-min-height;
   visibility: hidden;
 }
 
@@ -59,6 +60,9 @@
 
 .list::ng-deep li:not(:last-of-type) {
   margin-bottom: 15px;
-  width: 100%;
+}
 
+.content {
+  max-height: 45vh;
+  @extend %overflow-y;
 }

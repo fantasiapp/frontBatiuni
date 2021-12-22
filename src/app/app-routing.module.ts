@@ -9,17 +9,14 @@ import { DiscoverComponent } from 'src/components/discover_page/discover-page.co
 import { OptionsModel } from 'src/components/options/options';
 import { HomeComponent } from 'src/components/home_page/home.component';
 import { ProfileComponent } from 'src/components/profile/profile.component';
-import { MissionsUI } from 'src/components/ui_component/missions/missions.ui';
-import { Notifications } from 'src/components/notifications/notifications';
-import { FileUI } from 'src/components/ui_component/filesUI/files.ui';
+import { CalendarUI } from 'src/components/ui_component/calendar/calendar.ui';
+import { MissionsComponent } from 'src/components/missions_page/missions.component';
 
 import { UISlideMenuComponent } from 'src/components/ui_component/slidemenu/slidemenu.component';
 import { UINumberComponent } from 'src/components/ui_component/number/number.component';
-import { MissionsPages } from 'src/components/missions/missions.component';
-import { CalendarUI } from 'src/components/ui_component/calendar/calendar.ui';
 const routes: Routes = [{
     path: 'landing',
-    component: CalendarUI,
+    component: HomeComponent,
     data: { animation: 'LandingPage' }
   }, {
     path: 'connexion',
@@ -50,11 +47,12 @@ const routes: Routes = [{
     component: HomeComponent,
     children: [
       {path: 'profile', component: ProfileComponent, data: { animation: 'profile' }},
+      {path: 'missions', component: MissionsComponent, data: { animation: 'missions' }},
       {path: '**', component: RegistrationSuccess}
     ]
   }, {
     path: '**',
-    redirectTo: 'landing',
+    redirectTo: 'home',
   },
 ];
 

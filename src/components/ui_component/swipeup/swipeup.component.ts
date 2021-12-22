@@ -11,6 +11,9 @@ export class UISwipeupComponent extends UIOpenMenu {
   constructor() {
     super();
   }
+
+  @Input()
+  type: 'list' | 'view' = 'list';
   
   willClose = false;
   close() {

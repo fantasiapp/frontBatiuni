@@ -8,6 +8,8 @@ $formulaireMainColor : #080F18;
 $externelLinks : #0F557C;
 $succesCircleShadow : #CDCFD0;
 $infosColor : #52D1BD;
+$input-image-offset-x: 10px;
+$input-image-offset-y: 5px;
 
 $paging-height: 75px;
 $paging-decoration-height: 12px;
@@ -55,3 +57,19 @@ $available : #52d1bd;
 $availableWithLimits : #f9c067;
 $unAvailable : #e82727;
 $icon-padding: 2px;
+$icon-padding: 2px;
+
+//search-bar
+$searchbar-height: 48px;
+$searchbar-icon-size: 24px;
+$searchbar-icon-padding: 8px;
+$searchbar-padding: 16px;
+
+//tab
+$tab-height: 40px;
+$tab-padding: 10px;
+$tab-default-background: #E5E5E5;
+$tab-default-color: #9A9A9A;
+$tab-active-background: white;
+$tab-active-color: $secondaryBackground;
+$tab-spacing: 8px;

@@ -1,18 +1,21 @@
 @import '../../styles/variables';
+@import '../../styles/mixins';
 
 :host {
-  display: block;
-  width: 100%;
-  margin-top: $sticky-header-height;
+  @extend %page;
 }
 
-.sticky-header {
-  img {
-    padding: 0 $item-padding;
-  }
+header {
+  @extend %header;
+  background: $secondaryBackground;
+  color: white;
+  img { padding: 0 $item-padding; }
+  position: fixed;
 }
 
-.hosted-page {
+.content {
+  @include with-set-safe-area(margin-top, top, $sticky-header-height);
+  @include with-safe-height($sticky-header-height + $navigation-height);
   padding-top: 0;
 }
 
