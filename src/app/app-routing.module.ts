@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { LandingPageComponent } from 'src/components/landing_page/landing-page.component';
 import { RegisterComponent } from 'src/components/register/register.component';
 import { ConnexionComponent } from 'src/components/connexion/connexion.component';
 import { emailConfirmation } from 'src/components/validator/email_confirmation/emailconfirmation';
@@ -11,9 +12,11 @@ import { ProfileComponent } from 'src/components/profile/profile.component';
 import { CalendarUI } from 'src/components/ui_component/calendar/calendar.ui';
 import { MissionsComponent } from 'src/components/missions_page/missions.component';
 
+import { UISlideMenuComponent } from 'src/components/ui_component/slidemenu/slidemenu.component';
+import { UINumberComponent } from 'src/components/ui_component/number/number.component';
 const routes: Routes = [{
     path: 'landing',
-    component: CalendarUI,
+    component: HomeComponent,
     data: { animation: 'LandingPage' }
   }, {
     path: 'connexion',

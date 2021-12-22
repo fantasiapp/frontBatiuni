@@ -44,6 +44,7 @@ import { FileUI } from 'src/components/ui_component/filesUI/files.ui';
 import { UIBoxComponent } from 'src/components/ui_component/box/box.component';
 import { MissionsComponent } from 'src/components/missions_page/missions.component';
 import { SearchbarComponent } from 'src/components/ui_component/searchbar/searchbar.component';
+import { HorizantaleCalendar } from 'src/components/ui_component/horizantalecalendar/horizantale.component';
 
 @Injectable()
 export class CustomConfig extends HammerGestureConfig {
@@ -85,6 +86,7 @@ export class CustomConfig extends HammerGestureConfig {
     UIBoxComponent,
     SearchbarComponent,
     MissionsComponent,
+    HorizantaleCalendar
   ],
   imports: [
     //Ngxs imports
