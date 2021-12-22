@@ -9,6 +9,7 @@ import { OptionsModel } from 'src/components/options/options';
 import { HomeComponent } from 'src/components/home_page/home.component';
 import { ProfileComponent } from 'src/components/profile/profile.component';
 import { CalendarUI } from 'src/components/ui_component/calendar/calendar.ui';
+import { MissionsComponent } from 'src/components/missions_page/missions.component';
 
 const routes: Routes = [{
     path: 'landing',
@@ -43,11 +44,12 @@ const routes: Routes = [{
     component: HomeComponent,
     children: [
       {path: 'profile', component: ProfileComponent, data: { animation: 'profile' }},
+      {path: 'missions', component: MissionsComponent, data: { animation: 'missions' }},
       {path: '**', component: RegistrationSuccess}
     ]
   }, {
     path: '**',
-    redirectTo: 'landing',
+    redirectTo: 'home',
   },
 ];
 

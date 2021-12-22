@@ -16,5 +16,5 @@ export class OfferComponent {
   @Input()
   date : Date  = new Date('December 17, 1995 03:24:00')
   @Input()
-  imgSrc : string = "/assets/confirmation.svg"
+  imgSrc : string = "assets/confirmation.svg"
 };

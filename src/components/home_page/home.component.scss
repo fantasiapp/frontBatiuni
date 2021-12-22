@@ -1,12 +1,8 @@
 @import '../../styles/variables';
+@import '../../styles/mixins';
 
 :host {
   display: block;
-  min-height: 100vh;
+  @extend %safe-min-height;
   background-color: white;
-}
-
-.router {
-  height: calc(100vh - #{$navigation-height});
-  overflow: auto;
 }

@@ -12,6 +12,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppState } from './app.state';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
+import { NgxSliderModule } from '@angular-slider/ngx-slider';
 
 import { LandingPageComponent } from 'src/components/landing_page/landing-page.component';
 import { SlidesDirective } from 'src/directives/slides.directive';
@@ -26,7 +27,6 @@ import { OfferComponent } from 'src/components/ui_component/offer/offer.compnent
 import { NavigationMenu } from 'src/components/ui_component/navigation/navigation.component';
 
 import { HAMMER_GESTURE_CONFIG, HammerGestureConfig } from '@angular/platform-browser';
-import { TabComponent, TabsComponent } from 'src/components/tabs/tabs.component';
 import { SlideTemplate } from 'src/directives/slideTemplate.directive';
 import { PagingComponent } from 'src/components/paging/paging.component';
 import { FadeTemplate } from 'src/directives/fadeTemplate.directive';
@@ -35,7 +35,6 @@ import { HomeComponent } from 'src/components/home_page/home.component';
 import { ProfileComponent } from 'src/components/profile/profile.component';
 import { UISwitchComponent } from 'src/components/ui_component/switch/switch.component';
 import { UISwipeupComponent } from 'src/components/ui_component/swipeup/swipeup.component';
-import { MissionsUI } from 'src/components/ui_component/missions/missions.ui';
 import { Notifications } from 'src/components/notifications/notifications';
 import { UIStarsComponent } from 'src/components/ui_component/stars/stars.component';
 import { UISlideMenuComponent } from 'src/components/ui_component/slidemenu/slidemenu.component';
@@ -44,6 +43,8 @@ import { UINumberComponent } from 'src/components/ui_component/number/number.com
 import { FileUI } from 'src/components/ui_component/filesUI/files.ui';
 import { MissionsPages } from 'src/components/missions/missions.component';
 import { UIBoxComponent } from 'src/components/ui_component/box/box.component';
+import { MissionsComponent } from 'src/components/missions_page/missions.component';
+import { SearchbarComponent } from 'src/components/ui_component/searchbar/searchbar.component';
 
 @Injectable()
 export class CustomConfig extends HammerGestureConfig {
@@ -65,8 +66,6 @@ export class CustomConfig extends HammerGestureConfig {
     SlidesDirective,
     DiscoverComponent,
     OptionsModel,
-    TabComponent,
-    TabsComponent,
     OfferComponent,
     PagingComponent,
     SlideTemplate,
@@ -77,15 +76,17 @@ export class CustomConfig extends HammerGestureConfig {
     ProfileComponent,
     UISwitchComponent,
     UISwipeupComponent,
-    MissionsUI,
     Notifications,
     UIStarsComponent,
     UISlideMenuComponent,
     UIProfileImageComponent,
+    UIBoxComponent,
     UINumberComponent,
     FileUI,
     MissionsPages,
-    UIBoxComponent
+    UIBoxComponent,
+    SearchbarComponent,
+    MissionsComponent,
   ],
   imports: [
     //Ngxs imports
