@@ -5,12 +5,12 @@ import { UIDefaultAccessor } from "src/common/classes";
 @Component({
   selector: 'switch',
   template: `
-    <span [class.active]="!this.value">{{off}}</span>
+    <span *ngIf="off" [class.active]="!this.value">{{off}}</span>
     <label class="switch">
       <input type="checkbox" (input)="onChange($event)" #input/>
       <div class="slider" [class.round]="round"></div>
     </label>
-    <span [class.active]="this.value">{{on}}</span>
+    <span *ngIf="on" [class.active]="this.value">{{on}}</span>
 `,
   styleUrls: [ './switch.component.scss' ],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -25,10 +25,10 @@ export class UISwitchComponent extends UIDefaultAccessor<boolean> {
   readonly round: boolean = true;
 
   @Input()
-  off = "Profil ST";
+  off = "";
 
   @Input()
-  on = "Profile PME";
+  on = "";
 
   getInput(e: any) {
     let target = e.target as HTMLInputElement;

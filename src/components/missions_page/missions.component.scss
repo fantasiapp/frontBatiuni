@@ -1,0 +1,56 @@
+@import '../../styles/variables';
+@import '../../styles/mixins';
+
+:host {
+  display: block;
+  width: 100%;
+  @extend %safe-min-height;
+}
+
+header {
+  @include set-safe-area(margin-top, top);
+  @extend %header;
+  position: sticky;
+  height: auto;
+  padding-bottom: 0;
+}
+
+.pick {
+  justify-content: space-around;
+
+  img { margin-left: $item-padding; }
+}
+
+.tabs {
+  list-style-type: none;
+  justify-content: space-between;
+
+  li {
+    height: $tab-height;
+    padding: $tab-padding;
+    flex: 1;
+    background: $tab-default-background;
+    color: $tab-default-color;
+    line-height: $tab-height - 2*$tab-padding;
+
+    &.active { background: $tab-active-background; color: $tab-active-color; font-weight: 500; }
+    &:not(:last-child) { margin-right: $tab-spacing; }
+  }
+}
+.radio-item {
+  font-size: 0.9em;
+}
+
+.radio-container {
+  justify-content: space-between;
+}
+
+.switch-container {
+  span { flex: 1; font-size: 0.9em; }
+  switch {
+    margin-left: 10px;
+    position: relative;
+    // top: 50%;
+    // transform: translateY(-50%);
+  }
+}

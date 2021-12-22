@@ -5,7 +5,7 @@ import { UIDefaultAccessor } from "src/common/classes";
 @Component({
   selector: 'box',
   template: `
-    <input [type]="type" (input)="onChange($event)" [checked]="value || null"/>
+    <input [type]="type" [name]="name" (input)="onChange($event)" [checked]="value || null"/>
     <span></span>
   `,
   styleUrls: ['./box.component.scss'],
@@ -20,12 +20,16 @@ export class UIBoxComponent extends UIDefaultAccessor<boolean> {
   @Input()
   type: "checkbox" | "radio" = "checkbox";
 
+  @Input()
+  name: string | null = null;
+
   constructor() {
     super();
     this.value = false;
   }
 
   getInput(e: Event) {
+    console.log('yeah!!');
     let target = e.target as HTMLInputElement;
     return target.checked;
   }

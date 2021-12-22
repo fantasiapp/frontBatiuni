@@ -4,7 +4,11 @@
   <div class="decoration background-white" (click)="close()">
   </div>
 
-  <ul class="hosed-page list background-white font-Poppins text-light-emphasis">
+  <ul *ngIf="type == 'list'" class="hosed-page list background-white font-Poppins text-light-emphasis">
     <ng-content list></ng-content>
   </ul>
+
+  <div *ngIf="type != 'list'" class="hosted-page font-Poppins">
+    <ng-content select="[view]"></ng-content>
+  </div>
 </div>

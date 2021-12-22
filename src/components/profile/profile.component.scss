@@ -1,15 +1,17 @@
 @import '../../styles/variables';
+@import '../../styles/mixins';
 
 :host {
   display: block;
   width: 100%;
-  margin-top: $sticky-header-height;
 }
 
-.sticky-header {
-  img {
-    padding: 0 $item-padding;
-  }
+header {
+  @extend %header;
+  background: $secondaryBackground;
+  color: white;
+  img { padding: 0 $item-padding; }
+  position: sticky;
 }
 
 .hosted-page {

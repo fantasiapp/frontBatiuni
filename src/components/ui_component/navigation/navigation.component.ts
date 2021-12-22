@@ -32,4 +32,3 @@ export interface MenuItem {
   src: string  // src de la photo non active
   route: string;
 }
-

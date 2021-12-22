@@ -108,7 +108,7 @@ a {
 }
 
 .flex {
-  display: flex;
+  display: flex !important;
 
   &.row {
     flex-flow: row nowrap;
@@ -228,7 +228,7 @@ a {
 }
 
 .space-children-margin {
-  & > *:not(:first-child), & > *:not(:last-child) {
+  & > *:not(:last-child) {
     margin-bottom: $spacing-margin;
   }
 }
@@ -302,13 +302,15 @@ a {
 
 .form-input {
   font-family: inherit;
+  position: relative;
+
   & > * {
     display: block;
   }
 
   label {
-    font-size: 0.8em;
     margin-bottom: 5px;
+    font-weight: 500;
   }
 
   & > input, & > span > input {
@@ -317,7 +319,6 @@ a {
     outline: none;
     border: none;
     border-bottom: 2px solid #cdcfd0;
-    margin-bottom: $form-item-spacing;
     font-family: "Poppins";
   }
   
@@ -327,9 +328,16 @@ a {
     outline: none;
     border: none;
     border-bottom: 2px solid #cdcfd0;
-    margin-bottom: 20px;
     font-family: "Poppins";
   }
+
+  img {
+    position: absolute;
+    right: $input-image-offset-x;
+    bottom: $input-image-offset-y;
+  }
+
+  margin-bottom: $form-item-spacing;
 }
 
 .external-links {
@@ -411,43 +419,31 @@ input {
   @include circle(80px, rgb(241, 241, 241));
 }
 //--------------------------------------------------
-//--------------------------------------------------
-// Sticky header : 
-// <div class="sticky-header">
-// <a><img class="return" src="assets/arrowdown.svg"/></a>
-// <span class="sticky-header-title">MES MISSIONS</span>
 
-// </div>
-// .sticky-header {
-//   background-color: white;
-//   padding: 20px 0;
-//   position: fixed;
-//   display: inline-block;
-//   width: 100%;
-//   top: 0;
-//   padding: 1.5em;
-//   height: $sticky-header-height;
-//   z-index: 999;
-//   text-align: center;
-//   font-weight: 500;
-//   a {
-//       float: left;
-//       .return {
-//           transform: rotate(90deg);
-//       }
-//   }
-// }
-  
-//Page layouts
-.sticky-header {
-  position: fixed;
+%header {
   @include set-safe-area(top);
   padding: $highlight-margin $page-padding;
   height: $sticky-header-height;
-  background: white;
   z-index: 10;
+}
+
+//Page layouts
+.sticky-header {
+  position: fixed;
+  background: $secondaryBackground;
+  color: white;
+  @extend %header;
 }
 
 .section {
   position: relative;
+}
+
+
+//----------------------------------------------------
+//clear fixes
+input[type="date"]::-webkit-inner-spin-button,
+input[type="date"]::-webkit-calendar-picker-indicator {
+  display: none;
+  -webkit-appearance: none;
 }

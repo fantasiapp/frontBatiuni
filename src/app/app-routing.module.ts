@@ -9,10 +9,11 @@ import { DiscoverComponent } from 'src/components/discover_page/discover-page.co
 import { OptionsModel } from 'src/components/options/options';
 import { HomeComponent } from 'src/components/home_page/home.component';
 import { ProfileComponent } from 'src/components/profile/profile.component';
+import { MissionsComponent } from 'src/components/missions_page/missions.component';
 
 const routes: Routes = [{
     path: 'landing',
-    component: LandingPageComponent,
+    component: OptionsModel,
     data: { animation: 'LandingPage' }
   }, {
     path: 'connexion',
@@ -43,11 +44,12 @@ const routes: Routes = [{
     component: HomeComponent,
     children: [
       {path: 'profile', component: ProfileComponent, data: { animation: 'profile' }},
+      {path: 'missions', component: MissionsComponent, data: { animation: 'missions' }},
       {path: '**', component: RegistrationSuccess}
     ]
   }, {
     path: '**',
-    redirectTo: 'landing',
+    redirectTo: 'home',
   },
 ];
 
