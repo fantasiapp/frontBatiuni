@@ -41,7 +41,6 @@ import { UISlideMenuComponent } from 'src/components/ui_component/slidemenu/slid
 import { UIProfileImageComponent } from 'src/components/ui_component/profile-image/profile-image.component';
 import { UINumberComponent } from 'src/components/ui_component/number/number.component';
 import { FileUI } from 'src/components/ui_component/filesUI/files.ui';
-import { MissionsPages } from 'src/components/missions/missions.component';
 import { UIBoxComponent } from 'src/components/ui_component/box/box.component';
 import { MissionsComponent } from 'src/components/missions_page/missions.component';
 import { SearchbarComponent } from 'src/components/ui_component/searchbar/searchbar.component';
@@ -83,7 +82,6 @@ export class CustomConfig extends HammerGestureConfig {
     UIBoxComponent,
     UINumberComponent,
     FileUI,
-    MissionsPages,
     UIBoxComponent,
     SearchbarComponent,
     MissionsComponent,

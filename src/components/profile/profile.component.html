@@ -57,7 +57,7 @@
 
 <slidemenu [(open)]="openModifyMenu">
   <div class="full-width center-text text-emphasis" header>Modifier mon Profil</div>
-  <div class="hosted-page include-header flex column center-cross space-children-margin" content>
+  <div class="hosted-page flex column center-cross space-children-margin" content>
     <section class="section">
       <profile-image></profile-image>
       <img src="assets/icons/modify.svg" class="modify-icon image" (click)="openModifyPictureMenu()"/>
@@ -292,5 +292,5 @@
 </slidemenu>
    <slidemenu [(open)]="openNotifications">
     <div class="full-width center-text text-emphasis" header>Notifications</div>
-    <notifications class="hosted-page include-header flex column center-cross space-children-margin" content></notifications>
+    <notifications class="hosted-page flex column center-cross space-children-margin" content></notifications>
 </slidemenu>
