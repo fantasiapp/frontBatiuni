@@ -1,9 +1,18 @@
+<<<<<<< HEAD
+@import "../../styles/fonts.scss";
+@import "../../styles/variables";
+=======
 @import '../../styles/variables';
+>>>>>>> 3f6f9cabc59463420183b9ed7bd5b96d3ef81922
 
 :host {
   display: block;
   font-family: "Poppins";
   margin-bottom: $form-item-spacing;
+<<<<<<< HEAD
+
+=======
+>>>>>>> 3f6f9cabc59463420183b9ed7bd5b96d3ef81922
 }
 
 .form-select {

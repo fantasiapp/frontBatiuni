@@ -17,10 +17,9 @@ import { UISlideMenuComponent } from 'src/components/ui_component/slidemenu/slid
 import { UINumberComponent } from 'src/components/ui_component/number/number.component';
 import { MissionsPages } from 'src/components/missions/missions.component';
 import { CalendarUI } from 'src/components/ui_component/calendar/calendar.ui';
-import { HorizantaleCalendar } from 'src/components/ui_component/hori_calendar/hozirantal.calendar';
 const routes: Routes = [{
     path: 'landing',
-    component: HorizantaleCalendar,
+    component: CalendarUI,
     data: { animation: 'LandingPage' }
   }, {
     path: 'connexion',
