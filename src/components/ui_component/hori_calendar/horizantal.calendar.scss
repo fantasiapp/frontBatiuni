@@ -1,0 +1,213 @@
+@import "../../../styles/mixins";
+@import "../../../styles/variables";
+
+:host {
+    font-family: "Roboto";
+    color : #1E2843;
+    margin : 1em 1em;
+}
+main {
+    display: flex;
+    flex-flow: column;
+}
+.calendar {
+    flex-flow: column;
+    width: 100%;
+    padding: 20px 0;
+}
+.header-calendar {
+    width: 80%;
+    align-content: center;
+    justify-content: space-between;
+    h1 {
+        color: #1e2843;
+    }
+}
+.wrapper-calendar {
+    width: 80%;
+    margin: 0.25rem;
+    border-radius: 15px;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    background-color: #fafafa;
+    padding: 10px;
+    ol {
+        row-gap: 1rem;
+        list-style: none;
+        display: grid;
+        margin-bottom: 5px;
+        grid-template-columns: repeat(7, 1fr);
+        margin: 0;
+        padding: 0;
+    }
+    li {
+        height: 1.5rem;
+        width: 1.5rem;
+        font-size: 0.8rem;
+        cursor: pointer;
+        text-align: center;
+        line-height: 1.5rem;
+        color: #1e2843;
+    }
+}
+
+
+
+.day-name {
+    font-size: 14px;
+    margin-bottom: 2px;
+    text-align: center;
+}
+
+.calendar-action {
+    justify-content: space-around;
+    img {
+        height: 1.5em;
+    }
+}
+
+.header-calendar h1 {
+    width: 100%;
+    font-size: 14px;
+}
+
+.header-calendar button {
+    cursor: pointer;
+    background-color: transparent;
+    border: 0;
+}
+%bgcolor {
+    color: #ffffff !important;
+    border-radius: 50%;
+}
+
+// .available {
+//     background-color: $available;
+//     @extend %bgcolor;
+// }
+// .availablelimits {
+//     background-color: $availableWithLimits;
+//     @extend %bgcolor;
+// }
+.unavailable {
+    background-color: #1e2843;
+    @extend %bgcolor;
+}
+
+%before-element {
+    content: "";
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 10px;
+}
+
+.disponible::before {
+    @extend %before-element;
+    @include circle(1.2em, $available);
+}
+.sous-conditions::before {
+    @extend %before-element;
+    @include circle(1.2em, $availableWithLimits);
+}
+// .pas-disponible::before {
+//     @extend %before-element;
+//     @include circle(1.2em, $unAvailable);
+// }
+// .non-renseigne::before {
+//     @extend %before-element;
+//     @include circle(1.1em, #fafafa);
+//     border: 1px solid black;
+// }
+.horizantal-calendar {
+    overflow: auto;
+    white-space: nowrap;
+    margin-bottom: 10px;
+    width: 100%;
+    ul {
+        list-style-type: none;
+        display: inline-block;
+
+        li {
+            display: inline-block;
+            padding: 5px 5px;
+            div {
+                align-items: center;
+                padding: 7px;
+                margin: 10px;
+                border-radius: 10px;
+                width: 47px;
+                justify-content: center;
+                background-color: white;
+                border: 1px solid #e1e1e1;
+                flex-flow: column;
+                font-weight: 500;
+                height: 90px;
+                box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+
+                .nameofday {
+                    font-size: 14px;
+                    margin-bottom: 5px;
+                }
+                .daynumber {
+                    font-weight: 400 !important;
+                    font-size: 25px;
+                }
+            }
+        }
+    }
+}
+.agenda {
+    margin: inherit;
+    position: relative;
+        li {
+            height: 30px;
+            padding: 5px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+}
+
+.agenda-line {
+    margin-left: 20px;
+    border-bottom: 1px solid #E5E5E5;
+    height: 1px;
+    width: 80%;
+}
+
+.topthing {
+    position: absolute;
+    border-radius: 7px;
+    background : linear-gradient(#B9EDAF,#b0d8a8);
+    opacity: 0.7;
+    width: 79%;
+    color: white;
+    left : 12%;
+    box-shadow: rgba(185,237,175, 0.16) 0px 1px 4px;
+    transition: all 300ms ease-out 0s;
+    p {
+        padding : 1em;
+    }
+}
+.day-availibility {
+    margin: inherit;
+    display: grid;
+    font-size: 14px;
+    .selected-day {
+        font-weight: 500;
+    }
+    .selected-day-availibility {
+        font-weight: 200;
+        align-items: center;
+        div {
+            margin-left : 1em
+        }
+    }
+}
+.cover-parent {
+    display: grid;
+}
+.changevue {
+    font-size: 12px;
+    font-weight: 200;
+    text-align: center;
+    margin-left: 30%;
+}

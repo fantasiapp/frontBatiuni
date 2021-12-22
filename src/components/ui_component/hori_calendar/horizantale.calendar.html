@@ -1,0 +1,64 @@
+    <div class="cover-parent"> 
+    <div *ngIf="hori" class="calendar flex center">
+        <div class="header-calendar flex center">
+
+            <h1>{{dateSelect | date:'MMMM, yyyy'}}</h1>
+            <div class="calendar-action flex">
+                <button (click)="changeMonth(-1)" class="btn-prev"><img src="assets/arrowleft.svg" /> </button>
+
+                <button (click)="changeMonth(1)" class="btn-next"><img src="assets/arrowright.svg" /></button>
+            </div>
+        </div>
+        <div class="wrapper-calendar ">
+            <ol>
+                <li *ngFor="let day of week; let index = index" class="day-name">{{day | slice:0:1}}</li>
+                <li [style.gridColumnStart]="first ? day?.indexWeek : 'auto'"
+                    *ngFor="let day of monthSelect;let first = first"
+                    (click)="showAgenda(day.date)"
+
+                    [class]="day.availbility == 'occupe' ? 'unavailable' : '' ">
+                    {{day?.value}}
+                </li>
+            </ol>
+        </div>
+    </div>
+
+    <div class="horizantal-calendar" *ngIf='!hori'>
+        <ul>
+            <li *ngFor="let i of weekend">
+                <div class="flex" 
+                (click)="showAgenda(i.day[2])" 
+                [style.background]="i.status == 'occupe' ? '#0D6191' : '#FFFFFF' "
+                    [style.color]="i.status == 'occupe' ? '#FFFFFF' : '#1e284' "
+                >
+                    <span class="nameofday"> {{i.day[1].slice(0,1).toUpperCase()+i.day[1].slice(1,2)}}</span>
+                    <span class="daynumber">{{i.day[0]}} </span>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <div class="changevue">
+    <span (click)="changeVue()" >{{hori ? "Affichage horizontale" : "Affichage complète du mois"}}</span>
+</div>
+</div>
+<div class="day-availibility">
+    <span class="selected-day">{{spanShowToday}}</span>
+    <span class="selected-day-availibility flex">Vous étes dispo <div class="sous-conditions"></div></span>
+</div>
+<div class="agenda flex " >
+    <ol class="full-width"> 
+        <li class="flex center-cross " 
+        *ngFor="let hours of hoursperday">
+        {{hours}}h 
+            <div class="agenda-line"></div></li>
+    </ol>
+   <div 
+   class="topthing" 
+   [style.height.px]="greenCardHeight" 
+   [style.top.px]="greenCardFromTop">
+       <p >
+        {{bilan}}
+       </p>
+   </div>
+   
+</div>

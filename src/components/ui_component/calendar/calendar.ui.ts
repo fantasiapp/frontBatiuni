@@ -25,6 +25,8 @@ export class CalendarUI implements OnInit {
     dateValue: Availibility[] = [];
     current: any;
     openModal: boolean = false;
+
+    hori = false
     constructor() {
 
     }
@@ -106,7 +108,6 @@ export class CalendarUI implements OnInit {
             }
 
         }
-        console.log(this.dateValue)
     }
 }
 

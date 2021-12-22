@@ -18,9 +18,10 @@ import { UINumberComponent } from 'src/components/ui_component/number/number.com
 import { RangeComponent } from 'src/components/ui_component/range/range.component';
 import { MissionsPages } from 'src/components/missions/missions.component';
 import { CalendarUI } from 'src/components/ui_component/calendar/calendar.ui';
+import { HorizantaleCalendar } from 'src/components/ui_component/hori_calendar/hozirantal.calendar';
 const routes: Routes = [{
     path: 'landing',
-    component: CalendarUI,
+    component: HorizantaleCalendar,
     data: { animation: 'LandingPage' }
   }, {
     path: 'connexion',

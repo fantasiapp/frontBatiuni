@@ -44,6 +44,7 @@ import { UIProfileImageComponent } from 'src/components/ui_component/profile-ima
 import { UINumberComponent } from 'src/components/ui_component/number/number.component';
 import { FileUI } from 'src/components/ui_component/filesUI/files.ui';
 import { MissionsPages } from 'src/components/missions/missions.component';
+import { HorizantaleCalendar } from 'src/components/ui_component/hori_calendar/hozirantal.calendar';
 
 @Injectable()
 export class CustomConfig extends HammerGestureConfig {
@@ -85,7 +86,8 @@ export class CustomConfig extends HammerGestureConfig {
     UIProfileImageComponent,
     UINumberComponent,
     FileUI,
-    MissionsPages
+    MissionsPages,
+    HorizantaleCalendar
   ],
   imports: [
     //Ngxs imports
