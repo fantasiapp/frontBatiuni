@@ -16,7 +16,6 @@ header {
 .content {
   @include with-set-safe-area(margin-top, top, $sticky-header-height);
   @include with-safe-height($sticky-header-height + $navigation-height);
-  padding-top: 0;
 }
 
 .quick-intro {

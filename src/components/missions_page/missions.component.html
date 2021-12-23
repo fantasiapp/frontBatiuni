@@ -11,8 +11,13 @@
 </header>
 
 <div class="hosted-page space-children-margin content">
-  <horizantale-calendar></horizantale-calendar>
-
+  
+  <ng-container [ngSwitch]="activeView">
+    <ng-container *ngSwitchCase="0">
+      <offer *ngFor="let mission of missions"></offer>
+    </ng-container>
+    <horizantale-calendar class="space-children-margin" *ngSwitchCase="1"></horizantale-calendar>
+  </ng-container>
 </div>
 
 <swipeup [(open)]="openFilterMenu" type="view">

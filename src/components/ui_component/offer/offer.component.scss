@@ -2,16 +2,16 @@
 @import "../../../styles/variables";
 
 :host {
-    font-family: "Roboto Regular";
+    font-family: "Roboto";
 }
 
 .offres {
-    width: 80%;
     justify-content: space-between;
-    box-shadow: rgba(149, 157, 165, 0.2) 0px 25px 24px;
+    box-shadow: 0 10px 5px 0 rgba(149, 157, 165, 0.2); // x y spread outline color
     padding: 1.5em;
     color: #999999;
     font-size: 15px;
+    border-radius: 5px;
     .offres-infos {
         flex : 1;
     }
@@ -21,12 +21,12 @@
     .entreprise , .adresse {
         font-size: 13px;
     }
+
     .metier, .date {
         color: #333333;
     }
-    .adresse {
-        font-family: "Roboto Light";
-    }
+    
+    .adresse { font-weight: 300; }
     
 }
 

@@ -6,7 +6,7 @@
 
 <div class="hosted-page flex column center-cross space-children-margin content">
   <profile-image></profile-image>
-  <switch style="text-align: center;"></switch>
+  <switch off="Profile ST" on="Profil PME"  style="text-align: center;"></switch>
   <section class="quick-intro flex column center-cross">
     <span class="text-emphasis">Gabriel Dubois</span>
     <span>Gabriel_Dubois@gmail.com</span>
@@ -57,13 +57,13 @@
 
 <slidemenu [(open)]="openModifyMenu">
   <div class="full-width center-text text-emphasis" header>Modifier mon Profil</div>
-  <div class="hosted-page include-header flex column center-cross space-children-margin" content>
+  <div class="hosted-page flex column center-cross space-children-margin" content>
     <section class="section">
       <profile-image></profile-image>
       <img src="assets/icons/modify.svg" class="modify-icon image" (click)="openModifyPictureMenu()"/>
     </section>
 
-    <switch style="text-align: center;" off="Profil ST" on="Profil PME"></switch>
+    <switch off="Profile ST" on="Profil PME"  style="text-align: center;" off="Profil ST" on="Profil PME"></switch>
     <stars value="3.9"></stars>
 
     
@@ -206,7 +206,7 @@
   <div class="hosted-page include-navigation flex column center-cross space-children-margin" content>
 
     <profile-image></profile-image>
-     <switch style="text-align: center;"></switch>
+     <switch off="Profile ST" on="Profil PME"  style="text-align: center;"></switch>
 
      <stars value="3.9"></stars>
      <span class="full-width section " style="text-align: center;font-size: 12px; margin-bottom: 10px;">Demander une recommandation</span>
@@ -292,5 +292,5 @@
 </slidemenu>
    <slidemenu [(open)]="openNotifications">
     <div class="full-width center-text text-emphasis" header>Notifications</div>
-    <notifications class="hosted-page include-header flex column center-cross space-children-margin" content></notifications>
+    <notifications class="hosted-page flex column center-cross space-children-margin" content></notifications>
 </slidemenu>

@@ -15,6 +15,8 @@ import { MissionsComponent } from 'src/components/missions_page/missions.compone
 import { UISlideMenuComponent } from 'src/components/ui_component/slidemenu/slidemenu.component';
 import { UINumberComponent } from 'src/components/ui_component/number/number.component';
 import { HorizantaleCalendar } from 'src/components/ui_component/horizantalecalendar/horizantale.component';
+import { UiMapComponent } from 'src/components/ui_component/map/map.component';
+
 const routes: Routes = [{
     path: 'landing',
     component: HomeComponent,
@@ -38,14 +40,17 @@ const routes: Routes = [{
     data: { animation: 'Confirmed' }
   }, {
     path: 'testmodel',
-    component: OptionsModel
+    component: UiMapComponent
+  },{
+    path: 'map',
+    component: UiMapComponent
   }, {
     path: 'success',
     component: RegistrationSuccess,
     data: { animation: 'Success' }
   }, {
     path: 'home',
-    component: HomeComponent,
+    component: HomeComponent  ,
     children: [
       {path: 'profile', component: ProfileComponent, data: { animation: 'profile' }},
       {path: 'missions', component: MissionsComponent, data: { animation: 'missions' }},
