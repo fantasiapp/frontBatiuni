@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import * as mapboxgl from 'mapbox-gl';
 
 export type MarkerData = {
@@ -10,6 +10,7 @@ export type MarkerData = {
   selector: 'mapbox-batiuni',
   templateUrl: 'map.component.html',
   styleUrls: ['map.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UiMapComponent {
 
@@ -25,7 +26,19 @@ export class UiMapComponent {
     [2.3114995493, 48.8611235443],
     [2.285813409112486, 48.850739049625446],
     [2.268915048260837, 48.85421018352511]
-  ]
+  ];
+
+  popupContent!: Node;
+
+  initializePopup() {
+    let span = document.createElement('span');
+    span.classList.add('mapbox-popup-content');
+    span.innerText = "Hello world";
+    span.onclick = () => { console.log('yeah'); };
+
+    this.popupContent = span;
+    console.log(this.popupContent);
+  }
 
   ngOnInit() {
     this.map = new mapboxgl.Map({
@@ -36,18 +49,17 @@ export class UiMapComponent {
       center: [this.lng, this.lat],
       attributionControl:false
     });
+    this.initializePopup();
     // Add map controls
     // this.map.addControl(new mapboxgl.NavigationControl());
-    this.places.forEach(item => new mapboxgl.Marker({
-      color: "green",
-    })
+    this.places.forEach(item =>
+      new mapboxgl.Marker({color: "green"})
       .setLngLat([item[0], item[1]])
-      .setPopup(new mapboxgl.Popup().setHTML("<h3 style='padding:10px;' >Hello World!</h3>")) // add popup
-      .addTo(this.map))
-    // const marker = new mapboxgl.Marker()
-    //               .setLngLat([ 2.349014, 48.864716])
-    //               .addTo(this.map);
+      .setPopup(new mapboxgl.Popup().setDOMContent(this.popupContent.cloneNode(true))) // add popup
+      .addTo(this.map)
+    )
 
+    
   }
 }
 

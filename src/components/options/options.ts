@@ -34,6 +34,7 @@ export class OptionsModel extends UIDefaultAccessor<Option[]> {
   set options(val: Option[]) {
     this.search = '';
     this._options = val;
+    this.value = val.filter(option => option.checked);
   }
 
   @Input()

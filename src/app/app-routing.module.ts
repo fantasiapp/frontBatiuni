@@ -21,7 +21,7 @@ import { AvailabilitiesComponent } from 'src/components/availabilities_page/avai
 
 const routes: Routes = [{
     path: 'landing',
-    component: HomeComponent,
+    component: LandingPageComponent,
     data: { animation: 'LandingPage' }
   }, {
     path: 'connexion',

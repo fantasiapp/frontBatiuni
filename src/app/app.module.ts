@@ -103,7 +103,7 @@ export class CustomConfig extends HammerGestureConfig {
       developmentMode: !environment.production
     }),
     NgxsStoragePluginModule.forRoot({
-      key: ['auth.token', 'register']
+      key: ['app.auth.token']
     }),
     NgxsRouterPluginModule.forRoot(),
     //Google maps

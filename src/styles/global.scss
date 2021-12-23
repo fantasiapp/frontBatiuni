@@ -2,6 +2,7 @@
 @import 'responsive.scss';
 @import 'variables.scss';
 @import 'animations.scss';
+@import 'mapbox-gl.scss';
 
 * {
   margin: 0;
@@ -331,7 +332,7 @@ a {
     font-family: "Poppins";
   }
 
-  img {
+  & > img {
     position: absolute;
     right: $input-image-offset-x;
     bottom: $input-image-offset-y;
@@ -438,7 +439,45 @@ input {
 .section {
   position: relative;
 }
+//Tabs
+.pick {
+  justify-content: space-around;
 
+  img { margin-left: $item-padding; }
+}
+
+.tabs {
+  list-style-type: none;
+  justify-content: space-between;
+  margin-top: auto;
+
+  li {
+    height: $tab-height;
+    padding: $tab-padding;
+    flex: 1;
+    background: $tab-default-background;
+    color: $tab-default-color;
+    line-height: $tab-height - 2*$tab-padding;
+
+    &.active { background: $tab-active-background; color: $tab-active-color; font-weight: 500; }
+    &:not(:last-child) { margin-right: $tab-spacing; }
+  }
+}
+.radio-item {
+  font-size: 0.9em;
+}
+
+.radio-container {
+  justify-content: space-between;
+}
+
+.switch-container {
+  span { flex: 1; font-size: 0.9em; }
+  switch {
+    margin-left: 10px;
+    position: relative;
+ }
+}
 
 //----------------------------------------------------
 //clear fixes
@@ -446,4 +485,7 @@ input[type="date"]::-webkit-inner-spin-button,
 input[type="date"]::-webkit-calendar-picker-indicator {
   display: none;
   -webkit-appearance: none;
+}
+input[type="date"] {
+  background: none;
 }

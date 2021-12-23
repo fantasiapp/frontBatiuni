@@ -27,10 +27,11 @@ export class RegisterComponent {
     password: new FormControl('', [
       Validators.minLength(8)
     ]),
-    parrain: new FormControl(''),
+    proposer: new FormControl(''),
     role: new FormControl(''),
     company: new FormControl(''),
-    name: new FormControl('')
+    name: new FormControl(''),
+    jobs: new FormControl([])
   }, {validators: VerifyField('email', 'emailVerification')});
 
   @ViewChild(SlidesDirective, {static: true})
@@ -38,7 +39,7 @@ export class RegisterComponent {
 
 
   onSubmit(f: any) {
-
+    console.log(this.registerForm.value);
   }
 
   onNavigate(dx: number) {

@@ -1,8 +1,12 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
-import { Store } from "@ngxs/store";
+import { Select, Store } from "@ngxs/store";
+import { Observable } from "rxjs";
+import { take } from "rxjs/operators";
 import { Login, Logout } from "src/auth/auth.actions";
+import { AuthModel } from "src/auth/auth.model";
+import { AuthState } from "src/auth/auth.state";
 
 @Component({
   selector: 'connexion',
@@ -35,16 +39,24 @@ export class ConnexionComponent {
   }
 
   constructor(private router: Router, private store: Store, private cd: ChangeDetectorRef) {
-    
+    this.auth$.subscribe(console.log);
+    this.token$.subscribe(console.log)
   }
 
   onChange() {
     this.clearErrors();
   }
 
+  @Select(AuthState)
+  auth$!: Observable<AuthModel>;
+
+  @Select(AuthState.token)
+  token$!: Observable<string>;
+
   async onSubmit(e: any) {
+
     let { email, password } = this.loginForm.value;
-    this.store.dispatch(new Login(email, password)).subscribe(
+    this.store.dispatch(new Login(email, password)).pipe(take(1)).subscribe(
       success => {
         this.router.navigate(['', 'confirmed']);
       },
@@ -53,7 +65,5 @@ export class ConnexionComponent {
       }
     );
 
-    this.store.dispatch(new Logout());
-    return 
   }
 };

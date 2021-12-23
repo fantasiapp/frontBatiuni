@@ -4,4 +4,10 @@
 </page-header>
 
 <div class="hosted-page space-children-margin page-content">
+  <ng-container [ngSwitch]="activeView">
+    <ng-container *ngSwitchCase="0">
+      <offer *ngFor="let mission of annonces"></offer>
+    </ng-container>
+    <mapbox-batiuni class="space-children-margin" *ngSwitchCase="1"></mapbox-batiuni>
+  </ng-container>
 </div>

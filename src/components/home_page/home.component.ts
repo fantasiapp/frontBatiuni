@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy } from "@angular/core";
+import { Component, ChangeDetectionStrategy, SimpleChanges } from "@angular/core";
 
 @Component({
   selector: 'home',
@@ -8,4 +8,5 @@ import { Component, ChangeDetectionStrategy } from "@angular/core";
 })
 export class HomeComponent {
   activeView: number = 0;
+  annonces = new Array(10);
 };

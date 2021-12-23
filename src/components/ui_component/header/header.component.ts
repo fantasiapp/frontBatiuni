@@ -10,8 +10,8 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from 
       <img src="assets/Filtrer par.svg" (click)="openFilterMenu = true"/>
     </div>
     <ul class="tabs flex row full-width font-Poppins">
-      <li class="center-text" [class.active]="activeView == 0" (click)="activeView = 0" ><ng-content select="[tab_0]"></ng-content></li>
-      <li class="center-text" [class.active]="activeView == 1" (click)="activeView = 1" ><ng-content select="[tab_1]"></ng-content></li>
+      <li class="center-text" [class.active]="activeView == 0" (click)="activeViewChange.emit(activeView = 0)" ><ng-content select="[tab_0]"></ng-content></li>
+      <li class="center-text" [class.active]="activeView == 1" (click)="activeViewChange.emit(activeView = 1)" ><ng-content select="[tab_1]"></ng-content></li>
     </ul>
   </header>
 

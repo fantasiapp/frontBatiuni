@@ -30,7 +30,7 @@
       </div>
     
       <div class="form-input">
-        <label>Code parrain ?</label> <input type="password" formControlName="parrain"/>
+        <label>Code parrain ?</label> <input type="password" formControlName="proposer"/>
       </div>
       <a class="external-links form-links block center-text" style="margin-top: auto;" [routerLink]="['', 'home']">
         J'ai déjà un compte
@@ -63,7 +63,7 @@
     
       <div class="form-input">
         <label>Métier</label>
-        <options [options]="jobs"></options>
+        <options [options]="jobs" formControlName="jobs"></options>
       </div>
       <div class="form-action" style="margin-top: auto;">
         <button class="button discover gradient" style="width: 250px">Valider</button>
