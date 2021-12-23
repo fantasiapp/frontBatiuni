@@ -14,6 +14,7 @@ import { MissionsComponent } from 'src/components/missions_page/missions.compone
 
 import { UISlideMenuComponent } from 'src/components/ui_component/slidemenu/slidemenu.component';
 import { UINumberComponent } from 'src/components/ui_component/number/number.component';
+import { HorizantaleCalendar } from 'src/components/ui_component/horizantalecalendar/horizantale.component';
 const routes: Routes = [{
     path: 'landing',
     component: HomeComponent,
