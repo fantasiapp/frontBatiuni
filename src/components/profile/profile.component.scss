@@ -13,10 +13,6 @@ header {
   position: fixed;
 }
 
-.content {
-  @extend %content-with-header;
-}
-
 .quick-intro {
   font-weight: 200;
   & > *:not(:last-of-type) {

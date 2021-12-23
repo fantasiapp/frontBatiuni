@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import * as moment from 'moment';
 
 @Component({
-    selector: 'app-root',
+    selector: 'calendar',
     templateUrl: './calendar.ui.html',
     styleUrls: ['./calendar.ui.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush

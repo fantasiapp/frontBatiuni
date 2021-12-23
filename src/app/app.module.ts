@@ -48,6 +48,7 @@ import { UiMapComponent } from 'src/components/ui_component/map/map.component';
 import { AgmCoreModule } from '@agm/core';
 import { HomeComponent } from 'src/components/home_page/home.component';
 import { HeaderComponent } from 'src/components/ui_component/header/header.component';
+import { AvailabilitiesComponent } from 'src/components/availabilities_page/availabilities.component';
 
 @Injectable()
 export class CustomConfig extends HammerGestureConfig {
@@ -92,7 +93,8 @@ export class CustomConfig extends HammerGestureConfig {
     HorizantaleCalendar,
     UiMapComponent,
     HeaderComponent,
-    HomeComponent
+    HomeComponent,
+    AvailabilitiesComponent
   ],
   imports: [
     //Ngxs imports

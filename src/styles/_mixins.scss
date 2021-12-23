@@ -140,3 +140,10 @@
   @include with-set-safe-area(margin-top, top, $mission-header-height);
   @include with-safe-height($mission-header-height + $navigation-height);
 }
+
+.page-content-no-tabs {
+  @extend %overflow-y;
+  @extend %content-with-header;
+  @include with-set-safe-area(margin-top, top, $sticky-header-height);
+  @include with-safe-height($sticky-header-height + $navigation-height);
+}

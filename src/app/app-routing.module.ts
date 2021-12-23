@@ -16,6 +16,7 @@ import { UISlideMenuComponent } from 'src/components/ui_component/slidemenu/slid
 import { UINumberComponent } from 'src/components/ui_component/number/number.component';
 import { UiMapComponent } from 'src/components/ui_component/map/map.component';
 import { HomeComponent } from 'src/components/home_page/home.component';
+import { AvailabilitiesComponent } from 'src/components/availabilities_page/availabilities.component';
 
 const routes: Routes = [{
     path: 'landing',
@@ -51,6 +52,7 @@ const routes: Routes = [{
     children: [
       {path: 'profile', component: ProfileComponent, data: { animation: 'profile' }},
       {path: 'missions', component: MissionsComponent, data: { animation: 'missions' }},
+      {path: 'availabilities', component: AvailabilitiesComponent, data: { animation: 'availabilities' }},
       {path: '', pathMatch: 'full', component: HomeComponent, data: { animation: 'home' } },
       {path: '**', component: RegistrationSuccess}
     ]
