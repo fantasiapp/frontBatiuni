@@ -1,5 +1,7 @@
 import { ChangeDetectionStrategy, Component, ContentChildren, HostBinding, HostListener, QueryList, TemplateRef, ViewChild } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
+import { Store } from "@ngxs/store";
+import { Register } from "src/auth/auth.actions";
 import { SlidesDirective } from "src/directives/slides.directive";
 import { VerifyField } from "src/validators/verify";
 import { Option } from "../options/options";
@@ -37,9 +39,11 @@ export class RegisterComponent {
   @ViewChild(SlidesDirective, {static: true})
   slider!: SlidesDirective;
 
+  constructor(private store: Store) {}
 
   onSubmit(f: any) {
     console.log(this.registerForm.value);
+    this.store.dispatch(Register.fromFormGroup(this.registerForm));
   }
 
   onNavigate(dx: number) {

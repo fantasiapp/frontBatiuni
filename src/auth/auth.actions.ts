@@ -1,4 +1,5 @@
 import { FormGroup } from "@angular/forms";
+import { Option } from "src/components/options/options";
 
 export class Login {
   static readonly type = '[Auth] Login';
@@ -31,7 +32,7 @@ export class Register {
       input.company,
       +input.role,
       input.proposer,
-      input.jobs
+      input.jobs.map((job: Option) => job.id)
     );
   };
 };

@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from "@angular/core";
 import { AuthModel } from "./auth.model";
 import { environment } from 'src/environments/environment';
-import { Login, Logout } from "./auth.actions";
+import { Login, Logout, Register } from "./auth.actions";
 import { catchError, tap } from "rxjs/operators";
 import { of, throwError } from "rxjs";
 
@@ -52,4 +52,19 @@ export class AuthState {
     );
   }
   
+  @Action(Register)
+  register(ctx: StateContext<AuthModel>, action: Register) {
+    let req = this.http.post(environment.backUrl + '/data/', action, {
+      headers: {
+        Authorization: "Basic " + ctx.getState().token,
+        'Content-Type': 'application/json'
+      }
+    });
+    return req.pipe(
+      catchError(err => throwError(err)),
+      tap((response: any) => {
+        ctx.setState({username: '<void>', token: response['token']})
+      })
+    )
+  };
 };
