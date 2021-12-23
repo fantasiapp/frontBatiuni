@@ -14,8 +14,7 @@ header {
 }
 
 .content {
-  @include with-set-safe-area(margin-top, top, $sticky-header-height);
-  @include with-safe-height($sticky-header-height + $navigation-height);
+  @extend %content-with-header;
 }
 
 .quick-intro {
@@ -92,14 +91,13 @@ header {
   }
 }
 
-.form-input number {
+.form-input .number-container {
   display: inline;
   right: $item-padding;
 }
 
 .add-field {
-  margin-bottom: $form-item-spacing;
-  img { margin: 0 $item-padding; }
+  img { margin: 0 $item-padding; position: static; }
 }
 
 .add-field > * {

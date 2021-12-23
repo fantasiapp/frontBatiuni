@@ -1,4 +1,7 @@
-<div [@routeAnimation]="prepareRoute(outlet)" class="router">
-  <router-outlet #outlet="outlet"></router-outlet>
+<page-header name="Annonces qui peuvent vous intéresser" [(activeView)]="activeView">
+  <span tab_0>Vue liste</span>
+  <span tab_1>Carte</span>
+</page-header>
+
+<div class="hosted-page space-children-margin page-content">
 </div>
-<navigation (routeChange)="routeTo($event)"></navigation>

@@ -30,7 +30,7 @@ import { SlideTemplate } from 'src/directives/slideTemplate.directive';
 import { PagingComponent } from 'src/components/paging/paging.component';
 import { FadeTemplate } from 'src/directives/fadeTemplate.directive';
 import { CalendarUI } from 'src/components/ui_component/calendar/calendar.ui';
-import { HomeComponent } from 'src/components/home_page/home.component';
+import { MainPage } from 'src/components/main/main.component';
 import { ProfileComponent } from 'src/components/profile/profile.component';
 import { UISwitchComponent } from 'src/components/ui_component/switch/switch.component';
 import { UISwipeupComponent } from 'src/components/ui_component/swipeup/swipeup.component';
@@ -45,6 +45,9 @@ import { MissionsComponent } from 'src/components/missions_page/missions.compone
 import { SearchbarComponent } from 'src/components/ui_component/searchbar/searchbar.component';
 import { HorizantaleCalendar } from 'src/components/ui_component/horizantalecalendar/horizantale.component';
 import { UiMapComponent } from 'src/components/ui_component/map/map.component';
+import { AgmCoreModule } from '@agm/core';
+import { HomeComponent } from 'src/components/home_page/home.component';
+import { HeaderComponent } from 'src/components/ui_component/header/header.component';
 
 @Injectable()
 export class CustomConfig extends HammerGestureConfig {
@@ -71,7 +74,7 @@ export class CustomConfig extends HammerGestureConfig {
     SlideTemplate,
     FadeTemplate,
     CalendarUI,
-    HomeComponent,
+    MainPage,
     NavigationMenu,
     ProfileComponent,
     UISwitchComponent,
@@ -87,7 +90,9 @@ export class CustomConfig extends HammerGestureConfig {
     SearchbarComponent,
     MissionsComponent,
     HorizantaleCalendar,
-    UiMapComponent
+    UiMapComponent,
+    HeaderComponent,
+    HomeComponent
   ],
   imports: [
     //Ngxs imports
@@ -100,7 +105,13 @@ export class CustomConfig extends HammerGestureConfig {
       key: ['auth.token', 'register']
     }),
     NgxsRouterPluginModule.forRoot(),
-    //Angular normal imports
+    //Google maps
+    AgmCoreModule.forRoot({
+      apiKey: ''
+    }),
+    //3rd party
+    NgxSliderModule,
+    //Angular standard imports
     CommonModule,
     HttpClientModule,
     BrowserModule,
@@ -108,7 +119,6 @@ export class CustomConfig extends HammerGestureConfig {
     BrowserAnimationsModule,
     HammerModule,
     ReactiveFormsModule,
-    NgxSliderModule
   ],
   providers: [{
     provide: HAMMER_GESTURE_CONFIG,

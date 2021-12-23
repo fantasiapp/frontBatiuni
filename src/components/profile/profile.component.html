@@ -57,7 +57,7 @@
 
 <slidemenu [(open)]="openModifyMenu">
   <div class="full-width center-text text-emphasis" header>Modifier mon Profil</div>
-  <div class="hosted-page flex column center-cross space-children-margin" content>
+  <div class="hosted-page flex column center-cross space-children-margin" style="height: 100%" content>
     <section class="section">
       <profile-image></profile-image>
       <img src="assets/icons/modify.svg" class="modify-icon image" (click)="openModifyPictureMenu()"/>
@@ -138,12 +138,16 @@
             <label>Métiers</label>
             <span class="position-relative">
               <input placeholder="Chef de chantier" class="form-element" type="text" disabled/>
-              <number class="position-absolute"></number>
+              <div class="position-absolute number-container">
+                <number [value]="0"></number>
+              </div>
             </span>
 
             <span class="position-relative">
               <input placeholder="Maître d'oeuvre" class="form-element" type="text" disabled/>
-              <number class="position-absolute"></number>
+              <div class="position-absolute number-container">
+                <number [value]="0"></number>
+              </div>
             </span>
           </div>
 

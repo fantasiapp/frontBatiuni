@@ -1,5 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core'
-import { MapInfoWindow, MapMarker, GoogleMap } from '@angular/google-maps'
+import { ChangeDetectionStrategy, Component } from '@angular/core'
 import { styles } from './map.styles'
 
 export type MarkerData = {

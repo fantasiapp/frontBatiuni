@@ -1,4 +1,7 @@
 import { Component, Input, EventEmitter, ChangeDetectionStrategy, Output } from "@angular/core";
+import { ActivatedRoute, NavigationEnd, Router } from "@angular/router";
+import { takeUntil } from "rxjs/operators";
+import { Destroy$ } from "src/common/classes";
 
 @Component({
   selector: 'navigation',
@@ -6,7 +9,7 @@ import { Component, Input, EventEmitter, ChangeDetectionStrategy, Output } from 
   styleUrls: ['./navigation.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class NavigationMenu {
+export class NavigationMenu extends Destroy$ {
   currentIndex: number = 0;
 
   @Input()
@@ -22,8 +25,31 @@ export class NavigationMenu {
 
   changeRoute(index: number) {
     if ( index == this.currentIndex ) return;
-    this.currentIndex = index;
-    this.routeChange.emit(this.menu[index].route);
+    let route = this.menu[index].route;
+    this.routeChange.emit(route);
+    this.router.navigate(route ? ['', 'home', route] : ['', 'home']);
+  }
+
+  constructor(private router: Router, private route: ActivatedRoute) {
+    super();
+    this.router.events.pipe(takeUntil(this.destroy$)).subscribe((event) => {
+      if ( !(event instanceof NavigationEnd) ) return;
+      let segments = event.urlAfterRedirects.split('/');
+      if ( segments.length < 2 ) this.redirectHome();
+      if ( segments.length == 2 ) this.currentIndex = 0;
+      if ( segments.length > 2 ) {
+        let child = segments[2],
+          index = this.menu.findIndex(item => item.route == child);
+        
+        if ( index >= 0 ) this.currentIndex = index; 
+        else this.redirectHome()
+      }
+    });
+  }
+
+  redirectHome() {
+    this.router.navigate(['', 'home']);
+
   }
 } 
 
