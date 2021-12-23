@@ -7,14 +7,31 @@
     width: 100%;
 }
 
-
+.calendar {
+    flex-flow: column;
+    width: 100%;
+    padding: 20px 0;
+}
 .header-calendar {
+    align-content: center;
+    justify-content: space-between;
     h1 {
         color: #1e2843;
     }
 }
 .wrapper-calendar {
+    margin: 0.25rem;
+    border-radius: 15px;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    background-color: #fafafa;
+    padding: 10px;
     li {
+        height: 1.5rem;
+        width: 1.5rem;
+        font-size: 0.8rem;
+        cursor: pointer;
+        text-align: center;
+        line-height: 1.5rem;
         color: #1e2843;                        
     }
 }
@@ -22,6 +39,7 @@
 ol {
     row-gap: 1rem;
     list-style: none;
+    display: grid;
     margin-bottom: 5px;
     grid-template-columns: repeat(7, 1fr);
     margin: 0;

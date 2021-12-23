@@ -102,9 +102,6 @@ a {
 .block {
   display: block;
 }
-.grid {
-  display: grid;
-}
 
 .half-rotation {
   transform: rotate(180deg);
@@ -302,10 +299,7 @@ a {
     @extend .subtitle;
   }
 }
-ol {
-  list-style: none;
 
-}
 .form-input {
   font-family: inherit;
   position: relative;
@@ -452,37 +446,4 @@ input[type="date"]::-webkit-inner-spin-button,
 input[type="date"]::-webkit-calendar-picker-indicator {
   display: none;
   -webkit-appearance: none;
-}
-
-
-// Calendar : 
-.calendar {
-  flex-flow: column;
-  width: 100%;
-  padding: 20px 0;
-}
-.header-calendar {
-  justify-content: space-between;
-  
-}
-.wrapper-calendar {
-  margin: 0.25rem;
-  border-radius: 15px;
-  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
-  background-color: #fafafa;
-  padding: 10px;
-  ol {
-      row-gap: 1rem;
-      margin-bottom: 5px;
-      grid-template-columns: repeat(7, 1fr);
-      margin: 0;
-      padding: 0;
-  }
-  li {
-      height: 1.5rem;
-      width: 1.5rem;
-      font-size: 0.8rem;
-      cursor: pointer;
-      line-height: 1.5rem;
-  }
 }

@@ -1,5 +1,5 @@
 @import "../../../styles/mixins";
-// @import "../../../styles/variables";
+@import "../../../styles/variables";
 
 :host {
     max-width: 100%;
@@ -7,13 +7,50 @@
     color : #1E2843;
 }
 
-
+.calendar {
+    flex-flow: column;
+    width: 100%;
+    padding: 20px 0;
+}
+.header-calendar {
+    align-content: center;
+    justify-content: space-between;
+    h1 {
+        color: #1e2843;
+    }
+}
+.wrapper-calendar {
+    margin: 0.25rem;
+    border-radius: 15px;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    background-color: #fafafa;
+    padding: 10px;
+    ol {
+        row-gap: 1rem;
+        list-style: none;
+        display: grid;
+        margin-bottom: 5px;
+        grid-template-columns: repeat(7, 1fr);
+        margin: 0;
+        padding: 0;
+    }
+    li {
+        height: 1.5rem;
+        width: 1.5rem;
+        font-size: 0.8rem;
+        cursor: pointer;
+        text-align: center;
+        line-height: 1.5rem;
+        color: #1e2843;
+    }
+}
 
 
 
 .day-name {
     font-size: 14px;
     margin-bottom: 2px;
+    text-align: center;
 }
 
 .calendar-action {
@@ -50,10 +87,10 @@
     margin-right: 10px;
 }
 
-// .disponible::before {
-//     @extend %before-element;
-//     @include circle(1.2em, $available);
-// }
+.disponible::before {
+    @extend %before-element;
+    @include circle(1.2em, $available);
+}
 .sous-conditions::before {
     @extend %before-element;
     @include circle(1.2em, $availableWithLimits);
@@ -72,15 +109,18 @@
     white-space: nowrap;
     margin-bottom: 10px;
     ul {
+        list-style-type: none;
         display: inline-block;
         padding-bottom: 20px;
 
         li {
             display: inline-block;
             div {
+                align-items: center;
                 margin: 0px 10px;
                 border-radius: 10px;
                 width: 47px;
+                justify-content: center;
                 background-color: white;
                 border: 1px solid #e1e1e1;
                 flex-flow: column;
@@ -102,6 +142,7 @@
 }
 .agenda {
     margin: 1em 0;
+    position: relative;
         li {
             height: 25px;
             padding: 5px;
@@ -117,6 +158,7 @@
 }
 
 .topthing {
+    position: absolute;
     border-radius: 7px;
     background : linear-gradient(#B9EDAF,#b0d8a8);
     opacity: 0.7;
@@ -131,20 +173,25 @@
 }
 .day-availibility {
     margin: 1em 0;
+    display: grid;
     font-size: 14px;
     .selected-day {
         font-weight: 500;
     }
     .selected-day-availibility {
         font-weight: 200;
+        align-items: center;
         div {
             margin-left : 1em
         }
     }
 }
-
+.horiparent {
+    display: grid;
+}
 .changevue {
     font-size: 12px;
     font-weight: 200;
+    text-align: center;
     margin-left: 30%;
 }

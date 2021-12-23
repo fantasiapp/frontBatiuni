@@ -1,16 +1,9 @@
-<header class="clear-margin flex column full-width space-children-margin">
-  <div class="text-light-emphasis">Mes missions</div>
-  <div class="pick flex row">
-    <searchbar class="grow"></searchbar>
-    <img src="assets/Filtrer par.svg" (click)="openFilterMenu = true"/>
-  </div>
-  <ul class="tabs flex row full-width font-Poppins">
-    <li class="center-text" [class.active]="activeView == 0" (click)="activeView = 0" >Vue liste</li>
-    <li class="center-text" [class.active]="activeView == 1" (click)="activeView = 1" >Calendrier</li>
-  </ul>
-</header>
+<page-header name="Mes missions" [(activeView)]="activeView">
+  <span tab_0>Vue liste</span>
+  <span tab_1>Calendrier</span>
+</page-header>
 
-<div class="hosted-page space-children-margin content">
+<div class="hosted-page space-children-margin page-content">
   
   <ng-container [ngSwitch]="activeView">
     <ng-container *ngSwitchCase="0">

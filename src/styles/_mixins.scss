@@ -135,3 +135,8 @@
   @include with-set-safe-area(margin-top, top, $sticky-header-height);
   @include with-safe-height($sticky-header-height);
 }
+
+.page-content {
+  @include with-set-safe-area(margin-top, top, $mission-header-height);
+  @include with-safe-height($mission-header-height + $navigation-height);
+}

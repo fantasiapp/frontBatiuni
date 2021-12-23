@@ -1,0 +1,8 @@
+@import '../../styles/variables';
+@import '../../styles/mixins';
+
+:host {
+  display: block;
+  @extend %safe-min-height;
+  background-color: $secondaryBackground;
+}

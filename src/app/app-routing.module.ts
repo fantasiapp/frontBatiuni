@@ -7,7 +7,7 @@ import { emailConfirmation } from 'src/components/validator/email_confirmation/e
 import { RegistrationSuccess } from 'src/components/validator/registration_success/registrationsuccess';
 import { DiscoverComponent } from 'src/components/discover_page/discover-page.component';
 import { OptionsModel } from 'src/components/options/options';
-import { HomeComponent } from 'src/components/home_page/home.component';
+import { MainPage } from 'src/components/main/main.component';
 import { ProfileComponent } from 'src/components/profile/profile.component';
 import { CalendarUI } from 'src/components/ui_component/calendar/calendar.ui';
 import { MissionsComponent } from 'src/components/missions_page/missions.component';
@@ -16,6 +16,7 @@ import { UISlideMenuComponent } from 'src/components/ui_component/slidemenu/slid
 import { UINumberComponent } from 'src/components/ui_component/number/number.component';
 import { HorizantaleCalendar } from 'src/components/ui_component/horizantalecalendar/horizantale.component';
 import { UiMapComponent } from 'src/components/ui_component/map/map.component';
+import { HomeComponent } from 'src/components/home_page/home.component';
 
 const routes: Routes = [{
     path: 'landing',
@@ -50,10 +51,11 @@ const routes: Routes = [{
     data: { animation: 'Success' }
   }, {
     path: 'home',
-    component: HomeComponent  ,
+    component: MainPage,
     children: [
       {path: 'profile', component: ProfileComponent, data: { animation: 'profile' }},
       {path: 'missions', component: MissionsComponent, data: { animation: 'missions' }},
+      {path: '', pathMatch: 'full', component: HomeComponent, data: { animation: 'home' } },
       {path: '**', component: RegistrationSuccess}
     ]
   }, {
