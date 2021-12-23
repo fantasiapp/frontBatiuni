@@ -10,15 +10,15 @@
 		</div>
 	</div>
 <div class="wrapper-calendar full-width">
-	<ol>
+	<ol class="grid">
 		<li *ngFor="let day of week; let index = index" 
 		
-		class="day-name">{{day | slice:0:1}}</li>
+		class="day-name center-text">{{day | slice:0:1}}</li>
         <li 
 		(click) ="openModal = true"
 		(click)="choseDay(day,$event)"   [style.gridColumnStart]="first ? day?.indexWeek : 'auto'"
          *ngFor="let day of monthSelect;let first = first" 
-		 [class] = "day.availbility"
+		 [class] = "day.availbility" class="center-text"
 		 >
 			{{day?.value}}
 		</li>

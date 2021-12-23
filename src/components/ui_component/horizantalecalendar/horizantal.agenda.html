@@ -9,13 +9,13 @@
             </div>
         </div>
         <div class="wrapper-calendar full-width">
-            <ol>
-                <li *ngFor="let day of week; let index = index" class="day-name">{{day | slice:0:1}}</li>
+            <ol class="grid"> 
+                <li *ngFor="let day of week; let index = index" class="day-name center-text">{{day | slice:0:1}}</li>
                 <li [style.gridColumnStart]="first ? day?.indexWeek : 'auto'"
                     *ngFor="let day of monthSelect;let first = first"
                     (click)="showAgenda(day.date)"
 
-                    [class]="day.availbility == 'occupe' ? 'unavailable' : '' ">
+                    [class]="day.availbility == 'occupe' ? 'unavailable' : '' " class="center-text">
                     {{day?.value}}
                 </li>
             </ol>
@@ -25,7 +25,7 @@
     <div class="horizantal-calendar" *ngIf='!hori'>
         <ul>
             <li *ngFor="let i of weekend">
-                <div class="flex" 
+                <div class="flex center-cross center-main" 
                 (click)="showAgenda(i.day[2])" 
                 (click)="showgrey(i)"
                 [style.background]="i.status == 'occupe' && i.selected ? 'grey' : i.status == 'occupe' && !i.selected ? '#0D6191' : i.status != 'occupe' && i.selected ? 'grey' : '#FFFFFF' "
@@ -37,14 +37,14 @@
             </li>
         </ul>
     </div>
-    <div class="changevue">
+    <div class="changevue center-text ">
     <span (click)="changeVue()" >{{hori ? "Affichage horizontale" : "Affichage complète du mois"}}</span>
 </div>
-<div class="day-availibility">
+<div class="day-availibility grid">
     <span class="selected-day">{{spanShowToday}}</span>
-    <span class="selected-day-availibility flex">Vous étes dispo <div class="sous-conditions"></div></span>
+    <span class="selected-day-availibility flex center-cross">Vous étes dispo <div class="sous-conditions"></div></span>
 </div>
-<div class="agenda flex " >
+<div class="agenda flex position-relative " >
     <ol class="full-width"> 
         <li class="flex center-cross " 
         *ngFor="let hours of hoursperday">
@@ -52,7 +52,7 @@
             <div class="agenda-line full-width"></div></li>
     </ol>
    <div 
-   class="topthing" 
+   class="topthing position-absolute" 
    [style.height.px]="greenCardHeight" 
    [style.top.px]="greenCardFromTop">
        <p >

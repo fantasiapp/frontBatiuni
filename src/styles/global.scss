@@ -38,7 +38,7 @@ body {
   margin: 0;
   @extend %safe-min-height;
   @extend %overflow-y;
-  background: $secondaryBackground;
+  // background: $secondaryBackground;
 
   @include breakpoint(tablet) {
     font-size: 20px;
@@ -331,7 +331,7 @@ a {
     font-family: "Poppins";
   }
 
-  & > img {
+  img {
     position: absolute;
     right: $input-image-offset-x;
     bottom: $input-image-offset-y;
@@ -442,50 +442,8 @@ input {
 
 //----------------------------------------------------
 //clear fixes
-input[type="date"] {
-  background: none;
-}
 input[type="date"]::-webkit-inner-spin-button,
 input[type="date"]::-webkit-calendar-picker-indicator {
   display: none;
   -webkit-appearance: none;
-}
-
-.pick {
-  justify-content: space-around;
-
-  img { margin-left: $item-padding; }
-}
-
-.tabs {
-  list-style-type: none;
-  justify-content: space-between;
-  margin-top: auto;
-
-  li {
-    height: $tab-height;
-    padding: $tab-padding;
-    flex: 1;
-    background: $tab-default-background;
-    color: $tab-default-color;
-    line-height: $tab-height - 2*$tab-padding;
-
-    &.active { background: $tab-active-background; color: $tab-active-color; font-weight: 500; }
-    &:not(:last-child) { margin-right: $tab-spacing; }
-  }
-}
-.radio-item {
-  font-size: 0.9em;
-}
-
-.radio-container {
-  justify-content: space-between;
-}
-
-.switch-container {
-  span { flex: 1; font-size: 0.9em; }
-  switch {
-    margin-left: 10px;
-    position: relative;
-  }
 }

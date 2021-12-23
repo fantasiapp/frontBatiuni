@@ -14,13 +14,14 @@ import { MissionsComponent } from 'src/components/missions_page/missions.compone
 
 import { UISlideMenuComponent } from 'src/components/ui_component/slidemenu/slidemenu.component';
 import { UINumberComponent } from 'src/components/ui_component/number/number.component';
+import { HorizantaleCalendar } from 'src/components/ui_component/horizantalecalendar/horizantale.component';
 import { UiMapComponent } from 'src/components/ui_component/map/map.component';
 import { HomeComponent } from 'src/components/home_page/home.component';
 import { AvailabilitiesComponent } from 'src/components/availabilities_page/availabilities.component';
 
 const routes: Routes = [{
     path: 'landing',
-    component: LandingPageComponent,
+    component: HomeComponent,
     data: { animation: 'LandingPage' }
   }, {
     path: 'connexion',
@@ -41,7 +42,10 @@ const routes: Routes = [{
     data: { animation: 'Confirmed' }
   }, {
     path: 'testmodel',
-    component: OptionsModel
+    component: UiMapComponent
+  },{
+    path: 'map',
+    component: UiMapComponent
   }, {
     path: 'success',
     component: RegistrationSuccess,

@@ -45,7 +45,6 @@ import { MissionsComponent } from 'src/components/missions_page/missions.compone
 import { SearchbarComponent } from 'src/components/ui_component/searchbar/searchbar.component';
 import { HorizantaleCalendar } from 'src/components/ui_component/horizantalecalendar/horizantale.component';
 import { UiMapComponent } from 'src/components/ui_component/map/map.component';
-import { AgmCoreModule } from '@agm/core';
 import { HomeComponent } from 'src/components/home_page/home.component';
 import { HeaderComponent } from 'src/components/ui_component/header/header.component';
 import { AvailabilitiesComponent } from 'src/components/availabilities_page/availabilities.component';
@@ -108,12 +107,9 @@ export class CustomConfig extends HammerGestureConfig {
     }),
     NgxsRouterPluginModule.forRoot(),
     //Google maps
-    AgmCoreModule.forRoot({
-      apiKey: ''
-    }),
     //3rd party
     NgxSliderModule,
-    //Angular standard imports
+    //Anng gular standard imports
     CommonModule,
     HttpClientModule,
     BrowserModule,
