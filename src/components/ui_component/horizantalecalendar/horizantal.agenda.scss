@@ -2,21 +2,17 @@
 @import "../../../styles/variables";
 
 :host {
+    max-width: 100%;
     font-family: "Roboto";
     color : #1E2843;
-    margin : 1em 1em;
 }
-main {
-    display: flex;
-    flex-flow: column;
-}
+
 .calendar {
     flex-flow: column;
     width: 100%;
     padding: 20px 0;
 }
 .header-calendar {
-    width: 80%;
     align-content: center;
     justify-content: space-between;
     h1 {
@@ -24,7 +20,6 @@ main {
     }
 }
 .wrapper-calendar {
-    width: 80%;
     margin: 0.25rem;
     border-radius: 15px;
     box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
@@ -80,14 +75,6 @@ main {
     border-radius: 50%;
 }
 
-// .available {
-//     background-color: $available;
-//     @extend %bgcolor;
-// }
-// .availablelimits {
-//     background-color: $availableWithLimits;
-//     @extend %bgcolor;
-// }
 .unavailable {
     background-color: #1e2843;
     @extend %bgcolor;
@@ -124,6 +111,7 @@ main {
     ul {
         list-style-type: none;
         display: inline-block;
+        padding-bottom: 20px;
 
         li {
             display: inline-block;
@@ -153,7 +141,7 @@ main {
     }
 }
 .agenda {
-    margin: 1em 1em;
+    margin: 1em 0;
     position: relative;
         li {
             height: 25px;
@@ -167,7 +155,6 @@ main {
     margin-left: 20px;
     border-bottom: 1px solid #E5E5E5;
     height: 1px;
-    width: 80%;
 }
 
 .topthing {
@@ -185,7 +172,7 @@ main {
     }
 }
 .day-availibility {
-    margin: 1em 1em;
+    margin: 1em 0;
     display: grid;
     font-size: 14px;
     .selected-day {

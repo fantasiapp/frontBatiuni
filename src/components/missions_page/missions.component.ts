@@ -15,4 +15,6 @@ export class MissionsComponent {
   }
 
   openFilterMenu: boolean = false;
+
+  missions = new Array(10);
 };

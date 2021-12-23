@@ -3,14 +3,16 @@
 
 :host {
     font-family: "Roboto";
+    display: block;
+    width: 100%;
 }
+
 .calendar {
     flex-flow: column;
     width: 100%;
     padding: 20px 0;
 }
 .header-calendar {
-    width: 80%;
     align-content: center;
     justify-content: space-between;
     h1 {
@@ -18,7 +20,6 @@
     }
 }
 .wrapper-calendar {
-    width: 80%;
     margin: 0.25rem;
     border-radius: 15px;
     box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;

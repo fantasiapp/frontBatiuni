@@ -1,6 +1,6 @@
 <main class="cover-parent flex center">
     <div class="calendar flex center">
-    <div class="header-calendar flex center">
+    <div class="header-calendar full-width flex center">
 		
 		<h1>{{dateSelect | date:'MMMM, yyyy'}}</h1>
         <div class="calendar-action flex">
@@ -9,7 +9,7 @@
 			<button (click)="changeMonth(1)" class="btn-next"><img src="assets/arrowright.svg"/></button>
 		</div>
 	</div>
-<div class="wrapper-calendar ">
+<div class="wrapper-calendar full-width">
 	<ol>
 		<li *ngFor="let day of week; let index = index" 
 		

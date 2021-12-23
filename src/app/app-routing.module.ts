@@ -14,9 +14,11 @@ import { MissionsComponent } from 'src/components/missions_page/missions.compone
 
 import { UISlideMenuComponent } from 'src/components/ui_component/slidemenu/slidemenu.component';
 import { UINumberComponent } from 'src/components/ui_component/number/number.component';
+import { UiMapComponent } from 'src/components/ui_component/map/map.component';
+
 const routes: Routes = [{
     path: 'landing',
-    component: HomeComponent,
+    component: LandingPageComponent,
     data: { animation: 'LandingPage' }
   }, {
     path: 'connexion',
@@ -44,7 +46,7 @@ const routes: Routes = [{
     data: { animation: 'Success' }
   }, {
     path: 'home',
-    component: HomeComponent,
+    component: UiMapComponent,
     children: [
       {path: 'profile', component: ProfileComponent, data: { animation: 'profile' }},
       {path: 'missions', component: MissionsComponent, data: { animation: 'missions' }},

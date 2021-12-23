@@ -22,7 +22,6 @@ import { emailConfirmation } from 'src/components/validator/email_confirmation/e
 import { RegistrationSuccess } from 'src/components/validator/registration_success/registrationsuccess';
 import { DiscoverComponent } from 'src/components/discover_page/discover-page.component';
 import { OptionsModel } from 'src/components/options/options';
-import { GoogleMapsModule } from '@angular/google-maps';
 import { OfferComponent } from 'src/components/ui_component/offer/offer.compnent';
 import { NavigationMenu } from 'src/components/ui_component/navigation/navigation.component';
 
@@ -45,6 +44,7 @@ import { UIBoxComponent } from 'src/components/ui_component/box/box.component';
 import { MissionsComponent } from 'src/components/missions_page/missions.component';
 import { SearchbarComponent } from 'src/components/ui_component/searchbar/searchbar.component';
 import { HorizantaleCalendar } from 'src/components/ui_component/horizantalecalendar/horizantale.component';
+import { UiMapComponent } from 'src/components/ui_component/map/map.component';
 
 @Injectable()
 export class CustomConfig extends HammerGestureConfig {
@@ -86,7 +86,8 @@ export class CustomConfig extends HammerGestureConfig {
     UIBoxComponent,
     SearchbarComponent,
     MissionsComponent,
-    HorizantaleCalendar
+    HorizantaleCalendar,
+    UiMapComponent
   ],
   imports: [
     //Ngxs imports
@@ -107,7 +108,6 @@ export class CustomConfig extends HammerGestureConfig {
     BrowserAnimationsModule,
     HammerModule,
     ReactiveFormsModule,
-    GoogleMapsModule,
     NgxSliderModule
   ],
   providers: [{

@@ -1,5 +1,5 @@
     <div *ngIf="hori" class="calendar flex center">
-        <div class="header-calendar flex center">
+        <div class="header-calendar flex center full-width">
 
             <h1>{{dateSelect | date:'MMMM, yyyy'}}</h1>
             <div class="calendar-action flex">
@@ -8,7 +8,7 @@
                 <button (click)="changeMonth(1)" class="btn-next"><img src="assets/arrowright.svg" /></button>
             </div>
         </div>
-        <div class="wrapper-calendar ">
+        <div class="wrapper-calendar full-width">
             <ol>
                 <li *ngFor="let day of week; let index = index" class="day-name">{{day | slice:0:1}}</li>
                 <li [style.gridColumnStart]="first ? day?.indexWeek : 'auto'"
@@ -49,7 +49,7 @@
         <li class="flex center-cross " 
         *ngFor="let hours of hoursperday">
         {{hours}}h 
-            <div class="agenda-line"></div></li>
+            <div class="agenda-line full-width"></div></li>
     </ol>
    <div 
    class="topthing" 
