@@ -123,6 +123,12 @@
   color: white;
 };
 
+.paging-content {
+  @extend %overflow-y;
+  @include with-set-safe-area(margin-top, top, $paging-height);
+  @include with-safe-height($sticky-header-height);
+}
+
 %page {
   display: block;
   width: 100%;
@@ -136,19 +142,14 @@
   @include with-safe-height($sticky-header-height);
 }
 
-.page-content {
+.page-content-with-tabs {
+  @extend %overflow-y;
   @include with-set-safe-area(margin-top, top, $mission-header-height);
   @include with-safe-height($mission-header-height + $navigation-height);
 }
 
-.page-content-no-tabs {
+.page-content {
   @extend %overflow-y;
   @include with-set-safe-area(margin-top, top, $sticky-header-height);
   @include with-safe-height($sticky-header-height + $navigation-height);
-}
-
-.paging-content {
-  @extend %overflow-y;
-  @include with-set-safe-area(margin-top, top, $paging-height);
-  @include with-safe-height($sticky-header-height);
 }

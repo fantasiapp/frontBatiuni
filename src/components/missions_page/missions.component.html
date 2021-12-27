@@ -3,7 +3,7 @@
   <span tab_1>Calendrier</span>
 </page-header>
 
-<div class="hosted-page space-children-margin page-content">
+<div class="hosted-page space-children-margin page-content-with-tabs">
   <ng-container [ngSwitch]="activeView">
     <ng-container *ngSwitchCase="0">
       <offer *ngFor="let mission of missions"></offer>
