@@ -1,13 +1,14 @@
 @import '../../styles/variables';
+@import '../../styles/mixins';
+
 
 :host {
-  display: block;
   position: fixed;
   top: 0;
-  z-index: 9999;
+  z-index: 100;
   height: $paging-height + $paging-decoration-height;
-  overflow: hidden;
-  width: 100%;
+  width: 100vw;
+  @include set-safe-area(margin-top, top);
 }
 
 .decoration-cover {
