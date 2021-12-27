@@ -50,6 +50,8 @@ import { HeaderComponent } from 'src/components/ui_component/header/header.compo
 import { AvailabilitiesComponent } from 'src/components/availabilities_page/availabilities.component';
 import { SuiviComments } from 'src/components/ui_component/Suivi/comment.suivi';
 import { UICreditCard } from 'src/components/ui_component/creditcard/credit-card.ui';
+import { AnnoncePage } from 'src/components/annonce/annonce.page';
+
 @Injectable()
 export class CustomConfig extends HammerGestureConfig {
   overrides: { [key: string]: Object; } = {
@@ -96,7 +98,8 @@ export class CustomConfig extends HammerGestureConfig {
     HomeComponent,
     AvailabilitiesComponent,
     SuiviComments,
-    UICreditCard
+    UICreditCard,
+    AnnoncePage
   ],
   imports: [
     //Ngxs imports

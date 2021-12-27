@@ -11,10 +11,11 @@ import { ProfileComponent } from 'src/components/profile/profile.component';
 import { MissionsComponent } from 'src/components/missions_page/missions.component';
 import { HomeComponent } from 'src/components/home_page/home.component';
 import { AvailabilitiesComponent } from 'src/components/availabilities_page/availabilities.component';
+import { AnnoncePage } from 'src/components/annonce/annonce.page';
 
 const routes: Routes = [{
     path: 'landing',
-    component: LandingPageComponent,
+    component: AnnoncePage,
     data: { animation: 'LandingPage' }
   }, {
     path: 'connexion',
