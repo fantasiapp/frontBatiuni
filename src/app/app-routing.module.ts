@@ -16,7 +16,7 @@ import { MakeAdComponent } from 'src/components/make_ad/make_ad.component';
 
 const routes: Routes = [{
     path: 'landing',
-    component: MakeAdComponent,
+    component: LandingPageComponent,
     data: { animation: 'LandingPage' }
   }, {
     path: 'connexion',

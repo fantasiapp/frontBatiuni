@@ -6,11 +6,7 @@
 }
 
 header {
-  @extend %header;
-  background: $secondaryBackground;
-  color: white;
   img { padding: 0 $item-padding; }
-  position: fixed;
 }
 
 .quick-intro {
