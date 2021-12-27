@@ -2,8 +2,8 @@ import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@
 import * as mapboxgl from 'mapbox-gl';
 
 export type MarkerData = {
-  position: { lat: number; lng: number; }
-  title: string;
+  position: [number, number]
+  name: string;
 };
 
 @Component({
@@ -18,25 +18,29 @@ export class UiMapComponent {
   style = 'mapbox://styles/zeuschatoui/ckxj0zqovi9lf15p5gysrfax4';
   lat = 48.864716;
   lng = 2.349014;
-  constructor() {
-  }
 
-  places = [
-    [2.352558675604982, 48.83011647720049],
-    [2.3114995493, 48.8611235443],
-    [2.285813409112486, 48.850739049625446],
-    [2.268915048260837, 48.85421018352511]
+  constructor() {}
+
+  places: MarkerData[] = [
+    {position: [2.352558675604982, 48.83011647720049], name: 'New York'},
+    {position: [2.3114995493, 48.8611235443], name: 'Paris'},
+    {position: [2.285813409112486, 48.850739049625446], name: 'Rabat'},
+    {position: [2.268915048260837, 48.85421018352511], name: 'Beijing'}
   ];
 
-  popupContent!: Node;
+  popupContent!: HTMLElement;
 
   initializePopup() {
     let span = document.createElement('span');
     span.classList.add('mapbox-popup-content');
     span.innerText = "Hello world";
+    span.onclick = () => { };
 
     this.popupContent = span;
-    console.log(this.popupContent);
+  }
+
+  createPopup(data: MarkerData) {
+    return new mapboxgl.Popup().setDOMContent(this.popupContent);
   }
 
   ngOnInit() {
@@ -51,12 +55,18 @@ export class UiMapComponent {
     this.initializePopup();
     // Add map controls
     // this.map.addControl(new mapboxgl.NavigationControl());
-    this.places.forEach(item =>
-      new mapboxgl.Marker({color: "green"})
-      .setLngLat([item[0], item[1]])
-      .setPopup(new mapboxgl.Popup().setDOMContent(this.popupContent.cloneNode(true))) // add popup
-      .addTo(this.map)
-    )
+
+    this.places.forEach(item => {
+      let marker = new mapboxgl.Marker({color: "green"})
+        .setLngLat(item.position)
+        .addTo(this.map);
+      
+      marker.getElement().onclick = () => {
+        marker.setPopup(this.createPopup(item));
+      }
+
+      return marker;
+    })
 
     
   }
