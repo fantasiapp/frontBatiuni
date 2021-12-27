@@ -1,4 +1,4 @@
-<section class="today">
+<section>
   <span class="text-emphasis">Aujourd'hui</span>
   <div *ngFor="let notification of today;let index = index" class="todays-notifications flex">
     <div class="offres-logo flex center">
@@ -10,9 +10,9 @@
   </div>
 </section>
 
-<section class="month">
+<section>
   <span class="text-emphasis">Ce mois</span>
-  <div *ngFor="let notification of month; let index = index" class="monthly-notifications flex center-main">
+  <div *ngFor="let notification of month; let index = index" class="monthly-notifications flex">
     <div class="offres-logo flex center">
       <img [src]="notification.src" />
     </div>
