@@ -34,7 +34,6 @@ export class UiMapComponent {
     let span = document.createElement('span');
     span.classList.add('mapbox-popup-content');
     span.innerText = "Hello world";
-    span.onclick = () => { console.log('yeah'); };
 
     this.popupContent = span;
     console.log(this.popupContent);

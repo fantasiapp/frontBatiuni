@@ -44,7 +44,7 @@ const routes: Routes = [{
       {path: 'profile', component: ProfileComponent, data: { animation: 'profile' }},
       {path: 'missions', component: MissionsComponent, data: { animation: 'missions' }},
       {path: 'availabilities', component: AvailabilitiesComponent, data: { animation: 'availabilities' }},
-      {path: '', pathMatch: 'full', component: ProfileComponent, data: { animation: 'home' } },
+      {path: '', pathMatch: 'full', component: HomeComponent, data: { animation: 'home' } },
       {path: '**', component: HomeComponent}
     ]
   }, {
