@@ -99,12 +99,6 @@
   color: white;
 };
 
-.paging-content {
-  @extend %overflow-y;
-  @include with-set-safe-area(margin-top, top, $paging-height + $paging-decoration-height);
-  height: calc(100vh -  #{$paging-height + $paging-decoration-height});
-}
-
 %page {
   display: block;
   height: calc(100vh - #{$navigation-height});
@@ -115,16 +109,4 @@
   @extend %overflow-y;
   @include with-set-safe-area(margin-top, top, $sticky-header-height);
   height: calc(100vh - #{$sticky-header-height});
-}
-
-.page-content-with-tabs {
-  @extend %overflow-y;
-  @include with-set-safe-area(margin-top, top, $mission-header-height);
-  height: calc(100vh - #{$mission-header-height + $navigation-height});
-}
-
-.page-content {
-  @extend %overflow-y;
-  @include with-set-safe-area(margin-top, top, $sticky-header-height);
-  height: calc(100vh - #{$sticky-header-height + $navigation-height});
 }

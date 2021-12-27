@@ -2,13 +2,13 @@
 @import "../../../styles/variables";
 
 :host {
-    font-family: "Roboto";
+  display: block;
 }
 
 .offres {
     justify-content: space-between;
-    box-shadow: 0 10px 5px 0 rgba(149, 157, 165, 0.2); // x y spread outline color
-    padding: 1.5em;
+    box-shadow: 0 5px 3px 0 rgba(149, 157, 165, 0.2); // x y spread outline color
+    padding: $item-padding 2 * $item-padding;
     color: #999999;
     font-size: 15px;
     border-radius: 5px;

@@ -1,4 +1,4 @@
-<page-header name="Mes missions" [(activeView)]="activeView">
+<page-header name="Mes missions" [(activeView)]="activeView" (filterClicked)="openFilterMenu = true">
   <span tab_0>Vue liste</span>
   <span tab_1>Calendrier</span>
 </page-header>
@@ -28,7 +28,7 @@
 
     <div class="form-input">
       <label>Adresse de chantier</label>
-      <input type="date"/>
+      <input type="text"/>
     </div>
 
     <div class="form-input">
@@ -50,7 +50,7 @@
       </div>
     </div>
 
-    <div class="form-input">
+    <div class="form-input space-children-margin">
       <label>Réorganiser la liste selon</label>
       <div class="switch-container flex center-cross">
         <span class="criteria">Mission clôturer</span> <switch></switch>

@@ -1,4 +1,4 @@
-<page-header name="Annonces qui peuvent vous intéresser" [(activeView)]="activeView">
+<page-header name="Annonces qui peuvent vous intéresser" [(activeView)]="activeView" (filterClicked)="openAdFilterMenu = true">
   <span tab_0>Vue liste</span>
   <span tab_1>Carte</span>
 </page-header>
@@ -11,3 +11,94 @@
     <mapbox-batiuni class="space-children-margin" *ngSwitchCase="1"></mapbox-batiuni>
   </ng-container>
 </div>
+
+<swipeup [(open)]="openAdFilterMenu" type="view">
+  <form class="form-control full-width" view>
+    <div class="form-input">
+      <label>Date de mission</label>
+      <input type="date"/>
+      <img src="assets/calendar.png"/>
+    </div>
+
+    <div class="form-input">
+      <label>Adresse de chantier</label>
+      <input type="text"/>
+    </div>
+
+    <div class="form-input">
+      <label>Dans un rayon autour de:</label>
+      <ngx-slider [options]="imports.DistanceSliderConfig"></ngx-slider>
+    </div>
+
+    <div class="form-input">
+      <label>Métier</label>
+      <options></options>
+    </div>
+
+    <div class="form-input">
+      <label>Type</label>
+      <div class="flex row radio-container">
+        <div class="radio-item">
+          <box type="radio" class="grow" name="job-type"></box>
+          Main d'oeuvre
+        </div>
+        <div class="radio-item">
+          <box type="radio" class="grow" name="job-type"></box>
+          Fourniture et pose
+        </div>
+      </div>
+    </div>
+
+    <div class="form-input">
+      <label>Estimation de salaire:</label>
+      <ngx-slider [options]="imports.SalarySliderConfig" [value]="0" [highValue]="10000"></ngx-slider>
+    </div>
+
+    <div class="form-input space-children-margin">
+      <label>Taille de l'entreprise</label>
+      <div class="radio-item">
+        <box type="checkbox" class="grow" name="job-type"></box>
+        Moins que 10 salariés
+      </div>
+      <div class="radio-item">
+        <box type="checkbox" class="grow" name="job-type"></box>
+        Entre 11 et 20 salariés
+      </div>
+      <div class="radio-item">
+        <box type="checkbox" class="grow" name="job-type"></box>
+        Entre 20 et 25 salariées
+      </div>
+      <div class="radio-item">
+        <box type="checkbox" class="grow" name="job-type"></box>
+        Entre 50 et 100 salariés
+      </div>
+      <div class="radio-item">
+        <box type="checkbox" class="grow" name="job-type"></box>
+        Plus de 100 salariés
+      </div>
+    </div>
+
+    <div class="form-input space-children-margin">
+      <label>Réorganiser la liste selon</label>
+      <div class="switch-container flex center-cross">
+        <span class="criteria">Annonces déjà vus uniquement</span> <switch></switch>
+      </div>
+      <div class="switch-container flex center-cross">
+        <span class="criteria">Annonces favoristes uniquement</span> <switch></switch>
+      </div>
+      <div class="switch-container flex center-cross">
+        <span class="criteria">Annonces déjà postulées uniquement</span> <switch></switch>
+      </div>
+      <div class="switch-container flex center-cross">
+        <span class="criteria">Annonces ouverte à contre-proposition</span> <switch></switch>
+      </div>
+      <div class="switch-container flex center-cross">
+        <span class="criteria">Date d'échéance de l'annonce de la plus proche à la plus lointaine</span> <switch></switch>
+      </div>
+      <div class="switch-container flex center-cross">
+        <span class="criteria">Date de publication la plus récente à la plus anciennce</span> <switch></switch>
+      </div>
+      
+    </div>
+  </form>
+</swipeup>

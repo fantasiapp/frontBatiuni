@@ -1,8 +1,9 @@
-@import 'mixins.scss';
+@import 'mixins';
 @import 'responsive.scss';
-@import 'variables.scss';
+@import 'variables';
 @import 'animations.scss';
 @import 'mapbox-gl.scss';
+@import 'ngx-slider.scss';
 
 * {
   margin: 0;
@@ -37,13 +38,13 @@ body {
   font-size: 16px;
   margin: 0;
 
-  @include breakpoint(tablet) {
-    font-size: 20px;
-  }
+  // @include breakpoint(tablet) {
+  //   font-size: 20px;
+  // }
 
-  @include breakpoint(desktop) {
-    font-size: 22px;
-  }
+  // @include breakpoint(desktop) {
+  //   font-size: 22px;
+  // }
 
   &.blocked {
     overflow: hidden;
@@ -202,6 +203,24 @@ a {
 
 .curved-border {
   border-radius: 15px 15px 0 0;
+}
+
+.paging-content {
+  @extend %overflow-y;
+  @include with-set-safe-area(margin-top, top, $paging-height + $paging-decoration-height);
+  height: calc(100vh -  #{$paging-height + $paging-decoration-height});
+}
+
+.page-content-with-tabs {
+  @extend %overflow-y;
+  @include with-set-safe-area(margin-top, top, $mission-header-height);
+  height: calc(100vh - #{$mission-header-height + $navigation-height});
+}
+
+.page-content {
+  @extend %overflow-y;
+  @include with-set-safe-area(margin-top, top, $sticky-header-height);
+  height: calc(100vh - #{$sticky-header-height + $navigation-height});
 }
 
 .hosted-page {
@@ -419,8 +438,6 @@ input {
 //Tabs
 .pick {
   justify-content: space-around;
-
-  img { margin-left: $item-padding; }
 }
 
 .tabs {
@@ -466,3 +483,4 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 input[type="date"] {
   background: none;
 }
+

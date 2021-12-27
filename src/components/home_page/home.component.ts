@@ -1,4 +1,5 @@
-import { Component, ChangeDetectionStrategy, SimpleChanges } from "@angular/core";
+import { Component, ChangeDetectionStrategy } from "@angular/core";
+import { DistanceSliderConfig, SalarySliderConfig } from "src/common/config";
 
 @Component({
   selector: 'home',
@@ -9,4 +10,8 @@ import { Component, ChangeDetectionStrategy, SimpleChanges } from "@angular/core
 export class HomeComponent {
   activeView: number = 0;
   annonces = new Array(10);
+
+  openAdFilterMenu: boolean = false;
+
+  imports = { DistanceSliderConfig, SalarySliderConfig };
 };
