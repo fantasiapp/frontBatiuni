@@ -37,13 +37,13 @@ body {
   font-size: 16px;
   margin: 0;
 
-  @include breakpoint(tablet) {
-    font-size: 20px;
-  }
+  // @include breakpoint(tablet) {
+  //   font-size: 20px;
+  // }
 
-  @include breakpoint(desktop) {
-    font-size: 22px;
-  }
+  // @include breakpoint(desktop) {
+  //   font-size: 22px;
+  // }
 
   &.blocked {
     overflow: hidden;
@@ -419,8 +419,6 @@ input {
 //Tabs
 .pick {
   justify-content: space-around;
-
-  img { margin-left: $item-padding; }
 }
 
 .tabs {

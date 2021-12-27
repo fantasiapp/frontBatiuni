@@ -10,7 +10,6 @@
 .calendar {
     flex-flow: column;
     width: 100%;
-    padding: 20px 0;
 }
 .header-calendar {
     align-content: center;
@@ -172,8 +171,6 @@
     }
 }
 .day-availibility {
-    margin: 1em 0;
-    display: grid;
     font-size: 14px;
     .selected-day {
         font-weight: 500;
@@ -192,6 +189,5 @@
 .changevue {
     font-size: 12px;
     font-weight: 200;
-    text-align: center;
-    margin-left: 30%;
+    text-align: right;
 }

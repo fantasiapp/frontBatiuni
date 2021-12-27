@@ -20,7 +20,7 @@ export class UISwipeupComponent extends UIOpenMenu {
     this.willClose = true;
   }
 
-  onTransitionEnd() {
+  onTransitionEnd(e: any) {
     if ( this.willClose ) {
       this.willClose = false;
       this.openChange.emit(this._open = false);

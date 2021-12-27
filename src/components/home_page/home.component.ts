@@ -9,4 +9,6 @@ import { Component, ChangeDetectionStrategy, SimpleChanges } from "@angular/core
 export class HomeComponent {
   activeView: number = 0;
   annonces = new Array(10);
+
+  openAdFilterMenu: boolean = false;
 };

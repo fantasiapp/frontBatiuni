@@ -1,6 +1,6 @@
 <div class="cover-parent" (click)="close()"></div>
 
-<div class="menu full-width" [class.open]="open && !willClose" (transitionend)="onTransitionEnd()">
+<div class="menu full-width" [class.open]="open && !willClose" (transitionend)="onTransitionEnd($event)">
   <div class="decoration background-white" (click)="close()">
   </div>
 
