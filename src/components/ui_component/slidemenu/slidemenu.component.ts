@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from "@angular/core";
+import { ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Input, Output, ViewChild } from "@angular/core";
 import { UIOpenMenu } from "src/common/classes";
 
 @Component({
@@ -8,8 +8,19 @@ import { UIOpenMenu } from "src/common/classes";
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UISlideMenuComponent extends UIOpenMenu {
+  @ViewChild('content', {static: true})
+  contentRef!: ElementRef;
+
   constructor() {
     super();
+  }
+
+  ngOnInit() {
+    
+  }
+
+  resetScroll() {
+    this.contentRef.nativeElement.scrollTop = 0;
   }
 
   close() {

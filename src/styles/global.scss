@@ -206,22 +206,10 @@ a {
 
 .hosted-page {
   @extend .background-white;
-  @extend %overflow-y;
+  // @extend %overflow-y;
   padding: $page-padding;
   position: relative;
   font-size: 0.95em;
-
-  &.include-paging {
-    height: calc(100% - #{$paging-height + $paging-decoration-height});
-  }
-
-  &.include-navigation {
-    height: calc(100% - #{$navigation-height});
-  }
-
-  &.include-header {
-    height: calc(100% - #{$sticky-header-height});
-  }
 }
 
 .space-children-margin {

@@ -23,9 +23,6 @@ export class ProfileComponent {
   openModifyPicture: boolean = false;
   openNotifications : boolean = false;
 
-  @ViewChild('modifyContent', {static: true})
-  modifyContent!: ElementRef;
-
   constructor() { }
 
   slideModifyMenu() {
@@ -40,13 +37,16 @@ export class ProfileComponent {
   @ViewChild(SlidesDirective, {static: true})
   modifySlider!: SlidesDirective;
 
+  @ViewChild('modifyMenu', {static: true, read: UISlideMenuComponent})
+  modifyMenu!: UISlideMenuComponent;
+
   allLabels = ["Qualibat", "RGE", "RGE Eco Artisan", "NF", "Effinergie", "Handibat"]
     .map((name, id) => ({id, name, checked: false}));
 
   labels: Option[] = [];
   
   private fixScrollTop() {
-    this.modifyContent.nativeElement.scrollTop = 0;
+    this.modifyMenu.resetScroll();
   }
 
   @HostListener('swipeleft')

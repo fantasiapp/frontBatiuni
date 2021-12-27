@@ -55,9 +55,9 @@
   <li>Se déconnecter</li>
 </swipeup>
 
-<slidemenu [(open)]="openModifyMenu">
+<slidemenu [(open)]="openModifyMenu" #modifyMenu>
   <div class="full-width center-text text-emphasis" header>Modifier mon Profil</div>
-  <div class="hosted-page flex column center-cross space-children-margin" style="height: 100%" content #modifyContent>
+  <div class="hosted-page flex column center-cross space-children-margin" style="height: 100%" content>
     <section class="section">
       <profile-image></profile-image>
       <img src="assets/icons/modify.svg" class="modify-icon image" (click)="openModifyPictureMenu()"/>
@@ -214,7 +214,7 @@
 
 <slidemenu [(open)]="openRatings">
   <div class="full-width center-text text-emphasis" header>Mes notes</div>
-  <div class="hosted-page include-navigation flex column center-cross space-children-margin" content>
+  <div class="hosted-page flex column center-cross space-children-margin" content>
 
     <profile-image></profile-image>
      <switch off="Profile ST" on="Profil PME"  style="text-align: center;"></switch>
