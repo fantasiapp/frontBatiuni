@@ -26,6 +26,11 @@
     </div>
 
     <div class="form-input">
+      <label>Dans un rayon autour de:</label>
+      <ngx-slider [options]="imports.DistanceSliderConfig"></ngx-slider>
+    </div>
+
+    <div class="form-input">
       <label>Métier</label>
       <options></options>
     </div>
@@ -45,22 +50,55 @@
     </div>
 
     <div class="form-input">
-      <label>Dans un rayon autour de</label>
-      <ngx-slider [options]="{floor: 0, ceil: 100, showSelectionBar: true}"></ngx-slider>
+      <label>Estimation de salaire:</label>
+      <ngx-slider [options]="imports.SalarySliderConfig" [value]="0" [highValue]="10000"></ngx-slider>
     </div>
 
-    <div class="form-input">
+    <div class="form-input space-children-margin">
+      <label>Taille de l'entreprise</label>
+      <div class="radio-item">
+        <box type="checkbox" class="grow" name="job-type"></box>
+        Moins que 10 salariés
+      </div>
+      <div class="radio-item">
+        <box type="checkbox" class="grow" name="job-type"></box>
+        Entre 11 et 20 salariés
+      </div>
+      <div class="radio-item">
+        <box type="checkbox" class="grow" name="job-type"></box>
+        Entre 20 et 25 salariées
+      </div>
+      <div class="radio-item">
+        <box type="checkbox" class="grow" name="job-type"></box>
+        Entre 50 et 100 salariés
+      </div>
+      <div class="radio-item">
+        <box type="checkbox" class="grow" name="job-type"></box>
+        Plus de 100 salariés
+      </div>
+    </div>
+
+    <div class="form-input space-children-margin">
       <label>Réorganiser la liste selon</label>
       <div class="switch-container flex center-cross">
-        <span class="criteria">Mission clôturer</span> <switch></switch>
+        <span class="criteria">Annonces déjà vus uniquement</span> <switch></switch>
       </div>
       <div class="switch-container flex center-cross">
-        <span class="criteria">Date de mission la plus proche à la plus lointaine</span>
-        <switch></switch>
+        <span class="criteria">Annonces favoristes uniquement</span> <switch></switch>
       </div>
       <div class="switch-container flex center-cross">
-        <span class="criteria">Norifications suivi de chantier non lu</span> <switch></switch>
+        <span class="criteria">Annonces déjà postulées uniquement</span> <switch></switch>
       </div>
+      <div class="switch-container flex center-cross">
+        <span class="criteria">Annonces ouverte à contre-proposition</span> <switch></switch>
+      </div>
+      <div class="switch-container flex center-cross">
+        <span class="criteria">Date d'échéance de l'annonce de la plus proche à la plus lointaine</span> <switch></switch>
+      </div>
+      <div class="switch-container flex center-cross">
+        <span class="criteria">Date de publication la plus récente à la plus anciennce</span> <switch></switch>
+      </div>
+      
     </div>
   </form>
 </swipeup>

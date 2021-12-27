@@ -1,0 +1,16 @@
+@import 'variables';
+
+.ngx-slider-pointer {
+  outline: none;
+  border: none;
+  background-color: $secondaryBackground !important;
+  &::after { display: none; }
+}
+
+.ngx-slider-selection {
+  background-color: $secondaryBackground !important;
+}
+
+.ngx-slider-bubble {
+  color: #0F557C !important;
+}
