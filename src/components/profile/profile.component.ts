@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, HostListener, ViewChild } from "@angular/core";
+import { ChangeDetectorRef, Component, ElementRef, HostListener, ViewChild } from "@angular/core";
 import { SlidesDirective } from "src/directives/slides.directive";
 import { Option } from "../options/options";
 import { UISlideMenuComponent } from "../ui_component/slidemenu/slidemenu.component";
@@ -23,9 +23,10 @@ export class ProfileComponent {
   openModifyPicture: boolean = false;
   openNotifications : boolean = false;
 
-  constructor(private cd: ChangeDetectorRef) {
-    (window as any).profile = this;
-  }
+  @ViewChild('modifyContent', {static: true})
+  modifyContent!: ElementRef;
+
+  constructor() { }
 
   slideModifyMenu() {
     this.openMenu = false;
@@ -44,15 +45,20 @@ export class ProfileComponent {
 
   labels: Option[] = [];
   
+  private fixScrollTop() {
+    this.modifyContent.nativeElement.scrollTop = 0;
+  }
 
   @HostListener('swipeleft')
   onSwipeLeft() {
+    this.fixScrollTop();
     if ( this.openModifyMenu )
       this.modifySlider.left();
   }
   
   @HostListener('swiperight')
   onSwipeRight() {
+    this.fixScrollTop();
     if ( this.openModifyMenu )
       this.modifySlider.right();
   }

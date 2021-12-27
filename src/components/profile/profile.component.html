@@ -57,7 +57,7 @@
 
 <slidemenu [(open)]="openModifyMenu">
   <div class="full-width center-text text-emphasis" header>Modifier mon Profil</div>
-  <div class="hosted-page flex column center-cross space-children-margin" style="height: 100%" content>
+  <div class="hosted-page flex column center-cross space-children-margin" style="height: 100%" content #modifyContent>
     <section class="section">
       <profile-image></profile-image>
       <img src="assets/icons/modify.svg" class="modify-icon image" (click)="openModifyPictureMenu()"/>
@@ -70,7 +70,7 @@
     <div class="full-width grow flex column position-relative">
       <div [slides]="[modifyPage1, modifyPage2, modifyPage3]" type="template" [animate]="true"></div>
       <ng-template #modifyPage1>
-        <section class="full-width section modify-profile">
+        <section class="full-width section">
           <form class="form-control" [style.display]="modifyPassword ? 'none' : 'initial'">
             <h3 class="form-title font-Roboto">
               Infos personelles: 
@@ -121,82 +121,89 @@
       </ng-template>
 
       <ng-template #modifyPage2>
-        <form class="full-width form-control">
-          <h3 class="form-title font-Roboto">
-            Infos entreprise: 
-            <img src="assets/icons/modify.svg" (click)="modifyPassword = true" class="modify-icon text"/>
-          </h3>
-          <div class="form-input">
-            <label>Nom de l'entreprise</label>
-            <input class="form-element" type="text"/>
-          </div>
-          <div class="form-input">
-            <label>N SIRET</label>
-            <input class="form-element" type="text"/>
-          </div>
-          <div class="form-input">
-            <label>Métiers</label>
-            <span class="position-relative">
-              <input placeholder="Chef de chantier" class="form-element" type="text" disabled/>
-              <div class="position-absolute number-container">
-                <number [value]="0"></number>
-              </div>
-            </span>
+        <section class="full-width section">
+          <form class="full-width form-control">
+            <h3 class="form-title font-Roboto">
+              Infos entreprise: 
+              <img src="assets/icons/modify.svg" (click)="modifyPassword = true" class="modify-icon text"/>
+            </h3>
+            <div class="form-input">
+              <label>Nom de l'entreprise</label>
+              <input class="form-element" type="text"/>
+            </div>
+            <div class="form-input">
+              <label>N SIRET</label>
+              <input class="form-element" type="text"/>
+            </div>
+            <div class="form-input metiers">
+              <label>Métiers</label>
+              <span class="position-relative">
+                <input placeholder="Chef de chantier" class="form-element" type="text" disabled/>
+                <div class="position-absolute number-container">
+                  <number [value]="0"></number>
+                </div>
+              </span>
 
-            <span class="position-relative">
-              <input placeholder="Maître d'oeuvre" class="form-element" type="text" disabled/>
-              <div class="position-absolute number-container">
-                <number [value]="0"></number>
-              </div>
-            </span>
-          </div>
+              <span class="position-relative">
+                <input placeholder="Maître d'oeuvre" class="form-element" type="text" disabled/>
+                <div class="position-absolute number-container">
+                  <number [value]="0"></number>
+                </div>
+              </span>
+            </div>
 
-          <div class="form-input center-text add-field">
-            <img src="assets/icons/add.svg"/>
-            <span>Ajouter une métier</span>
-          </div>
+            <div class="form-input center-text add-field">
+              <img src="assets/icons/add.svg"/>
+              <span>Ajouter une métier</span>
+            </div>
 
-          <div class="form-input">
-            <label>Site internet</label>
-            <input class="form-element" type="text"/>
-          </div>
-          <div class="form-input">
-            <label>Chiffres d'affaires</label>
-            <input class="form-element" type="text"/>
-          </div>
+            <div class="form-input">
+              <label>Site internet</label>
+              <input class="form-element" type="text"/>
+            </div>
+            
+            <div class="form-input">
+              <label>Chiffres d'affaires</label>
+              <input class="form-element" type="text"/>
+            </div>
 
-          <fileinput class="flex column" [showtitle]="false" filename="Kbis" imgsrc="assets/files/KBIS.svg"></fileinput>
-          <fileinput class="flex column" [showtitle]="false" filename="Attestation travail dissimulé" imgsrc="assets/files/Trav. Dis..svg"></fileinput>
-          <fileinput class="flex column" [showtitle]="false" filename="Attestation RC + DC" imgsrc="assets/files/RC + DC.svg"></fileinput>
-          <fileinput class="flex column" [showtitle]="false" filename="URSSAF" imgsrc="assets/files/urssaf.svg"></fileinput>
-          <fileinput class="flex column" [showtitle]="false" filename="Impôts" imgsrc="assets/files/Impot.svg"></fileinput>
-          <fileinput class="flex column" [showtitle]="false" filename="Congés payés" imgsrc="assets/files/Cong.Payés.svg"></fileinput>
-        </form> 
+            <fileinput [showtitle]="false" filename="Kbis" imgsrc="assets/files/KBIS.svg"></fileinput>
+            <fileinput [showtitle]="false" filename="Attestation travail dissimulé" imgsrc="assets/files/Trav. Dis..svg"></fileinput>
+            <fileinput [showtitle]="false" filename="Attestation RC + DC" imgsrc="assets/files/RC + DC.svg"></fileinput>
+            <fileinput [showtitle]="false" filename="URSSAF" imgsrc="assets/files/urssaf.svg"></fileinput>
+            <fileinput [showtitle]="false" filename="Impôts" imgsrc="assets/files/Impot.svg"></fileinput>
+            <fileinput [showtitle]="false" filename="Congés payés" imgsrc="assets/files/Cong.Payés.svg"></fileinput>
+          </form>
+        </section>
       </ng-template>
 
       <ng-template #modifyPage3>
-        <form class="full-width form-control">
-          <h3 class="form-title font-Roboto">
-            Certifications & labels: 
-            <img src="assets/icons/modify.svg" (click)="modifyPassword = true" class="modify-icon text"/>
-          </h3>
-          <div class="form-input">
-            <label>Vos labels</label>
-            <options [showChosenItems]="false" [options]="allLabels" (valueChange)="labels = $event"></options>
-          </div>
-          <fileinput class="flex column" *ngFor="let label of labels" [filename]="label.name"></fileinput>
-        </form>
+        <section class="full-width section">
+          <form class="full-width form-control">
+            <h3 class="form-title font-Roboto">
+              Certifications & labels: 
+              <img src="assets/icons/modify.svg" (click)="modifyPassword = true" class="modify-icon text"/>
+            </h3>
+            <div class="form-input">
+              <label>Vos labels</label>
+              <options [showChosenItems]="false" [options]="allLabels" (valueChange)="labels = $event"></options>
+            </div>
+            <fileinput *ngFor="let label of labels" [filename]="label.name"></fileinput>
+          </form>
+        </section>
       </ng-template>
+
+      <div style="margin-top: auto;">
+        <div class="form-step">
+          <div (click)="modifySlider.index = 0"[class.active]="modifySlider.index == 0"></div>
+          <div (click)="modifySlider.index = 1"[class.active]="modifySlider.index == 1"></div>
+          <div (click)="modifySlider.index = 2"[class.active]="modifySlider.index == 2"></div>
+        </div>
+        <button class="button gradient full-width" (click)="modifyPassword = false">
+          Enregistrer
+        </button>
+      </div>
     </div>
-    
-    <div class="form-step" style="margin-top: auto;">
-      <div (click)="modifySlider.index = 0"[class.active]="modifySlider.index == 0"></div>
-      <div (click)="modifySlider.index = 1"[class.active]="modifySlider.index == 1"></div>
-      <div (click)="modifySlider.index = 2"[class.active]="modifySlider.index == 2"></div>
-    </div>
-    <button class="button gradient full-width" (click)="modifyPassword = false">
-      Enregistrer
-    </button>
 
     <swipeup [(open)]="openModifyPicture">
       <li>Accédez à l'appareil photo</li>
