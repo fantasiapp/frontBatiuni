@@ -1,16 +1,16 @@
 <paging [length]="2" [(index)]="slider.index" (navigate)="onNavigate($event)"></paging>
 
-<div class="hosted-page include-paging flex column">
+<div class="hosted-page paging-content flex column">
   <div class="content" type="template" [slides]="[page1, page2]"></div>
 </div>
 
 <ng-template #page1>
-  <div class="hosted-view flex column grow">
+  <div class="full-width flex column grow">
     <form class="grow form-control curved-border" [formGroup]="registerForm">
       <h3 class="form-title">Créer un compte !</h3>
       <h3 class="form-subtitle">Informations contact</h3>
       <div class="form-input">
-        <label>Nom du contact</label> <input type="text" formControlName="lastname" required/>
+        <label>Nom du contact</label> <input type="text" formControlName="lastname"/>
       </div>
     
       <div class="form-input">
@@ -44,7 +44,7 @@
 </ng-template>
 
 <ng-template #page2>
-  <div class="hosted-view flex column grow">
+  <div class="full-width flex column grow">
     <form class="grow form-control curved-border" [formGroup]="registerForm" (ngSubmit)="onSubmit($event)">
       <h3 class="form-title">Créer un compte !</h3>
       <h3 class="form-subtitle">Informations entreprise</h3>

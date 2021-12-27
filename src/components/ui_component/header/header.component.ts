@@ -16,7 +16,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from 
   </header>
 
   <swipeup [(open)]="openFilterMenu" type="view">
-    <form class="form-control hosted-view" view>
+    <form class="form-control full-width" view>
       <div class="form-input">
         <label>Date de validation</label>
         <input type="date"/>

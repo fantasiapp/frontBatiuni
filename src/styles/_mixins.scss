@@ -143,7 +143,12 @@
 
 .page-content-no-tabs {
   @extend %overflow-y;
-  @extend %content-with-header;
   @include with-set-safe-area(margin-top, top, $sticky-header-height);
   @include with-safe-height($sticky-header-height + $navigation-height);
+}
+
+.paging-content {
+  @extend %overflow-y;
+  @include with-set-safe-area(margin-top, top, $paging-height);
+  @include with-safe-height($sticky-header-height);
 }

@@ -234,12 +234,6 @@ a {
   }
 }
 
-
-.hosted-view {
-  width: 100%;
-  @extend %overflow-y;
-}
-
 .formulaire {
   display: flex;
   flex-direction: column;

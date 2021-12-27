@@ -22,9 +22,11 @@ export class RegisterComponent {
     ]),
     email: new FormControl('', [
       Validators.required,
+      Validators.email
     ]),
     emailVerification: new FormControl('', [
       Validators.required,
+      Validators.email
     ]),
     password: new FormControl('', [
       Validators.minLength(8)
@@ -39,7 +41,9 @@ export class RegisterComponent {
   @ViewChild(SlidesDirective, {static: true})
   slider!: SlidesDirective;
 
-  constructor(private store: Store) {}
+  constructor(private store: Store) {
+    (window as any).register = this;
+  }
 
   onSubmit(f: any) {
     console.log(this.registerForm.value);

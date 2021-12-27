@@ -2,11 +2,12 @@
 
 :host {
   display: block;
-  position: sticky;
+  position: fixed;
   top: 0;
   z-index: 9999;
   height: $paging-height + $paging-decoration-height;
   overflow: hidden;
+  width: 100%;
 }
 
 .decoration-cover {

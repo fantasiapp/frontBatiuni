@@ -1,5 +1,5 @@
 <ng-template #page let-ctx>
-  <section class="hosted-view section flex column">
+  <section class="full-width section flex column">
     <header style="flex-grow: 0;">
       <h3 class="title">{{ ctx.title }}</h3>
       <p class="font-Poppins">
@@ -9,14 +9,10 @@
       </p>
     </header>
     <div class="image-container center-text" style="margin-top: 40px; margin-bottom: auto">
-      <img [src]="ctx.image"/>
+      <img [src]="ctx.image" loading="eager"/>
     </div>
   </section>
 </ng-template>
-
-<div class="card">
-  
-</div>
 
 <paging [showPageName]="false" [length]="4" [showNext]="false"></paging>
 <div class="hosted-page include-paging">

@@ -118,10 +118,11 @@ export class DiscoverComponent {
     'sous-traitant': STContexts
   };
 
-  constructor(private router: Router, private route: ActivatedRoute) {}
+  constructor(private router: Router, private route: ActivatedRoute) {
+
+  }
 
   ngOnInit() {
-    console.log('yes');
     this.subject = this.route.snapshot.params['subject'] || 'entreprise';
     if ( !DiscoverComponent.subjects.includes(this.subject))
       this.router.navigate(['', 'discover', this.subject = 'entreprise']);
