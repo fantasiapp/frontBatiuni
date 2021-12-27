@@ -49,7 +49,7 @@ import { HomeComponent } from 'src/components/home_page/home.component';
 import { HeaderComponent } from 'src/components/ui_component/header/header.component';
 import { AvailabilitiesComponent } from 'src/components/availabilities_page/availabilities.component';
 import { SuiviComments } from 'src/components/ui_component/Suivi/comment.suivi';
-
+import { UICreditCard } from 'src/components/ui_component/creditcard/credit-card.ui';
 @Injectable()
 export class CustomConfig extends HammerGestureConfig {
   overrides: { [key: string]: Object; } = {
@@ -95,7 +95,8 @@ export class CustomConfig extends HammerGestureConfig {
     HeaderComponent,
     HomeComponent,
     AvailabilitiesComponent,
-    SuiviComments
+    SuiviComments,
+    UICreditCard
   ],
   imports: [
     //Ngxs imports
