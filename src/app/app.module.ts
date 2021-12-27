@@ -48,6 +48,7 @@ import { UiMapComponent } from 'src/components/ui_component/map/map.component';
 import { HomeComponent } from 'src/components/home_page/home.component';
 import { HeaderComponent } from 'src/components/ui_component/header/header.component';
 import { AvailabilitiesComponent } from 'src/components/availabilities_page/availabilities.component';
+import { SuiviComments } from 'src/components/ui_component/Suivi/comment.suivi';
 
 @Injectable()
 export class CustomConfig extends HammerGestureConfig {
@@ -93,7 +94,8 @@ export class CustomConfig extends HammerGestureConfig {
     UiMapComponent,
     HeaderComponent,
     HomeComponent,
-    AvailabilitiesComponent
+    AvailabilitiesComponent,
+    SuiviComments
   ],
   imports: [
     //Ngxs imports
