@@ -9,9 +9,11 @@
   z-index: 10;
   transition: transform 250ms ease-out 0s;
   transform: translateX(100%);
+  opacity: 0;
 }
 
 :host(.open) {
+  opacity: 1;
   min-height: 100vh;
   transform: translateX(0);
 }
