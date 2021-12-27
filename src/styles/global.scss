@@ -33,13 +33,9 @@
 }
 
 body {
-
   font-family: "Roboto", sans-serif;
   font-size: 16px;
   margin: 0;
-  @extend %safe-min-height;
-  @extend %overflow-y;
-  // background: $secondaryBackground;
 
   @include breakpoint(tablet) {
     font-size: 20px;
@@ -216,15 +212,15 @@ a {
   font-size: 0.95em;
 
   &.include-paging {
-    @include with-safe-height($paging-height + $paging-decoration-height);
+    height: calc(100% - #{$paging-height + $paging-decoration-height});
   }
 
   &.include-navigation {
-    @include with-safe-height($navigation-height);
+    height: calc(100% - #{$navigation-height});
   }
 
   &.include-header {
-    @include with-safe-height($sticky-header-height);
+    height: calc(100% - #{$sticky-header-height});
   }
 }
 
@@ -238,8 +234,6 @@ a {
   display: flex;
   flex-direction: column;
   background: $secondaryBackground;
-  @extend %overflow-y;
-  @include with-safe-min-height($paging-height);
 }
 
 .paging {

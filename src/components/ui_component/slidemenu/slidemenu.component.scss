@@ -21,9 +21,8 @@
 }
 
 .return {
-  width: 25px;
-  height: 25px;
-  transform: rotate(90deg);
+  width: $navigation-arrow-icon-size;
+  height: $navigation-arrow-icon-size;
 }
 
 .hosted-page {

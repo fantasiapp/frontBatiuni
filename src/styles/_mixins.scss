@@ -70,30 +70,6 @@
   }
 }
 
-@mixin with-safe-min-height($offset: 0) {
-  min-height: calc(100vh - #{$offset});
-  min-height: calc(100vh - constant(safe-area-inset-top) - #{$offset});
-  min-height: calc(100vh - env(safe-area-inset-top) - #{$offset});
-}
-
-%safe-min-height {
-  min-height: calc(100vh);
-  min-height: calc(100vh - constant(safe-area-inset-top));
-  min-height: calc(100vh - env(safe-area-inset-top));
-}
-
-@mixin with-safe-height($offset: 0) {
-  height: calc(100vh - #{$offset});
-  height: calc(100vh - constant(safe-area-inset-top) - #{$offset});
-  height: calc(100vh - env(safe-area-inset-top) - #{$offset});
-}
-
-%safe-height {
-  height: calc(100vh);
-  height: calc(100vh - constant(safe-area-inset-top));
-  height: calc(100vh - env(safe-area-inset-top));
-}
-
 @mixin set-safe-area($property, $direction: $property) {
   #{$property}: 0;
   #{$property}: constant(safe-area-inset-#{$direction});
@@ -125,31 +101,31 @@
 
 .paging-content {
   @extend %overflow-y;
-  @include with-set-safe-area(margin-top, top, $paging-height);
-  @include with-safe-height($sticky-header-height);
+  @include with-set-safe-area(margin-top, top, $paging-height + $paging-decoration-height);
+  height: calc(100vh -  #{$paging-height + $paging-decoration-height});
 }
 
 %page {
   display: block;
   width: 100%;
-  @include with-safe-height($navigation-height);
+  height: calc(100vh - #{$navigation-height});
   @extend %overflow-y;
 }
 
 %content-with-header {
   @extend %overflow-y;
   @include with-set-safe-area(margin-top, top, $sticky-header-height);
-  @include with-safe-height($sticky-header-height);
+  height: calc(100vh - #{$sticky-header-height});
 }
 
 .page-content-with-tabs {
   @extend %overflow-y;
   @include with-set-safe-area(margin-top, top, $mission-header-height);
-  @include with-safe-height($mission-header-height + $navigation-height);
+  height: calc(100vh - #{$mission-header-height + $navigation-height});
 }
 
 .page-content {
   @extend %overflow-y;
   @include with-set-safe-area(margin-top, top, $sticky-header-height);
-  @include with-safe-height($sticky-header-height + $navigation-height);
+  height: calc(100vh - #{$sticky-header-height + $navigation-height});
 }

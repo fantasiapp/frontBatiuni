@@ -9,7 +9,6 @@
   z-index: 10;
   width: 100vw;
   height: 0;
-  @extend %safe-min-height;
   visibility: hidden;
 }
 

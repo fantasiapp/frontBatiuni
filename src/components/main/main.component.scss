@@ -3,6 +3,6 @@
 
 :host {
   display: block;
-  @extend %safe-min-height;
+  height: 100vh;
   background-color: $secondaryBackground;
 }
