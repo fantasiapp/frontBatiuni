@@ -38,14 +38,6 @@ body {
   font-size: 16px;
   margin: 0;
 
-  // @include breakpoint(tablet) {
-  //   font-size: 20px;
-  // }
-
-  // @include breakpoint(desktop) {
-  //   font-size: 22px;
-  // }
-
   &.blocked {
     overflow: hidden;
   }
@@ -205,10 +197,16 @@ a {
   border-radius: 15px 15px 0 0;
 }
 
-.paging-content {
+.simple-content {
+  @extend %overflow-y;
+  @include with-set-safe-area(margin-top, top);
+  height: calc(100vh - #{$navigation-height});
+}
+
+.paging-only-content {
   @extend %overflow-y;
   @include with-set-safe-area(margin-top, top, $paging-height + $paging-decoration-height);
-  height: calc(100vh -  #{$paging-height + $paging-decoration-height});
+  height: calc(100vh - #{$paging-height + $paging-decoration-height});
 }
 
 .page-content-with-tabs {
@@ -289,6 +287,11 @@ a {
   
   .form-title {
     @extend .title;
+  }
+
+  .form-section-title {
+    @extend .title;
+    color: $secondaryBackground;
   }
 
   .form-subtitle {

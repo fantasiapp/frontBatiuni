@@ -25,13 +25,16 @@ $spacing-margin: 10px;
 $form-item-spacing: 20px;
 
 
-// Switch checkbox
+// Switch box
 $switch-size-x: 40px;
 $switch-size-y: 20px;
 $switch-padding: 2px;
 $switch-button-size: min($switch-size-x, $switch-size-y) - 2 * $switch-padding;
 $switch-gradient-start: #009BE0;
 $switch-gradient-end: #69F0AE;
+
+// UI checkbox
+$box-size: 25px;
 
 //Profile page
 $tick-size-x: 3px;
@@ -57,7 +60,6 @@ $icon-size: 25px;
 $available : #52d1bd;
 $availableWithLimits : #f9c067;
 $unAvailable : #e82727;
-$icon-padding: 2px;
 $icon-padding: 2px;
 
 //search-bar

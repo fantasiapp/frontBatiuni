@@ -8,7 +8,7 @@
   top: 0; left: 0;
   z-index: 10;
   width: 100vw;
-  height: 100%;
+  height: 100vh;
   visibility: hidden;
 }
 
@@ -17,7 +17,7 @@
 }
 
 .cover-parent {
-  background-color: #ddd;
+  background-color: #ccc;
   opacity: 0.5;
 }
 

@@ -11,10 +11,12 @@ import { ProfileComponent } from 'src/components/profile/profile.component';
 import { MissionsComponent } from 'src/components/missions_page/missions.component';
 import { HomeComponent } from 'src/components/home_page/home.component';
 import { AvailabilitiesComponent } from 'src/components/availabilities_page/availabilities.component';
+import { UIPopup } from 'src/components/ui_component/popup/popup.component';
+import { MakeAdComponent } from 'src/components/make_ad/make_ad.component';
 
 const routes: Routes = [{
     path: 'landing',
-    component: LandingPageComponent,
+    component: MakeAdComponent,
     data: { animation: 'LandingPage' }
   }, {
     path: 'connexion',

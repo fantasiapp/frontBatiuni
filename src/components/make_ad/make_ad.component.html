@@ -1,0 +1,57 @@
+<header class="full-width sticky-header flex center-cross">
+  <span class="grow text-light-emphasis">Créer une annonce</span>
+</header>
+
+<div class="hosted-page simple-content flex column center-cross space-children-margin">
+  <form class="full-width form-control">
+    <h2 class="form-section-title">Besoins de l'entreprise</h2>
+
+    <div class="form-input">
+      <label>Je cherche</label>
+      <input type="text"/>
+    </div>
+
+    <div class="form-input">
+      <label>Métier</label>
+      <options [showChosenItems]="false"></options>
+    </div>
+
+    <div class="form-input">
+      <label>Type</label>
+      <div class="flex row radio-container">
+        <div class="radio-item">
+          <box type="radio" class="grow" name="job-type"></box>
+          Main d'oeuvre
+        </div>
+        <div class="radio-item">
+          <box type="radio" class="grow" name="job-type"></box>
+          Fourniture et pose
+        </div>
+      </div>
+    </div>
+
+    <div class="form-input">
+      <label>Date d'échéance de l'annonce</label>
+      <input type="date"/>
+      <img src="assets/calendar.png"/>
+    </div>
+
+    <h2 class="form-section-title">Infos chantiers</h2>
+    <div class="form-input">
+      <label>Adresse</label>
+      <input type="text"/>
+    </div>
+
+    <div class="form-input">
+      <label>Description du chantier</label>
+      <textarea style="width: 100%; min-height: 50px;"></textarea>
+    </div>
+
+    <div class="form-input">
+      <label>Dates</label>
+      <input type="date"/>
+      <img src="assets/calendar.png"/>
+    </div>
+
+  </form>
+</div>
