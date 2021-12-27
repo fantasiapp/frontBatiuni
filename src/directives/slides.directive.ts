@@ -51,8 +51,6 @@ export class SlidesDirective extends IndexBased {
   };
 
   private animateWithClass(element: HTMLElement, className: string, callback?: Function) {
-    if ( element.parentElement )
-      element.parentElement.scrollTop = 0;
     element.classList?.add(className, 'animating');
     let save = element.onanimationend;
     element.onanimationend = (e: AnimationEvent) => {

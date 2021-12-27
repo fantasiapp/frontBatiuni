@@ -18,34 +18,34 @@ export class Notifications {
   @Input()
   notification: Notification[] = [
     {
-        id: 1,
-        date: new Date(Date.now()),
-        src: 'assets/PS1B.svg',
-        text: 'Vos horaires pour le chantier Lorem ipsum à été modifier.'
+      id: 1,
+      date: new Date(Date.now()),
+      src: 'assets/PS1B.svg',
+      text: 'Vos horaires pour le chantier Lorem ipsum à été modifier.'
     },
-    {
-        id: 2,
-        date: "2021-12-20T00:00:00Z",
-        src: 'assets/PS1B.svg',
-        text: 'Vos horaires pour le chantier Lorem ipsum à été modifier. '
+  {
+      id: 2,
+      date: "2021-12-20T00:00:00Z",
+      src: 'assets/PS1B.svg',
+      text: 'Vos horaires pour le chantier Lorem ipsum à été modifier. '
     },
-    {
-        id: 5,
-        date: "2021-12-16T11:30:00Z",
-        src: 'assets/PS1B.svg',
-        text: 'Vos horaires pour le chantier Lorem ipsum à été modifier. '
+  {
+      id: 5,
+      date: "2021-12-16T11:30:00Z",
+      src: 'assets/PS1B.svg',
+      text: 'Vos horaires pour le chantier Lorem ipsum à été modifier. '
     },
-    {
-        id: 3,
-        date: "2021-12-15T00:00:00Z",
-        src: 'assets/PS1B.svg',
-        text: 'Vos horaires pour le chantier Lorem ipsum à été modifier.'
+  {
+      id: 3,
+      date: "2021-12-15T00:00:00Z",
+      src: 'assets/PS1B.svg',
+      text: 'Vos horaires pour le chantier Lorem ipsum à été modifier.'
     },
-    {
-        id: 4,
-        date: "2021-12-16T00:00:00Z",
-        src: 'assets/PS1B.svg',
-        text: 'Vos horaires pour le chantier Lorem ipsum à été modifier.'
+  {
+      id: 4,
+      date: "2021-12-16T00:00:00Z",
+      src: 'assets/PS1B.svg',
+      text: 'Vos horaires pour le chantier Lorem ipsum à été modifier.'
     },
   ]
 
@@ -60,6 +60,5 @@ export class Notifications {
     for (let i = 0; i < this.today.length; i++) {
         this.timer.push(moment(moment(this.today[i].date)).startOf('hour').fromNow());
     }
-    console.log(this.timer)
   }
 }

@@ -1,3 +1,5 @@
+@import '../../../styles/variables';
+
 :host {
   display: inline-block;
 }
@@ -17,4 +19,9 @@ input {
 
 input {
   width: 20px;
+}
+
+img {
+  width: $icon-size;
+  height: $icon-size;
 }

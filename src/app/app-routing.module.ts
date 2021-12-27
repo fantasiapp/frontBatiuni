@@ -6,16 +6,9 @@ import { ConnexionComponent } from 'src/components/connexion/connexion.component
 import { emailConfirmation } from 'src/components/validator/email_confirmation/emailconfirmation';
 import { RegistrationSuccess } from 'src/components/validator/registration_success/registrationsuccess';
 import { DiscoverComponent } from 'src/components/discover_page/discover-page.component';
-import { OptionsModel } from 'src/components/options/options';
 import { MainPage } from 'src/components/main/main.component';
 import { ProfileComponent } from 'src/components/profile/profile.component';
-import { CalendarUI } from 'src/components/ui_component/calendar/calendar.ui';
 import { MissionsComponent } from 'src/components/missions_page/missions.component';
-
-import { UISlideMenuComponent } from 'src/components/ui_component/slidemenu/slidemenu.component';
-import { UINumberComponent } from 'src/components/ui_component/number/number.component';
-import { HorizantaleCalendar } from 'src/components/ui_component/horizantalecalendar/horizantale.component';
-import { UiMapComponent } from 'src/components/ui_component/map/map.component';
 import { HomeComponent } from 'src/components/home_page/home.component';
 import { AvailabilitiesComponent } from 'src/components/availabilities_page/availabilities.component';
 
@@ -41,12 +34,6 @@ const routes: Routes = [{
     component: emailConfirmation,
     data: { animation: 'Confirmed' }
   }, {
-    path: 'testmodel',
-    component: UiMapComponent
-  },{
-    path: 'map',
-    component: UiMapComponent
-  }, {
     path: 'success',
     component: RegistrationSuccess,
     data: { animation: 'Success' }
@@ -62,7 +49,7 @@ const routes: Routes = [{
     ]
   }, {
     path: '**',
-    redirectTo: 'home',
+    redirectTo: 'landing',
   },
 ];
 
@@ -71,7 +58,3 @@ const routes: Routes = [{
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
-
-/*
-  <range min="10" max="10" unit="km"></range>
-*/
