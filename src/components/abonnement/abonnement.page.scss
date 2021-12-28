@@ -1,0 +1,59 @@
+@import "../../styles/variables";
+@import "../../styles/mixins";
+
+:host {
+    @extend %page;
+}
+.abonnement {
+    background: #ffffff !important;
+    color: black;
+    flex-grow: 1;
+}
+
+
+page-header::ng-deep header {
+    background-color: #ffffff !important;
+    border-bottom: 1px solid #e5e5e5;
+}
+page-header::ng-deep .tabs {
+    li {
+        position: relative;
+        top: 1px;
+        border: 1px solid #e5e5e5;
+        border-bottom: none !important;
+    }
+}
+
+.caroussel {
+    position: relative;
+    display: flex;
+    overflow-y: scroll ;
+    padding: 1rem 0;
+    margin: 0 auto;
+    scroll-snap-type: y mandatory;
+    div {
+        flex: 2 0 70%;
+        margin-left: 1rem;
+        margin-right: 1rem;
+        scroll-snap-align: start;
+        padding: 1rem 0;
+    }   
+}
+.caroussel:first-child {
+    margin-left: auto !important;
+    
+}
+.caroussel:first-child {
+    margin-right: auto !important;
+
+}
+
+.thiscenterclass{
+    position: relative;
+    .thischild{
+        margin-top: 1rem;
+        position: absolute;
+        top: -20px;
+        margin: auto;
+    }
+}
