@@ -7,9 +7,7 @@
 .abonnement {
     background: #ffffff !important;
     color: black;
-    flex-grow: 1;
 }
-
 
 page-header::ng-deep header {
     background-color: #ffffff !important;
@@ -27,32 +25,37 @@ page-header::ng-deep .tabs {
 .caroussel {
     position: relative;
     display: flex;
-    overflow-y: scroll ;
+    overflow-y: scroll;
     padding: 1rem 0;
-    margin: 0 auto;
     scroll-snap-type: y mandatory;
     div {
-        flex: 2 0 70%;
+        flex: 2 0 300px;
         margin-left: 1rem;
-        margin-right: 1rem;
+        margin-right: 1rem !important;
         scroll-snap-align: start;
         padding: 1rem 0;
-    }   
-}
-.caroussel:first-child {
-    margin-left: auto !important;
-    
-}
-.caroussel:first-child {
-    margin-right: auto !important;
-
+    }
 }
 
-.thiscenterclass{
+.thiscenterclass {
     position: relative;
-    .thischild{
+    .thischild {
         margin-top: 1rem;
         position: absolute;
         top: -20px;
+        scroll-snap-align: center;
+    }
+}
+.caroussel-button {
+    position: fixed;
+    bottom: 0;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+    justify-content: space-evenly;
+    button {
+        background: none !important;
     }
 }

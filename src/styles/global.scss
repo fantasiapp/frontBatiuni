@@ -213,10 +213,6 @@ a {
   @extend %overflow-y;
   @include with-set-safe-area(margin-top, top, $mission-header-height);
   height: calc(100vh - #{$mission-header-height + $navigation-height});
-
-  &.no-navigation {
-    height: calc(100vh - #{$mission-header-height});
-  }
 }
 
 .page-content {
