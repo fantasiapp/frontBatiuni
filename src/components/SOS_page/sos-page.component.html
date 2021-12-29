@@ -1,0 +1,18 @@
+<page-header name="SOS" [(activeView)]="activeView" (filterClicked)="openSOSFilterMenu = true">
+  <span tab_0>Vue liste</span>
+  <span tab_1>Carte</span>
+</page-header>
+
+
+<div class="hosted-page space-children-margin page-content-with-tabs">
+  <ng-container [ngSwitch]="activeView">
+    <ng-container *ngSwitchCase="0">
+      <sos-card *ngFor="let mission of availableAgents"></sos-card>
+    </ng-container>
+    <mapbox-batiuni class="space-children-margin" *ngSwitchCase="1"></mapbox-batiuni>
+  </ng-container>
+</div>
+
+<swipeup [(open)]="openSOSFilterMenu" type="view">
+  <sos-filter-form view></sos-filter-form>
+</swipeup>

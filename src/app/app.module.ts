@@ -58,6 +58,9 @@ import { PMEFilterForm } from 'src/components/forms/PMEFilter.form';
 import { AbonnementPage } from 'src/components/abonnement/abonnement.page';
 import { UIAbonnement } from 'src/components/ui_component/abonnementUI/abonnement.ui';
 import { HeaderComponent } from 'src/components/ui_component/header/header.component';
+import { UISOSCard } from 'src/components/ui_component/SOSCard/SOSCard.ui';
+import { SOSPageComponent } from 'src/components/SOS_page/sos-page.component';
+import { SOSFilterForm } from 'src/components/forms/SOSFilter.form';
 
 @Injectable()
 export class CustomConfig extends HammerGestureConfig {
@@ -113,7 +116,10 @@ export class CustomConfig extends HammerGestureConfig {
     STFilterForm,
     PMEFilterForm,
     AbonnementPage,
-    UIAbonnement
+    UIAbonnement,
+    UISOSCard,
+    SOSPageComponent,
+    SOSFilterForm
   ],
   imports: [
     //Ngxs imports

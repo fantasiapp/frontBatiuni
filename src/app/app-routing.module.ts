@@ -14,9 +14,12 @@ import { AvailabilitiesComponent } from 'src/components/availabilities_page/avai
 import { UIPopup } from 'src/components/ui_component/popup/popup.component';
 import { MakeAdComponent } from 'src/components/make_ad/make_ad.component';
 import { AbonnementPage } from 'src/components/abonnement/abonnement.page';
+import { UISOSCard } from 'src/components/ui_component/SOSCard/SOSCard.ui';
+import { SOSPageComponent } from 'src/components/SOS_page/sos-page.component';
+
 const routes: Routes = [{
     path: 'landing',
-    component: MainPage,
+    component: SOSPageComponent,
     data: { animation: 'LandingPage' }
   }, {
     path: 'connexion',
