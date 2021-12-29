@@ -112,8 +112,8 @@
   $target: if(list.index($positioning, $property), $property, #{$property}-#{$direction});
 
   #{$target}: list.nth($offset, 1);
-  #{$target}: calc(constant(safe-area-inset-#{$direction} + #{list.nth($offset, 1)}));
-  #{$target}: calc(env(safe-area-inset-#{$direction} + #{list.nth($offset, 1)}));
+  #{$target}: calc(constant(safe-area-inset-#{$direction}) + #{list.nth($offset, 1)});
+  #{$target}: calc(env(safe-area-inset-#{$direction}) + #{list.nth($offset, 1)});
 }
 
 %overflow-y {
@@ -142,14 +142,9 @@
 
 %content-with-header {
   @extend %overflow-y;
-  @include with-set-safe-area(margin, top, $sticky-header-height 0);
+  @include with-set-safe-area(margin, top, $sticky-header-height);
+  @include set-safe-area(margin, bottom);
   height: calc(100vh - #{$sticky-header-height});
-}
-
-.simple-content {
-  @extend %overflow-y;
-  @include with-set-safe-area(margin, top);
-  height: calc(100vh - #{$navigation-height});
 }
 
 .paging-only-content {
