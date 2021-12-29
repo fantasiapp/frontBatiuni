@@ -2,7 +2,6 @@
 @import '../../../styles/mixins';
 
 header {
-  @include set-safe-area(margin-top, top);
   @extend %header;
   position: fixed;
   height: $mission-header-height;

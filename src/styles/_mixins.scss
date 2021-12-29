@@ -1,3 +1,4 @@
+@use "sass:list";
 @import './variables';
 
 @mixin cover-background {
@@ -70,20 +71,53 @@
   }
 }
 
+@function opposite-direction($direction) {
+  @if $direction == top {
+    @return bottom;
+  } @else if $direction == bottom {
+    @return top;
+  } @else if $direction == left {
+    @return right;
+  } @else if $direction == right {
+    @return left;
+  } @else {
+    @error "Only accepts: top, right, bottom, left. Received: #{$direction} which isn't a direction.";
+  }
+};
+
 @mixin set-safe-area($property, $direction: $property) {
-  #{$property}: 0;
-  #{$property}: constant(safe-area-inset-#{$direction});
-  #{$property}: env(safe-area-inset-#{$direction});
+  $positioning: (top, left, bottom, right);
+  $boxes: (margin, padding, border);
+  $allowed_properties: join($boxes, $positioning, comma);
+
+  @if not list.index($allowed_properties, $property) {
+    @error "safe-area only valid on: margin, padding, border and positioning properties. Recieved #{$property}."
+  }
+  $target: if(list.index($positioning, $property), $property, #{$property}-#{$direction});
+
+  #{$target}: 0;
+  #{$target}: constant(safe-area-inset-#{$direction});
+  #{$target}: env(safe-area-inset-#{$direction});
 }
 
-@mixin with-set-safe-area($property, $direction: $property, $offset: 0px) {
-  #{$property}: $offset;
-  #{$property}: calc(constant(safe-area-inset-#{$direction}) + #{$offset});
-  #{$property}: calc(env(safe-area-inset-#{$direction}) + #{$offset});
+@mixin with-set-safe-area($property, $direction: $property, $offset: 0px 0px) {
+  $positioning: (top, left, bottom, right);
+  $boxes: (margin, padding, border);
+  $allowed_properties: join($boxes, $positioning, comma);
+  
+  @if not list.index($allowed_properties, $property) {
+    @error "safe-area only valid on: margin, padding, border and positioning properties. Recieved #{$property}."
+  }
+
+  $target: if(list.index($positioning, $property), $property, #{$property}-#{$direction});
+
+  #{$target}: list.nth($offset, 1);
+  #{$target}: calc(constant(safe-area-inset-#{$direction} + #{list.nth($offset, 1)}));
+  #{$target}: calc(env(safe-area-inset-#{$direction} + #{list.nth($offset, 1)}));
 }
 
 %overflow-y {
-  width: 100vw;
+  width: 100%;
   overflow-y: auto;
   overflow-x: hidden;
   //scroll-behavior: smooth;
@@ -91,6 +125,7 @@
 }
 
 %header {
+  @include set-safe-area(top);
   padding: $highlight-margin $page-padding;
   height: $sticky-header-height;
   z-index: 10;
@@ -107,6 +142,36 @@
 
 %content-with-header {
   @extend %overflow-y;
-  @include with-set-safe-area(margin-top, top, $sticky-header-height);
+  @include with-set-safe-area(margin, top, $sticky-header-height 0);
   height: calc(100vh - #{$sticky-header-height});
+}
+
+.simple-content {
+  @extend %overflow-y;
+  @include with-set-safe-area(margin, top);
+  height: calc(100vh - #{$navigation-height});
+}
+
+.paging-only-content {
+  @extend %overflow-y;
+  @include with-set-safe-area(margin, top, $paging-height + $paging-decoration-height 0);
+  height: calc(100vh - #{$paging-height + $paging-decoration-height});
+}
+
+.page-content-with-tabs {
+  @extend %overflow-y;
+  @include with-set-safe-area(margin, top, $mission-header-height 0);
+  height: calc(100vh - #{$mission-header-height + $navigation-height});
+}
+
+.page-content {
+  @extend %overflow-y;
+  @include with-set-safe-area(margin, top, $sticky-header-height 0);
+  height: calc(100vh - #{$sticky-header-height + $navigation-height});
+}
+
+.full-page {
+  @extend %overflow-y;
+  @include set-safe-area(top);
+  @include set-safe-area(bottom);
 }

@@ -6,5 +6,7 @@ import { Component } from "@angular/core";
   styleUrls: ['./make_ad.component.scss']
 })
 export class MakeAdComponent {
-
+  imports = {
+    currencies: ['$', '€', '£']
+  }
 };

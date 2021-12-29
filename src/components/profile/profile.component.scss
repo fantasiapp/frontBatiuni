@@ -21,7 +21,7 @@ header {
 }
 
 .documents {
-  width: 100vw;
+  width: calc(100% + 2*#{$page-padding});
   padding: 10px 20px 0;
   border-top: 1px dashed #aaa;
 
@@ -86,19 +86,6 @@ header {
 .form-input .number-container {
   display: inline;
   right: $item-padding;
-}
-
-.add-field {
-  img { margin: 0 $item-padding; position: static; }
-}
-
-.add-field > * {
-  display: inline-block;
-  vertical-align: middle;
-
-  img {
-    margin: 0 10px;
-  }
 }
 
 .metiers > * { margin-bottom: $item-padding; }

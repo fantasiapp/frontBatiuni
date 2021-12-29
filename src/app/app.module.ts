@@ -53,6 +53,9 @@ import { UICreditCard } from 'src/components/ui_component/creditcard/credit-card
 import { UIPopup } from 'src/components/ui_component/popup/popup.component';
 import { MakeAdComponent } from 'src/components/make_ad/make_ad.component';
 import { AnnoncePage } from 'src/components/annonce/annonce.page';
+import { MakeAdForm } from 'src/components/forms/MakeAd.form';
+import { STFilterForm } from 'src/components/forms/STFilter.form';
+import { PMEFilterForm } from 'src/components/forms/PMEFilter.form';
 
 @Injectable()
 export class CustomConfig extends HammerGestureConfig {
@@ -103,7 +106,10 @@ export class CustomConfig extends HammerGestureConfig {
     UICreditCard,
     UIPopup,
     MakeAdComponent,
-    AnnoncePage
+    AnnoncePage,
+    MakeAdForm,
+    STFilterForm,
+    PMEFilterForm
   ],
   imports: [
     //Ngxs imports

@@ -4,11 +4,10 @@
 
 :host {
   position: fixed;
-  top: 0;
   z-index: 100;
   height: $paging-height + $paging-decoration-height;
-  width: 100vw;
-  @include set-safe-area(margin-top, top);
+  width: 100%;
+  @include set-safe-area(top);
 }
 
 .decoration-cover {

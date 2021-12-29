@@ -7,7 +7,7 @@
     </span>
     <img src="assets/Attachement.svg">
 </div>
-<div class="file-date flex">
+<div *ngIf="includeDate" class="file-date flex">
     <img *ngIf="imgsrc; else div" class="image" [src]="imgsrc">
     <ng-template #div>
         <div class="image"></div>

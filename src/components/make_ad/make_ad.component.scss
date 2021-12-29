@@ -1,0 +1,14 @@
+@import '../../styles/variables';
+@import '../../styles/mixins';
+
+:host {
+  @extend %page;
+}
+
+.remuneration > * {
+  max-width: 45%;
+}
+
+.submit-container {
+  button { max-width: 45%;}
+}

@@ -7,6 +7,12 @@
   user-select: none;
   width: $box-size; height: $box-size;
   vertical-align: middle;
+  margin-right: $box-padding;
+}
+
+:host::ng-deep ~ * {
+  display: inline-block;
+  vertical-align: middle;
 }
 
 input {

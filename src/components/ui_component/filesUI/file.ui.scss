@@ -18,11 +18,13 @@ label {
 }
 
 .file-form {
+  position: relative;
   justify-content: space-between;
   border-bottom: 2px solid #CDCFD0;
   img {
-    margin: 0.5rem;
-    height: 15px;
+    position: absolute;
+    right: $input-image-offset-x;
+    bottom: $input-image-offset-y;
   }
   input {
     opacity: 0;

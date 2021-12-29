@@ -37,6 +37,7 @@ body {
   font-family: "Roboto", sans-serif;
   font-size: 16px;
   margin: 0;
+  background: #333;
 
   &.blocked {
     overflow: hidden;
@@ -61,7 +62,13 @@ button {
 
     &.gradient {
       background: linear-gradient(#134C6C, #0C5E8D);
+    }
 
+    &.passive {
+      background: none;
+      color: #0C5E8D;
+      border: 2px solid #0C5E8D;
+      font-weight: 500;
     }
   }
 }
@@ -110,6 +117,10 @@ a {
 
   &.center-main {
     justify-content: center;
+  }
+
+  &.space-between {
+    justify-content: space-between;
   }
 
   &.center-cross {
@@ -197,30 +208,6 @@ a {
   border-radius: 15px 15px 0 0;
 }
 
-.simple-content {
-  @extend %overflow-y;
-  @include with-set-safe-area(margin-top, top);
-  height: calc(100vh - #{$navigation-height});
-}
-
-.paging-only-content {
-  @extend %overflow-y;
-  @include with-set-safe-area(margin-top, top, $paging-height + $paging-decoration-height);
-  height: calc(100vh - #{$paging-height + $paging-decoration-height});
-}
-
-.page-content-with-tabs {
-  @extend %overflow-y;
-  @include with-set-safe-area(margin-top, top, $mission-header-height);
-  height: calc(100vh - #{$mission-header-height + $navigation-height});
-}
-
-.page-content {
-  @extend %overflow-y;
-  @include with-set-safe-area(margin-top, top, $sticky-header-height);
-  height: calc(100vh - #{$sticky-header-height + $navigation-height});
-}
-
 .hosted-page {
   @extend .background-white;
   // @extend %overflow-y;
@@ -240,6 +227,7 @@ a {
   flex-direction: column;
   background: $secondaryBackground;
 }
+
 
 .paging {
   list-style-type: none;
@@ -268,13 +256,13 @@ a {
 .title {
   font-size: 1.1em;
   font-weight: bold;
-  margin-bottom: 30px;
+  margin-bottom: $title-padding;
 }
 
 .subtitle {
   font-size: 0.85em;
   font-weight: normal;
-  margin-bottom: 30px;
+  margin-bottom: $title-padding;
 }
 
 .form-control {
@@ -287,11 +275,13 @@ a {
   
   .form-title {
     @extend .title;
+    &:not(:first-child) { margin-top: $title-padding; }
   }
 
   .form-section-title {
-    @extend .title;
+    @extend .form-title;
     color: $secondaryBackground;
+    font-family: "Poppins";
   }
 
   .form-subtitle {
@@ -300,7 +290,7 @@ a {
 }
 
 .form-input {
-  font-family: inherit;
+  font-family: "Poppins";
   position: relative;
 
   & > * {
@@ -312,13 +302,16 @@ a {
     font-weight: 500;
   }
 
+  input {
+    font-family: inherit;
+    border-bottom: 2px solid #cdcfd0 !important;
+  }
+
   & > input, & > span > input {
     width: 100%;
     height: 30px;
     outline: none;
     border: none;
-    border-bottom: 2px solid #cdcfd0;
-    font-family: "Poppins";
   }
   
   select{
@@ -327,7 +320,6 @@ a {
     outline: none;
     border: none;
     border-bottom: 2px solid #cdcfd0;
-    font-family: "Poppins";
   }
 
   & > img {
@@ -337,6 +329,13 @@ a {
   }
 
   margin-bottom: $form-item-spacing;
+
+  &.add-field > * {
+    display: inline-block;
+    vertical-align: middle;
+  }
+  
+  &.add-field img { margin: 0 $item-padding; position: static; }
 }
 
 .external-links {
@@ -419,13 +418,6 @@ input {
 }
 //--------------------------------------------------
 
-%header {
-  @include set-safe-area(top);
-  padding: $highlight-margin $page-padding;
-  height: $sticky-header-height;
-  z-index: 10;
-}
-
 //Page layouts
 .sticky-header {
   position: fixed;
@@ -476,6 +468,14 @@ input {
  }
 }
 
+textarea {
+  width: 100%;
+  min-height: 80px;
+  border: 2px solid #aaa;
+  outline: none;
+  border-radius: 3px;
+}
+
 //----------------------------------------------------
 //clear fixes
 input[type="date"]::-webkit-inner-spin-button,
@@ -487,3 +487,20 @@ input[type="date"] {
   background: none;
 }
 
+select {
+  outline: none;
+  border: none;
+  border-bottom: 2px solid #aaa;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}

@@ -29,6 +29,9 @@ export class FileUI extends UIDefaultAccessor<FileList> {
   @Input()
   showtitle : boolean = false;
 
+  @Input()
+  includeDate: boolean = true;
+
   constructor() {
     super();
   }
