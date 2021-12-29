@@ -14,6 +14,8 @@ import { AvailabilitiesComponent } from 'src/components/availabilities_page/avai
 import { UIPopup } from 'src/components/ui_component/popup/popup.component';
 import { MakeAdComponent } from 'src/components/make_ad/make_ad.component';
 import { AbonnementPage } from 'src/components/abonnement/abonnement.page';
+import { AnnoncePage } from 'src/components/annonce/annonce.page';
+import { FacturePage } from 'src/components/factures/facture.page';
 const routes: Routes = [{
     path: 'landing',
     component: MainPage,
@@ -42,6 +44,12 @@ const routes: Routes = [{
   }, {
     path: 'abonnement',
     component: AbonnementPage,
+  },  {
+    path: 'annonce',
+    component: AnnoncePage,
+  },{
+    path: 'factures',
+    component: FacturePage,
   }, {
     path: 'home',
     component: MainPage,

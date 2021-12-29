@@ -1,0 +1,15 @@
+@import "../../styles/variables";
+@import "../../styles/mixins";
+
+:host {
+    @extend %page ;
+    @extend %no-navigation ;
+}
+
+.facture{
+    background: white !important;
+    color: #333333;
+}
+// .hosted-page{
+//     height: 100vh;
+// }

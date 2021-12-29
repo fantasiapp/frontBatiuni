@@ -58,6 +58,8 @@ import { PMEFilterForm } from 'src/components/forms/PMEFilter.form';
 import { AbonnementPage } from 'src/components/abonnement/abonnement.page';
 import { UIAbonnement } from 'src/components/ui_component/abonnementUI/abonnement.ui';
 import { HeaderComponent } from 'src/components/ui_component/header/header.component';
+import { FacturePage } from 'src/components/factures/facture.page';
+import { FactureUI } from 'src/components/ui_component/factureUI/facture.ui';
 
 @Injectable()
 export class CustomConfig extends HammerGestureConfig {
@@ -113,7 +115,9 @@ export class CustomConfig extends HammerGestureConfig {
     STFilterForm,
     PMEFilterForm,
     AbonnementPage,
-    UIAbonnement
+    UIAbonnement,
+    FacturePage,
+    FactureUI
   ],
   imports: [
     //Ngxs imports

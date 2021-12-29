@@ -46,7 +46,7 @@
   <li (click)="slideModifyMenu()">Modifier mon profil</li>
   <li>Candidatures en cours</li>
   <li [routerLink]="['','abonnement']">Gérer mes abonnements</li>
-  <li>Mes factures</li>
+  <li [routerLink]="['','factures']">Mes factures</li>
   <li>Partager l'application</li>
   <li>Noter l'application</li>
   <li>Nous contacter</li>
@@ -103,7 +103,7 @@
             </div>
           </form>
       
-          <form class="form-control" [style.display]="!modifyPassword ? 'none' : 'initial'">
+          <!-- <form class="form-control" [style.display]="!modifyPassword ? 'none' : 'initial'">
             <div class="form-input">
               <label>Ancien mot de passe</label>
               <input class="form-element" type="text"/>
@@ -116,7 +116,7 @@
               <label>Confirmation nouveau mot de passe</label>
               <input class="form-element" type="text"/>
             </div>
-          </form>
+          </form> -->
         </section>
       </ng-template>
 
