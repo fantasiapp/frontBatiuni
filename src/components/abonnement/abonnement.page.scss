@@ -3,6 +3,7 @@
 
 :host {
     @extend %page;
+    background: white !important;
 }
 .abonnement {
     background: #ffffff !important;
@@ -47,6 +48,7 @@ page-header::ng-deep .tabs {
     }
 }
 .caroussel-button {
+    background: white !important;
     position: fixed;
     bottom: 0;
     height: 70px;

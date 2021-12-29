@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, ElementRef, HostListener, ViewChild } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, HostListener, ViewChild } from "@angular/core";
 import { SlidesDirective } from "src/directives/slides.directive";
 import { Option } from "../options/options";
 import { UISlideMenuComponent } from "../ui_component/slidemenu/slidemenu.component";
@@ -7,7 +7,8 @@ import { UISwipeupComponent } from "../ui_component/swipeup/swipeup.component";
 @Component({
   selector: 'profile',
   templateUrl: './profile.component.html',
-  styleUrls: ['./profile.component.scss']
+  styleUrls: ['./profile.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProfileComponent {
   @ViewChild(UISwipeupComponent, {static: true})
