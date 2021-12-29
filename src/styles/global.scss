@@ -37,7 +37,7 @@ body {
   font-family: "Roboto", sans-serif;
   font-size: 16px;
   margin: 0;
-  background: transparent !important;
+  background: white !important;
 
   &.blocked {
     overflow: hidden;
@@ -511,4 +511,11 @@ input[type=number] {
   color: #999999;
   font-size: 15px;
   border-radius: 5px;
+}
+
+.sticky-footer{
+  @include set-safe-area(bottom);
+  position: fixed;
+  height: $navigation-height;
+  padding: 0 30px;
 }

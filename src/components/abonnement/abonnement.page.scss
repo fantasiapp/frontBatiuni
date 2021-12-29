@@ -30,9 +30,9 @@ page-header::ng-deep .tabs {
     padding: 1rem 0;
     scroll-snap-type: y mandatory;
     div {
-        flex: 2 0 300px;
-        margin-left: 1rem;
-        margin-right: 1rem !important;
+        flex: 2 0 310px;
+        margin-left: 0.5rem;
+        margin-right: 0.5rem !important;
         scroll-snap-align: start;
         padding: 1rem 0;
     }
@@ -61,3 +61,6 @@ page-header::ng-deep .tabs {
         background: none !important;
     }
 }
+::-webkit-scrollbar {
+    display: none;
+  }

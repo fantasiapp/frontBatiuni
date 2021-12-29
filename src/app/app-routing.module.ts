@@ -18,10 +18,11 @@ import { AnnoncePage } from 'src/components/annonce/annonce.page';
 import { FacturePage } from 'src/components/factures/facture.page';
 import { UISOSCard } from 'src/components/ui_component/SOSCard/SOSCard.ui';
 import { SOSPageComponent } from 'src/components/SOS_page/sos-page.component';
+import { EngagementPage } from 'src/components/abonnement/engagement/engagement';
 
 const routes: Routes = [{
     path: 'landing',
-    component: SOSPageComponent,
+    component: MainPage,
     data: { animation: 'LandingPage' }
   }, {
     path: 'connexion',
@@ -47,7 +48,10 @@ const routes: Routes = [{
   }, {
     path: 'abonnement',
     component: AbonnementPage,
-  },  {
+  },   {
+    path: 'engagement',
+    component: EngagementPage,
+  },{
     path: 'annonce',
     component: AnnoncePage,
   },{

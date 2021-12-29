@@ -1,0 +1,67 @@
+@import "../../../styles/variables";
+@import "../../../styles/mixins";
+
+
+:host {
+    @extend %page ;
+    @extend %no-navigation ;
+}
+.engagement {
+    background: white !important;
+    color: #333333;
+}
+.title {
+    color: #333333;
+    font-weight: 500;
+}
+.facture {
+    display: grid;
+}
+.hosted-page {
+    padding: 20px !important;
+}
+.right-price{
+    float: right;
+}
+.float-right{
+    text-align: right;
+}
+
+.total {
+    width: 100%;
+}
+.white{
+    width: 50%;
+}
+.sous-total {
+    width: 50%;
+    justify-content: space-between;
+}
+.total{
+    justify-content: space-between;
+}
+.postuler {
+    width: 100%;
+    background-color: #0C5E8D;
+    color : #FFFFFF;
+  }
+.blue-text-price {
+    font-size: 14px;
+    font-weight: 200;
+    &.bold-price {
+        font-size: 16px;
+        font-weight: 500 !important;
+    }
+    &.blue {
+        color : #0F557C;
+    }
+    &.line-through {
+        text-decoration: line-through;
+    }
+}
+hr {
+    border-top: 1px solid #00000029;
+    &.dashed {
+        border-top: 1px dashed #00000029 !important;
+    }
+}

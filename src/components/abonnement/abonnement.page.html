@@ -4,7 +4,7 @@
 [customHeader]='true'
 [(activeView)]="activeView"
 >
-<div class="clear-margin full-width  flex center-cross abonnement" headerBar>
+<div *ngIf="engagmentClicked" class="clear-margin full-width  flex center-cross abonnement" headerBar>
     <img [routerLink]="['','home','profile']" src="assets/arrowlblack.svg" />
     <span class="grow center-text text-light-emphasis">Gérer mes abonnement</span>
 </div>
@@ -12,7 +12,7 @@
     <span tab_1>Sous-traitance</span>
   </page-header>
 
-  <div class=" space-children-margin page-content-with-tabs flex center ">
+  <div *ngIf="engagmentClicked" class=" space-children-margin page-content-with-tabs flex center ">
     <ng-container [ngSwitch]="activeView">
       <ng-container *ngSwitchCase="0">
           <div class="caroussel ">
@@ -37,7 +37,7 @@
     </ng-container>
 
   </div>
-<div class="caroussel-button"  >
+<div class="caroussel-button" *ngIf="engagmentClicked" >
   <button class="flex center"
   (click)="scrollRight()"
   ><img src="assets/arrowleft.svg" alt=""></button>

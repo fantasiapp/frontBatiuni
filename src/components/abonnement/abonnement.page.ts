@@ -8,10 +8,16 @@ import { Component, ChangeDetectionStrategy } from "@angular/core";
 })
 export class AbonnementPage {
     activeView: number = 0;
-
+    engagmentClicked: boolean = true;
+    ngAfterViewInit(){
+        let scroll = document.getElementsByClassName('caroussel')
+        scroll[0].scrollTo({
+            top:0,
+            left:302
+        })
+    }
     scrollLeft() {
         let scroll = document.getElementsByClassName('caroussel')
-        let offset = scroll[0];
         scroll[0].scrollTo({
             top:0,
             left:310 + scroll[0].scrollLeft,
@@ -20,7 +26,6 @@ export class AbonnementPage {
     }
     scrollRight() {
         let scroll = document.getElementsByClassName('caroussel')
-        let offset = scroll[0];
         scroll[0].scrollTo({
             top:0,
             left: -310 + scroll[0].scrollLeft,
