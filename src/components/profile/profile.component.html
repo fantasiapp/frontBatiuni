@@ -45,7 +45,7 @@
 <swipeup [(open)]="openMenu">
   <li (click)="slideModifyMenu()">Modifier mon profil</li>
   <li>Candidatures en cours</li>
-  <li>Gérer mes abonnements</li>
+  <li [routerLink]="['','abonnement']">Gérer mes abonnements</li>
   <li>Mes factures</li>
   <li>Partager l'application</li>
   <li>Noter l'application</li>

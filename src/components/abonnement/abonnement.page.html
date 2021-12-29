@@ -5,7 +5,7 @@
 [(activeView)]="activeView"
 >
 <div class="clear-margin full-width  flex center-cross abonnement" headerBar>
-    <img src="assets/arrowlblack.svg" />
+    <img [routerLink]="['','home','profile']" src="assets/arrowlblack.svg" />
     <span class="grow center-text text-light-emphasis">Gérer mes abonnement</span>
 </div>
     <span tab_0>PME</span>
@@ -39,9 +39,9 @@
   </div>
 <div class="caroussel-button"  >
   <button class="flex center"
-  (click)="scrollLeft()"
+  (click)="scrollRight()"
   ><img src="assets/arrowleft.svg" alt=""></button>
   <button class="flex center"
-  (click)="scrollRight()"
+  (click)="scrollLeft()"
   ><img src="assets/arrowright.svg" alt=""></button>
 </div>

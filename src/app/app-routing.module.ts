@@ -16,7 +16,7 @@ import { MakeAdComponent } from 'src/components/make_ad/make_ad.component';
 import { AbonnementPage } from 'src/components/abonnement/abonnement.page';
 const routes: Routes = [{
     path: 'landing',
-    component: AbonnementPage,
+    component: MainPage,
     data: { animation: 'LandingPage' }
   }, {
     path: 'connexion',
@@ -39,6 +39,9 @@ const routes: Routes = [{
     path: 'success',
     component: RegistrationSuccess,
     data: { animation: 'Success' }
+  }, {
+    path: 'abonnement',
+    component: AbonnementPage,
   }, {
     path: 'home',
     component: MainPage,

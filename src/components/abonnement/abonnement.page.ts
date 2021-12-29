@@ -14,7 +14,7 @@ export class AbonnementPage {
         let offset = scroll[0];
         scroll[0].scrollTo({
             top:0,
-            left:300 + scroll[0].scrollLeft,
+            left:310 + scroll[0].scrollLeft,
             behavior:'smooth'
         })
     }
@@ -23,7 +23,7 @@ export class AbonnementPage {
         let offset = scroll[0];
         scroll[0].scrollTo({
             top:0,
-            left: -300 + scroll[0].scrollLeft,
+            left: -310 + scroll[0].scrollLeft,
             behavior:'smooth'
         })
     }
