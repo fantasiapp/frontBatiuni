@@ -13,10 +13,10 @@ import { HomeComponent } from 'src/components/home_page/home.component';
 import { AvailabilitiesComponent } from 'src/components/availabilities_page/availabilities.component';
 import { UIPopup } from 'src/components/ui_component/popup/popup.component';
 import { MakeAdComponent } from 'src/components/make_ad/make_ad.component';
-
+import { AbonnementPage } from 'src/components/abonnement/abonnement.page';
 const routes: Routes = [{
     path: 'landing',
-    component: LandingPageComponent,
+    component: AbonnementPage,
     data: { animation: 'LandingPage' }
   }, {
     path: 'connexion',

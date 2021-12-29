@@ -1,0 +1,47 @@
+
+
+<page-header name="Annonces qui peuvent vous intéresser " class=""
+[customHeader]='true'
+[(activeView)]="activeView"
+>
+<div class="clear-margin full-width  flex center-cross abonnement" headerBar>
+    <img src="assets/arrowlblack.svg" />
+    <span class="grow center-text text-light-emphasis">Gérer mes abonnement</span>
+</div>
+    <span tab_0>PME</span>
+    <span tab_1>Sous-traitance</span>
+  </page-header>
+
+  <div class=" space-children-margin page-content-with-tabs flex center ">
+    <ng-container [ngSwitch]="activeView">
+      <ng-container *ngSwitchCase="0">
+          <div class="caroussel ">
+              <div class="margleft"> 
+                <abonnement-card  [duration]="55"></abonnement-card>
+              </div>
+              <div class="thiscenterclass"> 
+                <abonnement-card class="thischild"></abonnement-card>
+
+              </div>
+              <div>
+
+                  <abonnement-card></abonnement-card>
+              </div>
+        </div>
+      </ng-container>
+      <ng-container *ngSwitchCase="1" >
+<div class="hosted-page  flex center clear-margin full-width">
+          <abonnement-card class="" ></abonnement-card>
+        </div>
+      </ng-container>
+    </ng-container>
+
+  </div>
+<div class="caroussel-button"  >
+  <button class="flex center"
+  (click)="scrollLeft()"
+  ><img src="assets/arrowleft.svg" alt=""></button>
+  <button class="flex center"
+  (click)="scrollRight()"
+  ><img src="assets/arrowright.svg" alt=""></button>
+</div>

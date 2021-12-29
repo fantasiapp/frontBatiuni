@@ -46,7 +46,6 @@ import { SearchbarComponent } from 'src/components/ui_component/searchbar/search
 import { HorizantaleCalendar } from 'src/components/ui_component/horizantalecalendar/horizantale.component';
 import { UiMapComponent } from 'src/components/ui_component/map/map.component';
 import { HomeComponent } from 'src/components/home_page/home.component';
-import { HeaderComponent } from 'src/components/ui_component/header/header.component';
 import { AvailabilitiesComponent } from 'src/components/availabilities_page/availabilities.component';
 import { SuiviComments } from 'src/components/ui_component/Suivi/comment.suivi';
 import { UICreditCard } from 'src/components/ui_component/creditcard/credit-card.ui';
@@ -56,6 +55,9 @@ import { AnnoncePage } from 'src/components/annonce/annonce.page';
 import { MakeAdForm } from 'src/components/forms/MakeAd.form';
 import { STFilterForm } from 'src/components/forms/STFilter.form';
 import { PMEFilterForm } from 'src/components/forms/PMEFilter.form';
+import { AbonnementPage } from 'src/components/abonnement/abonnement.page';
+import { UIAbonnement } from 'src/components/ui_component/abonnementUI/abonnement.ui';
+import { HeaderComponent } from 'src/components/ui_component/header/header.component';
 
 @Injectable()
 export class CustomConfig extends HammerGestureConfig {
@@ -109,7 +111,9 @@ export class CustomConfig extends HammerGestureConfig {
     AnnoncePage,
     MakeAdForm,
     STFilterForm,
-    PMEFilterForm
+    PMEFilterForm,
+    AbonnementPage,
+    UIAbonnement
   ],
   imports: [
     //Ngxs imports
