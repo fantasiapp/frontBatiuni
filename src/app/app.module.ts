@@ -60,6 +60,9 @@ import { UIAbonnement } from 'src/components/ui_component/abonnementUI/abonnemen
 import { HeaderComponent } from 'src/components/ui_component/header/header.component';
 import { FacturePage } from 'src/components/factures/facture.page';
 import { FactureUI } from 'src/components/ui_component/factureUI/facture.ui';
+import { UISOSCard } from 'src/components/ui_component/SOSCard/SOSCard.ui';
+import { SOSPageComponent } from 'src/components/SOS_page/sos-page.component';
+import { SOSFilterForm } from 'src/components/forms/SOSFilter.form';
 
 @Injectable()
 export class CustomConfig extends HammerGestureConfig {
@@ -117,7 +120,10 @@ export class CustomConfig extends HammerGestureConfig {
     AbonnementPage,
     UIAbonnement,
     FacturePage,
-    FactureUI
+    FactureUI,
+    UISOSCard,
+    SOSPageComponent,
+    SOSFilterForm
   ],
   imports: [
     //Ngxs imports

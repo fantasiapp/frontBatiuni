@@ -5,7 +5,7 @@ export const DistanceSliderConfig: Options = {
   ceil: 100,
   showSelectionBar: true,
   translate(value: number, label: LabelType): string {
-    return value + ' €';
+    return value + ' KM';
   }
 };
 

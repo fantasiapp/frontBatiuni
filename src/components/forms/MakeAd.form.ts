@@ -99,7 +99,7 @@ import { ChangeDetectionStrategy, Component } from "@angular/core";
       <span>Ajouter un document</span>
     </div>
 
-    <div class="flex row space-between submit-container">
+    <div class="flex row space-between full-width submit-container">
       <button class="button passive full-width">
         Brouillon
       </button>
@@ -121,6 +121,13 @@ import { ChangeDetectionStrategy, Component } from "@angular/core";
     
     .submit-container {
       button { max-width: 45%;}
+    }
+
+    .submit-container {
+      position: fixed;
+      left: 0; bottom: 0;
+      height: 70px;
+      padding: 10px 20px;
     }
   `],
   changeDetection: ChangeDetectionStrategy.OnPush

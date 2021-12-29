@@ -7,5 +7,13 @@ import { ChangeDetectionStrategy, Component } from "@angular/core";
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UIProfileImageComponent {
-  //set state here
+  
+  static getAvailabilityColor(availability: number) {
+    switch(availability) {
+      case 0: return '#B9EDAF';
+      case 1: return '#FFC425';
+      case 2: return '#E80000';
+      default: return '#aaaaaa';
+    }
+  }
 };
