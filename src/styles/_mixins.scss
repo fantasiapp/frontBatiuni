@@ -134,6 +134,11 @@
   color: white;
 };
 
+%block {
+  display: block;
+  @extend %overflow-y;
+}
+
 %page {
   display: block;
   height: calc(100vh - #{$navigation-height});

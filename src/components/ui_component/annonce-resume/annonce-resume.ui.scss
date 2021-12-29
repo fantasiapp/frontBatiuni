@@ -1,0 +1,61 @@
+@import '../../../styles/variables';
+@import '../../../styles/mixins';
+
+:host {
+  display: block;
+  width: 100%;
+  & > *:not(:last-child) {
+    margin-bottom: $item-padding;
+  }
+}
+
+.annonce {
+  background: #FFFFFF !important;
+  color: black;
+}
+
+.star-annonce{
+  height: 2rem;
+}
+
+
+.sticky-footer{
+  bottom: 0;
+  position: fixed;
+  height: $navigation-height;
+  padding: 0 30px;
+}
+
+.dashed {
+  margin-left: -30px !important;
+  // margin-right: -30px;
+  margin: 1rem 0;
+  display: block;
+  width: 100vw;
+  border-top: 1px dashed black;
+}
+
+.your-price {
+  justify-content: space-evenly;
+    
+}
+.company {
+  color: #999999;
+}
+
+.stars {
+  transform: scale(0.7);
+}
+
+.needs, .description, .documents {
+  .title { color: #333; }
+  ul {
+    color: #999;
+    white-space: normal;
+    li {
+      margin: 0.5rem 1rem;
+      font-size: 14px;
+      a { text-decoration: underline; }
+    }
+  }
+}
