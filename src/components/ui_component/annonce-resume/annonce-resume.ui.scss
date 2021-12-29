@@ -1,12 +1,14 @@
+@use "sass:math";
 @import '../../../styles/variables';
 @import '../../../styles/mixins';
 
 :host {
   display: block;
   width: 100%;
-  & > *:not(:last-child) {
-    margin-bottom: $item-padding;
-  }
+}
+
+:host(.collapsed) {
+  @extend %collapse;
 }
 
 .annonce {
