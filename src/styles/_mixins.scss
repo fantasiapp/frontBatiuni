@@ -134,6 +134,10 @@
   color: white;
 };
 
+%collapse {
+  overflow: hidden;
+}
+
 %page {
   display: block;
   height: calc(100vh - #{$navigation-height});
