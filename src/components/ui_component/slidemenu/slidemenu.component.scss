@@ -32,3 +32,17 @@
   @extend %content-with-header;
   background: white;
 }
+
+.content-with-footer {
+  @extend %content-with-header-and-footer;
+  background: white;
+}
+
+.footer {
+  position: fixed;
+  @include set-safe-area(bottom);
+  left: 0;
+  height: $sticky-footer-height;
+  padding: 10px 20px;
+  background: white;
+}

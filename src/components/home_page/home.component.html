@@ -1,17 +1,36 @@
-<page-header name="Annonces qui peuvent vous intéresser" [(activeView)]="activeView" (filterClicked)="openAdFilterMenu = true">
-  <span tab_0>Vue liste</span>
-  <span tab_1>Carte</span>
+<page-header name="Annonces qui peuvent vous intéresser" [tabs]="userType ? 3 : 2" [(activeView)]="activeView" (filterClicked)="openAdFilterMenu = true">
+  <span tab_0>{{ userType ? 'Brouillon' : 'Vue liste' }}</span>
+  <span tab_1>{{ userType ? 'En ligne' : 'Carte' }}</span>
+  <span tab_2>Validées</span>
 </page-header>
 
 <div class="hosted-page space-children-margin page-content-with-tabs">
   <ng-container [ngSwitch]="activeView">
     <ng-container *ngSwitchCase="0">
-      <offer *ngFor="let mission of annonces"></offer>
+      <offer *ngFor="let mission of annonces" (click)="userType && openBrouillonMenu = true"></offer>
     </ng-container>
     <mapbox-batiuni class="space-children-margin" *ngSwitchCase="1"></mapbox-batiuni>
   </ng-container>
 </div>
 
 <swipeup [(open)]="openAdFilterMenu" type="view">
-  <pme-filter-form view></pme-filter-form>
+  <pme-filter-form *ngIf="userType; else stfilter" view></pme-filter-form>
+  <ng-template #stfilter>
+    <st-filter-form></st-filter-form>
+  </ng-template>
 </swipeup>
+
+<slidemenu [(open)]="openBrouillonMenu" [footer]="true">
+  <div class="full-width center-text text-emphasis" header>Brouillon</div>
+  <div class="hosted-page flex column center-cross space-children-margin" content>
+    <ad-form [withSubmit]="false"></ad-form>
+  </div>
+  <div class="submit-container flex row space-between full-width" footer>
+    <button class="button passive full-width">
+      Brouillon
+    </button>
+    <button class="button gradient full-width">
+      Valider
+    </button>
+  </div>
+</slidemenu>

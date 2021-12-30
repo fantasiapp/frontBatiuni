@@ -11,6 +11,9 @@ export class UISlideMenuComponent extends UIOpenMenu {
   @ViewChild('content', {static: true})
   contentRef!: ElementRef;
 
+  @Input()
+  footer: boolean = false;
+
   constructor() {
     super();
   }

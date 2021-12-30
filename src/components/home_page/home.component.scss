@@ -1,5 +1,9 @@
 @import '../../styles/mixins';
 
 :host {
-  @extend %page;
+  @extend %page
+}
+
+.submit-container {
+  button { max-width: 45%;}
 }
