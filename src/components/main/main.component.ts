@@ -20,7 +20,6 @@ export class MainPage {
   }
 
   prepareRoute(outlet: RouterOutlet) {
-    console.log(outlet?.activatedRouteData?.['animation'])
     return outlet?.activatedRouteData?.['animation'];
   }
 };

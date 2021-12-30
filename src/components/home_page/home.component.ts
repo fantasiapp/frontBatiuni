@@ -1,5 +1,9 @@
 import { Component, ChangeDetectionStrategy } from "@angular/core";
+import { Select } from "@ngxs/store";
+import { BehaviorSubject, Observable } from "rxjs";
 import { DistanceSliderConfig, SalarySliderConfig } from "src/common/config";
+import { User } from "src/models/User/user.model";
+import { UserState } from "src/models/User/user.state";
 
 @Component({
   selector: 'home',
@@ -8,13 +12,18 @@ import { DistanceSliderConfig, SalarySliderConfig } from "src/common/config";
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HomeComponent {
+  
+  @Select(UserState)
+  user$!: Observable<User>;
+
+  ngOnInit() {
+    this.user$.subscribe(console.log);
+  }
+  
   activeView: number = 0;
   annonces = new Array(10);
 
   openAdFilterMenu: boolean = false;
-
-  //mock variable, should be a part of our models later
-  userType: boolean = true; //0 -> ST; 1 -> PME
 
   imports = { DistanceSliderConfig, SalarySliderConfig };
 };
