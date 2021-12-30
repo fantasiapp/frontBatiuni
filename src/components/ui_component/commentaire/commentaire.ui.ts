@@ -17,6 +17,18 @@ export class CommentaireUI extends UIDefaultAccessor<FileList>{
     imagepath: any;
     imgSrc : any;
     url : any;
+    @Input()
+    withstars : boolean = true;
+    @Input()
+    withtitle : boolean = true;
+    @Input()
+    withcomment : boolean = false;
+    @Input()
+    title: string = 'Qualité du travail fourni';
+    @Input()
+    startitle: string = 'backstar';
+
+
     constructor(private cd: ChangeDetectorRef) {
         super();
     }
@@ -29,7 +41,7 @@ export class CommentaireUI extends UIDefaultAccessor<FileList>{
         this.imgSrc = e.target.result;
         this.cd.detectChanges();
     };
-  reader.readAsDataURL(e.target.files[0]);
+    reader.readAsDataURL(e.target.files[0]);
         }
     
     }

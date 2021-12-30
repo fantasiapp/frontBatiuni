@@ -1,4 +1,3 @@
-
 .commentaire {
     border: 1px solid rgb(231, 231, 231);
     width: 100%;
@@ -30,4 +29,9 @@ textarea {
 }
 .comment, .photo{
     margin: 1rem 1rem;
+}
+.title {
+    color: #333333;
+    font-size: 14px !important;
+    font-weight: 200;
 }

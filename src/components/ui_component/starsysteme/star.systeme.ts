@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy } from "@angular/core";
+import { Component, ChangeDetectionStrategy, Input } from "@angular/core";
 
 @Component({
     selector: "star-systeme",
@@ -10,6 +10,8 @@ export class StarSysteme {
     nstars: number = 5;
     stars: any;
     note: any;
+    @Input()
+    title:string='backstar';
 
     constructor() {
         this.stars = Array(this.nstars).fill(0).map((x,i)=>i);
@@ -17,22 +19,23 @@ export class StarSysteme {
 
 
     ngAfterViewInit() {
-        let elements = document.getElementsByClassName('backstar')
         for(let star = 0; star < this.nstars; star++) {
-            let thisone = document.getElementById(`backstar${star}`)
+            let thisone = document.getElementById(`${this.title}${star}`)
             thisone!.style.fill = "white";
         }
     }
     changeBack(id: number) {
         this.note = id +1;
+        console.log(this.title +' '+ this.note)
         for(let star = 0; star < this.nstars; star++) {
-            let thisone = document.getElementById(`backstar${star}`)
+            let thisone = document.getElementById(`${this.title}${star}`)
             thisone!.style.fill = "white";
             
         }
         for(let star = 0; star <= id; star++) {
-            let thisone = document.getElementById(`backstar${star}`)
+            let thisone = document.getElementById(`${this.title}${star}`)
             thisone!.style.fill = "#F7D454";
+            
             
         }
     }

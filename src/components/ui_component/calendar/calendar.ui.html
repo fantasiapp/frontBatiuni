@@ -2,7 +2,7 @@
     <div class="calendar flex center">
     <div class="header-calendar full-width flex center">
 		
-		<h1>{{dateSelect | date:'MMMM, yyyy'}}</h1>
+		<h1>{{dateSelect.format('MMMM, yyyy') | titlecase}}</h1>
         <div class="calendar-action flex">
 			<button (click)="changeMonth(-1)" class="btn-prev"><img src="assets/arrowleft.svg"/> </button>
 		
