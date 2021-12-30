@@ -38,8 +38,7 @@ export class CalendarUI implements OnInit {
 
         const startDate = moment.utc(`${year}/${month}/01`)
         const endDate = startDate.clone().endOf('month')
-        this.dateSelect = startDate;
-
+        this.dateSelect = startDate.locale('fr');
         const diffDays = endDate.diff(startDate, 'days', true)
         const numberDays = Math.round(diffDays);
         const arrayDays = Object.keys([...Array(numberDays)]).map((a: any) => {
@@ -106,7 +105,6 @@ export class CalendarUI implements OnInit {
             }
 
         }
-        console.log(this.dateValue)
     }
 }
 
