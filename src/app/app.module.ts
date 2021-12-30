@@ -67,6 +67,7 @@ import { EngagementPage } from 'src/components/abonnement/engagement/engagement'
 import { UIAnnonceResume } from 'src/components/ui_component/annonce-resume/annonce-resume.ui';
 import { BoosterPage } from 'src/components/booster/booster.page';
 import { StarSysteme } from 'src/components/ui_component/starsysteme/star.systeme';
+import { UserState } from 'src/models/User/user.state';
 import { CommentaireUI } from 'src/components/ui_component/commentaire/commentaire.ui';
 
 @Injectable()
@@ -138,7 +139,7 @@ export class CustomConfig extends HammerGestureConfig {
   imports: [
     //Ngxs imports
     NgxsModule.forRoot([
-      AppState, AuthState
+      AppState, AuthState, UserState
     ], {
       developmentMode: !environment.production
     }),

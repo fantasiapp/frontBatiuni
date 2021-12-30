@@ -7,7 +7,7 @@
 <div class="hosted-page space-children-margin page-content-with-tabs">
   <ng-container [ngSwitch]="activeView">
     <ng-container *ngSwitchCase="0">
-      <offer *ngFor="let mission of annonces" (click)="userType && openBrouillonMenu = true"></offer>
+      <offer *ngFor="let mission of annonces" [routerLink]="userType ? ['', 'brouillon'] : null"></offer>
     </ng-container>
     <mapbox-batiuni class="space-children-margin" *ngSwitchCase="1"></mapbox-batiuni>
   </ng-container>
@@ -19,18 +19,3 @@
     <st-filter-form></st-filter-form>
   </ng-template>
 </swipeup>
-
-<slidemenu [(open)]="openBrouillonMenu" [footer]="true">
-  <div class="full-width center-text text-emphasis" header>Brouillon</div>
-  <div class="hosted-page flex column center-cross space-children-margin" content>
-    <ad-form [withSubmit]="false"></ad-form>
-  </div>
-  <div class="submit-container flex row space-between full-width" footer>
-    <button class="button passive full-width">
-      Brouillon
-    </button>
-    <button class="button gradient full-width">
-      Valider
-    </button>
-  </div>
-</slidemenu>

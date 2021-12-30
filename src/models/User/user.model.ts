@@ -1,4 +1,4 @@
 export class User {
-  userType: 'PME' | 'ST' = 'PME';
+  type: 'PME' | 'ST' = 'PME';
   password: string = '';
 };

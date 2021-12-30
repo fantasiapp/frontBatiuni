@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, HostBinding, Input, Output } from "@angular/core";
+import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
 
 @Component({
   selector: 'annonce-resume',
@@ -52,7 +52,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, HostBinding, Input, O
       </div>
     </div>
     <div (click)="collapsed = !collapsed" class="collapse-controller full-width center-text">
-      <span>Lire la suite</span>  <img src="assets/arrowdown.svg" [style.transform]="'rotate(' + (180 * +!collapsed) + 'deg)'"/>
+      <span>{{collapsed ? 'Lire la suite' : 'Lire moins'}}</span>  <img src="assets/arrowdown.svg" [style.transform]="'rotate(' + (180 * +!collapsed) + 'deg)'"/>
     </div>
   </div>
 
@@ -62,5 +62,5 @@ import { ChangeDetectionStrategy, Component, EventEmitter, HostBinding, Input, O
 })
 export class UIAnnonceResume {
   @Input()
-  collapsed: boolean = true;
+  collapsed: boolean = false;
 };
