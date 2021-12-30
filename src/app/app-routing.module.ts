@@ -11,20 +11,12 @@ import { ProfileComponent } from 'src/components/profile/profile.component';
 import { MissionsComponent } from 'src/components/missions_page/missions.component';
 import { HomeComponent } from 'src/components/home_page/home.component';
 import { AvailabilitiesComponent } from 'src/components/availabilities_page/availabilities.component';
-import { UIPopup } from 'src/components/ui_component/popup/popup.component';
-import { MakeAdComponent } from 'src/components/make_ad/make_ad.component';
+
 import { AbonnementPage } from 'src/components/abonnement/abonnement.page';
 import { AnnoncePage } from 'src/components/annonce/annonce.page';
 import { FacturePage } from 'src/components/factures/facture.page';
-import { UISOSCard } from 'src/components/ui_component/SOSCard/SOSCard.ui';
-import { SOSPageComponent } from 'src/components/SOS_page/sos-page.component';
 import { EngagementPage } from 'src/components/abonnement/engagement/engagement';
-import { StarSysteme } from 'src/components/ui_component/starsysteme/star.systeme';
-
-import { UIAnnonceResume } from 'src/components/ui_component/annonce-resume/annonce-resume.ui';
-import { BoosterPage } from 'src/components/booster/booster.page';
-import { CommentaireUI } from 'src/components/ui_component/commentaire/commentaire.ui';
-
+import { MakeAdComponent } from 'src/components/make_ad/make_ad.component';
 const routes: Routes = [{
     path: 'landing',
     component: LandingPageComponent,
@@ -59,7 +51,10 @@ const routes: Routes = [{
   },{
     path: 'annonce',
     component: AnnoncePage,
-  },{
+  }, {
+    path: 'brouillon',
+    component: MakeAdComponent
+  }, {
     path: 'factures',
     component: FacturePage,
   }, {

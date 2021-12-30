@@ -551,3 +551,11 @@ input[type=number] {
   background-color: #0C5E8D;
   color : #FFFFFF;
 }
+
+.sticky-footer {
+  position: fixed;
+  @include set-safe-area(bottom);
+  left: 0;
+  height: $sticky-footer-height;
+  padding: 0 30px;
+}

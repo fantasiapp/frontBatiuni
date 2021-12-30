@@ -12,7 +12,6 @@ export class HomeComponent {
   annonces = new Array(10);
 
   openAdFilterMenu: boolean = false;
-  openBrouillonMenu: boolean = false;
 
   //mock variable, should be a part of our models later
   userType: boolean = true; //0 -> ST; 1 -> PME

@@ -52,7 +52,7 @@ import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
       </div>
     </div>
     <div (click)="collapsed = !collapsed" class="collapse-controller full-width center-text">
-      <span>Lire la suite</span>  <img src="assets/arrowdown.svg" [style.transform]="'rotate(' + (180 * +!collapsed) + 'deg)'"/>
+      <span>{{collapsed ? 'Lire la suite' : 'Lire moins'}}</span>  <img src="assets/arrowdown.svg" [style.transform]="'rotate(' + (180 * +!collapsed) + 'deg)'"/>
     </div>
   </div>
 
