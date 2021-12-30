@@ -22,10 +22,11 @@ import { EngagementPage } from 'src/components/abonnement/engagement/engagement'
 
 
 import { UIAnnonceResume } from 'src/components/ui_component/annonce-resume/annonce-resume.ui';
+import { BoosterPage } from 'src/components/booster/booster.page';
 
 const routes: Routes = [{
     path: 'landing',
-    component: UIAnnonceResume,
+    component: BoosterPage,
     data: { animation: 'LandingPage' }
   }, {
     path: 'connexion',

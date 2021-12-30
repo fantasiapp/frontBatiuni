@@ -1,0 +1,28 @@
+@import "../../styles/mixins";
+@import "../../styles/variables";
+
+:host {
+    @extend %page ;
+    @extend %no-navigation ;
+    color: #333333;
+    font-weight: 300;
+}
+
+.grid {
+    display: grid;
+    width: 60%;
+}
+.space {
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+.small {
+    color: #454545;
+    font-size: 12px;
+}
+
+.hr-line {
+    border-top : 1px solid #00000029;
+    margin: 1rem 0;
+}

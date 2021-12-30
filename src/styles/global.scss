@@ -541,3 +541,13 @@ input[type=number] {
   bottom: 0;
   & > * { vertical-align: middle; }
 }
+// White sticky header 
+.white-header{
+  background: white !important;
+  color: #333333;
+}
+.footer-button {
+  width: 100%;
+  background-color: #0C5E8D;
+  color : #FFFFFF;
+}
