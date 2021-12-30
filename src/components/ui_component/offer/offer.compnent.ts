@@ -8,13 +8,13 @@ import { ChangeDetectionStrategy, Component, Input} from "@angular/core";
 })
 export class OfferComponent { 
   @Input()
-  company : string = "Nom de l'entreprise";
+  company: string = "Nom de l'entreprise";
   @Input()
-  fourniture : string = "Fourniture et pose";
+  fourniture: string = "Fourniture et pose";
   @Input()
-  adress : string = "Adresse du chantier";
+  address: string = "Adresse du chantier";
   @Input()
-  date : string  = 'December 17, 1995 03:24:00'
+  date: string  = 'December 17, 1995 03:24:00'
   @Input()
-  imgSrc : string = "assets/confirmation.svg"
+  src: string = "assets/confirmation.svg"
 };

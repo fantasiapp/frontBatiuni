@@ -17,6 +17,7 @@ import { AnnoncePage } from 'src/components/annonce/annonce.page';
 import { FacturePage } from 'src/components/factures/facture.page';
 import { EngagementPage } from 'src/components/abonnement/engagement/engagement';
 import { MakeAdComponent } from 'src/components/make_ad/make_ad.component';
+import { SOSPageComponent } from 'src/components/SOS_page/sos-page.component';
 const routes: Routes = [{
     path: 'landing',
     component: LandingPageComponent,
@@ -64,6 +65,8 @@ const routes: Routes = [{
       {path: 'profile', component: ProfileComponent, data: { animation: 'profile' }},
       {path: 'missions', component: MissionsComponent, data: { animation: 'missions' }},
       {path: 'availabilities', component: AvailabilitiesComponent, data: { animation: 'availabilities' }},
+      {path: 'sos', component: SOSPageComponent, data: { animation: 'sos' } },
+      {path: 'make', component: MakeAdComponent, data: { animation: 'make'} },
       {path: '', pathMatch: 'full', component: HomeComponent, data: { animation: 'home' } },
       {path: '**', component: HomeComponent}
     ]

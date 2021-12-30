@@ -127,9 +127,6 @@ import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
     }
 
     .submit-container {
-      position: fixed;
-      @include set-safe-area(bottom);
-      left: 0;
       height: $sticky-footer-height;
       padding: 10px 20px;
     }

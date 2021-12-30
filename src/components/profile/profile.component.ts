@@ -1,5 +1,10 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, HostListener, ViewChild } from "@angular/core";
+import { Select, Store } from "@ngxs/store";
+import { Observable } from "rxjs";
 import { SlidesDirective } from "src/directives/slides.directive";
+import { User } from "src/models/User/user.model";
+import { UserState } from "src/models/User/user.state";
+import * as UserActions from "src/models/User/user.actions";
 import { Option } from "../options/options";
 import { UISlideMenuComponent } from "../ui_component/slidemenu/slidemenu.component";
 import { UISwipeupComponent } from "../ui_component/swipeup/swipeup.component";
@@ -17,6 +22,10 @@ export class ProfileComponent {
   @ViewChild(UISlideMenuComponent, {static: true})
   slideMenu!: UISlideMenuComponent;
 
+  @Select(UserState)
+  user$!: Observable<User>;
+  
+
   openMenu: boolean = false;
   openModifyMenu: boolean = false;
   openRatings: boolean = false;
@@ -24,7 +33,9 @@ export class ProfileComponent {
   openModifyPicture: boolean = false;
   openNotifications : boolean = false;
 
-  constructor() { }
+  constructor(private store: Store) {
+
+  }
 
   slideModifyMenu() {
     this.openMenu = false;
@@ -63,4 +74,9 @@ export class ProfileComponent {
     if ( this.openModifyMenu )
       this.modifySlider.right();
   }
+
+
+  changeProfileType(type: boolean) {
+    this.store.dispatch(new UserActions.ChangeProfileType(type));
+  };
 };

@@ -1,4 +1,4 @@
-import { ComponentFactoryResolver, Directive, EventEmitter, HostBinding, Input, Output, ViewContainerRef } from "@angular/core";
+import { Attribute, ComponentFactoryResolver, Directive, EventEmitter, HostBinding, Input, Optional, Output, ViewContainerRef } from "@angular/core";
 import { ControlValueAccessor } from "@angular/forms";
 import { Subject } from "rxjs";
 import { Ref } from "./types";
@@ -90,7 +90,7 @@ export abstract class UIDefaultAccessor<T> implements ControlValueAccessor {
   valueChange = new EventEmitter<T>();
 
   onChange(e: any) {
-    if ( this.disabled ) return;
+    if ( this.isDisabled ) { e.preventDefault?.(); return; }
     let next = this.getInput(e);
     if ( next != this.value ) {
       this.valueChange.emit(this.value = next);
@@ -101,8 +101,14 @@ export abstract class UIDefaultAccessor<T> implements ControlValueAccessor {
 
   protected getInput(e: any): any { return e; };
 
-  disabled: boolean = false;
-  setDisabledState(isDisabled: boolean) { this.disabled = isDisabled; }
+  @Input()
+  set disabled(disabled: any) {
+    if ( disabled != null ) this.isDisabled = true;
+  }
+
+
+  isDisabled: boolean = false;
+  setDisabledState(isDisabled: boolean) { this.isDisabled = isDisabled; }
 
   onTouched: Function = () => {};
   registerOnTouched(onTouched: any): void {

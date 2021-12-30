@@ -6,18 +6,45 @@
   </page-header>
   
   <div class="hosted-page space-children-margin page-content-with-tabs">
-    <ng-container [ngSwitch]="activeView">
-      <ng-container *ngSwitchCase="0">
-        <offer *ngFor="let mission of annonces" [routerLink]="user.type ? ['', 'brouillon'] : null"></offer>
+    <!-- Page pour PME -->
+    <ng-container *ngIf="user.type; else stview">
+      <ng-container [ngSwitch]="activeView">
+        <ng-container *ngSwitchCase="0">
+          <offer
+            *ngFor="let mission of annonces"
+            src="assets/brouillon.svg"
+            [routerLink]="user.type ? ['', 'brouillon'] : null"></offer>
+        </ng-container>
+        <ng-container *ngSwitchCase="1">
+          <offer
+            *ngFor="let mission of annonces"
+            src="assets/enligne.svg"
+            [routerLink]="user.type ? ['', 'brouillon'] : null"></offer>
+        </ng-container>
+        <ng-container *ngSwitchCase="2">
+          <offer
+            *ngFor="let mission of annonces"
+            src="assets/validée.svg"
+            [routerLink]="user.type ? ['', 'brouillon'] : null"></offer>
+        </ng-container>
       </ng-container>
-      <mapbox-batiuni class="space-children-margin" *ngSwitchCase="1"></mapbox-batiuni>
     </ng-container>
+
+    <!-- Page pour ST -->
+    <ng-template #stview>
+      <ng-container [ngSwitch]="activeView">
+        <ng-container *ngSwitchCase="0">
+          <offer
+            *ngFor="let mission of annonces"
+            [routerLink]="user.type ? ['', 'brouillon'] : null"></offer>
+        </ng-container>
+        <mapbox-batiuni class="space-children-margin" *ngSwitchCase="1"></mapbox-batiuni>
+      </ng-container>
+    </ng-template>
   </div>
   
   <swipeup [(open)]="openAdFilterMenu" type="view">
     <pme-filter-form *ngIf="user.type; else stfilter" view></pme-filter-form>
-    <ng-template #stfilter>
-      <st-filter-form></st-filter-form>
-    </ng-template>
+    <ng-template #stfilter><st-filter-form></st-filter-form></ng-template>
   </swipeup>
 </ng-container>

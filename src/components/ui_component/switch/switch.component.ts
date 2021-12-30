@@ -7,7 +7,7 @@ import { UIDefaultAccessor } from "src/common/classes";
   template: `
     <span *ngIf="off" [class.active]="!this.value">{{off}}</span>
     <label class="switch">
-      <input type="checkbox" (input)="onChange($event)" #input/>
+      <input type="checkbox" (input)="onChange($event)" #input [checked]="value || null" [disabled]="isDisabled || null"/>
       <div class="slider" [class.round]="round"></div>
     </label>
     <span *ngIf="on" [class.active]="this.value">{{on}}</span>

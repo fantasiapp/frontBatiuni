@@ -1,4 +1,4 @@
 export class User {
-  type: boolean = true;
+  type: boolean = false;
   password: string = '';
 };

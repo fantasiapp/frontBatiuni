@@ -1,7 +1,25 @@
-import { Component, Input, EventEmitter, ChangeDetectionStrategy, Output } from "@angular/core";
+import { Component, Input, EventEmitter, ChangeDetectionStrategy, Output, ChangeDetectorRef } from "@angular/core";
 import { ActivatedRoute, NavigationEnd, Router } from "@angular/router";
+import { Store } from "@ngxs/store";
+import { BehaviorSubject, Observable } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { Destroy$ } from "src/common/classes";
+import { User } from "src/models/User/user.model";
+import { UserState } from "src/models/User/user.state";
+
+const STMenu = [
+  {name: "Home", src: "assets/navigation/st/home.svg", route: ''},
+  {name: "Missions", src: "assets/navigation/st/missions.svg", route: 'missions'},
+  {name: "Availibity", src: "assets/navigation/st/availabilities.svg", route: 'availabilities'},
+  {name: "Profile", src: "assets/navigation/st/profile.svg", route: 'profile'},
+];
+
+const PMEMenu = [
+  {name: "Home", src: "assets/navigation/st/home.svg", route: ''},
+  {name: "Créer une Annonce", src: "assets/navigation/pme/make.svg", route: 'make'},
+  {name: "SOS", src: "assets/navigation/pme/sos.svg", route: 'sos'},
+  {name: "Profile", src: "assets/navigation/st/profile.svg", route: 'profile'}
+];
 
 @Component({
   selector: 'navigation',
@@ -10,40 +28,42 @@ import { Destroy$ } from "src/common/classes";
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NavigationMenu extends Destroy$ {
-  currentIndex: number = 0;
+  currentIndex: BehaviorSubject<number> = new BehaviorSubject(0);
 
   @Input()
-  menu: MenuItem[] = [
-    {name: "Home", src: "assets/navigation/st/home.svg", route: ''},
-    {name: "Missions", src: "assets/navigation/st/missions.svg", route: 'missions'},
-    {name: "Availibity", src: "assets/navigation/st/availabilities.svg", route: 'availabilities'},
-    {name: "Profile", src: "assets/navigation/st/profile.svg", route: 'profile'},
-  ];
+  menu: BehaviorSubject<MenuItem[]> = new BehaviorSubject(STMenu);
 
   @Output()
   routeChange = new EventEmitter<string>();
 
   changeRoute(index: number) {
-    if ( index == this.currentIndex ) return;
-    let route = this.menu[index].route;
+    if ( index == this.currentIndex.getValue() ) return;
+    let menu = this.menu.getValue();
+    console.log(menu);
+    let route = menu[index].route;
     this.routeChange.emit(route);
     this.router.navigate(route ? ['', 'home', route] : ['', 'home']);
   }
 
-  constructor(private router: Router, private route: ActivatedRoute) {
+  constructor(private router: Router, private store: Store, private cd: ChangeDetectorRef) {
     super();
     this.router.events.pipe(takeUntil(this.destroy$)).subscribe((event) => {
       if ( !(event instanceof NavigationEnd) ) return;
+      let menu = this.menu.getValue();
       let segments = event.urlAfterRedirects.split('/');
       if ( segments.length < 2 ) this.redirectHome();
-      if ( segments.length == 2 ) this.currentIndex = 0;
+      if ( segments.length == 2 ) this.currentIndex.next(0);
       if ( segments.length > 2 ) {
         let child = segments[2],
-          index = this.menu.findIndex(item => item.route == child);
+          index = menu.findIndex(item => item.route == child);
         
-        if ( index >= 0 ) this.currentIndex = index; 
+        if ( index >= 0 ) { this.currentIndex.next(index); }
         else this.redirectHome()
       }
+    });
+
+    this.store.select(UserState).subscribe((user: User) => {
+      this.menu.next(user.type ? PMEMenu : STMenu)
     });
   }
 

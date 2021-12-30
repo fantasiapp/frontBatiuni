@@ -15,10 +15,10 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
 
 input {
   -moz-appearance: textfield;
-}
-
-input {
+  border: none !important;
+  outline: none !important;
   width: 20px;
+
 }
 
 img {
