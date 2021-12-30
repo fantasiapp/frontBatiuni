@@ -23,10 +23,11 @@ import { StarSysteme } from 'src/components/ui_component/starsysteme/star.system
 
 import { UIAnnonceResume } from 'src/components/ui_component/annonce-resume/annonce-resume.ui';
 import { BoosterPage } from 'src/components/booster/booster.page';
+import { CommentaireUI } from 'src/components/ui_component/commentaire/commentaire.ui';
 
 const routes: Routes = [{
     path: 'landing',
-    component: MakeAdComponent,
+    component: LandingPageComponent,
     data: { animation: 'LandingPage' }
   }, {
     path: 'connexion',

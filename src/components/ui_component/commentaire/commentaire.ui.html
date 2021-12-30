@@ -1,0 +1,12 @@
+
+
+    <div class="commentaire grid">
+        <div class="comment">
+            <textarea class="form-input" type="text"  placeholder="Ajouter une commentaire"></textarea>
+        </div>
+        <div class="photo position-relative ">
+            <input  type="file" (change)="showImage($event) "class="form-input upload-photo" >
+            <img class="upload" src="assets/calendar.png">
+        </div>
+        <img class="commentimage" *ngIf="imgSrc" [src]="imgSrc">        
+    </div>
