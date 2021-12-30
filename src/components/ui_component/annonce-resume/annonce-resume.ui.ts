@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, HostBinding, Input, Output } from "@angular/core";
+import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
 
 @Component({
   selector: 'annonce-resume',
@@ -62,5 +62,5 @@ import { ChangeDetectionStrategy, Component, EventEmitter, HostBinding, Input, O
 })
 export class UIAnnonceResume {
   @Input()
-  collapsed: boolean = true;
+  collapsed: boolean = false;
 };

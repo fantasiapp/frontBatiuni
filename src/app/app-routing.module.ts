@@ -26,7 +26,7 @@ import { BoosterPage } from 'src/components/booster/booster.page';
 
 const routes: Routes = [{
     path: 'landing',
-    component: LandingPageComponent,
+    component: MakeAdComponent,
     data: { animation: 'LandingPage' }
   }, {
     path: 'connexion',

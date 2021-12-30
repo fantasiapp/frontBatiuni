@@ -5,6 +5,7 @@ import { from } from "rxjs";
 import { tap } from "rxjs/operators";
 import { AuthModel } from "src/auth/auth.model";
 import { AuthState } from "src/auth/auth.state";
+import { UserState } from "src/models/User/user.state";
 import { Load } from "./app.actions";
 import { AppModel } from "./app.model";
 
@@ -13,7 +14,7 @@ import { AppModel } from "./app.model";
   defaults: {
     device: null
   },
-  children: [AuthState]
+  children: [AuthState, UserState]
 })
 @Injectable()
 export class AppState {
