@@ -1,0 +1,17 @@
+@import "../../../styles/mixins";
+@import "../../../styles/variables";
+
+:host {
+    color: #333333;
+    font-weight: 300;
+    -webkit-tap-highlight-color: transparent;
+
+}
+
+.relative {
+    -webkit-tap-highlight-color: transparent;
+    position: relative;
+}
+.fillstar {
+    position: absolute;
+}

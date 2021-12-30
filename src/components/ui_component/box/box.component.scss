@@ -63,12 +63,14 @@ input[type=radio] ~ span {
   border-radius: 50%;
   background-color: transparent;
   border: 1px solid #333;
+  
 
   &::after {
     top: 7.5px; left: 7.5px;
     width: 8px; height: 8px;
     border-radius: 50%;
     background: white;
+    
   }
 }
 

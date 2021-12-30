@@ -19,14 +19,14 @@ import { FacturePage } from 'src/components/factures/facture.page';
 import { UISOSCard } from 'src/components/ui_component/SOSCard/SOSCard.ui';
 import { SOSPageComponent } from 'src/components/SOS_page/sos-page.component';
 import { EngagementPage } from 'src/components/abonnement/engagement/engagement';
-
+import { StarSysteme } from 'src/components/ui_component/starsysteme/star.systeme';
 
 import { UIAnnonceResume } from 'src/components/ui_component/annonce-resume/annonce-resume.ui';
 import { BoosterPage } from 'src/components/booster/booster.page';
 
 const routes: Routes = [{
     path: 'landing',
-    component: BoosterPage,
+    component: LandingPageComponent,
     data: { animation: 'LandingPage' }
   }, {
     path: 'connexion',

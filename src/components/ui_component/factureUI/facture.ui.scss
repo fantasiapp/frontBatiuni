@@ -29,3 +29,6 @@ p {
         font-size: 18px ;
     }
 }
+.offres-logo {
+    @include circle(80px, white);
+  }
