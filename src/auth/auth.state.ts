@@ -24,7 +24,11 @@ export class AuthState {
   @Action(Login)
   login(ctx: StateContext<AuthModel>, action: Login) {
     let {username, password} = action;
-    let req = this.http.post(environment.backUrl + '/api-token-auth/', {username, password});
+    let req = this.http.post(environment.backUrl + '/api-token-auth/', {username, password}, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
     
     return req.pipe(
       catchError((err) => {

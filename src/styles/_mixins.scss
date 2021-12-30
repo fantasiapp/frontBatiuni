@@ -134,10 +134,6 @@
   color: white;
 };
 
-%collapse {
-  overflow: hidden;
-}
-
 %page {
   display: block;
   height: calc(100vh - #{$navigation-height});
@@ -153,6 +149,13 @@
   @include with-set-safe-area(margin, top, $sticky-header-height);
   @include set-safe-area(margin, bottom);
   height: calc(100vh - #{$sticky-header-height});
+}
+
+%content-with-header-and-footer {
+  @extend %overflow-y;
+  @include with-set-safe-area(margin, top, $sticky-header-height);
+  @include with-set-safe-area(margin, bottom, $sticky-footer-height);
+  height: calc(100vh - #{$sticky-header-height + $sticky-footer-height});
 }
 
 .paging-only-content {

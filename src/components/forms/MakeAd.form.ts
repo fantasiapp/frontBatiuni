@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from "@angular/core";
+import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
 
 @Component({
   selector: 'ad-form',
@@ -99,7 +99,7 @@ import { ChangeDetectionStrategy, Component } from "@angular/core";
       <span>Ajouter un document</span>
     </div>
 
-    <div class="flex row space-between full-width submit-container">
+    <div *ngIf="withSubmit" class="flex row space-between full-width submit-container">
       <button class="button passive full-width">
         Brouillon
       </button>
@@ -110,6 +110,9 @@ import { ChangeDetectionStrategy, Component } from "@angular/core";
   </form>
   `,
   styles: [`
+    @import '../../styles/mixins';
+    @import '../../styles/variables';
+
     :host {
       display: block;
       width: 100%;
@@ -125,14 +128,18 @@ import { ChangeDetectionStrategy, Component } from "@angular/core";
 
     .submit-container {
       position: fixed;
-      left: 0; bottom: 0;
-      height: 70px;
+      @include set-safe-area(bottom);
+      left: 0;
+      height: $sticky-footer-height;
       padding: 10px 20px;
     }
   `],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MakeAdForm {
+  @Input()
+  withSubmit: boolean = false;
+
   imports = {
     currencies: ['$', '€', '£']
   }
