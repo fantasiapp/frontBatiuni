@@ -34,7 +34,6 @@ export class RegisterComponent {
     proposer: new FormControl(''),
     role: new FormControl(''),
     company: new FormControl(''),
-    name: new FormControl(''),
     jobs: new FormControl([])
   }, {validators: VerifyField('email', 'emailVerification')});
 
