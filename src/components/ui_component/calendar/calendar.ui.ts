@@ -36,15 +36,15 @@ export class CalendarUI implements OnInit {
 
     getDaysFromDate(month: any, year: any) {
 
-        const startDate = moment.utc(`${year}/${month}/01`)
+        const startDate = moment.utc(`${year}/${month}/01`,"YYYY-MM-DD")
         const endDate = startDate.clone().endOf('month')
         this.dateSelect = startDate.locale('fr');
         const diffDays = endDate.diff(startDate, 'days', true)
         const numberDays = Math.round(diffDays);
         const arrayDays = Object.keys([...Array(numberDays)]).map((a: any) => {
             a = parseInt(a) + 1;
-            const dayObject = moment(`${year}/${month}/${a}`);
-            const compareDate = moment(`${year}-${month}-${a}`);
+            const dayObject = moment(`${year}/${month}/${a}`,"YYYY-MM-DD");
+            const compareDate = moment(`${year}-${month}-${a}`,"YYYY-MM-DD");
             let flow :any = compareDate
             let item = this.dateValue.filter(item => item.date == flow._i)
             return {

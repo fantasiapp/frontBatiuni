@@ -26,7 +26,7 @@ export class CommentaireUI extends UIDefaultAccessor<FileList>{
     @Input()
     title: string = 'Qualité du travail fourni';
     @Input()
-    startitle: string = 'backstar';
+    startitle: string = 'backstar'
 
 
     constructor(private cd: ChangeDetectorRef) {
