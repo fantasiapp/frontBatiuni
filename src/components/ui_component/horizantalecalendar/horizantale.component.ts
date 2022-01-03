@@ -49,7 +49,7 @@ export class HorizantaleCalendar implements OnInit {
         let days = [];
         for (var i = 1; i <= 14; i++) {
             if(i==1) {
-                
+                console.log(weekStart)
                 days.push({
                     day : moment(weekStart).locale("fr").add(i, 'days').format("D,dddd,YYYY/MM/DD").split(','),
                     status : '',
@@ -70,7 +70,7 @@ export class HorizantaleCalendar implements OnInit {
     
     getDaysFromDate(month: any, year: any) {
 
-        const startDate = moment.utc(`${year}/${month}/01`)
+        const startDate = moment.utc(`${year}/${month}/01`, "YYYY-MM-DD")
         const endDate = startDate.clone().endOf('month')
         this.dateSelect = startDate;
 
@@ -174,7 +174,7 @@ export class HorizantaleCalendar implements OnInit {
     }
 
     showAgenda(date:any) {
-        this.spanShowToday = moment(date).locale('fr').format("dddd D - MMMM - YYYY")
+        this.spanShowToday = moment(date,"YYYY/MM/DD").locale('fr').format("dddd D - MMMM - YYYY")
         let today = this.working.filter(item => item?.date == date)
         if(today.length)
         {
