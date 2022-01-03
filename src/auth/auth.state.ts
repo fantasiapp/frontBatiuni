@@ -58,7 +58,7 @@ export class AuthState {
   
   @Action(Register)
   register(ctx: StateContext<AuthModel>, action: Register) {
-    let req = this.http.post(environment.backUrl + '/data/', action, {
+    let req = this.http.post(environment.backUrl + '/register/', action, {
       headers: {
         Authorization: "Basic " + ctx.getState().token,
         'Content-Type': 'application/json'
