@@ -1,6 +1,8 @@
 import { Component, ChangeDetectionStrategy } from "@angular/core";
 import { Select } from "@ngxs/store";
 import { BehaviorSubject, Observable } from "rxjs";
+import { takeUntil } from "rxjs/operators";
+import { Destroy$ } from "src/common/classes";
 import { DistanceSliderConfig, SalarySliderConfig } from "src/common/config";
 import { User } from "src/models/User/user.model";
 import { UserState } from "src/models/User/user.state";
@@ -11,13 +13,13 @@ import { UserState } from "src/models/User/user.state";
   styleUrls: ['./home.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class HomeComponent {
+export class HomeComponent extends Destroy$ {
   
   @Select(UserState)
   user$!: Observable<User>;
 
   ngOnInit() {
-    this.user$.subscribe(console.log);
+    this.user$.pipe(takeUntil(this.destroy$)).subscribe(console.log);
   }
   
   activeView: number = 0;

@@ -51,8 +51,4 @@ export class HeaderComponent {
       result[i] = i;
     return result;
   }
-
-  ngOnInit() {
-    console.log('my tabs are', this.tabs);
-  }
 };

@@ -3,10 +3,11 @@ import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
 import { Select, Store } from "@ngxs/store";
 import { Observable } from "rxjs";
-import { take } from "rxjs/operators";
+import { take, takeUntil } from "rxjs/operators";
 import { Login, Logout } from "src/auth/auth.actions";
 import { AuthModel } from "src/auth/auth.model";
 import { AuthState } from "src/auth/auth.state";
+import { Destroy$ } from "src/common/classes";
 
 @Component({
   selector: 'connexion',
@@ -14,7 +15,7 @@ import { AuthState } from "src/auth/auth.state";
   styleUrls: ['./connexion.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ConnexionComponent {
+export class ConnexionComponent extends Destroy$ {
   loginForm = new FormGroup({
     email: new FormControl('', [
       Validators.required
@@ -39,8 +40,12 @@ export class ConnexionComponent {
   }
 
   constructor(private router: Router, private store: Store, private cd: ChangeDetectorRef) {
-    this.auth$.subscribe(console.log);
-    this.token$.subscribe(console.log)
+    super()
+  }
+
+  ngOnInit() {
+    this.auth$.pipe(takeUntil(this.destroy$)).subscribe(t => console.log('auth$', t));
+    this.token$.pipe(takeUntil(this.destroy$)).subscribe(t => console.log('token$', t))
   }
 
   onChange() {

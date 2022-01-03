@@ -29,7 +29,6 @@ export class PagingComponent {
   indexChange = new EventEmitter<number>();
 
   onClick(dx: number) {
-    console.log(this.index, dx);
     this.index += dx;
     if ( this.index < 0 ) {
       this.router.navigate(['', 'landing']);

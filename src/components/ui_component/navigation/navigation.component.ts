@@ -1,6 +1,6 @@
 import { Component, Input, EventEmitter, ChangeDetectionStrategy, Output, ChangeDetectorRef } from "@angular/core";
 import { ActivatedRoute, NavigationEnd, Router } from "@angular/router";
-import { Store } from "@ngxs/store";
+import { Select, Store } from "@ngxs/store";
 import { BehaviorSubject, Observable } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { Destroy$ } from "src/common/classes";
@@ -36,10 +36,12 @@ export class NavigationMenu extends Destroy$ {
   @Output()
   routeChange = new EventEmitter<string>();
 
+  @Select(UserState)
+  user$!: Observable<User>;
+
   changeRoute(index: number) {
     if ( index == this.currentIndex.getValue() ) return;
     let menu = this.menu.getValue();
-    console.log(menu);
     let route = menu[index].route;
     this.routeChange.emit(route);
     this.router.navigate(route ? ['', 'home', route] : ['', 'home']);
@@ -62,7 +64,7 @@ export class NavigationMenu extends Destroy$ {
       }
     });
 
-    this.store.select(UserState).subscribe((user: User) => {
+    this.user$.pipe(takeUntil(this.destroy$)).subscribe((user: User) => {
       this.menu.next(user.type ? PMEMenu : STMenu)
     });
   }
