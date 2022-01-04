@@ -217,6 +217,8 @@ a {
   font-size: 0.95em;
   overflow: hidden;
   flex-grow: 1;
+
+  & > * { flex-shrink: 0; }
 }
 
 .space-children-margin {
