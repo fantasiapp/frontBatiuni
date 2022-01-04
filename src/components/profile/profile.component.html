@@ -68,8 +68,8 @@
 
     
     <div class="full-width grow flex column position-relative">
-      <div [slides]="[modifyPage1, modifyPage2, modifyPage3]" type="template" [animate]="true"></div>
-      <ng-template #modifyPage1>
+      <div  [slides]="[modifyPage1, modifyPage2, modifyPage3]" type="template" [animate]="true"></div>
+      <ng-template #modifyPage1> 
         <section class="full-width section">
           <form class="form-control" [style.display]="modifyPassword ? 'none' : 'initial'">
             <h3 class="form-title font-Roboto">
@@ -93,17 +93,17 @@
               <input class="form-element" type="text" disabled/>
             </div>
     
-            <h3 class="form-title font-Roboto">
+            <!-- <h3 class="form-title font-Roboto">
               Modifier le mot de passe: 
               <img src="assets/icons/modify.svg" (click)="modifyPassword = true" class="modify-icon text"/>
             </h3>
-            <div class="form-input">
+            <div class="form-input" *ngIf="!modifyPassword">
               <label></label>
               <input class="form-element" value="********" type="text" disabled/>
-            </div>
+            </div> -->
           </form>
       
-          <!-- <form class="form-control" [style.display]="!modifyPassword ? 'none' : 'initial'">
+          <!-- <form class="form-control" *ngIf="modifyPassword">
             <div class="form-input">
               <label>Ancien mot de passe</label>
               <input class="form-element" type="text"/>
