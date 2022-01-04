@@ -25,7 +25,7 @@ export class Notifications {
     },
   {
       id: 2,
-      date: "2021-12-20T00:00:00Z",
+      date: "2022-01-03T00:00:00Z",
       src: 'assets/PS1B.svg',
       text: 'Vos horaires pour le chantier Lorem ipsum à été modifier. '
     },
@@ -54,11 +54,12 @@ export class Notifications {
   timer: any[] = [];
   ngOnInit() {
     let today = new Date(Date.now())
-    this.month = this.notification.filter(notif => moment(moment(today).format('l')).isAfter(moment(notif.date).format('l')))
-    this.today = this.notification.filter(notif => moment(moment(today).format('l')).isSame(moment(notif.date).format('l')))
+    this.month = this.notification.filter(notif => moment(moment(today).format('L')).isAfter(moment(notif.date).format('L')))
+    this.today = this.notification.filter(notif => moment(moment(today).format('L')).isSame(moment(notif.date).format('L')))
 
     for (let i = 0; i < this.today.length; i++) {
         this.timer.push(moment(moment(this.today[i].date)).startOf('hour').fromNow());
     }
+  
   }
 }
