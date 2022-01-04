@@ -1,6 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Action, Selector, State, StateContext, Store } from "@ngxs/store";
+import { tap } from "rxjs/operators";
 import { AuthState } from "src/auth/auth.state";
 import { environment } from "src/environments/environment";
 import { ChangePassword, ChangeProfilePicture, ChangeProfileType } from "./user.actions";
@@ -37,8 +38,10 @@ export class UserState {
         Authorization: "Token " + token,
         'Content-Type': 'application/json'
       }
-    });
+    })
 
-    return req;
+    return req.pipe(
+      tap((response: any) => console.log(response))
+    );
   }
 };

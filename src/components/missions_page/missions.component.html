@@ -6,7 +6,7 @@
 <div class="hosted-page space-children-margin page-content-with-tabs">
   <ng-container [ngSwitch]="activeView">
     <ng-container *ngSwitchCase="0">
-      <offer *ngFor="let mission of missions"  ></offer>
+      <offer *ngFor="let mission of missions" [routerLink]="['', 'suivi']"></offer>
     </ng-container>
     <horizantale-calendar class="space-children-margin" *ngSwitchCase="1"></horizantale-calendar>
   </ng-container>

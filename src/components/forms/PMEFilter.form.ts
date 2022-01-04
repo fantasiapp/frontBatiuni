@@ -1,49 +1,52 @@
-import { ChangeDetectionStrategy, Component } from "@angular/core";
+import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
 
 @Component({
   selector: 'pme-filter-form',
   template: `
-  <form class="form-control full-width">
-    <div class="form-input">
-      <label>Date de mission</label>
-      <input type="date"/>
-      <img src="assets/calendar.png"/>
-    </div>
-
-    <div class="form-input">
-      <label>Adresse de chantier</label>
-      <input type="text"/>
-    </div>
-
-    <div class="form-input">
-      <label>Métier</label>
-      <options></options>
-    </div>
-
-    <div class="form-input">
-      <label>Type</label>
-      <div class="flex row radio-container">
-        <div class="radio-item">
-          <box type="radio" class="grow" name="job-type"></box>
-          <span>Main d'oeuvre</span>
+    <ng-container [ngSwitch]="activeView">
+      <form class="form-control full-width" *ngSwitchCase="0">
+        <div class="form-input">
+          <label>Date de mission</label>
+          <input type="date"/>
+          <img src="assets/calendar.png"/>
         </div>
-        <div class="radio-item">
-          <box type="radio" class="grow" name="job-type"></box>
-          <span>Fourniture et pose</span>
-        </div>
-      </div>
-    </div>
 
-    <div class="form-input space-children-margin">
-      <label>Réorganiser la liste selon</label>
-      <div class="switch-container flex center-cross">
-        <span class="criteria">Les brouillons les plus anciens</span> <switch></switch>
-      </div>
-      <div class="switch-container flex center-cross">
-        <span class="criteria">Les brouillons les plus complets</span> <switch></switch>
-      </div>
-    </div>
-  </form>
+        <div class="form-input">
+          <label>Adresse de chantier</label>
+          <input type="text"/>
+        </div>
+
+        <div class="form-input">
+          <label>Métier</label>
+          <options></options>
+        </div>
+
+        <div class="form-input">
+          <label>Type</label>
+          <div class="flex row radio-container">
+            <div class="radio-item">
+              <box type="radio" class="grow" name="job-type"></box>
+              <span>Main d'oeuvre</span>
+            </div>
+            <div class="radio-item">
+              <box type="radio" class="grow" name="job-type"></box>
+              <span>Fourniture et pose</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-input space-children-margin">
+          <label>Réorganiser la liste selon</label>
+          <div class="switch-container flex center-cross">
+            <span class="criteria">Les brouillons les plus anciens</span> <switch></switch>
+          </div>
+          <div class="switch-container flex center-cross">
+            <span class="criteria">Les brouillons les plus complets</span> <switch></switch>
+          </div>
+        </div>
+      </form>
+      <online-filter-form [target]="activeView == 1 ? 'réponses' : 'notifications'" *ngSwitchDefault></online-filter-form>
+    </ng-container>
   `,
   styles: [`
     :host {
@@ -58,4 +61,7 @@ import { ChangeDetectionStrategy, Component } from "@angular/core";
   `],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class PMEFilterForm {}
+export class PMEFilterForm {
+  @Input()
+  activeView: number = 0;
+}

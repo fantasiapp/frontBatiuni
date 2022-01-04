@@ -24,8 +24,7 @@
         <ng-container *ngSwitchCase="2">
           <offer
             *ngFor="let mission of annonces"
-            src="assets/validée.svg"
-            [routerLink]="user.type ? ['', 'brouillon'] : null"></offer>
+            src="assets/validée.svg"></offer>
         </ng-container>
       </ng-container>
     </ng-container>
@@ -44,7 +43,7 @@
   </div>
   
   <swipeup [(open)]="openAdFilterMenu" type="view">
-    <pme-filter-form *ngIf="user.type; else stfilter" view></pme-filter-form>
+    <pme-filter-form [activeView]="activeView" *ngIf="user.type; else stfilter" view></pme-filter-form>
     <ng-template #stfilter><st-filter-form></st-filter-form></ng-template>
   </swipeup>
 </ng-container>

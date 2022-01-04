@@ -20,6 +20,7 @@ import { MakeAdComponent } from 'src/components/make_ad/make_ad.component';
 import { SOSPageComponent } from 'src/components/SOS_page/sos-page.component';
 import { AnnonceEnlignePage } from 'src/components/annonce_enligne/annonce.enligne';
 import { BoosterPage } from 'src/components/booster/booster.page';
+import { SuiviPage } from 'src/components/suivi_page/suivi.page';
 
 const routes: Routes = [{
     path: 'landing',
@@ -65,6 +66,9 @@ const routes: Routes = [{
     path: 'annonce-enligne',
     component: AnnonceEnlignePage
   },{
+    path: 'suivi',
+    component: SuiviPage
+  }, {
     path: 'factures',
     component: FacturePage,
   }, {

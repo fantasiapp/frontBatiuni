@@ -1,0 +1,27 @@
+@import '../../styles/variables';
+@import '../../styles/mixins';
+
+:host {
+  @extend %page;
+  @extend %no-navigation;
+}
+
+.annonce {
+  background: #FFFFFF !important;
+  color: black;
+}
+
+
+
+.hosted-page {
+  padding-top: 0;
+}
+
+.dashed {
+  margin-left: -30px !important;
+  // margin-right: -30px;
+  margin: 1rem 0;
+  display: block;
+  width: 100vw;
+  border-top: 1px dashed black;
+}
