@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from 
 @Component({
   selector: 'page-header',
   template: `
-  <header class="clear-margin flex column full-width space-children-margin">
+  <header class="clear-margin flex column full-width small-space-children-margin">
     <div *ngIf="!customHeader" class="text-light-emphasis">{{name}}</div>
     <div *ngIf="!customHeader; else headerBar" class="pick flex row">
       <searchbar class="grow"></searchbar>

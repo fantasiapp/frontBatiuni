@@ -18,6 +18,7 @@ import { FacturePage } from 'src/components/factures/facture.page';
 import { EngagementPage } from 'src/components/abonnement/engagement/engagement';
 import { MakeAdComponent } from 'src/components/make_ad/make_ad.component';
 import { SOSPageComponent } from 'src/components/SOS_page/sos-page.component';
+import { SuiviPage } from 'src/components/suivi_page/suivi.page';
 
 const routes: Routes = [{
     path: 'landing',

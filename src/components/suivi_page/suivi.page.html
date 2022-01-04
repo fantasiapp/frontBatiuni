@@ -1,0 +1,20 @@
+<header class="clear-margin full-width sticky-header flex center-cross annonce">
+  <img class="image-icon" [routerLink]="['','home','missions']"  src="assets/arrowlblack.svg" />
+  <span class="grow center-text text-light-emphasis">Mes missions</span>
+  <img class="image-icon" src="assets/phone.png" />
+</header>
+
+<div class="container hosted-page page-content-without-nav">
+  <annonce-resume></annonce-resume>
+  <hr class="dashed">
+  <form class="full-width form-control">
+    <h6 class="form-section-title">
+      Suivi du chantier
+    </h6>
+    <div class="full-width flex column space-children-margin">
+      <commentaire-ui *ngFor="let date of dates" [title]="date.date" [withstars]="false" [withcomment]="true">
+
+      </commentaire-ui>
+    </div>
+  </form>
+</div>
