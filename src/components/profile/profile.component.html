@@ -43,7 +43,8 @@
 </div>
 
 <swipeup [(open)]="openMenu">
-  <li (click)="slideModifyMenu()">Modifier mon profil</li>
+  <li (click)="slideModifyMenu(false)">Modifier mon profil</li>
+  <li (click)="slideModifyMenu(true)">Modifier mon mot de passe</li>
   <li>Candidatures en cours</li>
   <li [routerLink]="['','abonnement']">Gérer mes abonnements</li>
   <li [routerLink]="['','factures']">Mes factures</li>
@@ -68,8 +69,8 @@
 
     
     <div class="full-width grow flex column position-relative">
-      <div  [slides]="[modifyPage1, modifyPage2, modifyPage3]" type="template" [animate]="true"></div>
-      <ng-template #modifyPage1> 
+      <div *ngIf="!modifyPassword" [slides]="[modifyPage1, modifyPage2, modifyPage3]" type="template" [animate]="true"></div>
+      <ng-template #modifyPage1>
         <section class="full-width section">
           <form class="form-control" [style.display]="modifyPassword ? 'none' : 'initial'">
             <h3 class="form-title font-Roboto">
@@ -195,11 +196,11 @@
 
       <div style="margin-top: auto;">
         <div class="form-step">
-          <div (click)="modifySlider && modifySlider.index = 0" [class.active]="modifySlider.index == 0"></div>
-          <div (click)="modifySlider && modifySlider.index = 1" [class.active]="modifySlider.index == 1"></div>
-          <div (click)="modifySlider && modifySlider.index = 2" [class.active]="modifySlider.index == 2"></div>
+          <div (click)="modifySlider.index = 0" [class.active]="modifySlider ? modifySlider.index == 0 : true"></div>
+          <div (click)="modifySlider.index = 1" [class.active]="modifySlider && modifySlider.index == 1"></div>
+          <div (click)="modifySlider.index = 2" [class.active]="modifySlider && modifySlider.index == 2"></div>
         </div>
-        <button class="button gradient full-width" (click)="modifyPassword = false">
+        <button class="button gradient full-width">
           Enregistrer
         </button>
       </div>
