@@ -225,6 +225,12 @@ a {
   }
 }
 
+.small-space-children-margin {
+  & > *:not(:last-child) {
+    margin-bottom: $small-spacing-margin;
+  }
+}
+
 .formulaire {
   display: flex;
   flex-direction: column;
@@ -560,4 +566,9 @@ input[type=number] {
   left: 0;
   height: $sticky-footer-height;
   padding: 0 30px;
+}
+
+.image-icon {
+  width: $icon-size;
+  height: $icon-size;
 }

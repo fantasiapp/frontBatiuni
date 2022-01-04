@@ -1,13 +1,13 @@
 
-  <span class="title" *ngIf="withtitle">{{title}}</span>
-   <star-systeme *ngIf="withstars" title="{{startitle}}"></star-systeme>
-    <div class="commentaire grid">
-        <div class="comment">
-            <textarea class="form-input" type="text"  placeholder="Ajouter une commentaire"></textarea>
-        </div>
-        <div *ngIf="withcomment" class="photo position-relative ">
-            <input  type="file" (change)="showImage($event) "class="form-input upload-photo" >
-            <img class="upload" src="assets/calendar.png">
-        </div>
-        <img class="commentimage" *ngIf="imgSrc" [src]="imgSrc">        
-    </div>
+<span class="title" *ngIf="withtitle">{{title}}</span>
+<star-systeme *ngIf="withstars" title="{{startitle}}"></star-systeme>
+<div class="commentaire grid">
+  <div class="comment">
+    <textarea class="form-input" type="text"  placeholder="Ajouter une commentaire"></textarea>
+  </div>
+  <div *ngIf="withcomment" class="photo position-relative ">
+    <input  type="file" (change)="showImage($event) "class="form-input upload-photo" >
+    <img class="upload" src="assets/camera.png">
+  </div>
+  <img class="commentimage" *ngIf="imgSrc" [src]="imgSrc">        
+</div>

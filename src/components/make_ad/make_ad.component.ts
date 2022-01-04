@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from "@angular/core";
+import { ChangeDetectionStrategy, Component, HostBinding } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 
 @Component({
@@ -8,6 +8,8 @@ import { ActivatedRoute, Router } from "@angular/router";
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MakeAdComponent {
+  @HostBinding('class.page')
+  isPage: boolean;
 
   goBack() { window.history.back() }
 
@@ -15,9 +17,7 @@ export class MakeAdComponent {
     currencies: ['$', '€', '£']
   }
 
-  isDraft: boolean;
-
   constructor(route: ActivatedRoute) {
-    this.isDraft = route.snapshot.url[0].path == 'brouillon';
+    this.isPage = route.snapshot.url[0].path == 'make';
   }
 };
