@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component } from "@angular/core";
+import { ActivatedRoute, Router } from "@angular/router";
 
 @Component({
   selector: 'make_ad',
@@ -12,5 +13,11 @@ export class MakeAdComponent {
 
   imports = {
     currencies: ['$', '€', '£']
+  }
+
+  isDraft: boolean;
+
+  constructor(route: ActivatedRoute) {
+    this.isDraft = route.snapshot.url[0].path == 'brouillon';
   }
 };

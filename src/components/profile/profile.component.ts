@@ -6,9 +6,10 @@ import { User } from "src/models/User/user.model";
 import { UserState } from "src/models/User/user.state";
 import * as UserActions from "src/models/User/user.actions";
 import { Option } from "../options/options";
+import { Camera, CameraResultType, CameraSource } from "@capacitor/camera";
 import { UISlideMenuComponent } from "src/app/ui/slidemenu/slidemenu.component";
 import { UISwipeupComponent } from "src/app/ui/swipeup/swipeup.component";
-import { Camera, CameraResultType, CameraSource, CameraPermissionType } from "@capacitor/camera";
+
 
 @Component({
   selector: 'profile',
@@ -27,6 +28,7 @@ export class ProfileComponent {
   user$!: Observable<User>;
   
 
+  //move to state
   openMenu: boolean = false;
   openModifyMenu: boolean = false;
   openRatings: boolean = false;
@@ -40,11 +42,12 @@ export class ProfileComponent {
 
   async ngOnInit() {
     let permissions  = await Camera.checkPermissions();
-    if ( permissions.camera != 'granted' || permissions.photos != 'granted' ) {
-      let result = await Camera.requestPermissions({
-        permissions: ["camera", "photos"]
-      });
-    }
+    if ( permissions.camera != 'granted' || permissions.photos != 'granted' )
+      try {
+        await Camera.requestPermissions({
+          permissions: ["camera", "photos"]
+        });
+      } catch ( e ) {  }
   }
 
   slideModifyMenu() {

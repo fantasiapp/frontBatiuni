@@ -31,11 +31,15 @@
 .content {
   @extend %content-with-header;
   background: white;
+
+  &::ng-deep > * { flex-shrink: 0; }
 }
 
 .content-with-footer {
   @extend %content-with-header-and-footer;
   background: white;
+
+  &::ng-deep > * { flex-shrink: 0; }
 }
 
 .footer {
