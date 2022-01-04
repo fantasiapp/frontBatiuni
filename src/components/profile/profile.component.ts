@@ -50,16 +50,17 @@ export class ProfileComponent {
       } catch ( e ) {  }
   }
 
-  slideModifyMenu() {
+  slideModifyMenu(modifyPassword: boolean) {
     this.openMenu = false;
     this.openModifyMenu = true;
+    this.modifyPassword = modifyPassword;
   }
 
   openModifyPictureMenu() {
     this.openModifyPicture = true;
   }
 
-  @ViewChild(SlidesDirective, {static: true})
+  @ViewChild(SlidesDirective, {static: false})
   modifySlider!: SlidesDirective;
 
   @ViewChild('modifyMenu', {static: true, read: UISlideMenuComponent})
@@ -78,14 +79,14 @@ export class ProfileComponent {
   onSwipeLeft() {
     this.fixScrollTop();
     if ( this.openModifyMenu )
-      this.modifySlider.left();
+      this.modifySlider?.left();
   }
   
   @HostListener('swiperight')
   onSwipeRight() {
     this.fixScrollTop();
     if ( this.openModifyMenu )
-      this.modifySlider.right();
+      this.modifySlider?.right();
   }
 
 

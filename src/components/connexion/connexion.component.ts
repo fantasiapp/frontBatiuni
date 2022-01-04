@@ -63,7 +63,7 @@ export class ConnexionComponent extends Destroy$ {
     let { email, password } = this.loginForm.value;
     this.store.dispatch(new Login(email, password)).pipe(take(1)).subscribe(
       success => {
-        this.router.navigate(['', 'confirmed']);
+        this.router.navigate(['', 'home']);
       },
       errors => {
         this.addErrors(errors);
