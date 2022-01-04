@@ -103,20 +103,20 @@
             </div> -->
           </form>
       
-          <!-- <form class="form-control" *ngIf="modifyPassword">
+          <form class="form-control" [formGroup]="modifyPwdForm" (ngSubmit)="modifyPwdAction($event)">
             <div class="form-input">
               <label>Ancien mot de passe</label>
-              <input class="form-element" type="text"/>
+              <input class="form-element" type="text" formControlName="oldPwd"/>
             </div>
             <div class="form-input">
               <label>Nouveau mot de passe</label>
-              <input class="form-element" type="text"/>
+              <input class="form-element" type="text" formControlName="newPwd"/>
             </div>
             <div class="form-input">
               <label>Confirmation nouveau mot de passe</label>
-              <input class="form-element" type="text"/>
+              <input class="form-element" type="text" formControlName="newPwdConfirmation"/>
             </div>
-          </form> -->
+          </form>
         </section>
       </ng-template>
 

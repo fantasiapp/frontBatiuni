@@ -9,6 +9,7 @@ import { Option } from "../options/options";
 import { Camera, CameraResultType, CameraSource } from "@capacitor/camera";
 import { UISlideMenuComponent } from "src/app/ui/slidemenu/slidemenu.component";
 import { UISwipeupComponent } from "src/app/ui/swipeup/swipeup.component";
+import { FormControl, FormGroup, Validators } from "@angular/forms";
 
 
 @Component({
@@ -27,6 +28,24 @@ export class ProfileComponent {
   @Select(UserState)
   user$!: Observable<User>;
   
+  // Modify password 
+  modifyPwdForm = new FormGroup({
+    oldPwd: new FormControl('', [
+      Validators.required
+    ]),
+    newPwd: new FormControl('',[
+      Validators.required,
+      Validators.minLength(8),      
+    ]),
+    newPwdConfirmation: new FormControl('',[
+      Validators.required,
+      Validators.minLength(8),      
+    ])
+  })
+
+  async modifyPwdAction(e: Event) {
+
+  }
 
   //move to state
   openMenu: boolean = false;

@@ -1,6 +1,7 @@
+import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Action, Selector, State, StateContext } from "@ngxs/store";
-import { ChangeProfilePicture, ChangeProfileType } from "./user.actions";
+import { ChangePassword, ChangeProfilePicture, ChangeProfileType } from "./user.actions";
 import { User } from "./user.model";
 
 @State<User>({
@@ -12,7 +13,7 @@ export class UserState {
   @Selector()
   static type(state: User) { return state.type; }
 
-  constructor() { }
+  constructor(private http: HttpClient) { }
 
   //....
   @Action(ChangeProfileType)
@@ -23,5 +24,10 @@ export class UserState {
   @Action(ChangeProfilePicture)
   changeProfilePicture(ctx: StateContext<User>, action: ChangeProfilePicture) {
     return ctx.patchState({imageUrl: action.src});
+  }
+
+  @Action(ChangePassword) 
+  modifyPassword(ctx: StateContext<User>, action: ChangePassword) {
+    return '';
   }
 };
