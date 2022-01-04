@@ -42,8 +42,9 @@ export class ProfileComponent {
       Validators.minLength(8),      
     ])
   })
-
+  
   async modifyPwdAction(e: Event) {
+
 
   }
 
@@ -79,7 +80,7 @@ export class ProfileComponent {
     this.openModifyPicture = true;
   }
 
-  @ViewChild(SlidesDirective, {static: false})
+  @ViewChild(SlidesDirective, {static: true})
   modifySlider!: SlidesDirective;
 
   @ViewChild('modifyMenu', {static: true, read: UISlideMenuComponent})
@@ -95,17 +96,17 @@ export class ProfileComponent {
   }
 
   @HostListener('swipeleft')
-  onSwipeLeft() {
+  onSwipeLeft() { 
     this.fixScrollTop();
     if ( this.openModifyMenu )
-      this.modifySlider?.left();
+      this.modifySlider.left();
   }
   
   @HostListener('swiperight')
   onSwipeRight() {
     this.fixScrollTop();
     if ( this.openModifyMenu )
-      this.modifySlider?.right();
+      this.modifySlider.right();
   }
 
 
