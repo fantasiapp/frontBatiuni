@@ -10,6 +10,7 @@ import { Camera, CameraResultType, CameraSource } from "@capacitor/camera";
 import { UISlideMenuComponent } from "src/app/ui/slidemenu/slidemenu.component";
 import { UISwipeupComponent } from "src/app/ui/swipeup/swipeup.component";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
+import { VerifyField } from "src/validators/verify";
 
 
 @Component({
@@ -41,8 +42,8 @@ export class ProfileComponent {
       Validators.required,
       Validators.minLength(8),      
     ])
-  })
-  
+  }, {validators: VerifyField('newPwd', 'newPwdConfirmation')})
+
   async modifyPwdAction(e: Event) {
 
 
@@ -107,6 +108,11 @@ export class ProfileComponent {
     this.fixScrollTop();
     if ( this.openModifyMenu )
       this.modifySlider.right();
+  }
+
+  onSubmit() {
+    let { oldPwd, newPwd } = this.modifyPwdForm.value;
+    this.store.dispatch(new UserActions.ChangePassword(oldPwd, newPwd));
   }
 
 

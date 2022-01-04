@@ -36,7 +36,7 @@
         <ng-container *ngSwitchCase="0">
           <offer
             *ngFor="let mission of annonces"
-            [routerLink]="user.type ? ['', 'brouillon'] : null"></offer>
+            [routerLink]="['','annonce']"></offer>
         </ng-container>
         <mapbox-batiuni class="space-children-margin" *ngSwitchCase="1"></mapbox-batiuni>
       </ng-container>

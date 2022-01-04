@@ -1,6 +1,8 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Action, Selector, State, StateContext } from "@ngxs/store";
+import { Action, Selector, State, StateContext, Store } from "@ngxs/store";
+import { AuthState } from "src/auth/auth.state";
+import { environment } from "src/environments/environment";
 import { ChangePassword, ChangeProfilePicture, ChangeProfileType } from "./user.actions";
 import { User } from "./user.model";
 
@@ -13,7 +15,7 @@ export class UserState {
   @Selector()
   static type(state: User) { return state.type; }
 
-  constructor(private http: HttpClient) { }
+  constructor(private store: Store, private http: HttpClient) { }
 
   //....
   @Action(ChangeProfileType)
@@ -28,6 +30,15 @@ export class UserState {
 
   @Action(ChangePassword) 
   modifyPassword(ctx: StateContext<User>, action: ChangePassword) {
-    return '';
+    console.log(this.store.selectSnapshot(AuthState));
+    let token = this.store.selectSnapshot(AuthState).token;
+    let req = this.http.post(environment.backUrl + '/data/', action, {
+      headers: {
+        Authorization: "Token " + token,
+        'Content-Type': 'application/json'
+      }
+    });
+
+    return req;
   }
 };
