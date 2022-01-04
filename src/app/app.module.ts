@@ -46,6 +46,7 @@ import { EngagementPage } from 'src/components/abonnement/engagement/engagement'
 import { BoosterPage } from 'src/components/booster/booster.page';
 import { UserState } from 'src/models/User/user.state';
 import { UIModule } from './ui/ui.module';
+import { AnnonceEnlignePage } from 'src/components/annonce_enligne/annonce.enligne';
 
 @Injectable()
 export class CustomConfig extends HammerGestureConfig {
@@ -87,6 +88,7 @@ export class CustomConfig extends HammerGestureConfig {
     SOSFilterForm,
     EngagementPage,
     BoosterPage,
+    AnnonceEnlignePage
   ],
   imports: [
     //Ngxs imports

@@ -19,7 +19,7 @@
           <offer
             *ngFor="let mission of annonces"
             src="assets/enligne.svg"
-            [routerLink]="user.type ? ['', 'brouillon'] : null"></offer>
+            [routerLink]="user.type ? ['', 'annonce'] : null"></offer>
         </ng-container>
         <ng-container *ngSwitchCase="2">
           <offer

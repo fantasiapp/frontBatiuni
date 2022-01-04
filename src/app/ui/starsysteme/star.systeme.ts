@@ -7,6 +7,7 @@ import { Component, ChangeDetectionStrategy, Input } from "@angular/core";
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class StarSysteme {
+  @Input()
   nstars: number = 5;
   stars: any;
   note: any;
@@ -14,7 +15,10 @@ export class StarSysteme {
   @Input()
   title:string='backstar';
 
-  constructor() {
+  // constructor() {
+  //   this.stars = 
+  // }
+  ngOnInit(){
     this.stars = Array(this.nstars).fill(0).map((x,i)=>i);
   }
 
@@ -26,6 +30,13 @@ export class StarSysteme {
     }
   }
   changeBack(id: number) {
+    if(this.note == (id+1)){
+      for(let star = 0; star < this.nstars; star++) {
+        let thisone = document.getElementById(`${this.title}${star}`)
+        thisone!.style.fill = "white";
+      }
+      this.note = 0;
+    }else{
     this.note = id +1;
     for(let star = 0; star < this.nstars; star++) {
       let thisone = document.getElementById(`${this.title}${star}`)
@@ -35,6 +46,7 @@ export class StarSysteme {
       let thisone = document.getElementById(`${this.title}${star}`)
       thisone!.style.fill = "#F7D454";
     }
+  }
   }
 
 }
