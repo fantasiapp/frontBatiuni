@@ -1,9 +1,10 @@
-import { Component } from "@angular/core";
+import { ChangeDetectionStrategy, Component } from "@angular/core";
 
 @Component({
-    selector: "annonce-enligne",
-    templateUrl:"annonce.enligne.html",
-    styleUrls:['annonce.enligne.scss']
+  selector: "annonce-enligne",
+  templateUrl:"annonce.enligne.html",
+  styleUrls:['annonce.enligne.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AnnonceEnlignePage {
 

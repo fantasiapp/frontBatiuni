@@ -13,18 +13,19 @@
           <offer
             *ngFor="let mission of annonces"
             src="assets/brouillon.svg"
-            [routerLink]="user.type ? ['', 'brouillon'] : null"></offer>
+            [routerLink]="['', 'brouillon']"></offer>
         </ng-container>
         <ng-container *ngSwitchCase="1">
           <offer
             *ngFor="let mission of annonces"
             src="assets/enligne.svg"
-            [routerLink]="user.type ? ['', 'annonce-enligne'] : null"></offer>
+            [routerLink]="['', 'annonce-en-ligne']"></offer>
         </ng-container>
         <ng-container *ngSwitchCase="2">
           <offer
             *ngFor="let mission of annonces"
-            src="assets/validée.svg"></offer>
+            src="assets/validée.svg"
+            [routerLink]="['', 'annonce-validee']"></offer>
         </ng-container>
       </ng-container>
     </ng-container>

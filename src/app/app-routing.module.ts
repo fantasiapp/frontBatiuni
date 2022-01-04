@@ -21,6 +21,7 @@ import { SOSPageComponent } from 'src/components/SOS_page/sos-page.component';
 import { AnnonceEnlignePage } from 'src/components/annonce_enligne/annonce.enligne';
 import { BoosterPage } from 'src/components/booster/booster.page';
 import { SuiviPage } from 'src/components/suivi_page/suivi.page';
+import { SuiviPME } from 'src/components/suivi_pme/suivi_pme.page';
 
 const routes: Routes = [{
     path: 'landing',
@@ -63,11 +64,14 @@ const routes: Routes = [{
     path: 'booster',
     component: BoosterPage
   }, {
-    path: 'annonce-enligne',
+    path: 'annonce-en-ligne',
     component: AnnonceEnlignePage
   }, {
     path: 'confirmed',
     component: emailConfirmation
+  }, {
+    path: 'annonce-validee',
+    component: SuiviPME
   },{
     path: 'suivi',
     component: SuiviPage
