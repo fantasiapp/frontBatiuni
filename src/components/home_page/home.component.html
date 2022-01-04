@@ -18,7 +18,8 @@
         <ng-container *ngSwitchCase="1">
           <offer
             *ngFor="let mission of annonces"
-            src="assets/enligne.svg"></offer>
+            src="assets/enligne.svg"
+            [routerLink]="user.type ? ['', 'annonce-enligne'] : null"></offer>
         </ng-container>
         <ng-container *ngSwitchCase="2">
           <offer
