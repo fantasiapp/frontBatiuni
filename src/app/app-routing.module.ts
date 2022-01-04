@@ -51,6 +51,9 @@ const routes: Routes = [{
   }, {
     path: 'abonnement',
     component: AbonnementPage,
+  }, {
+    path: 'annonce-enligne',
+    component: AnnonceEnlignePage,
   },   {
     path: 'engagement',
     component: EngagementPage,
