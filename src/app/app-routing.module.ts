@@ -59,6 +59,9 @@ const routes: Routes = [{
     path: 'brouillon',
     component: MakeAdComponent
   }, {
+    path: 'suivi',
+    component: SuiviPage
+  }, {
     path: 'factures',
     component: FacturePage,
   }, {
