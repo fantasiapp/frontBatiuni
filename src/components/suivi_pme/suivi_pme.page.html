@@ -1,0 +1,26 @@
+<header class="clear-margin full-width sticky-header flex center-cross annonce">
+  <img [routerLink]="['','home']"  src="assets/arrowlblack.svg" />
+  <span class="grow center-text text-light-emphasis">Annonce Validée</span>
+  <img  (click)="swipemenu = true" src="assets/Option.svg" />
+</header>
+<div class="container hosted-page page-content-without-nav">
+  <annonce-resume [collapsed]="true"></annonce-resume>
+  
+  <div class="full-width flex column space-children-margin comments">
+    <h6 class="title font-Poppins">
+      Suivi du chantier
+    </h6>
+
+    <ng-container *ngFor="let date of dates">
+      <comment-suivi [title]="date.date"></comment-suivi>
+      <hr class="dashed">
+    </ng-container>
+  </div>
+</div>
+
+<swipeup [(open)]="swipemenu">
+  <li>Modifier les horaires de présence</li>
+  <li>Appeler le 06 21 94 03 86</li>
+  <li>Clôturer la mission</li>
+  <li>Dupliquer l'annonce</li>
+</swipeup>

@@ -1,7 +1,5 @@
 @import '../../../styles/variables';
-:host{
-    font-family: 'Roboto';
-}
+
 
 .suivi-chantier{
     border: 1px solid #C7C7C7;
@@ -11,7 +9,7 @@
 .user-info{
     span {
         display: inline-block;
-        font-size: 14px;
+        font-size: 0.9em;
     }
     .user-name{
         font-weight: 500;
@@ -47,4 +45,12 @@
     width: 80%;
     white-space: normal;
     }
+}
+
+.title {
+    display: block;
+    color: $secondaryBackground;
+    font-size: 1.1em;
+    margin-bottom: $spacing-margin;
+    font-weight: 500;
 }

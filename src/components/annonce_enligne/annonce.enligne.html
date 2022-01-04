@@ -1,18 +1,16 @@
 <header class="clear-margin full-width sticky-header flex center-cross annonce">
     <img [routerLink]="['','home']"  src="assets/arrowlblack.svg" />
-    <span class="grow center-text text-light-emphasis">Annonce enligne</span>
+    <span class="grow center-text text-light-emphasis">Annonce en Ligne</span>
     <img  (click)="swipemenu = true" src="assets/Option.svg" />
   </header>
-
   <div class="container hosted-page page-content-without-nav">
   <annonce-resume [collapsed]="false"></annonce-resume>
- 
 </div>
 
 <swipeup [(open)]="swipemenu" >
-    <li>Afficher les réponses</li>
-    <li [routerLink]="['','booster']">Booster Mon annonce</li>
-    <li>Supprimer l'annonce</li>
-    <li>Duppliquer l'annonce</li>
-    <li>Mettre en pause l'annonce</li>
+  <li>Afficher les réponses</li>
+  <li [routerLink]="['','booster']">Booster Mon annonce</li>
+  <li>Supprimer l'annonce</li>
+  <li>Duppliquer l'annonce</li>
+  <li>Mettre en pause l'annonce</li>
 </swipeup>

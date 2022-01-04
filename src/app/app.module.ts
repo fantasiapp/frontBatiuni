@@ -49,6 +49,7 @@ import { UIModule } from './ui/ui.module';
 import { SuiviPage } from 'src/components/suivi_page/suivi.page';
 import { AnnonceEnlignePage } from 'src/components/annonce_enligne/annonce.enligne';
 import { OnlineFilterForm } from 'src/components/forms/OnlineFilter.form';
+import { SuiviPME } from 'src/components/suivi_pme/suivi_pme.page';
 
 @Injectable()
 export class CustomConfig extends HammerGestureConfig {
@@ -92,7 +93,8 @@ export class CustomConfig extends HammerGestureConfig {
     BoosterPage,
     SuiviPage,
     AnnonceEnlignePage,
-    OnlineFilterForm
+    OnlineFilterForm,
+    SuiviPME
   ],
   imports: [
     //Ngxs imports
