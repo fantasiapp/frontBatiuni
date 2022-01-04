@@ -11,5 +11,6 @@ export class ChangeProfilePicture {
 
 export class ChangePassword {
   static readonly type = '[User] Change Password';
-  constructor(public password: string) {}
+  action = 'modifyPwd';
+  constructor(public oldPwd: string, public newPwd: string) {}
 }

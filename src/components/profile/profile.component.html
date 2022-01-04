@@ -69,6 +69,22 @@
 
     
     <div class="full-width grow flex column position-relative">
+      <div *ngIf="modifyPassword">
+        <form class="form-control" [formGroup]="modifyPwdForm" [style.display]="!modifyPassword ? 'none' : 'initial'">
+          <div class="form-input">
+            <label>Ancien mot de passe</label>
+            <input class="form-element" type="text" formControlName="oldPwd"/>
+          </div>
+          <div class="form-input">
+            <label>Nouveau mot de passe</label>
+            <input class="form-element" type="text" formControlName="newPwd"/>
+          </div>
+          <div class="form-input">
+            <label>Confirmation nouveau mot de passe</label>
+            <input class="form-element" type="text" formControlName="newPwdConfirmation"/>
+          </div>
+        </form>
+      </div>
       <div *ngIf="!modifyPassword" [slides]="[modifyPage1, modifyPage2, modifyPage3]" type="template" [animate]="true"></div>
       <ng-template #modifyPage1>
         <section class="full-width section">
@@ -92,30 +108,6 @@
             <div class="form-input">
               <label>Téléphone portable</label>
               <input class="form-element" type="text" disabled/>
-            </div>
-    
-            <!-- <h3 class="form-title font-Roboto">
-              Modifier le mot de passe: 
-              <img src="assets/icons/modify.svg" (click)="modifyPassword = true" class="modify-icon text"/>
-            </h3>
-            <div class="form-input" *ngIf="!modifyPassword">
-              <label></label>
-              <input class="form-element" value="********" type="text" disabled/>
-            </div> -->
-          </form>
-      
-          <form class="form-control" [formGroup]="modifyPwdForm" (ngSubmit)="modifyPwdAction($event)">
-            <div class="form-input">
-              <label>Ancien mot de passe</label>
-              <input class="form-element" type="text" formControlName="oldPwd"/>
-            </div>
-            <div class="form-input">
-              <label>Nouveau mot de passe</label>
-              <input class="form-element" type="text" formControlName="newPwd"/>
-            </div>
-            <div class="form-input">
-              <label>Confirmation nouveau mot de passe</label>
-              <input class="form-element" type="text" formControlName="newPwdConfirmation"/>
             </div>
           </form>
         </section>
@@ -195,12 +187,12 @@
       </ng-template>
 
       <div style="margin-top: auto;">
-        <div class="form-step">
+        <div *ngIf="!modifyPassword" class="form-step">
           <div (click)="modifySlider.index = 0" [class.active]="modifySlider ? modifySlider.index == 0 : true"></div>
           <div (click)="modifySlider.index = 1" [class.active]="modifySlider && modifySlider.index == 1"></div>
           <div (click)="modifySlider.index = 2" [class.active]="modifySlider && modifySlider.index == 2"></div>
         </div>
-        <button class="button gradient full-width">
+        <button class="button gradient full-width" (click)="onSubmit()">
           Enregistrer
         </button>
       </div>
