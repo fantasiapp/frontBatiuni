@@ -81,7 +81,7 @@ export class ProfileComponent {
     this.openModifyPicture = true;
   }
 
-  @ViewChild(SlidesDirective, {static: true})
+  @ViewChild(SlidesDirective, {static: false})
   modifySlider!: SlidesDirective;
 
   @ViewChild('modifyMenu', {static: true, read: UISlideMenuComponent})
