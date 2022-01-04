@@ -5,6 +5,16 @@
   @extend %page;
 }
 
+:host(.page) {
+  footer { display: none !important; }
+
+  header {
+    img { display: none; }
+    background: $secondaryBackground !important;
+    color: white;
+  }
+}
+
 .remuneration > * {
   max-width: 45%;
 }

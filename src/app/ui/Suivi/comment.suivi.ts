@@ -6,7 +6,6 @@ import { Component, Input } from "@angular/core";
     styleUrls: ['comment.suivi.scss']
 })
 export class SuiviComments {
-
     // We can get the name and the profile image from the state
     @Input()
     name: string = 'Gabriel Dubois'
