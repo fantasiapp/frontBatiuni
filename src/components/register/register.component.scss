@@ -1,4 +1,6 @@
+@import '../../styles/mixins';
+
 :host {
   display: block;
-  width: 100%;
+  @extend %overflow-y;
 }
