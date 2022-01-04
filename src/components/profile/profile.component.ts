@@ -111,7 +111,8 @@ export class ProfileComponent {
 
   onSubmit() {
     let { oldPwd, newPwd } = this.modifyPwdForm.value;
-    this.store.dispatch(new UserActions.ChangePassword(oldPwd, newPwd));
+    let req = this.store.dispatch(new UserActions.ChangePassword(oldPwd, newPwd));
+    req.subscribe(console.log);
   }
 
 
