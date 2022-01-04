@@ -158,6 +158,14 @@
   height: calc(100vh - #{$sticky-header-height + $sticky-footer-height});
 }
 
+%content-with-paging-and-footer {
+  @extend %overflow-y;
+  @include with-set-safe-area(margin, top, $paging-height);
+  @include with-set-safe-area(margin, bottom, $sticky-footer-height);
+  height: calc(100vh - #{$paging-height + $sticky-footer-height});
+}
+
+
 .paging-only-content {
   @extend %overflow-y;
   @include with-set-safe-area(margin, top, $paging-height + $paging-decoration-height);

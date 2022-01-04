@@ -1,1 +1,4 @@
 Use template instead of different components
+
+
+//The pattern is to have a container with mixins and inside it put a hosted-page

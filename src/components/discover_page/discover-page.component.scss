@@ -8,26 +8,26 @@ $buttonHeight: 60px;
   width: 100%;
   font-size: inherit;
 }
+
+
 .create-account {
-  position: absolute;
-  bottom: 0;
-  height: $buttonHeight;
   padding: 0 30px;
-  box-shadow: 0 -2px 5px 0 #aaa;
+  box-shadow: 0 -2px 4px 0 #ccc;
   background: white;;
+  line-height: $sticky-footer-height;
 }
-
-.create-account button {
-  margin: 10px 0;
-}
-
 .section {
-  $offset: $buttonHeight + $paging-height + $page-padding;
+  $offset: $sticky-footer-height + $paging-height + $page-padding;
   height: calc(100vh - #{$offset});
 }
 
-.image-container {
+.content {
+  position: relative;
+  @extend %content-with-paging-and-footer;
+}
 
+.image-container {
+  margin: auto 0;
   img {
     max-height: 45vh;
   }
