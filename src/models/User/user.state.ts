@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Action, Selector, State, StateContext } from "@ngxs/store";
-import { ChangeProfileType } from "./user.actions";
+import { ChangeProfilePicture, ChangeProfileType } from "./user.actions";
 import { User } from "./user.model";
 
 @State<User>({
@@ -18,5 +18,10 @@ export class UserState {
   @Action(ChangeProfileType)
   changeProfileType(ctx: StateContext<User>, action: ChangeProfileType) {
     return ctx.patchState({type: action.type});
+  }
+
+  @Action(ChangeProfilePicture)
+  changeProfilePicture(ctx: StateContext<User>, action: ChangeProfilePicture) {
+    return ctx.patchState({imageUrl: action.src});
   }
 };

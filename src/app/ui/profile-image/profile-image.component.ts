@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from "@angular/core";
+import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
 
 @Component({
   selector: 'profile-image',
@@ -7,6 +7,9 @@ import { ChangeDetectionStrategy, Component } from "@angular/core";
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UIProfileImageComponent {
+
+  @Input()
+  src: string | null = null;
   
   static getAvailabilityColor(availability: number) {
     switch(availability) {

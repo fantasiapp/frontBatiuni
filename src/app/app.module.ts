@@ -22,53 +22,30 @@ import { emailConfirmation } from 'src/components/validator/email_confirmation/e
 import { RegistrationSuccess } from 'src/components/validator/registration_success/registrationsuccess';
 import { DiscoverComponent } from 'src/components/discover_page/discover-page.component';
 import { OptionsModel } from 'src/components/options/options';
-import { OfferComponent } from 'src/components/ui_component/offer/offer.compnent';
-import { NavigationMenu } from 'src/components/ui_component/navigation/navigation.component';
 
 import { HAMMER_GESTURE_CONFIG, HammerGestureConfig } from '@angular/platform-browser';
 import { SlideTemplate } from 'src/directives/slideTemplate.directive';
 import { PagingComponent } from 'src/components/paging/paging.component';
 import { FadeTemplate } from 'src/directives/fadeTemplate.directive';
-import { CalendarUI } from 'src/components/ui_component/calendar/calendar.ui';
 import { MainPage } from 'src/components/main/main.component';
 import { ProfileComponent } from 'src/components/profile/profile.component';
-import { UISwitchComponent } from 'src/components/ui_component/switch/switch.component';
-import { UISwipeupComponent } from 'src/components/ui_component/swipeup/swipeup.component';
 import { Notifications } from 'src/components/notifications/notifications';
-import { UIStarsComponent } from 'src/components/ui_component/stars/stars.component';
-import { UISlideMenuComponent } from 'src/components/ui_component/slidemenu/slidemenu.component';
-import { UIProfileImageComponent } from 'src/components/ui_component/profile-image/profile-image.component';
-import { UINumberComponent } from 'src/components/ui_component/number/number.component';
-import { FileUI } from 'src/components/ui_component/filesUI/files.ui';
-import { UIBoxComponent } from 'src/components/ui_component/box/box.component';
 import { MissionsComponent } from 'src/components/missions_page/missions.component';
-import { SearchbarComponent } from 'src/components/ui_component/searchbar/searchbar.component';
-import { HorizantaleCalendar } from 'src/components/ui_component/horizantalecalendar/horizantale.component';
-import { UiMapComponent } from 'src/components/ui_component/map/map.component';
 import { HomeComponent } from 'src/components/home_page/home.component';
 import { AvailabilitiesComponent } from 'src/components/availabilities_page/availabilities.component';
-import { SuiviComments } from 'src/components/ui_component/Suivi/comment.suivi';
-import { UICreditCard } from 'src/components/ui_component/creditcard/credit-card.ui';
-import { UIPopup } from 'src/components/ui_component/popup/popup.component';
 import { MakeAdComponent } from 'src/components/make_ad/make_ad.component';
 import { AnnoncePage } from 'src/components/annonce/annonce.page';
 import { MakeAdForm } from 'src/components/forms/MakeAd.form';
 import { STFilterForm } from 'src/components/forms/STFilter.form';
 import { PMEFilterForm } from 'src/components/forms/PMEFilter.form';
 import { AbonnementPage } from 'src/components/abonnement/abonnement.page';
-import { UIAbonnement } from 'src/components/ui_component/abonnementUI/abonnement.ui';
-import { HeaderComponent } from 'src/components/ui_component/header/header.component';
 import { FacturePage } from 'src/components/factures/facture.page';
-import { FactureUI } from 'src/components/ui_component/factureUI/facture.ui';
-import { UISOSCard } from 'src/components/ui_component/SOSCard/SOSCard.ui';
 import { SOSPageComponent } from 'src/components/SOS_page/sos-page.component';
 import { SOSFilterForm } from 'src/components/forms/SOSFilter.form';
 import { EngagementPage } from 'src/components/abonnement/engagement/engagement';
-import { UIAnnonceResume } from 'src/components/ui_component/annonce-resume/annonce-resume.ui';
 import { BoosterPage } from 'src/components/booster/booster.page';
-import { StarSysteme } from 'src/components/ui_component/starsysteme/star.systeme';
 import { UserState } from 'src/models/User/user.state';
-import { CommentaireUI } from 'src/components/ui_component/commentaire/commentaire.ui';
+import { UIModule } from './ui/ui.module';
 
 @Injectable()
 export class CustomConfig extends HammerGestureConfig {
@@ -90,51 +67,26 @@ export class CustomConfig extends HammerGestureConfig {
     SlidesDirective,
     DiscoverComponent,
     OptionsModel,
-    OfferComponent,
     PagingComponent,
     SlideTemplate,
     FadeTemplate,
-    CalendarUI,
     MainPage,
-    NavigationMenu,
     ProfileComponent,
-    UISwitchComponent,
-    UISwipeupComponent,
     Notifications,
-    UIStarsComponent,
-    UISlideMenuComponent,
-    UIProfileImageComponent,
-    UIBoxComponent,
-    UINumberComponent,
-    FileUI,
-    UIBoxComponent,
-    SearchbarComponent,
     MissionsComponent,
-    HorizantaleCalendar,
-    UiMapComponent,
-    HeaderComponent,
     HomeComponent,
     AvailabilitiesComponent,
-    SuiviComments,
-    UICreditCard,
-    UIPopup,
     MakeAdComponent,
     AnnoncePage,
     MakeAdForm,
     STFilterForm,
     PMEFilterForm,
     AbonnementPage,
-    UIAbonnement,
     FacturePage,
-    FactureUI,
-    UISOSCard,
     SOSPageComponent,
     SOSFilterForm,
     EngagementPage,
-    UIAnnonceResume,
     BoosterPage,
-    StarSysteme,
-    CommentaireUI
   ],
   imports: [
     //Ngxs imports
@@ -158,6 +110,7 @@ export class CustomConfig extends HammerGestureConfig {
     BrowserAnimationsModule,
     HammerModule,
     ReactiveFormsModule,
+    UIModule
   ],
   providers: [{
     provide: HAMMER_GESTURE_CONFIG,

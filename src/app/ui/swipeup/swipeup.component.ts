@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, SimpleChange, SimpleChanges } from "@angular/core";
+import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
 import { UIOpenMenu } from "src/common/classes";
 
 @Component({
