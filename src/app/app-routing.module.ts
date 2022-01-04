@@ -65,6 +65,9 @@ const routes: Routes = [{
   }, {
     path: 'annonce-enligne',
     component: AnnonceEnlignePage
+  }, {
+    path: 'confirmed',
+    component: emailConfirmation
   },{
     path: 'suivi',
     component: SuiviPage
