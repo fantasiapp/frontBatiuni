@@ -100,7 +100,7 @@
   #{$target}: env(safe-area-inset-#{$direction});
 }
 
-@mixin with-set-safe-area($property, $direction: $property, $offset: 0px 0px) {
+@mixin with-set-safe-area($property, $direction: $property, $offset: 0) {
   $positioning: (top, left, bottom, right);
   $boxes: (margin, padding, border);
   $allowed_properties: join($boxes, $positioning, comma);
@@ -111,9 +111,9 @@
 
   $target: if(list.index($positioning, $property), $property, #{$property}-#{$direction});
 
-  #{$target}: list.nth($offset, 1);
-  #{$target}: calc(constant(safe-area-inset-#{$direction}) + #{list.nth($offset, 1)});
-  #{$target}: calc(env(safe-area-inset-#{$direction}) + #{list.nth($offset, 1)});
+  #{$target}: $offset;
+  #{$target}: calc(constant(safe-area-inset-#{$direction}) + #{$offset});
+  #{$target}: calc(env(safe-area-inset-#{$direction}) + #{$offset});
 }
 
 %overflow-y {
@@ -158,27 +158,36 @@
   height: calc(100vh - #{$sticky-header-height + $sticky-footer-height});
 }
 
+%content-with-paging-and-footer {
+  @extend %overflow-y;
+  @include with-set-safe-area(margin, top, $paging-height);
+  @include with-set-safe-area(margin, bottom, $sticky-footer-height);
+  height: calc(100vh - #{$paging-height + $sticky-footer-height});
+}
+
+
 .paging-only-content {
   @extend %overflow-y;
-  @include with-set-safe-area(margin, top, $paging-height + $paging-decoration-height 0);
+  @include with-set-safe-area(margin, top, $paging-height + $paging-decoration-height);
   height: calc(100vh - #{$paging-height + $paging-decoration-height});
 }
 
 .page-content-with-tabs {
   @extend %overflow-y;
-  @include with-set-safe-area(margin, top, $mission-header-height 0);
+  @include with-set-safe-area(margin, top, $mission-header-height);
+  @include with-set-safe-area(margin, bottom);
   height: calc(100vh - #{$mission-header-height + $navigation-height});
 }
 
 .page-content {
   @extend %overflow-y;
-  @include with-set-safe-area(margin, top, $sticky-header-height 0);
+  @include with-set-safe-area(margin, top, $sticky-header-height);
   height: calc(100vh - #{$sticky-header-height + $navigation-height});
 }
 
 .page-content-without-nav {
   @extend %overflow-y;
-  @include with-set-safe-area(margin, top, $sticky-header-height 0);
+  @include with-set-safe-area(margin, top, $sticky-header-height);
   height: calc(100vh - #{$sticky-header-height});
 }
 

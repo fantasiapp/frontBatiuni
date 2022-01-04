@@ -1,5 +1,5 @@
 <ng-template #page let-ctx>
-  <section class="full-width section flex column">
+  <div class="hosted-page full-width section flex column">
     <header style="flex-grow: 0;">
       <h3 class="title">{{ ctx.title }}</h3>
       <p class="font-Poppins">
@@ -8,17 +8,19 @@
         </span>
       </p>
     </header>
-    <div class="image-container center-text" style="margin-top: 40px; margin-bottom: auto">
+    <div class="image-container center-text">
       <img [src]="ctx.image" loading="eager"/>
     </div>
-  </section>
+  </div>
 </ng-template>
 
 <paging [showPageName]="false" [length]="4" [showNext]="false"></paging>
-<div class="hosted-page paging-only-content">
+
+<div class="content flex column">
   <ng-container [slide-template]="page" [contexts]="contexts[subject]">
   </ng-container> 
 </div>
+
 
 <div class="full-width no-background">
   <a *ngIf="slider.index > 0" class="arrow_left absolute-center-y" (click)="slider.slide('right')">
@@ -30,6 +32,6 @@
   </a>
 </div>
 
-<div class="create-account background-white full-width">
+<div class="create-account full-width sticky-footer">
   <button class="button gradient full-width relative-center-x" [routerLink]="['', 'register']">Créer un compte</button>
 </div>

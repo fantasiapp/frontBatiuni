@@ -215,6 +215,8 @@ a {
   padding: $page-padding;
   position: relative;
   font-size: 0.95em;
+  overflow: hidden;
+  flex-grow: 1;
 }
 
 .space-children-margin {
