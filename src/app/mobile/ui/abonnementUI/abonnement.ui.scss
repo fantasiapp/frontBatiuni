@@ -44,7 +44,7 @@ $margin-top : 16px;
 }
 .earn {
     li{
-        list-style: url('../../../assets/confirmationblue.svg');
+        list-style: url('/assets/confirmationblue.svg');
         background-size: 40px;
         margin: $margin-top 0;
         padding-left: math.div($margin-top, 2);

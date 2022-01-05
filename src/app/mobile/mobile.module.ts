@@ -30,6 +30,7 @@ import { SlideTemplate } from "./directives/slideTemplate.directive";
 import { UIModule } from "./ui/ui.module";
 import { SharedModule } from "../shared/shared.module";
 import { ReactiveFormsModule } from "@angular/forms";
+import { HammerModule } from "@angular/platform-browser";
 
 @NgModule({
   declarations: [
@@ -66,6 +67,7 @@ import { ReactiveFormsModule } from "@angular/forms";
     UIModule,
     AppRoutingModule,
     ReactiveFormsModule,
+    HammerModule,
   ],
   exports: [
     LandingPageComponent,

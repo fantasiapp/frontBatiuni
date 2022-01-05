@@ -1,10 +1,9 @@
 import { environment } from 'src/environments/environment';
 import { Injectable, NgModule } from '@angular/core';
-import { BrowserModule, HammerModule } from '@angular/platform-browser';
+import { BrowserModule, } from '@angular/platform-browser';
 import { NgxsModule } from '@ngxs/store';
 import { NgxsRouterPluginModule } from '@ngxs/router-plugin';
 import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
-import { AppRoutingModule } from './mobile/routing/app-routing.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppComponent } from './app.component';
 import { AuthState } from 'src/models/auth/auth.state';
@@ -14,6 +13,9 @@ import { CommonModule } from '@angular/common';
 
 import { HAMMER_GESTURE_CONFIG, HammerGestureConfig } from '@angular/platform-browser';
 import { UserState } from 'src/models/user/user.state';
+
+import { AppRoutingModule } from './mobile/routing/app-routing.module';
+import { DesktopModule } from './desktop/desktop.module';
 import { MobileModule } from './mobile/mobile.module';
 
 @Injectable()
@@ -27,8 +29,7 @@ export class CustomConfig extends HammerGestureConfig {
 
 @NgModule({
   declarations: [
-    AppComponent,
-    
+    AppComponent
   ],
   imports: [
     //Ngxs imports
@@ -45,9 +46,8 @@ export class CustomConfig extends HammerGestureConfig {
     CommonModule,
     HttpClientModule,
     BrowserModule,
-    AppRoutingModule,
     BrowserAnimationsModule,
-    HammerModule,
+    AppRoutingModule,
     MobileModule
   ],
   providers: [{
