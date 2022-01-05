@@ -13,7 +13,7 @@ import { UIBoxComponent } from './box/box.component';
 import { SearchbarComponent } from './searchbar/searchbar.component';
 import { HorizantaleCalendar } from './horizantalecalendar/horizantale.component';
 import { UiMapComponent } from './map/map.component';
-import { SuiviComments } from './Suivi/comment.suivi';
+import { SuiviComments } from './suivi/comment.suivi';
 import { UICreditCard } from './creditcard/credit-card.ui';
 import { UIPopup } from './popup/popup.component';
 import { UIAbonnement } from './abonnementUI/abonnement.ui';
