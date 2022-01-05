@@ -23,7 +23,7 @@ import { UIAnnonceResume } from './annonce-resume/annonce-resume.ui';
 import { StarSysteme } from './starsysteme/star.systeme';
 import { CommentaireUI } from './commentaire/commentaire.ui';
 import { FactureUI } from './factureUI/facture.ui';
-import { AppRoutingModule } from '../app-routing.module';
+import { AppRoutingModule } from '../routing/app-routing.module';
 import { UINumberComponent } from './number/number.component';
 
 

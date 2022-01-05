@@ -22,20 +22,24 @@ import { AnnonceEnlignePage } from 'src/components/annonce_enligne/annonce.enlig
 import { BoosterPage } from 'src/components/booster/booster.page';
 import { SuiviPage } from 'src/components/suivi_page/suivi.page';
 import { SuiviPME } from 'src/components/suivi_pme/suivi_pme.page';
+import { AuthGuard } from './auth/auth.guard';
 
 const routes: Routes = [{
     path: 'landing',
     component: LandingPageComponent,
+    canActivate: [AuthGuard],
     data: { animation: 'LandingPage' }
   }, {
     path: 'connexion',
-    component: ConnexionComponent
+    component: ConnexionComponent,
+    canActivate: [AuthGuard]
   }, {
     path: 'discover',
     redirectTo: 'discover/entreprise'
   }, {
     path: 'discover/:subject',
     component: DiscoverComponent,
+    canActivate: [AuthGuard],
     data: { animation: 'Discover' }
   }, {
     path: 'register',
@@ -84,6 +88,7 @@ const routes: Routes = [{
   }, {
     path: 'home',
     component: MainPage,
+    canActivate: [AuthGuard],
     children: [
       {path: 'profile', component: ProfileComponent, data: { animation: 'profile' }},
       {path: 'missions', component: MissionsComponent, data: { animation: 'missions' }},
@@ -101,6 +106,7 @@ const routes: Routes = [{
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
+  providers: [AuthGuard]
 })
 export class AppRoutingModule { }
