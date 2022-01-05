@@ -3,7 +3,7 @@ import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { Store } from "@ngxs/store";
 import { Register } from "src/auth/auth.actions";
 import { SlidesDirective } from "src/directives/slides.directive";
-import { VerifyField } from "src/validators/verify";
+import { MatchField } from "src/validators/verify";
 import { Option } from "../options/options";
 
 @Component({
@@ -35,7 +35,7 @@ export class RegisterComponent {
     role: new FormControl(''),
     company: new FormControl(''),
     jobs: new FormControl([])
-  }, {validators: VerifyField('email', 'emailVerification')});
+  }, {validators: MatchField('email', 'emailVerification')});
 
   @ViewChild(SlidesDirective, {static: true})
   slider!: SlidesDirective;

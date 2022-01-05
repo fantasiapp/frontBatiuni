@@ -1,11 +1,12 @@
 import { Action, Selector, State, StateContext } from "@ngxs/store";
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from "@angular/core";
 import { AuthModel } from "./auth.model";
 import { environment } from 'src/environments/environment';
 import { Login, Logout, Register } from "./auth.actions";
 import { catchError, tap } from "rxjs/operators";
 import { of, throwError } from "rxjs";
+import * as strings from '../common/strings';
 
 @State<AuthModel>({
   name: 'auth',
@@ -31,8 +32,13 @@ export class AuthState {
     });
     
     return req.pipe(
-      catchError((err) => {
-        return throwError(err.error);
+      catchError((err: HttpErrorResponse) => {
+        let error;
+        if ( err.status == 404 ) error = strings.requests.INVALID_CONFIG; 
+        else if ( err.status == 500 ) error = strings.requests.SERVER_UNAVAILABLE;
+        else if ( err.status == 400 ) error = strings.requests.INVALID_CREDENTIALS;
+        else error = strings.requests.UNEXPECTED_ERROR;
+        return throwError({all: error});
       }),
       tap((response: any) => {
         let token = response['token'];
