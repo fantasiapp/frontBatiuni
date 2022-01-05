@@ -1,0 +1,66 @@
+@import "src/styles/variables";
+@import "src/styles/mixins";
+
+:host {
+    @extend %page;
+    background: white !important;
+}
+.abonnement {
+    background: #ffffff !important;
+    color: black;
+}
+
+page-header::ng-deep header {
+    background-color: #ffffff !important;
+    border-bottom: 1px solid #e5e5e5;
+}
+page-header::ng-deep .tabs {
+    li {
+        position: relative;
+        top: 1px;
+        border: 1px solid #e5e5e5;
+        border-bottom: none !important;
+    }
+}
+
+.caroussel {
+    position: relative;
+    display: flex;
+    overflow-y: scroll;
+    padding: 1rem 0;
+    scroll-snap-type: y mandatory;
+    div {
+        flex: 2 0 310px;
+        margin-left: 0.5rem;
+        margin-right: 0.5rem !important;
+        scroll-snap-align: start;
+        padding: 1rem 0;
+    }
+}
+
+.thiscenterclass {
+    position: relative;
+    .thischild {
+        margin-top: 1rem;
+        position: absolute;
+        top: -20px;
+        scroll-snap-align: center;
+    }
+}
+.caroussel-button {
+    background: white !important;
+    position: fixed;
+    bottom: 0;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+    justify-content: space-evenly;
+    button {
+        background: none !important;
+    }
+}
+::-webkit-scrollbar {
+    display: none;
+  }

@@ -2,9 +2,9 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Action, Selector, State, StateContext, Store } from "@ngxs/store";
 import { tap } from "rxjs/operators";
-import { AuthState } from "src/auth/auth.state";
+import { AuthState } from "src/models/auth/auth.state";
 import { environment } from "src/environments/environment";
-import { ChangePassword, ChangeProfilePicture, ChangeProfileType } from "./user.actions";
+import { ChangePassword, ChangeProfileType, ChangeProfilePicture } from "./user.actions";
 import { User } from "./user.model";
 
 @State<User>({

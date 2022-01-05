@@ -1,0 +1,31 @@
+@import 'src/styles/variables';
+@import 'src/styles/mixins';
+
+:host {
+  @extend %page;
+}
+
+:host(.page) {
+  footer { display: none !important; }
+
+  header {
+    img { display: none; }
+    background: $secondaryBackground !important;
+    color: white;
+  }
+}
+
+.remuneration > * {
+  max-width: 45%;
+}
+
+.submit-container {
+  padding: 10px 20px;
+
+  button { max-width: 45%;}
+}
+
+header {
+  background: #FFFFFF !important;
+  color: black;
+}

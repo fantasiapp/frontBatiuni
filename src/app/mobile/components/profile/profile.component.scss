@@ -1,0 +1,92 @@
+@import 'src/styles/variables';
+@import 'src/styles/mixins';
+
+:host {
+  @extend %page;
+}
+
+header {
+  img { padding: 0 $item-padding; }
+}
+
+.quick-intro {
+  font-weight: 200;
+  & > *:not(:last-of-type) {
+    margin-bottom: $spacing-margin;
+  }
+}
+
+.job-description .value {
+  font-weight: 300;
+}
+
+.documents {
+  width: calc(100% + 2*#{$page-padding});
+  padding: 10px 20px 0;
+  border-top: 1px dashed #aaa;
+
+  .images {
+    flex-wrap: wrap !important;
+    justify-content: space-between;
+  }
+}
+
+.documents img {
+  width: $document-image-size-x;
+}
+
+.modify-icon {
+  width: $icon-size + 2 * $icon-padding;
+  height: $icon-size + 2 * $icon-padding;
+  
+  &.image {
+    position: absolute;
+    bottom: $icon-size; left: $profile-image-size - $highlight-margin - $icon-size;
+  }
+  
+  &.text {
+    position: relative;
+    vertical-align: middle;
+    margin-left: 20px;
+  }
+}
+
+.form-title, .form-input label {
+  font-size: 1em;
+}
+
+.company-rate{
+  font-family:  "Roboto";
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+  padding : 10px;
+  margin: 10px 0;
+ 
+}
+.company-name {
+  font-weight: 800;
+  color : #333333;
+}
+
+.criterion {
+  margin: 10px;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+  padding: 10px;
+  .criterion-stars {
+    font-size: 14px;
+  }
+  .stars {
+    transform: scale(0.7);
+  }
+  span{
+    color :#999999;
+    white-space: normal;
+  }
+}
+
+.form-input .number-container {
+  display: inline;
+  right: $item-padding;
+}
+
+.metiers > * { margin-bottom: $item-padding; }
+.section { background-color: white; }

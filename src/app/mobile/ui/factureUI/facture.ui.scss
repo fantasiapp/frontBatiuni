@@ -1,0 +1,34 @@
+@import "src/styles/mixins";
+@import "src/styles/variables";
+
+:host {
+    display: block;
+}
+
+.factures-infos {
+    flex: 1;
+    white-space: nowrap;
+}
+p {
+    margin: 0.6em;
+}
+.facutreid,
+.service, .price{
+    font-size: 13px;
+}
+
+.date {
+    color: #070A28;
+    font-weight: 500;
+}
+
+.price{
+    span{
+        font-weight: 500;
+        color: #070A28;
+        font-size: 18px ;
+    }
+}
+.offres-logo {
+    @include circle(80px, white);
+  }

@@ -1,8 +1,0 @@
-@import "../../styles/variables";
-@import "../../styles/mixins";
-
-:host {
-    @extend %page ;
-    @extend %no-navigation ;
-}
-

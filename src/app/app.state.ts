@@ -3,9 +3,9 @@ import { Device, DeviceInfo } from "@capacitor/device";
 import { Action, Selector, State, StateContext } from "@ngxs/store";
 import { from } from "rxjs";
 import { tap } from "rxjs/operators";
-import { AuthModel } from "src/auth/auth.model";
-import { AuthState } from "src/auth/auth.state";
-import { UserState } from "src/models/User/user.state";
+import { AuthModel } from "src/models/auth/auth.model";
+import { AuthState } from "src/models/auth/auth.state";
+import { UserState } from "src/models/user/user.state";
 import { Load } from "./app.actions";
 import { AppModel } from "./app.model";
 

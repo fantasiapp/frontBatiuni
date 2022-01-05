@@ -1,0 +1,68 @@
+@import 'src/styles/variables';
+
+:host {
+  display: inline-block;
+}
+
+:host > * {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+span {
+  color: #aaa;
+  margin: 0 $item-padding;
+  transition: color 250ms ease-out 0s;
+}
+
+span.active {
+  color: black;
+}
+
+input {
+  display: none;
+}
+
+.switch {
+  position: relative;
+  width: $switch-size-x;
+  height: $switch-size-y;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  background-color: #ccc;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  transition: 250ms ease-out;
+}
+
+.slider:before {
+  background-color: #fff;
+  top: $switch-padding;
+  left: $switch-padding;
+  content: "";
+  height: $switch-button-size;
+  position: absolute;
+  transition: .4s;
+  width: $switch-button-size;
+}
+
+.slider {
+  background: linear-gradient(to right, #{$switch-gradient-start}, #{$switch-gradient-end});
+}
+
+input:checked + .slider:before {
+  transform: translateX(#{$switch-size-x - 2 * $switch-padding - $switch-button-size});
+}
+
+.slider.round {
+  border-radius: $switch-size-y;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}

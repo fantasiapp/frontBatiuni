@@ -1,0 +1,19 @@
+@import 'src/styles/variables';
+@import 'src/styles/mixins';
+
+header {
+  @extend %header;
+  position: fixed;
+  height: $mission-header-height;
+  padding-bottom: 0;
+}
+
+.pick > img {
+  margin-left: 15px;
+}
+
+.three_tabs {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+}

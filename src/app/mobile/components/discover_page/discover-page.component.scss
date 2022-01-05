@@ -1,0 +1,53 @@
+@import 'src/styles/mixins';
+@import 'src/styles/variables';
+
+$buttonHeight: 60px;
+
+:host {
+  display: block;
+  width: 100%;
+  font-size: inherit;
+}
+
+
+.create-account {
+  padding: 0 30px;
+  box-shadow: 0 -2px 4px 0 #ccc;
+  background: white;;
+  line-height: $sticky-footer-height;
+}
+.section {
+  $offset: $sticky-footer-height + $paging-height + $page-padding;
+  height: calc(100vh - #{$offset});
+}
+
+.content {
+  position: relative;
+  @extend %content-with-paging-and-footer;
+}
+
+.image-container {
+  margin: auto 0;
+  img {
+    max-height: 45vh;
+  }
+}
+
+.paging {
+  z-index: 1;
+}
+
+.arrow_left, .arrow_right {
+  position: absolute;
+}
+
+.arrow_right {
+  right: 0;
+  transform: scale(0.8);
+}
+
+.arrow_left {
+  left: 0;
+  transform-origin: center center;
+  transform: scale(0.8) scaleX(-1);
+}

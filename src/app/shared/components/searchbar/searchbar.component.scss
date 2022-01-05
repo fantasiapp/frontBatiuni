@@ -1,0 +1,21 @@
+@import 'src/styles/variables';
+
+:host {
+  position: relative;
+  display: inline-block;
+  height: $searchbar-height;
+}
+
+img {
+  position: absolute;
+  width: $searchbar-icon-size; height: $searchbar-icon-size;
+  left: $searchbar-icon-padding;
+  top: 50%; transform: translateY(-50%);
+}
+
+input {
+  padding: $searchbar-padding;
+  padding-left: $searchbar-icon-size + 2*$searchbar-icon-padding;
+  border-radius: 5px;
+  width: 100%;
+}

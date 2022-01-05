@@ -1,0 +1,10 @@
+@import 'src/styles/variables';
+@import 'src/styles/mixins';
+
+:host {
+  @extend %page;
+}
+
+switch::ng-deep .slider {
+  background: #ccc;
+}

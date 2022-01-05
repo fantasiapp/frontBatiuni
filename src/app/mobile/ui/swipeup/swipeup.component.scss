@@ -1,0 +1,65 @@
+@use "sass:math";
+@import 'src/styles/variables';
+@import 'src/styles/mixins';
+
+
+:host {
+  position: fixed;
+  top: 0; left: 0;
+  z-index: 20;
+  width: 100%;
+  height: 100vh;
+  visibility: hidden;
+}
+
+:host(.open) {
+  visibility: visible;
+}
+
+.cover-parent {
+  background-color: #ccc;
+  opacity: 0.5;
+}
+
+.menu {  position: absolute;
+  bottom: 0;
+  transform: translateY(100%);
+  transition: transform 250ms ease-out 0s;
+
+  &.open {
+    transform: translateY(0);
+  }
+}
+
+.decoration {
+  position: relative;
+  height: $swipeup-decoration-height;
+  border-top-left-radius: math.div($swipeup-decoration-height, 2);
+  border-top-right-radius: math.div($swipeup-decoration-height, 2);
+}
+
+.decoration::after {
+  content: '';
+  display: block;
+  position: absolute;
+  background-color: #aaa;
+  height: 3px;
+  width: 40px;
+  @include absolute-center('xy', absolute);
+}
+
+.list {
+  font-size: 0.9em;
+  list-style-type: none;
+  padding: 20px 60px;
+  @include with-set-safe-area(padding, bottom, 20px);
+}
+
+.list::ng-deep li:not(:last-of-type) {
+  margin-bottom: 15px;
+}
+
+.content {
+  max-height: 60vh;
+  @extend %overflow-y;
+}
