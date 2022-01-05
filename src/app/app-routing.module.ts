@@ -51,6 +51,9 @@ const routes: Routes = [{
   }, {
     path: 'abonnement',
     component: AbonnementPage,
+  }, {
+    path: 'annonce-enligne',
+    component: AnnonceEnlignePage,
   },   {
     path: 'engagement',
     component: EngagementPage,
@@ -66,6 +69,9 @@ const routes: Routes = [{
   }, {
     path: 'annonce-en-ligne',
     component: AnnonceEnlignePage
+  }, {
+    path: 'confirmed',
+    component: emailConfirmation
   }, {
     path: 'annonce-validee',
     component: SuiviPME

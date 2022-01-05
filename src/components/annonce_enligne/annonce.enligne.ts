@@ -9,4 +9,7 @@ import { ChangeDetectionStrategy, Component } from "@angular/core";
 export class AnnonceEnlignePage {
 
  swipemenu: boolean = false;
+ annoncePause: boolean = false;
+
+
 }

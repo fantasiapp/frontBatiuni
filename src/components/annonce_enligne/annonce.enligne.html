@@ -8,9 +8,10 @@
 </div>
 
 <swipeup [(open)]="swipemenu" >
-  <li>Afficher les réponses</li>
-  <li [routerLink]="['','booster']">Booster Mon annonce</li>
-  <li>Supprimer l'annonce</li>
-  <li>Duppliquer l'annonce</li>
-  <li>Mettre en pause l'annonce</li>
+    <li>Afficher les réponses</li>
+    <li [routerLink]="['','booster']">Booster Mon annonce</li>
+    <li>Supprimer l'annonce</li>
+    <li>Duppliquer l'annonce</li>
+    <li (click)="annoncePause = true">Mettre en pause l'annonce</li>
+
 </swipeup>

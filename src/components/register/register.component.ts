@@ -5,6 +5,7 @@ import { Register } from "src/auth/auth.actions";
 import { SlidesDirective } from "src/directives/slides.directive";
 import { MatchField } from "src/validators/verify";
 import { Option } from "../options/options";
+import { Router } from "@angular/router";
 
 @Component({
   selector: 'register',
@@ -40,13 +41,14 @@ export class RegisterComponent {
   @ViewChild(SlidesDirective, {static: true})
   slider!: SlidesDirective;
 
-  constructor(private store: Store) {
+  constructor(private store: Store, private _router: Router) {
     (window as any).register = this;
   }
 
   onSubmit(f: any) {
     console.log(this.registerForm.value);
     this.store.dispatch(Register.fromFormGroup(this.registerForm));
+    this._router.navigate(['confirmed'])
   }
 
   onNavigate(dx: number) {
