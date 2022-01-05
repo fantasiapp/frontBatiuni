@@ -42,13 +42,13 @@ import { DistanceSliderConfig, SalarySliderConfig } from "src/common/config";
     <div class="form-input space-children-margin">
       <label>Réorganiser la liste selon</label>
       <div class="switch-container flex center-cross">
-        <span class="criteria">La meilleur note à la moins bonne</span> <switch></switch>
+        <span class="criteria">La meilleur note à la moins bonne</span> <switch class="default"></switch>
       </div>
       <div class="switch-container flex center-cross">
-        <span class="criteria">Les profils les plus complets</span> <switch></switch>
+        <span class="criteria">Les profils les plus complets</span> <switch class="default"></switch>
       </div>
       <div class="switch-container flex center-cross">
-        <span class="criteria">Les profils affichés comme disponibles</span> <switch></switch>
+        <span class="criteria">Les profils affichés comme disponibles</span> <switch class="default"></switch>
       </div>
     </div>
   </form>

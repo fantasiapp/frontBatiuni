@@ -37,7 +37,7 @@ import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
     <div class="form-input space-children-margin">
       <label>Réorganiser la liste selon</label>
       <div class="switch-container flex center-cross">
-        <span class="criteria">Annonces contentant des {{target}} en premier</span> <switch></switch>
+        <span class="criteria">Annonces contentant des {{target}} en premier</span> <switch class="default"></switch>
       </div>
     </div>
   </form>

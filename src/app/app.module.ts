@@ -14,9 +14,7 @@ import { CommonModule } from '@angular/common';
 import { HAMMER_GESTURE_CONFIG, HammerGestureConfig } from '@angular/platform-browser';
 import { UserState } from 'src/models/user/user.state';
 
-import { AppRoutingModule } from './mobile/routing/app-routing.module';
-import { DesktopModule } from './desktop/desktop.module';
-import { MobileModule } from './mobile/mobile.module';
+import { GlobalRoutingModule } from './app.routing-module';
 
 @Injectable()
 export class CustomConfig extends HammerGestureConfig {
@@ -47,8 +45,7 @@ export class CustomConfig extends HammerGestureConfig {
     HttpClientModule,
     BrowserModule,
     BrowserAnimationsModule,
-    AppRoutingModule,
-    MobileModule
+    GlobalRoutingModule
   ],
   providers: [{
     provide: HAMMER_GESTURE_CONFIG,

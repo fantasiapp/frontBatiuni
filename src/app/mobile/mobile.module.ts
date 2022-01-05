@@ -1,6 +1,5 @@
 import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
-import { AppRoutingModule } from "./routing/app-routing.module";
 import { AbonnementPage } from "./components/abonnement/abonnement.page";
 import { EngagementPage } from "./components/abonnement/engagement/engagement";
 import { AnnoncePage } from "./components/annonce/annonce.page";
@@ -31,6 +30,8 @@ import { UIModule } from "./ui/ui.module";
 import { SharedModule } from "../shared/shared.module";
 import { ReactiveFormsModule } from "@angular/forms";
 import { HammerModule } from "@angular/platform-browser";
+import { AppRoutingModule } from "./routing/mobile-routing.module";
+
 
 @NgModule({
   declarations: [
@@ -68,34 +69,6 @@ import { HammerModule } from "@angular/platform-browser";
     AppRoutingModule,
     ReactiveFormsModule,
     HammerModule,
-  ],
-  exports: [
-    LandingPageComponent,
-    ConnexionComponent,
-    RegisterComponent,
-    emailConfirmation,
-    RegistrationSuccess,
-    SlidesDirective,
-    DiscoverComponent,
-    PagingComponent,
-    SlideTemplate,
-    FadeTemplate,
-    MainPage,
-    ProfileComponent,
-    Notifications,
-    MissionsComponent,
-    HomeComponent,
-    AvailabilitiesComponent,
-    MakeAdComponent,
-    AnnoncePage,
-    AbonnementPage,
-    FacturePage,
-    SOSPageComponent,
-    EngagementPage,
-    BoosterPage,
-    SuiviPage,
-    AnnonceEnlignePage,
-    SuiviPME
   ]
 })
 export class MobileModule {}

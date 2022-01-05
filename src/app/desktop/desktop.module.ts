@@ -3,7 +3,7 @@ import { NgModule } from "@angular/core";
 import { HammerModule } from "@angular/platform-browser";
 import { SharedModule } from "../shared/shared.module";
 import { HelloComponent } from "./components/hello.component";
-import { AppRoutingModule } from "./routing/app-routing.module";
+import { AppRoutingModule } from "./routing/desktop-routing.module";
 
 @NgModule({
   declarations: [
@@ -14,9 +14,6 @@ import { AppRoutingModule } from "./routing/app-routing.module";
     SharedModule,
     AppRoutingModule,
     HammerModule,
-  ],
-  exports: [
-    HelloComponent
   ]
 })
 export class DesktopModule {}

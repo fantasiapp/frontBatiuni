@@ -5,13 +5,13 @@ import { HelloComponent } from "../components/hello.component";
 const routes: Routes =[{
     path: 'landing',
     component: HelloComponent
-  },{
-    path: '**',
-    redirectTo: 'landing'
+}, {
+  path: '**',
+  redirectTo: 'landing'
 }];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
 export class AppRoutingModule {}

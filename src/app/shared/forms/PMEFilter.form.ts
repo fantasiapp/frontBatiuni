@@ -38,10 +38,10 @@ import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
         <div class="form-input space-children-margin">
           <label>Réorganiser la liste selon</label>
           <div class="switch-container flex center-cross">
-            <span class="criteria">Les brouillons les plus anciens</span> <switch></switch>
+            <span class="criteria">Les brouillons les plus anciens</span> <switch class="default"></switch>
           </div>
           <div class="switch-container flex center-cross">
-            <span class="criteria">Les brouillons les plus complets</span> <switch></switch>
+            <span class="criteria">Les brouillons les plus complets</span> <switch class="default"></switch>
           </div>
         </div>
       </form>

@@ -72,22 +72,22 @@ import { DistanceSliderConfig, SalarySliderConfig } from "src/common/config";
     <div class="form-input space-children-margin">
       <label>Réorganiser la liste selon</label>
       <div class="switch-container flex center-cross">
-        <span class="criteria">Annonces déjà vus uniquement</span> <switch></switch>
+        <span class="criteria">Annonces déjà vus uniquement</span> <switch class="default"></switch>
       </div>
       <div class="switch-container flex center-cross">
-        <span class="criteria">Annonces favoristes uniquement</span> <switch></switch>
+        <span class="criteria">Annonces favoristes uniquement</span> <switch class="default"></switch>
       </div>
       <div class="switch-container flex center-cross">
-        <span class="criteria">Annonces déjà postulées uniquement</span> <switch></switch>
+        <span class="criteria">Annonces déjà postulées uniquement</span> <switch class="default"></switch>
       </div>
       <div class="switch-container flex center-cross">
-        <span class="criteria">Annonces ouverte à contre-proposition</span> <switch></switch>
+        <span class="criteria">Annonces ouverte à contre-proposition</span> <switch class="default"></switch>
       </div>
       <div class="switch-container flex center-cross">
-        <span class="criteria">Date d'échéance de l'annonce de la plus proche à la plus lointaine</span> <switch></switch>
+        <span class="criteria">Date d'échéance de l'annonce de la plus proche à la plus lointaine</span> <switch class="default"></switch>
       </div>
       <div class="switch-container flex center-cross">
-        <span class="criteria">Date de publication la plus récente à la plus anciennce</span> <switch></switch>
+        <span class="criteria">Date de publication la plus récente à la plus anciennce</span> <switch class="default"></switch>
       </div>
       
     </div>

@@ -8,7 +8,7 @@ export class AuthGuard implements CanActivate {
   constructor(private router: Router, private store: Store) {}
   
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-    if ( route.url[0].path == 'home' )
+    if ( route.url[0]?.path == 'home' )
       return this.store.selectSnapshot(AuthState.isAutheticated) || this.router.parseUrl('/connexion');
     
     return !this.store.selectSnapshot(AuthState.isAutheticated) || this.router.parseUrl('/home');

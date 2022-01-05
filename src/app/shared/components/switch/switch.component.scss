@@ -66,3 +66,9 @@ input:checked + .slider:before {
 .slider.round:before {
   border-radius: 50%;
 }
+
+::ng-deep switch.default {
+  input:checked + .slider {
+    background: $secondaryBackground;
+  }
+}

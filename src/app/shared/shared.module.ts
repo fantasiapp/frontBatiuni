@@ -5,7 +5,6 @@ import { OnlineFilterForm } from "./forms/OnlineFilter.form";
 import { PMEFilterForm } from "./forms/PMEFilter.form";
 import { SOSFilterForm } from "./forms/SOSFilter.form";
 import { STFilterForm } from "./forms/STFilter.form";
-import { AppRoutingModule } from "../mobile/routing/app-routing.module";
 import { NgxSliderModule } from "@angular-slider/ngx-slider";
 import { OptionsModel } from "./components/options/options";
 import { UIBoxComponent } from "./components/box/box.component";
@@ -38,8 +37,7 @@ import { FileUI } from "./components/filesUI/files.ui";
   ],
   imports: [
     CommonModule,
-    NgxSliderModule,
-    AppRoutingModule,
+    NgxSliderModule
   ],
   exports: [
     OptionsModel,
