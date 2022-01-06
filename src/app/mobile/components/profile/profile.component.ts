@@ -1,7 +1,7 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, HostListener, ViewChild } from "@angular/core";
+import { ChangeDetectionStrategy, Component, HostListener, ViewChild } from "@angular/core";
 import { Select, Store } from "@ngxs/store";
 import { Observable } from "rxjs";
-import { SlidesDirective } from "../../directives/slides.directive";
+import { SlidesDirective } from "src/app/shared/directives/slides.directive";
 import { User } from "src/models/user/user.model";
 import { UserState } from "src/models/user/user.state";
 import * as UserActions from "src/models/user/user.actions";

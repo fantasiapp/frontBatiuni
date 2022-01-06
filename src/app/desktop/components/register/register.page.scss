@@ -1,0 +1,18 @@
+@import 'src/styles/variables';
+@import 'src/styles/mixins';
+
+:host {
+  display: flex;
+  height: 100vh;
+}
+
+.background-image {
+  position: static;
+  width: 40vw;
+  height: 100%;
+}
+
+.form-container {
+  flex: 1;
+  padding: $page-padding;
+}

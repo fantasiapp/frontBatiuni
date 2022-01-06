@@ -16,6 +16,10 @@ import { StarSysteme } from "./components/starsysteme/star.systeme";
 import { UIStarsComponent } from "./components/stars/stars.component";
 import { UISwitchComponent } from "./components/switch/switch.component";
 import { FileUI } from "./components/filesUI/files.ui";
+import { RegisterForm } from "./forms/register.form";
+import { RouterModule } from "@angular/router";
+import { ReactiveFormsModule } from "@angular/forms";
+import { SlidesDirective } from "./directives/slides.directive";
 
 @NgModule({
   declarations: [
@@ -33,11 +37,15 @@ import { FileUI } from "./components/filesUI/files.ui";
     STFilterForm,
     PMEFilterForm,
     SOSFilterForm,
-    OnlineFilterForm
+    OnlineFilterForm,
+    RegisterForm,
+    SlidesDirective
   ],
   imports: [
     CommonModule,
-    NgxSliderModule
+    NgxSliderModule,
+    RouterModule,
+    ReactiveFormsModule
   ],
   exports: [
     OptionsModel,
@@ -55,7 +63,9 @@ import { FileUI } from "./components/filesUI/files.ui";
     UIStarsComponent,
     StarSysteme,
     UISwitchComponent,
-    FileUI
+    FileUI,
+    RegisterForm,
+    SlidesDirective
   ]
 })
 export class SharedModule {}
