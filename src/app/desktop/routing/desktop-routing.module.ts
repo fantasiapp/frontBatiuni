@@ -1,14 +1,15 @@
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
-import { HelloComponent } from "../components/hello.component";
+import { LandingPageComponent } from "../components/landing_page/landing.page";
 
 const routes: Routes =[{
     path: 'landing',
-    component: HelloComponent
-}, {
-  path: '**',
-  redirectTo: 'landing'
-}];
+    component: LandingPageComponent
+  }, {
+    path: '**',
+    redirectTo: 'landing'
+  }
+];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
