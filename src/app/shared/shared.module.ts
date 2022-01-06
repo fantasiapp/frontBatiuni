@@ -20,6 +20,8 @@ import { RegisterForm } from "./forms/register.form";
 import { RouterModule } from "@angular/router";
 import { ReactiveFormsModule } from "@angular/forms";
 import { SlidesDirective } from "./directives/slides.directive";
+import { EmailConfirmation } from "./validators/email_confirmation/emailconfirmation.component";
+import { RegistrationSuccess } from "./validators/registration_success/registrationsuccess.component";
 
 @NgModule({
   declarations: [
@@ -39,7 +41,9 @@ import { SlidesDirective } from "./directives/slides.directive";
     SOSFilterForm,
     OnlineFilterForm,
     RegisterForm,
-    SlidesDirective
+    SlidesDirective,
+    EmailConfirmation,
+    RegistrationSuccess
   ],
   imports: [
     CommonModule,
@@ -65,7 +69,9 @@ import { SlidesDirective } from "./directives/slides.directive";
     UISwitchComponent,
     FileUI,
     RegisterForm,
-    SlidesDirective
+    SlidesDirective,
+    EmailConfirmation,
+    RegistrationSuccess
   ]
 })
 export class SharedModule {}

@@ -1,0 +1,30 @@
+@import "src/styles/variables.scss";
+@import "src/styles/mixins.scss";
+
+:host {
+  font-family: "Poppins";
+  height: 100vh;
+  display: block;
+  background-color: white;
+  width: 100%;
+}
+
+.confirmation-pages { 
+  padding: 30px;
+  text-align: center;
+  background-color: $landingColor;
+}
+
+p {
+  margin-top: 25%;
+  font-size: 1em;
+}
+
+.help a {
+  font-size: 0.9em;
+}
+
+// Success Circle with the  confirmation SVG
+.email {
+  color : $infosColor;
+}
