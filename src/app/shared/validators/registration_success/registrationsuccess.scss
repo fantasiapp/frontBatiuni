@@ -24,13 +24,13 @@ p {
   margin-left: -$page-padding + 10px;
 }
 
-img {
-  max-width: 350px;
-}
-
 // Success Circle with the  confirmation SVG
 .email {
   color : $infosColor;
+}
+
+.overlap, .content {
+  padding: $page-padding;
 }
 
 .overlap {
@@ -39,8 +39,9 @@ img {
 }
 
 .content {
-  padding: $page-padding;
   flex: 1;
+  max-width: 500px;
+  margin: 0 auto;
 }
 
 @media (min-width: 768px) {
@@ -52,6 +53,7 @@ img {
 
   .content {
     background-color: #f7f7f7;
+    max-width: unset;
   }
 
   .overlap {
