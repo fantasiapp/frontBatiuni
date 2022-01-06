@@ -2,6 +2,7 @@
 @import 'mixins';
 @import 'variables';
 @import 'animations.scss';
+@import 'forms.scss';
 @import 'mapbox-gl.scss';
 @import 'ngx-slider.scss';
 
@@ -49,9 +50,10 @@ button {
   display: inline-block;
   outline: none;
   border: none;
-  padding: 12px;
+  padding: 10px;
   border-radius: 8px;
   font-family: inherit;
+  font-weight: 200;
 
   &.button {
     color: white;
@@ -65,10 +67,14 @@ button {
     }
 
     &.passive {
-      background: none;
+      background: white;
       color: #0C5E8D;
       border: 2px solid #0C5E8D;
       font-weight: 500;
+    }
+
+    &.active {
+      background: #134C6C;
     }
   }
 }
@@ -189,205 +195,6 @@ a {
   @include absolute-center('y', relative);
 }
 
-//------------------------------------------------
-// FORMULAIRES
-
-.arrow_right {
-  transform: scale(0.6);
-};
-
-.arrow_left {
-  transform: scale(0.6) rotate(180deg);
-};
-
-.arrow_right, .arrow_left {
-  margin: 0 8px;
-}
-
-.curved-border {
-  border-radius: 15px 15px 0 0;
-}
-
-.hosted-page {
-  @extend .background-white;
-  // @extend %overflow-y;
-  padding: $page-padding;
-  position: relative;
-  font-size: 0.95em;
-  overflow: hidden;
-  flex-grow: 1;
-
-  & > * { flex-shrink: 0; }
-}
-
-.space-children-margin {
-  & > *:not(:last-child) {
-    margin-bottom: $spacing-margin;
-  }
-}
-
-.small-space-children-margin {
-  & > *:not(:last-child) {
-    margin-bottom: $small-spacing-margin;
-  }
-}
-
-.formulaire {
-  display: flex;
-  flex-direction: column;
-  background: $secondaryBackground;
-}
-
-
-.paging {
-  list-style-type: none;
-  font-size: 0.9em;
-  height: $paging-height;
-  line-height: $paging-height;
-  background: $secondaryBackground;
-  color: $landingColor;
-  justify-content: space-between;
-
-  & > li {
-    flex-grow: 1;
-    height: 100%;
-  }
-  
-  & li a > * {
-    display: inline-block;
-    vertical-align: middle;
-  }
-}
-
-.no-background {
-  background: none !important;
-}
-
-.title {
-  font-size: 1.1em;
-  font-weight: bold;
-  margin-bottom: $title-padding;
-}
-
-.subtitle {
-  font-size: 0.85em;
-  font-weight: normal;
-  margin-bottom: $title-padding;
-}
-
-.form-control {
-  background-color: $landingColor;
-  color: $formulaireMainColor;
-  flex: 1;
-  font-family: "Poppins";
-  @extend .flex;
-  @extend .column;
-  
-  .form-title {
-    @extend .title;
-    &:not(:first-child) { margin-top: $title-padding; }
-  }
-
-  .form-section-title {
-    @extend .form-title;
-    color: $secondaryBackground;
-    font-family: "Poppins";
-  }
-
-  .form-subtitle {
-    @extend .subtitle;
-  }
-}
-
-.form-input {
-  font-family: "Poppins";
-  position: relative;
-
-  .error { color: #ff0033; font-size: 0.75em; }
-
-  & > * {
-    display: block;
-  }
-
-  label {
-    margin-bottom: 5px;
-    font-weight: 500;
-  }
-
-  input {
-    font-family: inherit;
-    border-bottom: 2px solid #cdcfd0 !important;
-
-    &.ng-invalid:not(.ng-untouched) {
-      border-bottom-color: red !important;
-    }
-  }
-
-  & > input, & > span > input {
-    width: 100%;
-    height: 30px;
-    outline: none;
-    border: none;
-  }
-  
-  select {
-    width: 100%;
-    height: 30px;
-    outline: none;
-    border: none;
-    border-bottom: 2px solid #cdcfd0;
-  }
-
-  & > img {
-    position: absolute;
-    right: $input-image-offset-x;
-    bottom: $input-image-offset-y;
-  }
-
-  margin-bottom: $form-item-spacing;
-
-  &.add-field > * {
-    display: inline-block;
-    vertical-align: middle;
-  }
-  
-  &.add-field img { margin: 0 $item-padding; position: static; }
-}
-
-.external-links {
-  color: $externelLinks;
-  font-family: "Poppins Light";
-  font-size: 15px;
-}
-
-.form-action {
-  margin: 25px 0;
-  display: flex;
-  flex-flow: column;
-  align-items: center;
-}
-
-.form-step {
-  background-color: $landingColor;
-  width: 100%;
-  text-align: center;
-
-  & > * {
-    display: inline-block;
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    margin: 5px;
-    background-color: #f2f2f2;
-
-  }
-  
-  .active {
-    background-color: $buttonColor;
-  }
-}
-
-//------------------------------------------------
 
 //-------------------------------------------------
 //ANGULAR FORMS
@@ -583,3 +390,115 @@ input[type=number] {
 }
 
 .criteria { font-weight: 500; }
+
+//RESPONSIVE - WEB
+@media (max-width: 1024px) {
+  body { font-size: 12px; }
+}
+
+@media (min-width: 1025px) and (max-width: 1366px) {
+  body { font-size: 13px; }
+}
+
+
+@media (min-width: 1367px) {
+  body { font-size: 14px; }
+}
+
+.hero {
+  overflow-x: hidden;
+  color: black;
+  height: 100vh;
+
+  &.with-sticky-header {
+    margin-top: $sticky-header-height;
+    height: calc(100vh - #{$sticky-header-height});
+  }
+
+  .content {
+    @extend .cover-parent;
+    max-width: 1024px;
+    margin: 0 auto;
+    padding: $page-padding 0;
+  }
+}
+
+@media (max-width: 1024px) {
+  .hero {
+    .content {
+      padding: $page-padding;
+      margin: 0;
+    }
+  }
+}
+
+@media (min-width: 1025px) and (max-width: 1366px) {
+  .hero {
+    .content {
+      max-width: 1024px;
+      margin: 0 auto;
+      padding: $page-padding 0;
+    }
+  }
+}
+
+
+@media (min-width: 1367px) {
+  .hero {
+    .content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: $page-padding 0;
+    }
+  }}
+
+
+
+@media (min-width: 768px) and (max-width: 1366px) {
+  .hero {
+    .content {
+      
+    }
+  }
+}
+
+.hero-title {
+  font-weight: 900;
+  margin-bottom: 20px;
+}
+
+$hero-header-offset-y: 60px;
+$hero-header-offset-x: 60px;
+
+$hero-header-tick-offset: 10px;
+$hero-header-tick-width: 60px;
+$hero-header-tick-thickness: 8px;
+
+.hero-header {
+  font-size: 2.5em;
+  font-weight: 900;
+  padding-top: $hero-header-offset-y;
+
+  &.left {
+    padding-left: $hero-header-offset-x;
+
+  }
+
+  &.right {
+    padding-right: $hero-header-offset-x;
+  }
+
+  span { position: relative; }
+  
+  span::before {
+    content: "";
+    display: block;
+    height: $hero-header-tick-thickness;
+    width: $hero-header-tick-width;
+    background-color: black;
+    position: absolute;
+    top: -$hero-header-tick-offset;
+    left: 50%; transform: translateX(-50%);
+  }
+
+}

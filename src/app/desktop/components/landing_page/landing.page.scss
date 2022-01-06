@@ -1,0 +1,134 @@
+@use "sass:math";
+@import 'src/styles/variables';
+@import 'src/styles/mixins';
+
+:host {
+  font-family: 'Poppins';
+  display: block;
+  scroll-snap-type: mandatory;
+  scroll-snap-points-y: repeat(100vh);
+  scroll-snap-type: y mandatory;
+  height: 100vh;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+}
+
+header { 
+  background: white;
+  padding: math.div($page-padding, 2) $page-padding;
+
+  img { height: 100%; }
+  button {
+    margin-left: $item-padding;
+  }
+
+  button:first-of-type {
+    border: none;
+  }
+
+  box-shadow: 0 3px 3px 0 #ccc;
+}
+
+.hero {
+  scroll-snap-align: start;
+}
+
+.hero:nth-of-type(2) {
+  background-color: #F7F7F7;
+} 
+
+.hero:nth-of-type(3) {
+  background-color: #52D1BD;
+} 
+
+.intro {
+  h1 { font-weight: 900; }
+  img { @extend .pull-down; }
+  margin-right: 60px;
+}
+
+.map {
+  width: 500px;
+  height: 500px;
+}
+
+@media (max-width: 1024px) {
+  :host {
+    --presentation-image-width: 100px;
+    --presentation-image-height: 50px;
+  }
+}
+
+@media (min-width: 1025px) and (max-width: 1366px) {
+  :host {
+    --presentation-image-width: 150px;
+    --presentation-image-height: 60px;
+  }
+}
+
+@media (min-width: 1367px) {
+  :host {
+    --presentation-image-width: 175px;
+    --presentation-image-height: 80px;
+  }
+}
+
+$presentation-theme-factor: 1.5;
+$presentation-image-offset-right: 30px;
+$presentation-image-offset-bottom: 60px;
+
+
+.presentation {
+  @extend .pull-down;
+
+  &.left {
+    align-self: start;
+    margin-left: -$presentation-image-offset-right;
+
+  }
+  &.right {
+    align-self: end;
+    margin-right: $presentation-image-offset-right;
+  }
+
+  .card:nth-child(1) .theme {
+    opacity: 1;
+  }
+  .card:nth-child(2) .theme {
+    opacity: 0.75;
+  }
+  .card:nth-child(3) .theme {
+    opacity: 0.5;
+  }
+  .card:nth-child(4) .theme {
+    opacity: 0.25;
+  }
+}
+
+.card {
+  text-align: right;
+  width: calc(#{$presentation-theme-factor} * var(--presentation-image-width));
+  position: relative;
+  bottom: $presentation-image-offset-bottom;
+  z-index: 1;
+
+  .theme {
+    position: absolute;
+    bottom: -$presentation-image-offset-bottom;
+    right: -$presentation-image-offset-right;
+    width: calc(#{$presentation-theme-factor} * var(--presentation-image-width));
+    height: calc(var(--presentation-image-height) + #{$presentation-image-offset-bottom});
+    z-index: -1;
+    border-radius: 4px;
+    background-color: #0F557C;
+  }
+
+  img {
+    width: var(--presentation-image-width);
+  }
+
+  &:not(:last-of-type) {
+    margin-right: 20px;
+  }
+}
+

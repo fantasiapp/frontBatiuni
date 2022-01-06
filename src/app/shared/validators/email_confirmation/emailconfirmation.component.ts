@@ -3,9 +3,9 @@ import {  ChangeDetectionStrategy, Component } from "@angular/core";
 @Component({
   selector: 'emailConfirmed',
   templateUrl: 'emailconfirmation.component.html',
-  styleUrls: ['emailconfirmed.scss'],
+  styleUrls: ['emailconfirmation.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class emailConfirmation {
+export class EmailConfirmation {
   constructor() { }
 };

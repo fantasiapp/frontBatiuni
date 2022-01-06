@@ -1,0 +1,63 @@
+@import "src/styles/variables";
+@import "src/styles/mixins";
+
+:host {
+  font-family: "Poppins";
+  display: flex;
+  background-color: white;
+  text-align: center;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  position: relative;
+}
+
+p {
+  font-size: 1em;
+}
+
+.help a {
+  font-size: 0.9em;
+}
+
+.image-container {
+  margin-left: -$page-padding + 10px;
+}
+
+// Success Circle with the  confirmation SVG
+.email {
+  color : $infosColor;
+}
+
+.overlap, .content {
+  padding: $page-padding;
+}
+
+.overlap {
+  flex: 1;
+  display: none;
+}
+
+.content {
+  flex: 1;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+@media (min-width: 768px) {
+  img {
+    left: 25%; top: 50%;
+    transform: translate(-50%, -50%);
+    position: absolute;
+  }
+
+  .content {
+    background-color: #f7f7f7;
+    max-width: unset;
+  }
+
+  .overlap {
+    display: block;
+  }
+}
+

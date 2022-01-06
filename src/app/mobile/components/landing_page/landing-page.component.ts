@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, HostListener, ViewChild } from "@angular/core";
-import { SlidesDirective } from "../../directives/slides.directive";
+import { SlidesDirective } from "src/app/shared/directives/slides.directive";
 
 @Component({
   selector: 'landing-page',

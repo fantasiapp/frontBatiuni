@@ -3,8 +3,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { LandingPageComponent } from '../components/landing_page/landing-page.component';
 import { RegisterComponent } from '../components/register/register.component';
 import { ConnexionComponent } from '../components/connexion/connexion.component';
-import { emailConfirmation } from '../components/validator/email_confirmation/emailconfirmation';
-import { RegistrationSuccess } from '../components/validator/registration_success/registrationsuccess';
 import { DiscoverComponent } from '../components/discover_page/discover-page.component';
 import { MainPage } from '../components/main/main.component';
 import { ProfileComponent } from '../components/profile/profile.component';
@@ -23,6 +21,9 @@ import { BoosterPage } from '../components/booster/booster.page';
 import { SuiviPage } from '../components/suivi_page/suivi.page';
 import { SuiviPME } from '../components/suivi_pme/suivi_pme.page';
 import { AuthGuard } from './auth/auth.guard';
+
+import { EmailConfirmation } from 'src/app/shared/validators/email_confirmation/emailconfirmation.component';
+import { RegistrationSuccess } from 'src/app/shared/validators/registration_success/registrationsuccess.component';
 
 const routes: Routes = [{
     path: 'landing',
@@ -46,7 +47,7 @@ const routes: Routes = [{
     component: RegisterComponent
   }, {
     path: 'confirmed',
-    component: emailConfirmation,
+    component: EmailConfirmation,
     data: { animation: 'Confirmed' }
   }, {
     path: 'success',
@@ -73,9 +74,6 @@ const routes: Routes = [{
   }, {
     path: 'annonce-en-ligne',
     component: AnnonceEnlignePage
-  }, {
-    path: 'confirmed',
-    component: emailConfirmation
   }, {
     path: 'annonce-validee',
     component: SuiviPME

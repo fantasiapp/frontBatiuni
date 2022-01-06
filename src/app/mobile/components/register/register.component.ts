@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, ContentChildren, HostBinding, HostL
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { Store } from "@ngxs/store";
 import { Register } from "src/models/auth/auth.actions";
-import { SlidesDirective } from "../../directives/slides.directive";
+import { SlidesDirective } from "src/app/shared/directives/slides.directive";
 import { MatchField } from "src/validators/verify";
 import { Option } from "src/models/option";
 import { Router } from "@angular/router";
@@ -41,14 +41,12 @@ export class RegisterComponent {
   @ViewChild(SlidesDirective, {static: true})
   slider!: SlidesDirective;
 
-  constructor(private store: Store, private _router: Router) {
-    (window as any).register = this;
-  }
+  constructor(private store: Store, private router: Router) {}
 
   onSubmit(f: any) {
     console.log(this.registerForm.value);
     this.store.dispatch(Register.fromFormGroup(this.registerForm));
-    this._router.navigate(['confirmed'])
+    this.router.navigate(['confirmed'])
   }
 
   onNavigate(dx: number) {

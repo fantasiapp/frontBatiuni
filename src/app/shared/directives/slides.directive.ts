@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, ComponentFactoryResolver, ComponentRef, Directive, HostBinding, Input, TemplateRef, ViewContainerRef } from "@angular/core";
+import { ChangeDetectorRef, ComponentFactoryResolver, Directive, Input, TemplateRef, ViewContainerRef } from "@angular/core";
 import { IndexBased } from "src/common/classes";
 import { Ref } from "src/common/types";
 
