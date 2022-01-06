@@ -1,22 +1,18 @@
-@import "src/styles/variables.scss";
-@import "src/styles/mixins.scss";
+@import "src/styles/variables";
+@import "src/styles/mixins";
 
 :host {
   font-family: "Poppins";
-  height: 100vh;
-  display: block;
+  display: flex;
   background-color: white;
-  width: 100%;
-}
-
-.confirmation-pages { 
-  padding: 30px;
   text-align: center;
-  background-color: $landingColor;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  position: relative;
 }
 
 p {
-  margin-top: 25%;
   font-size: 1em;
 }
 
@@ -24,7 +20,42 @@ p {
   font-size: 0.9em;
 }
 
+.image-container {
+  margin-left: -$page-padding + 10px;
+}
+
+img {
+  max-width: 350px;
+}
+
 // Success Circle with the  confirmation SVG
 .email {
   color : $infosColor;
 }
+
+.overlap {
+  flex: 1;
+  display: none;
+}
+
+.content {
+  padding: $page-padding;
+  flex: 1;
+}
+
+@media (min-width: 768px) {
+  img {
+    left: 25%; top: 50%;
+    transform: translate(-50%, -50%);
+    position: absolute;
+  }
+
+  .content {
+    background-color: #f7f7f7;
+  }
+
+  .overlap {
+    display: block;
+  }
+}
+

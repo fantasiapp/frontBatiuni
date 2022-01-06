@@ -1,5 +1,7 @@
-import {  ChangeDetectionStrategy, Component,} from "@angular/core";
+import {  ChangeDetectionStrategy, ChangeDetectorRef, Component,} from "@angular/core";
 import { Router } from "@angular/router";
+import { Store } from "@ngxs/store";
+import { AppState } from "src/app/app.state";
 
 @Component({
   selector: 'emailConfirmed',
@@ -9,8 +11,8 @@ import { Router } from "@angular/router";
 })
 export class RegistrationSuccess {
   userEmail : string;
-  constructor(){
+
+  constructor() {
     this.userEmail = "Jean-luc@fantasiapp.com"
   }
-  
 };
