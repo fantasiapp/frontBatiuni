@@ -8,6 +8,7 @@ export class Destroy$ {
   protected destroy$ = new Subject<void>();
 
   ngOnDestroy() {
+    console.log('destruction');
     this.destroy$.next();
     this.destroy$.complete();
   }

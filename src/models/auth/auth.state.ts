@@ -1,6 +1,6 @@
 import { Action, Selector, State, StateContext } from "@ngxs/store";
 import { HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/http';
-import { Injectable } from "@angular/core";
+import { Injectable, NgZone } from "@angular/core";
 import { AuthModel } from "./auth.model";
 import { environment } from 'src/environments/environment';
 import { Login, Logout, Register } from "./auth.actions";
@@ -30,7 +30,7 @@ export class AuthState {
     return throwError({all: error});
   };
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private http: HttpClient, private router: Router, private zone: NgZone) {}
 
   @Action(Login)
   login(ctx: StateContext<AuthModel>, action: Login) {
@@ -63,7 +63,9 @@ export class AuthState {
     return req.pipe(
       tap(() => {
         ctx.setState({token: null, username: null});
-        this.router.navigate(['', 'connexion']);
+        this.zone.run(() => {
+          this.router.navigate(['', 'connexion']);
+        })
       })
     );
   }

@@ -31,10 +31,8 @@ export class ConnexionComponent extends Destroy$ {
   get errors() { return this._errors; }
 
   constructor(private router: Router, private store: Store, private cd: ChangeDetectorRef) {
-    super()
+    super();
   }
-
-  ngOnInit() {}
 
   @Select(AuthState)
   auth$!: Observable<AuthModel>;
