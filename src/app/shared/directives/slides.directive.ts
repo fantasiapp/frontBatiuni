@@ -73,11 +73,11 @@ export class SlidesDirective extends IndexBased {
       });
   }
 
-  indexChanged(k: number): void {
-    k > 0 ? this.left(k) : this.right(-k);
+  indexChanged(k: number, animate = this.animate, done?: Function): void {
+    k > 0 ? this.left(k, animate, done) : this.right(-k, animate, done);
   }
 
-  left(k = 1, animate = this.animate) {
+  left(k = 1, animate = this.animate, done?: Function) {
     let next = Math.min(this.components.length-1, this.index + k);
     if ( this.index != next ) {
       this._index = next;
@@ -87,10 +87,11 @@ export class SlidesDirective extends IndexBased {
       this.componentRef = componentRef;
       this.view.insert(componentRef.view);
       this.cd.markForCheck();
+      done && done();
     }
   }
 
-  right(k = 1, animate = this.animate) {
+  right(k = 1, animate = this.animate, done?: Function) {
     let next = Math.max(0, this.index - k);
     if ( this.index != next ) {
       this._index = next;
@@ -100,6 +101,7 @@ export class SlidesDirective extends IndexBased {
       this.componentRef = componentRef;
       this.view.insert(componentRef.view);
       this.cd.markForCheck();
+      done && done();
     }
   }
 };

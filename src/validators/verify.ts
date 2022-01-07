@@ -1,4 +1,5 @@
 import { AbstractControl, ValidationErrors, ValidatorFn } from "@angular/forms";
+import { lowerCase, upperCase } from "./regex";
 
 export const MatchField = (field: string, verification: string): ValidatorFn => {
   return (control: AbstractControl) => {
@@ -13,10 +14,6 @@ export const MatchField = (field: string, verification: string): ValidatorFn => 
   };
 };
 
-const lowerCase = /[a-z]/;
-const upperCase = /[A-Z]/;
-const number = /[0-9]/;
-const symbols = /\+|\-|\*|\_|\,|\;|\./;
 
 export const ComplexPassword = (fieldName: string): ValidatorFn => {
   return (control: AbstractControl) => {
@@ -32,4 +29,13 @@ export const ComplexPassword = (fieldName: string): ValidatorFn => {
     field.setErrors(Object.keys(errors).length ? errors : null);
     return null;
   }
-}
+};
+
+export const setErrors = (form: AbstractControl, errors: ValidationErrors | null) => {
+  if ( !errors ) return;
+  console.log(form.value, errors);
+  if ( errors.all ) form.setErrors({server: errors.all});
+  let errorFields = Object.keys(errors).filter(field => field != 'all');
+  for ( let field of errorFields )
+    form.get(field)?.setErrors({server: errors[field]});
+};

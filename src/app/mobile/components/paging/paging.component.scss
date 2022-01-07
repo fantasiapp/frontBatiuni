@@ -8,6 +8,8 @@
   height: $paging-height + $paging-decoration-height;
   width: 100%;
   @include set-safe-area(top);
+
+  border-bottom: 5px solid white; //cover the blue line
 }
 
 .decoration-cover {

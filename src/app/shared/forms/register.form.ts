@@ -1,10 +1,14 @@
-import { Component, HostBinding, Input, ViewChild } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostBinding, Input, ViewChild } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
 import { Store } from "@ngxs/store";
+import { take } from "rxjs/operators";
 import { Register } from "src/models/auth/auth.actions";
-import { MatchField } from "src/validators/verify";
+import { ComplexPassword, MatchField, setErrors } from "src/validators/verify";
 import { SlidesDirective } from "../directives/slides.directive";
+import { Option } from "src/models/option";
+import { Email } from "src/validators/persist";
+
 
 @Component({
   selector: 'register-form',
@@ -24,7 +28,11 @@ import { SlidesDirective } from "../directives/slides.directive";
           </div>
         
           <div class="form-input">
-            <label>Adresse e-mail contact</label> <input type="email" formControlName="email"/>
+            <label>Adresse e-mail contact</label>
+            <input type="email" formControlName="email"/>
+            <div *ngIf="registerForm.get('email')!.errors" class="server-error">
+              {{ registerForm.get('email')!.errors?.server }}
+            </div>
           </div>
         
           <div class="form-input">
@@ -72,6 +80,9 @@ import { SlidesDirective } from "../directives/slides.directive";
             <options [options]="jobs" formControlName="jobs"></options>
           </div>
           <div class="form-action" style="margin-top: auto;">
+            <div *ngIf="registerForm.errors?.server" class="server-error">
+              {{ registerForm.errors?.server }}
+            </div>
             <button class="button discover gradient" style="width: 250px">Valider</button>
           </div>
         
@@ -85,7 +96,8 @@ import { SlidesDirective } from "../directives/slides.directive";
   `,
   styles: [`
   
-  `]
+  `],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RegisterForm {
   @HostBinding('class')
@@ -93,10 +105,14 @@ export class RegisterForm {
     return 'hosted-page flex column' + (this.pagingContent ? ' paging-only-content' : '');
   }
 
-  constructor(private store: Store, private router: Router) {}
+  constructor(private store: Store, private router: Router, private cd: ChangeDetectorRef) {}
 
   @ViewChild(SlidesDirective, {static: true})
   slider!: SlidesDirective;
+
+  ngOnInit() {
+    (window as any).register = this;
+  }
 
 
   @Input()
@@ -111,26 +127,79 @@ export class RegisterForm {
     ]),
     email: new FormControl('', [
       Validators.required,
-      Validators.email
+      Email
     ]),
     emailVerification: new FormControl('', [
-      Validators.required,
-      Validators.email
+      Validators.required
     ]),
     password: new FormControl('', [
       Validators.minLength(8)
     ]),
     proposer: new FormControl(''),
-    role: new FormControl(''),
-    company: new FormControl(''),
-    jobs: new FormControl([])
-  }, {validators: MatchField('email', 'emailVerification')});
+    role: new FormControl('', [Validators.required]),
+    company: new FormControl('', [Validators.required]),
+    jobs: new FormControl([], [Validators.required])
+  }, {validators: [MatchField('email', 'emailVerification'), ComplexPassword('password')]});
 
   onSubmit(f: any) {
     console.log(this.registerForm.value);
-    this.store.dispatch(Register.fromFormGroup(this.registerForm));
-    this.router.navigate(['confirmed'])
+    this.store.dispatch(Register.fromFormGroup(this.registerForm))
+      .pipe(take(1))
+      .subscribe(
+        success => this.router.navigate(['', 'success']),
+        errors => {
+          if ( !errors.all ) this.onNavigate(-1)
+          setErrors(this.registerForm, errors);
+        }
+      );
   }
 
-  jobs = [];
+  onNavigate(dx: number, done?: Function) {
+    if ( dx > 0 ) this.slider.left();
+    else this.slider.right();
+  }
+
+  jobs: Option[] = [
+    {id:1,name:"TCE", checked:false},
+    {id:2,name:"Cuisiniste" , checked:false},
+    {id:3,name:"Ingénieur en Aménagement et Urbanisme" , checked:false},
+    {id:4,name:"Ingénieur d'affaires du BTP" , checked:false},
+    {id:5,name:"Economiste de la construction", checked:false},
+    {id:6,name:"Dessinateur technique", checked:false},
+    {id:7,name:"Conducteur de travaux bâtiment", checked:false},
+    {id:8,name:"Chef d'équipe BTP", checked:false},
+    {id:9, name:"Calculateur projeteur en béton armé", checked:false},
+    {id:10,name:"Technicien Expert VRD", checked:false},
+    {id:11,name:"Métreur", checked:false},
+    {id:12,name:"Maître d’œuvre", checked:false},
+    {id:13,name:"Ingénieur en Génie Civil", checked:false},
+    {id:14,name:"Géomètre topographe", checked:false},
+    {id:15,name:"Assistant d’entrepreneur du BTP", checked:false},
+    {id:16,name:"Aide-conducteur de travaux", checked:false},
+    {id:17,name:"Acousticien", checked:false},
+    {id:18,name:"Ingénieur études de prix", checked:false},
+    {id:19,name:"Peintre décorateur", checked:false},
+    {id:20,name:"Chef de chantier", checked:false},
+    {id:21,name:"Conducteur d’engins", checked:false},
+    {id:22,name:"Agenceur de cuisines et de salles de bains", checked:false},
+    {id:23,name:"Vitrier", checked:false},
+    {id:24,name:"Vitrailliste", checked:false},
+    {id:25,name:"Restaurateur d’art", checked:false},
+    {id:26,name:"Menuisier", checked:false},
+    {id:27,name:"Terrassier", checked:false},
+    {id:28,name:"Maçon", checked:false},
+    {id:29,name:"Dessinateur-Projeteur", checked:false},
+    {id:30,name:"Couvreur-zingueur", checked:false},
+    {id:31,name:"Serrurier", checked:false},
+    {id:32,name:"Plombier", checked:false},
+    {id:33,name:"Electricien", checked:false},
+    {id:34,name:"Chauffagiste", checked:false},
+    {id:35,name:"Carreleur faïenceur", checked:false},
+    {id:36,name:"Câbleur", checked:false},
+    {id:37,name:"Bainiste", checked:false},
+    {id:38,name:"Collaborateur d’architecte", checked:false},
+    {id:39,name:"Charpentier", checked:false},
+    {id:40,name:"Designer", checked:false},
+    {id:41,name:"Ferronnier d’art", checked:false}
+  ];
 };

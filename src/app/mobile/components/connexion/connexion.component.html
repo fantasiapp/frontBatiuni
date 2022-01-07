@@ -7,7 +7,10 @@
     <div class="form-input">
         <label >Adresse e-mail contact</label>
         <input class="form-element" type="email" formControlName="email"/>
-        <div *ngIf="loginForm.get('email')!.errors?.email" class="server-error">Format invalide.</div>
+        <div *ngIf="loginForm.get('email')!.errors?.email" class="error">Format invalide.</div>
+        <div *ngIf="loginForm.get('email')!.errors?.server" class="server-error">
+          {{ loginForm.get('email')!.errors?.server }}
+        </div>
     </div>
     <div class="form-input">
         <label >Mot de passe</label>
@@ -20,8 +23,8 @@
       Mot de passe oublié !
     </a>
     <div class="form-action" style="margin-top: auto;">
-      <div *ngIf="loginForm.errors?.all" class="server-error">
-        {{ loginForm.errors?.all }}
+      <div *ngIf="loginForm.errors?.server" class="server-error">
+        {{ loginForm.errors?.server }}
       </div>
       <button class="button discover gradient" style="width: 250px;" [disabled]="!loginForm.touched || loginForm.status === 'INVALID'">Se connecter</button>
     </div>
