@@ -3,12 +3,12 @@ import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
 import { Select, Store } from "@ngxs/store";
 import { Observable } from "rxjs";
-import { take, takeUntil } from "rxjs/operators";
-import { Login, Logout } from "src/models/auth/auth.actions";
+import { take } from "rxjs/operators";
+import { Login } from "src/models/auth/auth.actions";
 import { AuthModel } from "src/models/auth/auth.model";
 import { AuthState } from "src/models/auth/auth.state";
 import { Destroy$ } from "src/common/classes";
-import { ComplexPassword, setErrors } from "src/validators/verify";
+import { setErrors } from "src/validators/verify";
 
 @Component({
   selector: 'connexion',
