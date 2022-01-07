@@ -26,7 +26,6 @@ export class HomeComponent extends Destroy$ {
   ngOnInit() {
     this.user$.pipe(takeUntil(this.destroy$)).subscribe(console.log);
     console.log(this.user$.subscribe(console.log))
-    console.log(this.store.selectSnapshot(UserState))
   }
   
   activeView: number = 0;

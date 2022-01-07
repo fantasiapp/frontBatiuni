@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component } from "@angular/core";
+import { main } from "src/models/data/mapper.model";
 
 @Component({
   selector: 'landing',
@@ -7,5 +8,7 @@ import { ChangeDetectionStrategy, Component } from "@angular/core";
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LandingPageComponent {
-  
+  constructor() {
+    main();
+  }
 };

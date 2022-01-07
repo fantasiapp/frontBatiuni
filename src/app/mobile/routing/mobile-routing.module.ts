@@ -24,6 +24,7 @@ import { AuthGuard } from './auth/auth.guard';
 
 import { EmailConfirmation } from 'src/app/shared/validators/email_confirmation/emailconfirmation.component';
 import { RegistrationSuccess } from 'src/app/shared/validators/registration_success/registrationsuccess.component';
+import { AuthResolver } from './auth/auth.resolver';
 
 const routes: Routes = [{
     path: 'landing',
@@ -33,7 +34,7 @@ const routes: Routes = [{
   }, {
     path: 'connexion',
     component: ConnexionComponent,
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard],
   }, {
     path: 'discover',
     redirectTo: 'discover/entreprise'
@@ -87,6 +88,7 @@ const routes: Routes = [{
     path: 'home',
     component: MainPage,
     canActivate: [AuthGuard],
+    resolve: [AuthResolver],
     children: [
       {path: 'profile', component: ProfileComponent, data: { animation: 'profile' }},
       {path: 'missions', component: MissionsComponent, data: { animation: 'missions' }},
@@ -105,6 +107,6 @@ const routes: Routes = [{
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
-  providers: [AuthGuard]
+  providers: [AuthGuard, AuthResolver]
 })
 export class AppRoutingModule { }
