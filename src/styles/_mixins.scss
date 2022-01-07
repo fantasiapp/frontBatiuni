@@ -196,3 +196,7 @@
   @include set-safe-area(top);
   @include set-safe-area(bottom);
 }
+
+.pull-down {
+  margin-top: auto;
+}

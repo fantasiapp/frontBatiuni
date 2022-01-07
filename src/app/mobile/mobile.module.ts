@@ -21,10 +21,7 @@ import { RegisterComponent } from "./components/register/register.component";
 import { SOSPageComponent } from "./components/SOS_page/sos-page.component";
 import { SuiviPage } from "./components/suivi_page/suivi.page";
 import { SuiviPME } from "./components/suivi_pme/suivi_pme.page";
-import { emailConfirmation } from "./components/validator/email_confirmation/emailconfirmation";
-import { RegistrationSuccess } from "./components/validator/registration_success/registrationsuccess";
 import { FadeTemplate } from "./directives/fadeTemplate.directive";
-import { SlidesDirective } from "./directives/slides.directive";
 import { SlideTemplate } from "./directives/slideTemplate.directive";
 import { UIModule } from "./ui/ui.module";
 import { SharedModule } from "../shared/shared.module";
@@ -32,15 +29,11 @@ import { ReactiveFormsModule } from "@angular/forms";
 import { HammerModule } from "@angular/platform-browser";
 import { AppRoutingModule } from "./routing/mobile-routing.module";
 
-
 @NgModule({
   declarations: [
     LandingPageComponent,
     ConnexionComponent,
     RegisterComponent,
-    emailConfirmation,
-    RegistrationSuccess,
-    SlidesDirective,
     DiscoverComponent,
     PagingComponent,
     SlideTemplate,

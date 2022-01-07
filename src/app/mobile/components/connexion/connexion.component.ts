@@ -11,6 +11,7 @@ import { Destroy$ } from "src/common/classes";
 import { ComplexPassword } from "src/validators/verify";
 import { getGeneraleData, getUserData } from "src/models/user/user.actions";
 import { Mapping } from "./mapping.response";
+import {  setErrors } from "src/validators/verify";
 
 @Component({
   selector: 'connexion',
@@ -33,7 +34,7 @@ export class ConnexionComponent extends Destroy$ {
   get errors() { return this._errors; }
 
   constructor(private router: Router, private store: Store, private cd: ChangeDetectorRef) {
-    super()
+    super();
   }
   // data = {
   //   "UserprofileFields": [
@@ -104,13 +105,14 @@ export class ConnexionComponent extends Destroy$ {
 
   async onSubmit(e: any) {
     let { email, password } = this.loginForm.value;
-    this.store.dispatch(new Login(email, password)).pipe(take(1)).subscribe(
+    this.store.dispatch(new Login(email, password))
+    .pipe(take(1)).subscribe(
       success => {
         this.store.dispatch(new getUserData(success.app.auth.token)).subscribe()
         this.router.navigate(['', 'home']);
       },
       errors => {
-        this.loginForm.setErrors(errors);
+        setErrors(this.loginForm, errors);
         this.cd.markForCheck();
       }
     );

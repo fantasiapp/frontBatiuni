@@ -1,7 +1,7 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, HostListener, ViewChild } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, ViewChild } from "@angular/core";
 import { Select, Store } from "@ngxs/store";
 import { Observable } from "rxjs";
-import { SlidesDirective } from "../../directives/slides.directive";
+import { SlidesDirective } from "src/app/shared/directives/slides.directive";
 import { User } from "src/models/user/user.model";
 import { UserState } from "src/models/user/user.state";
 import * as UserActions from "src/models/user/user.actions";
@@ -12,6 +12,7 @@ import { UISwipeupComponent } from "../../ui/swipeup/swipeup.component";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { MatchField } from "src/validators/verify";
 import { Logout } from "src/models/auth/auth.actions";
+import { take } from "rxjs/operators";
 
 
 @Component({
@@ -145,4 +146,6 @@ export class ProfileComponent {
 
     this.store.dispatch(new UserActions.ChangeProfilePicture('data:image/png;base64,' + photo.base64String!));
   }
+
+  
 };

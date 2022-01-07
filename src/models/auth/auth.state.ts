@@ -1,11 +1,11 @@
 import { Action, Selector, State, StateContext } from "@ngxs/store";
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Injectable } from "@angular/core";
+import { HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/http';
+import { Injectable, NgZone } from "@angular/core";
 import { AuthModel } from "./auth.model";
 import { environment } from 'src/environments/environment';
 import { Login, Logout, Register } from "./auth.actions";
-import { catchError, tap } from "rxjs/operators";
-import { of, throwError } from "rxjs";
+import { catchError, map, tap } from "rxjs/operators";
+import { Observable, of, throwError } from "rxjs";
 import * as strings from '../../common/strings';
 import { Router } from "@angular/router";
 import { Mapping } from "src/app/mobile/components/connexion/mapping.response";
@@ -22,7 +22,16 @@ export class AuthState {
   @Selector()
   static isAutheticated(state: AuthModel): boolean { return !!state.token; }
 
-  constructor(private http: HttpClient, private router: Router) {}
+  static handleError(err: HttpErrorResponse): Observable<never> {
+    let error;
+    if ( err.status == 404 ) error = strings.requests.INVALID_CONFIG; 
+    else if ( err.status == 500 ) error = strings.requests.SERVER_UNAVAILABLE;
+    else if ( err.status == 400 ) error = strings.requests.INVALID_CREDENTIALS;
+    else error = strings.requests.UNEXPECTED_ERROR;
+    return throwError({all: error});
+  };
+
+  constructor(private http: HttpClient, private router: Router, private zone: NgZone) {}
 
   @Action(Login)
   login(ctx: StateContext<AuthModel>, action: Login) {
@@ -35,12 +44,7 @@ export class AuthState {
     
     return req.pipe(
       catchError((err: HttpErrorResponse) => {
-        let error;
-        if ( err.status == 404 ) error = strings.requests.INVALID_CONFIG; 
-        else if ( err.status == 500 ) error = strings.requests.SERVER_UNAVAILABLE;
-        else if ( err.status == 400 ) error = strings.requests.INVALID_CREDENTIALS;
-        else error = strings.requests.UNEXPECTED_ERROR;
-        return throwError({all: error});
+        return AuthState.handleError(err);
       }),
       tap((response: any) => {
         let token = response['token'];
@@ -60,22 +64,28 @@ export class AuthState {
     return req.pipe(
       tap(() => {
         ctx.setState({token: null, username: null});
-        this.router.navigate(['', 'connexion'])
+        this.zone.run(() => {
+          this.router.navigate(['', 'connexion']);
+        })
       })
     );
   }
   
   @Action(Register)
   register(ctx: StateContext<AuthModel>, action: Register) {
-    let req = this.http.post(environment.backUrl + '/register/', action, {
+    let req = this.http.post(environment.backUrl + '/initialize/', action, {
       headers: {
         'Content-Type': 'application/json'
       }
     });
     return req.pipe(
-      catchError(err => throwError(err)),
-      tap((response: any) => {
-        ctx.setState({username: '<void>', token: response['token']})
+      catchError((err: HttpErrorResponse) => {
+        return AuthState.handleError(err);
+      }),
+      map((response: any) => {
+        if ( response['register'] == 'OK' )
+          return true;
+        throw response.messages;
       })
     )
   };
