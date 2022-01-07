@@ -7,6 +7,8 @@ import { Login, Logout, Register } from "./auth.actions";
 import { catchError, tap } from "rxjs/operators";
 import { of, throwError } from "rxjs";
 import * as strings from '../../common/strings';
+import { Router } from "@angular/router";
+import { Mapping } from "src/app/mobile/components/connexion/mapping.response";
 
 @State<AuthModel>({
   name: 'auth',
@@ -20,7 +22,7 @@ export class AuthState {
   @Selector()
   static isAutheticated(state: AuthModel): boolean { return !!state.token; }
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private router: Router) {}
 
   @Action(Login)
   login(ctx: StateContext<AuthModel>, action: Login) {
@@ -58,6 +60,7 @@ export class AuthState {
     return req.pipe(
       tap(() => {
         ctx.setState({token: null, username: null});
+        this.router.navigate(['', 'connexion'])
       })
     );
   }
@@ -66,7 +69,6 @@ export class AuthState {
   register(ctx: StateContext<AuthModel>, action: Register) {
     let req = this.http.post(environment.backUrl + '/register/', action, {
       headers: {
-        Authorization: "Basic " + ctx.getState().token,
         'Content-Type': 'application/json'
       }
     });
@@ -77,4 +79,6 @@ export class AuthState {
       })
     )
   };
+
+  
 };

@@ -5,7 +5,8 @@ import { from } from "rxjs";
 import { tap } from "rxjs/operators";
 import { AuthModel } from "src/models/auth/auth.model";
 import { AuthState } from "src/models/auth/auth.state";
-import { UserState } from "src/models/user/user.state";
+import { User } from "src/models/user/user.model";
+import { GeneralData, UserState } from "src/models/user/user.state";
 import { Load } from "./app.actions";
 import { AppModel } from "./app.model";
 
@@ -14,7 +15,7 @@ import { AppModel } from "./app.model";
   defaults: {
     device: null
   },
-  children: [AuthState, UserState]
+  children: [AuthState, UserState, GeneralData]
 })
 @Injectable()
 export class AppState {
@@ -26,6 +27,14 @@ export class AppState {
   @Selector([AppState])
   static device(state: AppModel) {
     return state.device;
+  }
+  @Selector([GeneralData])
+  static generalData(state: GeneralData) {
+    return state;
+  }
+  @Selector([UserState])
+  static userState(state: User) {
+    return state;
   }
 
   @Action(Load)

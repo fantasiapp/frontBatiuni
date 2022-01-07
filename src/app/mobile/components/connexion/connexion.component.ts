@@ -9,6 +9,8 @@ import { AuthModel } from "src/models/auth/auth.model";
 import { AuthState } from "src/models/auth/auth.state";
 import { Destroy$ } from "src/common/classes";
 import { ComplexPassword } from "src/validators/verify";
+import { getGeneraleData, getUserData } from "src/models/user/user.actions";
+import { Mapping } from "./mapping.response";
 
 @Component({
   selector: 'connexion',
@@ -33,8 +35,66 @@ export class ConnexionComponent extends Destroy$ {
   constructor(private router: Router, private store: Store, private cd: ChangeDetectorRef) {
     super()
   }
-
-  ngOnInit() {}
+  // data = {
+  //   "UserprofileFields": [
+  //       "user",
+  //       "company",
+  //       "firstName",
+  //       "lastName",
+  //       "proposer",
+  //       "role",
+  //       "cellPhone",
+  //       "jobs"
+  //   ],
+  //   "UserprofileIndices": [
+  //       1,
+  //       5,
+  //       7
+  //   ],
+  //   "UserprofileValues": {
+  //       "2": [
+  //           "anasschatoui@gmail.com",
+  //           1,
+  //           "Majed",
+  //           "Majed",
+  //           null,
+  //           1,
+  //           null,
+  //           [
+  //               1,
+  //               2,
+  //               3
+  //           ]
+  //       ]
+  //   },
+  //   "CompanyFields": [
+  //       "name",
+  //       "siret",
+  //       "capital",
+  //       "logo",
+  //       "webSite",
+  //       "stars",
+  //       "companyPhone"
+  //   ],
+  //   "CompanyValues": {
+  //       "1": [
+  //           "Fantasiapp",
+  //           null,
+  //           null,
+  //           null,
+  //           null,
+  //           null,
+  //           null
+  //       ]
+  //   }
+// }
+  ngOnInit() {
+    // this.store.dispatch(new getGeneraleData()).subscribe(
+    //   console.log
+    // )
+    // let mapping = new Mapping(this.data)
+    // console.log(mapping.companyData)
+  }
 
   @Select(AuthState)
   auth$!: Observable<AuthModel>;
@@ -46,6 +106,7 @@ export class ConnexionComponent extends Destroy$ {
     let { email, password } = this.loginForm.value;
     this.store.dispatch(new Login(email, password)).pipe(take(1)).subscribe(
       success => {
+        this.store.dispatch(new getUserData(success.app.auth.token)).subscribe()
         this.router.navigate(['', 'home']);
       },
       errors => {
@@ -53,6 +114,5 @@ export class ConnexionComponent extends Destroy$ {
         this.cd.markForCheck();
       }
     );
-
   }
 };

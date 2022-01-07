@@ -11,6 +11,7 @@ import { UISlideMenuComponent } from "../../ui/slidemenu/slidemenu.component";
 import { UISwipeupComponent } from "../../ui/swipeup/swipeup.component";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { MatchField } from "src/validators/verify";
+import { Logout } from "src/models/auth/auth.actions";
 
 
 @Component({
@@ -57,7 +58,7 @@ export class ProfileComponent {
   openModifyPicture: boolean = false;
   openNotifications : boolean = false;
 
-  constructor(private store: Store) {
+  constructor(private store: Store, private cd: ChangeDetectorRef) {
 
   }
 
@@ -108,6 +109,9 @@ export class ProfileComponent {
     this.fixScrollTop();
     if ( this.openModifyMenu )
       this.modifySlider.right();
+  }
+  logout(){
+    this.store.dispatch(new Logout()).subscribe(console.log)
   }
 
   onSubmit() {
