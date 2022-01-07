@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, HostListener, ViewChild } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, ViewChild } from "@angular/core";
 import { Select, Store } from "@ngxs/store";
 import { Observable } from "rxjs";
 import { SlidesDirective } from "src/app/shared/directives/slides.directive";
@@ -59,7 +59,7 @@ export class ProfileComponent {
   openModifyPicture: boolean = false;
   openNotifications : boolean = false;
 
-  constructor(private store: Store) {
+  constructor(private store: Store, private cd: ChangeDetectorRef) {
 
   }
 
@@ -111,6 +111,9 @@ export class ProfileComponent {
     if ( this.openModifyMenu )
       this.modifySlider.right();
   }
+  logout(){
+    this.store.dispatch(new Logout()).subscribe(console.log)
+  }
 
   onSubmit() {
     let { oldPwd, newPwd } = this.modifyPwdForm.value;
@@ -144,7 +147,5 @@ export class ProfileComponent {
     this.store.dispatch(new UserActions.ChangeProfilePicture('data:image/png;base64,' + photo.base64String!));
   }
 
-  logout() {
-    this.store.dispatch(new Logout())
-  }
+  
 };

@@ -4,8 +4,10 @@ import { Action, Selector, State, StateContext, Store } from "@ngxs/store";
 import { tap } from "rxjs/operators";
 import { AuthState } from "src/models/auth/auth.state";
 import { environment } from "src/environments/environment";
-import { ChangePassword, ChangeProfileType, ChangeProfilePicture } from "./user.actions";
+import { ChangePassword, ChangeProfileType, ChangeProfilePicture, getGeneraleData, getUserData } from "./user.actions";
 import { User } from "./user.model";
+import { Mapping } from "src/app/mobile/components/connexion/mapping.response";
+import { Job, Label, Role, map } from "../data/data.model";
 
 @State<User>({
   name: 'user',
@@ -16,7 +18,8 @@ export class UserState {
   @Selector()
   static type(state: User) { return state.type; }
 
-  constructor(private store: Store, private http: HttpClient) { }
+  constructor(private store: Store, private http: HttpClient) { 
+  }
 
   //....
   @Action(ChangeProfileType)
@@ -29,6 +32,31 @@ export class UserState {
     return ctx.patchState({imageUrl: action.src});
   }
 
+  // Get User Data
+  /*
+   * Baptiste was here
+   * 
+   */
+  @Action(getUserData)
+  getUserData(ctx: StateContext<User>, action: getUserData) {
+    let {token} = action
+    let req = this.http.get(environment.backUrl + '/data/?action=getUserData',
+    {
+      headers: {
+        "Authorization": `Token ${token}`,
+        'Content-Type': 'application/json'
+      }
+    })
+    return req.pipe(
+      tap((response: any)=> {
+        let mapping = new Mapping(response);
+        ctx.patchState({
+          userData : mapping.userData,
+          companyData: mapping.companyData
+        })
+      })
+    )
+  }
   @Action(ChangePassword) 
   modifyPassword(ctx: StateContext<User>, action: ChangePassword) {
     console.log(this.store.selectSnapshot(AuthState));
@@ -45,3 +73,31 @@ export class UserState {
     );
   }
 };
+
+@State({
+  name:"generalData",
+  defaults: {}
+})
+@Injectable()
+export class GeneralData {
+
+  constructor(private store: Store, private http: HttpClient) { }
+
+  @Action(getGeneraleData)
+  getGeneraleData(ctx: StateContext<any>, action: getGeneraleData) {    
+    let req = this.http.get(environment.backUrl + "/initialize/?action=getGeneralData",  {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+
+    return req.pipe(
+      tap((response:any) => {
+        map(response, Role);
+        map(response, Job);
+        map(response, Label);
+      }) 
+    )
+  }
+
+}

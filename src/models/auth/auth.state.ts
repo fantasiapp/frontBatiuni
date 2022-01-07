@@ -8,6 +8,7 @@ import { catchError, map, tap } from "rxjs/operators";
 import { Observable, of, throwError } from "rxjs";
 import * as strings from '../../common/strings';
 import { Router } from "@angular/router";
+import { Mapping } from "src/app/mobile/components/connexion/mapping.response";
 
 @State<AuthModel>({
   name: 'auth',
@@ -74,7 +75,6 @@ export class AuthState {
   register(ctx: StateContext<AuthModel>, action: Register) {
     let req = this.http.post(environment.backUrl + '/initialize/', action, {
       headers: {
-        Authorization: "Basic " + ctx.getState().token,
         'Content-Type': 'application/json'
       }
     });
@@ -89,4 +89,6 @@ export class AuthState {
       })
     )
   };
+
+  
 };

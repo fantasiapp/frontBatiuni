@@ -9,6 +9,9 @@ import { AuthModel } from "src/models/auth/auth.model";
 import { AuthState } from "src/models/auth/auth.state";
 import { Destroy$ } from "src/common/classes";
 import { setErrors } from "src/validators/verify";
+import { ComplexPassword } from "src/validators/verify";
+import { getGeneraleData, getUserData } from "src/models/user/user.actions";
+import { Mapping } from "./mapping.response";
 
 @Component({
   selector: 'connexion',
@@ -34,6 +37,11 @@ export class ConnexionComponent extends Destroy$ {
     super();
   }
 
+  ngOnInit() {
+
+    
+  }
+
   @Select(AuthState)
   auth$!: Observable<AuthModel>;
 
@@ -45,6 +53,7 @@ export class ConnexionComponent extends Destroy$ {
     this.store.dispatch(new Login(email, password))
     .pipe(take(1)).subscribe(
       success => {
+        this.store.dispatch(new getUserData(success.app.auth.token)).subscribe()
         this.router.navigate(['', 'home']);
       },
       errors => {
@@ -52,6 +61,5 @@ export class ConnexionComponent extends Destroy$ {
         this.cd.markForCheck();
       }
     );
-
   }
 };

@@ -10,7 +10,7 @@ function getByValue<K, V>(map: Map<K, V>, searchValue: V): K | null {
   return null;
 }
 
-function staticMap(data: any, cls: any) {
+export function staticMap(data: any, cls: any) {
   if ( cls.mapped || !data[cls.fieldName + 'Values']) return cls;
 
   Object.entries(data[cls.fieldName + 'Values']).map(
@@ -20,11 +20,10 @@ function staticMap(data: any, cls: any) {
   return cls;
 };
 
-function map(data: any, cls: any) {
+export function map(data: any, cls: any) {
   const field = cls.fieldName;
 
   if ( !data[field + 'Fields'] ) return staticMap(data, cls);
-
   data[field + 'Fields']?.forEach((field: string, index: number) =>
     cls.fields.set(field, index)
   );
@@ -150,83 +149,3 @@ mapping.set('role', Role);
 mapping.set('userprofile', UserProfile);
 mapping.set('jobs', Job);
 mapping.set('label', Label);
-
-export function main() {
-
-  let generalData = {
-    "JobValues": {
-      1: "TCE",
-      2: "ABC",
-      3: "EDX"
-    },
-    "RoleValues": {
-      1: "ST",
-      2: "PME",
-      3: "Les deux"
-    }
-  };
-
-  staticMap(generalData, Job);
-  staticMap(generalData, Role);
-
-
-  let data = {
-    "UserprofileFields": [
-      "user",
-      "company",
-      "firstName",
-      "lastName",
-      "proposer",
-      "role",
-      "cellPhone",
-      "jobs"
-    ],
-    "UserprofileIndices": [
-      1,
-      5,
-      7
-    ],
-    "UserprofileValues": {
-      "2": [
-        "anasschatoui@gmail.com",
-        1,
-        "Majed",
-        "Majed",
-        null,
-        1,
-        null,
-        [
-          1,
-          2,
-          3
-        ]
-      ]
-    },
-    "CompanyFields": [
-      "name",
-      "siret",
-      "capital",
-      "logo",
-      "webSite",
-      "stars",
-      "companyPhone"
-    ],
-    "CompanyValues": {
-      "1": [
-        "Fantasiapp",
-        null,
-        null,
-        null,
-        null,
-        null,
-        null
-      ]
-    }
-  };
-
-  map(data, UserProfile);
-  const anass = UserProfile.getById(2);
-  console.log(anass?.firstName, anass?.company.name)
-  
-}
-

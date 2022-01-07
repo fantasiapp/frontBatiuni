@@ -391,6 +391,10 @@ input[type=number] {
 
 .criteria { font-weight: 500; }
 
+
+.dropdown-content {
+  height: 160px !important;
+}
 //RESPONSIVE - WEB
 @media (max-width: 1024px) {
   body { font-size: 12px; }
