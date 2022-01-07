@@ -6,8 +6,8 @@ import { AuthState } from "src/models/auth/auth.state";
 import { environment } from "src/environments/environment";
 import { ChangePassword, ChangeProfileType, ChangeProfilePicture, getGeneraleData, getUserData } from "./user.actions";
 import { User } from "./user.model";
-import { Mapping } from "src/app/mobile/components/connexion/mapping.response";
-import { Job, Label, Role, map } from "../data/data.model";
+import { Job, Label, Role, UserProfile } from "../data/data.model";
+import { Mapper } from "../data/mapper.model";
 
 @State<User>({
   name: 'user',
@@ -49,11 +49,8 @@ export class UserState {
     })
     return req.pipe(
       tap((response: any)=> {
-        let mapping = new Mapping(response);
-        ctx.patchState({
-          userData : mapping.userData,
-          companyData: mapping.companyData
-        })
+        Mapper.mapTable(response, 'Userprofile');
+        ctx.patchState({profile: UserProfile.getById(2)})
       })
     )
   }
@@ -92,10 +89,8 @@ export class GeneralData {
     })
 
     return req.pipe(
-      tap((response:any) => {
-        map(response, Role);
-        map(response, Job);
-        map(response, Label);
+      tap((response: any) => {
+        Mapper.staticMap(response);
       }) 
     )
   }

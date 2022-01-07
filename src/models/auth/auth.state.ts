@@ -8,7 +8,6 @@ import { catchError, map, tap } from "rxjs/operators";
 import { Observable, of, throwError } from "rxjs";
 import * as strings from '../../common/strings';
 import { Router } from "@angular/router";
-import { Mapping } from "src/app/mobile/components/connexion/mapping.response";
 
 @State<AuthModel>({
   name: 'auth',

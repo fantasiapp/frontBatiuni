@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
+import { User } from "src/models/user/user.model";
 
 @Component({
   selector: 'profile-image',

@@ -22,10 +22,10 @@ import { take } from "rxjs/operators";
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProfileComponent {
-  @ViewChild(UISwipeupComponent, {static: true})
+  @ViewChild(UISwipeupComponent, {static: false})
   swipeMenu!: UISwipeupComponent;
 
-  @ViewChild(UISlideMenuComponent, {static: true})
+  @ViewChild(UISlideMenuComponent, {static: false})
   slideMenu!: UISlideMenuComponent;
 
   @Select(UserState)
@@ -86,7 +86,7 @@ export class ProfileComponent {
   @ViewChild(SlidesDirective, {static: false})
   modifySlider!: SlidesDirective;
 
-  @ViewChild('modifyMenu', {static: true, read: UISlideMenuComponent})
+  @ViewChild('modifyMenu', {static: false, read: UISlideMenuComponent})
   modifyMenu!: UISlideMenuComponent;
 
   allLabels = ["Qualibat", "RGE", "RGE Eco Artisan", "NF", "Effinergie", "Handibat"]

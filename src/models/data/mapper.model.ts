@@ -56,8 +56,6 @@ export class Mapper {
       multiple: false
     }
 
-    console.log(name);
-
     if ( name[name.length-1] == 's' ) {
       name = name.slice(0, -1);
       let result = this.getField(name);
@@ -119,9 +117,7 @@ export class Mapper {
   };
 
   private static mapSimpleTable(data: any, name: string) {
-    let fields = data[name + 'Fields'],
-      clazz = this.getTableClass(name);
-    
+    let clazz = this.getTableClass(name);
     Object.entries(this.readTable(data, name)).forEach(([id, values]) => new clazz(+id, values));
     this.mapped[name] = true;
   }

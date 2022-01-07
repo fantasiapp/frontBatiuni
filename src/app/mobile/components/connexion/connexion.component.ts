@@ -9,9 +9,7 @@ import { AuthModel } from "src/models/auth/auth.model";
 import { AuthState } from "src/models/auth/auth.state";
 import { Destroy$ } from "src/common/classes";
 import { setErrors } from "src/validators/verify";
-import { ComplexPassword } from "src/validators/verify";
-import { getGeneraleData, getUserData } from "src/models/user/user.actions";
-import { Mapping } from "./mapping.response";
+import { getUserData } from "src/models/user/user.actions";
 
 @Component({
   selector: 'connexion',
