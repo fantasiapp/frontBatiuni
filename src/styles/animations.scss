@@ -1,7 +1,7 @@
 @import 'src/styles/variables';
 
-$slide: 250ms ease-out;
-$fade: 250ms ease-out;
+$slide: 200ms ease-out;
+$fade: 200ms ease-out;
 
 @keyframes slide-in-right {
   0% { transform: translateX(-100%); }
@@ -42,30 +42,30 @@ $fade: 250ms ease-out;
 
 .slide-in-right {
   @extend .animating;
-  animation: $slide 0s normal forwards slide-in-right;
+  animation: $slide 50ms normal forwards slide-in-right;
 }
 
 .slide-out-right {
   @extend .animating;
-  animation: $slide 0s normal forwards slide-out-right;
+  animation: $slide 50ms normal forwards slide-out-right;
 }
 
 .slide-in-left {
   @extend .animating;
-  animation: $slide 0s normal forwards slide-in-left;
+  animation: $slide 50ms normal forwards slide-in-left;
 }
 
 .slide-out-left {
   @extend .animating;
-  animation: $slide 0s normal forwards slide-out-left;
+  animation: $slide 50ms normal forwards slide-out-left;
 }
 
 .fade-in {
   @extend .animating;
-  animation: $fade normal forwards fade-in;
+  animation: $fade 50ms normal forwards fade-in;
 }
 
 .fade-out {
   @extend .animating;
-  animation: $fade normal forwards fade-out;
+  animation: $fade 50ms normal forwards fade-out;
 }

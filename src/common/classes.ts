@@ -10,7 +10,6 @@ export class Destroy$ {
   protected destroy$ = new Subject<void>();
 
   ngOnDestroy() {
-    console.log('destruction');
     this.destroy$.next();
     this.destroy$.complete();
   }
@@ -49,9 +48,8 @@ export abstract class AnimateCSS extends IndexBased {
   }
 
   protected animateWithClass(element: HTMLElement, className: string, callback?: Function) {
-    if ( element.parentElement )
-    element.parentElement.scrollTop = 0;
-    element.classList?.add(className, 'animating');    element.classList.add('animating', className);
+    if ( element.parentElement ) element.parentElement.scrollTop = 0;
+    element.classList?.add(className, 'animating');
     
     let save = element.onanimationend;
     element.onanimationend = (e: AnimationEvent) => {

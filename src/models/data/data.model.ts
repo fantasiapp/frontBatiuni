@@ -40,7 +40,7 @@ export class Company {
   get logo() { return this.values[Company.fields.get('logo')!]; }
   get webSite() { return this.values[Company.fields.get('webSite')!]; }
   get stars() { return this.values[Company.fields.get('stars')!]; }
-  get companyPhone() { return this.values[Company.fields.get('companyPhones')!]; }
+  get companyPhone() { return this.values[Company.fields.get('companyPhone')!]; }
 };
 
 export class UserProfile {
