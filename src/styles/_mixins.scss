@@ -137,59 +137,59 @@
 
 %page {
   display: block;
-  height: calc(100vh - #{$navigation-height});
+  height: calc(100vh - #{$navigation-height} - env(safe-area-inset-bottom));
   @extend %overflow-y;
 }
 
 %no-navigation {
-  height: 100vh !important;
+  height: calc(100vh - env(safe-area-inset-bottom)) !important;
 }
 
 %content-with-header {
   @extend %overflow-y;
   @include with-set-safe-area(margin, top, $sticky-header-height);
-  @include set-safe-area(margin, bottom);
-  height: calc(100vh - #{$sticky-header-height});
+  // @include set-safe-area(margin, bottom);
+  height: calc(100vh - #{$sticky-header-height} - env(safe-area-inset-bottom));
 }
 
 %content-with-header-and-footer {
   @extend %overflow-y;
   @include with-set-safe-area(margin, top, $sticky-header-height);
-  @include with-set-safe-area(margin, bottom, $sticky-footer-height);
-  height: calc(100vh - #{$sticky-header-height + $sticky-footer-height});
+  // @include with-set-safe-area(margin, bottom, $sticky-footer-height);
+  height: calc(100vh - #{$sticky-header-height + $sticky-footer-height} - env(safe-area-inset-bottom));
 }
 
 %content-with-paging-and-footer {
   @extend %overflow-y;
   @include with-set-safe-area(margin, top, $paging-height);
-  @include with-set-safe-area(margin, bottom, $sticky-footer-height);
-  height: calc(100vh - #{$paging-height + $sticky-footer-height});
+  // @include with-set-safe-area(margin, bottom, $sticky-footer-height);
+  height: calc(100vh - #{$paging-height + $sticky-footer-height} - env(safe-area-inset-bottom));
 }
 
 
 .paging-only-content {
   @extend %overflow-y;
   @include with-set-safe-area(margin, top, $paging-height + $paging-decoration-height);
-  height: calc(100vh - #{$paging-height + $paging-decoration-height});
+  height: calc(100vh - #{$paging-height + $paging-decoration-height} - env(safe-area-inset-bottom));
 }
 
 .page-content-with-tabs {
   @extend %overflow-y;
   @include with-set-safe-area(margin, top, $mission-header-height);
   @include with-set-safe-area(margin, bottom);
-  height: calc(100vh - #{$mission-header-height + $navigation-height});
+  height: calc(100vh - #{$mission-header-height + $navigation-height} - env(safe-area-inset-bottom));
 }
 
 .page-content {
   @extend %overflow-y;
   @include with-set-safe-area(margin, top, $sticky-header-height);
-  height: calc(100vh - #{$sticky-header-height + $navigation-height});
+  height: calc(100vh - #{$sticky-header-height + $navigation-height} - env(safe-area-inset-bottom));
 }
 
 .page-content-without-nav {
   @extend %overflow-y;
   @include with-set-safe-area(margin, top, $sticky-header-height);
-  height: calc(100vh - #{$sticky-header-height});
+  height: calc(100vh - #{$sticky-header-height}) - env(safe-area-inset-bottom);
 }
 
 .full-page {

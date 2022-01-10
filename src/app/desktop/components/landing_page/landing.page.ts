@@ -1,5 +1,4 @@
 import { ChangeDetectionStrategy, Component } from "@angular/core";
-import { main } from "src/models/data/mapper.model";
 
 @Component({
   selector: 'landing',
@@ -9,6 +8,6 @@ import { main } from "src/models/data/mapper.model";
 })
 export class LandingPageComponent {
   constructor() {
-    main();
+
   }
 };

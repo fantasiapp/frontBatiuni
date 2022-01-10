@@ -1,5 +1,4 @@
-import { filterSplit, getByValue } from 'src/common/functions';
-import { Optional } from 'src/common/types';
+import { getByValue } from 'src/common/functions';
 import { Role, Job, Label, Company, UserProfile } from './data.model';
 
 type Dict<T> = {[key: string]: T};
@@ -176,66 +175,3 @@ export class Mapper {
       this.mapTableDependencies(data, name);
   }
 };
-
-let data = {
-  JobValues: {1: 'TCE', 2: 'Cuisiniste', 3: 'Ingénieur en Aménagement et Urbanisme', 4: "Ingénieur d'affaires du BTP", 5: 'Economiste de la construction', 6: 'Dessinateur technique', 7: 'Conducteur de travaux bâtiment', 8: "Chef d'équipe BTP", 9: 'Calculateur projeteur en béton armé', 10: 'Technicien Expert VRD', 11: 'Métreur', 12: 'Maître d’œuvre', 13: 'Ingénieur en Génie Civil', 14: 'Géomètre topographe', 15: 'Assistant d’entrepreneur du BTP', 16: 'Aide-conducteur de travaux', 17: 'Acousticien', 18: 'Ingénieur études de prix', 19: 'Peintre décorateur', 20: 'Chef de chantier', 21: 'Conducteur d’engins', 22: 'Agenceur de cuisines et de salles de bains', 23: 'Vitrier', 24: 'Vitrailliste', 25: 'Restaurateur d’art', 26: 'Menuisier', 27: 'Terrassier', 28: 'Maçon', 29: 'Dessinateur-Projeteur', 30: 'Couvreur-zingueur', 31: 'Serrurier', 32: 'Plombier', 33: 'Electricien', 34: 'Chauffagiste', 35: 'Carreleur faïenceur', 36: 'Câbleur', 37: 'Bainiste', 38: 'Collaborateur d’architecte', 39: 'Charpentier', 40: 'Designer', 41: 'Ferronnier d’art'},
-  LabelValues: {1: 'Qualibat', 2: 'RGE', 3: 'RGE Eco Artisan', 4: 'NF', 5: 'Effinergie', 6: 'Handibat', 7: 'Qualifelec', 8: 'Qualit’EnR', 9: 'Quali’Sol', 10: 'Quali’Bois', 11: 'Quali’PV', 12: 'Quali’Pac', 13: 'Certibat', 14: 'CERQUAL Qualitel Certification', 15: 'Autres...'},
-  RoleValues: {1: 'Une entreprise à la recherche de sous-traitances', 2: "Un sous-traitant à la recherche d'une entreprise", 3: 'Les deux'},
-  "UserprofileFields": [
-    "user",
-    "company",
-    "firstName",
-    "lastName",
-    "proposer",
-    "role",
-    "cellPhone",
-    "jobs"
-  ],
-  "UserprofileIndices": [
-    1,
-    5,
-    7
-  ],
-  "UserprofileValues": {
-    "2": [
-      "anasschatoui@gmail.com",
-      1,
-      "Majed",
-      "Majed",
-      null,
-      1,
-      null,
-      [
-        1,
-        2,
-        3
-      ]
-    ]
-  },
-  "CompanyFields": [
-    "name",
-    "siret",
-    "capital",
-    "logo",
-    "webSite",
-    "stars",
-    "companyPhone"
-  ],
-  "CompanyValues": {
-    "1": [
-      "Fantasiapp",
-      null,
-      null,
-      null,
-      null,
-      null,
-      null
-    ]
-  }
-};
-
-export function main() {
-  Mapper.mapTable(data, 'Userprofile');
-  console.log(Company.instances)
-  console.log(UserProfile.instances);
-}
