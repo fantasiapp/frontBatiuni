@@ -1,0 +1,68 @@
+import { ChangeDetectionStrategy, Component, Output } from "@angular/core";
+import { FormControl, FormGroup, Validators } from "@angular/forms";
+import { ComplexPassword, MatchField } from "src/validators/verify";
+import * as UserActions from "src/models/user/user.actions";
+import { Store } from "@ngxs/store";
+
+
+@Component({
+  selector: 'modify-password-form',
+  template: `
+  <form class="form-control" style="height: 100%;" [formGroup]="modifyPwdForm" >
+    <div class="form-input">
+      <label>Ancien mot de passe</label>
+      <input class="form-element" type="text" formControlName="oldPwd"/>
+      <div class="server-error" *ngIf="modifyPwdForm.get('oldPwd')!.errors">
+        {{ modifyPwdForm.get('oldPwd')!.errors?.server }}
+      </div>
+    </div>
+    <div class="form-input">
+      <label>Nouveau mot de passe</label>
+      <input class="form-element" type="text" formControlName="newPwd"/>
+      <div *ngIf="modifyPwdForm.get('newPwd')!.touched  && modifyPwdForm.get('newPwd')!.errors?.minlength" class="error">
+        Le mot de passe doit contenir au moins 8 caractères.
+      </div>
+      <div *ngIf="modifyPwdForm.get('newPwd')!.touched  && modifyPwdForm.get('newPwd')!.errors?.lowercase" class="error">
+        Le mot de passe doit contenir une lettre en miniscule.
+      </div>
+      <div *ngIf="modifyPwdForm.get('newPwd')!.touched && modifyPwdForm.get('newPwd')!.errors?.uppercase" class="error">
+        Le mot de passe doit contenir une lettre en majuscule.
+      </div>
+    </div>
+    <div class="form-input">
+      <label>Confirmation nouveau mot de passe</label>
+      <input class="form-element" type="text" formControlName="newPwdConfirmation"/>
+      <div *ngIf="modifyPwdForm.get('newPwdConfirmation')!.touched && modifyPwdForm.get('newPwdConfirmation')!.errors" class="error">
+        Les mots de passes ne sont pas identiques.
+      </div>
+    </div>
+    <button class="button gradient full-width" style="margin-top: auto;" [attr.disabled]="modifyPwdForm.invalid || null" (click)="onSubmit()">
+      Enregistrer
+    </button>
+  </form>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush
+})
+export class ModifyPasswordForm {
+  constructor(private store: Store) {}
+
+  // Modify password 
+  modifyPwdForm = new FormGroup({
+    oldPwd: new FormControl('', [
+      Validators.required
+    ]),
+    newPwd: new FormControl('',[
+      Validators.required,
+      Validators.minLength(8),      
+    ]),
+    newPwdConfirmation: new FormControl('',[
+      Validators.required,
+      Validators.minLength(8),      
+    ])
+  }, {validators: [MatchField('newPwd', 'newPwdConfirmation'), ComplexPassword('oldPwd'), ComplexPassword('newPwd')]})
+
+  onSubmit() {
+    let { oldPwd, newPwd } = this.modifyPwdForm.value;
+    let req = this.store.dispatch(new UserActions.ChangePassword(oldPwd, newPwd));
+  }
+};

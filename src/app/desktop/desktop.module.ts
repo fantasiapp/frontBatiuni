@@ -7,12 +7,16 @@ import { AppRoutingModule } from "./routing/desktop-routing.module";
 import { RegisterPageComponent } from "./components/register/register.page";
 import { EmailConfirmation } from "../shared/validators/email_confirmation/emailconfirmation.component";
 import { HeaderDesktop } from "./components/header/header.desktop";
+import { HomePageComponent } from "./components/home_page/home.page";
+import { NavigationMenu } from "./components/navigation/navigation.component";
 
 @NgModule({
   declarations: [
     LandingPageComponent,
     RegisterPageComponent,
-    HeaderDesktop
+    HeaderDesktop,
+    HomePageComponent,
+    NavigationMenu
   ],
   imports: [
     CommonModule,
