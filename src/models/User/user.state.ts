@@ -1,13 +1,15 @@
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Action, Selector, State, StateContext, Store } from "@ngxs/store";
-import { tap } from "rxjs/operators";
+import { catchError, tap } from "rxjs/operators";
 import { AuthState } from "src/models/auth/auth.state";
 import { environment } from "src/environments/environment";
-import { ChangePassword, ChangeProfileType, ChangeProfilePicture, getGeneraleData, getUserData } from "./user.actions";
+import { ChangePassword, ChangeProfileType, ChangeProfilePicture, GetUserData } from "./user.actions";
 import { User } from "./user.model";
-import { Job, Label, Role, UserProfile } from "../data/data.model";
+import { Logout } from "../auth/auth.actions";
+import { throwError } from "rxjs";
 import { Mapper } from "../data/mapper.model";
+import { UserProfile } from "../data/data.model";
 
 @State<User>({
   name: 'user',
@@ -21,7 +23,6 @@ export class UserState {
   constructor(private store: Store, private http: HttpClient) { 
   }
 
-  //....
   @Action(ChangeProfileType)
   changeProfileType(ctx: StateContext<User>, action: ChangeProfileType) {
     return ctx.patchState({type: action.type});
@@ -32,28 +33,6 @@ export class UserState {
     return ctx.patchState({imageUrl: action.src});
   }
 
-  // Get User Data
-  /*
-   * Baptiste was here
-   * 
-   */
-  @Action(getUserData)
-  getUserData(ctx: StateContext<User>, action: getUserData) {
-    let {token} = action
-    let req = this.http.get(environment.backUrl + '/data/?action=getUserData',
-    {
-      headers: {
-        "Authorization": `Token ${token}`,
-        'Content-Type': 'application/json'
-      }
-    })
-    return req.pipe(
-      tap((response: any)=> {
-        Mapper.mapTable(response, 'Userprofile');
-        ctx.patchState({profile: UserProfile.getById(2)})
-      })
-    )
-  }
   @Action(ChangePassword) 
   modifyPassword(ctx: StateContext<User>, action: ChangePassword) {
     console.log(this.store.selectSnapshot(AuthState));
@@ -69,30 +48,29 @@ export class UserState {
       tap((response: any) => console.log(response))
     );
   }
-};
 
-@State({
-  name:"generalData",
-  defaults: {}
-})
-@Injectable()
-export class GeneralData {
-
-  constructor(private store: Store, private http: HttpClient) { }
-
-  @Action(getGeneraleData)
-  getGeneraleData(ctx: StateContext<any>, action: getGeneraleData) {    
-    let req = this.http.get(environment.backUrl + "/initialize/?action=getGeneralData",  {
+  @Action(GetUserData)
+  getUserData(ctx: StateContext<User>, action: GetUserData) {
+    let {token} = action
+    let req = this.http.get(environment.backUrl + '/data/?action=getUserData', {
       headers: {
+        "Authorization": `Token ${token}`,
         'Content-Type': 'application/json'
       }
     })
-
     return req.pipe(
-      tap((response: any) => {
-        Mapper.staticMap(response);
-      }) 
+      catchError((err: HttpErrorResponse) => {
+        console.log('got error', err);
+        this.store.dispatch(new Logout());
+        return throwError(err);
+      }),
+      tap((response: any)=> {
+        Mapper.mapTable(response, 'Userprofile');
+        console.log('>>',  [...UserProfile.instances.values()][0]);
+        let currentUser = [...UserProfile.instances.values()][0];
+        console.log(currentUser);
+        ctx.patchState({profile: currentUser})
+      })
     )
   }
-
-}
+};

@@ -1,16 +1,11 @@
-import { ChangeDetectionStrategy, Component, ContentChildren, HostBinding, HostListener, QueryList, TemplateRef, ViewChild } from "@angular/core";
+import { ChangeDetectionStrategy, Component, HostListener, ViewChild } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { StateContext, Store } from "@ngxs/store";
+import { Store } from "@ngxs/store";
 import { Register } from "src/models/auth/auth.actions";
 import { SlidesDirective } from "src/app/shared/directives/slides.directive";
 import { MatchField } from "src/validators/verify";
-import { Option } from "src/models/option";
 import { Router } from "@angular/router";
-import { getGeneraleData } from "src/models/user/user.actions";
-import { GeneralData } from "src/models/user/user.state";
-import { AppState } from "src/app/app.state";
 import { RegisterForm } from "src/app/shared/forms/register.form";
-import { Role } from "src/models/data/data.model";
 
 @Component({
   selector: 'register',

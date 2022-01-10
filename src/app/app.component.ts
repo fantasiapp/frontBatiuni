@@ -6,9 +6,8 @@ import { Load } from './app.actions';
 import { RouterOutlet } from '@angular/router';
 import { transition, trigger } from '@angular/animations';
 import { SlideChildrenLeft, SlideChildrenRight } from 'src/animations/slide.animation';
-import { getGeneraleData } from 'src/models/user/user.actions';
 import { AsyncSubject } from 'rxjs';
-import { Role } from 'src/models/data/data.model';
+import { GetGeneralData } from 'src/models/data/data.actions';
 
 
 @Component({
@@ -34,9 +33,7 @@ export class AppComponent extends Destroy$ {
   async ngOnInit() {
     await this.store.dispatch(new Load()).toPromise();
     await SplashScreen.hide();
-    await this.store.dispatch(new getGeneraleData()).toPromise();
-
-    console.log('-- Ready --');
+    await this.store.dispatch(new GetGeneralData()).toPromise();
 
     this.ready$.next(true);
     this.ready$.complete();

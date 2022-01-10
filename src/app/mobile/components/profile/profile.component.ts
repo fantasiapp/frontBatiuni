@@ -12,7 +12,6 @@ import { UISwipeupComponent } from "../../ui/swipeup/swipeup.component";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { MatchField } from "src/validators/verify";
 import { Logout } from "src/models/auth/auth.actions";
-import { take } from "rxjs/operators";
 
 
 @Component({
@@ -47,7 +46,6 @@ export class ProfileComponent {
   }, {validators: MatchField('newPwd', 'newPwdConfirmation')})
 
   async modifyPwdAction(e: Event) {
-
 
   }
 
@@ -133,7 +131,6 @@ export class ProfileComponent {
       source: CameraSource.Camera
     });
     
-    console.log(photo);
     this.store.dispatch(new UserActions.ChangeProfilePicture('data:image/png;base64,' + photo.base64String!));
   }
 

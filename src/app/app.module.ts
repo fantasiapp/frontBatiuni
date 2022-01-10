@@ -12,9 +12,10 @@ import { AppState } from './app.state';
 import { CommonModule } from '@angular/common';
 
 import { HAMMER_GESTURE_CONFIG, HammerGestureConfig } from '@angular/platform-browser';
-import { GeneralData, UserState } from 'src/models/user/user.state';
+import { UserState } from 'src/models/user/user.state';
 
 import { GlobalRoutingModule } from './app.routing-module';
+import { DataState } from 'src/models/data/data.state';
 
 @Injectable()
 export class CustomConfig extends HammerGestureConfig {
@@ -32,12 +33,12 @@ export class CustomConfig extends HammerGestureConfig {
   imports: [
     //Ngxs imports
     NgxsModule.forRoot([
-      AppState, AuthState, UserState, GeneralData
+      AppState, AuthState, UserState, DataState
     ], {
       developmentMode: !environment.production
     }),
     NgxsStoragePluginModule.forRoot({
-      key: ['app.auth.token', 'app.user', 'app.generalData']
+      key: ['app.auth.token', 'app.user']
     }),
     NgxsRouterPluginModule.forRoot(),
     //Angular standard imports
