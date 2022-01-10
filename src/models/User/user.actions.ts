@@ -19,3 +19,9 @@ export class GetUserData {
   constructor(public token: string) {}
   action = 'getUerData';
 }
+
+export class ModifyUserProfile {
+  static readonly type = '[User] Change User Profile';
+  constructor(public data: Object) {}
+  action = 'modifyUser'
+}

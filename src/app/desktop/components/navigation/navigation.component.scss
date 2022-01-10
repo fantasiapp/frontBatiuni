@@ -1,0 +1,26 @@
+@import "src/styles/variables";
+@import "src/styles/mixins";
+
+
+
+
+nav {
+  width: 500px;
+}
+
+ul {
+  list-style-type: none;
+  justify-content: space-between;
+}
+
+li a {
+  display: block;
+}
+
+li img {
+  height: 50px;
+}
+
+li.active a img {
+  filter: invert(12%) sepia(96%) saturate(7052%) hue-rotate(180deg) brightness(78%) contrast(111%);
+}

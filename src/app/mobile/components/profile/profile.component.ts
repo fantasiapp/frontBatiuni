@@ -12,6 +12,8 @@ import { UISwipeupComponent } from "../../ui/swipeup/swipeup.component";
 import { Logout } from "src/models/auth/auth.actions";
 import { ImageGenerator } from "src/app/shared/services/image-generator.service";
 import { map, take } from "rxjs/operators";
+import { FormControl, FormGroup, Validators } from "@angular/forms";
+import { MatchField } from "src/validators/verify";
 
 
 @Component({
@@ -29,6 +31,49 @@ export class ProfileComponent {
 
   @Select(UserState)
   user$!: BehaviorSubject<User>;
+  userData = this.store.selectSnapshot(UserState).profile
+  // Modify User profile
+  modifyUser = new FormGroup({
+    // User
+    lastName: new FormControl(this.userData.lastName, [
+      Validators.required
+    ]),
+    firstName: new FormControl(this.userData.firstName, [
+      Validators.required
+    ]),
+    user: new FormControl(this.userData.user, [
+      Validators.required
+    ]),
+    cellPhone: new FormControl(this.userData.cellPhone, [
+      Validators.required
+    ]),
+    // Company 
+    name: new FormControl(this.userData.company.name, [
+    ]),
+    siret: new FormControl(this.userData.company.siret, [
+    ]),
+    capital: new FormControl(this.userData.company.capital, [
+    ]),
+    webSite: new FormControl(this.userData.company.webSite, [
+    ]),
+  });
+
+
+
+  // Modify password 
+  modifyPwdForm = new FormGroup({
+    oldPwd: new FormControl('', [
+      Validators.required
+    ]),
+    newPwd: new FormControl('',[
+      Validators.required,
+      Validators.minLength(8),      
+    ]),
+    newPwdConfirmation: new FormControl('',[
+      Validators.required,
+      Validators.minLength(8),      
+    ])
+  }, {validators: MatchField('newPwd', 'newPwdConfirmation')})
 
   profileImage$ = this.user$.pipe(take(1), map(user => {
     if ( user.imageUrl ) return user.imageUrl;
@@ -110,6 +155,22 @@ export class ProfileComponent {
   logout(){
     this.store.dispatch(new Logout()).subscribe(console.log)
   }
+  
+  modifyProfileAction(){
+    let value = this.modifyUser.value;
+    let postValues = {
+      "UserprofileValues": {
+       
+      }
+    }
+  }
+
+  changePasswordAction() {
+    let { oldPwd, newPwd } = this.modifyPwdForm.value;
+    let req = this.store.dispatch(new UserActions.ChangePassword(oldPwd, newPwd));
+    req.subscribe(console.log);
+  }
+
 
   changeProfileType(type: boolean) {
     this.store.dispatch(new UserActions.ChangeProfileType(type));
