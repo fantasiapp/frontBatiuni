@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, ViewChild } from "@angular/core";
 import { Select, Store } from "@ngxs/store";
-import { Observable } from "rxjs";
+import { BehaviorSubject, Observable, of } from "rxjs";
 import { SlidesDirective } from "src/app/shared/directives/slides.directive";
 import { User } from "src/models/user/user.model";
 import { UserState } from "src/models/user/user.state";
@@ -9,9 +9,9 @@ import { Option } from "src/models/option";
 import { Camera, CameraResultType, CameraSource } from "@capacitor/camera";
 import { UISlideMenuComponent } from "../../ui/slidemenu/slidemenu.component";
 import { UISwipeupComponent } from "../../ui/swipeup/swipeup.component";
-import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { MatchField } from "src/validators/verify";
 import { Logout } from "src/models/auth/auth.actions";
+import { ImageGenerator } from "src/app/shared/services/image-generator.service";
+import { map, take } from "rxjs/operators";
 
 
 @Component({
@@ -28,25 +28,16 @@ export class ProfileComponent {
   slideMenu!: UISlideMenuComponent;
 
   @Select(UserState)
-  user$!: Observable<User>;
+  user$!: BehaviorSubject<User>;
+
+  profileImage$ = this.user$.pipe(take(1), map(user => {
+    if ( user.imageUrl ) return user.imageUrl;
+    const fullname = user.profile!.firstName[0].toUpperCase() + user.profile!.lastName[0].toUpperCase();
+    return this.imageGenerator.generate(fullname);
+  }))
   
-  // Modify password 
-  modifyPwdForm = new FormGroup({
-    oldPwd: new FormControl('', [
-      Validators.required
-    ]),
-    newPwd: new FormControl('',[
-      Validators.required,
-      Validators.minLength(8),      
-    ]),
-    newPwdConfirmation: new FormControl('',[
-      Validators.required,
-      Validators.minLength(8),      
-    ])
-  }, {validators: MatchField('newPwd', 'newPwdConfirmation')})
-
   async modifyPwdAction(e: Event) {
-
+    
   }
 
   //move to state
@@ -57,8 +48,15 @@ export class ProfileComponent {
   openModifyPicture: boolean = false;
   openNotifications : boolean = false;
 
-  constructor(private store: Store, private cd: ChangeDetectorRef) {
+  constructor(private store: Store, private imageGenerator: ImageGenerator) {
 
+  }
+
+  generateDefaultImage() {
+    return this.user$.pipe(take(1), map(user => {
+      const fullname = user.profile!.firstName + user.profile!.lastName;
+      return this.imageGenerator.generate(fullname);
+    }));
   }
 
   async ngOnInit() {
@@ -113,13 +111,6 @@ export class ProfileComponent {
     this.store.dispatch(new Logout()).subscribe(console.log)
   }
 
-  onSubmit() {
-    let { oldPwd, newPwd } = this.modifyPwdForm.value;
-    let req = this.store.dispatch(new UserActions.ChangePassword(oldPwd, newPwd));
-    req.subscribe(console.log);
-  }
-
-
   changeProfileType(type: boolean) {
     this.store.dispatch(new UserActions.ChangeProfileType(type));
   };
@@ -144,5 +135,5 @@ export class ProfileComponent {
     this.store.dispatch(new UserActions.ChangeProfilePicture('data:image/png;base64,' + photo.base64String!));
   }
 
-  
+  onSubmit() {}
 };

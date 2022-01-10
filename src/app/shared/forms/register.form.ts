@@ -37,11 +37,21 @@ import { Job } from "src/models/data/data.model";
           </div>
         
           <div class="form-input">
-            <label>Vérification addresse e-mail</label> <input type="email" formControlName="emailVerification"/>
+            <label>Vérification addresse e-mail</label>
+            <input type="email" formControlName="emailVerification"/>
           </div>
         
           <div class="form-input">
             <label>Mot de passe</label> <input type="password" formControlName="password"/>
+            <div *ngIf="registerForm.get('password')!.touched  && registerForm.get('password')!.errors?.minlength" class="error">
+              Le mot de passe doit contenir au moins 8 caractères.
+            </div>
+            <div *ngIf="registerForm.get('password')!.touched  && registerForm.get('password')!.errors?.lowercase" class="error">
+              Le mot de passe doit contenir une lettre en miniscule.
+            </div>
+            <div *ngIf="registerForm.get('password')!.touched && registerForm.get('password')!.errors?.uppercase" class="error">
+              Le mot de passe doit contenir une lettre en majuscule.
+            </div>
           </div>
         
           <div class="form-input">

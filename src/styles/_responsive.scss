@@ -1,0 +1,32 @@
+$mobile: 768px;
+$small: 1024px;
+$medium: 1366px;
+$high: 1920px;
+
+@mixin breakpoint($point) {
+  @if ( $point == 'small' ) {
+    @media (min-width: #{$mobile+1px}) and (max-width: $small) {
+      @content;
+    }
+  } @else if ( $point == 'medium' ) {
+    @media (min-width: #{$small+1px}) and (max-width: $medium) {
+      @content;
+    }
+  } @else if ( $point == 'medium' ) {
+    @media (min-width: #{$medium+1px}) and (max-width: $high) {
+      @content;
+    }
+  } @else if ( $point == 'high' ) {
+    @media (min-width: #{$high+1px}) {
+      @content;
+    }
+  } @else {
+    @error 'Unknown breakpoint #{$point}.';
+  }
+};
+
+@mixin desktop-only {
+  @media (min-width: #{$mobile + 1px}) {
+    @content;
+  }
+}

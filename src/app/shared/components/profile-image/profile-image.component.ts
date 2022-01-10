@@ -1,6 +1,4 @@
 import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
-import { User } from "src/models/user/user.model";
-
 @Component({
   selector: 'profile-image',
   templateUrl: './profile-image.component.html',
@@ -11,7 +9,7 @@ export class UIProfileImageComponent {
 
   @Input()
   src: string | null = null;
-  
+
   static getAvailabilityColor(availability: number) {
     switch(availability) {
       case 0: return '#B9EDAF';

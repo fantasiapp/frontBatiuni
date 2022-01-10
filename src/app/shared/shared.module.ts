@@ -22,6 +22,8 @@ import { ReactiveFormsModule } from "@angular/forms";
 import { SlidesDirective } from "./directives/slides.directive";
 import { EmailConfirmation } from "./validators/email_confirmation/emailconfirmation.component";
 import { RegistrationSuccess } from "./validators/registration_success/registrationsuccess.component";
+import { ModifyPasswordForm } from "./forms/ModifyPassword.form";
+import { ImageGenerator } from "./services/image-generator.service";
 
 @NgModule({
   declarations: [
@@ -43,7 +45,8 @@ import { RegistrationSuccess } from "./validators/registration_success/registrat
     RegisterForm,
     SlidesDirective,
     EmailConfirmation,
-    RegistrationSuccess
+    RegistrationSuccess,
+    ModifyPasswordForm
   ],
   imports: [
     CommonModule,
@@ -71,7 +74,9 @@ import { RegistrationSuccess } from "./validators/registration_success/registrat
     RegisterForm,
     SlidesDirective,
     EmailConfirmation,
-    RegistrationSuccess
-  ]
+    RegistrationSuccess,
+    ModifyPasswordForm
+  ],
+  providers: [ImageGenerator]
 })
 export class SharedModule {}

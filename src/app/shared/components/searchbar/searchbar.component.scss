@@ -1,9 +1,15 @@
 @import 'src/styles/variables';
+@import 'src/styles/responsive';
 
 :host {
   position: relative;
   display: inline-block;
   height: $searchbar-height;
+  border-radius: 5px;
+
+  @include desktop-only {
+    box-shadow: 0 2px 0 1px #f7f7f7;
+  }
 }
 
 img {

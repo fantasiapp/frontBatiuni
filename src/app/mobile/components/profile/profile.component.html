@@ -7,10 +7,10 @@
   </header>
   
   <div class="hosted-page flex column center-cross space-children-margin page-content">
-    <profile-image [src]="user!.imageUrl"></profile-image>
+    <profile-image [src]="profileImage$ | async"></profile-image>
     <switch off="Profile ST" on="Profil PME"  style="text-align: center;" [value]="user!.type" (valueChange)="changeProfileType($event)"></switch>
     <section class="quick-intro flex column center-cross">
-      <span class="text-emphasis">{{ user.profile!.firstName }} {{ user.profile!.lastName }}</span>
+      <span class="text-emphasis">{{ (user.profile!.firstName + " " + user.profile!.lastName) | titlecase }}</span>
       <span>{{ user.profile!.user }}</span>
       <span>{{ user.profile!.cellPhone || '00 00 00 00 00' }}</span>
       <stars (click)="openRatings = true" value="3.9"></stars>
@@ -69,22 +69,8 @@
   
       
       <div class="full-width grow flex column position-relative">
-        <div *ngIf="modifyPassword">
-          <form class="form-control" [formGroup]="modifyPwdForm" [style.display]="!modifyPassword ? 'none' : 'initial'">
-            <div class="form-input">
-              <label>Ancien mot de passe</label>
-              <input class="form-element" type="text" formControlName="oldPwd"/>
-            </div>
-            <div class="form-input">
-              <label>Nouveau mot de passe</label>
-              <input class="form-element" type="text" formControlName="newPwd"/>
-            </div>
-            <div class="form-input">
-              <label>Confirmation nouveau mot de passe</label>
-              <input class="form-element" type="text" formControlName="newPwdConfirmation"/>
-            </div>
-          </form>
-        </div>
+        <modify-password-form  *ngIf="modifyPassword" class="grow" [style.display]="!modifyPassword ? 'none' : 'initial'"></modify-password-form>
+
         <div *ngIf="!modifyPassword" [slides]="[modifyPage1, modifyPage2, modifyPage3]" type="template" [animate]="true"></div>
         <ng-template #modifyPage1>
           <section class="full-width section">
@@ -186,8 +172,8 @@
           </section>
         </ng-template>
   
-        <div style="margin-top: auto;">
-          <div *ngIf="!modifyPassword" class="form-step">
+        <div style="margin-top: auto;" *ngIf="!modifyPassword" >
+          <div class="form-step">
             <div (click)="modifySlider.index = 0" [class.active]="modifySlider ? modifySlider.index == 0 : true"></div>
             <div (click)="modifySlider.index = 1" [class.active]="modifySlider && modifySlider.index == 1"></div>
             <div (click)="modifySlider.index = 2" [class.active]="modifySlider && modifySlider.index == 2"></div>

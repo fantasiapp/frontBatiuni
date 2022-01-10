@@ -1,0 +1,12 @@
+@import 'src/styles/mixins';
+@import 'src/styles/variables';
+
+:host {
+  @extend %three-section-layout;
+  height: 100vh;
+}
+
+.content {
+  text-align: center;
+  searchbar { width: 80%; }
+}
