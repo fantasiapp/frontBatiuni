@@ -1,0 +1,62 @@
+@import "src/styles/mixins";
+@import "src/styles/variables";
+@import "src/assets/fonts/fonts.scss";
+
+:host {
+    width: 100vw;
+}
+
+.sticky-desktop-header {
+    height: 80px;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem 1rem;
+    align-items: center;
+}
+.home-page {
+    margin-left: 3rem;
+    height: 100%;
+    align-items: center;
+}
+.profile-actions {
+    align-items: center;
+    justify-content: space-between !important;
+    flex: 0 0 220px;
+}
+.logo {
+    height: 50px;
+}
+
+.invert {
+    filter: invert(1);
+}
+
+.offres-logo {
+    @include circle(50px, rgb(241, 241, 241));
+}
+button {
+    background-color: unset !important;
+    cursor: pointer;
+}
+.dropdown-action {
+    border-radius: 50%;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+}
+.username {
+    font-family: "Poppins";
+    letter-spacing: 0.1px;
+    color: #171725;
+    font-size: 0.9rem;
+}
+.subheader-menu {
+    align-items: start;
+    justify-content: center;
+    padding: 1rem;
+    width: 100vw;
+    height: 150px;
+    background:  transparent linear-gradient(180deg, #134C6C 0%, #0C5E8D 100%) 0% 0% no-repeat padding-box;
+    font-family: "Poppins";
+    color: #FFFFFF;
+    font-size: 1.2rem;
+}

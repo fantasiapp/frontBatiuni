@@ -4,7 +4,7 @@ import { Action, Selector, State, StateContext, Store } from "@ngxs/store";
 import { catchError, tap } from "rxjs/operators";
 import { AuthState } from "src/models/auth/auth.state";
 import { environment } from "src/environments/environment";
-import { ChangePassword, ChangeProfileType, ChangeProfilePicture, GetUserData } from "./user.actions";
+import { ChangePassword, ChangeProfileType, ChangeProfilePicture, GetUserData, ModifyUserProfile } from "./user.actions";
 import { User } from "./user.model";
 import { Logout } from "../auth/auth.actions";
 import { throwError } from "rxjs";
@@ -73,4 +73,19 @@ export class UserState {
       })
     )
   }
+
+  @Action(ModifyUserProfile) 
+  modifyUser(ctx: AuthState, action: ModifyUserProfile) {
+    let token = this.store.selectSnapshot(AuthState).token;
+
+    let req = this.http.post(environment.backUrl + '/data/?action="modifyUser"', action.data,{
+      headers : {
+        "Authorization": `Token ${token}`,
+        'Content-Type': 'application/json'
+      }
+    })
+    return req.pipe(
+      tap((response: any) => console.log(response))
+    );
+    }
 };

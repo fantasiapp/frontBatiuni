@@ -6,11 +6,13 @@ import { SharedModule } from "../shared/shared.module";
 import { AppRoutingModule } from "./routing/desktop-routing.module";
 import { RegisterPageComponent } from "./components/register/register.page";
 import { EmailConfirmation } from "../shared/validators/email_confirmation/emailconfirmation.component";
+import { HeaderDesktop } from "./components/header/header.desktop";
 
 @NgModule({
   declarations: [
     LandingPageComponent,
-    RegisterPageComponent
+    RegisterPageComponent,
+    HeaderDesktop
   ],
   imports: [
     CommonModule,
