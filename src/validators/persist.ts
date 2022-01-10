@@ -3,13 +3,18 @@ import { email } from "./regex";
 
 export type PersistValidatorFn = ValidatorFn;
 
+const map = new Map<AbstractControl, string>();
+
 export const Email = (control: AbstractControl) => {
   //persist the server error
-  console.log(control.value, control.errors)
   let content = control.value,
-    errors: ValidationErrors = control.errors?.server ? {server: control.errors.server} : {};
+    errors: ValidationErrors = {};
   
+  if ( map.get(control) === content && control.errors )
+    errors = control.errors;
+
+  map.set(control, content);
   if ( !content ) return null;
   if ( !content.match(email) ) errors['email'] = 'Format e-mail invalide.';
   return Object.keys(errors).length ? errors : null
-}
+};

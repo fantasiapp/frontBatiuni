@@ -45,7 +45,8 @@ const routes: Routes = [{
     data: { animation: 'Discover' }
   }, {
     path: 'register',
-    component: RegisterComponent
+    component: RegisterComponent,
+    data: { animation: 'Register' }
   }, {
     path: 'confirmed',
     component: EmailConfirmation,

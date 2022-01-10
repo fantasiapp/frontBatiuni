@@ -31,7 +31,7 @@ import { Job } from "src/models/data/data.model";
           <div class="form-input">
             <label>Adresse e-mail contact</label>
             <input type="email" formControlName="email"/>
-            <div *ngIf="registerForm.get('email')!.errors" class="server-error">
+            <div *ngIf="registerForm.get('email')!.touched && registerForm.get('email')!.errors" class="server-error">
               {{ registerForm.get('email')!.errors?.server }}
             </div>
           </div>

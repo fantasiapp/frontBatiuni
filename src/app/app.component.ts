@@ -17,7 +17,7 @@ import { GetGeneralData } from 'src/models/data/data.actions';
   changeDetection: ChangeDetectionStrategy.OnPush,
   animations: [
     trigger('routeAnimation', [
-      transition('LandingPage => *, * => Confirmed, * => Success', SlideChildrenRight),
+      transition('LandingPage => *, * => Confirmed, * => Success, * => Register', SlideChildrenRight),
       transition('* => LandingPage, Confirmed => *, Success => *', SlideChildrenLeft)
     ])
   ]
