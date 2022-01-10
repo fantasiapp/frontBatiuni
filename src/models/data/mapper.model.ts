@@ -1,4 +1,5 @@
 import { getByValue } from 'src/common/functions';
+import { UserState } from '../user/user.state';
 import { Role, Job, Label, Company, UserProfile } from './data.model';
 
 type Dict<T> = {[key: string]: T};
@@ -174,4 +175,29 @@ export class Mapper {
     else
       this.mapTableDependencies(data, name);
   }
+
+  static mapModifyForm(user: UserProfile, changes: any) {
+    const keys = Object.keys(changes),
+      profileKeys = keys.filter(key => key.indexOf('Userprofile') >= 0),
+      companyKeys = keys.filter(key => key.indexOf('Company') >= 0);
+
+    console.log(changes, profileKeys, companyKeys);
+    
+    const output: any = {};
+
+    if ( profileKeys.length ) {
+      output['Userprofile'] = {id: user.id};
+      for ( let key of profileKeys )
+        output['Userprofile'][key] = changes[key];
+    }
+
+    
+    if ( companyKeys.length ) {
+      output['Company'] = {id: user.company.id};
+      for ( let key of companyKeys )
+        output['Company'][key] = changes[key];
+    }
+  
+    return output;
+  };
 };

@@ -69,27 +69,27 @@
   
       
       <div class="full-width grow flex column position-relative">
-        <modify-password-form  *ngIf="modifyPassword" class="grow" [style.display]="!modifyPassword ? 'none' : 'initial'"></modify-password-form>
+        <modify-password-form  *ngIf="modifyPassword" class="grow"></modify-password-form>
 
         <div *ngIf="!modifyPassword" [slides]="[modifyPage1, modifyPage2, modifyPage3]" type="template" [animate]="true"></div>
         <ng-template #modifyPage1>
           <section class="full-width section">
-            <form class="form-control" [formGroup]="modifyUser" [style.display]="modifyPassword ? 'none' : 'initial'">
+            <form class="form-control" [formGroup]="modifyProfileForm" [style.display]="modifyPassword ? 'none' : 'initial'">
               <h3 class="form-title font-Roboto">
                 Infos personelles: 
                 <img src="assets/icons/modify.svg" class="modify-icon text"/>
               </h3>
               <div class="form-input">
                 <label>Nom du contact</label>
-                <input class="form-element" type="text" formControlName="lastName" />
+                <input class="form-element" type="text" formControlName="Userprofile.lastName" />
               </div>
               <div class="form-input">
                 <label>Prénom du contact</label>
-                <input class="form-element" type="text" formControlName="firstName" />
+                <input class="form-element" type="text" formControlName="Userprofile.firstName" />
               </div>
               <div class="form-input">
                 <label>Adresse e-mail contact</label>
-                <input class="form-element" type="text" formControlName="user" />
+                <input class="form-element" type="text" formControlName="Userprofile.user" />
               </div>
               <div class="form-input">
                 <label>Telephone fixe</label>
@@ -97,7 +97,7 @@
               </div>
               <div class="form-input">
                 <label>Téléphone portable</label>
-                <input class="form-element" type="text" formControlName="cellPhone" />
+                <input class="form-element" type="text" formControlName="Userprofile.cellPhone" />
               </div>
             </form>
           </section>
@@ -105,18 +105,18 @@
   
         <ng-template #modifyPage2>
           <section class="full-width section">
-            <form class="full-width form-control" [formGroup]="modifyUser">
+            <form class="full-width form-control" [formGroup]="modifyProfileForm">
               <h3 class="form-title font-Roboto">
                 Infos entreprise: 
                 <img src="assets/icons/modify.svg" (click)="modifyPassword = true" class="modify-icon text"/>
               </h3>
               <div class="form-input">
                 <label>Nom de l'entreprise</label>
-                <input class="form-element" type="text" formControlName="name" />
+                <input class="form-element" type="text" formControlName="Company.name" />
               </div>
               <div class="form-input">
                 <label>N SIRET</label>
-                <input class="form-element" type="text" formControlName="siret"/>
+                <input class="form-element" type="text" formControlName="Company.siret"/>
               </div>
               <div class="form-input metiers">
                 <label>Métiers</label>
@@ -142,12 +142,12 @@
   
               <div class="form-input">
                 <label>Site internet</label>
-                <input class="form-element" type="text" formControlName="webSite"/>
+                <input class="form-element" type="text" formControlName="Company.webSite"/>
               </div>
               
               <div class="form-input">
                 <label>Chiffres d'affaires</label>
-                <input class="form-element" type="text" formControlName="capital"/>
+                <input class="form-element" type="text" formControlName="Company.capital"/>
               </div>
   
               <fileinput [showtitle]="false" filename="Kbis" imgsrc="assets/files/KBIS.svg"></fileinput>
@@ -182,7 +182,7 @@
             <div (click)="modifySlider.index = 1" [class.active]="modifySlider && modifySlider.index == 1"></div>
             <div (click)="modifySlider.index = 2" [class.active]="modifySlider && modifySlider.index == 2"></div>
           </div>
-          <button class="button gradient full-width" (click)="changePasswordAction()">
+          <button class="button gradient full-width" (click)="modifyProfile()" [disabled]="(!modifyProfileForm.touched || modifyProfileForm.invalid) || null">
             Enregistrer
           </button>
         </div>
