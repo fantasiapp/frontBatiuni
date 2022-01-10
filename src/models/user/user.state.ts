@@ -86,6 +86,8 @@ export class UserState {
 
     const profile = this.store.selectSnapshot(UserState.profile)!,
       json = Mapper.mapModifyForm(profile, action.changes);
+
+    console.log('after map', json);
     
     let req = this.http.post(environment.backUrl + '/data/?action=modifyUser', json, {
       headers : {

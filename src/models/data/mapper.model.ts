@@ -187,19 +187,15 @@ export class Mapper {
 
     if ( profileKeys.length ) {
       output['Userprofile'] = {id: user.id};
-      for ( let key of profileKeys ) {
-        key = key.split('.')[1]
-        output['Userprofile'][key] = changes[key];
-      }
+      for ( let key of profileKeys )
+        output['Userprofile'][key.split('.')[1]] = changes[key];
     }
 
     
     if ( companyKeys.length ) {
       output['Company'] = {id: user.company.id};
-      for ( let key of companyKeys ) {
-        key = key.split('.')[1];
-        output['Company'][key] = changes[key];
-      }
+      for ( let key of companyKeys )
+        output['Company'][key.split('.')[1]] = changes[key];
     }
   
     return output;
