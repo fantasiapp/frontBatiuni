@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { NgModule } from "@angular/core";
+import { Injectable, NgModule } from "@angular/core";
 import { AbonnementPage } from "./components/abonnement/abonnement.page";
 import { EngagementPage } from "./components/abonnement/engagement/engagement";
 import { AnnoncePage } from "./components/annonce/annonce.page";
@@ -23,11 +23,12 @@ import { SuiviPage } from "./components/suivi_page/suivi.page";
 import { SuiviPME } from "./components/suivi_pme/suivi_pme.page";
 import { FadeTemplate } from "./directives/fadeTemplate.directive";
 import { SlideTemplate } from "./directives/slideTemplate.directive";
+import { ScrollTemplate } from "./directives/scrollTemplate.directive";
 import { UIModule } from "./ui/ui.module";
 import { SharedModule } from "../shared/shared.module";
 import { ReactiveFormsModule } from "@angular/forms";
-import { HammerModule } from "@angular/platform-browser";
 import { AppRoutingModule } from "./routing/mobile-routing.module";
+
 
 @NgModule({
   declarations: [
@@ -38,6 +39,7 @@ import { AppRoutingModule } from "./routing/mobile-routing.module";
     PagingComponent,
     SlideTemplate,
     FadeTemplate,
+    ScrollTemplate,
     MainPage,
     ProfileComponent,
     Notifications,
@@ -61,7 +63,6 @@ import { AppRoutingModule } from "./routing/mobile-routing.module";
     UIModule,
     AppRoutingModule,
     ReactiveFormsModule,
-    HammerModule,
   ]
 })
 export class MobileModule {}

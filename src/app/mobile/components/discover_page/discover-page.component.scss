@@ -4,9 +4,8 @@
 $buttonHeight: 60px;
 
 :host {
-  display: block;
-  width: 100%;
-  font-size: inherit;
+  position: absolute;
+  @extend .full-page;
 }
 
 
@@ -17,13 +16,16 @@ $buttonHeight: 60px;
   line-height: $sticky-footer-height;
 }
 .section {
-  $offset: $sticky-footer-height + $paging-height + $page-padding;
-  height: calc(100vh - #{$offset});
+  $offset: $sticky-footer-height + $paging-height;
+  height: calc(100vh - #{$offset} - env(safe-area-inset-bottom));
+  flex-shrink: 0;
 }
 
 .content {
   position: relative;
   @extend %content-with-paging-and-footer;
+  justify-content: stretch;
+  scroll-behavior: smooth;
 }
 
 .image-container {
