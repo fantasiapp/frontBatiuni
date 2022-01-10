@@ -93,3 +93,11 @@ $sos-border-thickness: 5px;
 //Collapse
 $collapse-min-height: 300px;
 $collapse-extra-height: 30px;
+
+//Notifications
+$notification-size: 15px;
+
+:root {
+  //default value
+  --notification-size: $notification-size;
+}

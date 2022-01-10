@@ -216,3 +216,18 @@
     section + section { margin-left: $page-padding; }
   }
 };
+
+%has-notifications {
+  position: relative;
+  &::after {
+    content: attr(data-notification-number);
+    position: absolute;
+    background: red;
+    @include circle(var(--notification-size));
+    right: 0; top: 0;
+    text-align: center;
+    line-height: var(--notification-size);
+    font-size: calc(var(--notification-size) * 0.8);
+    color: white;
+  }
+}
