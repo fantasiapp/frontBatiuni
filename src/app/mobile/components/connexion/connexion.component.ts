@@ -36,7 +36,6 @@ export class ConnexionComponent extends Destroy$ {
   }
 
   ngOnInit() {
-
     
   }
 

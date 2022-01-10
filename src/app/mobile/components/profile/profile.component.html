@@ -21,13 +21,13 @@
         <span class="text-light-emphasis font-Poppins">Nom de l'entreprise : </span> <span class="value">{{user.profile!.company.name}}</span>
       </span>
       <span>
-        <span class="text-light-emphasis font-Poppins">N SIRET : </span> <span class="value">362 521 879 00034</span>
+        <span class="text-light-emphasis font-Poppins">N SIRET : </span> <span class="value">{{user.profile!.company.siret}}</span>
       </span>
       <span>
         <span class="text-light-emphasis font-Poppins">Métier : </span> <span *ngFor="let job of user.profile!.jobs" class="value">1 {{ job.name }}, </span>
       </span>
       <span>
-        <span class="text-light-emphasis font-Poppins">Chiffres d'affaires : </span> <span class="value">77 584 €</span>
+        <span class="text-light-emphasis font-Poppins">Chiffres d'affaires : </span> <span class="value">{{user.profile!.company.capital}}</span>
       </span>
     </section>
   
@@ -77,7 +77,6 @@
             <form class="form-control" [formGroup]="modifyUser" [style.display]="modifyPassword ? 'none' : 'initial'">
               <h3 class="form-title font-Roboto">
                 Infos personelles: 
-                <img src="assets/icons/modify.svg" class="modify-icon text"/>
               </h3>
               <div class="form-input">
                 <label>Nom du contact</label>
@@ -108,7 +107,6 @@
             <form class="full-width form-control" [formGroup]="modifyUser">
               <h3 class="form-title font-Roboto">
                 Infos entreprise: 
-                <img src="assets/icons/modify.svg" (click)="modifyPassword = true" class="modify-icon text"/>
               </h3>
               <div class="form-input">
                 <label>Nom de l'entreprise</label>
@@ -165,7 +163,6 @@
             <form class="full-width form-control">
               <h3 class="form-title font-Roboto">
                 Certifications & labels: 
-                <img src="assets/icons/modify.svg" (click)="modifyPassword = true" class="modify-icon text"/>
               </h3>
               <div class="form-input">
                 <label>Vos labels</label>

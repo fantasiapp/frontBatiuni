@@ -1,4 +1,4 @@
-import { Action, Selector, State, StateContext } from "@ngxs/store";
+import { Action, Selector, State, StateContext, Store } from "@ngxs/store";
 import { HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Injectable, NgZone } from "@angular/core";
 import { AuthModel } from "./auth.model";
@@ -30,7 +30,7 @@ export class AuthState {
     return throwError({all: error});
   };
 
-  constructor(private http: HttpClient, private router: Router, private zone: NgZone) {}
+  constructor(private http: HttpClient, private router: Router, private zone: NgZone,private store:Store) {}
 
   @Action(Login)
   login(ctx: StateContext<AuthModel>, action: Login) {

@@ -5,20 +5,33 @@
 
 
 nav {
-  width: 500px;
+  width: 50%;
 }
 
 ul {
   list-style-type: none;
   justify-content: space-between;
 }
+li {
+  padding: 0 2rem;
+  border-right: 2px solid #FFFFFF;
 
+}
 li a {
   display: block;
+  white-space: nowrap;
+  margin-right: 0.5rem;
 }
 
 li img {
-  height: 50px;
+  height: 30px;
+}
+
+li:last-child {
+  content: '' !important;
+  display: block;
+  border-right: none !important;
+
 }
 
 li.active a img {

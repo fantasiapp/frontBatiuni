@@ -13,6 +13,9 @@ const routes: Routes =[{
   }, {
     path: 'register',
     component: RegisterPageComponent
+  },{
+    path: 'sos',
+    component: RegisterPageComponent
   }, {
     path: 'confirmed',
     component: EmailConfirmation 

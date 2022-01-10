@@ -14,6 +14,7 @@ import { ImageGenerator } from "src/app/shared/services/image-generator.service"
 import { map, take } from "rxjs/operators";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { MatchField } from "src/validators/verify";
+import { AppState } from "src/app/app.state";
 
 
 @Component({
@@ -94,7 +95,7 @@ export class ProfileComponent {
   openNotifications : boolean = false;
 
   constructor(private store: Store, private imageGenerator: ImageGenerator) {
-
+    
   }
 
   generateDefaultImage() {
@@ -105,6 +106,7 @@ export class ProfileComponent {
   }
 
   async ngOnInit() {
+    console.log(this.store.selectSnapshot(AppState))
     let permissions  = await Camera.checkPermissions();
     if ( permissions.camera != 'granted' || permissions.photos != 'granted' )
       try {
