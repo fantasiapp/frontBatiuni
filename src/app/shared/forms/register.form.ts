@@ -8,7 +8,7 @@ import { ComplexPassword, MatchField, setErrors } from "src/validators/verify";
 import { SlidesDirective } from "../directives/slides.directive";
 import { Option } from "src/models/option";
 import { Email } from "src/validators/persist";
-import { Job } from "src/models/data/data.model";
+import { Job, Role } from "src/models/data/data.model";
 
 
 @Component({
@@ -76,9 +76,7 @@ import { Job } from "src/models/data/data.model";
           <div class="form-input">
             <label>Je suis</label>
             <select formControlName="role">
-              <option value="0">Une entreprise à la recherche de sous-traitances</option>
-              <option value="1">Un sous-traitant à la recerche d'une entreprise</option>
-              <option value="2">Les deux</option>
+              <option *ngFor="let role of roles" [value]="role.value">{{role.name}}</option>
             </select>
           </div>
       
@@ -125,7 +123,6 @@ export class RegisterForm {
     (window as any).register = this;
   }
 
-
   @Input()
   pagingContent: boolean = true;
 
@@ -170,5 +167,6 @@ export class RegisterForm {
     else this.slider.right();
   }
 
-  jobs: Option[] = [...Job.instances.values()].map(job => ({...job, checked: false}))
+  jobs: Option[] = [...Job.instances.values()].map(job => ({...job, checked: false}));
+  roles = [...Role.instances.values()].map(role => ({value: role.id, name: role.name}));
 };
