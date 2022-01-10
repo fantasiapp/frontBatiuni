@@ -183,19 +183,23 @@ export class Mapper {
 
     console.log(changes, profileKeys, companyKeys);
     
-    const output: any = {};
+    const output: any = {action: 'modifyUser'};
 
     if ( profileKeys.length ) {
       output['Userprofile'] = {id: user.id};
-      for ( let key of profileKeys )
+      for ( let key of profileKeys ) {
+        key = key.split('.')[1]
         output['Userprofile'][key] = changes[key];
+      }
     }
 
     
     if ( companyKeys.length ) {
       output['Company'] = {id: user.company.id};
-      for ( let key of companyKeys )
+      for ( let key of companyKeys ) {
+        key = key.split('.')[1];
         output['Company'][key] = changes[key];
+      }
     }
   
     return output;
