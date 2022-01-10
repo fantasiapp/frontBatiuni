@@ -1,6 +1,8 @@
+import { HttpClient } from "@angular/common/http";
 import { Attribute, ComponentFactoryResolver, Directive, EventEmitter, HostBinding, Input, Optional, Output, ViewContainerRef } from "@angular/core";
 import { ControlValueAccessor } from "@angular/forms";
 import { Subject } from "rxjs";
+import { environment } from "src/environments/environment";
 import { Ref } from "./types";
 
 @Directive()
@@ -124,4 +126,23 @@ export abstract class UIDefaultAccessor<T> implements ControlValueAccessor {
   registerOnChange(onChanged: any): void {
     this.onChanged = onChanged;
   }
+};
+
+export type RequestPath = 'initialize' | 'data' | 'register' | 'api-token-auth';
+
+export class HttpAction {
+  constructor(protected http: HttpClient) {}
+
+  static api = ['initialize', 'data', 'register', 'api-token-auth'];
+
+  postAction(path: RequestPath, action: any, authorization: boolean) {
+    const headers = new Headers;
+    headers.append('Content-Type', 'application/json');
+    
+    this.http.post(`${environment.backUrl}/path?action=${action.action}`, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+  };
 };

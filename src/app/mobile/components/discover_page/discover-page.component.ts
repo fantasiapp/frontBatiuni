@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, ViewChild } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
+import { ScrollTemplate } from "../../directives/scrollTemplate.directive";
 import { SlideTemplate } from "../../directives/slideTemplate.directive";
 
 export type DiscoveryContext = {
@@ -20,7 +21,7 @@ const PMEContexts: DiscoveryContext[] = [
       {content: 'PME et filtrez selon', emphasis: false},
       {content: 'vos préferences', emphasis: true}
     ],
-    image: 'assets/PME1.svg'
+    image: 'assets/PME-1.svg'
   }},
   //Page 2
   {$implicit: {
@@ -29,7 +30,7 @@ const PMEContexts: DiscoveryContext[] = [
       {content: 'Soyez facilement', emphasis: false},
       {content: 'organisés', emphasis: true}
     ],
-    image: 'assets/PME2.svg'
+    image: 'assets/PME-2.svg'
   }},
   //Page 3
   {$implicit: {
@@ -40,7 +41,7 @@ const PMEContexts: DiscoveryContext[] = [
       {content: 'suivez', emphasis: true},
       {content: 'vos chantiers efficacement', emphasis: false}
     ],
-    image: 'assets/PME3.svg'
+    image: 'assets/PME-3.png'
   }},
   //Page 4
   {$implicit: {
@@ -51,7 +52,7 @@ const PMEContexts: DiscoveryContext[] = [
       {content: 'intéressantes selon vos', emphasis: false},
       {content: 'disponibilités', emphasis: true}
     ],
-    image: 'assets/PME4.svg'
+    image: 'assets/PME-4.png'
   }}
 ];
 
@@ -65,7 +66,7 @@ const STContexts: DiscoveryContext[] = [
       {content: 'de sous-traitances et filtrez selon', emphasis: false},
       {content: 'vos préferences', emphasis: true}
     ],
-    image: 'assets/ST1.png'
+    image: 'assets/ST-1.svg'
   }},
   //Page 2
   {$implicit: {
@@ -74,7 +75,7 @@ const STContexts: DiscoveryContext[] = [
       {content: 'Soyez facilement', emphasis: false},
       {content: 'organisés', emphasis: true}
     ],
-    image: 'assets/ST2.png'
+    image: 'assets/ST-2.svg'
   }},
   //Page 3
   {$implicit: {
@@ -85,7 +86,7 @@ const STContexts: DiscoveryContext[] = [
       {content: 'suivez', emphasis: true},
       {content: 'vos chantiers efficacement', emphasis: false}
     ],
-    image: 'assets/ST3.svg'
+    image: 'assets/ST-3.png'
   }},
   //Page 4
   {$implicit: {
@@ -96,7 +97,7 @@ const STContexts: DiscoveryContext[] = [
       {content: 'intéressantes selon vos', emphasis: false},
       {content: 'disponibilités', emphasis: true}
     ],
-    image: 'assets/ST4.svg'
+    image: 'assets/ST-4.svg'
   }}
 ];
 
@@ -110,8 +111,8 @@ export class DiscoverComponent {
   subject: 'entreprise' | 'sous-traitant' = 'entreprise';
   static subjects: string[] = ['entreprise', 'sous-traitant'];
 
-  @ViewChild(SlideTemplate, {static: true})
-  slider!: SlideTemplate<DiscoveryContext>;
+  @ViewChild(ScrollTemplate, {static: true})
+  slider!: ScrollTemplate<DiscoveryContext>;
 
   contexts: {[key: string]: DiscoveryContext[]} = {
     'entreprise': PMEContexts,

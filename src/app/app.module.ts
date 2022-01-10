@@ -1,6 +1,6 @@
 import { environment } from 'src/environments/environment';
 import { Injectable, NgModule } from '@angular/core';
-import { BrowserModule, } from '@angular/platform-browser';
+import { BrowserModule, HammerGestureConfig, HammerModule, HAMMER_GESTURE_CONFIG, } from '@angular/platform-browser';
 import { NgxsModule } from '@ngxs/store';
 import { NgxsRouterPluginModule } from '@ngxs/router-plugin';
 import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
@@ -11,11 +11,11 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppState } from './app.state';
 import { CommonModule } from '@angular/common';
 
-import { HAMMER_GESTURE_CONFIG, HammerGestureConfig } from '@angular/platform-browser';
 import { UserState } from 'src/models/user/user.state';
 
 import { GlobalRoutingModule } from './app.routing-module';
 import { DataState } from 'src/models/data/data.state';
+
 
 @Injectable()
 export class CustomConfig extends HammerGestureConfig {
@@ -46,7 +46,8 @@ export class CustomConfig extends HammerGestureConfig {
     HttpClientModule,
     BrowserModule,
     BrowserAnimationsModule,
-    GlobalRoutingModule
+    GlobalRoutingModule,
+    HammerModule
   ],
   providers: [{
     provide: HAMMER_GESTURE_CONFIG,

@@ -20,6 +20,9 @@ export class UserState {
   @Selector()
   static type(state: User) { return state.type; }
 
+  @Selector()
+  static profile(state: User) { return state.profile; }
+
   constructor(private store: Store, private http: HttpClient) { 
   }
 
@@ -57,35 +60,42 @@ export class UserState {
         "Authorization": `Token ${token}`,
         'Content-Type': 'application/json'
       }
-    })
+    });
+
     return req.pipe(
       catchError((err: HttpErrorResponse) => {
-        console.log('got error', err);
         this.store.dispatch(new Logout());
         return throwError(err);
       }),
       tap((response: any)=> {
         Mapper.mapTable(response, 'Userprofile');
-        console.log('>>',  [...UserProfile.instances.values()][0]);
-        let currentUser = [...UserProfile.instances.values()][0];
-        console.log(currentUser);
+        const currentUser = [...UserProfile.instances.values()][0];
         ctx.patchState({profile: currentUser})
       })
     )
+  }
+
+  @Action(Logout)
+  logout(ctx: StateContext<User>) {
+    ctx.patchState({type: false, imageUrl: null, profile: null});
   }
 
   @Action(ModifyUserProfile) 
   modifyUser(ctx: AuthState, action: ModifyUserProfile) {
     let token = this.store.selectSnapshot(AuthState).token;
 
-    let req = this.http.post(environment.backUrl + '/data/?action="modifyUser"', action.data,{
+    const profile = this.store.selectSnapshot(UserState.profile)!,
+      json = Mapper.mapModifyForm(profile, action.changes);
+    
+    let req = this.http.post(environment.backUrl + '/data/?action="modifyUser"', json, {
       headers : {
         "Authorization": `Token ${token}`,
         'Content-Type': 'application/json'
       }
-    })
+    });
+    
     return req.pipe(
       tap((response: any) => console.log(response))
     );
-    }
+  }
 };
