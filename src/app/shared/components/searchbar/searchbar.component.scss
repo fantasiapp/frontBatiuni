@@ -8,7 +8,7 @@
   border-radius: 5px;
 
   @include desktop-only {
-    box-shadow: 0 2px 0 1px #f7f7f7;
+    box-shadow: 0 2px 4px 1px #ddd;
   }
 }
 
@@ -20,8 +20,9 @@ img {
 }
 
 input {
+  font-size: 1em;
   padding: $searchbar-padding;
   padding-left: $searchbar-icon-size + 2*$searchbar-icon-padding;
-  border-radius: 5px;
+  border-radius: 12px;
   width: 100%;
 }

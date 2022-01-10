@@ -10,7 +10,7 @@ import { FadeIn } from "src/animations/fade.animation";
   changeDetection: ChangeDetectionStrategy.OnPush,
   animations: [
     trigger('routeAnimation', [
-      transition("* => home,* => missions, * => availabilities, * => profile", FadeIn)
+      transition("* => *", FadeIn)
     ])
   ]
 })

@@ -8,7 +8,7 @@ import { User } from "src/models/user/user.model";
 import { UserState } from "src/models/user/user.state";
 
 const STMenu = [
-  {name: "Home", src: "assets/navigation/st/home.svg", route: ''},
+  {name: "Home", src: "assets/navigation/st/home.svg", route: '',},
   {name: "Missions", src: "assets/navigation/st/missions.svg", route: 'missions'},
   {name: "Availibity", src: "assets/navigation/st/availabilities.svg", route: 'availabilities'},
   {name: "Profile", src: "assets/navigation/st/profile.svg", route: 'profile'},
@@ -29,6 +29,7 @@ const PMEMenu = [
 })
 export class NavigationMenu extends Destroy$ {
   currentIndex: BehaviorSubject<number> = new BehaviorSubject(0);
+  mobileView = window.innerWidth <= 768;
 
   @Input()
   menu: BehaviorSubject<MenuItem[]> = new BehaviorSubject(STMenu);
@@ -65,7 +66,7 @@ export class NavigationMenu extends Destroy$ {
     });
 
     this.user$.pipe(takeUntil(this.destroy$)).subscribe((user: User) => {
-      this.menu.next(user.type ? PMEMenu : STMenu)
+      this.menu.next(user.type ? STMenu : PMEMenu)
     });
   }
 

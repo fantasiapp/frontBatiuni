@@ -1,11 +1,12 @@
 @use "sass:math";
 @import 'mixins';
 @import 'variables';
+@import 'responsive';
 @import 'animations.scss';
 @import 'forms.scss';
 @import 'mapbox-gl.scss';
 @import 'ngx-slider.scss';
-@import 'responsive.scss';
+@import 'web.scss';
 
 * {
   margin: 0;
@@ -37,13 +38,14 @@
 
 body {
   font-family: "Roboto", sans-serif;
-  font-size: 16px;
   margin: 0;
   background: white !important;
 
   &.blocked {
     overflow: hidden;
   }
+
+  @include desktop-only { overflow: hidden; }
 }
 
 button {
@@ -397,117 +399,3 @@ input[type=number] {
   height: 160px !important;
 }
 //RESPONSIVE - WEB
-@media (max-width: 768px) {
-  body { font-size: 16px !important; }
-}
-
-@media (max-width: 1024px) {
-  body { font-size: 12px; }
-}
-
-@media (min-width: 1025px) and (max-width: 1366px) {
-  body { font-size: 13px; }
-}
-
-
-@media (min-width: 1367px) {
-  body { font-size: 14px; }
-}
-
-.hero {
-  overflow-x: hidden;
-  color: black;
-  height: 100vh;
-
-  &.with-sticky-header {
-    margin-top: $sticky-header-height;
-    height: calc(100vh - #{$sticky-header-height});
-  }
-
-  .content {
-    @extend .cover-parent;
-    max-width: 1024px;
-    margin: 0 auto;
-    padding: $page-padding 0;
-  }
-}
-
-@media (max-width: 1024px) {
-  .hero {
-    .content {
-      padding: $page-padding;
-      margin: 0;
-    }
-  }
-}
-
-@media (min-width: 1025px) and (max-width: 1366px) {
-  .hero {
-    .content {
-      max-width: 1024px;
-      margin: 0 auto;
-      padding: $page-padding 0;
-    }
-  }
-}
-
-
-@media (min-width: 1367px) {
-  .hero {
-    .content {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: $page-padding 0;
-    }
-  }}
-
-
-
-@media (min-width: 768px) and (max-width: 1366px) {
-  .hero {
-    .content {
-      
-    }
-  }
-}
-
-.hero-title {
-  font-weight: 900;
-  margin-bottom: 20px;
-}
-
-$hero-header-offset-y: 60px;
-$hero-header-offset-x: 60px;
-
-$hero-header-tick-offset: 10px;
-$hero-header-tick-width: 60px;
-$hero-header-tick-thickness: 8px;
-
-.hero-header {
-  font-size: 2.5em;
-  font-weight: 900;
-  padding-top: $hero-header-offset-y;
-
-  &.left {
-    padding-left: $hero-header-offset-x;
-
-  }
-
-  &.right {
-    padding-right: $hero-header-offset-x;
-  }
-
-  span { position: relative; }
-  
-  span::before {
-    content: "";
-    display: block;
-    height: $hero-header-tick-thickness;
-    width: $hero-header-tick-width;
-    background-color: black;
-    position: absolute;
-    top: -$hero-header-tick-offset;
-    left: 50%; transform: translateX(-50%);
-  }
-
-}

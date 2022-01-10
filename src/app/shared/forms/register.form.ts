@@ -135,7 +135,7 @@ export class RegisterForm {
     ]),
     email: new FormControl('', [
       Validators.required,
-      Email
+      Email()
     ]),
     emailVerification: new FormControl('', [
       Validators.required

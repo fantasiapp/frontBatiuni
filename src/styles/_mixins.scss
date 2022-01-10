@@ -206,15 +206,6 @@
   @extend %overflow-y;
   display: flex;
   //height: calc(100vh - #{$navigation-height});
-  section.content { flex: 1; }
-  
-  @include breakpoint(small) {
-    section + section { margin-left: $item-padding; }
-  }
-
-  @include breakpoint(medium) {
-    section + section { margin-left: $page-padding; }
-  }
 };
 
 %has-notifications {
@@ -231,3 +222,5 @@
     color: white;
   }
 }
+
+.invert { filter: invert(1); }

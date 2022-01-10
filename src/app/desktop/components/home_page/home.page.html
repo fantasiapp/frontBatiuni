@@ -1,11 +1,18 @@
 <section class="filters">
-
+  <div class="header">
+    <img src="assets/Filtrer par.svg"/> Filtrer par
+  </div>
+  <pme-filter-form></pme-filter-form>
 </section>
 
-<section class="content font-Poppins">
+<section class="main content font-Poppins">
   <searchbar></searchbar>
   <div class="report-search">
-    Resultat <span class="no-result">8 annonces</span>
+    Resultat <span class="no-result">10 annonces</span>
+  </div>
+
+  <div class="results space-children-margin">
+    <offer *ngFor="let annonce of annonces" [routerLink]="['', 'suivi']"></offer>
   </div>
 </section>
 

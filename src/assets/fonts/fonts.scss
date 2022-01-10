@@ -25,6 +25,12 @@ $ttf: format('truetype');
 }
 
 @font-face {
+  font-family: 'Roboto';
+  src: url("Roboto/Roboto-Black.ttf") $ttf;
+  font-weight: 900;
+}
+
+@font-face {
   font-family: 'Poppins';
   src: url("Poppins/Poppins-Regular.ttf") $ttf;
   font-weight: 400;
@@ -46,4 +52,16 @@ $ttf: format('truetype');
   font-family: 'Poppins';
   src: url("Poppins/Poppins-Medium.ttf") $ttf;
   font-weight: 500;
+}
+
+@font-face {
+  font-family: 'Poppins';
+  src: url("Poppins/Poppins-Bold.ttf") $ttf;
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: 'Poppins';
+  src: url("Poppins/Poppins-Black.ttf") $ttf;
+  font-weight: 900;
 }

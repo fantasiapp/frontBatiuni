@@ -25,6 +25,7 @@ import { RegistrationSuccess } from "./validators/registration_success/registrat
 import { ModifyPasswordForm } from "./forms/ModifyPassword.form";
 import { ImageGenerator } from "./services/image-generator.service";
 import { OfferComponent } from "./components/offer/offer.compnent";
+import { NavigationMenu } from "./components/navigation/navigation.component";
 
 @NgModule({
   declarations: [
@@ -48,7 +49,8 @@ import { OfferComponent } from "./components/offer/offer.compnent";
     EmailConfirmation,
     RegistrationSuccess,
     ModifyPasswordForm,
-    OfferComponent
+    OfferComponent,
+    NavigationMenu
   ],
   imports: [
     CommonModule,
@@ -78,7 +80,8 @@ import { OfferComponent } from "./components/offer/offer.compnent";
     EmailConfirmation,
     RegistrationSuccess,
     ModifyPasswordForm,
-    OfferComponent
+    OfferComponent,
+    NavigationMenu
   ],
   providers: [ImageGenerator]
 })

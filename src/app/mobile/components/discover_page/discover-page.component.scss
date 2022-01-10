@@ -30,9 +30,8 @@ $buttonHeight: 60px;
 
 .image-container {
   margin: auto 0;
-  img {
-    max-height: 45vh;
-  }
+  position: relative;
+  img { max-height: 50vh; @include absolute-center('xy'); }
 }
 
 .paging {

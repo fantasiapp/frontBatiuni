@@ -47,7 +47,7 @@ export class ProfileComponent {
     ]),
     'Userprofile.user': new FormControl(this.userData.user, [
       Validators.required,
-      Email
+      Email()
     ]),
     'Userprofile.cellPhone': new FormControl(this.userData.cellPhone, [
       Validators.required

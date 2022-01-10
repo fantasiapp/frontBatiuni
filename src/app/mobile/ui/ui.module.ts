@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { NavigationMenu } from './navigation/navigation.component';
 import { CalendarUI } from './calendar/calendar.ui';
 import { UISwipeupComponent } from './swipeup/swipeup.component';
 import { UISlideMenuComponent } from './slidemenu/slidemenu.component';
@@ -21,7 +20,6 @@ import { SharedModule } from 'src/app/shared/shared.module';
 
 @NgModule({
   declarations: [
-    NavigationMenu,
     CalendarUI,
     UISwipeupComponent,
     UISlideMenuComponent,
@@ -42,7 +40,6 @@ import { SharedModule } from 'src/app/shared/shared.module';
     SharedModule
   ],
   exports: [
-    NavigationMenu,
     CalendarUI,
     UISwipeupComponent,
     UISlideMenuComponent,

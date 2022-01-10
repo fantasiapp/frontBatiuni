@@ -25,6 +25,17 @@ $high: 1920px;
   }
 };
 
+
+@mixin from($point) {
+  @media (min-width: #{$point + 1px}) { @content; }
+};
+
+@mixin range($from, $to) {
+  @media (min-width: #{$from + 1px}) and (max-width: $to) {
+    @content;
+  }
+}
+
 @mixin desktop-only {
   @media (min-width: #{$mobile + 1px}) {
     @content;

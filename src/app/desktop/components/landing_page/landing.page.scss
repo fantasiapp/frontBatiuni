@@ -54,23 +54,29 @@ header {
 
 @media (max-width: 1024px) {
   :host {
-    --presentation-image-width: 100px;
-    --presentation-image-height: 50px;
+    --presentation-image-width: 120px;
+    --presentation-image-height: 60px;
   }
+
+  .hero { height: 700px; }
 }
 
 @media (min-width: 1025px) and (max-width: 1366px) {
   :host {
     --presentation-image-width: 150px;
-    --presentation-image-height: 60px;
+    --presentation-image-height: 75px;
   }
+
+  .hero { height: 900px;}
 }
 
 @media (min-width: 1367px) {
   :host {
-    --presentation-image-width: 175px;
-    --presentation-image-height: 80px;
+    --presentation-image-width: 180px;
+    --presentation-image-height: 90px;
   }
+
+  .hero { height: 900px; }
 }
 
 $presentation-theme-factor: 1.5;
@@ -86,6 +92,7 @@ $presentation-image-offset-bottom: 60px;
     margin-left: -$presentation-image-offset-right;
 
   }
+
   &.right {
     align-self: end;
     margin-right: $presentation-image-offset-right;
@@ -104,6 +111,8 @@ $presentation-image-offset-bottom: 60px;
     opacity: 0.25;
   }
 }
+
+.hero-header.right { text-align: right; }
 
 .card {
   text-align: right;
