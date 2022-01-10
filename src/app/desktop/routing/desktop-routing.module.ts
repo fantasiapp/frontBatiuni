@@ -9,7 +9,7 @@ import { RegisterPageComponent } from "../components/register/register.page";
 
 const routes: Routes =[{
     path: 'landing',
-    component: HeaderDesktop
+    component: LandingPageComponent
   }, {
     path: 'register',
     component: RegisterPageComponent
@@ -22,6 +22,9 @@ const routes: Routes =[{
   }, {
     path: 'success',
     component: RegistrationSuccess
+  }, {
+    path: 'home',
+    component: HeaderDesktop
   }, {
     path: '**',
     redirectTo: 'landing'
