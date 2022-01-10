@@ -1,3 +1,4 @@
+@use "sass:math";
 @import 'src/styles/variables';
 @import 'src/styles/mixins';
 
@@ -11,8 +12,8 @@ header {
 
 .quick-intro {
   font-weight: 200;
-  & > *:not(:last-of-type) {
-    margin-bottom: $spacing-margin;
+  & > *:not(:last-child) {
+    margin-bottom: math.div($spacing-margin, 2);
   }
 }
 

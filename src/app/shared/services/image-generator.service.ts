@@ -13,7 +13,7 @@ export const defaultOptions: ImageGenerationOptions = {
   size: 150,
   background: '#3498db',
   color: '#ecf0f1',
-  font: '40px Poppins',
+  font: '40px Roboto',
   textAlign: 'center',
   output: 'base64'
 };
@@ -23,11 +23,13 @@ export const defaultOptions: ImageGenerationOptions = {
 export class ImageGenerator {
   private canvas: HTMLCanvasElement;
   private ctx: CanvasRenderingContext2D;
+  private offsetY: number;
 
   constructor() {
     this.canvas = document.createElement('canvas');
     this.canvas.width = this.canvas.height = 150;
     this.ctx = this.canvas.getContext('2d')!;
+    this.offsetY = (this.ctx.measureText("H") as any).fontBoundingBoxAscent / 2;
   }
 
   generate(text: string, options: ImageGenerationOptions = defaultOptions) {
@@ -39,7 +41,7 @@ export class ImageGenerator {
     this.ctx.font = options.font;
     this.ctx.textBaseline = 'middle';
     this.ctx.fillStyle = options.color;
-    this.ctx.fillText(text, size/2, size/2);
+    this.ctx.fillText(text, size/2, size/2 + this.offsetY);
     return this.canvas.toDataURL('image/jpeg');
   }
 };
