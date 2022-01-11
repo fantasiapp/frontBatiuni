@@ -44,7 +44,7 @@ export class ProfileComponent {
     ]),
     'Userprofile.firstName': new FormControl(this.userData.firstName, [
     ]),
-    'Userprofile.user': new FormControl(this.userData.userName, [
+    'Userprofile.userName': new FormControl(this.userData.user, [
       Email()
     ]),
     'Userprofile.cellPhone': new FormControl(this.userData.cellPhone, [

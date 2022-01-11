@@ -37,6 +37,7 @@ export class Company {
   get name() { return this.values[Company.fields.get('name')!]; }
   get siret() { return this.values[Company.fields.get('siret')!]; }
   get capital() { return this.values[Company.fields.get('capital')!]; }
+  // get revenue() { return this.values[Company.fields.get('revenue')!]; }
   get logo() { return this.values[Company.fields.get('logo')!]; }
   get webSite() { return this.values[Company.fields.get('webSite')!]; }
   get stars() { return this.values[Company.fields.get('stars')!]; }
@@ -52,7 +53,7 @@ export class UserProfile {
   static instances = new Map<number, UserProfile>();
   static getById(id: number) { return this.instances.get(id); }
 
-  get userName(): string { return this.values[UserProfile.fields.get('userName')!]; }
+  get user(): string { return this.values[UserProfile.fields.get('userName')!]; }
   get company(): Company { return this.values[UserProfile.fields.get('company')!]; }
   get firstName(): string { return this.values[UserProfile.fields.get('firstName')!]; }
   get lastName(): string { return this.values[UserProfile.fields.get('lastName')!]; }
