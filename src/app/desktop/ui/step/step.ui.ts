@@ -10,4 +10,9 @@ import { Component } from "@angular/core";
 export class StepUI {
 
     constructor() {}
+    id : any;
+    changeBack(e: Event,id:number)  {
+        let circle = (e.target as any)
+        circle.style.backgroundColor = 'black'
+    }
 }
