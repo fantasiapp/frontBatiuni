@@ -219,6 +219,13 @@
 
 .invert { filter: invert(1); }
 
+$space-top-small: 30px;
+$space-top-mid: 40px;
+
+%web-space-top {
+  @include range($mobile, 1500px) { padding-top: $space-top-small; }
+  @include from(1500px) { padding-top: $space-top-mid; }
+}
 
 %three-section-layout {
   @extend %overflow-y;
@@ -232,8 +239,19 @@
   }
 
   @include range($mobile, 1500px) {
-    section:first-child { position: sticky; top: 0; }
-    
+    section:first-child {
+      transform: translateY(-$space-top-mid);
+      position: sticky;
+      top: 0;
+    }
+  }
+
+  @include from(1500px) {
+    section:first-child {
+      position: fixed;
+      top: 220px;
+      bottom: 0;
+    }
   }
 };
 

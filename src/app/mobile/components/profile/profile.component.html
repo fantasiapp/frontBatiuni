@@ -7,14 +7,7 @@
   </header>
 
   <div class="hosted-page flex column center-cross space-children-margin page-content">
-    <profile-image [src]="profileImage$ | async"></profile-image>
-    <switch off="Profile ST" on="Profil PME"  style="text-align: center;" [value]="user.profile!.role.id == 2" (valueChange)="changeProfileType($event)" [disabled]="user.profile!.role.id !== 3"></switch>
-    <section class="quick-intro flex column center-cross">
-      <span class="text-emphasis">{{ (user.profile!.firstName + " " + user.profile!.lastName) | titlecase }}</span>
-      <span>{{ user.profile!.user }}</span>
-      <span>{{ user.profile!.cellPhone }}</span>
-      <stars (click)="openRatings = true" value="3.9"></stars>
-    </section>
+    <profile-resume [showMore]="true" (ratingClicked)="openRatings = true" (profileChanged)="changeProfileType($event)" [user]="user"></profile-resume>
 
     <section class="job-description full-width flex column space-children-margin">
       <span>
@@ -26,8 +19,8 @@
           class="value">{{user.profile!.company.siret}}</span>
       </span>
       <span>
-        <span class="text-light-emphasis font-Poppins">Métier : </span> <span *ngFor="let job of user.profile!.jobs"
-          class="value">1 {{ job.name }}, </span>
+        <span class="text-light-emphasis font-Poppins">Métier : </span>
+        <span *ngFor="let job of user.profile!.jobs" class="value">1 {{ job.name }}, </span>
       </span>
       <span>
         <span class="text-light-emphasis font-Poppins">Chiffres d'affaires : </span> <span
@@ -64,7 +57,7 @@
     <div class="full-width center-text text-emphasis" header>Modifier mon Profil</div>
     <div class="hosted-page flex column center-cross space-children-margin" content>
       <section class="section">
-        <profile-image [src]="profileImage$ | async"></profile-image>
+        <profile-image [user]="user"></profile-image>
         <img src="assets/icons/modify.svg" class="modify-icon image" (click)="openModifyPictureMenu()" />
       </section>
   
@@ -88,7 +81,7 @@
     <div class="full-width center-text text-emphasis" header>Mes notes</div>
     <div class="hosted-page flex column center-cross space-children-margin" content>
 
-      <profile-image [src]="profileImage$ | async"></profile-image>
+      <profile-image [user]="user"></profile-image>
       <switch off="Profile ST" on="Profil PME" style="text-align: center;"></switch>
 
       <stars value="3.9"></stars>

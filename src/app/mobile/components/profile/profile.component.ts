@@ -34,12 +34,6 @@ export class ProfileComponent {
 
   @Select(UserState)
   user$!: BehaviorSubject<User>;
-  
-  profileImage$ = this.user$.pipe(take(1), map(user => {
-    if ( user.imageUrl ) return user.imageUrl;
-    const fullname = user.profile!.firstName[0].toUpperCase() + user.profile!.lastName[0].toUpperCase();
-    return this.imageGenerator.generate(fullname);
-  }))
 
   //move to state
   openMenu: boolean = false;
@@ -49,14 +43,7 @@ export class ProfileComponent {
   openModifyPicture: boolean = false;
   openNotifications : boolean = false;
 
-  constructor(private store: Store, private imageGenerator: ImageGenerator) {}
-
-  generateDefaultImage() {
-    return this.user$.pipe(take(1), map(user => {
-      const fullname = user.profile!.firstName + user.profile!.lastName;
-      return this.imageGenerator.generate(fullname);
-    }));
-  }
+  constructor(private store: Store) {}
 
   async ngOnInit() {
     let permissions  = await Camera.checkPermissions();

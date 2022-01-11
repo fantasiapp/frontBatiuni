@@ -46,7 +46,7 @@
   }
 }
 
-.space-children-margin {
+.small-space-children-margin {
   & > *:not(:last-child) {
 
     @include range(0, $small) {
