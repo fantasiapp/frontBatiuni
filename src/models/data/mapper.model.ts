@@ -169,6 +169,7 @@ export class Mapper {
   };
 
   static mapTable(data: any, name: string) {
+    console.log('mapping table', name, 'from', data);
     this.mapFields(data, name);
     if ( this.isSimpleTable(data, name) )
       this.mapSimpleTable(data, name);

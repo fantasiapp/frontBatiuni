@@ -26,6 +26,8 @@ export class UINumberComponent extends UIDefaultAccessor<number> {
   @Input()
   min: number = 0;
 
+  ngOnInit() { }
+
   @Input()
   max: number = Infinity;
 

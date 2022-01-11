@@ -8,11 +8,11 @@
   
   <div class="hosted-page flex column center-cross space-children-margin page-content">
     <profile-image [src]="profileImage$ | async"></profile-image>
-    <switch off="Profile ST" on="Profil PME"  style="text-align: center;" [value]="user!.type" (valueChange)="changeProfileType($event)"></switch>
+    <switch off="Profile ST" on="Profil PME"  style="text-align: center;" [value]="user.profile!.role.id == 2" (valueChange)="changeProfileType($event)" [disabled]="user.profile!.role.id !== 3"></switch>
     <section class="quick-intro flex column center-cross">
       <span class="text-emphasis">{{ (user.profile!.firstName + " " + user.profile!.lastName) | titlecase }}</span>
-      <span>{{ user.profile!.user }}</span>
-      <span>{{ user.profile!.cellPhone || '00 00 00 00 00' }}</span>
+      <span>{{ user.profile!.userName }}</span>
+      <span>{{ user.profile!.cellPhone }}</span>
       <stars (click)="openRatings = true" value="3.9"></stars>
     </section>
   
@@ -64,7 +64,7 @@
         <img src="assets/icons/modify.svg" class="modify-icon image" (click)="openModifyPictureMenu()"/>
       </section>
   
-      <switch off="Profile ST" on="Profil PME"  style="text-align: center;" off="Profil ST" on="Profil PME"></switch>
+      <switch off="Profile ST" on="Profil PME"  style="text-align: center;" off="Profil ST" on="Profil PME" [value]="user.profile!.role.id == 2" disabled></switch>
       <stars value="3.9"></stars>
   
       
@@ -117,26 +117,34 @@
                 <input class="form-element" type="text" formControlName="Company.siret"/>
               </div>
               <div class="form-input metiers">
-                <label>Métiers</label>
-                <span class="position-relative">
-                  <input placeholder="Chef de chantier" class="form-element" type="text" disabled/>
-                  <div class="position-absolute number-container">
-                    <number [value]="0"></number>
+
+                <!--Change placeholder to a span-->
+                <ng-container *ngIf="!addingField; else addfield_tpl">
+                  <label>Métiers</label>
+                  <ng-container formArrayName="Userprofile.jobs">
+                    <span class="position-relative" *ngFor="let control of profileJobsControls; index as i">
+                      <ng-container [formGroupName]="i">
+                        <input class="form-element" type="text" [value]="control.get('job')!.value.name" disabled>
+                        <div class="position-absolute number-container">
+                          <number formControlName="number"></number>
+                        </div>
+                      </ng-container>
+                    </span>
+                  </ng-container>
+                  <div (click)="addingField = true" class="form-input center-text add-field">
+                    <img src="assets/icons/add.svg"/>
+                    <span>Ajouter une métier</span>
                   </div>
-                </span>
-  
-                <span class="position-relative">
-                  <input placeholder="Maître d'oeuvre" class="form-element" type="text" disabled/>
-                  <div class="position-absolute number-container">
-                    <number [value]="0"></number>
+                </ng-container>
+              
+                <ng-template #addfield_tpl>
+                    <label>Ajoutez des métiers</label>
+                    <options [options]="allJobs" (valueChange)="updateJobs($event)"></options>
+                  <div class="form-input center-text">
+                    <button (click)="addingField = false" style="display:inline; width: 80%; padding: 5px;" class="button gradient"> Terminer</button>
                   </div>
-                </span>
-              </div>
-  
-              <div class="form-input center-text add-field">
-                <img src="assets/icons/add.svg"/>
-                <span>Ajouter une métier</span>
-              </div>
+                </ng-template>
+              </div>            
   
               <div class="form-input">
                 <label>Site internet</label>

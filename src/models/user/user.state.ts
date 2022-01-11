@@ -35,7 +35,6 @@ export class UserState {
   @Action(ChangeProfilePicture)
   changeProfilePicture(ctx: StateContext<User>, action: ChangeProfilePicture) {
     let token = this.store.selectSnapshot(AuthState).token;
-    let userData = this.store.selectSnapshot(AppState);
     let data = {
       "action": "changeUserImage",
       "name": action.name,
@@ -43,14 +42,16 @@ export class UserState {
       "imageBase64": "data:image/png;base64,"+action.src.base64String
 }
     
-    let req = this.http.post(environment.backUrl + '/data/', data,
-      {
-        headers: {
-          "Authorization": "Token " + token,
-          'Content-Type': 'application/json'
-        }
-      })  
-    return ctx.patchState({ imageUrl: action.src });
+    let req = this.http.post(environment.backUrl + '/data/', data, {
+      headers: {
+        "Authorization": "Token " + token,
+        'Content-Type': 'application/json'
+      }
+    });
+
+    req.pipe(
+      tap(() => ctx.patchState({ imageUrl: action.src }))
+    );
   }
 
   @Action(ChangePassword)
