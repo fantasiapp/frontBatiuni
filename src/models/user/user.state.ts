@@ -80,12 +80,15 @@ export class UserState {
       }
     });
 
+    console.log('sending get user data');
+
     return req.pipe(
       catchError((err: HttpErrorResponse) => {
         this.store.dispatch(new Logout());
         return throwError(err);
       }),
       tap((response: any) => {
+        console.log('mmaping request', response);
         Mapper.mapRequest(response);
         const currentUser = [...UserProfile.instances.values()][0];
         ctx.patchState({ profile: currentUser })

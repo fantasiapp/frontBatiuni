@@ -71,8 +71,8 @@ import { Job, Role } from "src/models/data/data.model";
     <ng-template #page2>
       <div class="full-width flex column grow">
         <form class="grow form-control curved-border" [formGroup]="registerForm" (ngSubmit)="onSubmit($event)">
-          <h3 class="form-title center-text">Créer un compte !</h3>
-          <h3 class="form-subtitle">Informations entreprise</h3>
+        <h4 class="form-title font-Roboto center-text">Créer un compte !</h4>
+        <h3 class="form-subtitle">Informations contact</h3>
           <div class="form-input">
             <label>Je suis</label>
             <select formControlName="role">
