@@ -10,7 +10,7 @@
   padding: 0 40px;
 }
 
-:host {
+.page {
   @extend %three-section-layout;
   height: 100vh;
   background-color: #f7f7f7;
@@ -20,6 +20,10 @@
   .main.web-content {
     margin: 0 auto;
   }
+}
+
+:host {
+  
 }
 
 .web-content {
@@ -43,6 +47,7 @@
   position: fixed;
   top: 220px;
   bottom: 0;
+  overflow-y: auto;
 
   width: 400px;
   @extend %padding;

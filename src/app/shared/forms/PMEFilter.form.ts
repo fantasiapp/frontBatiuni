@@ -54,7 +54,6 @@ import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
     :host {
       display: block;
       width: 100%;
-      height: 100%;    
     }
 
     form {

@@ -24,7 +24,7 @@ const routes: Routes =[{
     component: RegistrationSuccess
   }, {
     path: 'home',
-    component: HeaderDesktop
+    component: HomePageComponent
   }, {
     path: '**',
     redirectTo: 'landing'

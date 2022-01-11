@@ -57,6 +57,7 @@ export class ProfileComponent {
     ]),
     'Company.webSite': new FormControl(this.userData.company.webSite, [
     ]),
+    'Company.companyPhone': new FormControl(this.userData.company.companyPhone, [])
   });
 
   profileImage$ = this.user$.pipe(take(1), map(user => {

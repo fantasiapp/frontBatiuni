@@ -9,6 +9,7 @@ import { EmailConfirmation } from "../shared/validators/email_confirmation/email
 import { HeaderDesktop } from "./components/header/header.desktop";
 import { HomePageComponent } from "./components/home_page/home.page";
 import { StepUI } from "./ui/step/step.ui";
+import { TabsComponent } from "./ui/tabs/tabs.component";
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import { StepUI } from "./ui/step/step.ui";
     RegisterPageComponent,
     HeaderDesktop,
     HomePageComponent,
-    StepUI
+    StepUI,
+    TabsComponent
   ],
   imports: [
     CommonModule,

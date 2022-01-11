@@ -202,12 +202,6 @@
   margin-top: auto;
 }
 
-%three-section-layout {
-  @extend %overflow-y;
-  display: flex;
-  //height: calc(100vh - #{$navigation-height});
-};
-
 %has-notifications {
   position: relative;
   &::after {
@@ -224,3 +218,23 @@
 }
 
 .invert { filter: invert(1); }
+
+
+%three-section-layout {
+  @extend %overflow-y;
+  display: flex;
+  //height: calc(100vh - #{$navigation-height});
+
+  @include breakpoint(small) {
+    .web-content::ng-deep {
+      max-width: 400px;
+    }
+  }
+
+  @include range($mobile, 1500px) {
+    section:first-child { position: sticky; top: 0; }
+    
+  }
+};
+
+//default to 2 columns

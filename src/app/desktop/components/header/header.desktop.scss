@@ -5,6 +5,7 @@
   font-family: "Poppins";
   display: block;
   font-size: inherit;
+  position: relative;
 }
 
 .sticky-desktop-header {
@@ -58,4 +59,11 @@ button {
 }
 .white-spacing {
   white-space: nowrap;
+}
+
+.bottom {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
 }
