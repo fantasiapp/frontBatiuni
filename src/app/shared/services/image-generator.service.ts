@@ -12,7 +12,7 @@ export type ImageGenerationOptions = {
 export const defaultOptions: ImageGenerationOptions = {
   size: 150,
   background: '#3498db',
-  color: '#ecf0f1',
+  color: '#FFF',
   font: '40px Roboto',
   textAlign: 'center',
   output: 'base64'

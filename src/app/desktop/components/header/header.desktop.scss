@@ -22,7 +22,7 @@
 }
 
 .profile-actions {
-  flex: 0 0 250px;
+  flex: 0 0 500px;
 }
 
 .logo {
@@ -55,4 +55,7 @@ button {
   background:  transparent linear-gradient(180deg, #134C6C 0%, #0C5E8D 100%) 0% 0% no-repeat padding-box;
   color: #FFFFFF;
   font-size: 1.2em;
+}
+.white-spacing {
+  white-space: nowrap;
 }

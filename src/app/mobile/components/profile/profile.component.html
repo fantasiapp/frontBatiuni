@@ -60,7 +60,7 @@
     <div class="full-width center-text text-emphasis" header>Modifier mon Profil</div>
     <div class="hosted-page flex column center-cross space-children-margin" content>
       <section class="section">
-        <profile-image [src]="user!.imageUrl"></profile-image>
+        <profile-image [src]="profileImage$ | async"></profile-image>
         <img src="assets/icons/modify.svg" class="modify-icon image" (click)="openModifyPictureMenu()"/>
       </section>
   
@@ -196,7 +196,7 @@
     <div class="full-width center-text text-emphasis" header>Mes notes</div>
     <div class="hosted-page flex column center-cross space-children-margin" content>
   
-      <profile-image [src]="user!.imageUrl"></profile-image>
+      <profile-image [src]="profileImage$ | async"></profile-image>
        <switch off="Profile ST" on="Profil PME"  style="text-align: center;"></switch>
   
        <stars value="3.9"></stars>

@@ -68,7 +68,14 @@
   
   }
   
-  li.active a img {
-    filter: invert(12%) sepia(96%) saturate(7052%) hue-rotate(180deg) brightness(78%) contrast(111%);
+  li.active  {
+    a {
+      filter: invert(77%) sepia(9%) saturate(1471%) hue-rotate(137deg) brightness(86%) contrast(87%);  
+
+    }
+    img {
+      filter: invert(77%) sepia(9%) saturate(1471%) hue-rotate(137deg) brightness(86%) contrast(87%);  
+
+    }
   }
-};
+}
