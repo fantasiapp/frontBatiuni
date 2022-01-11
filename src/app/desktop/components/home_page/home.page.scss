@@ -17,12 +17,12 @@
 
   @extend %space-top;
 
-  .main.content {
+  .main.web-content {
     margin: 0 auto;
   }
 }
 
-.content {
+.web-content {
   searchbar {
     display: block;
     width: 80%;

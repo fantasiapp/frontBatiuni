@@ -31,7 +31,7 @@
   }
 }
 
-.content {
+.web-content {
   @extend .cover-parent;
   max-width: 1024px;
   margin: 0 auto;
@@ -39,14 +39,14 @@
 }  
 
 @include breakpoint(small) {
-  .content {
+  .web-content {
     padding: $page-padding;
     margin: 0;
   }
 }
 
 @include breakpoint(medium) {
-  .content {
+  .web-content {
     max-width: 1024px;
     margin: 0 auto;
     padding: $page-padding 0;
@@ -54,7 +54,7 @@
 }
 
 @include from($medium) {
-  .content {
+  .web-content {
     max-width: 1200px;
     margin: 0 auto;
     padding: $page-padding 0;
