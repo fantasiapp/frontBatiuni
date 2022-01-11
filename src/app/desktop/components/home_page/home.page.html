@@ -1,21 +1,30 @@
-<section class="filters">
-  <div class="header">
-    <img src="assets/Filtrer par.svg"/> Filtrer par
-  </div>
-  <pme-filter-form></pme-filter-form>
-</section>
+<desktop-stickyH>
+  <tabs [tabs]="3" [(activeView)]="activeView" bottom>
+    <span tab_0>Brouillon</span>
+    <span tab_1>En Ligne</span>
+    <span tab_2>Validées</span>
+  </tabs>
+</desktop-stickyH>
 
-<section class="main web-content font-Poppins">
-  <searchbar></searchbar>
-  <div class="report-search">
-    Resultat <span class="no-result">10 annonces</span>
-  </div>
-
-  <div class="results space-children-margin">
-    <offer *ngFor="let annonce of annonces" [routerLink]="['', 'suivi']"></offer>
-  </div>
-</section>
-
-<section class="info">
+<div class="page">
+  <section class="filters">
+    <div class="header">
+      <img src="assets/Filtrer par.svg"/> Filtrer par
+    </div>
+    <pme-filter-form></pme-filter-form>
+  </section>
   
-</section>
+  <section class="main web-content font-Poppins">
+    <searchbar></searchbar>
+    <div class="report-search">
+      Resultat <span class="no-result">10 annonces</span>
+    </div>
+  
+    <div class="results space-children-margin">
+      <offer *ngFor="let annonce of annonces" [routerLink]="['', 'suivi']"></offer>
+    </div>
+  </section>
+  
+  <section class="info">
+  </section>
+</div>

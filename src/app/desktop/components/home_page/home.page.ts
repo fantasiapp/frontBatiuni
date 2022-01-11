@@ -8,5 +8,6 @@ import { ChangeDetectionStrategy, Component } from "@angular/core";
 })
 export class HomePageComponent {
 
+  activeView: number = 0;
   annonces = new Array(10).fill(0);
 };

@@ -30,13 +30,37 @@
 
 .space-children-margin {
   & > *:not(:last-child) {
-    margin-bottom: $spacing-margin;
+
+    @include range(0, $small) {
+      margin-bottom: $spacing-margin;
+    }
+
+    @include range($small, $medium) {
+      margin-bottom: 1.5 * $spacing-margin
+    }
+
+    
+    @include from($medium) {
+      margin-bottom: 2 * $spacing-margin
+    }
   }
 }
 
-.small-space-children-margin {
+.space-children-margin {
   & > *:not(:last-child) {
-    margin-bottom: $small-spacing-margin;
+
+    @include range(0, $small) {
+      margin-bottom: $small-spacing-margin;
+    }
+
+    @include range($small, $medium) {
+      margin-bottom: 1.5 * $small-spacing-margin
+    }
+
+    
+    @include from($medium) {
+      margin-bottom: 2 * $small-spacing-margin
+    }
   }
 }
 

@@ -10,7 +10,7 @@
   padding: 0 40px;
 }
 
-:host {
+.page {
   @extend %three-section-layout;
   height: 100vh;
   background-color: #f7f7f7;
@@ -20,6 +20,10 @@
   .main.web-content {
     margin: 0 auto;
   }
+}
+
+:host {
+  
 }
 
 .web-content {
