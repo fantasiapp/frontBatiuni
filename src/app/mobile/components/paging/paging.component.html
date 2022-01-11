@@ -2,7 +2,7 @@
   <li>
     <a (click)="onClick(-1)">
       <img class="arrow_left" src="assets/Fleche.svg" />
-      <span> {{ showPageName ? (!index ? 'Acceuil' : 'Etape précedente') : '' }} </span>
+      <span> {{ showPageName ? (!index ? 'Accueil' : 'Etape précedente') : '' }} </span>
     </a>
   </li>
   <li *ngIf="showNext && (index < length-1)" style="text-align: right;">
