@@ -10,6 +10,7 @@
     position: fixed;
     @include set-safe-area(bottom);
     z-index: 10;
+    background-color: white;
   }
   
   nav {

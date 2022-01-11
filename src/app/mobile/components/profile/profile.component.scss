@@ -60,3 +60,7 @@ header {
     white-space: normal;
   }
 }
+
+.form-container {
+  @extend %overflow-y;
+}

@@ -18,7 +18,7 @@ export class UIProfileImageComponent {
   constructor(private imageGenerator: ImageGenerator) {}
 
   ngOnInit() {
-    if ( this.user ) {
+    if ( !this.src && this.user ) {
       const fullname = this.user.profile!.firstName[0].toUpperCase() + this.user.profile!.lastName[0].toUpperCase();
       this.src = this.user.imageUrl || this.imageGenerator.generate(fullname);
     }

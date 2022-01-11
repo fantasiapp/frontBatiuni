@@ -65,7 +65,7 @@
       <stars value="3.9"></stars>
   
       
-      <div class="full-width grow flex column position-relative">
+      <div class="form-container full-width grow flex column position-relative">
         <modify-password-form *ngIf="modifyPassword" class="grow"></modify-password-form>
         <modify-profile-form [user]="user.profile!" *ngIf="!modifyPassword" class="grow" (submit)="modifyProfile($event)"></modify-profile-form>
       </div>

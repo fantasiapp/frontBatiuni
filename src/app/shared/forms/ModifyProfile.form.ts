@@ -138,8 +138,10 @@ import { SlidesDirective } from "../directives/slides.directive";
     @import 'src/styles/mixins';
 
     :host {
+      width: 100%;
       display: flex;
-      flex-direction: column;
+      flex-flow: column nowrap;
+      flex-shrink: 0;
     }
 
     .form-title, .form-input label {
@@ -152,7 +154,7 @@ import { SlidesDirective } from "../directives/slides.directive";
     }
 
     .metiers > * { margin-bottom: $item-padding; }
-    .section { background-color: white; }
+    .section { background-color: white; @extend %overflow-y; }
   `],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
