@@ -180,6 +180,8 @@ export class Mapper {
   static mapRequest(data: any) {
     this.staticMap(data);
     this.getTablesNames(data).forEach(tableName => this.mapTable(data, tableName));
+    console.log([...UserProfile.instances.values()]);
+    console.log([...JobForCompany.instances.values()]);
   };
 
   static mapModifyForm(user: UserProfile, changes: any) {

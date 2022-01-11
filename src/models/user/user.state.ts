@@ -40,7 +40,7 @@ export class UserState {
       "name": action.name,
       "imageExtension": action.src.format, // PNG OR JPEG
       "imageBase64": "data:image/png;base64,"+action.src.base64String
-}
+    }
     
     let req = this.http.post(environment.backUrl + '/data/', data, {
       headers: {
