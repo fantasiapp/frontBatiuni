@@ -10,11 +10,8 @@ header {
   img { padding: 0 $item-padding; }
 }
 
-.quick-intro {
+.quick-intro::ng-deep {
   font-weight: 200;
-  & > *:not(:last-child) {
-    margin-bottom: math.div($spacing-margin, 2);
-  }
 }
 
 .job-description .value {

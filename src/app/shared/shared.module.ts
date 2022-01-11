@@ -27,6 +27,7 @@ import { ImageGenerator } from "./services/image-generator.service";
 import { OfferComponent } from "./components/offer/offer.compnent";
 import { NavigationMenu } from "./components/navigation/navigation.component";
 import { ModifyProfileForm } from "./forms/ModifyProfile.form";
+import { ProfileResume } from "./components/profile-resume/profile-resume.component";
 
 @NgModule({
   declarations: [
@@ -52,7 +53,8 @@ import { ModifyProfileForm } from "./forms/ModifyProfile.form";
     ModifyPasswordForm,
     OfferComponent,
     NavigationMenu,
-    ModifyProfileForm
+    ModifyProfileForm,
+    ProfileResume
   ],
   imports: [
     CommonModule,
@@ -84,7 +86,8 @@ import { ModifyProfileForm } from "./forms/ModifyProfile.form";
     ModifyPasswordForm,
     OfferComponent,
     NavigationMenu,
-    ModifyProfileForm
+    ModifyProfileForm,
+    ProfileResume
   ],
   providers: [ImageGenerator]
 })

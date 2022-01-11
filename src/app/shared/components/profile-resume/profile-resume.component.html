@@ -1,0 +1,10 @@
+<profile-image [user]="user"></profile-image>
+<switch off="Profile ST" on="Profil PME"  style="text-align: center;" [value]="user.profile!.role.id == 2" (valueChange)="profileChanged.emit($event)" [disabled]="user.profile!.role.id !== 3"></switch>
+<section class="quick-intro flex column center-cross small-space-children-margin">
+  <span class="text-emphasis">{{ (user.profile!.firstName + " " + user.profile!.lastName) | titlecase }}</span>
+  <ng-container *ngIf="showMore">
+    <span>{{ user.profile!.user }}</span>
+    <span>{{ user.profile!.cellPhone }}</span>
+  </ng-container>
+  <stars (click)="ratingsClicked.emit()" value="3.9"></stars>
+</section>

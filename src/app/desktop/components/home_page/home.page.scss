@@ -1,11 +1,6 @@
 @import 'src/styles/mixins';
 @import 'src/styles/variables';
 
-%space-top {
-  @include range($mobile, $medium) { padding-top: 30px; }
-  @include from($medium) { padding-top: 40px; }
-}
-
 %padding {
   padding: 0 40px;
 }
@@ -15,7 +10,7 @@
   height: 100vh;
   background-color: #f7f7f7;
 
-  @extend %space-top;
+  @extend %web-space-top;
 
   .main.web-content {
     margin: 0 auto;
@@ -44,17 +39,13 @@
 //1366+ follow specs
 .filters {
   background-color: white;
-  position: fixed;
-  top: 220px;
-  bottom: 0;
   overflow-y: auto;
-
   width: 400px;
   @extend %padding;
 
   .header {
     img { vertical-align: middle; }
-    @extend %space-top;
+    @extend %web-space-top;
     font-size: 1.5em;
     color: $secondaryBackground;
     padding-bottom: 20px;

@@ -10,6 +10,7 @@ import { HeaderDesktop } from "./components/header/header.desktop";
 import { HomePageComponent } from "./components/home_page/home.page";
 import { StepUI } from "./ui/step/step.ui";
 import { TabsComponent } from "./ui/tabs/tabs.component";
+import { ProfilePageComponent } from "./components/profile/profile.page";
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { TabsComponent } from "./ui/tabs/tabs.component";
     HeaderDesktop,
     HomePageComponent,
     StepUI,
-    TabsComponent
+    TabsComponent,
+    ProfilePageComponent
   ],
   imports: [
     CommonModule,
