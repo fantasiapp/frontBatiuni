@@ -86,7 +86,7 @@ export class UserState {
         return throwError(err);
       }),
       tap((response: any) => {
-        Mapper.mapTable(response, 'Userprofile');
+        Mapper.mapRequest(response);
         const currentUser = [...UserProfile.instances.values()][0];
         ctx.patchState({ profile: currentUser })
       })
@@ -104,8 +104,6 @@ export class UserState {
 
     const profile = this.store.selectSnapshot(UserState.profile)!,
       json = Mapper.mapModifyForm(profile, action.changes);
-
-    console.log('after map', json);
 
     let req = this.http.post(environment.backUrl + '/data/', json, {
       headers: {

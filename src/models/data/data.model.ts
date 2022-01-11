@@ -63,3 +63,17 @@ export class UserProfile {
   get cellPhone() { return this.values[UserProfile.fields.get('cellPhone')!]; }
   get jobs() { return this.values[UserProfile.fields.get('jobs')!]; }
 };
+
+export class JobForCompany {
+  constructor(public id: number, private values: any[]) {
+    JobForCompany.instances.set(id, this);
+  }
+
+  static fields = new Map<string, number>();
+  static instances = new Map<number, JobForCompany>();
+  static getById(id: number) { return this.instances.get(id); }
+
+  get job(): Job { return this.values[JobForCompany.fields.get('job')!]; }
+  get company(): Company { return this.values[JobForCompany.fields.get('company')!]; }
+  get number(): number { return this.values[JobForCompany.fields.get('number')!]; }
+}

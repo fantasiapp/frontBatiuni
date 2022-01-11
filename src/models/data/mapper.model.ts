@@ -1,6 +1,6 @@
 import { getByValue } from 'src/common/functions';
 import { UserState } from '../user/user.state';
-import { Role, Job, Label, Company, UserProfile } from './data.model';
+import { Role, Job, Label, Company, UserProfile, JobForCompany } from './data.model';
 
 type Dict<T> = {[key: string]: T};
 type ValueConstructor = {
@@ -24,7 +24,8 @@ export class Mapper {
     'Userprofile': UserProfile,
     'Role': Role,
     'Label': Label,
-    'Job': Job
+    'Job': Job,
+    'JobForCompany': JobForCompany
   };
 
   private static mapped: Dict<boolean> = Object.keys(Mapper.mapping).reduce(
@@ -42,7 +43,7 @@ export class Mapper {
   ];
 
   static readonly definedTables = [
-    'Company', 'Userprofile'
+    'Company', 'Userprofile', 'JobForCompany'
   ];
 
   static getField(name: string): {
@@ -176,13 +177,16 @@ export class Mapper {
       this.mapTableDependencies(data, name);
   }
 
+  static mapRequest(data: any) {
+    this.staticMap(data);
+    this.getTablesNames(data).forEach(tableName => this.mapTable(data, tableName));
+  };
+
   static mapModifyForm(user: UserProfile, changes: any) {
     const keys = Object.keys(changes),
       profileKeys = keys.filter(key => key.indexOf('Userprofile') >= 0),
       companyKeys = keys.filter(key => key.indexOf('Company') >= 0);
 
-    console.log(changes, profileKeys, companyKeys);
-    
     const output: any = {action: 'modifyUser'};
 
     if ( profileKeys.length ) {

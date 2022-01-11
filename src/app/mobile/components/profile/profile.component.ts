@@ -84,7 +84,8 @@ export class ProfileComponent {
   }
   
   modifyProfile(form: any /*FormGroup*/) {
-    this.store.dispatch(new UserActions.ModifyUserProfile(form));
+    const user = this.store.selectSnapshot(UserState);
+    this.store.dispatch(new UserActions.ModifyUserProfile({profile: user.profile, form}));
   }
 
   changeProfileType(type: boolean) {
@@ -115,7 +116,7 @@ export class ProfileComponent {
     let user = this.user$.subscribe(user=> {
       imageName = user.profile?.firstName + '-' + user.profile?.lastName + '-' + user.profile?.id;
     })
-    this.store.dispatch(new UserActions.ChangeProfilePicture(photo,imageName));
+    this.store.dispatch(new UserActions.ChangeProfilePicture(photo, imageName));
     // this.store.dispatch(new UserActions.ChangeProfilePicture('data:image/png;base64,' + photo.base64String!,imageName));
   }
 
