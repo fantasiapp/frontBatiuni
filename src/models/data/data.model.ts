@@ -54,6 +54,7 @@ export class UserProfile {
   static getById(id: number) { return this.instances.get(id); }
 
   get user(): string { return this.values[UserProfile.fields.get('userName')!]; }
+  //user or userName ?
   get company(): Company { return this.values[UserProfile.fields.get('company')!]; }
   get firstName(): string { return this.values[UserProfile.fields.get('firstName')!]; }
   get lastName(): string { return this.values[UserProfile.fields.get('lastName')!]; }

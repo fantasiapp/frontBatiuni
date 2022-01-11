@@ -1,7 +1,6 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, ViewChild } from "@angular/core";
+import { ChangeDetectionStrategy, Component, HostListener, ViewChild } from "@angular/core";
 import { Select, Store } from "@ngxs/store";
-import { BehaviorSubject, Observable, of } from "rxjs";
-import { SlidesDirective } from "src/app/shared/directives/slides.directive";
+import { BehaviorSubject } from "rxjs";
 import { User } from "src/models/user/user.model";
 import { UserState } from "src/models/user/user.state";
 import * as UserActions from "src/models/user/user.actions";
@@ -12,11 +11,8 @@ import { UISwipeupComponent } from "../../ui/swipeup/swipeup.component";
 import { Logout } from "src/models/auth/auth.actions";
 import { ImageGenerator } from "src/app/shared/services/image-generator.service";
 import { map, take } from "rxjs/operators";
-import { FormArray, FormControl, FormGroup, Validators } from "@angular/forms";
-import { MatchField } from "src/validators/verify";
-import { getDirtyValues } from "src/common/functions";
+import { FormArray, FormControl, FormGroup } from "@angular/forms";
 import { Email } from "src/validators/persist";
-import { AppState } from "src/app/app.state";
 import { Job, UserProfile } from "src/models/data/data.model";
 
 
@@ -33,48 +29,12 @@ export class ProfileComponent {
   @ViewChild(UISlideMenuComponent, {static: false})
   slideMenu!: UISlideMenuComponent;
 
+  @ViewChild('modifyMenu', {static: false, read: UISlideMenuComponent})
+  modifyMenu!: UISlideMenuComponent;
+
   @Select(UserState)
   user$!: BehaviorSubject<User>;
-  userData = this.store.selectSnapshot(UserState).profile as UserProfile;
   
-  // Modify User profile
-  modifyProfileForm = new FormGroup({
-    // User
-    'Userprofile.lastName': new FormControl(this.userData.lastName, [
-    ]),
-    'Userprofile.firstName': new FormControl(this.userData.firstName, [
-    ]),
-    'Userprofile.userName': new FormControl(this.userData.user, [
-      Email()
-    ]),
-    'Userprofile.cellPhone': new FormControl(this.userData.cellPhone, [
-    ]),
-    'Userprofile.jobs': new FormArray([
-      ...this.userData.jobs.map((job: Job) => new FormGroup({
-        job: new FormControl(job),
-        number: new FormControl(1)
-      }))
-    ]),
-    // Company 
-    'Company.name': new FormControl(this.userData.company.name, [
-    ]),
-    'Company.siret': new FormControl(this.userData.company.siret, [
-    ]),
-    'Company.capital': new FormControl(this.userData.company.capital, [
-    ]),
-    'Company.webSite': new FormControl(this.userData.company.webSite, [
-    ]),
-    'Company.companyPhone': new FormControl(this.userData.company.companyPhone, [])
-  });
-
-  get profileJobsControls() {
-    const jobsControl = this.modifyProfileForm.controls['Userprofile.jobs'] as FormArray;
-    return jobsControl.controls;
-  }
-
-
-  addingField: boolean = false;
-
   profileImage$ = this.user$.pipe(take(1), map(user => {
     if ( user.imageUrl ) return user.imageUrl;
     const fullname = user.profile!.firstName[0].toUpperCase() + user.profile!.lastName[0].toUpperCase();
@@ -117,45 +77,6 @@ export class ProfileComponent {
   openModifyPictureMenu() {
     this.openModifyPicture = true;
   }
-
-  @ViewChild(SlidesDirective, {static: false})
-  modifySlider!: SlidesDirective;
-
-  @ViewChild('modifyMenu', {static: false, read: UISlideMenuComponent})
-  modifyMenu!: UISlideMenuComponent;
-
-  allLabels = ["Qualibat", "RGE", "RGE Eco Artisan", "NF", "Effinergie", "Handibat"]
-    .map((name, id) => ({id, name, checked: false}));
-  
-  allJobs = [...Job.instances.values()].map(job => ({id: job.id, name: job.name, checked: this.userData.jobs.includes(job)}))
-
-  updateJobs(jobOptions: Option[]) {
-    const jobsControl = this.modifyProfileForm.controls['Userprofile.jobs'] as FormArray,
-      oldJobs = jobsControl.value as {job: Job, number: number}[],
-      newJobs = jobOptions.map(option => Job.getById(option.id)!);
-
-    const
-      newEntries = newJobs.map(newJob => [newJob, 1] as [Job, number]),
-      oldEntries = oldJobs
-        .filter(oldJob => newJobs.includes(oldJob.job))
-        .map(oldJob => [oldJob.job, oldJob.number] as [Job, number]);
-
-
-    const countMap = new Map<Job, number>([
-      ...newEntries,
-      ...oldEntries
-    ]);
-
-    jobsControl.clear();
-    [...countMap.entries()].forEach(([job, number]) => {
-      jobsControl.push(new FormGroup({
-        job: new FormControl(job),
-        number: new FormControl(number)
-      }))
-    });
-  };
-
-  labels: Option[] = [];
   
   private fixScrollTop() {
     this.modifyMenu.resetScroll();
@@ -164,23 +85,19 @@ export class ProfileComponent {
   @HostListener('swipeleft')
   onSwipeLeft() { 
     this.fixScrollTop();
-    if ( this.openModifyMenu )
-      this.modifySlider.left();
   }
   
   @HostListener('swiperight')
   onSwipeRight() {
     this.fixScrollTop();
-    if ( this.openModifyMenu )
-      this.modifySlider.right();
   }
-  logout(){
+
+  logout() {
     this.store.dispatch(new Logout()).subscribe(console.log)
   }
   
-  modifyProfile(){
-    console.log(getDirtyValues(this.modifyProfileForm));
-    this.store.dispatch(new UserActions.ModifyUserProfile(this.modifyProfileForm));
+  modifyProfile(form: any /*FormGroup*/) {
+    this.store.dispatch(new UserActions.ModifyUserProfile(form));
   }
 
   changeProfileType(type: boolean) {
@@ -194,7 +111,7 @@ export class ProfileComponent {
       source: CameraSource.Camera
     });
     let imageName = '';
-    let user = this.user$.subscribe(user=> {
+    let user = this.user$.subscribe(user => {
       imageName = user.profile?.firstName + '-' + user.profile?.lastName + '-' + user.profile?.id;
     })
     this.store.dispatch(new UserActions.ChangeProfilePicture(photo,imageName));
