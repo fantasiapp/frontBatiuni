@@ -8,13 +8,12 @@
 
   <div class="hosted-page flex column center-cross space-children-margin page-content">
     <profile-image [src]="profileImage$ | async"></profile-image>
-    <switch off="Profile ST" on="Profil PME" style="text-align: center;" [value]="user!.type"
-      (valueChange)="changeProfileType($event)"></switch>
+    <switch off="Profile ST" on="Profil PME"  style="text-align: center;" [value]="user.profile!.role.id == 2" (valueChange)="changeProfileType($event)" [disabled]="user.profile!.role.id !== 3"></switch>
     <section class="quick-intro flex column center-cross">
       <span class="text-emphasis">{{ (user.profile!.firstName + " " + user.profile!.lastName) | titlecase }}</span>
       <span>{{ user.profile!.user }}</span>
-      <span>{{ user.profile!.cellPhone || '00 00 00 00 00' }}</span>
-      <stars (click)="openRatings = true" [value]="user.profile!.company.stars || 0"></stars>
+      <span>{{ user.profile!.cellPhone }}</span>
+      <stars (click)="openRatings = true" value="3.9"></stars>
     </section>
 
     <section class="job-description full-width flex column space-children-margin">
@@ -68,142 +67,14 @@
         <profile-image [src]="profileImage$ | async"></profile-image>
         <img src="assets/icons/modify.svg" class="modify-icon image" (click)="openModifyPictureMenu()" />
       </section>
-
-      <switch off="Profile ST" on="Profil PME" style="text-align: center;" off="Profil ST" on="Profil PME"></switch>
-      <stars [value]="user.profile!.company.stars || 0"></stars>
-
-
+  
+      <switch off="Profile ST" on="Profil PME"  style="text-align: center;" off="Profil ST" on="Profil PME" [value]="user.profile!.role.id == 2" disabled></switch>
+      <stars value="3.9"></stars>
+  
+      
       <div class="full-width grow flex column position-relative">
         <modify-password-form *ngIf="modifyPassword" class="grow"></modify-password-form>
-
-        <div *ngIf="!modifyPassword" [slides]="[modifyPage1, modifyPage2, modifyPage3]" type="template"
-          [animate]="true"></div>
-        <ng-template #modifyPage1>
-          <section class="full-width section">
-            <form class="form-control" [formGroup]="modifyProfileForm"
-              [style.display]="modifyPassword ? 'none' : 'initial'">
-              <h3 class="form-title font-Roboto">
-                Infos personelles:
-              </h3>
-              <div class="form-input">
-                <label>Nom du contact</label>
-                <input class="form-element" type="text" formControlName="Userprofile.lastName" />
-              </div>
-              <div class="form-input">
-                <label>Prénom du contact</label>
-                <input class="form-element" type="text" formControlName="Userprofile.firstName" />
-              </div>
-              <div class="form-input">
-                <label>Adresse e-mail contact</label>
-                <input class="form-element" type="email" formControlName="Userprofile.userName" />
-              </div>
-              <div class="form-input">
-                <label>Téléphone de l'entreprise</label>
-                <input class="form-element" type="tel" formControlName="Company.companyPhone" />
-              </div>
-              <div class="form-input">
-                <label>Téléphone portable</label>
-                <input class="form-element" type="tel" formControlName="Userprofile.cellPhone" />
-              </div>
-            </form>
-          </section>
-        </ng-template>
-
-        <ng-template #modifyPage2>
-          <section class="full-width section">
-            <form class="full-width form-control" [formGroup]="modifyProfileForm">
-              <h3 class="form-title font-Roboto">
-                Infos entreprise:
-              </h3>
-              <div class="form-input">
-                <label>Nom de l'entreprise</label>
-                <input class="form-element" type="text" formControlName="Company.name" />
-              </div>
-              <div class="form-input">
-                <label>N SIRET</label>
-                <input class="form-element" type="text" formControlName="Company.siret" />
-              </div>
-              <div class="form-input metiers">
-                <label>Métiers</label>
-                <!-- Map des métier avec nombre de l'employe -->
-                <!-- 
-            <span class="position-relative" *ngFor="let  ">
-
-                  <input placeholder="Chef de chantier" class="form-element" type="text" disabled/>
-                              <div class="position-absolute number-container">
-                                <number [value]="0"></number>
-                              </div>
-                            </span>
-                 -->
-                <span class="position-relative">
-
-                  <input placeholder="Chef de chantier" class="form-element" type="text" disabled />
-                  <div class="position-absolute number-container">
-                    <number [value]="0"></number>
-                  </div>
-                </span>
-
-                <span class="position-relative">
-                  <input placeholder="Maître d'oeuvre" class="form-element" type="text" disabled />
-                  <div class="position-absolute number-container">
-                    <number [value]="0"></number>
-                  </div>
-                </span>
-              </div>
-
-              <div class="form-input center-text add-field">
-                <img src="assets/icons/add.svg" />
-                <span>Ajouter un métier</span>
-              </div>
-
-              <div class="form-input">
-                <label>Site internet</label>
-                <input class="form-element" type="text" formControlName="Company.webSite" />
-              </div>
-
-              <div class="form-input">
-                <label>Chiffres d'affaires</label>
-                <input class="form-element" type="text" formControlName="Company.capital" />
-              </div>
-
-              <fileinput [showtitle]="false" filename="Kbis" imgsrc="assets/files/KBIS.svg"></fileinput>
-              <fileinput [showtitle]="false" filename="Attestation travail dissimulé"
-                imgsrc="assets/files/Trav. Dis..svg"></fileinput>
-              <fileinput [showtitle]="false" filename="Attestation RC + DC" imgsrc="assets/files/RC + DC.svg">
-              </fileinput>
-              <fileinput [showtitle]="false" filename="URSSAF" imgsrc="assets/files/urssaf.svg"></fileinput>
-              <fileinput [showtitle]="false" filename="Impôts" imgsrc="assets/files/Impot.svg"></fileinput>
-              <fileinput [showtitle]="false" filename="Congés payés" imgsrc="assets/files/Cong.Payés.svg"></fileinput>
-            </form>
-          </section>
-        </ng-template>
-
-        <ng-template #modifyPage3>
-          <section class="full-width section">
-            <form class="full-width form-control">
-              <h3 class="form-title font-Roboto">
-                Certifications & labels:
-              </h3>
-              <div class="form-input">
-                <label>Vos labels</label>
-                <options [showChosenItems]="false" [options]="allLabels" (valueChange)="labels = $event"></options>
-              </div>
-              <fileinput *ngFor="let label of labels" [filename]="label.name"></fileinput>
-            </form>
-          </section>
-        </ng-template>
-
-        <div style="margin-top: auto;" *ngIf="!modifyPassword">
-          <div class="form-step">
-            <div (click)="modifySlider.index = 0" [class.active]="modifySlider ? modifySlider.index == 0 : true"></div>
-            <div (click)="modifySlider.index = 1" [class.active]="modifySlider && modifySlider.index == 1"></div>
-            <div (click)="modifySlider.index = 2" [class.active]="modifySlider && modifySlider.index == 2"></div>
-          </div>
-          <button class="button gradient full-width" (click)="modifyProfile()"
-            [disabled]="(!modifyProfileForm.touched || modifyProfileForm.invalid) || null">
-            Enregistrer
-          </button>
-        </div>
+        <modify-profile-form [user]="user.profile!" *ngIf="!modifyPassword" class="grow" (submit)="modifyProfile($event)"></modify-profile-form>
       </div>
 
       <swipeup [(open)]="openModifyPicture">

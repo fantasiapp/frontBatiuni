@@ -231,6 +231,21 @@ a {
   text-overflow: ellipsis;
 }
 
+.modify-icon {
+  width: $icon-size + 2 * $icon-padding;
+  height: $icon-size + 2 * $icon-padding;
+  
+  &.image {
+    position: absolute;
+    bottom: $icon-size; left: $profile-image-size - $highlight-margin - $icon-size;
+  }
+  
+  &.text {
+    position: relative;
+    vertical-align: middle;
+    margin-left: 20px;
+  }
+}
 //---------------------------------------------------
 //Inputs
 input {

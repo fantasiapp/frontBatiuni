@@ -36,27 +36,7 @@ header {
   width: $document-image-size-x;
 }
 
-.modify-icon {
-  width: $icon-size + 2 * $icon-padding;
-  height: $icon-size + 2 * $icon-padding;
-  
-  &.image {
-    position: absolute;
-    bottom: $icon-size; left: $profile-image-size - $highlight-margin - $icon-size;
-  }
-  
-  &.text {
-    position: relative;
-    vertical-align: middle;
-    margin-left: 20px;
-  }
-}
-
-.form-title, .form-input label {
-  font-size: 1em;
-}
-
-.company-rate{
+.company-rate {
   font-family:  "Roboto";
   box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
   padding : 10px;
@@ -83,11 +63,3 @@ header {
     white-space: normal;
   }
 }
-
-.form-input .number-container {
-  display: inline;
-  right: $item-padding;
-}
-
-.metiers > * { margin-bottom: $item-padding; }
-.section { background-color: white; }

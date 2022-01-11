@@ -1,50 +1,11 @@
-<!-- <div class="flex ">
-    <ol class="c-timeline">
-        <li class="c-timeline__item">
-            <div class="c-timeline__content">
-                <h3 class="c-timeline__title">Paris</h3>
-            </div>
-        </li>
-        <li class="c-timeline__item">
-            <div class="c-timeline__content">
-                <h3 class="c-timeline__title">Paris</h3>
-            </div>
-        </li>
-        <li class="c-timeline__item">
-            <div class="c-timeline__content">
-                <h3 class="c-timeline__title">Paris</h3>
-            </div>
-        </li>
-        <li class="c-timeline__item">
-            <div class="c-timeline__content">
-                <h3 class="c-timeline__title">Paris</h3>
-            </div>
-        </li>
-        Other items -->
-    <!-- </ol>
-
-
-</div> -->
-
-<div class="flex center">
+<div class="flex">
     <ol>
-        <li class="flex center timeline" >
-            <div class="circle" (click)="changeBack($event,1)">
+        <li *ngFor="let tache of tache; " class="flex center timeline" (click)="changeBack(tache.id)" [class.active]="currentTache == tache.id">
+            <div class="circle" >
 
             </div>
-            <span class="data"> Some Data</span>
+            <span class="data"> {{tache.name}}</span>
         </li>
-        <li class="flex center timeline">
-            <div class="circle" (click)="changeBack($event,2)">
-
-            </div>
-            <span class="data"> Some Data</span>
-        </li>
-        <li class="flex center timeline">
-            <div class="circle" (click)="changeBack($event,3)">
-
-            </div>
-            <span class="data"> Some Data</span>
-        </li>
+        
     </ol>
 </div>

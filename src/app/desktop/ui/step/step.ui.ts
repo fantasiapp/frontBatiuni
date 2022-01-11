@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, Input, Output } from "@angular/core";
 
 
 
@@ -10,9 +10,18 @@ import { Component } from "@angular/core";
 export class StepUI {
 
     constructor() {}
-    id : any;
-    changeBack(e: Event,id:number)  {
-        let circle = (e.target as any)
-        circle.style.backgroundColor = 'black'
+    @Input()
+    tache = [
+        {id:1, name:"TAHCE 1 "},
+        {id:2, name:"TAHCE 2 "},
+        {id:3, name:"TAHCE 3 "},
+        {id:4, name:"TAHCE 4 "}
+    ]
+    // @Output()
+    currentTache = 1 ;
+   
+    changeBack(id:number)  {
+        this.currentTache = id
     }
+   
 }
