@@ -6,10 +6,11 @@ import { HeaderDesktop } from "../components/header/header.desktop";
 import { HomePageComponent } from "../components/home_page/home.page";
 import { LandingPageComponent } from "../components/landing_page/landing.page";
 import { RegisterPageComponent } from "../components/register/register.page";
+import { StepUI } from "../ui/step/step.ui";
 
 const routes: Routes =[{
     path: 'landing',
-    component: LandingPageComponent
+    component: StepUI
   }, {
     path: 'register',
     component: RegisterPageComponent

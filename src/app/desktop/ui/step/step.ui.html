@@ -1,0 +1,11 @@
+<div class="flex">
+    <ol>
+        <li *ngFor="let tache of tache; " class="flex center timeline" (click)="changeBack(tache.id)" [class.active]="currentTache == tache.id">
+            <div class="circle" >
+
+            </div>
+            <span class="data"> {{tache.name}}</span>
+        </li>
+        
+    </ol>
+</div>
