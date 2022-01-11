@@ -47,6 +47,7 @@
   position: fixed;
   top: 220px;
   bottom: 0;
+  overflow-y: auto;
 
   width: 400px;
   @extend %padding;

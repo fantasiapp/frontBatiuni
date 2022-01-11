@@ -11,7 +11,7 @@
     <div class="header">
       <img src="assets/Filtrer par.svg"/> Filtrer par
     </div>
-    <pme-filter-form></pme-filter-form>
+    <pme-filter-form [activeView]="activeView"></pme-filter-form>
   </section>
   
   <section class="main web-content font-Poppins">
@@ -21,7 +21,26 @@
     </div>
   
     <div class="results space-children-margin">
-      <offer *ngFor="let annonce of annonces" [routerLink]="['', 'suivi']"></offer>
+      <ng-container [ngSwitch]="activeView">
+        <ng-container *ngSwitchCase="0">
+          <offer
+            *ngFor="let mission of annonces"
+            src="assets/brouillon.svg"
+            [routerLink]="['', 'brouillon']"></offer>
+        </ng-container>
+        <ng-container *ngSwitchCase="1">
+          <offer
+            *ngFor="let mission of annonces"
+            src="assets/enligne.svg"
+            [routerLink]="['', 'annonce-en-ligne']"></offer>
+        </ng-container>
+        <ng-container *ngSwitchCase="2">
+          <offer
+            *ngFor="let mission of annonces"
+            src="assets/validée.svg"
+            [routerLink]="['', 'annonce-validee']"></offer>
+        </ng-container>
+      </ng-container>
     </div>
   </section>
   
