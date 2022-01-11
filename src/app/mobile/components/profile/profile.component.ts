@@ -34,7 +34,8 @@ export class ProfileComponent {
 
   @Select(UserState)
   user$!: BehaviorSubject<User>;
-  userData = this.store.selectSnapshot(UserState).profile
+
+  userData = this.store.selectSnapshot(UserState).profile;
   
   // Modify User profile
   modifyProfileForm = new FormGroup({
@@ -43,7 +44,7 @@ export class ProfileComponent {
     ]),
     'Userprofile.firstName': new FormControl(this.userData.firstName, [
     ]),
-    'Userprofile.user': new FormControl(this.userData.user, [
+    'Userprofile.userName': new FormControl(this.userData.user, [
       Email()
     ]),
     'Userprofile.cellPhone': new FormControl(this.userData.cellPhone, [
