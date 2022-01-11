@@ -10,6 +10,7 @@ import { Logout } from "../auth/auth.actions";
 import { throwError } from "rxjs";
 import { Mapper } from "../data/mapper.model";
 import { UserProfile } from "../data/data.model";
+import { AppState } from "src/app/app.state";
 
 @State<User>({
   name: 'user',
@@ -23,20 +24,36 @@ export class UserState {
   @Selector()
   static profile(state: User) { return state.profile; }
 
-  constructor(private store: Store, private http: HttpClient) { 
+  constructor(private store: Store, private http: HttpClient) {
   }
 
   @Action(ChangeProfileType)
   changeProfileType(ctx: StateContext<User>, action: ChangeProfileType) {
-    return ctx.patchState({type: action.type});
+    return ctx.patchState({ type: action.type });
   }
 
   @Action(ChangeProfilePicture)
   changeProfilePicture(ctx: StateContext<User>, action: ChangeProfilePicture) {
-    return ctx.patchState({imageUrl: action.src});
+    let token = this.store.selectSnapshot(AuthState).token;
+    let userData = this.store.selectSnapshot(AppState);
+    let data = {
+      "action": "changeUserImage",
+      "name": action.name,
+      "imageExtension": action.src.format, // PNG OR JPEG
+      "imageBase64": "data:image/png;base64,"+action.src.base64String
+}
+    
+    let req = this.http.post(environment.backUrl + '/data/', data,
+      {
+        headers: {
+          "Authorization": "Token " + token,
+          'Content-Type': 'application/json'
+        }
+      })  
+    return ctx.patchState({ imageUrl: action.src });
   }
 
-  @Action(ChangePassword) 
+  @Action(ChangePassword)
   modifyPassword(ctx: StateContext<User>, action: ChangePassword) {
     console.log(this.store.selectSnapshot(AuthState));
     let token = this.store.selectSnapshot(AuthState).token;
@@ -54,7 +71,7 @@ export class UserState {
 
   @Action(GetUserData)
   getUserData(ctx: StateContext<User>, action: GetUserData) {
-    let {token} = action
+    let { token } = action
     let req = this.http.get(environment.backUrl + '/data/?action=getUserData', {
       headers: {
         "Authorization": `Token ${token}`,
@@ -67,20 +84,20 @@ export class UserState {
         this.store.dispatch(new Logout());
         return throwError(err);
       }),
-      tap((response: any)=> {
+      tap((response: any) => {
         Mapper.mapTable(response, 'Userprofile');
         const currentUser = [...UserProfile.instances.values()][0];
-        ctx.patchState({profile: currentUser})
+        ctx.patchState({ profile: currentUser })
       })
     )
   }
 
   @Action(Logout)
   logout(ctx: StateContext<User>) {
-    ctx.patchState({type: false, imageUrl: null, profile: null});
+    ctx.patchState({ type: false, imageUrl: null, profile: null });
   }
 
-  @Action(ModifyUserProfile) 
+  @Action(ModifyUserProfile)
   modifyUser(ctx: AuthState, action: ModifyUserProfile) {
     let token = this.store.selectSnapshot(AuthState).token;
 
@@ -88,14 +105,14 @@ export class UserState {
       json = Mapper.mapModifyForm(profile, action.changes);
 
     console.log('after map', json);
-    
-    let req = this.http.post(environment.backUrl + '/data/?action=modifyUser', json, {
-      headers : {
+
+    let req = this.http.post(environment.backUrl + '/data/', json, {
+      headers: {
         "Authorization": `Token ${token}`,
         'Content-Type': 'application/json'
       }
     });
-    
+
     return req.pipe(
       tap((response: any) => console.log(response))
     );

@@ -40,17 +40,13 @@ export class ProfileComponent {
   modifyProfileForm = new FormGroup({
     // User
     'Userprofile.lastName': new FormControl(this.userData.lastName, [
-      Validators.required
     ]),
     'Userprofile.firstName': new FormControl(this.userData.firstName, [
-      Validators.required
     ]),
     'Userprofile.user': new FormControl(this.userData.user, [
-      Validators.required,
       Email()
     ]),
     'Userprofile.cellPhone': new FormControl(this.userData.cellPhone, [
-      Validators.required
     ]),
     // Company 
     'Company.name': new FormControl(this.userData.company.name, [
@@ -87,7 +83,6 @@ export class ProfileComponent {
   }
 
   async ngOnInit() {
-    console.log(this.store.selectSnapshot(AppState))
     let permissions  = await Camera.checkPermissions();
     if ( permissions.camera != 'granted' || permissions.photos != 'granted' )
       try {
@@ -154,18 +149,26 @@ export class ProfileComponent {
       resultType: CameraResultType.Base64,
       source: CameraSource.Camera
     });
-    
-    this.store.dispatch(new UserActions.ChangeProfilePicture('data:image/png;base64,' + photo.base64String!));
+    let imageName = '';
+    let user = this.user$.subscribe(user=> {
+      imageName = user.profile?.firstName + '-' + user.profile?.lastName + '-' + user.profile?.id;
+    })
+    this.store.dispatch(new UserActions.ChangeProfilePicture(photo,imageName));
   }
 
   async selectPhoto() {
     const photo = await Camera.getPhoto({
       allowEditing: false,
       resultType: CameraResultType.Base64,
-      source: CameraSource.Photos
+      source: CameraSource.Photos,
     });
-
-    this.store.dispatch(new UserActions.ChangeProfilePicture('data:image/png;base64,' + photo.base64String!));
+    let format = photo.format
+    let imageName = '';
+    let user = this.user$.subscribe(user=> {
+      imageName = user.profile?.firstName + '-' + user.profile?.lastName + '-' + user.profile?.id;
+    })
+    this.store.dispatch(new UserActions.ChangeProfilePicture(photo,imageName));
+    // this.store.dispatch(new UserActions.ChangeProfilePicture('data:image/png;base64,' + photo.base64String!,imageName));
   }
 
   onSubmit() {}
