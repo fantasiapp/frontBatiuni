@@ -49,8 +49,10 @@ export class UserState {
       }
     });
 
-    req.pipe(
-      tap(() => ctx.patchState({ imageUrl: action.src }))
+    return req.pipe(
+      tap(() => {
+        ctx.patchState({ imageUrl: 'data:image/' + action.src.format + ';base64,' + action.src.base64String });
+      })
     );
   }
 
@@ -80,16 +82,18 @@ export class UserState {
       }
     });
 
-    console.log('sending get user data');
-
     return req.pipe(
       catchError((err: HttpErrorResponse) => {
         this.store.dispatch(new Logout());
         return throwError(err);
       }),
       tap((response: any) => {
-        console.log('mmaping request', response);
-        Mapper.mapRequest(response);
+        try {
+          Mapper.mapRequest(response);
+        } catch ( err ) {
+          console.log('fatal error', err);
+        };
+
         const currentUser = [...UserProfile.instances.values()][0];
         ctx.patchState({ profile: currentUser })
       })
@@ -108,6 +112,7 @@ export class UserState {
     const profile = this.store.selectSnapshot(UserState.profile)!,
       json = Mapper.mapModifyForm(profile, action.changes);
 
+    console.log(action.changes, json);
     let req = this.http.post(environment.backUrl + '/data/', json, {
       headers: {
         "Authorization": `Token ${token}`,

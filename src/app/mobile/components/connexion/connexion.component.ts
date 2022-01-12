@@ -49,11 +49,15 @@ export class ConnexionComponent extends Destroy$ {
     let { email, password } = this.loginForm.value;
     this.store.dispatch(new Login(email, password))
     .pipe(take(1)).subscribe(
-      success => {
-        this.store.dispatch(new GetUserData(success.app.auth.token)).subscribe()
-        this.router.navigate(['', 'home']);
+      async (success) => {
+        const result = await this.router.navigate(['', 'home']);
+        if ( !result ) {
+          setErrors(this.loginForm, {all: 'Erreur inattendue. (500 ?)'});
+          this.cd.markForCheck();
+        }
       },
       errors => {
+        console.log('got errors', errors);
         setErrors(this.loginForm, errors);
         this.cd.markForCheck();
       }

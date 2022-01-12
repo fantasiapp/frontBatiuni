@@ -1,6 +1,6 @@
 import { getByValue } from 'src/common/functions';
 import { UserState } from '../user/user.state';
-import { Role, Job, Label, Company, UserProfile, JobForCompany } from './data.model';
+import { Role, Job, Label, Company, UserProfile, JobForCompany, LabelForCompany } from './data.model';
 
 type Dict<T> = {[key: string]: T};
 type ValueConstructor = {
@@ -25,7 +25,8 @@ export class Mapper {
     'Role': Role,
     'Label': Label,
     'Job': Job,
-    'JobForCompany': JobForCompany
+    'JobForCompany': JobForCompany,
+    'LabelForCompany': LabelForCompany
   };
 
   private static mapped: Dict<boolean> = Object.keys(Mapper.mapping).reduce(
@@ -36,6 +37,7 @@ export class Mapper {
     'job': 'Job',
     'company': 'Company',
     'role': 'Role',
+    'label': 'Label'
   };
 
   static readonly definedValues = [
@@ -43,7 +45,7 @@ export class Mapper {
   ];
 
   static readonly definedTables = [
-    'Company', 'Userprofile', 'JobForCompany'
+    'Company', 'Userprofile', 'JobForCompany', 'LabelForCompany'
   ];
 
   static getField(name: string): {
@@ -87,7 +89,6 @@ export class Mapper {
   static getTableClass(name: string): TableConstructor {
     if ( this.definedTables.includes(name) )
       return Mapper.mapping[name] as TableConstructor;
-    console.trace();
     throw `Unknown table ${name}.`;
   }
 
@@ -186,8 +187,8 @@ export class Mapper {
 
   static mapModifyForm(user: UserProfile, changes: any) {
     const keys = Object.keys(changes),
-      profileKeys = keys.filter(key => key.indexOf('Userprofile') >= 0),
-      companyKeys = keys.filter(key => key.indexOf('Company') >= 0);
+      profileKeys = keys.filter(key => key.startsWith('Userprofile')),
+      companyKeys = keys.filter(key => key.startsWith('Company'));
 
     const output: any = {action: 'modifyUser'};
 
@@ -197,12 +198,13 @@ export class Mapper {
         output['Userprofile'][key.split('.')[1]] = changes[key];
     }
 
-    
     if ( companyKeys.length ) {
       output['Company'] = {id: user.company.id};
       for ( let key of companyKeys )
         output['Company'][key.split('.')[1]] = changes[key];
     }
+
+    if ( changes['JobForCompany'] ) output['JobForCompany'] = changes['JobForCompany'];
   
     return output;
   };

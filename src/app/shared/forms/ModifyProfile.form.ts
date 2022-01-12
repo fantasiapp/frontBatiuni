@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, HostListener, Input, ViewChild, EventEmitter, Output } from "@angular/core";
 import { FormArray, FormControl, FormGroup } from "@angular/forms";
-import { Job, UserProfile } from "src/models/data/data.model";
+import { Job, JobForCompany, UserProfile } from "src/models/data/data.model";
 import { Option } from "src/models/option";
 import { Email } from "src/validators/persist";
 import { SlidesDirective } from "../directives/slides.directive";
@@ -169,7 +169,31 @@ export class ModifyProfileForm {
   @Output()
   submit = new EventEmitter<FormGroup>();
 
-  modifyProfileForm!: FormGroup;
+  modifyProfileForm: FormGroup = new FormGroup({
+    // User
+    'Userprofile.lastName': new FormControl('', [
+    ]),
+    'Userprofile.firstName': new FormControl('', [
+    ]),
+    'Userprofile.userName': new FormControl('', [
+      Email()
+    ]),
+    'Userprofile.cellPhone': new FormControl('', [
+    ]),
+    'Userprofile.jobs': new FormArray([
+
+    ]),
+    //Company
+    'Company.name': new FormControl('', [
+    ]),
+    'Company.siret': new FormControl('', [
+    ]),
+    'Company.capital': new FormControl('', [
+    ]),
+    'Company.webSite': new FormControl('', [
+    ]),
+    'Company.companyPhone': new FormControl('', [])
+  });
 
   get profileJobsControls() {
     const jobsControl = this.modifyProfileForm.controls['Userprofile.jobs'] as FormArray;
@@ -191,36 +215,24 @@ export class ModifyProfileForm {
       .map((name, id) => ({id, name, checked: false}));
     
     this.allJobs = 
-      [...Job.instances.values()].map(job => ({id: job.id, name: job.name, checked: this.user.jobs.includes(job)}));
+  [...Job.instances.values()].map(job => ({id: job.id, name: job.name, checked: false/*this.user.jobs.includes(job)*/}));
 
-    this.modifyProfileForm = new FormGroup({
-      // User
-      'Userprofile.lastName': new FormControl(this.user.lastName, [
-      ]),
-      'Userprofile.firstName': new FormControl(this.user.firstName, [
-      ]),
-      'Userprofile.userName': new FormControl(this.user.user, [
-        Email()
-      ]),
-      'Userprofile.cellPhone': new FormControl(this.user.cellPhone, [
-      ]),
-      'Userprofile.jobs': new FormArray([
-        ...this.user.jobs.map((job: Job) => new FormGroup({
-          job: new FormControl(job),
-          number: new FormControl(1)
-        }))
-      ]),
-      // Company 
-      'Company.name': new FormControl(this.user.company.name, [
-      ]),
-      'Company.siret': new FormControl(this.user.company.siret, [
-      ]),
-      'Company.capital': new FormControl(this.user.company.capital, [
-      ]),
-      'Company.webSite': new FormControl(this.user.company.webSite, [
-      ]),
-      'Company.companyPhone': new FormControl(this.user.company.companyPhone, [])
-    });
+    this.modifyProfileForm.controls['Userprofile.lastName']?.setValue(this.user.lastName);
+    this.modifyProfileForm.controls['Userprofile.firstName']?.setValue(this.user.firstName);
+    this.modifyProfileForm.controls['Userprofile.userName']?.setValue(this.user.user);
+    this.modifyProfileForm.controls['Userprofile.cellPhone']?.setValue(this.user.cellPhone);
+    this.modifyProfileForm.controls['Company.name']?.setValue(this.user.company.name);
+    this.modifyProfileForm.controls['Company.siret']?.setValue(this.user.company.siret);
+    this.modifyProfileForm.controls['Company.capital']?.setValue(this.user.company.capital);
+    this.modifyProfileForm.controls['Company.webSite']?.setValue(this.user.company.webSite);
+    this.modifyProfileForm.controls['Company.companyPhone']?.setValue(this.user.company.companyPhone);
+
+    const jobControl = this.modifyProfileForm.controls['Userprofile.jobs'] as FormArray;
+    for ( let job of this.user.company.jobs )
+      jobControl.push(new FormGroup({
+        job: new FormControl(job.job),
+        number: new FormControl(job.number)
+      }));
   }
 
   updateJobs(jobOptions: Option[]) {

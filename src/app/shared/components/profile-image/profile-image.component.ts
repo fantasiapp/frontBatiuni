@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
+import { ChangeDetectionStrategy, Component, Input, SimpleChanges } from "@angular/core";
 import { User } from "src/models/user/user.model";
 import { ImageGenerator } from "../../services/image-generator.service";
 @Component({
@@ -22,6 +22,11 @@ export class UIProfileImageComponent {
       const fullname = this.user.profile!.firstName[0].toUpperCase() + this.user.profile!.lastName[0].toUpperCase();
       this.src = this.user.imageUrl || this.imageGenerator.generate(fullname);
     }
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if ( changes['user'] )
+      this.src = this.user!.imageUrl || this.src;
   }
 
   static getAvailabilityColor(availability: number) {

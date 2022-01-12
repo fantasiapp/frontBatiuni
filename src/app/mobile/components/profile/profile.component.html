@@ -20,7 +20,7 @@
       </span>
       <span>
         <span class="text-light-emphasis font-Poppins">Métier : </span>
-        <span *ngFor="let job of user.profile!.jobs" class="value">1 {{ job.name }}, </span>
+        <span *ngFor="let job of user.profile!.company.jobs" class="value">{{ job.number }} {{ job.job.name }}, </span>
       </span>
       <span>
         <span class="text-light-emphasis font-Poppins">Chiffres d'affaires : </span> <span

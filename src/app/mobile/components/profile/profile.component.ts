@@ -99,10 +99,7 @@ export class ProfileComponent {
       source: CameraSource.Camera
     });
     let imageName = '';
-    let user = this.user$.subscribe(user => {
-      imageName = user.profile?.firstName + '-' + user.profile?.lastName + '-' + user.profile?.id;
-    })
-    this.store.dispatch(new UserActions.ChangeProfilePicture(photo,imageName));
+    this.store.dispatch(new UserActions.ChangeProfilePicture(photo, imageName));
   }
 
   async selectPhoto() {
@@ -111,13 +108,8 @@ export class ProfileComponent {
       resultType: CameraResultType.Base64,
       source: CameraSource.Photos,
     });
-    let format = photo.format
     let imageName = '';
-    let user = this.user$.subscribe(user=> {
-      imageName = user.profile?.firstName + '-' + user.profile?.lastName + '-' + user.profile?.id;
-    })
     this.store.dispatch(new UserActions.ChangeProfilePicture(photo, imageName));
-    // this.store.dispatch(new UserActions.ChangeProfilePicture('data:image/png;base64,' + photo.base64String!,imageName));
   }
 
   onSubmit() {}

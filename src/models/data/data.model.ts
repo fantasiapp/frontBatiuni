@@ -42,6 +42,13 @@ export class Company {
   get webSite() { return this.values[Company.fields.get('webSite')!]; }
   get stars() { return this.values[Company.fields.get('stars')!]; }
   get companyPhone() { return this.values[Company.fields.get('companyPhone')!]; }
+
+  get jobs(): {job: Job, number: number}[] {
+    //stop using ids
+    return [...JobForCompany.instances.values()].filter(
+      (t: JobForCompany) => t.company.id == this.id
+    )
+  };
 };
 
 export class UserProfile {
@@ -61,7 +68,6 @@ export class UserProfile {
   get proposer() { return this.values[UserProfile.fields.get('proposer')!]; }
   get role(): Role { return this.values[UserProfile.fields.get('role')!]; }
   get cellPhone() { return this.values[UserProfile.fields.get('cellPhone')!]; }
-  get jobs() { return this.values[UserProfile.fields.get('jobs')!]; }
 };
 
 export class JobForCompany {
@@ -76,4 +82,18 @@ export class JobForCompany {
   get job(): Job { return this.values[JobForCompany.fields.get('job')!]; }
   get company(): Company { return this.values[JobForCompany.fields.get('company')!]; }
   get number(): number { return this.values[JobForCompany.fields.get('number')!]; }
+};
+
+export class LabelForCompany {
+  constructor(public id: number, private values: any[]) {
+
+  }
+
+  static fields = new Map<string, number>();
+  static instances = new Map<number, Label>();
+  static getById(id: number) { return this.instances.get(id); }
+
+  get label() { return this.values[LabelForCompany.fields.get('label')!]; }
+  get date() { return this.values[LabelForCompany.fields.get('date')!]; }
+  get company() { return this.values[LabelForCompany.fields.get('company')!]; }
 }
