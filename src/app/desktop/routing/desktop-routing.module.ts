@@ -12,7 +12,7 @@ import { RegisterPageComponent } from "../components/register/register.page";
 
 const routes: Routes =[{
     path: 'landing',
-    component: LandingPageComponent
+    component: StepUI
   }, {
     path: 'register',
     component: RegisterPageComponent
