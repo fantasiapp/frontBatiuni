@@ -14,9 +14,15 @@ type TableConstructor = {
   getById(id: number): any;
 }
 
+const definedTables = ['Company', 'Userprofile', 'JobForCompany', 'LabelForCompany'] as const;
+const definedValues = ['Role', 'Label', 'Job'] as const;
+export type tableName = typeof definedTables[number];
+export type valueName = typeof definedValues[number];
+type definedType = tableName | valueName;
+
+
 export type Value = Role | Job | Label;
 export type Table = UserProfile | Company;
-
 
 export class Mapper {
   private static mapping: {[key: string]: ValueConstructor | TableConstructor } = {
@@ -33,23 +39,18 @@ export class Mapper {
     (mapped, key) => {mapped[key] = false; return mapped}, ({} as Dict<boolean>)
   );
 
-  private static fieldMap: {[key: string]: string} = {
+  private static fieldMap: {[key: string]: definedType} = {
     'job': 'Job',
     'company': 'Company',
     'role': 'Role',
     'label': 'Label'
   };
 
-  static readonly definedValues = [
-    'Role', 'Label', 'Job'
-  ];
-
-  static readonly definedTables = [
-    'Company', 'Userprofile', 'JobForCompany', 'LabelForCompany'
-  ];
+  static readonly definedValues = definedValues;
+  static readonly definedTables = definedTables;
 
   static getField(name: string): {
-    name: string;
+    name: definedType;
     class: ValueConstructor | TableConstructor;
     multiple: boolean;
   } {
@@ -76,49 +77,49 @@ export class Mapper {
     return !data[name + 'Fields'];
   }
 
-  static getTablesNames(data: any) {
+  static getTablesNames(data: any): tableName[] {
     return Object.keys(data).filter(
       key => key.endsWith('Fields')
-    ).map(key => key.slice(0, -6));
+    ).map(key => key.slice(0, -6)) as tableName[];
   }
   
-  static getValuesNames(data: any) {
+  static getValuesNames(data: any): valueName[] {
     return this.definedValues.filter(valueName => data[valueName + 'Values']);
   }
 
-  static getTableClass(name: string): TableConstructor {
+  static getTableClass(name: tableName): TableConstructor {
     if ( this.definedTables.includes(name) )
       return Mapper.mapping[name] as TableConstructor;
     throw `Unknown table ${name}.`;
   }
 
-  static getValueClass(name: string): ValueConstructor {
+  static getValueClass(name: valueName): ValueConstructor {
     if ( Mapper.definedValues.includes(name) )
       return Mapper.mapping[name] as ValueConstructor;
     throw `Unknown value ${name}.`;
   }
 
-  private static readValue(data: any, name: string): Dict<string> {
+  private static readValue(data: any, name: valueName): Dict<string> {
     if ( this.definedValues.includes(name) )
       return data[name + 'Values'];
     throw `Unknown table ${name}.`;
   }
 
   
-  private static readTable(data: any, name: string): Dict<any[]> {
+  private static readTable(data: any, name: tableName): Dict<any[]> {
     if ( this.definedTables.includes(name) )
       return data[name + 'Values'];
     throw `Unknown value ${name}.`;
   }
 
-  private static mapFields(data: any, name: string) {
+  private static mapFields(data: any, name: tableName) {
     let fields = data[name + 'Fields'],
       clazz = this.getTableClass(name);
 
     fields.forEach((field: string, index: number) => clazz.fields.set(field, index));
   };
 
-  private static mapSimpleTable(data: any, name: string) {
+  private static mapSimpleTable(data: any, name: tableName) {
     let clazz = this.getTableClass(name);
     Object.entries(this.readTable(data, name)).forEach(([id, values]) => new clazz(+id, values));
     this.mapped[name] = true;
@@ -142,18 +143,18 @@ export class Mapper {
     })
   }
 
-  private static mapTableDependencies(data: any, name: string) {
+  private static mapTableDependencies(data: any, name: tableName) {
     let indices = data[name + 'Indices'] as number[],
       table = this.getTableClass(name);
-    
+        
     let dependencies = indices.map(index => {
       let name = getByValue(table.fields, index)!,
         field = this.getField(name);
       
         //map this class before
-      if ( !this.mapped[field.name] ) {
-        if ( this.definedTables.includes(field.name) )
-          this.mapTable(data, field.name);
+      if ( !this.mapped[field.name] ) {;
+        if ( (definedTables as any).includes(field.name) )
+          this.mapTable(data, field.name as tableName);
         else this.staticMap(data);
       };
       return field;
@@ -167,10 +168,14 @@ export class Mapper {
       });
 
       new table(+id, values.slice());
-    })
+    });
+
+    this.mapped[name] = true;
+    (window as any).mapper = Mapper;
   };
 
-  static mapTable(data: any, name: string) {
+  static mapTable(data: any, name: tableName) {
+    if ( this.mapped[name] ) return;
     this.mapFields(data, name);
     if ( this.isSimpleTable(data, name) )
       this.mapSimpleTable(data, name);
@@ -181,31 +186,29 @@ export class Mapper {
   static mapRequest(data: any) {
     this.staticMap(data);
     this.getTablesNames(data).forEach(tableName => this.mapTable(data, tableName));
-    console.log([...UserProfile.instances.values()]);
-    console.log([...JobForCompany.instances.values()]);
   };
 
   static mapModifyForm(user: UserProfile, changes: any) {
-    const keys = Object.keys(changes),
-      profileKeys = keys.filter(key => key.startsWith('Userprofile')),
-      companyKeys = keys.filter(key => key.startsWith('Company'));
-
     const output: any = {action: 'modifyUser'};
 
-    if ( profileKeys.length ) {
-      output['Userprofile'] = {id: user.id};
-      for ( let key of profileKeys )
-        output['Userprofile'][key.split('.')[1]] = changes[key];
+    const keys = Object.keys(changes);
+    tableLoop: for ( const table of definedTables ) {
+      let featureKeys = keys.filter(key => key.startsWith(table));
+      if ( !featureKeys.length ) continue;
+
+      for ( const key of featureKeys ) {
+        const field = key.split('.')[1];
+        if ( !field ) {
+          output[table] = changes[key];
+          continue tableLoop;
+        }
+        output[table][field] = changes[key];
+      }
     }
 
-    if ( companyKeys.length ) {
-      output['Company'] = {id: user.company.id};
-      for ( let key of companyKeys )
-        output['Company'][key.split('.')[1]] = changes[key];
-    }
+    if ( output['Userprofile'] ) output['Userprofile'].id = user.id;
+    if ( output['Company'] ) output['Company'].id = user.company.id;
 
-    if ( changes['JobForCompany'] ) output['JobForCompany'] = changes['JobForCompany'];
-  
     return output;
   };
 };

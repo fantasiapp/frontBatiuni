@@ -46,9 +46,12 @@ export class Company {
   get jobs(): {job: Job, number: number}[] {
     //stop using ids
     return [...JobForCompany.instances.values()].filter(
-      (t: JobForCompany) => t.company.id == this.id
+      (t: JobForCompany) => t.company == this
     )
   };
+
+  //mutabe data
+  update(data: any) { }
 };
 
 export class UserProfile {

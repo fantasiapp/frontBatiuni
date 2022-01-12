@@ -10,7 +10,7 @@ import { StepUI } from "../ui/step/step.ui";
 
 const routes: Routes =[{
     path: 'landing',
-    component: StepUI
+    component: LandingPageComponent
   }, {
     path: 'register',
     component: RegisterPageComponent

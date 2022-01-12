@@ -91,7 +91,7 @@ export class UserState {
         try {
           Mapper.mapRequest(response);
         } catch ( err ) {
-          console.log('fatal error', err);
+          this.store.dispatch(new Logout());
         };
 
         const currentUser = [...UserProfile.instances.values()][0];

@@ -23,7 +23,6 @@ export class Register {
     public jobs: string[]
   ) {}
 
-
   static fromFormGroup(group: FormGroup) {
     let input = group.value;
     return new Register(
