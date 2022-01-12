@@ -20,8 +20,6 @@ export class StepUI {
   @Input()
   tacheIndex = 0;
 
-  @Input()
-  tacheList: StepItem[] = [];
 
   @Output()
   tacheIndexChange = new EventEmitter<number>()
@@ -29,4 +27,14 @@ export class StepUI {
   changeTacheIndex(id:number)  {
     this.tacheIndexChange.emit(this.tacheIndex = id);
   }
+
+  @Input()
+  tacheList = [
+      {name:"Besoins de l’entreprise"},
+      {name:"Infos chantiers"},
+      {name:"Rémunération "},
+      {name:"Document important à télécharger"}
+  ]
+
+
 }
