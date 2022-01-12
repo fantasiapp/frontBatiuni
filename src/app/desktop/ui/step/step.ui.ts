@@ -18,10 +18,10 @@ export class StepUI {
 
     @Input()
     tacheList = [
-        {name:"TAHCE 1 "},
-        {name:"TAHCE 2 "},
-        {name:"TAHCE 3 "},
-        {name:"TAHCE 4 "}
+        {name:"Besoins de l’entreprise"},
+        {name:"Infos chantiers"},
+        {name:"Rémunération "},
+        {name:"Document important à télécharger"}
     ]
     @Output()
     tacheIndexChange = new EventEmitter<number>()

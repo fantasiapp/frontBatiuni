@@ -11,6 +11,7 @@ import { HomePageComponent } from "./components/home_page/home.page";
 import { StepUI } from "./ui/step/step.ui";
 import { TabsComponent } from "./ui/tabs/tabs.component";
 import { ProfilePageComponent } from "./components/profile/profile.page";
+import { AnnoncePage } from "./components/annonce_page/annonce.page";
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { ProfilePageComponent } from "./components/profile/profile.page";
     HomePageComponent,
     StepUI,
     TabsComponent,
-    ProfilePageComponent
+    ProfilePageComponent,
+    AnnoncePage
   ],
   imports: [
     CommonModule,
