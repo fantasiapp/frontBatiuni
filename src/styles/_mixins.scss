@@ -238,6 +238,10 @@ $space-top-mid: 40px;
     }
   }
 
+  section:first-child {
+    min-height: calc(100vh - 220px);
+  }
+
   @include range($mobile, 1500px) {
     section:first-child {
       transform: translateY(-$space-top-mid);
