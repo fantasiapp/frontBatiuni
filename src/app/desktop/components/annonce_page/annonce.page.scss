@@ -1,0 +1,78 @@
+@import 'src/styles/mixins';
+@import 'src/styles/variables';
+@import 'src/styles/responsive';
+
+%padding {
+  padding: 0 40px;
+}
+$square : 164px;
+.page {
+  @extend %three-section-layout;
+  height: 100vh;
+  background-color: #f7f7f7;
+
+  @extend %web-space-top;
+
+  .main.web-content {
+    margin: 0 auto;
+  }
+}
+
+:host {
+  
+}
+
+.web-content {
+  searchbar {
+    display: block;
+    width: 80%;
+    font-size: 1em;
+    margin: 0 auto;
+  }
+
+  width: 700px !important;
+}
+
+.report-search {
+  padding: 30px 0;
+}
+
+//1366+ follow specs
+.filters {
+  background-color: white;
+  overflow-y: auto;
+  width: 400px;
+  @extend %padding;
+
+  .header {
+    img { vertical-align: middle; }
+    @extend %web-space-top;
+    font-size: 1.5em;
+    color: $secondaryBackground;
+    padding-bottom: 20px;
+  }
+}
+.company-logo{
+    position: fixed;
+    top:160px;
+    background-color: grey;
+    flex: 3;
+    width: $square;
+    height: $square;
+}
+
+.company-text {
+    position: relative;
+    left : $square + 16px;
+    flex: 9;
+    top : -1rem;
+}
+.info{
+    justify-content: space-between;
+    display: flex;
+}
+
+.allow-overflow {
+    height: calc(100vh - 300px);
+    overflow: scroll;
+}

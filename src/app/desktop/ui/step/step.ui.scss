@@ -7,9 +7,9 @@
     gap: 1.5rem;
     padding-bottom: 5rem;
     cursor: pointer;
-    span {
-        font-size: 1.1rem;
-    }
+    white-space: nowrap;
+    font-size: 1rem;
+    
 }
 .timeline-horizontal:not(:last-child)::before{
     content: "";
@@ -19,14 +19,13 @@
     height: 5rem;
     width: 2px;
     background-color: #d3d3d3;
-    
 }
+
 .timeline-vertical {
+    flex: 0 0 auto;
     position: relative;
     list-style-type: none;
     flex-direction: column;
-    align-items: center;
-    text-align: center;
     margin-right: 5rem;
     cursor: pointer;
     span {
@@ -40,15 +39,17 @@
     content: "";
     position: absolute;
     bottom: 10px;
-    left:50%;
     height: 2px;
-    width: 8.7rem;
+    left: 50%;
+    width: calc(100% + 5rem);
     z-index: -1;
     background-color: #d3d3d3;
     
 }
 
 .circle {
+    position: relative;
+    left: 50%;
     height: 20px;
     width: 20px;
     background-color: #d3d3d3;
@@ -73,4 +74,7 @@
     //     background-color: #0D5A87;
         
     // }
+}
+.vertical {
+    overflow-x: hidden;
 }
