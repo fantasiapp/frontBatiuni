@@ -8,8 +8,8 @@ import { SlidesDirective } from "../directives/slides.directive";
 @Component({
   selector: 'modify-profile-form',
   template: `
-  <div [slides]="[modifyPage1, modifyPage2, modifyPage3]" type="template"
-    [animate]="true"></div>
+  <div [slides]="[modifyPage1, modifyPage2, modifyPage3]" [(index)]="index" type="template"
+    [animate]="animate"></div>
 
   <ng-template #modifyPage1>
     <section class="full-width section">
@@ -136,6 +136,8 @@ import { SlidesDirective } from "../directives/slides.directive";
   styles: [`
     @import 'src/styles/variables';
     @import 'src/styles/mixins';
+    @import 'src/styles/responsive';
+
 
     :host {
       width: 100%;
@@ -154,7 +156,12 @@ import { SlidesDirective } from "../directives/slides.directive";
     }
 
     .metiers > * { margin-bottom: $item-padding; }
-    .section { background-color: white; @extend %overflow-y; }
+    .section {
+      background-color: white;
+      @extend %overflow-y;
+
+      @include from($mobile) { background: transparent; }
+    }
   `],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -163,8 +170,14 @@ export class ModifyProfileForm {
   @Input()
   user!: UserProfile;
 
+  @Input()
+  index: number = 0;
+
   @ViewChild(SlidesDirective)
   slider!: SlidesDirective;
+
+  @Input()
+  animate: boolean = true;
 
   @Output()
   submit = new EventEmitter<FormGroup>();
