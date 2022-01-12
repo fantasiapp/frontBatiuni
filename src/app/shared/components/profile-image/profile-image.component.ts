@@ -26,7 +26,7 @@ export class UIProfileImageComponent {
 
   ngOnChanges(changes: SimpleChanges) {
     if ( changes['user'] )
-      this.src = this.user!.imageUrl || this.src;
+      this.src = this.user?.imageUrl || this.src;
   }
 
   static getAvailabilityColor(availability: number) {

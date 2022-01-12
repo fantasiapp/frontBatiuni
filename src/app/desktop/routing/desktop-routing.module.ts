@@ -1,5 +1,7 @@
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
+import { AuthGuard } from "src/app/mobile/routing/auth/auth.guard";
+import { AuthResolver } from "src/app/mobile/routing/auth/auth.resolver";
 import { EmailConfirmation } from "src/app/shared/validators/email_confirmation/emailconfirmation.component";
 import { RegistrationSuccess } from "src/app/shared/validators/registration_success/registrationsuccess.component";
 import { HomePageComponent } from "../components/home_page/home.page";
@@ -26,6 +28,8 @@ const routes: Routes =[{
   }, {
     path: 'home',
     component: MainPageComponent,
+    canActivate: [AuthGuard],
+    resolve: [AuthResolver],
     children: [
       {path: 'profile', component: ProfilePageComponent, data: { animation: 'profile' }},
       {path: '', pathMatch: 'full', component: HomePageComponent, data: { animation: 'home' } },
@@ -40,5 +44,6 @@ const routes: Routes =[{
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
+  providers: [AuthGuard, AuthResolver]
 })
 export class AppRoutingModule {}
