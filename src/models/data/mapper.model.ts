@@ -184,6 +184,7 @@ export class Mapper {
   }
 
   static mapRequest(data: any) {
+    console.log('mapping', data);
     this.staticMap(data);
     this.getTablesNames(data).forEach(tableName => this.mapTable(data, tableName));
   };

@@ -1,8 +1,9 @@
 import { ChangeDetectionStrategy, Component, HostListener, Input, ViewChild, EventEmitter, Output } from "@angular/core";
 import { FormArray, FormControl, FormGroup } from "@angular/forms";
-import { Job, JobForCompany, UserProfile } from "src/models/data/data.model";
+import { Job, JobForCompany, Label, UserProfile } from "src/models/data/data.model";
 import { Option } from "src/models/option";
 import { Email } from "src/validators/persist";
+import { FileinputOutput } from "../components/filesUI/files.ui";
 import { SlidesDirective } from "../directives/slides.directive";
 
 @Component({
@@ -71,7 +72,7 @@ import { SlidesDirective } from "../directives/slides.directive";
             </ng-container>
             <div (click)="addingField = true" class="form-input center-text add-field">
               <img src="assets/icons/add.svg"/>
-              <span>Ajouter une métier</span>
+              <span>Ajouter un métier</span>
             </div>
           </ng-container>
         
@@ -108,15 +109,21 @@ import { SlidesDirective } from "../directives/slides.directive";
 
   <ng-template #modifyPage3>
     <section class="full-width section">
-      <form class="full-width form-control">
+      <form class="full-width form-control" [formGroup]="modifyProfileForm">
         <h3 class="form-title font-Roboto">
           Certifications & labels:
         </h3>
         <div class="form-input">
           <label>Vos labels</label>
-          <options [showChosenItems]="false" [options]="allLabels" (valueChange)="labels = $event"></options>
+          <options [options]="allLabels" (valueChange)="updateLabels($event)"></options>
         </div>
-        <fileinput *ngFor="let label of labels" [filename]="label.name"></fileinput>
+        <ng-container formArrayName="Company.labels">
+            <span class="position-relative" *ngFor="let control of companyLabelControls; index as i">
+              <ng-container [formGroupName]="i">
+                <fileinput [showtitle]="false" [filename]="control.get('label')!.value.name" formControlName="fileData"></fileinput>
+              </ng-container>
+            </span>
+          </ng-container>
       </form>
     </section>
   </ng-template>
@@ -205,12 +212,20 @@ export class ModifyProfileForm {
     ]),
     'Company.webSite': new FormControl('', [
     ]),
-    'Company.companyPhone': new FormControl('', [])
+    'Company.companyPhone': new FormControl('', []),
+    'Company.labels': new FormArray([
+
+    ])
   });
 
   get profileJobsControls() {
     const jobsControl = this.modifyProfileForm.controls['Userprofile.jobs'] as FormArray;
     return jobsControl.controls;
+  }
+
+  get companyLabelControls() {
+    const labelsControl = this.modifyProfileForm.controls['Company.labels'] as FormArray;
+    return labelsControl.controls;
   }
 
   @HostListener('swipeleft')
@@ -224,8 +239,8 @@ export class ModifyProfileForm {
   }
   
   ngOnInit() {
-    this.allLabels =["Qualibat", "RGE", "RGE Eco Artisan", "NF", "Effinergie", "Handibat"]
-      .map((name, id) => ({id, name, checked: false}));
+    this.allLabels =[...Label.instances.values()]
+      .map(({name, id}) => ({id, name, checked: false}));
     
     this.allJobs = 
   [...Job.instances.values()].map(job => ({id: job.id, name: job.name, checked: false/*this.user.jobs.includes(job)*/}));
@@ -245,6 +260,16 @@ export class ModifyProfileForm {
       jobControl.push(new FormGroup({
         job: new FormControl(job.job),
         number: new FormControl(job.number)
+      }));
+    
+    const labelControl = this.modifyProfileForm.controls['Company.labels'] as FormArray,
+      now = (new Date()).toISOString().slice(0, 10).replace(/-/g, '/');
+    
+    for ( let label of this.user.company.labels )
+    labelControl.push(new FormGroup({
+        label: new FormControl(label.label),
+        //get date from server
+        fileData: new FormControl({files: null, date: now} as FileinputOutput)
       }));
   }
 
@@ -273,6 +298,20 @@ export class ModifyProfileForm {
       }))
     });
   };
+
+  updateLabels(labelOptions: Option[]) {
+    const labelsControl = this.modifyProfileForm.controls['Company.labels'] as FormArray,
+      newLabels = labelOptions.map(label => Label.getById(label.id)!),
+      now = (new Date()).toISOString().slice(0, 10).replace(/-/g, '/');
+
+    labelsControl.clear();
+    newLabels.forEach((label) => {
+      labelsControl.push(new FormGroup({
+        label: new FormControl(label),
+        fileData: new FormControl({files: null, date: now} as FileinputOutput)
+      }))
+    });
+  }
   
   allLabels: Option[] = [];
   allJobs: Option[] = [];

@@ -107,7 +107,7 @@ export abstract class UIDefaultAccessor<T> implements ControlValueAccessor {
     this.onTouched();
   };
 
-  protected getInput(e: any): any { return e; };
+  protected getInput(e: any): T { return e; };
 
   @Input()
   set disabled(disabled: any) {
