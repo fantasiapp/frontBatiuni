@@ -1,4 +1,4 @@
-import { Component, Input, Output } from "@angular/core";
+import { Component, EventEmitter, Input, Output } from "@angular/core";
 
 
 
@@ -11,17 +11,23 @@ export class StepUI {
 
     constructor() {}
     @Input()
-    tache = [
-        {id:1, name:"TAHCE 1 "},
-        {id:2, name:"TAHCE 2 "},
-        {id:3, name:"TAHCE 3 "},
-        {id:4, name:"TAHCE 4 "}
+    direction: 'horizontal' | 'vertical' = 'horizontal';
+
+    @Input()
+    tacheIndex = 0;
+
+    @Input()
+    tacheList = [
+        {name:"TAHCE 1 "},
+        {name:"TAHCE 2 "},
+        {name:"TAHCE 3 "},
+        {name:"TAHCE 4 "}
     ]
-    // @Output()
-    currentTache = 1 ;
+    @Output()
+    tacheIndexChange = new EventEmitter<number>()
    
-    changeBack(id:number)  {
-        this.currentTache = id
+    changeTacheIndex(id:number)  {
+        this.tacheIndexChange.emit(this.tacheIndex = id);
     }
    
 }

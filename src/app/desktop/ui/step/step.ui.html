@@ -1,6 +1,7 @@
-<div class="flex">
-    <ol>
-        <li *ngFor="let tache of tache; " class="flex center timeline" (click)="changeBack(tache.id)" [class.active]="currentTache == tache.id">
+
+<div class="flex center"  *ngIf="direction == 'horizontal'; else vertical" >
+    <ol >
+        <li *ngFor="let tache of tacheList; index as i;" class="flex center timeline-horizontal" (click)="changeTacheIndex(i)" [class.active]="tacheIndex == i">
             <div class="circle" >
 
             </div>
@@ -9,3 +10,18 @@
         
     </ol>
 </div>
+
+<ng-template #vertical>
+    <div class="test flex center">
+        <ol class="flex">
+            <li *ngFor="let tache of tacheList; index as i;" class="flex timeline-vertical" 
+            (click)="changeTacheIndex(i)" [class.active]="tacheIndex == i">
+            <span class="data"> {{tache.name}}</span>
+            <div class="circle" >
+
+            </div>
+            </li>
+            
+        </ol>
+    </div>
+</ng-template>
