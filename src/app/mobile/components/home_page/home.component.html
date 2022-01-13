@@ -1,13 +1,13 @@
 <ng-container *ngIf="user$ | async as user">
-  <page-header name="Annonces qui peuvent vous intéresser" [tabs]="user.type ? 3 : 2" [(activeView)]="activeView" (filterClicked)="openAdFilterMenu = true">
-    <span tab_0>{{ user.type ? 'Brouillon' : 'Vue liste' }}</span>
-    <span tab_1>{{ user.type ? 'En ligne' : 'Carte' }}</span>
+  <page-header name="Annonces qui peuvent vous intéresser" [tabs]="user.viewType ? 3 : 2" [(activeView)]="activeView" (filterClicked)="openAdFilterMenu = true">
+    <span tab_0>{{ user.viewType ? 'Brouillon' : 'Vue liste' }}</span>
+    <span tab_1>{{ user.viewType ? 'En ligne' : 'Carte' }}</span>
     <span tab_2>Validées</span>
   </page-header>
   
   <div class="hosted-page space-children-margin page-content-with-tabs">
     <!-- Page pour PME -->
-    <ng-container *ngIf="user.type; else stview">
+    <ng-container *ngIf="user.viewType; else stview">
       <ng-container [ngSwitch]="activeView">
         <ng-container *ngSwitchCase="0">
           <offer
@@ -44,7 +44,7 @@
   </div>
   
   <swipeup [(open)]="openAdFilterMenu" type="view">
-    <pme-filter-form [activeView]="activeView" *ngIf="user.type; else stfilter" view></pme-filter-form>
+    <pme-filter-form [activeView]="activeView" *ngIf="user.viewType; else stfilter" view></pme-filter-form>
     <ng-template #stfilter><st-filter-form></st-filter-form></ng-template>
   </swipeup>
 </ng-container>

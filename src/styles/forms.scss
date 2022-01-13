@@ -150,9 +150,9 @@
 
   input {
     font-family: inherit;
-    border-bottom: 2px solid #cdcfd0 !important;
+    border-bottom: $form-border-bottom !important; //override default
 
-    &.ng-invalid:not(.ng-untouched) {
+    &.ng-invalid:not(.ng-pristine) {
       border-bottom-color: red !important;
     }
 

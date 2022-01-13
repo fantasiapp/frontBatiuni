@@ -1,25 +1,28 @@
-<main class="cover-parent flex column center-cross">
+<div class="cover-parent flex column center-cross">
   <div class="form-select full-width">
-    <div class="input-select full-width flex row center-cross">  
+    <div *ngIf="!showDropDown; else dropdown_tpl" class="input-select full-width flex row center-cross">  
       <ul *ngIf="showChosenItems" class="chosen-items">
         <li *ngFor="let choice of value; let i = index" (click)="onChange(['delete', i])">{{choice.name}}</li>
       </ul>
       <img (click)="showDropDown = !showDropDown" src="assets/arrowdown.svg"/>
     </div>
-  
-    <div class="dropdown" *ngIf="showDropDown">
-      <div class="dropdown-choices full-width flex row center-cross">
-          <img src="assets/Rechercher.svg">
-          <input class="form-search"  (input)="filterOptions($event)" type="text" placeholder="Rechercher un métier"/>
-      </div>
-      <div *ngIf="options.length" class="dropdown-content" >
-        <ul>
-          <li *ngFor="let option of options; let index = index" class="flex center-cross">
-            {{option.name}} 
-            <input (change)="onChange(['toggle', index])" class="option-selected" type="checkbox" [attr.checked]="option.checked || null"/>
-          </li>
-        </ul>
-      </div>
+  </div>
+</div>
+
+
+<ng-template #dropdown_tpl>
+  <div class="dropdown">
+    <div class="dropdown-choices full-width flex row center-cross">
+        <img src="assets/Rechercher.svg">
+        <input class="form-search"  (input)="filterOptions($event)" type="text" placeholder="Rechercher un métier"/>
+    </div>
+    <div *ngIf="options.length" class="dropdown-content" >
+      <ul>
+        <li *ngFor="let option of options; let index = index" class="flex center-cross">
+          {{option.name}} 
+          <input (change)="onChange(['toggle', index])" class="option-selected" type="checkbox" [attr.checked]="option.checked || null"/>
+        </li>
+      </ul>
     </div>
   </div>
-</main>
+</ng-template>
