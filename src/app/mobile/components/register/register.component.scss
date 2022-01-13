@@ -5,3 +5,16 @@
   @extend %overflow-y;
 }
 
+.big-sticky-footer {
+  @extend %sticky-footer;
+  height: $big-sticky-footer-height;
+  padding: 10px 30px;
+
+  & > * {
+    margin-bottom: 6px;
+  }
+}
+
+a {
+  @extend %pull-down;
+}

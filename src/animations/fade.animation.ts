@@ -1,8 +1,9 @@
 import { animate, group, query, style } from "@angular/animations";
+import { animatingStyle } from "./common.animation";
 
 export const FadeIn = [
   query(
-    ':enter, :leave', style({ position: 'absolute' }), {
+    ':enter, :leave', animatingStyle, {
       optional: true,
     }
   ),

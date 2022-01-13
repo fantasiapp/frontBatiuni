@@ -1,8 +1,9 @@
 import { animate, group, query, style } from "@angular/animations";
+import { animatingStyle } from "./common.animation";
 
 export const SlideChildrenLeft = [
   query(
-    ':enter, :leave', style({ position: 'absolute' }), {
+    ':enter, :leave', animatingStyle, {
       optional: true,
     }
   ),
@@ -25,7 +26,7 @@ export const SlideChildrenLeft = [
 
 export const SlideChildrenRight = [
   query(
-    ':enter, :leave', style({ position: 'absolute' }), {
+    ':enter, :leave', animatingStyle, {
       optional: true,
     }
   ),

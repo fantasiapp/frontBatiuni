@@ -135,6 +135,15 @@
   color: white;
 };
 
+%sticky-footer {
+  position: fixed;
+  @include set-safe-area(bottom);
+  left: 0;
+  height: $sticky-footer-height;
+  padding: 0 30px;
+  width: 100vw;
+}
+
 %page {
   display: block;
   height: calc(100vh - #{$navigation-height} - env(safe-area-inset-bottom));
@@ -161,13 +170,19 @@
 
 %content-with-paging-and-footer {
   @extend %overflow-y;
-  @include with-set-safe-area(margin, top, $paging-height);
+  @include with-set-safe-area(margin, top, $paging-height + $paging-decoration-height);
   // @include with-set-safe-area(margin, bottom, $sticky-footer-height);
-  height: calc(100vh - #{$paging-height + $sticky-footer-height} - env(safe-area-inset-bottom));
+  height: calc(100vh - #{$paging-height + $paging-decoration-height + $sticky-footer-height} - env(safe-area-inset-bottom));
 }
 
+%content-with-paging-and-big-footer {
+  @extend %overflow-y;
+  @include with-set-safe-area(margin, top, $paging-height + $paging-decoration-height);
+  // @include with-set-safe-area(margin, bottom, $sticky-footer-height);
+  height: calc(100vh - #{$paging-height + $paging-decoration-height + $big-sticky-footer-height} - env(safe-area-inset-bottom));
+}
 
-.paging-only-content {
+%paging-only-content {
   @extend %overflow-y;
   @include with-set-safe-area(margin, top, $paging-height + $paging-decoration-height);
   height: calc(100vh - #{$paging-height + $paging-decoration-height} - env(safe-area-inset-bottom));
@@ -198,7 +213,7 @@
   @include set-safe-area(bottom);
 }
 
-.pull-down {
+%pull-down {
   margin-top: auto;
 }
 

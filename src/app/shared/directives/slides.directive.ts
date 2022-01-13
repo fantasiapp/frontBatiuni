@@ -105,8 +105,3 @@ export class SlidesDirective extends IndexBased {
     }
   }
 };
-
-
-//Think about locking when in animation
-//Think how to generate an entire element with structural directives*
-//Think about generation from templates

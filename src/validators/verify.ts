@@ -7,7 +7,7 @@ export const MatchField = (field: string, verification: string): ValidatorFn => 
       verified = control.get(verification);
 
     verified  && verified.setErrors(original && verified.value == original.value ? null : {
-      emailMismatch: true
+      mismatch: true
     });
       
     return null;

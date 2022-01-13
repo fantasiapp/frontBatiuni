@@ -1,18 +1,16 @@
-import { Component, Input, Output, EventEmitter } from "@angular/core";
+import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from "@angular/core";
 import { Router } from "@angular/router";
 
 @Component({
   selector: 'paging',
   templateUrl: './paging.component.html',
-  styleUrls: ['./paging.component.scss']
+  styleUrls: ['./paging.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PagingComponent {
 
   constructor(private router: Router) {}
-
-  @Input()
-  showNext: boolean = true;
-
+  
   @Input()
   showPageName: boolean = true;
 

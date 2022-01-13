@@ -1,2 +1,12 @@
 <paging [length]="2" [(index)]="form.slider.index" (navigate)="form.onNavigate($event)"></paging>
-<register-form></register-form>
+<register-form [showSteps]="false"></register-form>
+<footer class="big-sticky-footer flex column">
+  <a class="external-links form-links block center-text" [routerLink]="['', 'connexion']">
+    J'ai déjà un compte
+  </a>
+  <button *ngIf="form.slider.index == 0" class="button gradient" (click)="form.slider.index = 1">Etape Suivante</button>
+  <div class="form-step">
+    <div [class.active]="form.slider.index == 0" (click)="form.slider.index = 0"></div>
+    <div [class.active]="form.slider.index == 1" (click)="form.slider.index = 1"></div>
+  </div>
+</footer>
