@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, Output } from "@angular/core";
 import { NG_VALUE_ACCESSOR } from "@angular/forms";
 import { UIDefaultAccessor } from "src/common/classes";
 import { Option } from "src/models/option";
@@ -15,14 +15,35 @@ import { Option } from "src/models/option";
   }]
 })
 export class OptionsModel extends UIDefaultAccessor<Option[]> {
-  search : string = '';
-  showDropDown : Boolean =false;
+  search: string = '';
+  showDropDown: boolean = false;
 
   private _options: Option[] = [];
+  // private _listener?: ;
 
-  constructor() {
+  private static instances: OptionsModel[] = [];
+  private static listener = (e: Event) => {
+    const focused = document.activeElement;
+    for( const option of OptionsModel.instances )
+      if ( ! option.ref.nativeElement.contains(focused) ) {
+        //option.forceClose();
+        continue;
+      }
+  };
+  private static listening: boolean = false;
+
+  constructor(public ref: ElementRef, private cd: ChangeDetectorRef) {
     super();
     this.value = [];
+    OptionsModel.instances.push(this);
+
+    if ( !OptionsModel.listening )
+      window.addEventListener('click', OptionsModel.listener);
+  }
+
+  forceClose() {
+    this.showDropDown = false;
+    this.cd.detectChanges();
   }
 
   @Input()
@@ -53,4 +74,13 @@ export class OptionsModel extends UIDefaultAccessor<Option[]> {
 
     return this.options.filter(choice => choice.checked);
   };
+
+  ngOnDestroy() {
+    const index = OptionsModel.instances.indexOf(this);
+    if ( index >= 0 ) OptionsModel.instances.splice(index, 1);  
+    if ( OptionsModel.instances.length == 0 ) {
+      window.removeEventListener('click', OptionsModel.listener)
+      OptionsModel.listening = false;
+    }
+  }
 };

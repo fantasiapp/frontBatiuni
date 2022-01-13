@@ -66,7 +66,7 @@ export class NavigationMenu extends Destroy$ {
     });
 
     this.user$.pipe(takeUntil(this.destroy$)).subscribe((user: User) => {
-      this.menu.next(user.type ? STMenu : PMEMenu)
+      this.menu.next(user.viewType ? PMEMenu : STMenu)
     });
   }
 

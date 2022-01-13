@@ -6,7 +6,7 @@ import { AuthState } from "src/models/auth/auth.state";
 import { environment } from "src/environments/environment";
 import { ChangePassword, ChangeProfileType, ChangeProfilePicture, GetUserData, ModifyUserProfile } from "./user.actions";
 import { User } from "./user.model";
-import { Logout } from "../auth/auth.actions";
+import { Login, Logout } from "../auth/auth.actions";
 import { throwError } from "rxjs";
 import { Mapper } from "../data/mapper.model";
 import { UserProfile } from "../data/data.model";
@@ -19,7 +19,7 @@ import { AppState } from "src/app/app.state";
 @Injectable()
 export class UserState {
   @Selector()
-  static type(state: User) { return state.type; }
+  static type(state: User) { return state.viewType; }
 
   @Selector()
   static profile(state: User) { return state.profile; }
@@ -29,7 +29,7 @@ export class UserState {
 
   @Action(ChangeProfileType)
   changeProfileType(ctx: StateContext<User>, action: ChangeProfileType) {
-    return ctx.patchState({ type: action.type });
+    return ctx.patchState({ viewType: action.type });
   }
 
   @Action(ChangeProfilePicture)
@@ -95,14 +95,14 @@ export class UserState {
         };
 
         const currentUser = [...UserProfile.instances.values()][0];
-        ctx.patchState({ profile: currentUser })
+        ctx.patchState({ profile: currentUser, viewType: currentUser.role.id == 2 })
       })
     )
   }
 
   @Action(Logout)
   logout(ctx: StateContext<User>) {
-    ctx.patchState({ type: false, imageUrl: null, profile: null });
+    ctx.patchState({ imageUrl: null, profile: null });
   }
 
   @Action(ModifyUserProfile)
