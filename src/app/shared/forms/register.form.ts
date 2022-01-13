@@ -71,9 +71,8 @@ import { Job, Role } from "src/models/data/data.model";
         <h3 class="form-subtitle">Informations contact</h3>
           <div class="form-input">
             <label>Je suis</label>
-            <select formControlName="role">
-              <option *ngFor="let role of roles" [value]="role.value">{{role.name}}</option>
-            </select>
+            <options formControlName="role" [options]="roles" type="radio" [searchable]="false">
+            </options>
           </div>
       
           <div class="form-input">
@@ -153,7 +152,7 @@ export class RegisterForm {
       Validators.minLength(8)
     ]),
     proposer: new FormControl(''),
-    role: new FormControl('', [Validators.required]),
+    role: new FormControl([], [Validators.required]),
     company: new FormControl('', [Validators.required]),
     jobs: new FormControl([], [Validators.required])
   }, {validators: [MatchField('email', 'emailVerification'), ComplexPassword('password')]});
@@ -177,5 +176,5 @@ export class RegisterForm {
   }
 
   jobs: Option[] = [...Job.instances.values()].map(job => ({...job, checked: false}));
-  roles = [...Role.instances.values()].map(role => ({value: role.id, name: role.name}));
+  roles = [...Role.instances.values()].map(role => ({id: role.id, name: role.name, checked: false}));
 };

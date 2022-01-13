@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, Output } from "@angular/core";
 import { NG_VALUE_ACCESSOR } from "@angular/forms";
 import { UIDefaultAccessor } from "src/common/classes";
-import { getTopmostElement } from "src/common/functions";
+import { getTopmostElement, makeid } from "src/common/functions";
 import { Option } from "src/models/option";
 
 @Component({
@@ -18,7 +18,6 @@ import { Option } from "src/models/option";
 export class OptionsModel extends UIDefaultAccessor<Option[]> {
   search: string = '';
   showDropDown: boolean = false;
-
 
   private static instances: OptionsModel[] = [];
   //clicking on selected item closes the list
@@ -37,6 +36,8 @@ export class OptionsModel extends UIDefaultAccessor<Option[]> {
   private static listening: boolean = false;
 
   ngOnInit() {
+    console.log(this.options);
+
     OptionsModel.instances.push(this);
     if ( !OptionsModel.listening )
       window.addEventListener('click', OptionsModel.listener);
@@ -68,6 +69,17 @@ export class OptionsModel extends UIDefaultAccessor<Option[]> {
   @Input()
   showChosenItems: boolean = true;
 
+  @Input()
+  searchable: boolean = true;
+
+  _type: ['checkbox' | 'radio', string] = ['checkbox', ''];
+  
+  @Input()
+  set type(value: 'checkbox' | 'radio') {
+    if ( value == 'checkbox' ) this._type = [value, ''];
+    else { this._type = [value, makeid(8)]; };
+  };
+
   filterOptions(e: Event) {
     let search: string = (e.target as any).value
     this.availableOptions = this.options.filter(option => option.name.toLowerCase().includes(search.toLowerCase()))
@@ -75,17 +87,21 @@ export class OptionsModel extends UIDefaultAccessor<Option[]> {
 
 
   getInput(action: ['delete' | 'toggle', number]) {
-    if ( action[0] == 'delete' ) {
+    const isCheckbox = this._type[0] == 'checkbox';
+    if ( isCheckbox && action[0] == 'delete' ) {
       let idx = action[1];
       let indexOf = this.options.findIndex(option => option == this.value![idx]);
       this.options[indexOf] = {...this.options[indexOf], checked: false};
     } else if ( action[0] == 'toggle' ) {
       let id = action[1],
         indexOf = this.options.findIndex(option => option.id == id);
-    
-      this.options[indexOf] = {...this.options[indexOf], checked: !this.options[indexOf].checked};
-    }
 
+      if ( isCheckbox )
+        this.options[indexOf] = {...this.options[indexOf], checked: !this.options[indexOf].checked};
+      else
+        this.options.forEach((option, idx) => option.checked = idx == indexOf);
+    }
+    
     return this.options.filter(choice => choice.checked);
   };
 

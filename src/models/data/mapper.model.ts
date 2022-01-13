@@ -1,6 +1,6 @@
 import { getByValue } from 'src/common/functions';
 import { UserState } from '../user/user.state';
-import { Role, Job, Label, Company, UserProfile, JobForCompany, LabelForCompany } from './data.model';
+import { Role, Job, Label, Company, UserProfile, JobForCompany, LabelForCompany, Avatar } from './data.model';
 
 type Dict<T> = {[key: string]: T};
 type ValueConstructor = {
@@ -15,7 +15,7 @@ type TableConstructor = {
 }
 
 const definedTables = ['Company', 'Userprofile', 'JobForCompany', 'LabelForCompany'] as const;
-const definedValues = ['Role', 'Label', 'Job'] as const;
+const definedValues = ['Role', 'Label', 'Job', /* fix here */ 'avatar'] as const;
 export type tableName = typeof definedTables[number];
 export type valueName = typeof definedValues[number];
 type definedType = tableName | valueName;
@@ -32,7 +32,8 @@ export class Mapper {
     'Label': Label,
     'Job': Job,
     'JobForCompany': JobForCompany,
-    'LabelForCompany': LabelForCompany
+    'LabelForCompany': LabelForCompany,
+    'avatar': Avatar
   };
 
   private static mapped: Dict<boolean> = Object.keys(Mapper.mapping).reduce(
@@ -186,7 +187,12 @@ export class Mapper {
   static mapRequest(data: any) {
     console.log('mapping', data);
     this.staticMap(data);
+    this.dirtyAndShallBeDeprecatedMap(data);
     this.getTablesNames(data).forEach(tableName => this.mapTable(data, tableName));
+  };
+
+  static dirtyAndShallBeDeprecatedMap(data: any) {
+    new Avatar(Avatar.id++, data['avatar']);
   };
 
   static mapModifyForm(user: UserProfile, changes: any) {
@@ -213,3 +219,5 @@ export class Mapper {
     return output;
   };
 };
+
+(window as any).mapper = Mapper;
