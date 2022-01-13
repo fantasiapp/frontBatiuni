@@ -1,4 +1,10 @@
+@import 'src/styles/mixins';
+
 :host {
   display: block;
   width: 100%;
+}
+
+.hosted-page {
+  @extend %paging-only-content;
 }

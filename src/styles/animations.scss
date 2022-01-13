@@ -43,30 +43,30 @@ $fade: 200ms ease-out;
 
 .slide-in-right {
   @extend .animating;
-  animation: $slide 50ms normal forwards slide-in-right;
+  animation: $slide 50ms normal both slide-in-right;
 }
 
 .slide-out-right {
   @extend .animating;
-  animation: $slide 50ms normal forwards slide-out-right;
+  animation: $slide 50ms normal both slide-out-right;
 }
 
 .slide-in-left {
   @extend .animating;
-  animation: $slide 50ms normal forwards slide-in-left;
+  animation: $slide 50ms normal both slide-in-left;
 }
 
 .slide-out-left {
   @extend .animating;
-  animation: $slide 50ms normal forwards slide-out-left;
+  animation: $slide 50ms normal both slide-out-left;
 }
 
 .fade-in {
   @extend .animating;
-  animation: $fade 50ms normal forwards fade-in;
+  animation: $fade 50ms normal both fade-in;
 }
 
 .fade-out {
   @extend .animating;
-  animation: $fade 50ms normal forwards fade-out;
+  animation: $fade 50ms normal both fade-out;
 }

@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, Output } from "@angular/core";
 import { NG_VALUE_ACCESSOR } from "@angular/forms";
 import { UIDefaultAccessor } from "src/common/classes";
+import { getTopmostElement, makeid } from "src/common/functions";
 import { Option } from "src/models/option";
 
 @Component({
@@ -18,28 +19,31 @@ export class OptionsModel extends UIDefaultAccessor<Option[]> {
   search: string = '';
   showDropDown: boolean = false;
 
-  private _options: Option[] = [];
-  // private _listener?: ;
-
   private static instances: OptionsModel[] = [];
+  //clicking on selected item closes the list
   private static listener = (e: Event) => {
-    const focused = e.target;
+    const focused = e.target as HTMLElement,
+      mounted = getTopmostElement(focused).parentElement !== null;
+
+    if ( !mounted ) return;
     for( const option of OptionsModel.instances )
       if ( ! option.ref.nativeElement.contains(focused) ) {
-        console.log('maybe close ?', option.ref.nativeElement, focused, option.ref.nativeElement.contains(focused));
-        //option.forceClose();
+        option.forceClose();
         continue;
       }
   };
+
   private static listening: boolean = false;
+
+  ngOnInit() {
+    OptionsModel.instances.push(this);
+    if ( !OptionsModel.listening )
+      window.addEventListener('click', OptionsModel.listener);
+  }
 
   constructor(public ref: ElementRef, private cd: ChangeDetectorRef) {
     super();
     this.value = [];
-    OptionsModel.instances.push(this);
-
-    if ( !OptionsModel.listening )
-      window.addEventListener('click', OptionsModel.listener);
   }
 
   forceClose() {
@@ -47,30 +51,53 @@ export class OptionsModel extends UIDefaultAccessor<Option[]> {
     this.cd.detectChanges();
   }
 
+  private _options: Option[] = [];
+  get options() { return this._options; }  
   @Input()
   set options(val: Option[]) {
     this.search = '';
     this._options = val;
+    this.availableOptions = val;
     this.value = val.filter(option => option.checked);
   }
 
+  availableOptions: Option[] = [];
+
+
   @Input()
   showChosenItems: boolean = true;
-  get options() { return this._options; }  
+
+  @Input()
+  searchable: boolean = true;
+
+  _type: ['checkbox' | 'radio', string] = ['checkbox', ''];
+  
+  @Input()
+  set type(value: 'checkbox' | 'radio') {
+    if ( value == 'checkbox' ) this._type = [value, ''];
+    else { this._type = [value, makeid(8)]; };
+  };
 
   filterOptions(e: Event) {
     let search: string = (e.target as any).value
-    this.options = this.options.filter(option => option.name.toLowerCase().includes(search.toLowerCase()))
+    this.availableOptions = this.options.filter(option => option.name.toLowerCase().includes(search.toLowerCase()))
   }
 
+
   getInput(action: ['delete' | 'toggle', number]) {
-    if ( action[0] == 'delete' ) {
+    const isCheckbox = this._type[0] == 'checkbox';
+    if ( isCheckbox && action[0] == 'delete' ) {
       let idx = action[1];
       let indexOf = this.options.findIndex(option => option == this.value![idx]);
       this.options[indexOf] = {...this.options[indexOf], checked: false};
     } else if ( action[0] == 'toggle' ) {
-      let idx = action[1];
-      this.options[idx] = {...this.options[idx], checked: !this.options[idx].checked};
+      let id = action[1],
+        indexOf = this.options.findIndex(option => option.id == id);
+
+      if ( isCheckbox )
+        this.options[indexOf] = {...this.options[indexOf], checked: !this.options[indexOf].checked};
+      else
+        this.options.forEach((option, idx) => option.checked = idx == indexOf);
     }
 
     return this.options.filter(choice => choice.checked);

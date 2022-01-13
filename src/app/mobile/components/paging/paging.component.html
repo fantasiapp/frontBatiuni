@@ -5,12 +5,12 @@
       <span> {{ showPageName ? (!index ? 'Accueil' : 'Etape précedente') : '' }} </span>
     </a>
   </li>
-  <li *ngIf="showNext && (index < length-1)" style="text-align: right;">
+  <!-- <li *ngIf="showNext && (index < length-1)" style="text-align: right;">
     <a (click)="onClick(1)">
       <span>{{ showPageName ? 'Etape suivante' : '' }}</span>
       <img class="arrow_right" src="assets/Fleche.svg" />
     </a>
-  </li>
+  </li> -->
 </ul>
 <div class="decoration-cover">
   <div class="decoration background-white"></div>

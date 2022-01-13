@@ -42,4 +42,19 @@ export function getDirtyValues(form: any) {
   });
 
   return dirtyValues;
+};
+
+const alphanum = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+export function makeid(length: number) {
+  let result = '';
+  const charactersLength = alphanum.length;
+  for ( let i = 0; i < length; i++ )
+    result += alphanum.charAt(Math.floor(Math.random() * charactersLength));
+  return result;
+};
+
+export function getTopmostElement(element: HTMLElement) {
+  while ( element.parentElement && element.parentElement !== document.body)
+    element = element.parentElement;
+  return element;
 }

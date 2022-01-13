@@ -31,7 +31,7 @@ import { Job, Role } from "src/models/data/data.model";
           <div class="form-input">
             <label>Adresse e-mail contact</label>
             <input type="email" formControlName="email"/>
-            <div *ngIf="registerForm.get('email')!.touched && registerForm.get('email')!.errors" class="server-error">
+            <div *ngIf="registerForm.get('email')!.dirty && registerForm.get('email')!.errors" class="server-error">
               {{ registerForm.get('email')!.errors?.server }}
             </div>
           </div>
@@ -39,28 +39,24 @@ import { Job, Role } from "src/models/data/data.model";
           <div class="form-input">
             <label>Vérification addresse e-mail</label>
             <input type="email" formControlName="emailVerification"/>
+            <div *ngIf="registerForm.get('password')!.dirty  && registerForm.get('emailVerification')!.errors?.mismatch">
+              L'e-mail de confirmation doit être identique à celui du contact.
+            </div>
           </div>
         
           <div class="form-input">
             <label>Mot de passe</label> <input type="password" formControlName="password"/>
-            <div *ngIf="registerForm.get('password')!.touched  && registerForm.get('password')!.errors?.minlength" class="error">
+            <div *ngIf="registerForm.get('password')!.dirty  && registerForm.get('password')!.errors?.minlength" class="error">
               Le mot de passe doit contenir au moins 8 caractères.
             </div>
-            <div *ngIf="registerForm.get('password')!.touched  && registerForm.get('password')!.errors?.lowercase" class="error">
+            <div *ngIf="registerForm.get('password')!.dirty  && registerForm.get('password')!.errors?.lowercase" class="error">
               Le mot de passe doit contenir une lettre en miniscule.
             </div>
-            <div *ngIf="registerForm.get('password')!.touched && registerForm.get('password')!.errors?.uppercase" class="error">
+            <div *ngIf="registerForm.get('password')!.dirty && registerForm.get('password')!.errors?.uppercase" class="error">
               Le mot de passe doit contenir une lettre en majuscule.
             </div>
           </div>
-        
-          <div class="form-input">
-            <label>Code parrain ?</label> <input type="password" formControlName="proposer"/>
-          </div>
-          <a class="external-links form-links block center-text" style="margin-top: auto;" [routerLink]="['', 'connexion']">
-            J'ai déjà un compte
-          </a>
-          <div class="form-step">
+          <div *ngIf="showSteps" class="form-step">
             <div class="active"></div>
             <div (click)="slider.left()"></div>
           </div>
@@ -75,9 +71,8 @@ import { Job, Role } from "src/models/data/data.model";
         <h3 class="form-subtitle">Informations contact</h3>
           <div class="form-input">
             <label>Je suis</label>
-            <select formControlName="role">
-              <option *ngFor="let role of roles" [value]="role.value">{{role.name}}</option>
-            </select>
+            <options formControlName="role" [options]="roles" type="radio" [searchable]="false">
+            </options>
           </div>
       
           <div class="form-input">
@@ -88,14 +83,20 @@ import { Job, Role } from "src/models/data/data.model";
             <label>Métier</label>
             <options [options]="jobs" formControlName="jobs"></options>
           </div>
+
+          <div class="form-input parrain">
+            <label>Code parrain ?</label>
+            <input type="password" formControlName="proposer"/>
+          </div>
+
           <div class="form-action" style="margin-top: auto;">
             <div *ngIf="registerForm.errors?.server" class="server-error">
               {{ registerForm.errors?.server }}
             </div>
-            <button class="button discover gradient" style="width: 250px" [disabled]="!registerForm.touched || registerForm.status === 'INVALID'">Valider</button>
+            <button class="button discover gradient" style="width: 250px" [disabled]="!registerForm.dirty || registerForm.status === 'INVALID'">Valider</button>
           </div>
         
-          <div class="form-step">
+          <div *ngIf="showSteps" class="form-step">
             <div (click)="slider.right()"></div>
             <div class="active"></div>
           </div>
@@ -104,14 +105,25 @@ import { Job, Role } from "src/models/data/data.model";
     </ng-template>
   `,
   styles: [`
-  
+    @import 'src/styles/variables';
+    @import 'src/styles/mixins';
+    
+    :host(.mobile-view) {
+      @extend %content-with-paging-and-big-footer;
+    }
+
+    .parrain {
+      align-self: flex-end;
+      max-width: 50vw;
+    }
   `],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RegisterForm {
   @HostBinding('class')
   get classes() {
-    return 'hosted-page flex column' + (this.pagingContent ? ' paging-only-content' : '');
+    const isMobile = window.innerWidth <= 768;
+    return 'hosted-page flex column' + (isMobile ? ' mobile-view' : '');
   }
 
   constructor(private store: Store, private router: Router, private cd: ChangeDetectorRef) {}
@@ -119,12 +131,8 @@ export class RegisterForm {
   @ViewChild(SlidesDirective, {static: true})
   slider!: SlidesDirective;
 
-  ngOnInit() {
-    (window as any).register = this;
-  }
-
   @Input()
-  pagingContent: boolean = true;
+  showSteps: boolean = true;
 
   registerForm = new FormGroup({
     lastname: new FormControl('', [
@@ -144,7 +152,7 @@ export class RegisterForm {
       Validators.minLength(8)
     ]),
     proposer: new FormControl(''),
-    role: new FormControl('', [Validators.required]),
+    role: new FormControl([], [Validators.required]),
     company: new FormControl('', [Validators.required]),
     jobs: new FormControl([], [Validators.required])
   }, {validators: [MatchField('email', 'emailVerification'), ComplexPassword('password')]});
@@ -168,5 +176,5 @@ export class RegisterForm {
   }
 
   jobs: Option[] = [...Job.instances.values()].map(job => ({...job, checked: false}));
-  roles = [...Role.instances.values()].map(role => ({value: role.id, name: role.name}));
+  roles = [...Role.instances.values()].map(role => ({id: role.id, name: role.name, checked: false}));
 };

@@ -1,8 +1,8 @@
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Action, State, StateContext, Store } from "@ngxs/store";
-import { of } from "rxjs";
-import { tap } from "rxjs/operators";
+import { of, throwError } from "rxjs";
+import { catchError, tap } from "rxjs/operators";
 import { environment } from "src/environments/environment";
 import { GetGeneralData } from "./data.actions";
 import { Mapper } from "./mapper.model";
@@ -25,6 +25,10 @@ export class DataState {
     });
 
     return req.pipe(
+      catchError((err: HttpErrorResponse) => {
+        console.error(err);
+        return throwError('fatal error while retrieving general application data.');
+      }),
       tap((response: any) => {
         Mapper.staticMap(response);
         localStorage.setItem('general-data', JSON.stringify(response));

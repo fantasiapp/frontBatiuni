@@ -8,6 +8,7 @@ import { transition, trigger } from '@angular/animations';
 import { SlideChildrenLeft, SlideChildrenRight } from 'src/animations/slide.animation';
 import { AsyncSubject } from 'rxjs';
 import { GetGeneralData } from 'src/models/data/data.actions';
+import { environment } from 'src/environments/environment';
 
 
 @Component({
@@ -33,7 +34,12 @@ export class AppComponent extends Destroy$ {
   async ngOnInit() {
     await this.store.dispatch(new Load()).toPromise();
     await SplashScreen.hide();
-    await this.store.dispatch(new GetGeneralData()).toPromise();
+    try {
+      await this.store.dispatch(new GetGeneralData()).toPromise();
+    } catch (e) {
+      if ( !environment.production )
+        alert('GetGeneralData: 505 Error');
+    }
 
     this.ready$.next(true);
     this.ready$.complete();

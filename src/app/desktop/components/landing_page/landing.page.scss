@@ -43,7 +43,7 @@ header {
 
 .intro {
   h1 { font-weight: 900; }
-  img { @extend .pull-down; }
+  img { @extend %pull-down; }
   margin-right: 60px;
 }
 
@@ -85,7 +85,7 @@ $presentation-image-offset-bottom: 60px;
 
 
 .presentation {
-  @extend .pull-down;
+  @extend %pull-down;
 
   &.left {
     align-self: start;

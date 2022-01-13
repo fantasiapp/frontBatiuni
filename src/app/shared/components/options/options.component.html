@@ -1,29 +1,31 @@
 <div class="cover-parent flex column center-cross">
   <div class="form-select full-width">
-    <ul *ngIf="showChosenItems" class="chosen-items">
-      <li *ngFor="let choice of value; let i = index" (click)="onChange(['delete', i])">{{choice.name}}</li>
-    </ul>
 
-    <div *ngIf="!showDropDown; else dropdown_tpl" (click)="showDropDown = !showDropDown" class="input-select full-width flex row center-cross">  
-      <img src="assets/arrowdown.svg"/>
+    <div class="input-select full-width flex row center-cross">  
+      <ul *ngIf="showChosenItems" class="chosen-items" [class.multiple]="_type[0] == 'checkbox'">
+        <li *ngFor="let choice of value; let i = index" (click)="onChange(['delete', i])">{{choice.name}}</li>
+      </ul>
+      <img (click)="showDropDown = !showDropDown" src="assets/arrowdown.svg"/>
     </div>
+
+    <div *ngIf="showDropDown" class="dropdown">
+      <div *ngIf="searchable" class="dropdown-choices full-width flex row center-cross">
+          <img src="assets/Rechercher.svg">
+          <input class="form-search"  (input)="filterOptions($event)" type="text" placeholder="Rechercher un métier"/>
+      </div>
+      <div *ngIf="options.length" class="dropdown-content">
+        <ul>
+          <li *ngFor="let option of availableOptions; let index = index" class="flex center-cross">
+            {{option.name}} 
+            <box [type]="_type[0]" [name]="_type[1] || null" (valueChange)="onChange(['toggle', option.id])" [value]="option.checked"></box>
+            <!-- <input (change)="onChange(['toggle', option.id])" class="option-selected" type="checkbox" [attr.checked]="option.checked || null"/> -->
+          </li>
+        </ul>
+      </div>
+    </div>
+
   </div>
 </div>
 
 
-<ng-template #dropdown_tpl>
-  <div class="dropdown">
-    <div class="dropdown-choices full-width flex row center-cross">
-        <img src="assets/Rechercher.svg">
-        <input class="form-search"  (input)="filterOptions($event)" type="text" placeholder="Rechercher un métier"/>
-    </div>
-    <div *ngIf="options.length" class="dropdown-content" >
-      <ul>
-        <li *ngFor="let option of options; let index = index" class="flex center-cross">
-          {{option.name}} 
-          <input (change)="onChange(['toggle', index])" class="option-selected" type="checkbox" [attr.checked]="option.checked || null"/>
-        </li>
-      </ul>
-    </div>
-  </div>
-</ng-template>
+

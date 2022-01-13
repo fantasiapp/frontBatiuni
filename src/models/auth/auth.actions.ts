@@ -31,7 +31,7 @@ export class Register {
       input.email,
       input.password,
       input.company,
-      +input.role,
+      +input.role[0].id,
       input.proposer,
       input.jobs.map((job: Option) => job.id)
     );

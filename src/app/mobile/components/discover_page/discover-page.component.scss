@@ -17,7 +17,7 @@ $buttonHeight: 60px;
 }
 .section {
   $offset: $sticky-footer-height + $paging-height;
-  height: calc(100vh - #{$offset} - env(safe-area-inset-bottom));
+  // height: calc(100vh - #{$offset} - env(safe-area-inset-bottom));
   flex-shrink: 0;
 }
 

@@ -1,3 +1,6 @@
+import { immerable } from "immer";
+
+// Values
 export class Role {
   constructor(public id: number, public name: string) {
     Role.instances.set(id, this);
@@ -25,7 +28,25 @@ export class Label {
   static getById(id: number) { return this.instances.get(id); }
 };
 
+
+export class Avatar {
+  constructor(public id: number, public values: any) {
+    Avatar.instances.set(id, values);
+  }
+
+  static id: number = 1;
+  static instances = new Map<number, Avatar>();
+  static getById(id: number) { return this.instances.get(id); }
+
+  get content() { return this.values.content; }
+  get ext() { return this.values.ext; }
+  get name() { return this.values.ext; }
+};
+
+// Tables
 export class Company {
+  [immerable] = true;
+  
   constructor(public id: number, private values: any[]) {
     Company.instances.set(id, this);
   }
@@ -61,6 +82,8 @@ export class Company {
 };
 
 export class UserProfile {
+  [immerable] = true;
+
   constructor(public id: number, private values: any[]) {
     UserProfile.instances.set(id, this);
   }
@@ -105,4 +128,4 @@ export class LabelForCompany {
   get label() { return this.values[LabelForCompany.fields.get('label')!]; }
   get date() { return this.values[LabelForCompany.fields.get('date')!]; }
   get company() { return this.values[LabelForCompany.fields.get('company')!]; }
-}
+};
