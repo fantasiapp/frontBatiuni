@@ -36,8 +36,6 @@ export class OptionsModel extends UIDefaultAccessor<Option[]> {
   private static listening: boolean = false;
 
   ngOnInit() {
-    console.log(this.options);
-
     OptionsModel.instances.push(this);
     if ( !OptionsModel.listening )
       window.addEventListener('click', OptionsModel.listener);
@@ -101,7 +99,7 @@ export class OptionsModel extends UIDefaultAccessor<Option[]> {
       else
         this.options.forEach((option, idx) => option.checked = idx == indexOf);
     }
-    
+
     return this.options.filter(choice => choice.checked);
   };
 
