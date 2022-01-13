@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, ViewChild } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { ScrollTemplate } from "../../directives/scrollTemplate.directive";
 import { SlideTemplate } from "../../directives/slideTemplate.directive";
 
 export type DiscoveryContext = {
@@ -111,8 +110,8 @@ export class DiscoverComponent {
   subject: 'entreprise' | 'sous-traitant' = 'entreprise';
   static subjects: string[] = ['entreprise', 'sous-traitant'];
 
-  @ViewChild(ScrollTemplate, {static: true})
-  slider!: ScrollTemplate<DiscoveryContext>;
+  @ViewChild(SlideTemplate, {static: true})
+  slider!: SlideTemplate<DiscoveryContext>;
 
   contexts: {[key: string]: DiscoveryContext[]} = {
     'entreprise': PMEContexts,

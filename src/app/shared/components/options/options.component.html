@@ -17,7 +17,8 @@
         <ul>
           <li *ngFor="let option of availableOptions; let index = index" class="flex center-cross">
             {{option.name}} 
-            <input (change)="onChange(['toggle', option.id])" class="option-selected" type="checkbox" [attr.checked]="option.checked || null"/>
+            <box type="checkbox" (valueChange)="onChange(['toggle', option.id])" [value]="option.checked"></box>
+            <!-- <input (change)="onChange(['toggle', option.id])" class="option-selected" type="checkbox" [attr.checked]="option.checked || null"/> -->
           </li>
         </ul>
       </div>
