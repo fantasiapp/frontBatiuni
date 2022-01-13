@@ -191,6 +191,10 @@ export class Mapper {
     this.getTablesNames(data).forEach(tableName => this.mapTable(data, tableName));
   };
 
+  static updateFrom(root: any, data: any) {
+    console.log(root, data);
+  }
+
   static dirtyAndShallBeDeprecatedMap(data: any) {
     new Avatar(Avatar.id++, data['avatar']);
   };
@@ -201,10 +205,13 @@ export class Mapper {
     const keys = Object.keys(changes);
     tableLoop: for ( const table of definedTables ) {
       let featureKeys = keys.filter(key => key.startsWith(table));
+      console.log(table, featureKeys);
       if ( !featureKeys.length ) continue;
 
+      output[table] = {};
       for ( const key of featureKeys ) {
         const field = key.split('.')[1];
+        console.log('on key', key, '>', field);
         if ( !field ) {
           output[table] = changes[key];
           continue tableLoop;

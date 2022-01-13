@@ -121,7 +121,10 @@ export class UserState {
     });
 
     return req.pipe(
-      tap((response: any) => console.log(response))
+      tap((response: any) => {
+        console.log('response', response);
+        Mapper.updateFrom(profile, response.valueModified);
+      })
     );
   }
 };
