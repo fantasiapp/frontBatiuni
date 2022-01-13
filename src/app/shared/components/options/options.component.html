@@ -1,10 +1,11 @@
 <div class="cover-parent flex column center-cross">
   <div class="form-select full-width">
-    <div *ngIf="!showDropDown; else dropdown_tpl" class="input-select full-width flex row center-cross">  
-      <ul *ngIf="showChosenItems" class="chosen-items">
-        <li *ngFor="let choice of value; let i = index" (click)="onChange(['delete', i])">{{choice.name}}</li>
-      </ul>
-      <img (click)="showDropDown = !showDropDown" src="assets/arrowdown.svg"/>
+    <ul *ngIf="showChosenItems" class="chosen-items">
+      <li *ngFor="let choice of value; let i = index" (click)="onChange(['delete', i])">{{choice.name}}</li>
+    </ul>
+
+    <div *ngIf="!showDropDown; else dropdown_tpl" (click)="showDropDown = !showDropDown" class="input-select full-width flex row center-cross">  
+      <img src="assets/arrowdown.svg"/>
     </div>
   </div>
 </div>
