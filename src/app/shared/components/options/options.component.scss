@@ -32,7 +32,7 @@
     display:inline-block;
     border-radius: 20px;
     padding: 10px;
-    margin: 0 4px;
+    margin: 4px;
     font-size: 0.75em;
     border: 1px solid #333;
   }
@@ -69,6 +69,7 @@
   width: 100%;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
   padding: 12px 16px;
+  max-height: 160px !important;
   li {
     font-size: 0.7em;
     justify-content: space-between;

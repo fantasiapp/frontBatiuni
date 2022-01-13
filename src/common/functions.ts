@@ -42,4 +42,10 @@ export function getDirtyValues(form: any) {
   });
 
   return dirtyValues;
+};
+
+export function getTopmostElement(element: HTMLElement) {
+  while ( element.parentElement && element.parentElement !== document.body)
+    element = element.parentElement;
+  return element;
 }
