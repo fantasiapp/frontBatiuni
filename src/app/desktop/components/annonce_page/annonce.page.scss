@@ -1,11 +1,13 @@
+@use 'sass:math';
+
 @import 'src/styles/mixins';
 @import 'src/styles/variables';
 @import 'src/styles/responsive';
-
 %padding {
   padding: 0 40px;
 }
-$square : 164px;
+$square : 120px;
+$half-square : math.div($square,2);
 .page {
   @extend %three-section-layout;
   height: 100vh;
@@ -54,9 +56,8 @@ $square : 164px;
 }
 .company-logo{
     position: fixed;
-    top:160px;
+    top: calc(220px - 60px);
     background-color: grey;
-    flex: 3;
     width: $square;
     height: $square;
 }
@@ -64,15 +65,23 @@ $square : 164px;
 .company-text {
     position: relative;
     left : $square + 16px;
-    flex: 9;
-    top : -1rem;
+    top:1rem;
 }
-.info{
-    justify-content: space-between;
-    display: flex;
-}
+
 
 .allow-overflow {
     height: calc(100vh - 300px);
     overflow: scroll;
+}
+
+
+.companyinfo {
+  position: absolute;  
+  left: 500px;
+  height: 200px;
+}
+.company-data {
+  display: flex;
+  justify-content: space-between;
+  min-width: 700px;
 }

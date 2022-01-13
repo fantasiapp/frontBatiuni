@@ -93,12 +93,15 @@ export class ProfileComponent {
   };
 
   async takePhoto() {
+    let user = this.store.selectSnapshot(UserState)
+
+    let imageName = user.profile.firstName + '-'+ user.profile.lastName +'-'+ user.profile.id ;
+    
     const photo = await Camera.getPhoto({
       allowEditing: false,
       resultType: CameraResultType.Base64,
       source: CameraSource.Camera
     });
-    let imageName = '';
     this.store.dispatch(new UserActions.ChangeProfilePicture(photo, imageName));
   }
 
@@ -108,7 +111,9 @@ export class ProfileComponent {
       resultType: CameraResultType.Base64,
       source: CameraSource.Photos,
     });
-    let imageName = '';
+    let user = this.store.selectSnapshot(UserState)
+
+    let imageName = user.profile.firstName + '_'+ user.profile.lastName +'_'+ user.profile.id ;
     this.store.dispatch(new UserActions.ChangeProfilePicture(photo, imageName));
   }
 
