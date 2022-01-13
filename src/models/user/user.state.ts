@@ -41,7 +41,7 @@ export class UserState {
       "imageExtension": action.src.format, // PNG OR JPEG
       "imageBase64": "data:image/png;base64,"+action.src.base64String
     }
-    
+    console.log(data)
     let req = this.http.post(environment.backUrl + '/data/', data, {
       headers: {
         "Authorization": "Token " + token,
