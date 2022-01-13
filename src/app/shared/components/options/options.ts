@@ -23,9 +23,10 @@ export class OptionsModel extends UIDefaultAccessor<Option[]> {
 
   private static instances: OptionsModel[] = [];
   private static listener = (e: Event) => {
-    const focused = document.activeElement;
+    const focused = e.target;
     for( const option of OptionsModel.instances )
       if ( ! option.ref.nativeElement.contains(focused) ) {
+        console.log('maybe close ?', option.ref.nativeElement, focused, option.ref.nativeElement.contains(focused));
         //option.forceClose();
         continue;
       }
