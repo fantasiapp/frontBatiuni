@@ -26,7 +26,7 @@ export class OptionsModel extends UIDefaultAccessor<Option[]> {
     const focused = document.activeElement;
     for( const option of OptionsModel.instances )
       if ( ! option.ref.nativeElement.contains(focused) ) {
-        option.forceClose();
+        //option.forceClose();
         continue;
       }
   };
@@ -36,6 +36,9 @@ export class OptionsModel extends UIDefaultAccessor<Option[]> {
     super();
     this.value = [];
     OptionsModel.instances.push(this);
+
+    if ( !OptionsModel.listening )
+      window.addEventListener('click', OptionsModel.listener);
   }
 
   forceClose() {
@@ -75,5 +78,9 @@ export class OptionsModel extends UIDefaultAccessor<Option[]> {
   ngOnDestroy() {
     const index = OptionsModel.instances.indexOf(this);
     if ( index >= 0 ) OptionsModel.instances.splice(index, 1);  
+    if ( OptionsModel.instances.length == 0 ) {
+      window.removeEventListener('click', OptionsModel.listener)
+      OptionsModel.listening = false;
+    }
   }
 };
