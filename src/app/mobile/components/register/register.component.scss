@@ -6,6 +6,7 @@
 }
 
 .big-sticky-footer {
+  background-color: white;
   @extend %sticky-footer;
   height: $big-sticky-footer-height;
   padding: 10px 30px;

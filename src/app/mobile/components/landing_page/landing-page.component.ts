@@ -9,17 +9,17 @@ import { SlidesDirective } from "src/app/shared/directives/slides.directive";
 })
 export class LandingPageComponent {
   @ViewChild(SlidesDirective, {static: true})
-  slidesContainer!: SlidesDirective;
+  slider!: SlidesDirective;
 
   constructor() { }
 
   @HostListener('swiperight')
   onSwipeRight() {
-    this.slidesContainer.right();
+    this.slider.right();
   }
 
   @HostListener('swipeleft')
   onSwipeLeft() {
-    this.slidesContainer.left();
+    this.slider.left();
   }
 };

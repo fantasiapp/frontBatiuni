@@ -16,7 +16,9 @@
     position: absolute;
   } @else if $position == relative {
     position: relative;
-  } @else { }
+  } @else {
+    position: $position;
+  }
 
   @if $direction == 'x' {
     left: 50%;
@@ -70,6 +72,15 @@
       border-#{$position}: $size solid transparent;
     }
   }
+}
+
+//-----------------------------------------------
+//Size
+.full-width { width: 100%; }
+.full-height { height: 100% }
+.cover-parent {
+  @extend .full-width;
+  @extend .full-height;
 }
 
 @function opposite-direction($direction) {
