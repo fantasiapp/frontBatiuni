@@ -15,13 +15,20 @@ export class Destroy$ {
   }
 }
 
+@Directive()
 export abstract class IndexBased {
   protected _index = 0;
+  
+  @Input()
   get index() { return this._index; }
   set index(value: number) {
     if ( this._index == value ) return;
-    this.indexChanged(value - this.index);
+    this.indexChanged(value - this.index); //will set the index
+    this.indexChange.emit(this.index);
   };
+
+  @Output()
+  indexChange = new EventEmitter<number>();
 
   abstract indexChanged(k: number): void;
 };
@@ -100,7 +107,7 @@ export abstract class UIDefaultAccessor<T> implements ControlValueAccessor {
     this.onTouched();
   };
 
-  protected getInput(e: any): any { return e; };
+  protected getInput(e: any): T { return e; };
 
   @Input()
   set disabled(disabled: any) {

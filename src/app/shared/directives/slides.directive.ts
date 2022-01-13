@@ -14,9 +14,6 @@ export class SlidesDirective extends IndexBased {
     let ref = this.componentRef = this.create(0);
     this.view.insert(ref.view);
   }
-  
-  @Input('animate')
-  animate: boolean = true;
 
   componentRef: Ref = {element: null, view: null};
   private components: any[] = [];
@@ -31,6 +28,9 @@ export class SlidesDirective extends IndexBased {
   set type(type: 'component' | 'template') {
     this._type = type;
   };
+
+  @Input('animate')
+  animate: boolean = true;
 
   private create(index: number) {
     return this._type == 'component' ? this.createComponent(index) : this.createTemplate(index, {});

@@ -1,33 +1,40 @@
-import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from "@angular/core";
 
-
+export type StepItem = {
+  name: string;
+}
 
 @Component({
-    selector: 'step',
-    templateUrl: 'step.ui.html',
-    styleUrls: ['step.ui.scss']
+  selector: 'step',
+  templateUrl: 'step.ui.html',
+  styleUrls: ['step.ui.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class StepUI {
 
-    constructor() {}
-    @Input()
-    direction: 'horizontal' | 'vertical' = 'horizontal';
+  constructor() {}
 
-    @Input()
-    tacheIndex = 0;
+  @Input()
+  direction: 'horizontal' | 'vertical' = 'horizontal';
 
-    @Input()
-    tacheList = [
-        {name:"Besoins de l’entreprise"},
-        {name:"Infos chantiers"},
-        {name:"Rémunération "},
-        {name:"Document important à télécharger"}
-    ]
-    @Output()
-    tacheIndexChange = new EventEmitter<number>()
-   
-    changeTacheIndex(id:number)  {
-        this.tacheIndexChange.emit(this.tacheIndex = id);
-    }
-   
+  @Input()
+  tacheIndex = 0;
+
+
+  @Output()
+  tacheIndexChange = new EventEmitter<number>()
+  
+  changeTacheIndex(id:number)  {
+    this.tacheIndexChange.emit(this.tacheIndex = id);
+  }
+
+  @Input()
+  tacheList = [
+      {name:"Besoins de l’entreprise"},
+      {name:"Infos chantiers"},
+      {name:"Rémunération "},
+      {name:"Document important à télécharger"}
+  ]
+
+
 }

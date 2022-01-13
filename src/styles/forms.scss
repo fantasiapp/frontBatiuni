@@ -111,7 +111,6 @@
 
 
 .form-control {
-  background-color: $landingColor;
   color: $formulaireMainColor;
   flex: 1;
   font-family: "Poppins";
@@ -156,6 +155,8 @@
     &.ng-invalid:not(.ng-untouched) {
       border-bottom-color: red !important;
     }
+
+    @include from($mobile) { background: none; }
   }
 
   & > input, & > span > input {
@@ -203,7 +204,6 @@
 }
 
 .form-step {
-  background-color: $landingColor;
   width: 100%;
   text-align: center;
 

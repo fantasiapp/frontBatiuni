@@ -1,6 +1,7 @@
 import { FormArray, FormGroup } from "@angular/forms";
+import { FileinputOutput } from "src/app/shared/components/filesUI/files.ui";
 import { getDirtyValues } from "src/common/functions";
-import { Job, UserProfile } from "../data/data.model";
+import { Job, Label, UserProfile } from "../data/data.model";
 
 export class ChangeProfileType {
   static readonly type = '[User] Change Profile Type';
@@ -30,11 +31,21 @@ export class ModifyUserProfile {
   
   constructor({profile, form}: {profile: UserProfile, form: FormGroup}) {
     this.changes = getDirtyValues(form);
+    console.log(this.changes['Company.labels']);
     delete this.changes['Userprofile.jobs'];
     if ( form.controls['Userprofile.jobs']!.dirty ) {
       const jobs = (form.controls['Userprofile.jobs']! as FormArray).value;
       this.changes['JobForCompany'] = jobs.map(
         ({job, number}: {job: Job, number: number}) => ([job.id, number, profile.company.id])
+      );
+    }
+
+    delete this.changes['Company.labels'];
+    if ( form.controls['Company.labels']!.dirty ) {
+      const labels = (form.controls['Company.labels'] as FormArray).value;
+      console.log(labels);
+      this.changes['LabelForCompany'] = labels.map(
+        ({label, fileData}: {label: Label, fileData: FileinputOutput}) => ([label.id, fileData.date!.replace(/-/g, '/'), profile.company.id])
       )
     }
 

@@ -99,5 +99,16 @@ $hero-header-tick-thickness: 8px;
     top: -$hero-header-tick-offset;
     left: 50%; transform: translateX(-50%);
   }
+}
 
+.web-page {
+  @extend %three-section-layout;
+  height: 100vh;
+  background-color: #f7f7f7;
+
+  @extend %web-space-top;
+
+  .main.web-content {
+    margin: 0 auto;
+  }
 }

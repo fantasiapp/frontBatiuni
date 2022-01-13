@@ -47,8 +47,14 @@ export class Company {
     //stop using ids
     return [...JobForCompany.instances.values()].filter(
       (t: JobForCompany) => t.company == this
-    )
-  };
+    );
+  }
+
+  get labels(): {label: Label, date: string}[] {
+    return [...LabelForCompany.instances.values()].filter(
+      (t: LabelForCompany) => t.company == this
+    );
+  }
 
   //mutabe data
   update(data: any) { }
@@ -93,7 +99,7 @@ export class LabelForCompany {
   }
 
   static fields = new Map<string, number>();
-  static instances = new Map<number, Label>();
+  static instances = new Map<number, LabelForCompany>();
   static getById(id: number) { return this.instances.get(id); }
 
   get label() { return this.values[LabelForCompany.fields.get('label')!]; }

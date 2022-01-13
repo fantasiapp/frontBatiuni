@@ -6,24 +6,24 @@
     <img src="assets/menu.svg" (click)="openMenu = true" />
   </header>
 
-  <div class="hosted-page flex column center-cross space-children-margin page-content">
-    <profile-resume [showMore]="true" (ratingClicked)="openRatings = true" (profileChanged)="changeProfileType($event)" [user]="user"></profile-resume>
+  <div class="hosted-page flex column center-cross space-children-margin page-content font-Poppins">
+    <profile-resume class="flex column center-cross space-children-margin" [showMore]="true" (ratingClicked)="openRatings = true" (profileChanged)="changeProfileType($event)" [user]="user"></profile-resume>
 
     <section class="job-description full-width flex column space-children-margin">
       <span>
-        <span class="text-light-emphasis font-Poppins">Nom de l'entreprise : </span> <span
+        <span class="text-light-emphasis">Nom de l'entreprise : </span> <span
           class="value">{{user.profile!.company.name}}</span>
       </span>
       <span>
-        <span class="text-light-emphasis font-Poppins">N SIRET : </span> <span
+        <span class="text-light-emphasis">N SIRET : </span> <span
           class="value">{{user.profile!.company.siret}}</span>
       </span>
       <span>
-        <span class="text-light-emphasis font-Poppins">Métier : </span>
+        <span class="text-light-emphasis">Métier : </span>
         <span *ngFor="let job of user.profile!.company.jobs" class="value">{{ job.number }} {{ job.job.name }}, </span>
       </span>
       <span>
-        <span class="text-light-emphasis font-Poppins">Chiffres d'affaires : </span> <span
+        <span class="text-light-emphasis">Chiffres d'affaires : </span> <span
           class="value">{{user.profile!.company.capital}}</span>
       </span>
     </section>

@@ -1,0 +1,66 @@
+<ng-container *ngIf="(user$ | async) as user">
+  <div class="web-page">
+    <section class="action-menu">
+      <ul>
+        <li (click)="setView(0)" [class.active]="activeView == 0">Modifier mon profil</li>
+        <li (click)="setView(1)" [class.active]="activeView == 1">Modifier mon mot de passe</li>
+        <li (click)="setView(2)" [class.active]="activeView == 2">Candidatures en cours</li>
+        <li (click)="setView(3)" [class.active]="activeView == 3" class="separate">Gérer mes abonnements</li>
+        <li (click)="setView(4)" [class.active]="activeView == 4">Mes factures</li>
+        <li (click)="setView(5)" [class.active]="activeView == 5" class="separate">Partager l'application</li>
+        <li (click)="setView(6)" [class.active]="activeView == 6">Noter l'application</li>
+        <li (click)="setView(7)" [class.active]="activeView == 7">Nous contacter</li>
+        <li (click)="setView(8)" [class.active]="activeView == 8">FAQ</li>
+        <li (click)="setView(9)" [class.active]="activeView == 9" class="separate">Mentions légales</li>
+        <li (click)="setView(10)" [class.active]="activeView == 10">Se déconnecter</li>
+      </ul>
+    </section>
+    
+    <section class="main web-content font-Poppins">
+      <ng-container [ngSwitch]="activeView">
+        <ng-container *ngSwitchCase="0">
+          <profile-resume class="flex row center-cross space-around" [user]="user"></profile-resume>
+          <section class="job-description full-width space-children-margin">
+            
+            <span class="text-light-emphasis">Nom de l'entreprise : </span>
+            <span class="value">{{user.profile!.company.name}}</span>
+            
+            <span class="text-light-emphasis">N SIRET : </span>
+            <span class="value">{{user.profile!.company.siret}}</span>
+          
+            <span class="text-light-emphasis">Métier : </span>
+            <span>
+              <span *ngFor="let job of user.profile!.company.jobs" class="value">{{ job.number }} {{ job.job.name }}, </span>
+            </span>
+            
+            <span class="text-light-emphasis">Chiffres d'affaires : </span>
+            <span class="value">{{user.profile!.company.capital}}</span>
+          </section>
+      
+          <section class="documents">
+            <h4>Documents imporants</h4>
+            <div class="flex images">
+              <img src="assets/files/Impot.svg" />
+              <img src="assets/files/KBIS.svg" />
+              <img src="assets/files/qualibat.svg" />
+              <img src="assets/files/urssaf.svg" />
+            </div>
+          </section>
+        </ng-container>
+        <ng-container *ngSwitchCase="1">
+          <step direction="vertical" [tacheList]="[
+            {name: 'Infos Personelles'},
+            {name: 'Infos entreprise'},
+            {name: 'Certifications & labels'}
+          ]" #stepper style="margin-bottom: 40px;"></step>
+          <modify-profile-form [user]="user.profile!" [animate]="false" [index]="stepper.tacheIndex"></modify-profile-form>
+        </ng-container>
+        <ng-container *ngSwitchDefault>
+          <img src="/assets/wip.png">
+        </ng-container>
+      </ng-container>
+<!-- modify-profile-form -->
+      
+    </section>
+  </div>
+</ng-container>

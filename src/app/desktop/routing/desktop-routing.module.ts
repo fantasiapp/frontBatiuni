@@ -1,13 +1,16 @@
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
+import { AuthGuard } from "src/app/mobile/routing/auth/auth.guard";
+import { AuthResolver } from "src/app/mobile/routing/auth/auth.resolver";
 import { EmailConfirmation } from "src/app/shared/validators/email_confirmation/emailconfirmation.component";
 import { RegistrationSuccess } from "src/app/shared/validators/registration_success/registrationsuccess.component";
 import { AnnoncePage } from "../components/annonce_page/annonce.page";
 import { HeaderDesktop } from "../components/header/header.desktop";
 import { HomePageComponent } from "../components/home_page/home.page";
 import { LandingPageComponent } from "../components/landing_page/landing.page";
+import { MainPageComponent } from "../components/main/main.page";
+import { ProfilePageComponent } from "../components/profile/profile.page";
 import { RegisterPageComponent } from "../components/register/register.page";
-import { StepUI } from "../ui/step/step.ui";
 
 const routes: Routes =[{
     path: 'landing',
@@ -29,11 +32,14 @@ const routes: Routes =[{
     component: AnnoncePage
   }, {
     path: 'home',
-    component: HomePageComponent,
+    component: MainPageComponent,
+    canActivate: [AuthGuard],
+    resolve: [AuthResolver],
     children: [
-      {path: 'make', component: AnnoncePage}
+      {path: 'profile', component: ProfilePageComponent, data: { animation: 'profile' }},
+      {path: '', pathMatch: 'full', component: HomePageComponent, data: { animation: 'home' } },
+      {path: '**', component: HomePageComponent}
     ]
-    
   }, {
     path: '**',
     redirectTo: 'landing'
@@ -43,5 +49,6 @@ const routes: Routes =[{
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
+  providers: [AuthGuard, AuthResolver]
 })
 export class AppRoutingModule {}
