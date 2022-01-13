@@ -93,7 +93,7 @@ import { Job, Role } from "src/models/data/data.model";
             <div *ngIf="registerForm.errors?.server" class="server-error">
               {{ registerForm.errors?.server }}
             </div>
-            <button class="button discover gradient" style="width: 250px" [disabled]="!registerForm.dirty || registerForm.status === 'INVALID'">Valider</button>
+            <button class="button discover gradient" style="width: 250px" [disabled]="!registerForm.valid">Valider</button>
           </div>
         
           <div *ngIf="showSteps" class="form-step">

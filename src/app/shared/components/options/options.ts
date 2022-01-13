@@ -57,11 +57,8 @@ export class OptionsModel extends UIDefaultAccessor<Option[]> {
   set options(val: Option[]) {
     this.search = '';
     this._options = val;
-    this.availableOptions = val;
     this.value = val.filter(option => option.checked);
   }
-
-  availableOptions: Option[] = [];
 
 
   @Input()
@@ -79,16 +76,19 @@ export class OptionsModel extends UIDefaultAccessor<Option[]> {
   };
 
   filterOptions(e: Event) {
-    let search: string = (e.target as any).value
-    this.availableOptions = this.options.filter(option => option.name.toLowerCase().includes(search.toLowerCase()))
-  }
+    this.search = (e.target as any).value;
+}
 
+  get availableOptions() {
+    return this.options.filter(option => option.name.toLowerCase().includes(this.search.toLowerCase()));
+  }
 
   getInput(action: ['delete' | 'toggle', number]) {
     const isCheckbox = this._type[0] == 'checkbox';
     if ( isCheckbox && action[0] == 'delete' ) {
       let idx = action[1];
       let indexOf = this.options.findIndex(option => option == this.value![idx]);
+      
       this.options[indexOf] = {...this.options[indexOf], checked: false};
     } else if ( action[0] == 'toggle' ) {
       let id = action[1],
