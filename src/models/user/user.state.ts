@@ -9,7 +9,7 @@ import { User } from "./user.model";
 import { Login, Logout } from "../auth/auth.actions";
 import { throwError } from "rxjs";
 import { Mapper } from "../data/mapper.model";
-import { UserProfile } from "../data/data.model";
+import { Avatar, UserProfile } from "../data/data.model";
 import { AppState } from "src/app/app.state";
 
 @State<User>({
@@ -94,8 +94,12 @@ export class UserState {
           this.store.dispatch(new Logout());
         };
 
-        const currentUser = [...UserProfile.instances.values()][0];
-        ctx.patchState({ profile: currentUser, viewType: currentUser.role.id == 2 })
+        const currentUser = [...UserProfile.instances.values()][0],
+          partial: any = { profile: currentUser, viewType: currentUser.role.id == 2 };
+
+        let avatar: Avatar | null = null;
+        if ( avatar = Avatar.getById(1)! ) partial.imageUrl = 'data:image/' + avatar.ext + ';base64,' + avatar.content;
+        ctx.patchState(partial);
       })
     )
   }
@@ -106,13 +110,12 @@ export class UserState {
   }
 
   @Action(ModifyUserProfile)
-  modifyUser(ctx: AuthState, action: ModifyUserProfile) {
+  modifyUser(ctx: StateContext<User>, action: ModifyUserProfile) {
     let token = this.store.selectSnapshot(AuthState).token;
 
     const profile = this.store.selectSnapshot(UserState.profile)!,
       json = Mapper.mapModifyForm(profile, action.changes);
 
-    console.log(action.changes, json);
     let req = this.http.post(environment.backUrl + '/data/', json, {
       headers: {
         "Authorization": `Token ${token}`,
@@ -123,7 +126,8 @@ export class UserState {
     return req.pipe(
       tap((response: any) => {
         console.log('response', response);
-        Mapper.updateFrom(profile, response.valueModified);
+        const newProfile = Mapper.updateFrom(profile, response.valueModified);
+        ctx.patchState({profile: newProfile})
       })
     );
   }

@@ -1,5 +1,5 @@
+import produce from 'immer';
 import { getByValue } from 'src/common/functions';
-import { UserState } from '../user/user.state';
 import { Role, Job, Label, Company, UserProfile, JobForCompany, LabelForCompany, Avatar } from './data.model';
 
 type Dict<T> = {[key: string]: T};
@@ -191,8 +191,30 @@ export class Mapper {
     this.getTablesNames(data).forEach(tableName => this.mapTable(data, tableName));
   };
 
-  static updateFrom(root: any, data: any) {
-    console.log(root, data);
+  /*fix here: doesnt work with jobs and labels */
+  static updateFrom(root: UserProfile, data: any) {
+    const changed: any = {};
+
+    const newRoot = produce(root, root => {
+      for ( const table of ['Userprofile', 'Company'] as const ) {
+        if ( data[table] ) {
+          const keys = Object.keys(data[table]),
+            target = table == 'Userprofile' ? root : root.company as any,
+            clazz = target.constructor as any;
+          
+          for ( const key of keys )
+            target.values[clazz.fields.get(key)] = data[table][key];
+        }
+      }
+      return root;
+    });
+
+    //get dependencies
+    
+
+    UserProfile.instances.set(root.id, newRoot);
+    Company.instances.set(root.company.id, newRoot.company);
+    return newRoot;
   }
 
   static dirtyAndShallBeDeprecatedMap(data: any) {
@@ -205,13 +227,11 @@ export class Mapper {
     const keys = Object.keys(changes);
     tableLoop: for ( const table of definedTables ) {
       let featureKeys = keys.filter(key => key.startsWith(table));
-      console.log(table, featureKeys);
       if ( !featureKeys.length ) continue;
 
       output[table] = {};
       for ( const key of featureKeys ) {
         const field = key.split('.')[1];
-        console.log('on key', key, '>', field);
         if ( !field ) {
           output[table] = changes[key];
           continue tableLoop;
@@ -228,3 +248,8 @@ export class Mapper {
 };
 
 (window as any).mapper = Mapper;
+(window as any).avatar = Avatar;
+
+
+//!!!!! IMPORTANT !!!!!!
+//SEPERATE THE DATA STRUCTURE FROM THE STATE

@@ -1,3 +1,5 @@
+import { immerable } from "immer";
+
 // Values
 export class Role {
   constructor(public id: number, public name: string) {
@@ -43,6 +45,8 @@ export class Avatar {
 
 // Tables
 export class Company {
+  [immerable] = true;
+  
   constructor(public id: number, private values: any[]) {
     Company.instances.set(id, this);
   }
@@ -78,6 +82,8 @@ export class Company {
 };
 
 export class UserProfile {
+  [immerable] = true;
+
   constructor(public id: number, private values: any[]) {
     UserProfile.instances.set(id, this);
   }
