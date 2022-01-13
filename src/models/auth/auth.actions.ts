@@ -21,7 +21,9 @@ export class Register {
     public role: number,
     public proposer: string,
     public jobs: string[]
-  ) {}
+  ) {
+    console.log(this);
+  }
 
   static fromFormGroup(group: FormGroup) {
     let input = group.value;
@@ -31,7 +33,7 @@ export class Register {
       input.email,
       input.password,
       input.company,
-      +input.role,
+      +input.role.id,
       input.proposer,
       input.jobs.map((job: Option) => job.id)
     );
