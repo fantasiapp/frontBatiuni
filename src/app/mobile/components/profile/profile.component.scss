@@ -64,3 +64,12 @@ header {
 .form-container {
   @extend %overflow-y;
 }
+
+/* im sorry for writing this page badly */
+/* i had some difficulties with scrolling */
+.modify-page {
+  padding-bottom: 0;
+  .form-container {
+    padding-bottom: $page-padding;
+  }
+}

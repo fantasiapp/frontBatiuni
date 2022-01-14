@@ -7,7 +7,7 @@ import { FadeIn } from "src/animations/fade.animation";
   selector: 'main-page',
   template: `
     <desktop-stickyH></desktop-stickyH>
-    <div [@routeAnimation]="prepareRoute(outlet)" class="router">
+    <div class="router">
       <router-outlet #outlet="outlet"></router-outlet>
     </div>
   `,
@@ -22,19 +22,10 @@ import { FadeIn } from "src/animations/fade.animation";
 
     .router::ng-deep > * { width: 100vw; }
   `],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  animations: [
-    trigger('routeAnimation', [
-      transition("* => *", FadeIn)
-    ])
-  ]
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MainPageComponent {
   constructor() {
 
-  }
-
-  prepareRoute(outlet: RouterOutlet) {
-    return outlet?.activatedRouteData?.['animation'];
   }
 };
