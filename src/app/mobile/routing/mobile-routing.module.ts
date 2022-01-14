@@ -48,7 +48,7 @@ const routes: Routes = [{
     component: RegisterComponent,
     data: { animation: 'Register' }
   }, {
-    path: 'confirmed/:token?',
+    path: 'confirmed/:token',
     component: EmailConfirmation,
     data: { animation: 'Confirmed' }
   }, {
