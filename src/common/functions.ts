@@ -3,8 +3,8 @@ import { Optional } from "./types";
 export function nullable<T>(x: T) { return !x; }
 export function nonNullable<T>(x: T) { return !!x; }
 
-export function filterMap<U, V>(array: U[], mapping: (x: U) => Optional<V>) {
-  return array.map(mapping).filter(nonNullable);
+export function filterMap<U, V>(array: U[], mapping: (x: U) => Optional<V>): V[] {
+  return array.map(mapping).filter(nonNullable) as V[];
 };
 
 export function filterSplit<U>(array: U[], pred: (x: U) => boolean) {

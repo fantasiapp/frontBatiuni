@@ -1,59 +1,134 @@
-import { immerable } from "immer";
+import produce from "immer";
+
+export interface Table {
+  new (id: number, values: string[]): object;
+  fields: Map<string, number>;
+  getById(id: number): any;
+};
+
+export interface Value {
+  new (id: number, name: string): object;
+  getById(id: number): any;
+};
+
+/* base table class */
+abstract class __table__ {
+
+  static isTable(value: any) { return value instanceof __table__; }
+
+  abstract id: number;
+  abstract values: any[];
+
+  get structure() { return this.constructor as Table; }
+
+  /* used as ngxs state */
+  serialize() {
+    const descriptors = Object.getOwnPropertyDescriptors(this.structure.prototype);
+    delete descriptors['constructor']; //ignore constructor
+
+    const output: any = {id: this.id};
+    for ( const prop of Object.keys(descriptors) ) {
+      let value = descriptors[prop].get?.call(this);
+      value = this.deepSerialize(value);
+      output[prop] = value;
+    }
+    return output;
+  }
+
+  /* recursive helper */
+  private deepSerialize(value: any): any {
+    if ( Array.isArray(value) )
+      return value.map(v => this.deepSerialize(v));
+    if ( value instanceof __table__ )
+      return value.serialize();
+    else
+      return value;
+  }
+
+  /* recursive update by mutating the data */
+  /* one issue with this is that .serialize() will be called to update the app model */
+  /* try to find a way to prune unmodified nodes */
+  update(data: any) {
+    const props = Object.getOwnPropertyNames(data);
+    
+    for( const prop of props ) {
+      let index = this.structure.fields.get(prop);
+      if ( !index ) throw `Unknown property ${prop} of table ${this.structure.name}`;
+      
+      if ( __table__.isTable(this.values[index]) )
+        this.values[index].update(data[prop]);
+      else
+        this.values[index] = data[prop];
+    }
+
+    return this;
+  }
+};
+
+/* hold information about the table + enforces some types */
+function createTable<T>() {
+  return class __new_table__ extends __table__ {
+    
+    static fields = new Map<string, number>();
+    static instances = new Map<number, T>();
+    static getById(id: number): T { return __new_table__.instances.get(id)! as unknown as T; }
+
+    constructor(public id: number, public values: any[]) {
+      super();
+      __new_table__.instances.set(id, this as unknown as T);
+    }
+  }
+};
+
+function createValue() {
+  return class __value__ {
+
+    static instances = new Map<number, __value__>();
+    static getById(id: number) { return this.instances.get(id); }
+
+    constructor(public id: number, public name: string) {
+      __value__.instances.set(id, this);
+    }
+
+    serialize() {
+      return Object.assign({}, this);
+    }
+  };
+};
 
 // Values
-export class Role {
-  constructor(public id: number, public name: string) {
-    Role.instances.set(id, this);
-  }
-
-  static instances = new Map<number, Role>();
-  static getById(id: number) { return this.instances.get(id); }
-};
-
-export class Job {
-  constructor(public id: number, public name: string) {
-    Job.instances.set(id, this);
-  }
-
-  static instances = new Map<number, Job>();
-  static getById(id: number) { return this.instances.get(id); }
-};
-
-export class Label {
-  constructor(public id: number, public name: string) {
-    Label.instances.set(id, this);
-  }
-
-  static instances = new Map<number, Label>();
-  static getById(id: number) { return this.instances.get(id); }
-};
-
-
-export class Avatar {
-  constructor(public id: number, public values: any) {
-    Avatar.instances.set(id, values);
-  }
-
-  static id: number = 1;
-  static instances = new Map<number, Avatar>();
-  static getById(id: number) { return this.instances.get(id); }
-
-  get content() { return this.values.content; }
-  get ext() { return this.values.ext; }
-  get name() { return this.values.ext; }
-};
+export class Role extends createValue() {};
+export class Job extends createValue() {};
+export class Label extends createValue() {} ;
 
 // Tables
-export class Company {
-  [immerable] = true;
-  
-  constructor(public id: number, private values: any[]) {
-    Company.instances.set(id, this);
-  }
+export class JobForCompany extends createTable<JobForCompany>() {
+  get job(): Job { return this.values[JobForCompany.fields.get('Job')!]; }
+  get number(): number { return this.values[JobForCompany.fields.get('number')!]; }
+}
 
-  static fields = new Map<string, number>();
-  static instances = new Map<number, Company>();
-  static getById(id: number) { return this.instances.get(id); }
+
+export class LabelForCompany extends createTable<LabelForCompany>() {
+  get label() { return this.values[LabelForCompany.fields.get('Label')!]; }
+  get date() { return this.values[LabelForCompany.fields.get('date')!]; }
+};
+
+export class Files extends createTable<Files>() {
+  get nature() { return this.values[Files.fields.get('nature')!]; }
+  get name() { return this.values[Files.fields.get('name')!]; }
+  get ext() { return this.values[Files.fields.get('ext')!]; }
+  get expiration() { return this.values[Files.fields.get('expirationDate')!]; }
+  get timestamp() { return this.values[Files.fields.get('timestamp')!]; }
+  get content() { return this.values[Files.fields.get('content')!]; }
+
+  serialize() {
+    console.log('-- custom serialize -- ');
+    return super.serialize();
+  }
+}
+
+// Tables
+export class Company extends createTable<Company>() {
 
   get name() { return this.values[Company.fields.get('name')!]; }
   get siret() { return this.values[Company.fields.get('siret')!]; }
@@ -64,68 +139,16 @@ export class Company {
   get stars() { return this.values[Company.fields.get('stars')!]; }
   get companyPhone() { return this.values[Company.fields.get('companyPhone')!]; }
 
-  get jobs(): {job: Job, number: number}[] {
-    //stop using ids
-    return [...JobForCompany.instances.values()].filter(
-      (t: JobForCompany) => t.company == this
-    );
-  }
-
-  get labels(): {label: Label, date: string}[] {
-    return [...LabelForCompany.instances.values()].filter(
-      (t: LabelForCompany) => t.company == this
-    );
-  }
-
-  //mutabe data
-  update(data: any) { }
+  get jobs(): JobForCompany[] { return this.values[Company.fields.get('JobForCompany')!]; }
+  get labels(): LabelForCompany[] { return this.values[Company.fields.get('LabelForCompany')!]; }
 };
 
-export class UserProfile {
-  [immerable] = true;
-
-  constructor(public id: number, private values: any[]) {
-    UserProfile.instances.set(id, this);
-  }
-
-  static fields = new Map<string, number>();
-  static instances = new Map<number, UserProfile>();
-  static getById(id: number) { return this.instances.get(id); }
-
+export class UserProfile extends createTable<UserProfile>() {
   get user(): string { return this.values[UserProfile.fields.get('userName')!]; }
-  //user or userName ?
-  get company(): Company { return this.values[UserProfile.fields.get('company')!]; }
+  get company(): Company { return this.values[UserProfile.fields.get('Company')!]; }
   get firstName(): string { return this.values[UserProfile.fields.get('firstName')!]; }
   get lastName(): string { return this.values[UserProfile.fields.get('lastName')!]; }
   get proposer() { return this.values[UserProfile.fields.get('proposer')!]; }
-  get role(): Role { return this.values[UserProfile.fields.get('role')!]; }
+  get role(): Role { return this.values[UserProfile.fields.get('role')!]; } /*fix here: role -> Role */
   get cellPhone() { return this.values[UserProfile.fields.get('cellPhone')!]; }
-};
-
-export class JobForCompany {
-  constructor(public id: number, private values: any[]) {
-    JobForCompany.instances.set(id, this);
-  }
-
-  static fields = new Map<string, number>();
-  static instances = new Map<number, JobForCompany>();
-  static getById(id: number) { return this.instances.get(id); }
-
-  get job(): Job { return this.values[JobForCompany.fields.get('job')!]; }
-  get company(): Company { return this.values[JobForCompany.fields.get('company')!]; }
-  get number(): number { return this.values[JobForCompany.fields.get('number')!]; }
-};
-
-export class LabelForCompany {
-  constructor(public id: number, private values: any[]) {
-
-  }
-
-  static fields = new Map<string, number>();
-  static instances = new Map<number, LabelForCompany>();
-  static getById(id: number) { return this.instances.get(id); }
-
-  get label() { return this.values[LabelForCompany.fields.get('label')!]; }
-  get date() { return this.values[LabelForCompany.fields.get('date')!]; }
-  get company() { return this.values[LabelForCompany.fields.get('company')!]; }
 };

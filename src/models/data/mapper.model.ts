@@ -1,6 +1,8 @@
+//enforce the model and do operations
+
 import produce from 'immer';
-import { getByValue } from 'src/common/functions';
-import { Role, Job, Label, Company, UserProfile, JobForCompany, LabelForCompany, Avatar } from './data.model';
+import { filterMap, getByValue } from 'src/common/functions';
+import { Role, Job, Label, Company, UserProfile, JobForCompany, LabelForCompany, Files } from './data.model';
 
 type Dict<T> = {[key: string]: T};
 type ValueConstructor = {
@@ -14,8 +16,8 @@ type TableConstructor = {
   getById(id: number): any;
 }
 
-const definedTables = ['Company', 'Userprofile', 'JobForCompany', 'LabelForCompany'] as const;
-const definedValues = ['Role', 'Label', 'Job', /* fix here */ 'avatar'] as const;
+const definedTables = ['Company', 'Userprofile', 'JobForCompany', 'LabelForCompany', 'Files'] as const;
+const definedValues = ['Role', 'Label', 'Job'] as const;
 export type tableName = typeof definedTables[number];
 export type valueName = typeof definedValues[number];
 type definedType = tableName | valueName;
@@ -28,24 +30,17 @@ export class Mapper {
   private static mapping: {[key: string]: ValueConstructor | TableConstructor } = {
     'Company': Company,
     'Userprofile': UserProfile,
-    'Role': Role,
+    'Role': Role, 'role': Role,/*fix here: Report this to JLW */
     'Label': Label,
     'Job': Job,
     'JobForCompany': JobForCompany,
     'LabelForCompany': LabelForCompany,
-    'avatar': Avatar
+    'Files': Files
   };
 
   private static mapped: Dict<boolean> = Object.keys(Mapper.mapping).reduce(
     (mapped, key) => {mapped[key] = false; return mapped}, ({} as Dict<boolean>)
   );
-
-  private static fieldMap: {[key: string]: definedType} = {
-    'job': 'Job',
-    'company': 'Company',
-    'role': 'Role',
-    'label': 'Label'
-  };
 
   static readonly definedValues = definedValues;
   static readonly definedTables = definedTables;
@@ -53,18 +48,10 @@ export class Mapper {
   static getField(name: string): {
     name: definedType;
     class: ValueConstructor | TableConstructor;
-    multiple: boolean;
   } {
-    if ( this.fieldMap[name] ) return {
-      name: this.fieldMap[name],
-      class: this.mapping[this.fieldMap[name]],
-      multiple: false
-    }
-
-    if ( name[name.length-1] == 's' ) {
-      name = name.slice(0, -1);
-      let result = this.getField(name);
-      if ( result ) return {...result, multiple: true}
+    if ( this.mapping[name] ) return {
+      name: name as definedType,
+      class: this.mapping[name]
     }
 
     throw `Unknown name ${name}`;
@@ -114,6 +101,9 @@ export class Mapper {
   }
 
   private static mapFields(data: any, name: tableName) {
+    if ( (this.mapping[name] as TableConstructor).fields.size )
+      return; //already mapped
+
     let fields = data[name + 'Fields'],
       clazz = this.getTableClass(name);
 
@@ -122,7 +112,7 @@ export class Mapper {
 
   private static mapSimpleTable(data: any, name: tableName) {
     let clazz = this.getTableClass(name);
-    Object.entries(this.readTable(data, name)).forEach(([id, values]) => new clazz(+id, values));
+    Object.entries(this.readTable(data, name)).forEach(([id, values]) => new clazz(+id, values.slice()));
     this.mapped[name] = true;
   }
   
@@ -144,10 +134,22 @@ export class Mapper {
     })
   }
 
+  //map field method
+  static getTableDependencies(data: any, name: tableName) {
+    this.mapFields(data, name);
+    const table = this.mapping[name] as TableConstructor;
+    const fields = [...table.fields.keys()];
+    return filterMap<string, TableConstructor>(fields, field => {
+      if ( this.mapping[field] ) return this.mapping[field] as TableConstructor;
+      return null;
+    });
+  }
+
   private static mapTableDependencies(data: any, name: tableName) {
     let indices = data[name + 'Indices'] as number[],
       table = this.getTableClass(name);
         
+    const _name = name;
     let dependencies = indices.map(index => {
       let name = getByValue(table.fields, index)!,
         field = this.getField(name);
@@ -161,14 +163,15 @@ export class Mapper {
       return field;
     });
 
-    Object.entries(this.readTable(data, name)).forEach(([id, values]) => {
+    Object.entries(this.readTable(data, name)).forEach(([id, src]) => {
+      let values = src.slice();
       indices.forEach((index, i) => {
-        values[index] = dependencies[i].multiple ?
+        values[index] = Array.isArray(values[index]) ?
           values[index].map((id: string) => dependencies[i].class.getById(+id))
           : dependencies[i].class.getById(values[index])
       });
 
-      new table(+id, values.slice());
+      new table(+id, values);
     });
 
     this.mapped[name] = true;
@@ -184,42 +187,26 @@ export class Mapper {
       this.mapTableDependencies(data, name);
   }
 
+  static mapAllFields(data: any) {
+    Mapper.getTablesNames(data).map(table => Mapper.mapFields(data, table));
+  }
+
   static mapRequest(data: any) {
     console.log('mapping', data);
+    this.mapAllFields(data);
     this.staticMap(data);
-    this.dirtyAndShallBeDeprecatedMap(data);
     this.getTablesNames(data).forEach(tableName => this.mapTable(data, tableName));
   };
 
   /*fix here: doesnt work with jobs and labels */
-  static updateFrom(root: UserProfile, data: any) {
-    const changed: any = {};
-
-    const newRoot = produce(root, root => {
-      for ( const table of ['Userprofile', 'Company'] as const ) {
-        if ( data[table] ) {
-          const keys = Object.keys(data[table]),
-            target = table == 'Userprofile' ? root : root.company as any,
-            clazz = target.constructor as any;
-          
-          for ( const key of keys )
-            target.values[clazz.fields.get(key)] = data[table][key];
-        }
-      }
-      return root;
-    });
-
-    //get dependencies
+  /*fix here: Ask JLW to move company inside Userprofil */
+  static updateFrom(context: UserProfile, data: any) {
+    if ( !data['Userprofile'] ) data['Userprofile'] = {};
+    if ( data['Company'] ) data['Userprofile']['Company'] = data['Company'];
     
-
-    UserProfile.instances.set(root.id, newRoot);
-    Company.instances.set(root.company.id, newRoot.company);
-    return newRoot;
+    const newContext = UserProfile.getById(context.id).update(data['Userprofile']);
+    return newContext.serialize();
   }
-
-  static dirtyAndShallBeDeprecatedMap(data: any) {
-    new Avatar(Avatar.id++, data['avatar']);
-  };
 
   static mapModifyForm(user: UserProfile, changes: any) {
     const output: any = {action: 'modifyUser'};
@@ -248,8 +235,3 @@ export class Mapper {
 };
 
 (window as any).mapper = Mapper;
-(window as any).avatar = Avatar;
-
-
-//!!!!! IMPORTANT !!!!!!
-//SEPERATE THE DATA STRUCTURE FROM THE STATE

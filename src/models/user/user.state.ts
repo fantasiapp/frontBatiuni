@@ -9,7 +9,7 @@ import { User } from "./user.model";
 import { Login, Logout } from "../auth/auth.actions";
 import { throwError } from "rxjs";
 import { Mapper } from "../data/mapper.model";
-import { Avatar, UserProfile } from "../data/data.model";
+import { UserProfile } from "../data/data.model";
 import { AppState } from "src/app/app.state";
 
 @State<User>({
@@ -41,7 +41,7 @@ export class UserState {
       "imageExtension": action.src.format, // PNG OR JPEG
       "imageBase64": "data:image/png;base64,"+action.src.base64String
     }
-    console.log(data)
+
     let req = this.http.post(environment.backUrl + '/data/', data, {
       headers: {
         "Authorization": "Token " + token,
@@ -91,14 +91,16 @@ export class UserState {
         try {
           Mapper.mapRequest(response);
         } catch ( err ) {
+          console.error(err);
           this.store.dispatch(new Logout());
+          return;
         };
-
+        
         const currentUser = [...UserProfile.instances.values()][0],
-          partial: any = { profile: currentUser, viewType: currentUser.role.id == 2 };
+          partial: any = { profile: currentUser.serialize(), viewType: currentUser.role.id == 2 };
 
-        let avatar: Avatar | null = null;
-        if ( avatar = Avatar.getById(1)! ) partial.imageUrl = 'data:image/' + avatar.ext + ';base64,' + avatar.content;
+        //let avatar: Avatar | null = null;
+        //if ( avatar = Avatar.getById(1)! ) partial.imageUrl = 'data:image/' + avatar.ext + ';base64,' + avatar.content;
         ctx.patchState(partial);
       })
     )
