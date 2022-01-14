@@ -1,0 +1,3 @@
+- Optimize scss loading:
+  I suspect @import statement are creating redundant code.
+  Check it out and optimize

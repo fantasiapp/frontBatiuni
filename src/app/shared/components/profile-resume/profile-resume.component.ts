@@ -20,4 +20,8 @@ export class ProfileResume {
 
   @Output()
   profileChanged = new EventEmitter<boolean>();
+
+  onStarClicked() {
+    this.ratingsClicked.emit();
+  }
 };

@@ -1,4 +1,6 @@
 import {  ChangeDetectionStrategy, Component } from "@angular/core";
+import { ActivatedRoute } from "@angular/router";
+import { Store } from "@ngxs/store";
 
 @Component({
   selector: 'emailConfirmed',
@@ -7,5 +9,9 @@ import {  ChangeDetectionStrategy, Component } from "@angular/core";
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class EmailConfirmation {
-  constructor() { }
+  confirmed: boolean = false;
+
+  constructor(private store: Store, private route: ActivatedRoute) {
+    const token = this.route.snapshot.params.token;
+  }
 };
