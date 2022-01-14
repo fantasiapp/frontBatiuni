@@ -187,12 +187,16 @@
 
   margin-bottom: $form-item-spacing;
 
-  &.add-field > * {
+  span.number, options {
+    margin-bottom: $form-item-spacing;
+  }
+
+  .add-field > * {
     display: inline-block;
     vertical-align: middle;
   }
   
-  &.add-field img { margin: 0 $item-padding; position: static; }
+  .add-field img { margin: 0 $item-padding; position: static; }
 }
 
 .external-links {

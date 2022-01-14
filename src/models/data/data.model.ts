@@ -63,6 +63,10 @@ abstract class __table__ {
 
     return this;
   }
+
+  getIndex(key: string) {
+    return this.structure.fields.get(key);
+  }
 };
 
 /* hold information about the table + enforces some types */
@@ -103,23 +107,23 @@ export class Label extends createValue() {} ;
 
 // Tables
 export class JobForCompany extends createTable<JobForCompany>() {
-  get job(): Job { return this.values[JobForCompany.fields.get('Job')!]; }
-  get number(): number { return this.values[JobForCompany.fields.get('number')!]; }
+  get job(): Job { return this.values[this.getIndex('Job')!]; }
+  get number(): number { return this.values[this.getIndex('number')!]; }
 }
 
 
 export class LabelForCompany extends createTable<LabelForCompany>() {
-  get label() { return this.values[LabelForCompany.fields.get('Label')!]; }
-  get date() { return this.values[LabelForCompany.fields.get('date')!]; }
+  get label() { return this.values[this.getIndex('Label')!]; }
+  get date() { return this.values[this.getIndex('date')!]; }
 };
 
 export class Files extends createTable<Files>() {
-  get nature() { return this.values[Files.fields.get('nature')!]; }
-  get name() { return this.values[Files.fields.get('name')!]; }
-  get ext() { return this.values[Files.fields.get('ext')!]; }
-  get expiration() { return this.values[Files.fields.get('expirationDate')!]; }
-  get timestamp() { return this.values[Files.fields.get('timestamp')!]; }
-  get content() { return this.values[Files.fields.get('content')!]; }
+  get nature() { return this.values[this.getIndex('nature')!]; }
+  get name() { return this.values[this.getIndex('name')!]; }
+  get ext() { return this.values[this.getIndex('ext')!]; }
+  get expiration() { return this.values[this.getIndex('expirationDate')!]; }
+  get timestamp() { return this.values[this.getIndex('timestamp')!]; }
+  get content() { return this.values[this.getIndex('content')!]; }
 
   serialize() {
     console.log('-- custom serialize -- ');
@@ -130,25 +134,25 @@ export class Files extends createTable<Files>() {
 // Tables
 export class Company extends createTable<Company>() {
 
-  get name() { return this.values[Company.fields.get('name')!]; }
-  get siret() { return this.values[Company.fields.get('siret')!]; }
-  get capital() { return this.values[Company.fields.get('capital')!]; }
-  // get revenue() { return this.values[Company.fields.get('revenue')!]; }
-  get logo() { return this.values[Company.fields.get('logo')!]; }
-  get webSite() { return this.values[Company.fields.get('webSite')!]; }
-  get stars() { return this.values[Company.fields.get('stars')!]; }
-  get companyPhone() { return this.values[Company.fields.get('companyPhone')!]; }
+  get name() { return this.values[this.getIndex('name')!]; }
+  get siret() { return this.values[this.getIndex('siret')!]; }
+  get capital() { return this.values[this.getIndex('capital')!]; }
+  // get revenue() { return this.values[this.getIndex('revenue')!]; }
+  get logo() { return this.values[this.getIndex('logo')!]; }
+  get webSite() { return this.values[this.getIndex('webSite')!]; }
+  get stars() { return this.values[this.getIndex('stars')!]; }
+  get companyPhone() { return this.values[this.getIndex('companyPhone')!]; }
 
-  get jobs(): JobForCompany[] { return this.values[Company.fields.get('JobForCompany')!]; }
-  get labels(): LabelForCompany[] { return this.values[Company.fields.get('LabelForCompany')!]; }
+  get jobs(): JobForCompany[] { return this.values[this.getIndex('JobForCompany')!]; }
+  get labels():  LabelForCompany[] { return this.values[this.getIndex('LabelForCompany')!]; }
 };
 
 export class UserProfile extends createTable<UserProfile>() {
-  get user(): string { return this.values[UserProfile.fields.get('userName')!]; }
-  get company(): Company { return this.values[UserProfile.fields.get('Company')!]; }
-  get firstName(): string { return this.values[UserProfile.fields.get('firstName')!]; }
-  get lastName(): string { return this.values[UserProfile.fields.get('lastName')!]; }
-  get proposer() { return this.values[UserProfile.fields.get('proposer')!]; }
-  get role(): Role { return this.values[UserProfile.fields.get('role')!]; } /*fix here: role -> Role */
-  get cellPhone() { return this.values[UserProfile.fields.get('cellPhone')!]; }
+  get user(): string { return this.values[this.getIndex('userName')!]; }
+  get company(): Company { return this.values[this.getIndex('Company')!]; }
+  get firstName(): string { return this.values[this.getIndex('firstName')!]; }
+  get lastName(): string { return this.values[this.getIndex('lastName')!]; }
+  get proposer(): string { return this.values[this.getIndex('proposer')!]; }
+  get role(): Role { return this.values[this.getIndex('role')!]; } /*fix here: role -> Role */
+  get cellPhone(): string { return this.values[this.getIndex('cellPhone')!]; }
 };

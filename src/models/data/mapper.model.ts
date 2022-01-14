@@ -30,7 +30,7 @@ export class Mapper {
   private static mapping: {[key: string]: ValueConstructor | TableConstructor } = {
     'Company': Company,
     'Userprofile': UserProfile,
-    'Role': Role, 'role': Role,/*fix here: Report this to JLW */
+    'Role': Role, 'role': Role, /* fix here: Report this to JLW */
     'Label': Label,
     'Job': Job,
     'JobForCompany': JobForCompany,
@@ -55,6 +55,16 @@ export class Mapper {
     }
 
     throw `Unknown name ${name}`;
+  }
+
+  static follow(path: string, root: UserProfile) {
+    const properties = path.split('.').slice(1);
+    let node: any = root;
+    
+    for ( const child of properties )
+      node = node.values[node.getIndex(child)];
+    
+    return node;
   }
 
   static isTable(data: any, name: string) {

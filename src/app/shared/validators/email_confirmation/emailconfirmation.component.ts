@@ -28,7 +28,7 @@ export class EmailConfirmation extends Destroy$ {
       this.points = this.points.length >= 5 ? '.' : this.points += '.'
       this.cd.markForCheck();
     }, err => {
-      console.log('>>', err);
+      //....
     }, () => {
       console.log('completed');
       this.confirmed = true;

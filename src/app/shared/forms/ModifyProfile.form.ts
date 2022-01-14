@@ -61,7 +61,7 @@ import { SlidesDirective } from "../directives/slides.directive";
           <ng-container *ngIf="!addingField; else addfield_tpl">
             <label>Métiers</label>
             <ng-container formArrayName="Userprofile.jobs">
-              <span class="position-relative" *ngFor="let control of profileJobsControls; index as i">
+              <span class="position-relative number" *ngFor="let control of profileJobsControls; index as i">
                 <ng-container [formGroupName]="i">
                   <input class="form-element" type="text" [value]="control.get('job')!.value.name" disabled>
                   <div class="position-absolute number-container">
@@ -70,7 +70,7 @@ import { SlidesDirective } from "../directives/slides.directive";
                 </ng-container>
               </span>
             </ng-container>
-            <div (click)="addingField = true" class="form-input center-text add-field">
+            <div (click)="addingField = true" class="center-text add-field">
               <img src="assets/icons/add.svg"/>
               <span>Ajouter un métier</span>
             </div>
@@ -162,7 +162,6 @@ import { SlidesDirective } from "../directives/slides.directive";
       right: $item-padding;
     }
 
-    .metiers > * { margin-bottom: $item-padding; }
     .section {
       background-color: white;
       @extend %overflow-y;
@@ -212,7 +211,9 @@ export class ModifyProfileForm {
     ]),
     'Company.webSite': new FormControl('', [
     ]),
-    'Company.companyPhone': new FormControl('', []),
+    'Company.companyPhone': new FormControl('', [
+      
+    ]),
     'Company.labels': new FormArray([
 
     ])
