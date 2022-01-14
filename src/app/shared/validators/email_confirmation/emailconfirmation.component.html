@@ -1,9 +1,11 @@
-<div *ngIf="confirmed; else waiting_tpl" class="confirmation-pages cover-parent flex column center bg-blue" >
-  <div class="success-circle flex center">
+<div class="confirmation-pages cover-parent flex column center">
+  <ng-container *ngIf="confirmed; else waiting_tpl">
+    <div class="success-circle flex center">
       <img src="assets/confirmation.svg" />
-  </div>
-  <p class="confirmed-with-success">Votre profil à bien été confirmé !</p>
-  <button [routerLink]="['', 'connexion']">Commencer</button>
+    </div>
+    <p>Votre profil à bien été confirmé !</p>
+    <button [routerLink]="['', 'connexion']">Commencer</button>
+  </ng-container>
 </div>
 
 <ng-template #waiting_tpl>
@@ -12,4 +14,6 @@
     <div></div>
     <div></div>
   </div>
+  <p class="confirmed-with-success">Confirmation en cours {{ points }}</p>
+
 </ng-template>

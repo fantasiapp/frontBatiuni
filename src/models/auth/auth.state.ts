@@ -3,7 +3,7 @@ import { HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/htt
 import { Injectable, NgZone } from "@angular/core";
 import { AuthModel } from "./auth.model";
 import { environment } from 'src/environments/environment';
-import { Login, Logout, Register } from "./auth.actions";
+import { ConfirmAccount, Login, Logout, Register } from "./auth.actions";
 import { catchError, map, tap } from "rxjs/operators";
 import { Observable, of, throwError } from "rxjs";
 import * as strings from '../../common/strings';
@@ -89,4 +89,15 @@ export class AuthState {
     )
   };
 
+  @Action(ConfirmAccount)
+  confirmAccount(ctx: StateContext<AuthModel>, {token}: ConfirmAccount) {
+    const req = this.http.get(environment.backUrl + '/initialize/', {
+      params: {
+        action: 'registerConfirm',
+        token
+      }
+    });
+
+    return req;
+  }
 };

@@ -10,6 +10,11 @@ export class Logout {
   static readonly type = '[Auth] Logout';
 };
 
+export class ConfirmAccount {
+  static readonly type = '[Auth] Confirm Account';
+  constructor(public token: string) {}
+};
+
 export class Register {
   static readonly type = '[Auth] Register';
   private constructor(
