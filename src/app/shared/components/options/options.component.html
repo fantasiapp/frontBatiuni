@@ -11,7 +11,7 @@
     <div *ngIf="showDropDown" class="dropdown">
       <div *ngIf="searchable" class="dropdown-choices full-width flex row center-cross">
           <img src="assets/Rechercher.svg">
-          <input class="form-search"  (input)="filterOptions($event)" type="text" placeholder="Rechercher un métier"/>
+          <input class="form-search"  (input)="filterOptions($event)" type="text" placeholder="Rechercher un métier" tabindex="-1"/>
       </div>
       <div *ngIf="options.length" class="dropdown-content">
         <ul>

@@ -5,7 +5,7 @@ import { UIDefaultAccessor } from "src/common/classes";
 @Component({
   selector: 'box',
   template: `
-    <input [type]="type" [name]="name" (input)="onChange($event)" [checked]="value || null"/>
+    <input [type]="type" [name]="name" (input)="onChange($event)" [checked]="value || null" tabindex="-1"/>
     <span></span>
   `,
   styleUrls: ['./box.component.scss'],

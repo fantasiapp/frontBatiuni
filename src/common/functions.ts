@@ -62,7 +62,7 @@ export function getTopmostElement(element: HTMLElement) {
 export function focusOutside(element: HTMLElement | null, target: HTMLElement) {
   const topmost = getTopmostElement(target).parentElement !== null;
 
-  if ( !topmost ) return false; //on root ?
+  if ( !topmost ) return false; //if the element left the dom
   if ( !element?.contains(target) ) return true;
   return false;
 };

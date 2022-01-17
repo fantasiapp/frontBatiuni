@@ -26,20 +26,24 @@ export class OptionsModel extends UIDefaultAccessor<Option[]> {
   @HostListener('focus')
   onFocus() { console.log('focus'); this.showDropDown = true; }
 
-  //@HostListener('blur')
-  //onBlur() { console.log('blur'); this.showDropDown = false; }
+  @HostListener('blur', ['$event'])
+  onBlur(e: Event) {
+    const focused = (e as any).relatedTarget as HTMLElement;
+    if ( !focused ) return this.showDropDown = false;
+    if ( focusOutside(this.ref.nativeElement, focused) )
+      this.showDropDown = false;
+    return true;
+  }
 
   private static instances: OptionsModel[] = [];
   //clicking on selected item closes the list
   private static listener = (e: Event) => {
     const focused = e.target as HTMLElement,
-      mounted = getTopmostElement(focused).parentElement !== null;
+      mounted = focusOutside(null, focused);
 
-    if ( !focusOutside(null, focused) ) return;
-    //if ( !mounted ) return;
+    if ( !mounted ) return;
     for( const option of OptionsModel.instances )
       if ( focusOutside(option.ref.nativeElement, focused) ) {
-      //if ( ! option.ref.nativeElement.contains(focused) ) {
         option.forceClose();
         continue;
       }
