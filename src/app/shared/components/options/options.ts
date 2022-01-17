@@ -17,13 +17,14 @@ import { Option } from "src/models/option";
 })
 export class OptionsModel extends UIDefaultAccessor<Option[]> {
   search: string = '';
-  closed: boolean = false;
+  justClosed: boolean = false;
   showDropDown: boolean = false;
 
 
   //make generic and share class
   @HostListener('focusin', ['$event'])
-  onFocus(e: Event) {
+  onFocus(e: any) {
+    console.log('focus in', e.target, e.relatedTarget, this.showDropDown);
     e.stopPropagation();
     if ( e.target == this.ref.nativeElement) {
 
@@ -32,18 +33,28 @@ export class OptionsModel extends UIDefaultAccessor<Option[]> {
         searchInput?.focus();
       });
     }
+
     this.showDropDown = true;
   }
 
   @HostListener('focusout', ['$event'])
-  onBlur(e: Event) {
-    //e.stopPropagation();
+  onBlur(e: any) {
+    console.log('focus out', e.target, e.relatedTarget, this.showDropDown);
+    e.stopPropagation();
     const focused = (e as any).relatedTarget as HTMLElement;
     if ( !focused )
       return;
 
-    if ( focusOutside(this.ref.nativeElement, focused) )
+    if ( focusOutside(this.ref.nativeElement, focused) ) {
       this.showDropDown = false;
+      this.justClosed = true;
+    }
+  }
+
+  onToggle(e: Event) {
+    if ( !this.justClosed )
+      this.showDropDown = !this.showDropDown;
+    // this.justFocused = false;
   }
 
   private static instances: OptionsModel[] = [];
