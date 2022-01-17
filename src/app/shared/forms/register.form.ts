@@ -8,7 +8,7 @@ import { ComplexPassword, MatchField, setErrors } from "src/validators/verify";
 import { SlidesDirective } from "../directives/slides.directive";
 import { Option } from "src/models/option";
 import { Email } from "src/validators/persist";
-import { Job, Role } from "src/models/data/data.model";
+import { JobRow, RoleRow } from "src/models/data/data.model";
 
 
 @Component({
@@ -39,7 +39,7 @@ import { Job, Role } from "src/models/data/data.model";
           <div class="form-input">
             <label>Vérification addresse e-mail</label>
             <input type="email" formControlName="emailVerification"/>
-            <div *ngIf="registerForm.get('password')!.dirty  && registerForm.get('emailVerification')!.errors?.mismatch">
+            <div *ngIf="registerForm.get('password')!.dirty  && registerForm.get('emailVerification')!.errors?.mismatch" class="error">
               L'e-mail de confirmation doit être identique à celui du contact.
             </div>
           </div>
@@ -166,6 +166,8 @@ export class RegisterForm {
         errors => {
           if ( !errors.all ) this.onNavigate(-1)
           setErrors(this.registerForm, errors);
+          console.log(this.registerForm.errors);
+          this.cd.markForCheck();
         }
       );
   }
@@ -175,6 +177,6 @@ export class RegisterForm {
     else this.slider.right();
   }
 
-  jobs: Option[] = [...Job.instances.values()].map(job => ({...job, checked: false}));
-  roles = [...Role.instances.values()].map(role => ({id: role.id, name: role.name, checked: false}));
+  jobs: Option[] = [...JobRow.instances.values()].map(job => ({...job, checked: false}));
+  roles = [...RoleRow.instances.values()].map(role => ({id: role.id, name: role.name, checked: false}));
 };

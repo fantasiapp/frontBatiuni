@@ -2,7 +2,7 @@
 
 import produce from 'immer';
 import { filterMap, getByValue } from 'src/common/functions';
-import { Role, Job, Label, Company, UserProfile, JobForCompany, LabelForCompany, Files } from './data.model';
+import { RoleRow, JobRow, LabelRow, CompanyRow, UserProfileRow, JobForCompanyRow, LabelForCompanyRow, FilesRow } from './data.model';
 
 type Dict<T> = {[key: string]: T};
 type ValueConstructor = {
@@ -23,19 +23,19 @@ export type valueName = typeof definedValues[number];
 type definedType = tableName | valueName;
 
 
-export type Value = Role | Job | Label;
-export type Table = UserProfile | Company;
+export type Value = RoleRow | JobRow | LabelRow;
+export type Table = UserProfileRow | CompanyRow;
 
 export class Mapper {
   private static mapping: {[key: string]: ValueConstructor | TableConstructor } = {
-    'Company': Company,
-    'Userprofile': UserProfile,
-    'Role': Role, 'role': Role, /* fix here: Report this to JLW */
-    'Label': Label,
-    'Job': Job,
-    'JobForCompany': JobForCompany,
-    'LabelForCompany': LabelForCompany,
-    'Files': Files
+    'Company': CompanyRow,
+    'Userprofile': UserProfileRow,
+    'Role': RoleRow, 'role': RoleRow, /* fix here: Report this to JLW */
+    'Label': LabelRow,
+    'Job': JobRow,
+    'JobForCompany': JobForCompanyRow,
+    'LabelForCompany': LabelForCompanyRow,
+    'Files': FilesRow
   };
 
   private static mapped: Dict<boolean> = Object.keys(Mapper.mapping).reduce(
@@ -57,7 +57,7 @@ export class Mapper {
     throw `Unknown name ${name}`;
   }
 
-  static follow(path: string, root: UserProfile) {
+  static follow(path: string, root: UserProfileRow) {
     const properties = path.split('.').slice(1);
     let node: any = root;
     
@@ -210,15 +210,15 @@ export class Mapper {
 
   /*fix here: doesnt work with jobs and labels */
   /*fix here: Ask JLW to move company inside Userprofil */
-  static updateFrom(context: UserProfile, data: any) {
+  static updateFrom(context: any, data: any) {
     if ( !data['Userprofile'] ) data['Userprofile'] = {};
     if ( data['Company'] ) data['Userprofile']['Company'] = data['Company'];
     
-    const newContext = UserProfile.getById(context.id).update(data['Userprofile']);
+    const newContext = UserProfileRow.getById(context.id).update(data['Userprofile']);
     return newContext.serialize();
   }
 
-  static mapModifyForm(user: UserProfile, changes: any) {
+  static mapModifyForm(user: any, changes: any) {
     const output: any = {action: 'modifyUser'};
 
     const keys = Object.keys(changes);

@@ -20,6 +20,6 @@
       <rect id="Rectangle_83" data-name="Rectangle 83" width="44.418" height="2.897" transform="translate(20.179 60.833)" fill="#ccc"/>
       <rect id="Rectangle_84" data-name="Rectangle 84" width="44.418" height="2.897" transform="translate(20.179 69.523)" fill="#ccc"/>
     </g>
-    <text id="Impôt" transform="translate(4.296 27.836)" fill="#fff" font-size="14" font-family="Roboto-Medium, Roboto" font-weight="500"><tspan x="0" y="0">Impôt</tspan></text>
+    <text id="Impôt" transform="translate(4.296 27.836)" fill="#fff" font-size="14" font-family="Roboto" font-weight="500"><tspan x="0" y="0">Impôt</tspan></text>
   </g>
 </svg>

@@ -5,7 +5,7 @@
       <ul *ngIf="showChosenItems" class="chosen-items" [class.multiple]="_type[0] == 'checkbox'">
         <li *ngFor="let choice of value; let i = index" (click)="onChange(['delete', i])">{{choice.name}}</li>
       </ul>
-      <img (click)="showDropDown = !showDropDown" src="assets/arrowdown.svg"/>
+      <img src="assets/arrowdown.svg"/>
     </div>
 
     <div *ngIf="showDropDown" class="dropdown">

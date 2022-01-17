@@ -1,4 +1,6 @@
-import produce from "immer";
+//find a way to mark objects as serialized
+
+import { Serialized } from "src/common/types";
 
 export interface Table {
   new (id: number, values: string[]): object;
@@ -11,13 +13,12 @@ export interface Value {
   getById(id: number): any;
 };
 
-/* base table class */
-abstract class __table__ {
-
+/* base table metaclass */
+/* instance stuff and all that */
+class __table__ {
   static isTable(value: any) { return value instanceof __table__; }
 
-  abstract id: number;
-  abstract values: any[];
+  constructor(public id: number, public values: any[]) {}
 
   get structure() { return this.constructor as Table; }
 
@@ -67,19 +68,32 @@ abstract class __table__ {
   getIndex(key: string) {
     return this.structure.fields.get(key);
   }
+
+  getField(key: string) {
+    return this.values[this.getIndex(key)!];
+  }
 };
 
-/* hold information about the table + enforces some types */
+/* hold information about the table instance */
 function createTable<T>() {
-  return class __new_table__ extends __table__ {
-    
+  return class __table_instance__ extends __table__ {
+
     static fields = new Map<string, number>();
     static instances = new Map<number, T>();
-    static getById(id: number): T { return __new_table__.instances.get(id)! as unknown as T; }
+    static getById(id: number): T { return __table_instance__.instances.get(id)! as unknown as T; }
 
-    constructor(public id: number, public values: any[]) {
-      super();
-      __new_table__.instances.set(id, this as unknown as T);
+    constructor(id: number, values: any[]) {
+      super(id, values);
+      __table_instance__.instances.set(id, this as unknown as T);
+    }
+
+    //for now to add types
+    serialize(): Serialized<T> {
+      return super.serialize();
+    }
+
+    asRaw(): Readonly<Serialized<T>> {
+      return this as unknown as Readonly<Serialized<T>>;
     }
   }
 };
@@ -101,29 +115,29 @@ function createValue() {
 };
 
 // Values
-export class Role extends createValue() {};
-export class Job extends createValue() {};
-export class Label extends createValue() {} ;
+export class RoleRow extends createValue() {};
+export class JobRow extends createValue() {};
+export class LabelRow extends createValue() {} ;
 
 // Tables
-export class JobForCompany extends createTable<JobForCompany>() {
-  get job(): Job { return this.values[this.getIndex('Job')!]; }
-  get number(): number { return this.values[this.getIndex('number')!]; }
+export class JobForCompanyRow extends createTable<JobForCompanyRow>() {
+  get job(): JobRow { return this.getField('Job'); }
+  get number(): number { return this.getField('number'); }
 }
 
 
-export class LabelForCompany extends createTable<LabelForCompany>() {
-  get label() { return this.values[this.getIndex('Label')!]; }
-  get date() { return this.values[this.getIndex('date')!]; }
+export class LabelForCompanyRow extends createTable<LabelForCompanyRow>() {
+  get label() { return this.getField('Label') }
+  get date() { return this.getField('date') }
 };
 
-export class Files extends createTable<Files>() {
-  get nature() { return this.values[this.getIndex('nature')!]; }
-  get name() { return this.values[this.getIndex('name')!]; }
-  get ext() { return this.values[this.getIndex('ext')!]; }
-  get expiration() { return this.values[this.getIndex('expirationDate')!]; }
-  get timestamp() { return this.values[this.getIndex('timestamp')!]; }
-  get content() { return this.values[this.getIndex('content')!]; }
+export class FilesRow extends createTable<FilesRow>() {
+  get nature() { return this.getField('nature') }
+  get name() { return this.getField('name') }
+  get ext() { return this.getField('ext') }
+  get expiration() { return this.getField('expirationDate') }
+  get timestamp() { return this.getField('timestamp') }
+  get content() { return this.getField('content') }
 
   serialize() {
     console.log('-- custom serialize -- ');
@@ -132,27 +146,41 @@ export class Files extends createTable<Files>() {
 }
 
 // Tables
-export class Company extends createTable<Company>() {
+export class CompanyRow extends createTable<CompanyRow>() {
 
-  get name() { return this.values[this.getIndex('name')!]; }
-  get siret() { return this.values[this.getIndex('siret')!]; }
-  get capital() { return this.values[this.getIndex('capital')!]; }
-  // get revenue() { return this.values[this.getIndex('revenue')!]; }
-  get logo() { return this.values[this.getIndex('logo')!]; }
-  get webSite() { return this.values[this.getIndex('webSite')!]; }
-  get stars() { return this.values[this.getIndex('stars')!]; }
-  get companyPhone() { return this.values[this.getIndex('companyPhone')!]; }
+  get name() { return this.getField('name') }
+  get siret() { return this.getField('siret') }
+  get capital() { return this.getField('capital') }
+  // get revenue() { return this.getField('revenue') }
+  get logo() { return this.getField('logo') }
+  get webSite() { return this.getField('webSite') }
+  get stars() { return this.getField('stars') }
+  get companyPhone() { return this.getField('companyPhone') }
 
-  get jobs(): JobForCompany[] { return this.values[this.getIndex('JobForCompany')!]; }
-  get labels():  LabelForCompany[] { return this.values[this.getIndex('LabelForCompany')!]; }
+  get jobs(): JobForCompanyRow[] { return this.getField('JobForCompany') }
+  get labels():  LabelForCompanyRow[] { return this.getField('LabelForCompany') }
 };
 
-export class UserProfile extends createTable<UserProfile>() {
-  get user(): string { return this.values[this.getIndex('userName')!]; }
-  get company(): Company { return this.values[this.getIndex('Company')!]; }
-  get firstName(): string { return this.values[this.getIndex('firstName')!]; }
-  get lastName(): string { return this.values[this.getIndex('lastName')!]; }
-  get proposer(): string { return this.values[this.getIndex('proposer')!]; }
-  get role(): Role { return this.values[this.getIndex('role')!]; } /*fix here: role -> Role */
-  get cellPhone(): string { return this.values[this.getIndex('cellPhone')!]; }
+export class UserProfileRow extends createTable<UserProfileRow>() {
+  get user(): string { return this.getField('userName') }
+  get company(): CompanyRow { return this.getField('Company') }
+  get firstName(): string { return this.getField('firstName') }
+  get lastName(): string { return this.getField('lastName') }
+  get proposer(): string { return this.getField('proposer') }
+  get role(): RoleRow { return this.getField('role') } /*fix here: role -> Role */
+  get cellPhone(): string { return this.getField('cellPhone') }
 };
+
+//Objectives
+//Move mapper here
+//Make a model interface and these types should implement it
+//Serialized stuff is the model
+
+export type UserProfile = Serialized<UserProfileRow>;
+export type Company = Serialized<CompanyRow>;
+export type Files = Serialized<FilesRow>;
+export type JobForCompany = Serialized<JobForCompanyRow>;
+export type LabelForCompany = Serialized<LabelForCompanyRow>;
+export type Role = Serialized<RoleRow>;
+export type Label = Serialized<LabelRow>;
+export type Job = Serialized<JobRow>;

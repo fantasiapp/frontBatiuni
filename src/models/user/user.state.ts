@@ -9,7 +9,7 @@ import { User } from "./user.model";
 import { Login, Logout } from "../auth/auth.actions";
 import { throwError } from "rxjs";
 import { Mapper } from "../data/mapper.model";
-import { UserProfile } from "../data/data.model";
+import { UserProfileRow } from "../data/data.model";
 import { AppState } from "src/app/app.state";
 
 @State<User>({
@@ -96,7 +96,7 @@ export class UserState {
           return;
         };
         
-        const currentUser = [...UserProfile.instances.values()][0],
+        const currentUser = [...UserProfileRow.instances.values()][0],
           partial: any = { profile: currentUser.serialize(), viewType: currentUser.role.id == 2 };
 
         //let avatar: Avatar | null = null;

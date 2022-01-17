@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, Output } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostBinding, HostListener, Input, Output } from "@angular/core";
 import { NG_VALUE_ACCESSOR } from "@angular/forms";
 import { UIDefaultAccessor } from "src/common/classes";
 import { getTopmostElement, makeid } from "src/common/functions";
@@ -18,6 +18,16 @@ import { Option } from "src/models/option";
 export class OptionsModel extends UIDefaultAccessor<Option[]> {
   search: string = '';
   showDropDown: boolean = false;
+
+  @HostBinding('attr.tabindex')
+  get tabIndex() { return 0; }
+
+  //make generic and share class
+  @HostListener('focus')
+  onFocus() { this.showDropDown = true; }
+
+  @HostListener('blur')
+  onBlur() { this.showDropDown = false; }
 
   private static instances: OptionsModel[] = [];
   //clicking on selected item closes the list

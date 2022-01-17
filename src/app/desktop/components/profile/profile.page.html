@@ -30,7 +30,7 @@
           
             <span class="text-light-emphasis">Métier : </span>
             <span>
-              <span *ngFor="let job of user.profile!.company.jobs" class="value">{{ job.number }} {{ job.job.name }}, </span>
+              <span *ngFor="let job of user.profile!.company.jobs!" class="value">{{ job.number }} {{ job.job.name }}, </span>
             </span>
             
             <span class="text-light-emphasis">Chiffres d'affaires : </span>
@@ -40,10 +40,10 @@
           <section class="documents">
             <h4>Documents importants</h4>
             <div class="flex images">
-              <img src="assets/files/Impot.svg" />
-              <img src="assets/files/KBIS.svg" />
-              <img src="assets/files/qualibat.svg" />
-              <img src="assets/files/urssaf.svg" />
+              <object type="image/svg+xml" data="assets/files/Impot.svg"></object>
+              <object type="image/svg+xml" data="assets/files/KBIS.svg"></object>
+              <object type="image/svg+xml" data="assets/files/qualibat.svg"></object>
+              <object type="image/svg+xml" data="assets/files/urssaf.svg"></object>
             </div>
           </section>
         </ng-container>

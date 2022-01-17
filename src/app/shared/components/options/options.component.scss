@@ -3,6 +3,7 @@
 :host {
   display: block;
   font-family: "Poppins";
+  outline: none;
 }
 
 .form-select {
@@ -22,6 +23,7 @@
     top: 50%;
     transform: translateY(-50%);
     height: 20px;
+    pointer-events: none;
   }
 }
 
