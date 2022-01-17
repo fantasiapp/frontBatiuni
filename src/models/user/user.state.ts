@@ -116,7 +116,7 @@ export class UserState {
 
     console.log('posting', action);
 
-    let req = this.http.post(environment.backUrl + '/data/', action.changes, {
+    let req = this.http.post(environment.backUrl + '/data/', action, {
       headers: {
         "Authorization": `Token ${token}`,
         'Content-Type': 'application/json'

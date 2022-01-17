@@ -155,7 +155,7 @@ export class HttpAction {
   };
 };
 
-const PropertyTrap: ProxyHandler<any> = {
+export const PropertyTrap: ProxyHandler<any> = {
   get(target: any, property: string) {
     const path = property.split('.');
     

@@ -300,11 +300,11 @@ export class ModifyProfileForm {
       const form = new FormGroup({
         job: new FormControl(job),
         number: new FormControl(number)
-      })
+      });
+
+      form.markAsDirty();
       jobsControl.push(form);
     });
-
-    console.log('!!', jobsControl.value);
   };
 
   updateLabels(labelOptions: Option[]) {
@@ -314,10 +314,12 @@ export class ModifyProfileForm {
 
     labelsControl.clear();
     newLabels.forEach((label) => {
-      labelsControl.push(new FormGroup({
+      const form  = new FormGroup({
         label: new FormControl(label),
         fileData: new FormControl({files: null, date: now} as FileinputOutput)
-      }))
+      });
+      form.markAsDirty();
+      labelsControl.push(form);
     });
   }
   

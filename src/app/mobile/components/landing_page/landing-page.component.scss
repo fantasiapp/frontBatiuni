@@ -5,6 +5,7 @@
 :host {
   display: block;
   width: 100vw;
+  overflow-x: hidden;
   @extend %fixed;
   @extend .full-page;
 }
