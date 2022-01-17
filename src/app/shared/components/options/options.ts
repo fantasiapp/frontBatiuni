@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostBinding, HostListener, Input, Output } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostBinding, HostListener, Input, NgZone, Output, ViewChild } from "@angular/core";
 import { NG_VALUE_ACCESSOR } from "@angular/forms";
 import { UIDefaultAccessor } from "src/common/classes";
 import { focusOutside, getTopmostElement, makeid } from "src/common/functions";
@@ -19,9 +19,20 @@ export class OptionsModel extends UIDefaultAccessor<Option[]> {
   search: string = '';
   showDropDown: boolean = false;
 
+
   //make generic and share class
   @HostListener('focusin', ['$event'])
-  onFocus(e: Event) { e.stopPropagation(); this.showDropDown = true; }
+  onFocus(e: Event) {
+    e.stopPropagation();
+    if ( e.target == this.ref.nativeElement) {
+
+      requestAnimationFrame(() => {
+        const searchInput = this.ref.nativeElement.querySelector('input[type=text]');
+        searchInput?.focus();
+      });
+    }
+    this.showDropDown = true;
+  }
 
   @HostListener('focusout', ['$event'])
   onBlur(e: Event) {
@@ -50,13 +61,17 @@ export class OptionsModel extends UIDefaultAccessor<Option[]> {
 
   private static listening: boolean = false;
 
+  ngAfterViewInit() {
+    console.log('view init');
+  }
+
   ngOnInit() {
     OptionsModel.instances.push(this);
     if ( !OptionsModel.listening )
       window.addEventListener('click', OptionsModel.listener);
   }
 
-  constructor(public ref: ElementRef, private cd: ChangeDetectorRef) {
+  constructor(public ref: ElementRef, private cd: ChangeDetectorRef, private zone: NgZone) {
     super();
     this.value = [];
   }
