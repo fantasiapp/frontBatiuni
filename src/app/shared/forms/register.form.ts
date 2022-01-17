@@ -93,7 +93,7 @@ import { JobRow, RoleRow } from "src/models/data/data.model";
             <div *ngIf="registerForm.errors?.server" class="server-error">
               {{ registerForm.errors?.server }}
             </div>
-            <button class="button discover gradient" style="width: 250px" [disabled]="!registerForm.valid">Valider</button>
+            <button *ngIf="showSubmitButton" class="button discover gradient" style="width: 250px" [disabled]="!registerForm.valid">Valider</button>
           </div>
         
           <div *ngIf="showSteps" class="form-step">
@@ -133,6 +133,9 @@ export class RegisterForm {
 
   @Input()
   showSteps: boolean = true;
+
+  @Input()
+  showSubmitButton: boolean = true;
 
   registerForm = new FormGroup({
     lastname: new FormControl('', [

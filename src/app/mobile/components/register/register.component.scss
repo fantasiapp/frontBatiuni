@@ -6,6 +6,8 @@
 }
 
 .big-sticky-footer {
+  box-shadow: 0 -3px 3px 0 #ddd;
+
   background-color: white;
   @extend %sticky-footer;
   height: $big-sticky-footer-height;
