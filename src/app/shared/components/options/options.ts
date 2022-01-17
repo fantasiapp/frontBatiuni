@@ -17,44 +17,46 @@ import { Option } from "src/models/option";
 })
 export class OptionsModel extends UIDefaultAccessor<Option[]> {
   search: string = '';
-  justClosed: boolean = false;
+  private enteredFromOutside: boolean = false;
+  private exitedToOutside: boolean = false;
+  private focusedOut: boolean = false;
   showDropDown: boolean = false;
 
 
   //make generic and share class
+  //and fucking fix this
   @HostListener('focusin', ['$event'])
   onFocus(e: any) {
-    console.log('focus in', e.target, e.relatedTarget, this.showDropDown);
+    const source = e.relatedTarget;
     e.stopPropagation();
-    if ( e.target == this.ref.nativeElement) {
-
-      requestAnimationFrame(() => {
-        const searchInput = this.ref.nativeElement.querySelector('input[type=text]');
-        searchInput?.focus();
-      });
-    }
-
+    if ( !source ) this.enteredFromOutside = true;
     this.showDropDown = true;
+    requestAnimationFrame(() => {
+      const searchInput = this.ref.nativeElement.querySelector('input[type=text]');
+      searchInput?.focus();
+    });
   }
+
+
 
   @HostListener('focusout', ['$event'])
   onBlur(e: any) {
-    console.log('focus out', e.target, e.relatedTarget, this.showDropDown);
-    e.stopPropagation();
     const focused = (e as any).relatedTarget as HTMLElement;
     if ( !focused )
       return;
 
     if ( focusOutside(this.ref.nativeElement, focused) ) {
       this.showDropDown = false;
-      this.justClosed = true;
+      this.exitedToOutside = true;
     }
   }
 
+  @HostListener('click')
+  private onClick() { this.enteredFromOutside = this.exitedToOutside = false; }
+
   onToggle(e: Event) {
-    if ( !this.justClosed )
+    if ( this.enteredFromOutside  || (!this.enteredFromOutside && !this.exitedToOutside))
       this.showDropDown = !this.showDropDown;
-    // this.justFocused = false;
   }
 
   private static instances: OptionsModel[] = [];
