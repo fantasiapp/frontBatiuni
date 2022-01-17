@@ -19,7 +19,6 @@ export class OptionsModel extends UIDefaultAccessor<Option[]> {
   search: string = '';
   private enteredFromOutside: boolean = false;
   private exitedToOutside: boolean = false;
-  private focusedOut: boolean = false;
   showDropDown: boolean = false;
 
 
@@ -36,8 +35,6 @@ export class OptionsModel extends UIDefaultAccessor<Option[]> {
       searchInput?.focus();
     });
   }
-
-
 
   @HostListener('focusout', ['$event'])
   onBlur(e: any) {
