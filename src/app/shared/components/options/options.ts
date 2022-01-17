@@ -17,6 +17,7 @@ import { Option } from "src/models/option";
 })
 export class OptionsModel extends UIDefaultAccessor<Option[]> {
   search: string = '';
+  closed: boolean = false;
   showDropDown: boolean = false;
 
 

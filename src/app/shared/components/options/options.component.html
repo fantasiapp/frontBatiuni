@@ -5,12 +5,12 @@
       <ul *ngIf="showChosenItems" class="chosen-items" [class.multiple]="_type[0] == 'checkbox'">
         <li *ngFor="let choice of value; let i = index" (click)="onChange(['delete', i])">{{choice.name}}</li>
       </ul>
-      <img src="assets/arrowdown.svg"/>
+      <img src="assets/arrowdown.svg" (click)="closed = !closed"/>
     </div>
 
-    <div *ngIf="showDropDown" class="dropdown">
+    <div *ngIf="!closed && showDropDown" class="dropdown">
       <div *ngIf="searchable" class="dropdown-choices full-width flex row center-cross">
-          <img src="assets/Rechercher.svg">
+          <img src="assets/Rechercher.svg" (click)="showDropDown = false">
           <input class="form-search" (input)="filterOptions($event)" type="text" placeholder="Rechercher un métier"/>
       </div>
       <div *ngIf="options.length" class="dropdown-content">
