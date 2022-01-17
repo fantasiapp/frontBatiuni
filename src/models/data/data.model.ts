@@ -18,7 +18,7 @@ export interface Value {
 class __table__ {
   static isTable(value: any) { return value instanceof __table__; }
 
-  constructor(public id: number, public values: any[]) {}
+  constructor(public id: number, protected values: any[]) {}
 
   get structure() { return this.constructor as Table; }
 
@@ -32,8 +32,7 @@ class __table__ {
       let value = descriptors[prop].get?.call(this);
       value = this.deepSerialize(value);
       output[prop] = value;
-    }
-    return output;
+    }; return output;
   }
 
   /* recursive helper */
@@ -174,9 +173,11 @@ export class UserProfileRow extends createTable<UserProfileRow>() {
 //Objectives
 //Move mapper here
 //Make a model interface and these types should implement it
-//Serialized stuff is the model
+// -- Serialized stuff is the model
 
-export type UserProfile = Serialized<UserProfileRow>;
+
+//Type aliases
+export type Profile = Serialized<UserProfileRow>;
 export type Company = Serialized<CompanyRow>;
 export type Files = Serialized<FilesRow>;
 export type JobForCompany = Serialized<JobForCompanyRow>;

@@ -57,4 +57,32 @@ export function getTopmostElement(element: HTMLElement) {
   while ( element.parentElement && element.parentElement !== document.body)
     element = element.parentElement;
   return element;
-}
+};
+
+export function focusOutside(element: HTMLElement | null, target: HTMLElement) {
+  const topmost = getTopmostElement(target).parentElement !== null;
+
+  if ( !topmost ) return false; //on root ?
+  if ( !element?.contains(target) ) return true;
+  return false;
+};
+
+/*https://stackoverflow.com/questions/5560248/programmatically-lighten-or-darken-a-hex-color-or-rgb-and-blend-colors*/
+/* Pablo & David Sherret */
+export function shadeColor(color: string, percent: number) {
+  let R = parseInt(color.substring(1,3),16);
+  let G = parseInt(color.substring(3,5),16);
+  let B = parseInt(color.substring(5,7),16);
+
+  R = R * ((100 + percent) / 100) | 0;
+  G = G * ((100 + percent) / 100) | 0;
+  B = B * ((100 + percent) / 100) | 0; //cast back to int
+  R = (R<255)?R:255;  
+  G = (G<255)?G:255;  
+  B = (B<255)?B:255;  
+
+  const RR = ((R.toString(16).length==1)?"0"+R.toString(16):R.toString(16));
+  const GG = ((G.toString(16).length==1)?"0"+G.toString(16):G.toString(16));
+  const BB = ((B.toString(16).length==1)?"0"+B.toString(16):B.toString(16));
+  return "#"+RR+GG+BB;
+};

@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component } from "@angular/core";
 import { Store } from "@ngxs/store";
-import { UserProfile } from "src/models/data/data.model";
+import { UserProfileRow } from "src/models/data/data.model";
 import { UserState } from "src/models/user/user.state";
 
 @Component({

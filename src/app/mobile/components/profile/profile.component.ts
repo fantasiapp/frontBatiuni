@@ -13,7 +13,7 @@ import { ImageGenerator } from "src/app/shared/services/image-generator.service"
 import { map, take } from "rxjs/operators";
 import { FormArray, FormControl, FormGroup } from "@angular/forms";
 import { Email } from "src/validators/persist";
-import { Job, UserProfile } from "src/models/data/data.model";
+import { JobRow, UserProfileRow } from "src/models/data/data.model";
 
 
 @Component({

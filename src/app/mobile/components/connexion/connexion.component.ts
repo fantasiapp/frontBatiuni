@@ -57,7 +57,6 @@ export class ConnexionComponent extends Destroy$ {
         }
       },
       errors => {
-        console.log('got errors', errors);
         setErrors(this.loginForm, errors);
         this.cd.markForCheck();
       }

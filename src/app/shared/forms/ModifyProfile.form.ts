@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, HostListener, Input, ViewChild, EventEmitter, Output } from "@angular/core";
 import { FormArray, FormControl, FormGroup } from "@angular/forms";
 import { Serialized } from "src/common/types";
-import { JobRow, JobForCompanyRow, LabelRow, UserProfileRow } from "src/models/data/data.model";
+import { JobRow, LabelRow, UserProfileRow } from "src/models/data/data.model";
 import { Option } from "src/models/option";
 import { Email } from "src/validators/persist";
 import { FileinputOutput } from "../components/filesUI/files.ui";

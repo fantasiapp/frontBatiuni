@@ -28,6 +28,7 @@ import { OfferComponent } from "./components/offer/offer.compnent";
 import { NavigationMenu } from "./components/navigation/navigation.component";
 import { ModifyProfileForm } from "./forms/ModifyProfile.form";
 import { ProfileResume } from "./components/profile-resume/profile-resume.component";
+import { FileIcon } from "./components/FileIcon/file.icon";
 
 @NgModule({
   declarations: [
@@ -54,7 +55,8 @@ import { ProfileResume } from "./components/profile-resume/profile-resume.compon
     OfferComponent,
     NavigationMenu,
     ModifyProfileForm,
-    ProfileResume
+    ProfileResume,
+    FileIcon
   ],
   imports: [
     CommonModule,
@@ -87,7 +89,8 @@ import { ProfileResume } from "./components/profile-resume/profile-resume.compon
     OfferComponent,
     NavigationMenu,
     ModifyProfileForm,
-    ProfileResume
+    ProfileResume,
+    FileIcon
   ],
   providers: [ImageGenerator]
 })

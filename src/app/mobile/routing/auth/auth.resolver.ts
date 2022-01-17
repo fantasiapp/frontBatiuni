@@ -4,7 +4,7 @@ import { Store } from "@ngxs/store";
 import { throwError } from "rxjs";
 import { catchError, tap } from "rxjs/operators";
 import { AuthState } from "src/models/auth/auth.state";
-import { UserProfile } from "src/models/data/data.model";
+import { UserProfileRow } from "src/models/data/data.model";
 import { GetUserData } from "src/models/user/user.actions";
 
 @Injectable()

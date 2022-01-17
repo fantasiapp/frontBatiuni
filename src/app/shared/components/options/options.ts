@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostBinding, HostListener, Input, Output } from "@angular/core";
 import { NG_VALUE_ACCESSOR } from "@angular/forms";
 import { UIDefaultAccessor } from "src/common/classes";
-import { getTopmostElement, makeid } from "src/common/functions";
+import { focusOutside, getTopmostElement, makeid } from "src/common/functions";
 import { Option } from "src/models/option";
 
 @Component({
@@ -24,10 +24,10 @@ export class OptionsModel extends UIDefaultAccessor<Option[]> {
 
   //make generic and share class
   @HostListener('focus')
-  onFocus() { this.showDropDown = true; }
+  onFocus() { console.log('focus'); this.showDropDown = true; }
 
-  @HostListener('blur')
-  onBlur() { this.showDropDown = false; }
+  //@HostListener('blur')
+  //onBlur() { console.log('blur'); this.showDropDown = false; }
 
   private static instances: OptionsModel[] = [];
   //clicking on selected item closes the list
@@ -35,9 +35,11 @@ export class OptionsModel extends UIDefaultAccessor<Option[]> {
     const focused = e.target as HTMLElement,
       mounted = getTopmostElement(focused).parentElement !== null;
 
-    if ( !mounted ) return;
+    if ( !focusOutside(null, focused) ) return;
+    //if ( !mounted ) return;
     for( const option of OptionsModel.instances )
-      if ( ! option.ref.nativeElement.contains(focused) ) {
+      if ( focusOutside(option.ref.nativeElement, focused) ) {
+      //if ( ! option.ref.nativeElement.contains(focused) ) {
         option.forceClose();
         continue;
       }
