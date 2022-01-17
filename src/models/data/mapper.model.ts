@@ -211,37 +211,13 @@ export class Mapper {
   /*fix here: doesnt work with jobs and labels */
   /*fix here: Ask JLW to move company inside Userprofil */
   static updateFrom(context: any, data: any) {
+    throw "unhandled"
     if ( !data['Userprofile'] ) data['Userprofile'] = {};
     if ( data['Company'] ) data['Userprofile']['Company'] = data['Company'];
     
     const newContext = UserProfileRow.getById(context.id).update(data['Userprofile']);
     return newContext.serialize();
   }
-
-  static mapModifyForm(user: any, changes: any) {
-    const output: any = {action: 'modifyUser'};
-
-    const keys = Object.keys(changes);
-    tableLoop: for ( const table of definedTables ) {
-      let featureKeys = keys.filter(key => key.startsWith(table));
-      if ( !featureKeys.length ) continue;
-
-      output[table] = {};
-      for ( const key of featureKeys ) {
-        const field = key.split('.')[1];
-        if ( !field ) {
-          output[table] = changes[key];
-          continue tableLoop;
-        }
-        output[table][field] = changes[key];
-      }
-    }
-
-    if ( output['Userprofile'] ) output['Userprofile'].id = user.id;
-    if ( output['Company'] ) output['Company'].id = user.company.id;
-
-    return output;
-  };
 };
 
 (window as any).mapper = Mapper;

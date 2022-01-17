@@ -9,7 +9,6 @@ import { UICreditCard } from './creditcard/credit-card.ui';
 import { UIPopup } from './popup/popup.component';
 import { UIAbonnement } from './abonnementUI/abonnement.ui';
 import { HeaderComponent } from './header/header.component';
-import { UISOSCard } from './SOSCard/SOSCard.ui';
 import { UIAnnonceResume } from './annonce-resume/annonce-resume.ui';
 import { CommentaireUI } from './commentaire/commentaire.ui';
 import { FactureUI } from './factureUI/facture.ui';
@@ -29,7 +28,6 @@ import { SharedModule } from 'src/app/shared/shared.module';
     UIPopup,
     UIAbonnement,
     HeaderComponent,
-    UISOSCard,
     UIAnnonceResume,
     CommentaireUI,
     FactureUI,
@@ -49,7 +47,6 @@ import { SharedModule } from 'src/app/shared/shared.module';
     UIPopup,
     UIAbonnement,
     HeaderComponent,
-    UISOSCard,
     UIAnnonceResume,
     CommentaireUI,
     FactureUI

@@ -97,6 +97,9 @@ export abstract class UIDefaultAccessor<T> implements ControlValueAccessor {
   @Output()
   valueChange = new EventEmitter<T>();
 
+  @HostBinding('attr.tabindex')
+  get tabIndex() { return 0; }
+
   onChange(e: any) {
     if ( this.isDisabled ) { e.preventDefault?.(); return; }
     let next = this.getInput(e);
@@ -150,4 +153,30 @@ export class HttpAction {
       }
     });
   };
+};
+
+const PropertyTrap: ProxyHandler<any> = {
+  get(target: any, property: string) {
+    const path = property.split('.');
+    
+    let root = target;
+    for ( const field of path ) {
+      if ( root[field] ) root = root[field];
+      else return undefined;
+    };
+    return root;
+  },
+
+  set(target, property: string, value: any) {
+    const path = property.split('.'),
+      lastField = path[path.length - 1];
+    
+    let root = target;
+    for ( const field of path.slice(0, -1) ) {
+      if ( root[field] ) root = root[field];
+      else root = root[field] = {};
+    }
+    root[lastField] = value;
+    return true;
+  }
 };

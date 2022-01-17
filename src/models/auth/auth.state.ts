@@ -63,7 +63,9 @@ export class AuthState {
     return req.pipe(
       tap(() => {
         ctx.setState({token: null, username: null});
+        console.log('token in now void');
         this.zone.run(() => {
+          console.log('navigating to /connexion')
           this.router.navigate(['', 'connexion']);
         })
       })

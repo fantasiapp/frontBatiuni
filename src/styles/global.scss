@@ -149,11 +149,9 @@ a {
     @extend .center-main;
     @extend .center-cross;
   }
-
-  & > .grow {
-    flex-grow: 1;
-  }
 }
+
+.grow { flex-grow: 1; }
 
 .auto-margin-x {
   margin: 0 auto;

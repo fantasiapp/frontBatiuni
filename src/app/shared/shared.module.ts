@@ -29,6 +29,7 @@ import { NavigationMenu } from "./components/navigation/navigation.component";
 import { ModifyProfileForm } from "./forms/ModifyProfile.form";
 import { ProfileResume } from "./components/profile-resume/profile-resume.component";
 import { FileIcon } from "./components/FileIcon/file.icon";
+import { UISOSCard } from "./components/SOSCard/SOSCard.ui";
 
 @NgModule({
   declarations: [
@@ -56,7 +57,8 @@ import { FileIcon } from "./components/FileIcon/file.icon";
     NavigationMenu,
     ModifyProfileForm,
     ProfileResume,
-    FileIcon
+    FileIcon,
+    UISOSCard
   ],
   imports: [
     CommonModule,
@@ -90,7 +92,8 @@ import { FileIcon } from "./components/FileIcon/file.icon";
     NavigationMenu,
     ModifyProfileForm,
     ProfileResume,
-    FileIcon
+    FileIcon,
+    UISOSCard
   ],
   providers: [ImageGenerator]
 })

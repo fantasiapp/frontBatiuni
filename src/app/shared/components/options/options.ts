@@ -19,20 +19,19 @@ export class OptionsModel extends UIDefaultAccessor<Option[]> {
   search: string = '';
   showDropDown: boolean = false;
 
-  @HostBinding('attr.tabindex')
-  get tabIndex() { return 0; }
-
   //make generic and share class
-  @HostListener('focus')
-  onFocus() { console.log('focus'); this.showDropDown = true; }
+  @HostListener('focusin', ['$event'])
+  onFocus(e: Event) { e.stopPropagation(); this.showDropDown = true; }
 
-  @HostListener('blur', ['$event'])
+  @HostListener('focusout', ['$event'])
   onBlur(e: Event) {
+    //e.stopPropagation();
     const focused = (e as any).relatedTarget as HTMLElement;
-    if ( !focused ) return this.showDropDown = false;
+    if ( !focused )
+      return;
+
     if ( focusOutside(this.ref.nativeElement, focused) )
       this.showDropDown = false;
-    return true;
   }
 
   private static instances: OptionsModel[] = [];
@@ -40,7 +39,7 @@ export class OptionsModel extends UIDefaultAccessor<Option[]> {
   private static listener = (e: Event) => {
     const focused = e.target as HTMLElement,
       mounted = focusOutside(null, focused);
-
+    
     if ( !mounted ) return;
     for( const option of OptionsModel.instances )
       if ( focusOutside(option.ref.nativeElement, focused) ) {

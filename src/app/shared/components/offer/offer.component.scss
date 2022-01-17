@@ -8,17 +8,12 @@
   box-shadow: 0 5px 3px 0 rgba(149, 157, 165, 0.2); // x y spread outline color
   padding: $item-padding (2*$item-padding);
   color: #999999;
-  font-size: 15px;
   border-radius: 12px;
   justify-content: center;
 }
 
 .container {
   max-width: 400px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex: 1;
 }
 
 .offres-infos {
@@ -30,7 +25,7 @@ p{
 }
 
 .entreprise , .adresse {
-  font-size: 13px;
+  // font-size: 13px;
 }
 
 .metier, .date {

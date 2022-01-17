@@ -103,7 +103,7 @@ $hero-header-tick-thickness: 8px;
 
 .web-page {
   @extend %three-section-layout;
-  height: 100vh;
+  height: calc(100vh - #{$web-header-height});
   background-color: #f7f7f7;
 
   @extend %web-space-top;

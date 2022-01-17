@@ -61,7 +61,7 @@ import { SlidesDirective } from "../directives/slides.directive";
 
           <ng-container *ngIf="!addingField; else addfield_tpl">
             <label>Métiers</label>
-            <ng-container formArrayName="Userprofile.Company.jobs">
+            <ng-container formArrayName="Userprofile.Company.JobForCompany">
               <span class="position-relative number" *ngFor="let control of profileJobsControls; index as i">
                 <ng-container [formGroupName]="i">
                   <input class="form-element" type="text" [value]="control.get('job')!.value.name" disabled>
@@ -118,7 +118,7 @@ import { SlidesDirective } from "../directives/slides.directive";
           <label>Vos labels</label>
           <options [options]="allLabels" (valueChange)="updateLabels($event)"></options>
         </div>
-        <ng-container formArrayName="Userprofile.Company.labels">
+        <ng-container formArrayName="Userprofile.Company.LabelForCompany">
             <span class="position-relative" *ngFor="let control of companyLabelControls; index as i">
               <ng-container [formGroupName]="i">
                 <fileinput [showtitle]="false" [filename]="control.get('label')!.value.name" formControlName="fileData"></fileinput>
@@ -196,11 +196,11 @@ export class ModifyProfileForm {
     'Userprofile.firstName': new FormControl('', [
     ]),
     'Userprofile.userName': new FormControl('', [
-      Email()
+      //Email()
     ]),
     'Userprofile.cellPhone': new FormControl('', [
     ]),
-    'Userprofile.Company.jobs': new FormArray([
+    'Userprofile.Company.JobForCompany': new FormArray([
 
     ]),
     //Company
@@ -215,18 +215,18 @@ export class ModifyProfileForm {
     'Userprofile.Company.companyPhone': new FormControl('', [
       
     ]),
-    'Userprofile.Company.labels': new FormArray([
+    'Userprofile.Company.LabelForCompany': new FormArray([
 
     ])
   });
 
   get profileJobsControls() {
-    const jobsControl = this.modifyProfileForm.controls['Userprofile.Company.jobs'] as FormArray;
+    const jobsControl = this.modifyProfileForm.controls['Userprofile.Company.JobForCompany'] as FormArray;
     return jobsControl.controls;
   }
 
   get companyLabelControls() {
-    const labelsControl = this.modifyProfileForm.controls['Userprofile.Company.labels'] as FormArray;
+    const labelsControl = this.modifyProfileForm.controls['Userprofile.Company.LabelForCompany'] as FormArray;
     return labelsControl.controls;
   }
 
@@ -260,14 +260,14 @@ export class ModifyProfileForm {
     this.modifyProfileForm.controls['Userprofile.Company.webSite']?.setValue(this.user.company.webSite);
     this.modifyProfileForm.controls['Userprofile.Company.companyPhone']?.setValue(this.user.company.companyPhone);
 
-    const jobControl = this.modifyProfileForm.controls['Userprofile.Company.jobs'] as FormArray;
+    const jobControl = this.modifyProfileForm.controls['Userprofile.Company.JobForCompany'] as FormArray;
     for ( let job of this.user.company.jobs )
       jobControl.push(new FormGroup({
         job: new FormControl(job.job),
         number: new FormControl(job.number)
       }));
     
-    const labelControl = this.modifyProfileForm.controls['Userprofile.Company.labels'] as FormArray,
+    const labelControl = this.modifyProfileForm.controls['Userprofile.Company.LabelForCompany'] as FormArray,
       now = (new Date()).toISOString().slice(0, 10).replace(/-/g, '/');
     
     for ( let label of this.user.company.labels )
@@ -279,7 +279,7 @@ export class ModifyProfileForm {
   }
 
   updateJobs(jobOptions: Option[]) {
-    const jobsControl = this.modifyProfileForm.controls['Userprofile.Company.jobs'] as FormArray,
+    const jobsControl = this.modifyProfileForm.controls['Userprofile.Company.JobForCompany'] as FormArray,
       oldJobs = jobsControl.value as {job: JobRow, number: number}[],
       newJobs = jobOptions.map(option => JobRow.getById(option.id)!);
 
@@ -297,15 +297,18 @@ export class ModifyProfileForm {
 
     jobsControl.clear();
     [...countMap.entries()].forEach(([job, number]) => {
-      jobsControl.push(new FormGroup({
+      const form = new FormGroup({
         job: new FormControl(job),
         number: new FormControl(number)
-      }))
+      })
+      jobsControl.push(form);
     });
+
+    console.log('!!', jobsControl.value);
   };
 
   updateLabels(labelOptions: Option[]) {
-    const labelsControl = this.modifyProfileForm.controls['Userprofile.Company.labels'] as FormArray,
+    const labelsControl = this.modifyProfileForm.controls['Userprofile.Company.LabelForCompany'] as FormArray,
       newLabels = labelOptions.map(label => LabelRow.getById(label.id)!),
       now = (new Date()).toISOString().slice(0, 10).replace(/-/g, '/');
 

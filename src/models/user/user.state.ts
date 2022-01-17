@@ -91,7 +91,6 @@ export class UserState {
         try {
           Mapper.mapRequest(response);
         } catch ( err ) {
-          console.error(err);
           this.store.dispatch(new Logout());
           return;
         };
@@ -115,10 +114,9 @@ export class UserState {
   modifyUser(ctx: StateContext<User>, action: ModifyUserProfile) {
     let token = this.store.selectSnapshot(AuthState).token;
 
-    const profile = this.store.selectSnapshot(UserState.profile)!,
-      json = Mapper.mapModifyForm(profile, action.changes);
+    console.log('posting', action);
 
-    let req = this.http.post(environment.backUrl + '/data/', json, {
+    let req = this.http.post(environment.backUrl + '/data/', action.changes, {
       headers: {
         "Authorization": `Token ${token}`,
         'Content-Type': 'application/json'
@@ -128,7 +126,7 @@ export class UserState {
     return req.pipe(
       tap((response: any) => {
         console.log('response', response);
-        const newProfile = Mapper.updateFrom(profile, response.valueModified);
+        const newProfile = Mapper.updateFrom(ctx.getState().profile, response.valueModified);
         ctx.patchState({profile: newProfile})
       })
     );

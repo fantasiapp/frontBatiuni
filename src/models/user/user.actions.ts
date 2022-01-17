@@ -1,7 +1,7 @@
 import { FormArray, FormGroup } from "@angular/forms";
 import { FileinputOutput } from "src/app/shared/components/filesUI/files.ui";
 import { getDirtyValues } from "src/common/functions";
-import { JobRow, LabelRow, UserProfileRow } from "../data/data.model";
+import { JobForCompanyRow, JobRow, LabelForCompanyRow, LabelRow, UserProfileRow } from "../data/data.model";
 
 export class ChangeProfileType {
   static readonly type = '[User] Change Profile Type';
@@ -15,41 +15,51 @@ export class ChangeProfilePicture {
 
 export class ChangePassword {
   static readonly type = '[User] Change Password';
-  action = 'modifyPwd';
+  readonly action = 'modifyPwd';
   constructor(public oldPwd: string, public newPwd: string) {}
 };
 
 export class GetUserData {
   static readonly type = '[User] Get User data';
   constructor(public token: string) {}
-  action = 'getUerData';
+  readonly action = 'getUerData';
 };
 
 export class ModifyUserProfile {
   static readonly type = '[User] Change User Profile';
-  changes: any;
+  readonly action = 'modifyUser';
+  changes: any = {};
   
-  constructor({profile, form}: {profile: UserProfileRow, form: FormGroup}) {
-    this.changes = getDirtyValues(form);
-    console.log(this.changes['Company.labels']);
-    delete this.changes['Userprofile.jobs'];
-    if ( form.controls['Userprofile.jobs']!.dirty ) {
-      const jobs = (form.controls['Userprofile.jobs']! as FormArray).value;
-      this.changes['JobForCompany'] = jobs.map(
-        ({job, number}: {job: JobRow, number: number}) => ([job.id, number, profile.company.id])
+  //for now we mark job as dirty, but we should take it directly from the form
+  constructor({profile, form}: {profile: UserProfileRow, form: FormGroup}) {    
+    const changes = getDirtyValues(form);
+    if ( Object.keys(changes).length == 0 ) return;
+
+    const jobs = changes['Userprofile.Company.JobForCompany'],
+      labels = changes['Userprofile.Company.LabelForCompany'];
+    
+    if ( jobs ) {
+      changes['Userprofile.Company.JobForCompany'] = Object.values<JobForCompanyRow>(jobs).map(
+        ({job, number}: {job: JobRow, number: number}) => ([job.id, number])
       );
     }
 
-    delete this.changes['Company.labels'];
-    if ( form.controls['Company.labels']!.dirty ) {
-      const labels = (form.controls['Company.labels'] as FormArray).value;
-      console.log(labels);
-      this.changes['LabelForCompany'] = labels.map(
-        ({label, fileData}: {label: LabelRow, fileData: FileinputOutput}) => ([label.id, fileData.date!.replace(/-/g, '/'), profile.company.id])
-      )
+    if ( labels ) {
+      changes['Userprofile.Company.LabelForCompany'] = Object.values<any>(labels).map(
+        ({label, fileData}: {label: LabelRow, fileData: FileinputOutput}) => ([label.id, fileData.date!.replace(/-/g, '/')])
+      );
     }
 
-    console.log('before post', this.changes);
+    this.changes['Userprofile'] = {id: profile.id};
+    for ( const [field, value] of Object.entries<any>(changes) ) {
+      const tree = field.split('.'), lastKey = tree[tree.length-1];
+      let root = this.changes;
+      for ( const level of tree.slice(0, -1) ) {
+        if ( !root[level] ) root[level] = {}   
+        root = root[level];
+      }
+      root[lastKey] = value;
+    }
+
   }
-  action = 'modifyUser';
 };

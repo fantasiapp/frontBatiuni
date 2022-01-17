@@ -1,17 +1,25 @@
 @import 'src/styles/variables';
+@import 'src/styles/mixins';
 
 :host {
   display: flex;
-  flex-flow: row nowrap;
-  align-items: center;
-  justify-content: space-around;
+  justify-content: center;
   background: white;
   border-left: $sos-border-thickness solid transparent;
   height: $sos-card-height;
   padding: $sos-card-padding;
-  font-size: 0.9em;
+  border-radius: 12px;
 
   box-shadow: 0 5px 3px 0 rgba(149, 157, 165, 0.2);
+  @include desktop-only {
+    border-left-width: 12px;
+  }
+
+  position: relative;
+}
+
+.container {
+  width: 400px;
 }
 
 .presentation {
