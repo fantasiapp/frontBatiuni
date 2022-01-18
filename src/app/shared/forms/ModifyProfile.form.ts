@@ -187,12 +187,6 @@ import { SlidesDirective } from "../directives/slides.directive";
 })
 export class ModifyProfileForm {
 
-  @HostBinding('class')
-  get classes() {
-    const isMobile = window.innerWidth <= 768;
-    return isMobile ? ' mobile-view' : '';
-  }
-
   @Input()
   user!: Serialized<UserProfileRow>;
 
