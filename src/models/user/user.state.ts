@@ -88,9 +88,10 @@ export class UserState {
       }),
       tap((response: any) => {
         const file = FilesRow.getById(action.id),
-          imageUrl = response[action.id][response[action.id].length - 1];
+          updates = response[action.id];
         
-        ctx.patchState({imageUrl: `data:image/${file.ext};base64,${imageUrl}`})
+        file.read(updates);
+        ctx.patchState({imageUrl: `data:image/${file.ext};base64,${file.content}`})
       })
     )
   }

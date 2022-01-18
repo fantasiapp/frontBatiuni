@@ -6,6 +6,7 @@ import { Mapper } from "./mapper.model";
 export interface Table {
   new (id: number, values: string[]): object;
   fields: Map<string, number>;
+  dependencyMap: Map<number, Table | Value>;
   getById(id: number): any;
   destroy(id: number): void;
 };
@@ -13,12 +14,13 @@ export interface Table {
 export interface Value {
   new (id: number, name: string): object;
   getById(id: number): any;
+  destroy(id: number): void;
 };
 
 /* base table metaclass */
 /* instance stuff and all that */
 class __table__ {
-  static isTable(value: any) { return value instanceof __table__; }
+  static isTable(value: any): value is Table { return value instanceof __table__; }
 
   constructor(public id: number, protected values: any[]) {}
 
@@ -52,9 +54,6 @@ class __table__ {
   /* but has the benefit that the only way to set data is from the back */
   update(data: any) {
     const props = Object.getOwnPropertyNames(data);
-    console.log('updating', this, 'from', data);
-    console.log('------------------------------------------------------')
-    console.log('props', props);
 
     for( const prop of props ) {
       let index = this.structure.fields.get(prop);
@@ -86,14 +85,20 @@ class __table__ {
   getField(key: string) {
     return this.values[this.getIndex(key)!];
   }
+
+  read(value: any) {
+    this.values = value.slice();
+  }
 };
 
 /* hold information about the table instance */
 function createTable<T>() {
   return class __table_instance__ extends __table__ {
 
+    static dependencyMap = new Map<number, Table | Value>();
     static fields = new Map<string, number>();
     static instances = new Map<number, T>();
+
     static getById(id: number): T { return __table_instance__.instances.get(id)! as unknown as T; }
     static destroy(id: number) { __table_instance__.instances.delete(id); }
 
@@ -118,6 +123,7 @@ function createValue() {
 
     static instances = new Map<number, __value__>();
     static getById(id: number) { return this.instances.get(id); }
+    static destroy(id: number) { this.instances.delete(id); }
 
     constructor(public id: number, public name: string) {
       __value__.instances.set(id, this);
@@ -191,6 +197,117 @@ export class UserProfileRow extends createTable<UserProfileRow>() {
 //Move mapper here
 //Make a model interface and these types should implement it
 // -- Serialized stuff is the model
+export class DataMapper {
+
+  private static fieldToClass: {[key: string]: Table | Value} = {
+    'Company': CompanyRow,
+    'Userprofile': UserProfileRow,
+    'Role': RoleRow, 'role': RoleRow, /* fix here: Report this to JLW */
+    'Label': LabelRow,
+    'Job': JobRow,
+    'JobForCompany': JobForCompanyRow,
+    'LabelForCompany': LabelForCompanyRow,
+    'Files': FilesRow
+  };
+
+  private static getClassName(table: Table | Value) { return table.name.slice(0, -3); }
+
+  static readonly definedValues = ['Role', 'Label', 'Job'] as const;
+  static readonly definedTables = ['Company', 'Userprofile', 'JobForCompany', 'LabelForCompany', 'Files'] as const;
+
+  static getField(name: string) {
+    const clazz = this.fieldToClass[name];
+    if ( !clazz ) throw `Unknown field ${name}`; //only during tests
+    return { name, class: clazz }
+  };
+
+  static isDefined(name: string) {
+    if ( this.isDefinedValue(name) ) return true;
+    return this.isDefinedValue(name);
+  };
+
+  static isDefinedTable(name: string) {
+    if ( this.definedTables.includes(name as any) ) return true;
+    return false;
+  }
+
+  static isDefinedValue(name: string) {
+    if ( this.definedValues.includes(name as any) ) return true;
+    return false;
+  }
+
+  static fieldIsTable(data: any, name: string) { return data.hasOwnProperty(name + 'Fields') }; 
+  static fieldIsSimple(data: any, name: string) { return data.hasOwnProperty(name + 'Indices'); };
+  static fieldIsValue(data: any, name: string) { return !this.fieldIsTable(data, name); };
+
+  static getFeatures(data: any) {
+    const tables: string[] = [], values: string[] = [];
+    Object.keys(data).forEach(key => {
+      if ( !this.isDefined(key) ) throw `Undefined feature ${key}.`; //only during tests
+      if ( this.fieldIsTable(data, key) ) tables.push(key);
+      else values.push(key);
+    });
+    return {tables, values};
+  };
+
+  static getValuesOf(data: any, name: string) {
+    const value = data[name + 'Values'];
+    if ( !value ) throw `Unknown field ${value}.`;
+    return value;
+  }
+  
+  static mapFields(data: any, table: Table) {
+    const name = this.getClassName(table),
+      fields = data[name + 'Fields'] as string[],
+      indices = data[name + 'Indices'] as string[];
+
+    fields.forEach((field, index) => table.fields.set(field, index));
+    indices.forEach(index => {
+      table.dependencyMap.set(+index, this.fieldToClass[fields[+index]]);
+    });
+  }
+
+  private static mapSimpleTable(data: any, table: Table) {
+    const name = this.getClassName(table),
+      content = this.getValuesOf(data, name);
+    
+    Object.entries<any[]>(content).forEach(([id, values]) => {
+      new table(+id, values);
+    });
+  }
+
+  // // important function
+  // private static recursiveGetById(table: Table | Value, id: number, data: any) {
+  //   let ref = table.getById(id);
+  //   if ( !ref ) {
+  //     const values = data[this.getClassName(table) + 'Values'][id] as any[];
+  //     if ( !__table__.isTable(table) )
+  //       return new table(id, ref);
+      
+      
+  //     values.forEach((value, index) => {
+  //       if ( table.dependencyMap.has(index) )  
+  //     });
+  //   }
+  // }
+
+  private addEntry(table: Table, id: number, values: any) {
+    new table(id, values);
+  }
+
+  private static mapTable(data: any, table: Table) {
+    const name = this.getClassName(table),
+      content = this.getValuesOf(data, name);    
+    
+    Object.entries<any[]>(content).forEach(([id, values], index) => {
+      // let ref = values[index];
+      // if ( table.dependencyMap.has(index) )
+      //   ref = this.protectedGetById(table.dependencyMap.get(index)!, id);
+        
+      new table(+id, values);
+    });
+  };
+};
 
 
 //Type aliases

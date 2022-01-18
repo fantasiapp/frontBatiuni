@@ -14,20 +14,24 @@ import { ConfirmAccount } from "src/models/auth/auth.actions";
 })
 export class EmailConfirmation extends Destroy$ {
   confirmed: boolean = false;
+  content = 'Confirmation en cours';
   points: string = '.';
 
   constructor(private store: Store, private cd: ChangeDetectorRef, private route: ActivatedRoute) {
     super();
     const token = this.route.snapshot.params.token;
-
     const reply = this.store.dispatch(new ConfirmAccount(token));
+
 
     interval(500).pipe(takeUntil(race(
       this.destroy$, reply
-    ))).subscribe(() =>  {
+    ))).subscribe((resp) =>  {
       this.points = this.points.length >= 5 ? '.' : this.points += '.'
       this.cd.markForCheck();
     }, err => {
+      this.content = 'Echec en raison de:';
+      this.points = 'Token invalide.'; //err
+      this.cd.markForCheck()
       //....
     }, () => {
       this.confirmed = true;
