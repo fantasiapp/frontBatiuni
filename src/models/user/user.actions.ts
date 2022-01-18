@@ -11,7 +11,15 @@ export class ChangeProfileType {
 
 export class ChangeProfilePicture {
   static readonly type = '[User] Change Profile Picture';
-  constructor(public src: any, public name: string) {}
+  ext: string = '';
+  imageBase64: string = '';
+  expirationDate: string = '31-02-2022';
+  constructor(src: any, public name: string) {
+    this.ext = src.format;
+    this.imageBase64 = src.base64String;
+  }
+
+  action = 'changeUserImage';
 };
 
 export class ChangePassword {
