@@ -13,18 +13,31 @@ export class InfoHandler {
   @HostBinding('class')
   type: string = '';
 
+  private fadingIn: boolean = false;
+
+  @HostListener('transitionend')
+  private onTransitionEnd() {
+    console.log('transitioning');
+    this.fadingIn = !this.fadingIn;
+    if ( this.fadingIn ) {
+      setTimeout(() => {
+        this.type = '';
+        this.content = '';
+        this.fadingIn = true;
+        this.cd.markForCheck();
+      }, this.time);
+    }
+  }
+
   constructor(private cd: ChangeDetectorRef) {
 
   }
 
-  show(type: 'error' | 'success' | 'info', content: string, time: number = this.time) {
+  show(type: 'error' | 'success' | 'info', content: string, time: number = 2500) {
     if ( !content ) return;
     this.content = content;
     this.type = type;
+    this.time = time;
     this.cd.markForCheck();
-    setTimeout(() => {
-      this.type = '';
-      this.cd.markForCheck();
-    }, time);
   }
 };

@@ -4,7 +4,7 @@ import { Action, Selector, State, StateContext, Store } from "@ngxs/store";
 import { catchError, mergeMap, tap } from "rxjs/operators";
 import { AuthState } from "src/models/auth/auth.state";
 import { environment } from "src/environments/environment";
-import { ChangePassword, ChangeProfileType, ChangeProfilePicture, GetUserData, ModifyUserProfile } from "./user.actions";
+import { ChangePassword, ChangeProfileType, ChangeProfilePicture, GetUserData, ModifyUserProfile, GetFile } from "./user.actions";
 import { User } from "./user.model";
 import { Login, Logout } from "../auth/auth.actions";
 import { of, throwError } from "rxjs";
@@ -67,6 +67,34 @@ export class UserState {
     );
   }
 
+  @Action(GetFile)
+  getFile(ctx: StateContext<User>, action: GetFile) {
+    const state = ctx.getState(),
+      { token } = this.store.selectSnapshot(AuthState);
+
+    console.log(action);
+    
+    let req = this.http.get(environment.backUrl + `/data/?action=${action.action}&id=${action.id}`, {
+      headers: {
+        "Authorization": `Token ${token}`,
+        'Content-Type': 'application/json'
+      }
+    });
+
+    return req.pipe(
+      catchError((err: HttpErrorResponse) => {
+        this.store.dispatch(new Logout());
+        return throwError(err);
+      }),
+      tap((response: any) => {
+        const file = FilesRow.getById(action.id),
+          imageUrl = response[action.id][response[action.id].length - 1];
+        
+        ctx.patchState({imageUrl: `data:image/${file.ext};base64,${imageUrl}`})
+      })
+    )
+  }
+
   @Action(GetUserData)
   getUserData(ctx: StateContext<User>, action: GetUserData) {
     let { token } = action;
@@ -77,9 +105,6 @@ export class UserState {
       }
     });
 
-    if ( !ctx.getState().imageUrl ) {
-      
-    }
 
     return req.pipe(
       catchError((err: HttpErrorResponse) => {
@@ -97,7 +122,13 @@ export class UserState {
         const currentUser = [...UserProfileRow.instances.values()][0],
           partial: any = { profile: currentUser.serialize(), viewType: currentUser.role.id == 2 };
 
-        console.log(currentUser.company.jobs);
+        console.log(currentUser.company.files);
+        console.log(ctx.getState());
+        if ( !ctx.getState().imageUrl ) {
+          const reversed = currentUser.company.files.slice(); reversed.reverse();
+          const newestImage = reversed.find((file) => file.nature == 'userImage');
+          if ( newestImage ) this.store.dispatch(new GetFile(newestImage.id));
+        }
         //let avatar: Avatar | null = null;
         //if ( avatar = Avatar.getById(1)! ) partial.imageUrl = 'data:image/' + avatar.ext + ';base64,' + avatar.content;
         ctx.patchState(partial);

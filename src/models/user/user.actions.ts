@@ -69,3 +69,9 @@ export class ModifyUserProfile {
     console.log(this, proxy);
   }
 };
+
+export class GetFile {
+  static readonly type = '[User] Get File';
+  action: string = 'loadImage';
+  constructor(public id: number) { }
+};
