@@ -15,14 +15,14 @@
       <div class="form-input montant">
         <label>Montant</label>
         <input type="text" placeholder="Saisissez votre montant">
-        <span class="ht">$HT</span>
+        <span class="ht">{{currency}}HT</span>
       </div>
       <div class="form-input">
         <label>Unité</label>
-        <select>
-          <option>€</option>
-          <option>$</option>
-          <option>£</option>
+        <select (change)="onCurrencyChange($event)">
+          <option value="€"> € </option>
+          <option value="$"> $ </option>
+          <option value="£"> £ </option>
         </select>
       </div>
     </div>
@@ -30,5 +30,5 @@
 </div>
 
 <footer class="clear-margin full-width sticky-footer flex center-text center-cross">
-  <button class="postuler full-width button gradient"> Postuler</button>
+  <button class="postuler full-width button gradient"> Postuler </button>
 </footer>

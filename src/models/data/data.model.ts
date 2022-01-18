@@ -5,22 +5,27 @@ import { Mapper } from "./mapper.model";
 
 export interface Table {
   new (id: number, values: string[]): object;
+  //getName(): string;
   fields: Map<string, number>;
   dependencyMap: Map<number, Table | Value>;
   getById(id: number): any;
-  destroy(id: number): void;
+  destroy(id: number): void
+  getName(): string;
 };
 
 export interface Value {
   new (id: number, name: string): object;
+  //getName(): string;
   getById(id: number): any;
   destroy(id: number): void;
+  getName(): string;
 };
 
 /* base table metaclass */
 /* instance stuff and all that */
 class __table__ {
-  static isTable(value: any): value is Table { return value instanceof __table__; }
+  static isTable(table: Table | Value): table is Table { return table.prototype instanceof __table__; }
+  static getName(): string { return this.name.slice(0, -3); }
 
   constructor(public id: number, protected values: any[]) {}
 
@@ -93,7 +98,7 @@ class __table__ {
 
 /* hold information about the table instance */
 function createTable<T>() {
-  return class __table_instance__ extends __table__ {
+  class __table_instance__ extends __table__ {
 
     static dependencyMap = new Map<number, Table | Value>();
     static fields = new Map<string, number>();
@@ -115,7 +120,9 @@ function createTable<T>() {
     asRaw(): Readonly<Serialized<T>> {
       return this as unknown as Readonly<Serialized<T>>;
     }
-  }
+  };
+
+  return __table_instance__;
 };
 
 function createValue() {
@@ -124,6 +131,7 @@ function createValue() {
     static instances = new Map<number, __value__>();
     static getById(id: number) { return this.instances.get(id); }
     static destroy(id: number) { this.instances.delete(id); }
+    static getName() { return __table__.getName.call(this); }
 
     constructor(public id: number, public name: string) {
       __value__.instances.set(id, this);
@@ -184,6 +192,8 @@ export class CompanyRow extends createTable<CompanyRow>() {
 };
 
 export class UserProfileRow extends createTable<UserProfileRow>() {
+  static getName() { return 'Userprofile'; }
+
   get user(): string { return this.getField('userName') }
   get company(): CompanyRow { return this.getField('Company') }
   get firstName(): string { return this.getField('firstName') }
@@ -197,6 +207,19 @@ export class UserProfileRow extends createTable<UserProfileRow>() {
 //Move mapper here
 //Make a model interface and these types should implement it
 // -- Serialized stuff is the model
+
+
+//Type aliases
+export type Profile = Serialized<UserProfileRow>;
+export type Company = Serialized<CompanyRow>;
+export type Files = Serialized<FilesRow>;
+export type JobForCompany = Serialized<JobForCompanyRow>;
+export type LabelForCompany = Serialized<LabelForCompanyRow>;
+export type Role = Serialized<RoleRow>;
+export type Label = Serialized<LabelRow>;
+export type Job = Serialized<JobRow>;
+
+/* new mapper */
 export class DataMapper {
 
   private static fieldToClass: {[key: string]: Table | Value} = {
@@ -210,7 +233,10 @@ export class DataMapper {
     'Files': FilesRow
   };
 
-  private static getClassName(table: Table | Value) { return table.name.slice(0, -3); }
+  private static getClassName(table: Table | Value) {
+    console.log('my name is whaaa ?', table.getName());
+    return table.getName();
+  }
 
   static readonly definedValues = ['Role', 'Label', 'Job'] as const;
   static readonly definedTables = ['Company', 'Userprofile', 'JobForCompany', 'LabelForCompany', 'Files'] as const;
@@ -276,20 +302,31 @@ export class DataMapper {
     });
   }
 
-  // // important function
-  // private static recursiveGetById(table: Table | Value, id: number, data: any) {
-  //   let ref = table.getById(id);
-  //   if ( !ref ) {
-  //     const values = data[this.getClassName(table) + 'Values'][id] as any[];
-  //     if ( !__table__.isTable(table) )
-  //       return new table(id, ref);
-      
-      
-  //     values.forEach((value, index) => {
-  //       if ( table.dependencyMap.has(index) )  
-  //     });
-  //   }
-  // }
+  // important function
+  // only works on tables but not values
+  static recursiveGetById(data: any, table: Table | Value, id: number) {
+    const name = this.getClassName(table);
+    let ref = table.getById(id);
+    if ( ref ) return ref;
+    
+    if ( !__table__.isTable(table) )
+      return new table(id, data[name + 'Values'][id]);
+    
+    console.log(data, name + 'Values', '>', data[name + 'Values']);
+    const values = data[name + 'Values'][id] as any[];
+    const refValues = values.map((value, index) => {
+      if ( table.dependencyMap.has(index) ) {
+        const refTable = table.dependencyMap.get(index)!;
+        if ( Array.isArray(value) )
+          value = value.map(v => this.recursiveGetById(data, refTable, v))
+        else
+          value = this.recursiveGetById(data, refTable, value);
+      }
+      return value;
+    });
+
+    return new table(id, refValues);
+  }
 
   private addEntry(table: Table, id: number, values: any) {
     new table(id, values);
@@ -309,13 +346,19 @@ export class DataMapper {
   };
 };
 
+// const data = {
+//   "RoleValues": {1: "Eminem", 2: "Sad-LiveKid", 3: "Gorillaz"},
+//   "UserprofileFields": ["email", "password", "Role"],
+//   "UserprofileIndices": [2],
+//   "UserprofileValues": {
+//     1: ["anas.chatou@gmail.com", "12345678", [1]],
+//     2: ["majed.abdennadher@gmail.com", "12345678", 2],
+//     3: ["jlw@gmail.com", "12345678", 3],
+//     4: ["anas@gmail.com", "12345678", 1]
+//   }
+// };
 
-//Type aliases
-export type Profile = Serialized<UserProfileRow>;
-export type Company = Serialized<CompanyRow>;
-export type Files = Serialized<FilesRow>;
-export type JobForCompany = Serialized<JobForCompanyRow>;
-export type LabelForCompany = Serialized<LabelForCompanyRow>;
-export type Role = Serialized<RoleRow>;
-export type Label = Serialized<LabelRow>;
-export type Job = Serialized<JobRow>;
+// DataMapper.mapFields(data, UserProfileRow);
+// console.log(UserProfileRow.dependencyMap);
+// console.log(DataMapper.recursiveGetById(data, UserProfileRow, 1));
+// console.log([...RoleRow.instances.values()])

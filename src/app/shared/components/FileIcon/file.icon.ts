@@ -40,7 +40,9 @@ import { shadeColor } from "src/common/functions";
 export class FileIcon {
   public name: string = 'Fichier';
   @Input('name') set _name(name: string) {
-    this.name = name.slice(0, 2) + '..' + name.slice(name.length-3);
+    if ( name.length >= 8 )
+      this.name = name.slice(0, 2) + '..' + name.slice(name.length-3);
+    this.name = name;
   };
 
   //#ffb347 for orange
