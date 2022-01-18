@@ -100,7 +100,7 @@ export class UserState {
         const currentUser = [...UserProfileRow.instances.values()][0],
           partial: any = { profile: currentUser.serialize(), viewType: currentUser.role.id == 2 };
 
-        console.log(currentUser.company.files);
+        console.log(currentUser.company.jobs);
         //let avatar: Avatar | null = null;
         //if ( avatar = Avatar.getById(1)! ) partial.imageUrl = 'data:image/' + avatar.ext + ';base64,' + avatar.content;
         ctx.patchState(partial);

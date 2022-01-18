@@ -121,7 +121,9 @@ import { SlidesDirective } from "../directives/slides.directive";
         <ng-container formArrayName="Userprofile.Company.LabelForCompany">
             <span class="position-relative" *ngFor="let control of companyLabelControls; index as i">
               <ng-container [formGroupName]="i">
-                <fileinput [showtitle]="false" [filename]="control.get('label')!.value.name" formControlName="fileData"></fileinput>
+                <fileinput [showtitle]="false" [filename]="control.get('label')!.value.name" formControlName="fileData">
+                  <file-svg [name]="control.get('label')!.value.name" image></file-svg>
+                </fileinput>
               </ng-container>
             </span>
           </ng-container>
