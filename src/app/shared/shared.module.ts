@@ -58,7 +58,7 @@ import { UISOSCard } from "./components/SOSCard/SOSCard.ui";
     ModifyProfileForm,
     ProfileResume,
     FileIcon,
-    UISOSCard
+    UISOSCard,
   ],
   imports: [
     CommonModule,

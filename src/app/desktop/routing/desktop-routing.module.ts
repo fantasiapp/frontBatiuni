@@ -11,39 +11,38 @@ import { LandingPageComponent } from "../components/landing_page/landing.page";
 import { MainPageComponent } from "../components/main/main.page";
 import { ProfilePageComponent } from "../components/profile/profile.page";
 import { RegisterPageComponent } from "../components/register/register.page";
+import { SosPageComponenet } from "../components/sos_page/sos.page";
 
-const routes: Routes =[{
-    path: 'landing',
-    component: LandingPageComponent
-  }, {
-    path: 'register',
-    component: RegisterPageComponent
-  },{
-    path: 'sos',
-    component: RegisterPageComponent
-  }, {
-    path: 'confirmed',
-    component: EmailConfirmation 
-  }, {
-    path: 'success',
-    component: RegistrationSuccess
-  },{
-    path: 'make',
-    component: AnnoncePage
-  }, {
-    path: 'home',
-    component: MainPageComponent,
-    canActivate: [AuthGuard],
-    resolve: [AuthResolver],
-    children: [
-      {path: 'profile', component: ProfilePageComponent, data: { animation: 'profile' }},
-      {path: '', pathMatch: 'full', component: HomePageComponent, data: { animation: 'home' } },
-      {path: '**', component: HomePageComponent}
-    ]
-  }, {
-    path: '**',
-    redirectTo: 'landing'
-  }
+const routes: Routes = [{
+  path: 'landing',
+  component: LandingPageComponent
+}, {
+  path: 'register',
+  component: RegisterPageComponent
+}, {
+  path: 'confirmed',
+  component: EmailConfirmation
+}, {
+  path: 'success',
+  component: RegistrationSuccess
+}, {
+  path: 'make',
+  component: AnnoncePage
+}, {
+  path: 'home',
+  component: MainPageComponent,
+  canActivate: [AuthGuard],
+  resolve: [AuthResolver],
+  children: [
+    { path: 'profile', component: ProfilePageComponent, data: { animation: 'profile' } },
+    { path: 'sos', component: SosPageComponenet, data: { animation: 'sos' } },
+    { path: '', pathMatch: 'full', component: HomePageComponent, data: { animation: 'home' } },
+    { path: '**', component: HomePageComponent }
+  ]
+}, {
+  path: '**',
+  redirectTo: 'landing'
+}
 ];
 
 @NgModule({
@@ -51,4 +50,4 @@ const routes: Routes =[{
   exports: [RouterModule],
   providers: [AuthGuard, AuthResolver]
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }
