@@ -23,8 +23,8 @@
         <span *ngFor="let job of user.profile!.company.jobs!" class="value">{{ job.number }} {{ job.job.name }}, </span>
       </span>
       <span>
-        <span class="text-light-emphasis">Chiffres d'affaires : </span> <span
-          class="value">{{user.profile!.company.capital}}</span>
+        <span class="text-light-emphasis">Chiffres d'affaires : </span>
+        <span class="value">{{user.profile!.company.capital | currency: 'EUR':'symbol':'1.0-0' }}</span>
       </span>
     </section>
 
@@ -67,7 +67,7 @@
       
       <div class="form-container full-width grow flex column position-relative">
         <modify-password-form *ngIf="modifyPassword" class="grow"></modify-password-form>
-        <modify-profile-form [user]="user.profile!" *ngIf="!modifyPassword" class="grow" (submit)="modifyProfile($event)"></modify-profile-form>
+        <modify-profile-form [user]="user.profile!" *ngIf="!modifyPassword" class="grow" (submit)="modifyProfile($event)" #modifyForm></modify-profile-form>
       </div>
 
       <swipeup [(open)]="openModifyPicture">
@@ -172,3 +172,5 @@
     <notifications class="hosted-page flex column center-cross space-children-margin" content></notifications>
   </slidemenu>
 </ng-container>
+
+<info></info>

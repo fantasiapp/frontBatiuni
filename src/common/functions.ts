@@ -35,7 +35,7 @@ export function getDirtyValues(form: any) {
 
     if ( currentControl.dirty ) {
       if ( currentControl.controls )
-        dirtyValues[key] = getDirtyValues(currentControl);
+        dirtyValues[key] = currentControl.value; //getDirtyValues(currentControl);
       else
         dirtyValues[key] = currentControl.value;
     }

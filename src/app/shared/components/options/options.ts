@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostBinding, HostListener, Input, Output } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostBinding, HostListener, Input, NgZone, Output, ViewChild } from "@angular/core";
 import { NG_VALUE_ACCESSOR } from "@angular/forms";
 import { UIDefaultAccessor } from "src/common/classes";
 import { focusOutside, getTopmostElement, makeid } from "src/common/functions";
@@ -17,21 +17,43 @@ import { Option } from "src/models/option";
 })
 export class OptionsModel extends UIDefaultAccessor<Option[]> {
   search: string = '';
+  private enteredFromOutside: boolean = false;
+  private exitedToOutside: boolean = false;
   showDropDown: boolean = false;
 
+
   //make generic and share class
+  //and fucking fix this
   @HostListener('focusin', ['$event'])
-  onFocus(e: Event) { e.stopPropagation(); this.showDropDown = true; }
+  onFocus(e: any) {
+    const source = e.relatedTarget;
+    e.stopPropagation();
+    if ( !source ) this.enteredFromOutside = true;
+    this.showDropDown = true;
+    requestAnimationFrame(() => {
+      const searchInput = this.ref.nativeElement.querySelector('input[type=text]');
+      searchInput?.focus();
+    });
+  }
 
   @HostListener('focusout', ['$event'])
-  onBlur(e: Event) {
-    //e.stopPropagation();
+  onBlur(e: any) {
     const focused = (e as any).relatedTarget as HTMLElement;
     if ( !focused )
       return;
 
-    if ( focusOutside(this.ref.nativeElement, focused) )
+    if ( focusOutside(this.ref.nativeElement, focused) ) {
       this.showDropDown = false;
+      this.exitedToOutside = true;
+    }
+  }
+
+  @HostListener('click')
+  private onClick() { this.enteredFromOutside = this.exitedToOutside = false; }
+
+  onToggle(e: Event) {
+    if ( this.enteredFromOutside  || (!this.enteredFromOutside && !this.exitedToOutside))
+      this.showDropDown = !this.showDropDown;
   }
 
   private static instances: OptionsModel[] = [];
@@ -50,13 +72,17 @@ export class OptionsModel extends UIDefaultAccessor<Option[]> {
 
   private static listening: boolean = false;
 
+  ngAfterViewInit() {
+    console.log('view init');
+  }
+
   ngOnInit() {
     OptionsModel.instances.push(this);
     if ( !OptionsModel.listening )
       window.addEventListener('click', OptionsModel.listener);
   }
 
-  constructor(public ref: ElementRef, private cd: ChangeDetectorRef) {
+  constructor(public ref: ElementRef, private cd: ChangeDetectorRef, private zone: NgZone) {
     super();
     this.value = [];
   }

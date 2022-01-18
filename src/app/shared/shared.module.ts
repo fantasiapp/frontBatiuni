@@ -30,6 +30,7 @@ import { ModifyProfileForm } from "./forms/ModifyProfile.form";
 import { ProfileResume } from "./components/profile-resume/profile-resume.component";
 import { FileIcon } from "./components/FileIcon/file.icon";
 import { UISOSCard } from "./components/SOSCard/SOSCard.ui";
+import { InfoHandler } from "./components/info/info.component";
 
 @NgModule({
   declarations: [
@@ -59,6 +60,7 @@ import { UISOSCard } from "./components/SOSCard/SOSCard.ui";
     ProfileResume,
     FileIcon,
     UISOSCard,
+    InfoHandler
   ],
   imports: [
     CommonModule,
@@ -93,7 +95,8 @@ import { UISOSCard } from "./components/SOSCard/SOSCard.ui";
     ModifyProfileForm,
     ProfileResume,
     FileIcon,
-    UISOSCard
+    UISOSCard,
+    InfoHandler
   ],
   providers: [ImageGenerator]
 })

@@ -1,11 +1,13 @@
 //find a way to mark objects as serialized
 
 import { Serialized } from "src/common/types";
+import { Mapper } from "./mapper.model";
 
 export interface Table {
   new (id: number, values: string[]): object;
   fields: Map<string, number>;
   getById(id: number): any;
+  destroy(id: number): void;
 };
 
 export interface Value {
@@ -47,18 +49,31 @@ class __table__ {
 
   /* recursive update by mutating the data */
   /* one issue with this is that .serialize() will be called to update the app model */
-  /* try to find a way to prune unmodified nodes */
+  /* but has the benefit that the only way to set data is from the back */
   update(data: any) {
     const props = Object.getOwnPropertyNames(data);
-    
+    console.log('updating', this, 'from', data);
+    console.log('------------------------------------------------------')
+    console.log('props', props);
+
     for( const prop of props ) {
       let index = this.structure.fields.get(prop);
       if ( !index ) throw `Unknown property ${prop} of table ${this.structure.name}`;
-      
-      if ( __table__.isTable(this.values[index]) )
-        this.values[index].update(data[prop]);
-      else
-        this.values[index] = data[prop];
+
+      if ( Array.isArray(this.values[index]) ) {
+        //Destroy
+        this.values[index].forEach((value: __table__) => {
+          value.structure.destroy(value.id);
+        });
+        
+
+        this.values[index] = Mapper.mapArray(data, prop);
+      } else {
+        if ( __table__.isTable(this.values[index]) )
+          this.values[index].update(data[prop]);
+        else
+          this.values[index] = data[prop];
+      }
     }
 
     return this;
@@ -80,6 +95,7 @@ function createTable<T>() {
     static fields = new Map<string, number>();
     static instances = new Map<number, T>();
     static getById(id: number): T { return __table_instance__.instances.get(id)! as unknown as T; }
+    static destroy(id: number) { __table_instance__.instances.delete(id); }
 
     constructor(id: number, values: any[]) {
       super(id, values);
@@ -155,6 +171,7 @@ export class CompanyRow extends createTable<CompanyRow>() {
   get webSite() { return this.getField('webSite') }
   get stars() { return this.getField('stars') }
   get companyPhone() { return this.getField('companyPhone') }
+  get files() { return this.getField('Files'); }
 
   get jobs(): JobForCompanyRow[] { return this.getField('JobForCompany') }
   get labels():  LabelForCompanyRow[] { return this.getField('LabelForCompany') }

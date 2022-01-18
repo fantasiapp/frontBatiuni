@@ -1,0 +1,54 @@
+@use "sass:math";
+@import 'src/styles/variables';
+
+:host {
+  display: block;
+  overflow: hidden;
+  position: fixed;
+  top: $sticky-header-height;
+  z-index: 99;
+  width: 100vw;
+  height: $info-height;
+
+  //animation
+  background-color: transparent;
+  will-change: background-color;
+  transition: background-color 150ms linear 0s;
+
+  //font
+  font-family: "Roboto";
+  font-weight: 200;
+  line-height: $info-height;
+  text-align: center;
+  color: white;
+
+  //events
+  pointer-events: none;
+}
+
+
+$icon-size: 16px;
+img {
+  position: absolute;
+  left: 50px;
+  width: $icon-size;
+  height: $icon-size;
+  top: math.div($info-height - $icon-size, 2);
+  filter: invert(1);
+}
+
+:host(.error, .success, .info) {
+  opacity: 1;
+}
+
+:host(.error) {
+  background-color: #c0392b;
+}
+
+:host(.success) {
+  background-color: #27ae60;
+}
+
+:host(.info) {
+  background-color: #2980b9;
+}

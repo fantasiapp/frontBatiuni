@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, HostListener, Input, ViewChild, EventEmitter, Output } from "@angular/core";
+import { ChangeDetectionStrategy, Component, HostListener, Input, ViewChild, EventEmitter, Output, HostBinding } from "@angular/core";
 import { FormArray, FormControl, FormGroup } from "@angular/forms";
 import { Serialized } from "src/common/types";
 import { JobRow, LabelRow, UserProfileRow } from "src/models/data/data.model";
@@ -81,7 +81,7 @@ import { SlidesDirective } from "../directives/slides.directive";
               <label>Ajoutez des métiers</label>
               <options [options]="allJobs" (valueChange)="updateJobs($event)"></options>
             <div class="form-input center-text">
-              <button (click)="addingField = false" style="display:inline; width: 80%; padding: 5px;" class="button gradient"> Terminer</button>
+              <button (click)="addingField = false" style="display:inline; width: 80%; padding: 5px;" class="button gradient"> Terminer </button>
             </div>
           </ng-template>
         </div>            
@@ -121,7 +121,9 @@ import { SlidesDirective } from "../directives/slides.directive";
         <ng-container formArrayName="Userprofile.Company.LabelForCompany">
             <span class="position-relative" *ngFor="let control of companyLabelControls; index as i">
               <ng-container [formGroupName]="i">
-                <fileinput [showtitle]="false" [filename]="control.get('label')!.value.name" formControlName="fileData"></fileinput>
+                <fileinput [showtitle]="false" [filename]="control.get('label')!.value.name" formControlName="fileData">
+                  <file-svg [name]="control.get('label')!.value.name" image></file-svg>
+                </fileinput>
               </ng-container>
             </span>
           </ng-container>
@@ -168,6 +170,19 @@ import { SlidesDirective } from "../directives/slides.directive";
       @extend %overflow-y;
 
       @include from($mobile) { background: transparent; }
+    }
+
+    .big-sticky-footer {
+      box-shadow: 0 -3px 3px 0 #ddd;
+    
+      background-color: white;
+      @extend %sticky-footer;
+      height: $big-sticky-footer-height;
+      padding: 10px 30px;
+    
+      & > * {
+        margin-bottom: 6px;
+      }
     }
   `],
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -241,8 +256,8 @@ export class ModifyProfileForm {
   }
   
   ngOnInit() {
-    const companyLabels = this.user.company.labels.map(label => label.id),
-      companyJobs = this.user.company.jobs.map(job => job.id);
+    const companyLabels = this.user.company.labels.map(label => label.label.id),
+      companyJobs = this.user.company.jobs.map(job => job.job.id);
     
     this.allLabels =[...LabelRow.instances.values()]
       .map(({name, id}) => ({id, name, checked: companyLabels.includes(id)}));
@@ -300,11 +315,15 @@ export class ModifyProfileForm {
       const form = new FormGroup({
         job: new FormControl(job),
         number: new FormControl(number)
-      })
+      });
+
+      form.markAsDirty();
       jobsControl.push(form);
     });
 
-    console.log('!!', jobsControl.value);
+    // const companyJobs = this.user.company.jobs.map(job => job.id);
+    // this.allJobs = [...JobRow.instances.values()]
+    //   .map(({name, id}) => ({id, name, checked: companyJobs.includes(id)}));
   };
 
   updateLabels(labelOptions: Option[]) {
@@ -314,15 +333,20 @@ export class ModifyProfileForm {
 
     labelsControl.clear();
     newLabels.forEach((label) => {
-      labelsControl.push(new FormGroup({
+      const form  = new FormGroup({
         label: new FormControl(label),
         fileData: new FormControl({files: null, date: now} as FileinputOutput)
-      }))
+      });
+      form.markAsDirty();
+      labelsControl.push(form);
     });
+
+    // const companyLabels = this.user.company.labels.map(label => label.id);
+    // this.allLabels =[...LabelRow.instances.values()]
+    //   .map(({name, id}) => ({id, name, checked: companyLabels.includes(id)}));
   }
   
   allLabels: Option[] = [];
   allJobs: Option[] = [];
   addingField: boolean = false;
-  labels: Option[] = [];
 };

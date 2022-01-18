@@ -1,15 +1,15 @@
 import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Action, Selector, State, StateContext, Store } from "@ngxs/store";
-import { catchError, tap } from "rxjs/operators";
+import { catchError, mergeMap, tap } from "rxjs/operators";
 import { AuthState } from "src/models/auth/auth.state";
 import { environment } from "src/environments/environment";
 import { ChangePassword, ChangeProfileType, ChangeProfilePicture, GetUserData, ModifyUserProfile } from "./user.actions";
 import { User } from "./user.model";
 import { Login, Logout } from "../auth/auth.actions";
-import { throwError } from "rxjs";
+import { of, throwError } from "rxjs";
 import { Mapper } from "../data/mapper.model";
-import { UserProfileRow } from "../data/data.model";
+import { FilesRow, UserProfileRow } from "../data/data.model";
 import { AppState } from "src/app/app.state";
 
 @State<User>({
@@ -35,14 +35,9 @@ export class UserState {
   @Action(ChangeProfilePicture)
   changeProfilePicture(ctx: StateContext<User>, action: ChangeProfilePicture) {
     let token = this.store.selectSnapshot(AuthState).token;
-    let data = {
-      "action": "changeUserImage",
-      "name": action.name,
-      "imageExtension": action.src.format, // PNG OR JPEG
-      "imageBase64": "data:image/png;base64,"+action.src.base64String
-    }
+    console.log(action);
 
-    let req = this.http.post(environment.backUrl + '/data/', data, {
+    let req = this.http.post(environment.backUrl + '/data/', action, {
       headers: {
         "Authorization": "Token " + token,
         'Content-Type': 'application/json'
@@ -51,7 +46,7 @@ export class UserState {
 
     return req.pipe(
       tap(() => {
-        ctx.patchState({ imageUrl: 'data:image/' + action.src.format + ';base64,' + action.src.base64String });
+        ctx.patchState({ imageUrl: 'data:image/' + action.ext + ';base64,' + action.imageBase64 });
       })
     );
   }
@@ -74,13 +69,17 @@ export class UserState {
 
   @Action(GetUserData)
   getUserData(ctx: StateContext<User>, action: GetUserData) {
-    let { token } = action
+    let { token } = action;
     let req = this.http.get(environment.backUrl + '/data/?action=getUserData', {
       headers: {
         "Authorization": `Token ${token}`,
         'Content-Type': 'application/json'
       }
     });
+
+    if ( !ctx.getState().imageUrl ) {
+      
+    }
 
     return req.pipe(
       catchError((err: HttpErrorResponse) => {
@@ -98,6 +97,7 @@ export class UserState {
         const currentUser = [...UserProfileRow.instances.values()][0],
           partial: any = { profile: currentUser.serialize(), viewType: currentUser.role.id == 2 };
 
+        console.log(currentUser.company.jobs);
         //let avatar: Avatar | null = null;
         //if ( avatar = Avatar.getById(1)! ) partial.imageUrl = 'data:image/' + avatar.ext + ';base64,' + avatar.content;
         ctx.patchState(partial);
@@ -116,7 +116,7 @@ export class UserState {
 
     console.log('posting', action);
 
-    let req = this.http.post(environment.backUrl + '/data/', action.changes, {
+    let req = this.http.post(environment.backUrl + '/data/', action, {
       headers: {
         "Authorization": `Token ${token}`,
         'Content-Type': 'application/json'
@@ -126,7 +126,7 @@ export class UserState {
     return req.pipe(
       tap((response: any) => {
         console.log('response', response);
-        const newProfile = Mapper.updateFrom(ctx.getState().profile, response.valueModified);
+        const newProfile = Mapper.updateFrom(UserProfileRow, ctx.getState().profile, response.valueModified);
         ctx.patchState({profile: newProfile})
       })
     );

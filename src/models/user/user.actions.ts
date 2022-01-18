@@ -1,5 +1,6 @@
 import { FormArray, FormGroup } from "@angular/forms";
 import { FileinputOutput } from "src/app/shared/components/filesUI/files.ui";
+import { PropertyTrap } from "src/common/classes";
 import { getDirtyValues } from "src/common/functions";
 import { JobForCompanyRow, JobRow, LabelForCompanyRow, LabelRow, UserProfileRow } from "../data/data.model";
 
@@ -10,7 +11,15 @@ export class ChangeProfileType {
 
 export class ChangeProfilePicture {
   static readonly type = '[User] Change Profile Picture';
-  constructor(public src: any, public name: string) {}
+  ext: string = '';
+  imageBase64: string = '';
+  expirationDate: string = '31-02-2022';
+  constructor(src: any, public name: string) {
+    this.ext = src.format;
+    this.imageBase64 = src.base64String;
+  }
+
+  action = 'changeUserImage';
 };
 
 export class ChangePassword {
@@ -28,7 +37,6 @@ export class GetUserData {
 export class ModifyUserProfile {
   static readonly type = '[User] Change User Profile';
   readonly action = 'modifyUser';
-  changes: any = {};
   
   //for now we mark job as dirty, but we should take it directly from the form
   constructor({profile, form}: {profile: UserProfileRow, form: FormGroup}) {    
@@ -39,27 +47,25 @@ export class ModifyUserProfile {
       labels = changes['Userprofile.Company.LabelForCompany'];
     
     if ( jobs ) {
+      console.log(jobs, Object.values<JobForCompanyRow>(jobs));
       changes['Userprofile.Company.JobForCompany'] = Object.values<JobForCompanyRow>(jobs).map(
         ({job, number}: {job: JobRow, number: number}) => ([job.id, number])
       );
     }
 
     if ( labels ) {
+      console.log(jobs, Object.values<JobForCompanyRow>(labels));
       changes['Userprofile.Company.LabelForCompany'] = Object.values<any>(labels).map(
         ({label, fileData}: {label: LabelRow, fileData: FileinputOutput}) => ([label.id, fileData.date!.replace(/-/g, '/')])
       );
     }
 
-    this.changes['Userprofile'] = {id: profile.id};
-    for ( const [field, value] of Object.entries<any>(changes) ) {
-      const tree = field.split('.'), lastKey = tree[tree.length-1];
-      let root = this.changes;
-      for ( const level of tree.slice(0, -1) ) {
-        if ( !root[level] ) root[level] = {}   
-        root = root[level];
-      }
-      root[lastKey] = value;
-    }
-
+    const proxy = new Proxy(this, PropertyTrap);
+    //write directly on this object
+    proxy['Userprofile.id'] = profile.id;
+    for ( const [field, value] of Object.entries<any>(changes) ) 
+      proxy[field] = value;
+    
+    console.log(this, proxy);
   }
 };
