@@ -171,6 +171,7 @@ export class CompanyRow extends createTable<CompanyRow>() {
   get webSite() { return this.getField('webSite') }
   get stars() { return this.getField('stars') }
   get companyPhone() { return this.getField('companyPhone') }
+  get files() { return this.getField('Files'); }
 
   get jobs(): JobForCompanyRow[] { return this.getField('JobForCompany') }
   get labels():  LabelForCompanyRow[] { return this.getField('LabelForCompany') }

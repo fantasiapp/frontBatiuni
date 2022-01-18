@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, HostListener, Input, ViewChild, EventEmitter, Output } from "@angular/core";
+import { ChangeDetectionStrategy, Component, HostListener, Input, ViewChild, EventEmitter, Output, HostBinding } from "@angular/core";
 import { FormArray, FormControl, FormGroup } from "@angular/forms";
 import { Serialized } from "src/common/types";
 import { JobRow, LabelRow, UserProfileRow } from "src/models/data/data.model";
@@ -169,10 +169,29 @@ import { SlidesDirective } from "../directives/slides.directive";
 
       @include from($mobile) { background: transparent; }
     }
+
+    .big-sticky-footer {
+      box-shadow: 0 -3px 3px 0 #ddd;
+    
+      background-color: white;
+      @extend %sticky-footer;
+      height: $big-sticky-footer-height;
+      padding: 10px 30px;
+    
+      & > * {
+        margin-bottom: 6px;
+      }
+    }
   `],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ModifyProfileForm {
+
+  @HostBinding('class')
+  get classes() {
+    const isMobile = window.innerWidth <= 768;
+    return isMobile ? ' mobile-view' : '';
+  }
 
   @Input()
   user!: Serialized<UserProfileRow>;
