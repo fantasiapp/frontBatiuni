@@ -64,7 +64,7 @@ import { SlidesDirective } from "../directives/slides.directive";
             <ng-container formArrayName="Userprofile.Company.JobForCompany">
               <span class="position-relative number" *ngFor="let control of profileJobsControls; index as i">
                 <ng-container [formGroupName]="i">
-                  <input class="form-element" type="text" [value]="control.get('job')!.value.name" disabled>
+                  <input class="form-element number-name" type="text" [value]="control.get('job')!.value.name" disabled>
                   <div class="position-absolute number-container">
                     <number formControlName="number"></number>
                   </div>
@@ -158,6 +158,12 @@ import { SlidesDirective } from "../directives/slides.directive";
 
     .form-title, .form-input label {
       font-size: 1em;
+    }
+
+    .number-name {
+      white-space: pre;
+      text-overflow: ellipsis;
+      padding-right: 90px;
     }
 
     .form-input .number-container {

@@ -24,7 +24,7 @@ export interface Value {
 /* base table metaclass */
 /* instance stuff and all that */
 class __table__ {
-  static isTable(table: Table | Value): table is Table { return table.prototype instanceof __table__; }
+  static isTable(table: Table | Value): table is Table { return table instanceof __table__  || table.prototype instanceof __table__; }
   static getName(): string { return this.name.slice(0, -3); }
 
   constructor(public id: number, protected values: any[]) {}
@@ -64,15 +64,18 @@ class __table__ {
       let index = this.structure.fields.get(prop);
       if ( !index ) throw `Unknown property ${prop} of table ${this.structure.name}`;
 
+      console.log(prop, index, this.values[index], Array.isArray(this.values[index]));
+
       if ( Array.isArray(this.values[index]) ) {
         //Destroy
         this.values[index].forEach((value: __table__) => {
           value.structure.destroy(value.id);
         });
         
-
+        console.log(this.values[index], data, prop, data[prop]);
         this.values[index] = Mapper.mapArray(data, prop);
       } else {
+        console.log(__table__.isTable(this.values[index]));
         if ( __table__.isTable(this.values[index]) )
           this.values[index].update(data[prop]);
         else
@@ -219,132 +222,124 @@ export type Role = Serialized<RoleRow>;
 export type Label = Serialized<LabelRow>;
 export type Job = Serialized<JobRow>;
 
-/* new mapper */
-export class DataMapper {
+// /* new mapper */
+// export class DataMapper {
 
-  private static fieldToClass: {[key: string]: Table | Value} = {
-    'Company': CompanyRow,
-    'Userprofile': UserProfileRow,
-    'Role': RoleRow, 'role': RoleRow, /* fix here: Report this to JLW */
-    'Label': LabelRow,
-    'Job': JobRow,
-    'JobForCompany': JobForCompanyRow,
-    'LabelForCompany': LabelForCompanyRow,
-    'Files': FilesRow
-  };
+//   private static fieldToClass: {[key: string]: Table | Value} = {
+//     'Company': CompanyRow,
+//     'Userprofile': UserProfileRow,
+//     'Role': RoleRow, 'role': RoleRow, /* fix here: Report this to JLW */
+//     'Label': LabelRow,
+//     'Job': JobRow,
+//     'JobForCompany': JobForCompanyRow,
+//     'LabelForCompany': LabelForCompanyRow,
+//     'Files': FilesRow
+//   };
 
-  private static getClassName(table: Table | Value) {
-    console.log('my name is whaaa ?', table.getName());
-    return table.getName();
-  }
+//   private static getClassName(table: Table | Value) {
+//     return table.getName();
+//   }
 
-  static readonly definedValues = ['Role', 'Label', 'Job'] as const;
-  static readonly definedTables = ['Company', 'Userprofile', 'JobForCompany', 'LabelForCompany', 'Files'] as const;
+//   static readonly definedValues = ['Role', 'Label', 'Job'] as const;
+//   static readonly definedTables = ['Company', 'Userprofile', 'JobForCompany', 'LabelForCompany', 'Files'] as const;
 
-  static getField(name: string) {
-    const clazz = this.fieldToClass[name];
-    if ( !clazz ) throw `Unknown field ${name}`; //only during tests
-    return { name, class: clazz }
-  };
+//   static getField(name: string) {
+//     const clazz = this.fieldToClass[name];
+//     if ( !clazz ) throw `Unknown field ${name}`; //only during tests
+//     return { name, class: clazz }
+//   };
 
-  static isDefined(name: string) {
-    if ( this.isDefinedValue(name) ) return true;
-    return this.isDefinedValue(name);
-  };
+//   static isDefined(name: string) {
+//     if ( this.isDefinedValue(name) ) return true;
+//     return this.isDefinedValue(name);
+//   };
 
-  static isDefinedTable(name: string) {
-    if ( this.definedTables.includes(name as any) ) return true;
-    return false;
-  }
+//   static isDefinedTable(name: string) {
+//     if ( this.definedTables.includes(name as any) ) return true;
+//     return false;
+//   }
 
-  static isDefinedValue(name: string) {
-    if ( this.definedValues.includes(name as any) ) return true;
-    return false;
-  }
+//   static isDefinedValue(name: string) {
+//     if ( this.definedValues.includes(name as any) ) return true;
+//     return false;
+//   }
 
-  static fieldIsTable(data: any, name: string) { return data.hasOwnProperty(name + 'Fields') }; 
-  static fieldIsSimple(data: any, name: string) { return data.hasOwnProperty(name + 'Indices'); };
-  static fieldIsValue(data: any, name: string) { return !this.fieldIsTable(data, name); };
+//   static fieldIsTable(data: any, name: string) { return data.hasOwnProperty(name + 'Fields') }; 
+//   static fieldIsSimple(data: any, name: string) { return data.hasOwnProperty(name + 'Indices'); };
+//   static fieldIsValue(data: any, name: string) { return !this.fieldIsTable(data, name); };
 
-  static getFeatures(data: any) {
-    const tables: string[] = [], values: string[] = [];
-    Object.keys(data).forEach(key => {
-      if ( !this.isDefined(key) ) throw `Undefined feature ${key}.`; //only during tests
-      if ( this.fieldIsTable(data, key) ) tables.push(key);
-      else values.push(key);
-    });
-    return {tables, values};
-  };
+//   static getFeatures(data: any) {
+//     const tables: string[] = [], values: string[] = [];
+//     Object.keys(data).forEach(key => {
+//       if ( !this.isDefined(key) ) throw `Undefined feature ${key}.`; //only during tests
+//       if ( this.fieldIsTable(data, key) ) tables.push(key);
+//       else values.push(key);
+//     });
+//     return {tables, values};
+//   };
 
-  static getValuesOf(data: any, name: string) {
-    const value = data[name + 'Values'];
-    if ( !value ) throw `Unknown field ${value}.`;
-    return value;
-  }
+//   static getValuesOf(data: any, name: string) {
+//     const value = data[name + 'Values'];
+//     if ( !value ) throw `Unknown field ${value}.`;
+//     return value;
+//   }
   
-  static mapFields(data: any, table: Table) {
-    const name = this.getClassName(table),
-      fields = data[name + 'Fields'] as string[],
-      indices = data[name + 'Indices'] as string[];
+//   static mapFields(data: any, table: Table) {
+//     const name = this.getClassName(table),
+//       fields = data[name + 'Fields'] as string[],
+//       indices = data[name + 'Indices'] as string[];
 
-    fields.forEach((field, index) => table.fields.set(field, index));
-    indices.forEach(index => {
-      table.dependencyMap.set(+index, this.fieldToClass[fields[+index]]);
-    });
-  }
+//     fields.forEach((field, index) => table.fields.set(field, index));
+//     indices.forEach(index => {
+//       table.dependencyMap.set(+index, this.fieldToClass[fields[+index]]);
+//     });
+//   }
 
-  private static mapSimpleTable(data: any, table: Table) {
-    const name = this.getClassName(table),
-      content = this.getValuesOf(data, name);
+//   private static mapSimpleTable(data: any, table: Table) {
+//     const name = this.getClassName(table),
+//       content = this.getValuesOf(data, name);
     
-    Object.entries<any[]>(content).forEach(([id, values]) => {
-      new table(+id, values);
-    });
-  }
+//     Object.entries<any[]>(content).forEach(([id, values]) => {
+//       new table(+id, values);
+//     });
+//   }
 
-  // important function
-  // only works on tables but not values
-  static recursiveGetById(data: any, table: Table | Value, id: number) {
-    const name = this.getClassName(table);
-    let ref = table.getById(id);
-    if ( ref ) return ref;
+//   // important function
+//   // only works on tables but not values
+//   static recursiveGetById(data: any, table: Table | Value, id: number) {
+//     const name = this.getClassName(table);
+//     let ref = table.getById(id);
+//     if ( ref ) return ref;
     
-    if ( !__table__.isTable(table) )
-      return new table(id, data[name + 'Values'][id]);
+//     if ( !__table__.isTable(table) )
+//       return new table(id, data[name + 'Values'][id]);
     
-    console.log(data, name + 'Values', '>', data[name + 'Values']);
-    const values = data[name + 'Values'][id] as any[];
-    const refValues = values.map((value, index) => {
-      if ( table.dependencyMap.has(index) ) {
-        const refTable = table.dependencyMap.get(index)!;
-        if ( Array.isArray(value) )
-          value = value.map(v => this.recursiveGetById(data, refTable, v))
-        else
-          value = this.recursiveGetById(data, refTable, value);
-      }
-      return value;
-    });
+//     const values = data[name + 'Values'][id] as any[];
+//     const refValues = values.map((value, index) => {
+//       if ( table.dependencyMap.has(index) ) {
+//         const refTable = table.dependencyMap.get(index)!;
+//         if ( Array.isArray(value) )
+//           value = value.map(v => this.recursiveGetById(data, refTable, v))
+//         else
+//           value = this.recursiveGetById(data, refTable, value);
+//       }
+//       return value;
+//     });
 
-    return new table(id, refValues);
-  }
+//     return new table(id, refValues);
+//   }
 
-  private addEntry(table: Table, id: number, values: any) {
-    new table(id, values);
-  }
+//   private addEntry(table: Table, id: number, values: any) {
+//     new table(id, values);
+//   }
 
-  private static mapTable(data: any, table: Table) {
-    const name = this.getClassName(table),
-      content = this.getValuesOf(data, name);    
+//   private static mapTable(data: any, table: Table) {
+//     const name = this.getClassName(table),
+//       content = this.getValuesOf(data, name);    
     
-    Object.entries<any[]>(content).forEach(([id, values], index) => {
-      // let ref = values[index];
-      // if ( table.dependencyMap.has(index) )
-      //   ref = this.protectedGetById(table.dependencyMap.get(index)!, id);
-        
-      new table(+id, values);
-    });
-  };
-};
+//     Object.keys(content).forEach(id => this.recursiveGetById(data, table, +id));
+//   };
+// };
 
 // const data = {
 //   "RoleValues": {1: "Eminem", 2: "Sad-LiveKid", 3: "Gorillaz"},
