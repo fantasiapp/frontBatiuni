@@ -188,8 +188,8 @@ export class Mapper {
     (window as any).mapper = Mapper;
   };
 
-  static mapTable(data: any, name: tableName) {
-    if ( this.mapped[name] ) return;
+  static mapTable(data: any, name: tableName, onlyIfUnmapped: boolean = true) {
+    if ( onlyIfUnmapped && this.mapped[name] ) return;
     this.mapFields(data, name);
     if ( this.isSimpleTable(data, name) )
       this.mapSimpleTable(data, name);
@@ -210,13 +210,23 @@ export class Mapper {
 
   /*fix here: doesnt work with jobs and labels */
   /*fix here: Ask JLW to move company inside Userprofil */
-  static updateFrom(context: any, data: any) {
-    throw "unhandled"
-    if ( !data['Userprofile'] ) data['Userprofile'] = {};
-    if ( data['Company'] ) data['Userprofile']['Company'] = data['Company'];
-    
-    const newContext = UserProfileRow.getById(context.id).update(data['Userprofile']);
+  static updateFrom(table: TableConstructor, context: any, data: any) {
+    console.log('udpating', table, context, data);
+    const row = table.getById(context.id),
+      newContext = row.update(data['Userprofile']);
+
+    console.log('new value', newContext);
+
     return newContext.serialize();
+  }
+
+  //Bad code !!
+  //This should save the structure
+
+  static mapArray(data: any, prop: string) {
+    const clazz = prop == 'JobForCompany' ? JobRow : LabelRow,
+      table = prop == 'JobForCompany' ? JobForCompanyRow : LabelForCompanyRow;
+    return Object.entries<any>(data[prop]).map(([id, d]) => new table(+id, [clazz.getById(d[0]), d[1]]));
   }
 };
 

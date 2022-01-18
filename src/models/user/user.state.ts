@@ -126,7 +126,7 @@ export class UserState {
     return req.pipe(
       tap((response: any) => {
         console.log('response', response);
-        const newProfile = Mapper.updateFrom(ctx.getState().profile, response.valueModified);
+        const newProfile = Mapper.updateFrom(UserProfileRow, ctx.getState().profile, response.valueModified);
         ctx.patchState({profile: newProfile})
       })
     );

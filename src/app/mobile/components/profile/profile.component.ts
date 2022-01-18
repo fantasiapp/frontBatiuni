@@ -1,19 +1,15 @@
-import { ChangeDetectionStrategy, Component, HostListener, ViewChild } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, ViewChild } from "@angular/core";
 import { Select, Store } from "@ngxs/store";
 import { BehaviorSubject } from "rxjs";
 import { User } from "src/models/user/user.model";
 import { UserState } from "src/models/user/user.state";
 import * as UserActions from "src/models/user/user.actions";
-import { Option } from "src/models/option";
 import { Camera, CameraResultType, CameraSource } from "@capacitor/camera";
 import { UISlideMenuComponent } from "../../ui/slidemenu/slidemenu.component";
 import { UISwipeupComponent } from "../../ui/swipeup/swipeup.component";
 import { Logout } from "src/models/auth/auth.actions";
-import { ImageGenerator } from "src/app/shared/services/image-generator.service";
-import { map, take } from "rxjs/operators";
-import { FormArray, FormControl, FormGroup } from "@angular/forms";
-import { Email } from "src/validators/persist";
-import { JobRow, UserProfileRow } from "src/models/data/data.model";
+import { InfoHandler } from "src/app/shared/components/info/info.component";
+import { take } from "rxjs/operators";
 
 
 @Component({
@@ -28,6 +24,9 @@ export class ProfileComponent {
 
   @ViewChild(UISlideMenuComponent, {static: false})
   slideMenu!: UISlideMenuComponent;
+  
+  @ViewChild(InfoHandler, {static: true})
+  info!: InfoHandler;
 
   @ViewChild('modifyMenu', {static: false, read: UISlideMenuComponent})
   modifyMenu!: UISlideMenuComponent;
@@ -43,7 +42,7 @@ export class ProfileComponent {
   openModifyPicture: boolean = false;
   openNotifications : boolean = false;
 
-  constructor(private store: Store) {}
+  constructor(private store: Store, private cd: ChangeDetectorRef) {}
 
   async ngOnInit() {
     let permissions  = await Camera.checkPermissions();
@@ -61,31 +60,35 @@ export class ProfileComponent {
     this.modifyPassword = modifyPassword;
   }
 
-  openModifyPictureMenu() {
-    this.openModifyPicture = true;
-  }
+  openModifyPictureMenu() { this.openModifyPicture = true; }
   
   private fixScrollTop() {
     this.modifyMenu.resetScroll();
   }
 
   @HostListener('swipeleft')
-  onSwipeLeft() { 
+  @HostListener('swiperight')
+  onSwipe() { 
     this.fixScrollTop();
   }
   
-  @HostListener('swiperight')
-  onSwipeRight() {
-    this.fixScrollTop();
-  }
-
   logout() {
     this.store.dispatch(new Logout()).subscribe(console.log)
   }
   
   modifyProfile(form: any /*FormGroup*/) {
     const user = this.store.selectSnapshot(UserState);
-    this.store.dispatch(new UserActions.ModifyUserProfile({profile: user.profile, form}));
+    const action = this.store.dispatch(new UserActions.ModifyUserProfile({profile: user.profile, form}));
+    action.pipe(take(1))
+      .subscribe(success => {
+        this.openModifyMenu = false;
+        this.info.show("success", "Profil modifié avec succès", 2000);
+        this.cd.markForCheck();
+      },
+      err => {
+        this.info.show("error", "Erreur lors du modification du profil", 3000);
+        this.cd.markForCheck();
+      });
   }
 
   changeProfileType(type: boolean) {
@@ -116,6 +119,4 @@ export class ProfileComponent {
     let imageName = user.profile.firstName + '_'+ user.profile.lastName +'_'+ user.profile.id ;
     this.store.dispatch(new UserActions.ChangeProfilePicture(photo, imageName));
   }
-
-  onSubmit() {}
 };

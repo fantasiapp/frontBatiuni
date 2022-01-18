@@ -81,7 +81,7 @@ import { SlidesDirective } from "../directives/slides.directive";
               <label>Ajoutez des métiers</label>
               <options [options]="allJobs" (valueChange)="updateJobs($event)"></options>
             <div class="form-input center-text">
-              <button (click)="addingField = false" style="display:inline; width: 80%; padding: 5px;" class="button gradient"> Terminer</button>
+              <button (click)="addingField = false" style="display:inline; width: 80%; padding: 5px;" class="button gradient"> Terminer </button>
             </div>
           </ng-template>
         </div>            
@@ -241,8 +241,8 @@ export class ModifyProfileForm {
   }
   
   ngOnInit() {
-    const companyLabels = this.user.company.labels.map(label => label.id),
-      companyJobs = this.user.company.jobs.map(job => job.id);
+    const companyLabels = this.user.company.labels.map(label => label.label.id),
+      companyJobs = this.user.company.jobs.map(job => job.job.id);
     
     this.allLabels =[...LabelRow.instances.values()]
       .map(({name, id}) => ({id, name, checked: companyLabels.includes(id)}));
@@ -305,6 +305,10 @@ export class ModifyProfileForm {
       form.markAsDirty();
       jobsControl.push(form);
     });
+
+    // const companyJobs = this.user.company.jobs.map(job => job.id);
+    // this.allJobs = [...JobRow.instances.values()]
+    //   .map(({name, id}) => ({id, name, checked: companyJobs.includes(id)}));
   };
 
   updateLabels(labelOptions: Option[]) {
@@ -321,10 +325,13 @@ export class ModifyProfileForm {
       form.markAsDirty();
       labelsControl.push(form);
     });
+
+    // const companyLabels = this.user.company.labels.map(label => label.id);
+    // this.allLabels =[...LabelRow.instances.values()]
+    //   .map(({name, id}) => ({id, name, checked: companyLabels.includes(id)}));
   }
   
   allLabels: Option[] = [];
   allJobs: Option[] = [];
   addingField: boolean = false;
-  labels: Option[] = [];
 };
