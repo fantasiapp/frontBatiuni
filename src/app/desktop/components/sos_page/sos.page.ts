@@ -8,5 +8,6 @@ import { ChangeDetectionStrategy, Component } from "@angular/core";
 
 })
 export class SosPageComponenet {
+    activeView: number = 0;
 
 }

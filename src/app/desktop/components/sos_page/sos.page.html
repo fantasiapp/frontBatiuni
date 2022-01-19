@@ -1,8 +1,7 @@
-<!-- <tabs [tabs]="3" [(activeView)]="activeView" bottom>
-    <span tab_0>Brouillon</span>
-    <span tab_1>En Ligne</span>
-    <span tab_2>Validées</span>
-  </tabs> -->
+<tabs [tabs]="2" [(activeView)]="activeView" bottom>
+    <span tab_0>Vue list</span>
+    <span tab_1>Vue map</span>
+  </tabs>
   
   <div class="web-page">
     <section class="filters">
@@ -11,6 +10,8 @@
     
     <section class="main web-content font-Poppins">
       <searchbar></searchbar>
+      <ng-container [ngSwitch]="activeView">
+        <ng-container *ngSwitchCase="0">
       <div class="report-search">
         Resultat <span class="no-result">10 annonces</span>
       </div>
@@ -23,5 +24,11 @@
         <sos-card></sos-card>
         <sos-card></sos-card>
       </div>
+    </ng-container>
+        <ng-container *ngSwitchCase="1">
+      <mapbox-batiuni></mapbox-batiuni>
+      
+    </ng-container>
+    </ng-container>
     </section>
   </div>
