@@ -62,7 +62,7 @@ import { ConnexionForm } from "./forms/connexion.form";
     ProfileResume,
     FileIcon,
     UISOSCard,
-    InfoHandler
+    InfoHandler,
   ],
   imports: [
     CommonModule,

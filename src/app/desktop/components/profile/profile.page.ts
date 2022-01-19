@@ -11,8 +11,9 @@ import { UserState } from "src/models/user/user.state";
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProfilePageComponent {
-
+  abonnementTabs: boolean = false;
   activeView: number = 0;
+  tabView: number = 0;
   factures = new Array(10).fill(0);
 
   setView(view: number) { this.activeView = view; }

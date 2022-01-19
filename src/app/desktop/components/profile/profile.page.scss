@@ -76,6 +76,28 @@ profile-resume {
   }
 }
 
-.web-content {
-  position: relative;
+
+tabs {
+  position: fixed;
+  width: 100%;
+  top: $web-header-height - $tab-height;
+}
+.abonnementCards {
+  // width: calc(100vw - 400px) !important;
+  display: flex;
+  flex-flow:row wrap;
+
+  
+}
+
+
+.child {
+  min-width: 300px;
+  margin: 1rem 1rem;
+  max-width: 300px;
+}
+.facture{
+  width: calc(100vw - 1000px);
+  min-width: 400px !important;
+  max-width: 800px !important;
 }
