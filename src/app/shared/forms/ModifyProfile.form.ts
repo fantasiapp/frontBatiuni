@@ -321,11 +321,11 @@ export class ModifyProfileForm {
     
     labelControl.clear();
     for ( let label of this.user.company.labels )
-    labelControl.push(new FormGroup({
-        label: new FormControl(label.label),
-        //get date from server
-        fileData: new FormControl({files: null, date: now} as FileinputOutput)
-      }));
+      labelControl.push(new FormGroup({
+          label: new FormControl(label.label),
+          //get date from server
+          fileData: new FormControl({files: null, date: label.date || now} as FileinputOutput)
+        }));
   }
 
   updateJobs(jobOptions: Option[]) {
