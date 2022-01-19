@@ -10,6 +10,7 @@ import { UISwipeupComponent } from "../../ui/swipeup/swipeup.component";
 import { Logout } from "src/models/auth/auth.actions";
 import { InfoHandler } from "src/app/shared/components/info/info.component";
 import { take } from "rxjs/operators";
+import { FormGroup } from "@angular/forms";
 
 
 @Component({
@@ -74,6 +75,7 @@ export class ProfileComponent {
       .subscribe(success => {
         this.openModifyMenu = false;
         this.info.show("success", "Profil modifié avec succès", 2000);
+        (form as FormGroup).markAsPristine(); (form as FormGroup).markAsUntouched();
         this.cd.markForCheck();
       },
       err => {

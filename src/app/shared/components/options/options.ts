@@ -19,36 +19,14 @@ export class OptionsModel extends UIDefaultAccessor<Option[]> {
   search: string = '';
   showDropDown: boolean = false;
 
-
-  //make generic and share class
-  //and fucking fix this
-  // @HostListener('focusin', ['$event'])
-  // onFocus(e: any) {
-  //   const source = e.relatedTarget;
-  //   e.stopPropagation();
-  //   if ( !source ) this.enteredFromOutside = true;
-  //   this.showDropDown = true;
-  //   requestAnimationFrame(() => {
-  //     const searchInput = this.ref.nativeElement.querySelector('input[type=text]');
-  //     searchInput?.scrollIntoView(true);
-  //   });
-  // }
-
-  // @HostListener('focusout', ['$event'])
-  // onBlur(e: any) {
-  //   const focused = (e as any).relatedTarget as HTMLElement;
-  //   if ( !focused )
-  //     return;
-
-  //   if ( focusOutside(this.ref.nativeElement, focused) ) {
-  //     this.showDropDown = false;
-  //     this.exitedToOutside = true;
-  //   }
-  // }
-
-
   onToggle(e: Event) {
     this.showDropDown = !this.showDropDown;
+    if ( this.showDropDown ) {
+      setTimeout(() => {
+        const searchInput = this.ref.nativeElement.querySelector('input[type=text]');
+        searchInput?.scrollIntoView(true);
+      });
+    }
   }
 
   private static instances: OptionsModel[] = [];

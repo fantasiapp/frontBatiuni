@@ -1,0 +1,13 @@
+@import 'src/styles/variables';
+@import 'src/styles/mixins';
+
+:host {
+  display: flex;
+  height: 100vh;
+}
+
+.background-image {
+  position: static;
+  width: 40vw;
+  height: 100%;
+}

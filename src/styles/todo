@@ -1,3 +1,5 @@
 - Optimize scss loading:
   I suspect @import statement are creating redundant code.
   Check it out and optimize
+
+- Apparently, we can solve safe area problems on .router and position relative etc...

@@ -15,6 +15,7 @@ import { AnnoncePage } from "./components/annonce_page/annonce.page";
 import { FactureUI } from "./ui/factureUI/facture.ui";
 import { SosPageComponenet } from "./components/sos_page/sos.page";
 import { UIAbonnement } from "./ui/abonnementUI/abonnement.ui";
+import { ConnexionPageComponent } from "./components/connexion/connexion.page";
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { UIAbonnement } from "./ui/abonnementUI/abonnement.ui";
     AnnoncePage,
     FactureUI,
     SosPageComponenet,
-    UIAbonnement
+    UIAbonnement,
+    ConnexionPageComponent
   ],
   imports: [
     CommonModule,
