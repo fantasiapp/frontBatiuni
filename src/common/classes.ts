@@ -155,6 +155,7 @@ export class HttpAction {
   };
 };
 
+//make it compatible with references ??
 export const PropertyTrap: ProxyHandler<any> = {
   get(target: any, property: string) {
     const path = property.split('.');

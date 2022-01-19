@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from "@angular/core";
+import { ChangeDetectionStrategy, Component, ElementRef, ViewChild } from "@angular/core";
 
 @Component({
   selector: "annonce-page",
@@ -7,5 +7,9 @@ import { ChangeDetectionStrategy, Component } from "@angular/core";
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AnnoncePage {
+  currency: string = '€';
 
+  onCurrencyChange(e: Event) {
+    this.currency = (e.target as HTMLInputElement).value;
+  }
 }

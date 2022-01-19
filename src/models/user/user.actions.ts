@@ -1,4 +1,4 @@
-import { FormArray, FormGroup } from "@angular/forms";
+import { FormGroup } from "@angular/forms";
 import { FileinputOutput } from "src/app/shared/components/filesUI/files.ui";
 import { PropertyTrap } from "src/common/classes";
 import { getDirtyValues } from "src/common/functions";
@@ -68,4 +68,10 @@ export class ModifyUserProfile {
     
     console.log(this, proxy);
   }
+};
+
+export class GetFile {
+  static readonly type = '[User] Get File';
+  action: string = 'loadImage';
+  constructor(public id: number) { }
 };

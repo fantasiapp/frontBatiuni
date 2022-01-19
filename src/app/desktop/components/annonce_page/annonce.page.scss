@@ -12,12 +12,12 @@ $half-square : math.div($square,2);
   @extend %three-section-layout;
   height: 100vh;
   background-color: #f7f7f7;
-
+  width: 100vw;
   @extend %web-space-top;
 
-  .main.web-content {
-    margin: 0 auto;
-  }
+  // .main.web-content {
+  //   margin: 0 auto;
+  // }
 }
 
 
@@ -40,34 +40,61 @@ $half-square : math.div($square,2);
     padding-bottom: 20px;
   }
 }
-.company-logo{
-    position: fixed;
-    top: calc(220px - 60px);
-    background-color: grey;
-    width: $square;
-    height: $square;
-}
+// .company-logo{
+//     position: fixed;
+//     top: calc(220px - 60px);
+//     background-color: grey;
+//     width: $square;
+//     height: $square;
+// }
 
-.company-text {
-    position: relative;
-    left : $square + 16px;
-    top:1rem;
-}
-
+// .company-text {
+//     position: relative;
+//     left : $square + 16px;
+//     top:1rem;
+// }
 
 .allow-overflow {
+  height: calc(100vh - 300px);
+  overflow-y: scroll;
+  width: 70%;
+}
+.info-bar {
     height: calc(100vh - 300px);
-    overflow: scroll;
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    button {
+      width: 50%;
+    }
 }
 
 
-.companyinfo {
-  position: absolute;  
-  left: 500px;
-  height: 200px;
-}
-.company-data {
-  display: flex;
-  justify-content: space-between;
-  min-width: 700px;
+// .companyinfo {
+//   position: absolute;  
+//   left: 500px;
+//   height: 200px;
+// }
+// .company-data {
+//   display: flex;
+//   justify-content: space-between;
+//   min-width: 700px;
+// }
+// .info {
+//   border: 1px solid black;
+// }
+
+
+
+.web-content {
+  width: 1200px !important;
+  @include range($mobile, 1299px) {
+   
+  }
+  @include range(1300px,1920) {
+   
+  }
+  
 }

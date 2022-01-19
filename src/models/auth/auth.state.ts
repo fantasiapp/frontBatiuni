@@ -4,7 +4,7 @@ import { Injectable, NgZone } from "@angular/core";
 import { AuthModel } from "./auth.model";
 import { environment } from 'src/environments/environment';
 import { ConfirmAccount, Login, Logout, Register } from "./auth.actions";
-import { catchError, map, tap } from "rxjs/operators";
+import { catchError, delay, map, tap, timeout } from "rxjs/operators";
 import { Observable, of, throwError } from "rxjs";
 import * as strings from '../../common/strings';
 import { Router } from "@angular/router";
@@ -92,14 +92,16 @@ export class AuthState {
   };
 
   @Action(ConfirmAccount)
-  confirmAccount(ctx: StateContext<AuthModel>, {token}: ConfirmAccount) {
-    const req = this.http.get(environment.backUrl + '/initialize/', {
+  async confirmAccount(ctx: StateContext<AuthModel>, {token}: ConfirmAccount) {
+    const req = this.http.get(environment.backUrl + `/initialize/`, {
       params: {
         action: 'registerConfirm',
         token
       }
     });
 
-    return req;
+    const result: any = await req.toPromise();
+    console.log(result);
+    if ( result['registerConfirm'] ) throw result['messages'];
   }
 };

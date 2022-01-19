@@ -5,20 +5,27 @@ import { Mapper } from "./mapper.model";
 
 export interface Table {
   new (id: number, values: string[]): object;
+  //getName(): string;
   fields: Map<string, number>;
+  dependencyMap: Map<number, Table | Value>;
   getById(id: number): any;
-  destroy(id: number): void;
+  destroy(id: number): void
+  getName(): string;
 };
 
 export interface Value {
   new (id: number, name: string): object;
+  //getName(): string;
   getById(id: number): any;
+  destroy(id: number): void;
+  getName(): string;
 };
 
 /* base table metaclass */
 /* instance stuff and all that */
 class __table__ {
-  static isTable(value: any) { return value instanceof __table__; }
+  static isTable(table: Table | Value): table is Table { return table instanceof __table__  || table.prototype instanceof __table__; }
+  static getName(): string { return this.name.slice(0, -3); }
 
   constructor(public id: number, protected values: any[]) {}
 
@@ -52,13 +59,12 @@ class __table__ {
   /* but has the benefit that the only way to set data is from the back */
   update(data: any) {
     const props = Object.getOwnPropertyNames(data);
-    console.log('updating', this, 'from', data);
-    console.log('------------------------------------------------------')
-    console.log('props', props);
 
     for( const prop of props ) {
       let index = this.structure.fields.get(prop);
       if ( !index ) throw `Unknown property ${prop} of table ${this.structure.name}`;
+
+      console.log(prop, index, this.values[index], Array.isArray(this.values[index]));
 
       if ( Array.isArray(this.values[index]) ) {
         //Destroy
@@ -66,9 +72,10 @@ class __table__ {
           value.structure.destroy(value.id);
         });
         
-
+        console.log(this.values[index], data, prop, data[prop]);
         this.values[index] = Mapper.mapArray(data, prop);
       } else {
+        console.log(__table__.isTable(this.values[index]));
         if ( __table__.isTable(this.values[index]) )
           this.values[index].update(data[prop]);
         else
@@ -86,14 +93,20 @@ class __table__ {
   getField(key: string) {
     return this.values[this.getIndex(key)!];
   }
+
+  read(value: any) {
+    this.values = value.slice();
+  }
 };
 
 /* hold information about the table instance */
 function createTable<T>() {
-  return class __table_instance__ extends __table__ {
+  class __table_instance__ extends __table__ {
 
+    static dependencyMap = new Map<number, Table | Value>();
     static fields = new Map<string, number>();
     static instances = new Map<number, T>();
+
     static getById(id: number): T { return __table_instance__.instances.get(id)! as unknown as T; }
     static destroy(id: number) { __table_instance__.instances.delete(id); }
 
@@ -110,7 +123,9 @@ function createTable<T>() {
     asRaw(): Readonly<Serialized<T>> {
       return this as unknown as Readonly<Serialized<T>>;
     }
-  }
+  };
+
+  return __table_instance__;
 };
 
 function createValue() {
@@ -118,6 +133,8 @@ function createValue() {
 
     static instances = new Map<number, __value__>();
     static getById(id: number) { return this.instances.get(id); }
+    static destroy(id: number) { this.instances.delete(id); }
+    static getName() { return __table__.getName.call(this); }
 
     constructor(public id: number, public name: string) {
       __value__.instances.set(id, this);
@@ -171,13 +188,15 @@ export class CompanyRow extends createTable<CompanyRow>() {
   get webSite() { return this.getField('webSite') }
   get stars() { return this.getField('stars') }
   get companyPhone() { return this.getField('companyPhone') }
-  get files() { return this.getField('Files'); }
+  get files(): FilesRow[] { return this.getField('Files'); }
 
   get jobs(): JobForCompanyRow[] { return this.getField('JobForCompany') }
   get labels():  LabelForCompanyRow[] { return this.getField('LabelForCompany') }
 };
 
 export class UserProfileRow extends createTable<UserProfileRow>() {
+  static getName() { return 'Userprofile'; }
+
   get user(): string { return this.getField('userName') }
   get company(): CompanyRow { return this.getField('Company') }
   get firstName(): string { return this.getField('firstName') }
@@ -202,3 +221,139 @@ export type LabelForCompany = Serialized<LabelForCompanyRow>;
 export type Role = Serialized<RoleRow>;
 export type Label = Serialized<LabelRow>;
 export type Job = Serialized<JobRow>;
+
+// /* new mapper */
+// export class DataMapper {
+
+//   private static fieldToClass: {[key: string]: Table | Value} = {
+//     'Company': CompanyRow,
+//     'Userprofile': UserProfileRow,
+//     'Role': RoleRow, 'role': RoleRow, /* fix here: Report this to JLW */
+//     'Label': LabelRow,
+//     'Job': JobRow,
+//     'JobForCompany': JobForCompanyRow,
+//     'LabelForCompany': LabelForCompanyRow,
+//     'Files': FilesRow
+//   };
+
+//   private static getClassName(table: Table | Value) {
+//     return table.getName();
+//   }
+
+//   static readonly definedValues = ['Role', 'Label', 'Job'] as const;
+//   static readonly definedTables = ['Company', 'Userprofile', 'JobForCompany', 'LabelForCompany', 'Files'] as const;
+
+//   static getField(name: string) {
+//     const clazz = this.fieldToClass[name];
+//     if ( !clazz ) throw `Unknown field ${name}`; //only during tests
+//     return { name, class: clazz }
+//   };
+
+//   static isDefined(name: string) {
+//     if ( this.isDefinedValue(name) ) return true;
+//     return this.isDefinedValue(name);
+//   };
+
+//   static isDefinedTable(name: string) {
+//     if ( this.definedTables.includes(name as any) ) return true;
+//     return false;
+//   }
+
+//   static isDefinedValue(name: string) {
+//     if ( this.definedValues.includes(name as any) ) return true;
+//     return false;
+//   }
+
+//   static fieldIsTable(data: any, name: string) { return data.hasOwnProperty(name + 'Fields') }; 
+//   static fieldIsSimple(data: any, name: string) { return data.hasOwnProperty(name + 'Indices'); };
+//   static fieldIsValue(data: any, name: string) { return !this.fieldIsTable(data, name); };
+
+//   static getFeatures(data: any) {
+//     const tables: string[] = [], values: string[] = [];
+//     Object.keys(data).forEach(key => {
+//       if ( !this.isDefined(key) ) throw `Undefined feature ${key}.`; //only during tests
+//       if ( this.fieldIsTable(data, key) ) tables.push(key);
+//       else values.push(key);
+//     });
+//     return {tables, values};
+//   };
+
+//   static getValuesOf(data: any, name: string) {
+//     const value = data[name + 'Values'];
+//     if ( !value ) throw `Unknown field ${value}.`;
+//     return value;
+//   }
+  
+//   static mapFields(data: any, table: Table) {
+//     const name = this.getClassName(table),
+//       fields = data[name + 'Fields'] as string[],
+//       indices = data[name + 'Indices'] as string[];
+
+//     fields.forEach((field, index) => table.fields.set(field, index));
+//     indices.forEach(index => {
+//       table.dependencyMap.set(+index, this.fieldToClass[fields[+index]]);
+//     });
+//   }
+
+//   private static mapSimpleTable(data: any, table: Table) {
+//     const name = this.getClassName(table),
+//       content = this.getValuesOf(data, name);
+    
+//     Object.entries<any[]>(content).forEach(([id, values]) => {
+//       new table(+id, values);
+//     });
+//   }
+
+//   // important function
+//   // only works on tables but not values
+//   static recursiveGetById(data: any, table: Table | Value, id: number) {
+//     const name = this.getClassName(table);
+//     let ref = table.getById(id);
+//     if ( ref ) return ref;
+    
+//     if ( !__table__.isTable(table) )
+//       return new table(id, data[name + 'Values'][id]);
+    
+//     const values = data[name + 'Values'][id] as any[];
+//     const refValues = values.map((value, index) => {
+//       if ( table.dependencyMap.has(index) ) {
+//         const refTable = table.dependencyMap.get(index)!;
+//         if ( Array.isArray(value) )
+//           value = value.map(v => this.recursiveGetById(data, refTable, v))
+//         else
+//           value = this.recursiveGetById(data, refTable, value);
+//       }
+//       return value;
+//     });
+
+//     return new table(id, refValues);
+//   }
+
+//   private addEntry(table: Table, id: number, values: any) {
+//     new table(id, values);
+//   }
+
+//   private static mapTable(data: any, table: Table) {
+//     const name = this.getClassName(table),
+//       content = this.getValuesOf(data, name);    
+    
+//     Object.keys(content).forEach(id => this.recursiveGetById(data, table, +id));
+//   };
+// };
+
+// const data = {
+//   "RoleValues": {1: "Eminem", 2: "Sad-LiveKid", 3: "Gorillaz"},
+//   "UserprofileFields": ["email", "password", "Role"],
+//   "UserprofileIndices": [2],
+//   "UserprofileValues": {
+//     1: ["anas.chatou@gmail.com", "12345678", [1]],
+//     2: ["majed.abdennadher@gmail.com", "12345678", 2],
+//     3: ["jlw@gmail.com", "12345678", 3],
+//     4: ["anas@gmail.com", "12345678", 1]
+//   }
+// };
+
+// DataMapper.mapFields(data, UserProfileRow);
+// console.log(UserProfileRow.dependencyMap);
+// console.log(DataMapper.recursiveGetById(data, UserProfileRow, 1));
+// console.log([...RoleRow.instances.values()])

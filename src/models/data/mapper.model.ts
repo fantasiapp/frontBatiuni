@@ -1,6 +1,5 @@
 //enforce the model and do operations
 
-import produce from 'immer';
 import { filterMap, getByValue } from 'src/common/functions';
 import { RoleRow, JobRow, LabelRow, CompanyRow, UserProfileRow, JobForCompanyRow, LabelForCompanyRow, FilesRow } from './data.model';
 
@@ -202,7 +201,7 @@ export class Mapper {
   }
 
   static mapRequest(data: any) {
-    console.log('mapping', data);
+    console.log(data);
     this.mapAllFields(data);
     this.staticMap(data);
     this.getTablesNames(data).forEach(tableName => this.mapTable(data, tableName));

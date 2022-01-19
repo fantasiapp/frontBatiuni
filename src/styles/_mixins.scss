@@ -301,18 +301,6 @@ $space-top-mid: 40px;
     font-family: "Poppins";
     width: 700px !important;
   }
-
-
-  @include from(1360px) {
-    section:last-child {
-      position: relative;
-      display: flex;
-      align-items: center;
-      border: 1px solid black;
-      width: 250px !important;
-      justify-content: center;
-    }
-  }
 };
 
 //default to 2 columns

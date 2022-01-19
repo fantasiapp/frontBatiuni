@@ -11,7 +11,7 @@ export const SlideChildrenLeft = [
     query(
       ':enter', [
         style({ transform: 'translateX(-100%)' }),
-        animate('200ms 50ms ease-out', style({ transform: 'translateX(0%)' })),], {
+        animate('200ms 100ms ease-out', style({ transform: 'translateX(0%)' })),], {
         optional: true,
       }
     ), query(
