@@ -18,7 +18,7 @@ import { Option } from "src/models/option";
 export class OptionsModel extends UIDefaultAccessor<Option[]> {
   search: string = '';
   showDropDown: boolean = false;
-
+  
 
   //make generic and share class
   //and fucking fix this
@@ -49,6 +49,12 @@ export class OptionsModel extends UIDefaultAccessor<Option[]> {
 
   onToggle(e: Event) {
     this.showDropDown = !this.showDropDown;
+    if ( this.showDropDown ) {
+      setTimeout(() => {
+        const searchInput = this.ref.nativeElement.querySelector('input[type=text]');
+        searchInput?.scrollIntoView(true);
+      });
+    }
   }
 
   private static instances: OptionsModel[] = [];
