@@ -1,10 +1,11 @@
-import { Component } from "@angular/core";
+import { ChangeDetectionStrategy, Component } from "@angular/core";
 import { UIDefaultAccessor } from "src/common/classes";
 
 @Component({
   selector: 'searchbar',
   templateUrl: 'searchbar.component.html',
-  styleUrls: ['searchbar.component.scss']
+  styleUrls: ['searchbar.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SearchbarComponent extends UIDefaultAccessor<string> {
   constructor() {
