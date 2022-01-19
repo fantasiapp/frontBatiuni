@@ -34,7 +34,7 @@ const routes: Routes = [{
   canActivate: [AuthGuard],
   resolve: [AuthResolver],
   children: [
-    { path: 'profile', component: SosPageComponenet, data: { animation: 'profile' } },
+    { path: 'profile', component: ProfilePageComponent, data: { animation: 'profile' } },
     { path: 'sos', component: SosPageComponenet, data: { animation: 'sos' } },
     { path: '', pathMatch: 'full', component: HomePageComponent, data: { animation: 'home' } },
     { path: '**', component: HomePageComponent }

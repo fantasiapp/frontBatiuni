@@ -62,7 +62,7 @@ button {
 
   &.button {
     color: white;
-
+    cursor: pointer;
     &:disabled {
       background: #aaa !important;
     }

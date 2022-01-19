@@ -280,9 +280,14 @@ $space-top-mid: 40px;
       padding-bottom: 20px;
     }
   }
+  section:last-child {
+    right: 0;
+    padding: $col-one-padding-y $col-one-padding-x;
+  }
 
   @include range($mobile, 1500px) {
-    section:first-child {
+    
+    section:first-child, section:last-child{
       transform: translateY(-$space-top-small);
       position: sticky;
       top: 0;
@@ -290,7 +295,7 @@ $space-top-mid: 40px;
   }
 
   @include from(1500px) {
-    section:first-child {
+    section:first-child, section:last-child{
       position: fixed;
       top: 220px;
       bottom: 0;
