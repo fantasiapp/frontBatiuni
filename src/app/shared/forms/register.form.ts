@@ -18,8 +18,8 @@ import { JobRow, RoleRow } from "src/models/data/data.model";
     <ng-template #page1>
       <div class="full-width flex column grow">
         <form class="grow form-control curved-border" [formGroup]="registerForm">
-          <h4 class="form-title font-Roboto center-text">Créer un compte !</h4>
-          <h3 class="form-subtitle">Informations contact</h3>
+          <h3 class="form-title">Créer un compte !</h3>
+          <h4 class="form-subtitle">Informations contact</h4>
           <div class="form-input">
             <label>Nom du contact</label> <input type="text" formControlName="lastname"/>
           </div>
@@ -67,8 +67,8 @@ import { JobRow, RoleRow } from "src/models/data/data.model";
     <ng-template #page2>
       <div class="full-width flex column grow">
         <form class="grow form-control curved-border" [formGroup]="registerForm" (ngSubmit)="onSubmit($event)">
-        <h4 class="form-title font-Roboto center-text">Créer un compte !</h4>
-        <h3 class="form-subtitle">Informations contact</h3>
+        <h3 class="form-title">Créer un compte !</h3>
+        <h4 class="form-subtitle">Informations contact</h4>
           <div class="form-input">
             <label>Je suis</label>
             <options formControlName="role" [options]="roles" type="radio" [searchable]="false">
@@ -105,7 +105,6 @@ import { JobRow, RoleRow } from "src/models/data/data.model";
     </ng-template>
   `,
   styles: [`
-    @import 'src/styles/variables';
     @import 'src/styles/mixins';
     
     :host(.mobile-view) {

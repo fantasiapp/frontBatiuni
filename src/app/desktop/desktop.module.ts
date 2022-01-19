@@ -14,6 +14,7 @@ import { MainPageComponent } from "./components/main/main.page";
 import { AnnoncePage } from "./components/annonce_page/annonce.page";
 import { FactureUI } from "./ui/factureUI/facture.ui";
 import { SosPageComponenet } from "./components/sos_page/sos.page";
+import { ConnexionPageComponent } from "./components/connexion/connexion.page";
 
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import { SosPageComponenet } from "./components/sos_page/sos.page";
     AnnoncePage,
     FactureUI,
     SosPageComponenet,
+    ConnexionPageComponent
   ],
   imports: [
     CommonModule,
