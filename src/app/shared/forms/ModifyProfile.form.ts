@@ -161,6 +161,10 @@ import { SlidesDirective } from "../directives/slides.directive";
       font-size: 1em;
     }
 
+    .metiers options {
+      margin-bottom: 20px;
+    }
+
     .number-name {
       display: block;
       white-space: pre;
