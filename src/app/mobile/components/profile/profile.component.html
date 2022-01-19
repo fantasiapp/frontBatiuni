@@ -24,6 +24,10 @@
       </span>
       <span>
         <span class="text-light-emphasis">Chiffres d'affaires : </span>
+        <span class="value">{{user.profile!.company.revenue | currency: 'EUR':'symbol':'1.0-0' }}</span>
+      </span>
+      <span>
+        <span class="text-light-emphasis">Capital : </span>
         <span class="value">{{user.profile!.company.capital | currency: 'EUR':'symbol':'1.0-0' }}</span>
       </span>
     </section>

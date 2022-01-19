@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, HostListener, Input, ViewChild, EventEmitter, Output, HostBinding } from "@angular/core";
+import { ChangeDetectionStrategy, Component, HostListener, Input, ViewChild, EventEmitter, Output, HostBinding, SimpleChanges } from "@angular/core";
 import { FormArray, FormControl, FormGroup } from "@angular/forms";
 import { Serialized } from "src/common/types";
 import { JobRow, LabelRow, UserProfileRow } from "src/models/data/data.model";
@@ -57,14 +57,15 @@ import { SlidesDirective } from "../directives/slides.directive";
           <label>N SIRET</label>
           <input class="form-element" type="text" formControlName="Userprofile.Company.siret" />
         </div>
+        <!-- change the structure -->
+        <!-- all elements are selected -->
         <div class="form-input metiers">
-
           <ng-container *ngIf="!addingField; else addfield_tpl">
             <label>Métiers</label>
             <ng-container formArrayName="Userprofile.Company.JobForCompany">
-              <span class="position-relative number" *ngFor="let control of profileJobsControls; index as i">
+              <span class="position-relative number form-element" *ngFor="let control of profileJobsControls; index as i">
                 <ng-container [formGroupName]="i">
-                  <input class="form-element number-name" type="text" [value]="control.get('job')!.value.name" disabled>
+                  <span class="number-name">{{control.get('job')!.value.name}}</span>
                   <div class="position-absolute number-container">
                     <number formControlName="number"></number>
                   </div>
@@ -161,14 +162,17 @@ import { SlidesDirective } from "../directives/slides.directive";
     }
 
     .number-name {
+      display: block;
       white-space: pre;
       text-overflow: ellipsis;
-      padding-right: 90px;
+      overflow: hidden;
+      width: calc(100% - 90px);
     }
 
     .form-input .number-container {
-      display: inline;
-      right: $item-padding;
+      position: absolute;
+      right: 0;
+      top: 0;
     }
 
     .section {
@@ -270,7 +274,9 @@ export class ModifyProfileForm {
         
     this.allJobs = [...JobRow.instances.values()]
       .map(({name, id}) => ({id, name, checked: companyJobs.includes(id)}));
+  }
 
+  ngOnChanges(changes: SimpleChanges) {
     this.modifyProfileForm.controls['Userprofile.lastName']?.setValue(this.user.lastName);
     this.modifyProfileForm.controls['Userprofile.firstName']?.setValue(this.user.firstName);
     this.modifyProfileForm.controls['Userprofile.userName']?.setValue(this.user.user);
@@ -282,6 +288,7 @@ export class ModifyProfileForm {
     this.modifyProfileForm.controls['Userprofile.Company.companyPhone']?.setValue(this.user.company.companyPhone);
 
     const jobControl = this.modifyProfileForm.controls['Userprofile.Company.JobForCompany'] as FormArray;
+    jobControl.clear();
     for ( let job of this.user.company.jobs )
       jobControl.push(new FormGroup({
         job: new FormControl(job.job),
@@ -291,6 +298,7 @@ export class ModifyProfileForm {
     const labelControl = this.modifyProfileForm.controls['Userprofile.Company.LabelForCompany'] as FormArray,
       now = (new Date()).toISOString().slice(0, 10).replace(/-/g, '/');
     
+    labelControl.clear();
     for ( let label of this.user.company.labels )
     labelControl.push(new FormGroup({
         label: new FormControl(label.label),

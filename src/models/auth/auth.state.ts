@@ -102,6 +102,6 @@ export class AuthState {
 
     const result: any = await req.toPromise();
     console.log(result);
-    if ( result['registerConfirm'] ) throw result['messages'];
+    if ( result['registerConfirm'] == 'Error' ) throw result['messages'];
   }
 };

@@ -210,11 +210,8 @@ export class Mapper {
   /*fix here: doesnt work with jobs and labels */
   /*fix here: Ask JLW to move company inside Userprofil */
   static updateFrom(table: TableConstructor, context: any, data: any) {
-    console.log('udpating', table, context, data);
     const row = table.getById(context.id),
       newContext = row.update(data['Userprofile']);
-
-    console.log('new value', newContext);
 
     return newContext.serialize();
   }
