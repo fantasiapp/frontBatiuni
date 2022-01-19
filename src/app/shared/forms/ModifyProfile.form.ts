@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, HostListener, Input, ViewChild, EventEmitter, Output, HostBinding, SimpleChanges } from "@angular/core";
 import { FormArray, FormControl, FormGroup } from "@angular/forms";
+import { Camera } from "@capacitor/camera";
 import { Serialized } from "src/common/types";
 import { JobRow, LabelRow, UserProfileRow } from "src/models/data/data.model";
 import { Option } from "src/models/option";
@@ -269,7 +270,7 @@ export class ModifyProfileForm {
     this.submit.emit(this.modifyProfileForm);
   }
   
-  ngOnInit() {
+  async ngOnInit() {
     const companyLabels = this.user.company.labels.map(label => label.label.id),
       companyJobs = this.user.company.jobs.map(job => job.job.id);
     
@@ -278,6 +279,14 @@ export class ModifyProfileForm {
         
     this.allJobs = [...JobRow.instances.values()]
       .map(({name, id}) => ({id, name, checked: companyJobs.includes(id)}));
+    
+    let permissions  = await Camera.checkPermissions();
+    if ( permissions.camera != 'granted' || permissions.photos != 'granted' )
+      try {
+        await Camera.requestPermissions({
+          permissions: ["camera", "photos"]
+        });
+      } catch ( e ) {  }
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -300,7 +309,7 @@ export class ModifyProfileForm {
       }));
     
     const labelControl = this.modifyProfileForm.controls['Userprofile.Company.LabelForCompany'] as FormArray,
-      now = (new Date()).toISOString().slice(0, 10).replace(/-/g, '/');
+      now = (new Date()).toISOString().slice(0, 10);
     
     labelControl.clear();
     for ( let label of this.user.company.labels )
@@ -339,6 +348,8 @@ export class ModifyProfileForm {
       jobsControl.push(form);
     });
 
+    this.modifyProfileForm.markAsDirty();
+
     // const companyJobs = this.user.company.jobs.map(job => job.id);
     // this.allJobs = [...JobRow.instances.values()]
     //   .map(({name, id}) => ({id, name, checked: companyJobs.includes(id)}));
@@ -347,7 +358,7 @@ export class ModifyProfileForm {
   updateLabels(labelOptions: Option[]) {
     const labelsControl = this.modifyProfileForm.controls['Userprofile.Company.LabelForCompany'] as FormArray,
       newLabels = labelOptions.map(label => LabelRow.getById(label.id)!),
-      now = (new Date()).toISOString().slice(0, 10).replace(/-/g, '/');
+      now = (new Date()).toISOString().slice(0, 10);
 
     labelsControl.clear();
     newLabels.forEach((label) => {
@@ -358,6 +369,8 @@ export class ModifyProfileForm {
       form.markAsDirty();
       labelsControl.push(form);
     });
+
+    this.modifyProfileForm.markAsDirty();
 
     // const companyLabels = this.user.company.labels.map(label => label.id);
     // this.allLabels =[...LabelRow.instances.values()]

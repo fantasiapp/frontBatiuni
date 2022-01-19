@@ -44,20 +44,11 @@ export class ProfileComponent {
 
   constructor(private store: Store, private cd: ChangeDetectorRef) {}
 
-  async ngOnInit() {
-    let permissions  = await Camera.checkPermissions();
-    if ( permissions.camera != 'granted' || permissions.photos != 'granted' )
-      try {
-        await Camera.requestPermissions({
-          permissions: ["camera", "photos"]
-        });
-      } catch ( e ) {  }
-  }
-
   slideModifyMenu(modifyPassword: boolean) {
     this.openMenu = false;
     this.openModifyMenu = true;
     this.modifyPassword = modifyPassword;
+    this.fixScrollTop();
   }
 
   openModifyPictureMenu() { this.openModifyPicture = true; }
@@ -86,7 +77,7 @@ export class ProfileComponent {
         this.cd.markForCheck();
       },
       err => {
-        this.info.show("error", "Erreur lors du modification du profil", 3000);
+        this.info.show("error", "Erreur lors du modification du profil", 10000);
         this.cd.markForCheck();
       });
   }

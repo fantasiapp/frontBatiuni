@@ -32,7 +32,7 @@ export class OptionsModel extends UIDefaultAccessor<Option[]> {
     this.showDropDown = true;
     requestAnimationFrame(() => {
       const searchInput = this.ref.nativeElement.querySelector('input[type=text]');
-      searchInput?.focus();
+      searchInput?.scrollIntoView(true);
     });
   }
 
