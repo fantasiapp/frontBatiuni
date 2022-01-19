@@ -24,7 +24,10 @@ export interface Value {
 /* base table metaclass */
 /* instance stuff and all that */
 class __table__ {
-  static isTable(table: Table | Value): table is Table { return table instanceof __table__  || table.prototype instanceof __table__; }
+  static isTable(table: Table | Value): table is Table {
+    console.log('$$', table);
+    return table instanceof __table__  || (table.prototype && table.prototype instanceof __table__);
+  }
   static getName(): string { return this.name.slice(0, -3); }
 
   constructor(public id: number, protected values: any[]) {}
@@ -72,10 +75,8 @@ class __table__ {
           value.structure.destroy(value.id);
         });
         
-        console.log(this.values[index], data, prop, data[prop]);
         this.values[index] = Mapper.mapArray(data, prop);
       } else {
-        console.log(__table__.isTable(this.values[index]));
         if ( __table__.isTable(this.values[index]) )
           this.values[index].update(data[prop]);
         else
