@@ -98,6 +98,11 @@ import { SlidesDirective } from "../directives/slides.directive";
           <input class="form-element" type="text" formControlName="Userprofile.Company.capital" />
         </div>
 
+        <div class="form-input">
+          <label>Capital</label>
+          <input class="form-element" type="text" formControlName="Userprofile.Company.revenue" />
+        </div>
+
         <fileinput [showtitle]="false" filename="Kbis" imgsrc="assets/files/KBIS.svg"></fileinput>
         <fileinput [showtitle]="false" filename="Attestation travail dissimulé"
           imgsrc="assets/files/Trav. Dis..svg"></fileinput>
@@ -240,6 +245,8 @@ export class ModifyProfileForm {
     ]),
     'Userprofile.Company.capital': new FormControl('', [
     ]),
+    'Userprofile.Company.revenue': new FormControl('', [
+    ]),
     'Userprofile.Company.webSite': new FormControl('', [
     ]),
     'Userprofile.Company.companyPhone': new FormControl('', [
@@ -296,6 +303,7 @@ export class ModifyProfileForm {
     this.modifyProfileForm.controls['Userprofile.cellPhone']?.setValue(this.user.cellPhone);
     this.modifyProfileForm.controls['Userprofile.Company.name']?.setValue(this.user.company.name);
     this.modifyProfileForm.controls['Userprofile.Company.siret']?.setValue(this.user.company.siret);
+    this.modifyProfileForm.controls['Userprofile.Company.revenue']?.setValue(this.user.company.revenue);
     this.modifyProfileForm.controls['Userprofile.Company.capital']?.setValue(this.user.company.capital);
     this.modifyProfileForm.controls['Userprofile.Company.webSite']?.setValue(this.user.company.webSite);
     this.modifyProfileForm.controls['Userprofile.Company.companyPhone']?.setValue(this.user.company.companyPhone);
