@@ -31,6 +31,7 @@ import { ProfileResume } from "./components/profile-resume/profile-resume.compon
 import { FileIcon } from "./components/FileIcon/file.icon";
 import { UISOSCard } from "./components/SOSCard/SOSCard.ui";
 import { InfoHandler } from "./components/info/info.component";
+import { ConnexionForm } from "./forms/connexion.form";
 
 @NgModule({
   declarations: [
@@ -50,6 +51,7 @@ import { InfoHandler } from "./components/info/info.component";
     SOSFilterForm,
     OnlineFilterForm,
     RegisterForm,
+    ConnexionForm,
     SlidesDirective,
     EmailConfirmation,
     RegistrationSuccess,
@@ -86,6 +88,7 @@ import { InfoHandler } from "./components/info/info.component";
     UISwitchComponent,
     FileUI,
     RegisterForm,
+    ConnexionForm,
     SlidesDirective,
     EmailConfirmation,
     RegistrationSuccess,

@@ -5,6 +5,7 @@ import { AuthResolver } from "src/app/mobile/routing/auth/auth.resolver";
 import { EmailConfirmation } from "src/app/shared/validators/email_confirmation/emailconfirmation.component";
 import { RegistrationSuccess } from "src/app/shared/validators/registration_success/registrationsuccess.component";
 import { AnnoncePage } from "../components/annonce_page/annonce.page";
+import { ConnexionPageComponent } from "../components/connexion/connexion.page";
 import { HomePageComponent } from "../components/home_page/home.page";
 import { LandingPageComponent } from "../components/landing_page/landing.page";
 import { MainPageComponent } from "../components/main/main.page";
@@ -18,6 +19,9 @@ const routes: Routes = [{
 }, {
   path: 'register',
   component: RegisterPageComponent
+}, {
+  path: 'connexion',
+  component: ConnexionPageComponent
 }, {
   path: 'confirmed',
   component: EmailConfirmation
