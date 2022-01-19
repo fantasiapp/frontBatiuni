@@ -1,3 +1,4 @@
+import { HttpClient } from "@angular/common/http";
 import { Component } from "@angular/core";
 
 
@@ -8,4 +9,5 @@ import { Component } from "@angular/core";
 })
 export class AnnoncePage {
     activeView: number = 0;
+    
 }

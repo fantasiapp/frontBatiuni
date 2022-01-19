@@ -20,20 +20,6 @@ $half-square : math.div($square,2);
   }
 }
 
-:host {
-  
-}
-
-.web-content {
-  searchbar {
-    display: block;
-    width: 80%;
-    font-size: 1em;
-    margin: 0 auto;
-  }
-
-  width: 700px !important;
-}
 
 .report-search {
   padding: 30px 0;
