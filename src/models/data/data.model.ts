@@ -183,7 +183,7 @@ export class CompanyRow extends createTable<CompanyRow>() {
   get name() { return this.getField('name') }
   get siret() { return this.getField('siret') }
   get capital() { return this.getField('capital') }
-  // get revenue() { return this.getField('revenue') }
+  get revenue() { return this.getField('revenue') }
   get logo() { return this.getField('logo') }
   get webSite() { return this.getField('webSite') }
   get stars() { return this.getField('stars') }

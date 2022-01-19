@@ -139,13 +139,14 @@
 
   &:focus-within {
     label { color: #2980b9; }
-    input { border-bottom-color: #2980b9 !important; }
+    & > .form-element { border-bottom-color: #2980b9 !important; }
   }
 
   .error { color: #ff0033; font-size: 0.75em; }
 
   & > * {
     display: block;
+    font-size: 1em;
   }
 
   label {
@@ -153,15 +154,15 @@
     font-weight: 400;
   }
 
-  input {
-    font-family: inherit;
+  .form-element {
     border-bottom: $form-border-bottom !important; //override default
+    font-family: inherit;
 
     &.ng-invalid:not(.ng-pristine) {
       border-bottom-color: red !important;
     }
 
-    @include from($mobile) { background: none; }
+    @include desktop-only { background: none; }
   }
 
   & > input, & > span > input {

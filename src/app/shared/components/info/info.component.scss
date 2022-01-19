@@ -1,11 +1,13 @@
 @use "sass:math";
 @import 'src/styles/variables';
+@import 'src/styles/mixins';
+
 
 :host {
   display: block;
   overflow: hidden;
   position: fixed;
-  top: $sticky-header-height;
+  @include with-set-safe-area(top, top, $sticky-header-height);
   z-index: 99;
   width: 100vw;
   height: $info-height;
