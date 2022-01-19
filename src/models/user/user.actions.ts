@@ -56,7 +56,7 @@ export class ModifyUserProfile {
     if ( labels ) {
       console.log('label:', labels, Object.values<LabelForCompanyRow>(labels));
       changes['Userprofile.Company.LabelForCompany'] = Object.values<any>(labels).map(
-        ({label, fileData}: {label: LabelRow, fileData: FileinputOutput}) => ([label.id, fileData.date!.replace(/-/g, '/')])
+        ({label, fileData}: {label: LabelRow, fileData: FileinputOutput}) => ([label.id, fileData.date!])
       );
     }
 

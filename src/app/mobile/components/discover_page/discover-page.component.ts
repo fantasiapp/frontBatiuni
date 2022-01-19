@@ -40,7 +40,7 @@ const PMEContexts: DiscoveryContext[] = [
       {content: 'suivez', emphasis: true},
       {content: 'vos chantiers efficacement', emphasis: false}
     ],
-    image: 'assets/PME-3.png'
+    image: 'assets/PME-3.svg'
   }},
   //Page 4
   {$implicit: {
@@ -51,7 +51,7 @@ const PMEContexts: DiscoveryContext[] = [
       {content: 'intéressantes selon vos', emphasis: false},
       {content: 'disponibilités', emphasis: true}
     ],
-    image: 'assets/PME-4.png'
+    image: 'assets/PME-4.svg'
   }}
 ];
 
@@ -85,7 +85,7 @@ const STContexts: DiscoveryContext[] = [
       {content: 'suivez', emphasis: true},
       {content: 'vos chantiers efficacement', emphasis: false}
     ],
-    image: 'assets/ST-3.png'
+    image: 'assets/ST-3.svg'
   }},
   //Page 4
   {$implicit: {

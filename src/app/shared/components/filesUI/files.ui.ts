@@ -50,7 +50,7 @@ export class FileUI extends UIDefaultAccessor<FileinputOutput> {
       return this.value ? ({ files: this.value.files, date: newDate }) : ({ files: null, date: newDate });
     }
 
-    const currentDate = (new Date).toISOString().slice(0, 10)
+    const currentDate = (new Date).toISOString().slice(0, 10);
     return this.value ? ({ files: input.files, date: this.value.date || currentDate }) : ({ files: input.files, date: currentDate });
   }
 
