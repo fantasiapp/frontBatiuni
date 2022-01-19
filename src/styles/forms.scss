@@ -154,7 +154,7 @@
     font-weight: 400;
   }
 
-  .form-element {
+  .form-element, & > input {
     border-bottom: $form-border-bottom !important; //override default
     font-family: inherit;
 
