@@ -345,10 +345,13 @@ export class ModifyProfileForm {
       });
 
       form.markAsDirty();
+      form.markAsTouched();
       jobsControl.push(form);
     });
-
+    
+    jobsControl.markAsTouched(); jobsControl.markAsDirty();
     this.modifyProfileForm.markAsDirty();
+    this.modifyProfileForm.markAsTouched();
 
     // const companyJobs = this.user.company.jobs.map(job => job.id);
     // this.allJobs = [...JobRow.instances.values()]
@@ -367,10 +370,13 @@ export class ModifyProfileForm {
         fileData: new FormControl({files: null, date: now} as FileinputOutput)
       });
       form.markAsDirty();
+      form.markAsTouched();
       labelsControl.push(form);
     });
 
+    labelsControl.markAsTouched(); labelsControl.markAsDirty();
     this.modifyProfileForm.markAsDirty();
+    this.modifyProfileForm.markAsTouched();
 
     // const companyLabels = this.user.company.labels.map(label => label.id);
     // this.allLabels =[...LabelRow.instances.values()]

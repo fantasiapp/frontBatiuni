@@ -25,7 +25,6 @@ export interface Value {
 /* instance stuff and all that */
 class __table__ {
   static isTable(table: Table | Value): table is Table {
-    console.log('$$', table);
     return table instanceof __table__  || (table.prototype && table.prototype instanceof __table__);
   }
   static getName(): string { return this.name.slice(0, -3); }
