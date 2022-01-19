@@ -29,9 +29,6 @@ const routes: Routes = [{
   path: 'success',
   component: RegistrationSuccess
 }, {
-  path: 'make',
-  component: AnnoncePage
-}, {
   path: 'home',
   component: MainPageComponent,
   canActivate: [AuthGuard],
@@ -39,7 +36,7 @@ const routes: Routes = [{
   children: [
     { path: 'profile', component: ProfilePageComponent, data: { animation: 'profile' } },
     { path: 'sos', component: SosPageComponenet, data: { animation: 'sos' } },
-    { path: 'annonce', component: AnnoncePage, data: { animation: 'annonce'} },
+    { path: 'make', component: AnnoncePage, data: { animation: 'annonce'} },
     { path: '', pathMatch: 'full', component: HomePageComponent, data: { animation: 'home' } },
     { path: '**', component: HomePageComponent }
   ]
