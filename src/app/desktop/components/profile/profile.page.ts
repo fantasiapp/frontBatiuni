@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component } from "@angular/core";
-import { Select } from "@ngxs/store";
+import { Select, Store } from "@ngxs/store";
 import { BehaviorSubject } from "rxjs";
+import { Logout } from "src/models/auth/auth.actions";
 import { User } from "src/models/user/user.model";
 import { UserState } from "src/models/user/user.state";
 
@@ -19,4 +20,10 @@ export class ProfilePageComponent {
   
   @Select(UserState)
   user$!: BehaviorSubject<User>;
+
+  constructor(private store: Store) {}
+
+  logout() {
+    this.store.dispatch(new Logout());
+  }
 }
