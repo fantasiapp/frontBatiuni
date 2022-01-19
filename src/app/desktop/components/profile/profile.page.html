@@ -1,3 +1,4 @@
+
 <ng-container *ngIf="(user$ | async) as user">
   <div class="web-page">
     <section class="action-menu">
@@ -17,6 +18,7 @@
     </section>
     
     <section class="main web-content font-Poppins">
+      
       <ng-container [ngSwitch]="activeView">
         <ng-container *ngSwitchCase="0">
           <profile-resume class="flex row center-cross space-around" [user]="user"></profile-resume>
@@ -54,6 +56,14 @@
             {name: 'Certifications & labels'}
           ]" #stepper style="margin-bottom: 40px;"></step>
           <modify-profile-form [user]="user.profile!" [animate]="false" [index]="stepper.tacheIndex"></modify-profile-form>
+        </ng-container>
+        <ng-container class="space-children-margin  " *ngSwitchCase="4">
+          
+            <h1>Mes Factures</h1>
+            <div class="space-children-margin">
+            <facture-ui *ngFor="let a of factures">
+            </facture-ui>
+            </div>
         </ng-container>
         <ng-container *ngSwitchDefault>
           <img src="/assets/wip.png">

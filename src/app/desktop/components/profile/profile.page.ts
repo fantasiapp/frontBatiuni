@@ -13,6 +13,7 @@ import { UserState } from "src/models/user/user.state";
 export class ProfilePageComponent {
 
   activeView: number = 0;
+  factures = new Array(10).fill(0);
 
   setView(view: number) { this.activeView = view; }
   

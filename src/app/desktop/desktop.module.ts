@@ -12,6 +12,8 @@ import { TabsComponent } from "./ui/tabs/tabs.component";
 import { ProfilePageComponent } from "./components/profile/profile.page";
 import { MainPageComponent } from "./components/main/main.page";
 import { AnnoncePage } from "./components/annonce_page/annonce.page";
+import { FactureUI } from "./ui/factureUI/facture.ui";
+import { SosPageComponenet } from "./components/sos_page/sos.page";
 
 @NgModule({
   declarations: [
@@ -23,7 +25,9 @@ import { AnnoncePage } from "./components/annonce_page/annonce.page";
     TabsComponent,
     ProfilePageComponent,
     MainPageComponent,
-    AnnoncePage
+    AnnoncePage,
+    FactureUI,
+    SosPageComponenet,
   ],
   imports: [
     CommonModule,
