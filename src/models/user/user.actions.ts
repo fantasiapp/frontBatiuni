@@ -47,14 +47,14 @@ export class ModifyUserProfile {
       labels = changes['Userprofile.Company.LabelForCompany'];
     
     if ( jobs ) {
-      console.log(jobs, Object.values<JobForCompanyRow>(jobs));
+      console.log('jobs:', jobs, Object.values<JobForCompanyRow>(jobs));
       changes['Userprofile.Company.JobForCompany'] = Object.values<JobForCompanyRow>(jobs).map(
         ({job, number}: {job: JobRow, number: number}) => ([job.id, number])
       );
     }
 
     if ( labels ) {
-      console.log(jobs, Object.values<JobForCompanyRow>(labels));
+      console.log('label:', labels, Object.values<LabelForCompanyRow>(labels));
       changes['Userprofile.Company.LabelForCompany'] = Object.values<any>(labels).map(
         ({label, fileData}: {label: LabelRow, fileData: FileinputOutput}) => ([label.id, fileData.date!.replace(/-/g, '/')])
       );
@@ -66,7 +66,7 @@ export class ModifyUserProfile {
     for ( const [field, value] of Object.entries<any>(changes) ) 
       proxy[field] = value;
     
-    console.log(this, proxy);
+    console.log(this);
   }
 };
 

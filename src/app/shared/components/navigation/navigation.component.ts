@@ -40,15 +40,19 @@ export class NavigationMenu extends Destroy$ {
   @Select(UserState)
   user$!: Observable<User>;
 
-  changeRoute(index: number) {
-    if ( index == this.currentIndex.getValue() ) return;
-    let menu = this.menu.getValue();
+  private changeRouteOnMenu(menu: MenuItem[], index: number) {
     let route = menu[index].route;
     this.routeChange.emit(route);
     this.router.navigate(route ? ['', 'home', route] : ['', 'home']);
   }
 
-  constructor(private router: Router, private store: Store, private cd: ChangeDetectorRef) {
+  changeRoute(index: number) {
+    if ( index == this.currentIndex.getValue() ) return;
+    let menu = this.menu.getValue();
+    this.changeRouteOnMenu(menu, index);
+  }
+
+  constructor(private router: Router) {
     super();
     this.router.events.pipe(takeUntil(this.destroy$)).subscribe((event) => {
       if ( !(event instanceof NavigationEnd) ) return;
@@ -66,7 +70,9 @@ export class NavigationMenu extends Destroy$ {
     });
 
     this.user$.pipe(takeUntil(this.destroy$)).subscribe((user: User) => {
-      this.menu.next(user.viewType ? PMEMenu : STMenu)
+      const nextMenu = user.viewType ? PMEMenu : STMenu;
+      this.menu.next(nextMenu);
+      this.changeRouteOnMenu(nextMenu, this.currentIndex.getValue());
     });
   }
 

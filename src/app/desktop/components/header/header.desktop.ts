@@ -1,7 +1,7 @@
-import { ChangeDetectionStrategy, Component } from "@angular/core";
+import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
 import { Store } from "@ngxs/store";
-import { UserProfileRow } from "src/models/data/data.model";
-import { UserState } from "src/models/user/user.state";
+import { User } from "src/models/user/user.model";
+import * as UserActions from "src/models/user/user.actions";
 
 @Component({
   selector: 'desktop-stickyH',
@@ -13,7 +13,15 @@ export class HeaderDesktop {
   constructor(private store : Store){
 
   }
+
+  @Input()
+  user!: User;
+
   ngOnInit(){
     // let userProfile = this.store.selectSnapshot(UserState).profile
+  }
+
+  changeProfileType(type: boolean) {
+    this.store.dispatch(new UserActions.ChangeProfileType(type));
   }
 }

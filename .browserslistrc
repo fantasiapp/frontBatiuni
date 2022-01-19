@@ -10,10 +10,8 @@
 
 last 2 Chrome versions
 last 2 Firefox versions
-last 2 ie versions
 last 2 Edge versions
 last 2 Safari versions
 last 2 iOS versions
 last 2 android versions
-last 2 ie_mob versions
 not IE 11 # Angular supports IE 11 only as an opt-in. To opt-in, remove the 'not' prefix on this line.
