@@ -5,7 +5,6 @@ import { AuthResolver } from "src/app/mobile/routing/auth/auth.resolver";
 import { EmailConfirmation } from "src/app/shared/validators/email_confirmation/emailconfirmation.component";
 import { RegistrationSuccess } from "src/app/shared/validators/registration_success/registrationsuccess.component";
 import { AnnoncePage } from "../components/annonce_page/annonce.page";
-import { HeaderDesktop } from "../components/header/header.desktop";
 import { HomePageComponent } from "../components/home_page/home.page";
 import { LandingPageComponent } from "../components/landing_page/landing.page";
 import { MainPageComponent } from "../components/main/main.page";
@@ -34,8 +33,9 @@ const routes: Routes = [{
   canActivate: [AuthGuard],
   resolve: [AuthResolver],
   children: [
-    { path: 'profile', component: SosPageComponenet, data: { animation: 'profile' } },
+    { path: 'profile', component: ProfilePageComponent, data: { animation: 'profile' } },
     { path: 'sos', component: SosPageComponenet, data: { animation: 'sos' } },
+    { path: 'annonce', component: AnnoncePage, data: { animation: 'annonce'} },
     { path: '', pathMatch: 'full', component: HomePageComponent, data: { animation: 'home' } },
     { path: '**', component: HomePageComponent }
   ]
