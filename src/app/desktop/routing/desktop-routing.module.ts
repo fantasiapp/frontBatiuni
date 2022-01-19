@@ -1,11 +1,11 @@
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
-
 import { AuthGuard } from "src/app/mobile/routing/auth/auth.guard";
 import { AuthResolver } from "src/app/mobile/routing/auth/auth.resolver";
 import { EmailConfirmation } from "src/app/shared/validators/email_confirmation/emailconfirmation.component";
 import { RegistrationSuccess } from "src/app/shared/validators/registration_success/registrationsuccess.component";
 import { AnnoncePage } from "../components/annonce_page/annonce.page";
+import { HeaderDesktop } from "../components/header/header.desktop";
 import { HomePageComponent } from "../components/home_page/home.page";
 import { LandingPageComponent } from "../components/landing_page/landing.page";
 import { MainPageComponent } from "../components/main/main.page";
@@ -22,7 +22,7 @@ const routes: Routes =[{
     path: 'sos',
     component: RegisterPageComponent
   }, {
-    path: 'confirmed/:token',
+    path: 'confirmed',
     component: EmailConfirmation 
   }, {
     path: 'success',
@@ -37,7 +37,6 @@ const routes: Routes =[{
     resolve: [AuthResolver],
     children: [
       {path: 'profile', component: ProfilePageComponent, data: { animation: 'profile' }},
-      {path: 'sos', component: SOSPageComponent},
       {path: '', pathMatch: 'full', component: HomePageComponent, data: { animation: 'home' } },
       {path: '**', component: HomePageComponent}
     ]
