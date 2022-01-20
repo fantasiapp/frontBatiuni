@@ -4,9 +4,8 @@ import { Camera } from "@capacitor/camera";
 import { Serialized } from "src/common/types";
 import { JobRow, LabelRow, UserProfileRow } from "src/models/data/data.model";
 import { Option } from "src/models/option";
-import { Email } from "src/validators/persist";
-import { FileinputOutput } from "../components/filesUI/files.ui";
 import { SlidesDirective } from "../directives/slides.directive";
+import { defaultFileUIOuput, FileUIOutput } from "../components/filesUI/files.ui";
 
 @Component({
   selector: 'modify-profile-form',
@@ -96,6 +95,11 @@ import { SlidesDirective } from "../directives/slides.directive";
         <div class="form-input">
           <label>Chiffres d'affaires</label>
           <input class="form-element" type="text" formControlName="Userprofile.Company.capital" />
+        </div>
+
+        <div class="form-input">
+          <label>Capital</label>
+          <input class="form-element" type="text" formControlName="Userprofile.Company.revenue" />
         </div>
 
         <fileinput [showtitle]="false" filename="Kbis" imgsrc="assets/files/KBIS.svg"></fileinput>
@@ -240,6 +244,8 @@ export class ModifyProfileForm {
     ]),
     'Userprofile.Company.capital': new FormControl('', [
     ]),
+    'Userprofile.Company.revenue': new FormControl('', [
+    ]),
     'Userprofile.Company.webSite': new FormControl('', [
     ]),
     'Userprofile.Company.companyPhone': new FormControl('', [
@@ -296,6 +302,7 @@ export class ModifyProfileForm {
     this.modifyProfileForm.controls['Userprofile.cellPhone']?.setValue(this.user.cellPhone);
     this.modifyProfileForm.controls['Userprofile.Company.name']?.setValue(this.user.company.name);
     this.modifyProfileForm.controls['Userprofile.Company.siret']?.setValue(this.user.company.siret);
+    this.modifyProfileForm.controls['Userprofile.Company.revenue']?.setValue(this.user.company.revenue);
     this.modifyProfileForm.controls['Userprofile.Company.capital']?.setValue(this.user.company.capital);
     this.modifyProfileForm.controls['Userprofile.Company.webSite']?.setValue(this.user.company.webSite);
     this.modifyProfileForm.controls['Userprofile.Company.companyPhone']?.setValue(this.user.company.companyPhone);
@@ -312,12 +319,13 @@ export class ModifyProfileForm {
       now = (new Date()).toISOString().slice(0, 10);
     
     labelControl.clear();
-    for ( let label of this.user.company.labels )
-    labelControl.push(new FormGroup({
-        label: new FormControl(label.label),
-        //get date from server
-        fileData: new FormControl({files: null, date: now} as FileinputOutput)
-      }));
+    for ( let label of this.user.company.labels ) {
+      labelControl.push(new FormGroup({
+          label: new FormControl(label.label),
+          //get date from server
+          fileData: new FormControl(defaultFileUIOuput(label.label.name, label.date))
+        }));
+    }
   }
 
   updateJobs(jobOptions: Option[]) {
@@ -352,22 +360,18 @@ export class ModifyProfileForm {
     jobsControl.markAsTouched(); jobsControl.markAsDirty();
     this.modifyProfileForm.markAsDirty();
     this.modifyProfileForm.markAsTouched();
-
-    // const companyJobs = this.user.company.jobs.map(job => job.id);
-    // this.allJobs = [...JobRow.instances.values()]
-    //   .map(({name, id}) => ({id, name, checked: companyJobs.includes(id)}));
   };
 
   updateLabels(labelOptions: Option[]) {
     const labelsControl = this.modifyProfileForm.controls['Userprofile.Company.LabelForCompany'] as FormArray,
-      newLabels = labelOptions.map(label => LabelRow.getById(label.id)!),
-      now = (new Date()).toISOString().slice(0, 10);
-
+      newLabels = labelOptions.map(label => LabelRow.getById(label.id)!) as LabelRow[];
+    
+    //also consider old labels
     labelsControl.clear();
     newLabels.forEach((label) => {
       const form  = new FormGroup({
         label: new FormControl(label),
-        fileData: new FormControl({files: null, date: now} as FileinputOutput)
+        fileData: new FormControl(defaultFileUIOuput(label.name))
       });
       form.markAsDirty();
       form.markAsTouched();
@@ -377,10 +381,6 @@ export class ModifyProfileForm {
     labelsControl.markAsTouched(); labelsControl.markAsDirty();
     this.modifyProfileForm.markAsDirty();
     this.modifyProfileForm.markAsTouched();
-
-    // const companyLabels = this.user.company.labels.map(label => label.id);
-    // this.allLabels =[...LabelRow.instances.values()]
-    //   .map(({name, id}) => ({id, name, checked: companyLabels.includes(id)}));
   }
   
   allLabels: Option[] = [];

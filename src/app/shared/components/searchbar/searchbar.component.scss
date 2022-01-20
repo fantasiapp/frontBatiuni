@@ -6,6 +6,7 @@
   display: inline-block;
   height: $searchbar-height;
   border-radius: 5px;
+  z-index: 100;
 
   @include desktop-only {
     box-shadow: 0 2px 4px 1px #ddd;

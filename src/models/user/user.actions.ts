@@ -1,5 +1,5 @@
 import { FormGroup } from "@angular/forms";
-import { FileinputOutput } from "src/app/shared/components/filesUI/files.ui";
+import { FileUIOutput } from "src/app/shared/components/filesUI/files.ui";
 import { PropertyTrap } from "src/common/classes";
 import { getDirtyValues } from "src/common/functions";
 import { JobForCompanyRow, JobRow, LabelForCompanyRow, LabelRow, UserProfileRow } from "../data/data.model";
@@ -56,7 +56,7 @@ export class ModifyUserProfile {
     if ( labels ) {
       console.log('label:', labels, Object.values<LabelForCompanyRow>(labels));
       changes['Userprofile.Company.LabelForCompany'] = Object.values<any>(labels).map(
-        ({label, fileData}: {label: LabelRow, fileData: FileinputOutput}) => ([label.id, fileData.date!])
+        ({label, fileData}: {label: LabelRow, fileData: FileUIOutput}) => ([label.id, fileData.expirationDate!])
       );
     }
 

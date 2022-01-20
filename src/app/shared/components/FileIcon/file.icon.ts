@@ -17,17 +17,17 @@ import { shadeColor } from "src/common/functions";
     <g transform="translate(1.374 6)">
       <g transform="translate(0 0)">
         <g transform="matrix(1, 0, 0, 1, -1.37, -6)" filter="url(#box-shadow)">
-          <rect data-name="container" width="60.198" height="84.748" rx="7" transform="translate(9 6)" fill="#fff"/>
+          <rect data-name="container" width="60.198" height="84.748" rx="7" transform="translate(9 15)" fill="#fff"/>
         </g>
         <path data-name="filename arrow"  d="M6000.1,11956.382l7.747,8.433v-8.433Z" transform="translate(-6000.102 -11922.76)" [style.fill]="arrowColor"/>
-        <g transform="translate(0, 15)">
-          <rect width="56" height="20" rx="5" [style.fill]="color"/>
+        <g transform="translate(0, 20)">
+          <rect width="65" height="20" rx="5" [style.fill]="color"/>
           <text style="fill: #fff; z-index: 1" x="6" y="14" font-size="12.5" font-family="Poppins" font-weight="500">{{ name }}</text>
         </g>
-        <rect data-name="Line 1" width="40" height="2.5" transform="translate(20.179 43.452)" fill="#ccc"/>
-        <rect data-name="Line 2" width="40" height="2.5" transform="translate(20.179 52.143)" fill="#ccc"/>
-        <rect data-name="Line 3" width="40" height="2.5" transform="translate(20.179 60.833)" fill="#ccc"/>
-        <rect data-name="Line 4" width="40" height="2.5" transform="translate(20.179 69.523)" fill="#ccc"/>
+        <rect data-name="Line 1" width="40" height="2.5" transform="translate(20.179 53.452)" fill="#ccc"/>
+        <rect data-name="Line 2" width="40" height="2.5" transform="translate(20.179 62.143)" fill="#ccc"/>
+        <rect data-name="Line 3" width="40" height="2.5" transform="translate(20.179 70.833)" fill="#ccc"/>
+        <rect data-name="Line 4" width="40" height="2.5" transform="translate(20.179 79.523)" fill="#ccc"/>
       </g>
     </g>
   </svg>

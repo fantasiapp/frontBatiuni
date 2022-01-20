@@ -17,4 +17,7 @@
 .map {
   width: 100%;
   height: 600px;
+  @include desktop-only {
+    height: 100%;
+  }
 }

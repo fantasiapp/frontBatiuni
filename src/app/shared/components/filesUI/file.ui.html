@@ -3,7 +3,7 @@
 <div class="file-form flex grow">
     <span class="file-input position-relative">
         <input class="form-search" (change)="onChange({origin: 'file', event: $event})" type="file"/>
-        <span class="placeholder full-width text-ellipsis position-absolute"> {{ value && value.files && value.files.length && value.files[0].name || placeholder }} </span>
+        <span class="placeholder full-width text-ellipsis position-absolute"> {{ value!.name }} </span>
     </span>
     <img src="assets/Attachement.svg">
 </div>
@@ -16,6 +16,6 @@
     </ng-template>
     <div class="date grow flex column center-main">
         <label class="label-input text-emphasis">Date de fin de validité</label>
-        <input class="full-width" [value]="value?.date || now" (change)="onChange({origin: 'date', event: $event})" type="date"/>
+        <input class="full-width" [value]="value!.expirationDate" (change)="onChange({origin: 'date', event: $event})" type="date"/>
     </div>
 </div>

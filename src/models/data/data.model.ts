@@ -159,17 +159,17 @@ export class JobForCompanyRow extends createTable<JobForCompanyRow>() {
 
 
 export class LabelForCompanyRow extends createTable<LabelForCompanyRow>() {
-  get label() { return this.getField('Label') }
+  get label(): LabelRow { return this.getField('Label') }
   get date() { return this.getField('date') }
 };
 
 export class FilesRow extends createTable<FilesRow>() {
-  get nature() { return this.getField('nature') }
-  get name() { return this.getField('name') }
-  get ext() { return this.getField('ext') }
-  get expiration() { return this.getField('expirationDate') }
-  get timestamp() { return this.getField('timestamp') }
-  get content() { return this.getField('content') }
+  get nature(): string { return this.getField('nature') }
+  get name(): string { return this.getField('name') }
+  get ext(): string { return this.getField('ext') }
+  get expirationDate(): string { return this.getField('expirationDate') }
+  get timestamp(): number { return this.getField('timestamp') }
+  get content(): string { return this.getField('content') }
 
   serialize() {
     console.log('-- custom serialize -- ');
