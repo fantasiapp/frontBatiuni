@@ -1,0 +1,33 @@
+<tabs [tabs]="2" [(activeView)]="activeView" bottom>
+    <span tab_0>Vue liste</span>
+    <span tab_1>Calendrier</span>
+  </tabs>
+  
+  <div class="web-page">
+    <section class="filters">
+        <div class="header">
+            <img src="assets/Filtrer par.svg"/>
+             Filtrer par
+          </div>
+      <online-filter-form></online-filter-form>
+    </section>
+    
+    <section class="main web-content space-children-margin font-Poppins">
+        <searchbar></searchbar>
+<div ></div>
+      <div class="space-children-margin">
+
+      <ng-container [ngSwitch]="activeView">
+        <ng-container *ngSwitchCase="0" >
+          <offer
+            *ngFor="let mission of annonces"
+            src="assets/brouillon.svg"
+            [routerLink]="['', 'brouillon']"></offer>
+        </ng-container>
+        <ng-container *ngSwitchCase="1" >
+            <horizantale-calendar ></horizantale-calendar>
+        </ng-container>
+      </ng-container>
+    </div>
+    </section>
+  </div>

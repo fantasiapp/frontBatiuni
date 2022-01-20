@@ -1,9 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { CalendarUI } from './calendar/calendar.ui';
 import { UISwipeupComponent } from './swipeup/swipeup.component';
 import { UISlideMenuComponent } from './slidemenu/slidemenu.component';
-import { HorizantaleCalendar } from './horizantalecalendar/horizantale.component';
 import { SuiviComments } from './suivi/comment.suivi';
 import { UICreditCard } from './creditcard/credit-card.ui';
 import { UIPopup } from './popup/popup.component';
@@ -19,10 +17,8 @@ import { SharedModule } from 'src/app/shared/shared.module';
 
 @NgModule({
   declarations: [
-    CalendarUI,
     UISwipeupComponent,
     UISlideMenuComponent,
-    HorizantaleCalendar,
     SuiviComments,
     UICreditCard,
     UIPopup,
@@ -35,13 +31,12 @@ import { SharedModule } from 'src/app/shared/shared.module';
   imports: [
     CommonModule,
     RouterModule,
-    SharedModule
+    SharedModule,
+
   ],
   exports: [
-    CalendarUI,
     UISwipeupComponent,
     UISlideMenuComponent,
-    HorizantaleCalendar,
     SuiviComments,
     UICreditCard,
     UIPopup,

@@ -101,3 +101,10 @@ tabs {
   min-width: 400px !important;
   max-width: 800px !important;
 }
+.filters {
+  height: calc(100vh - #{$web-header-height});
+  background-color: white;
+  overflow-y: auto;
+  width: 400px;
+  padding: $col-one-padding-y $col-one-padding-x;
+}

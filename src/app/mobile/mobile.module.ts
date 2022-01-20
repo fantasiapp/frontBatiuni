@@ -55,7 +55,7 @@ import { AppRoutingModule } from "./routing/mobile-routing.module";
     BoosterPage,
     SuiviPage,
     AnnonceEnlignePage,
-    SuiviPME
+    SuiviPME,
   ],
   imports: [
     CommonModule,

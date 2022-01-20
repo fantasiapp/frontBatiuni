@@ -3,7 +3,7 @@
 </header>
 
 <div class="hosted-page flex column center-cross space-children-margin page-content">
-  <calendar></calendar>
+  <calendar #calendar></calendar>
   <div class="full-width">
     <form class="form-control">
       <div class="form-input euro" style="max-width: 200px;">
@@ -13,3 +13,10 @@
     </form>
   </div>
 </div>
+
+<swipeup [(open)]="calendar.openModal">
+  <li (click)="calendar.clickDay('available')" class="disponible">Disponible</li>
+  <li (click)="calendar.clickDay('availablelimits')" class="sous-conditions">Disponible sous conditions</li>
+  <li (click)="calendar.clickDay('unavailable')" class="pas-disponible">Pas disponible</li>
+  <li (click)="calendar.clickDay('nothing')" class="non-renseigne">Non renseigné</li>
+</swipeup>
