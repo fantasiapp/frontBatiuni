@@ -25,7 +25,7 @@ export interface Value {
 /* instance stuff and all that */
 class __table__ {
   static isTable(table: Table | Value): table is Table {
-    return table instanceof __table__  || (table.prototype && table.prototype instanceof __table__);
+    return table && (table instanceof __table__  || (table.prototype && table.prototype instanceof __table__));
   }
   static getName(): string { return this.name.slice(0, -3); }
 
@@ -76,6 +76,7 @@ class __table__ {
         
         this.values[index] = Mapper.mapArray(data, prop);
       } else {
+        console.log('prop', prop, 'val', this.values[index]);
         if ( __table__.isTable(this.values[index]) )
           this.values[index].update(data[prop]);
         else
