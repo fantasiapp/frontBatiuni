@@ -25,7 +25,7 @@ const routes: Routes = [{
   path: 'connexion',
   component: ConnexionPageComponent
 }, {
-  path: 'confirmed',
+  path: 'confirmed/:token',
   component: EmailConfirmation
 }, {
   path: 'success',
