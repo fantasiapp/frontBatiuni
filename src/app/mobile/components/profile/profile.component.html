@@ -65,7 +65,7 @@
         <img src="assets/icons/modify.svg" class="modify-icon image" (click)="openModifyPictureMenu()" />
       </section>
   
-      <switch off="Profile ST" on="Profil PME"  style="text-align: center;" off="Profil ST" on="Profil PME" [value]="user.profile!.role.id == 2" disabled></switch>
+      <switch off="Profile ST" on="Profil PME"  style="text-align: center;" off="Profil ST" on="Profil PME" [value]="user.viewType" disabled></switch>
       <stars value="3.9"></stars>
   
       

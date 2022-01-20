@@ -1,5 +1,7 @@
 <header class="clear-margin full-width sticky-header flex center-cross annonce">
-  <img class="image-icon" [routerLink]="['','home','missions']"  src="assets/arrowlblack.svg" />
+  <a (click)="back()">
+    <img class="image-icon" src="assets/arrowlblack.svg" />
+  </a>
   <span class="grow center-text text-light-emphasis">Mes missions</span>
   <img class="image-icon" src="assets/phone.png" />
 </header>

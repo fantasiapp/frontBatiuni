@@ -11,7 +11,7 @@ import { Router } from "@angular/router";
 
 @State<AuthModel>({
   name: 'auth',
-  defaults: { token: null, username: null }
+  defaults: { token: null, username: null, pendingEmail: '' }
 })
 @Injectable()
 export class AuthState {
@@ -47,7 +47,7 @@ export class AuthState {
       }),
       tap((response: any) => {
         let token = response['token'];
-        ctx.setState({
+        ctx.patchState({
           token,
           username: action.username
         });
@@ -62,7 +62,7 @@ export class AuthState {
     let req = of(true); /* data to disconnect */
     return req.pipe(
       tap(() => {
-        ctx.setState({token: null, username: null});
+        ctx.patchState({token: null, username: null});
         console.log('token in now void');
         this.zone.run(() => {
           console.log('navigating to /connexion')
@@ -87,6 +87,9 @@ export class AuthState {
         if ( response['register'] == 'OK' )
           return true;
         throw response.messages;
+      }),
+      tap(() => {
+        ctx.patchState({pendingEmail: action.email})
       })
     )
   };

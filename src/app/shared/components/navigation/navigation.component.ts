@@ -1,5 +1,5 @@
 import { Component, Input, EventEmitter, ChangeDetectionStrategy, Output, ChangeDetectorRef } from "@angular/core";
-import { NavigationEnd, Router } from "@angular/router";
+import { NavigationCancel, NavigationEnd, Router } from "@angular/router";
 import { Select, Store } from "@ngxs/store";
 import { BehaviorSubject, Observable } from "rxjs";
 import { takeUntil } from "rxjs/operators";
@@ -58,6 +58,7 @@ export class NavigationMenu extends Destroy$ {
       if ( !(event instanceof NavigationEnd) ) return;
       let menu = this.menu.getValue();
       let segments = event.urlAfterRedirects.split('/');
+      console.log(segments);
       if ( segments.length < 2 ) this.redirectHome();
       if ( segments.length == 2 ) this.currentIndex.next(0);
       if ( segments.length > 2 ) {
@@ -78,7 +79,6 @@ export class NavigationMenu extends Destroy$ {
 
   redirectHome() {
     this.router.navigate(['', 'home']);
-
   }
 } 
 

@@ -38,7 +38,7 @@ export class CustomConfig extends HammerGestureConfig {
       developmentMode: !environment.production
     }),
     NgxsStoragePluginModule.forRoot({
-      key: ['app.auth.token', 'app.user']
+      key: ['app.auth.token', 'app.user.imageUrl']
     }),
     NgxsRouterPluginModule.forRoot(),
     //Angular standard imports
