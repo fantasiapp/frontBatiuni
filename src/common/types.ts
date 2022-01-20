@@ -18,3 +18,5 @@ export type NonFunctionPropNames<T> = {
 export type Serialized<T> ={
   [P in NonFunctionPropNames<T>]: T[P] extends (string | number) ? T[P] : (T[P] extends (infer U)[] ? Serialized<U>[] : Serialized<T[P]>);
 };
+
+type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>

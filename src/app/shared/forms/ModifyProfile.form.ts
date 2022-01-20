@@ -4,9 +4,8 @@ import { Camera } from "@capacitor/camera";
 import { Serialized } from "src/common/types";
 import { JobRow, LabelRow, UserProfileRow } from "src/models/data/data.model";
 import { Option } from "src/models/option";
-import { Email } from "src/validators/persist";
-import { FileinputOutput } from "../components/filesUI/files.ui";
 import { SlidesDirective } from "../directives/slides.directive";
+import { defaultFileUIOuput, FileUIOutput } from "../components/filesUI/files.ui";
 
 @Component({
   selector: 'modify-profile-form',
@@ -320,12 +319,13 @@ export class ModifyProfileForm {
       now = (new Date()).toISOString().slice(0, 10);
     
     labelControl.clear();
-    for ( let label of this.user.company.labels )
+    for ( let label of this.user.company.labels ) {
       labelControl.push(new FormGroup({
           label: new FormControl(label.label),
           //get date from server
-          fileData: new FormControl({files: null, date: label.date || now} as FileinputOutput)
+          fileData: new FormControl(defaultFileUIOuput(label.label.name, label.date))
         }));
+    }
   }
 
   updateJobs(jobOptions: Option[]) {
@@ -360,22 +360,18 @@ export class ModifyProfileForm {
     jobsControl.markAsTouched(); jobsControl.markAsDirty();
     this.modifyProfileForm.markAsDirty();
     this.modifyProfileForm.markAsTouched();
-
-    // const companyJobs = this.user.company.jobs.map(job => job.id);
-    // this.allJobs = [...JobRow.instances.values()]
-    //   .map(({name, id}) => ({id, name, checked: companyJobs.includes(id)}));
   };
 
   updateLabels(labelOptions: Option[]) {
     const labelsControl = this.modifyProfileForm.controls['Userprofile.Company.LabelForCompany'] as FormArray,
-      newLabels = labelOptions.map(label => LabelRow.getById(label.id)!),
-      now = (new Date()).toISOString().slice(0, 10);
-
+      newLabels = labelOptions.map(label => LabelRow.getById(label.id)!) as LabelRow[];
+    
+    //also consider old labels
     labelsControl.clear();
     newLabels.forEach((label) => {
       const form  = new FormGroup({
         label: new FormControl(label),
-        fileData: new FormControl({files: null, date: now} as FileinputOutput)
+        fileData: new FormControl(defaultFileUIOuput(label.name))
       });
       form.markAsDirty();
       form.markAsTouched();
@@ -385,10 +381,6 @@ export class ModifyProfileForm {
     labelsControl.markAsTouched(); labelsControl.markAsDirty();
     this.modifyProfileForm.markAsDirty();
     this.modifyProfileForm.markAsTouched();
-
-    // const companyLabels = this.user.company.labels.map(label => label.id);
-    // this.allLabels =[...LabelRow.instances.values()]
-    //   .map(({name, id}) => ({id, name, checked: companyLabels.includes(id)}));
   }
   
   allLabels: Option[] = [];

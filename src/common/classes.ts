@@ -1,5 +1,5 @@
 import { HttpClient } from "@angular/common/http";
-import { Attribute, ComponentFactoryResolver, Directive, EventEmitter, HostBinding, Input, Optional, Output, ViewContainerRef } from "@angular/core";
+import { Attribute, ChangeDetectorRef, ComponentFactoryResolver, Directive, EventEmitter, HostBinding, Injector, Input, Optional, Output, ViewContainerRef } from "@angular/core";
 import { ControlValueAccessor } from "@angular/forms";
 import { Subject } from "rxjs";
 import { environment } from "src/environments/environment";
@@ -97,12 +97,17 @@ export abstract class UIDefaultAccessor<T> implements ControlValueAccessor {
   @Output()
   valueChange = new EventEmitter<T>();
 
+  constructor() {
+
+  }
+
   @HostBinding('attr.tabindex')
   get tabIndex() { return 0; }
 
+
   onChange(e: any) {
     if ( this.isDisabled ) { e.preventDefault?.(); return; }
-    let next = this.getInput(e);
+    let next = this.getInput(e) as T;
     if ( next != this.value ) {
       this.valueChange.emit(this.value = next);
       this.onChanged(this.value);
@@ -110,7 +115,8 @@ export abstract class UIDefaultAccessor<T> implements ControlValueAccessor {
     this.onTouched();
   };
 
-  protected getInput(e: any): T { return e; };
+  //default implementation
+  protected getInput(e: any): T | Promise<T> { return e; };
 
   @Input()
   set disabled(disabled: any) {
@@ -134,6 +140,26 @@ export abstract class UIDefaultAccessor<T> implements ControlValueAccessor {
   registerOnChange(onChanged: any): void {
     this.onChanged = onChanged;
   }
+};
+
+@Directive()
+export class UIAsyncAccessor<T> extends UIDefaultAccessor<T> {
+  constructor(protected cd: ChangeDetectorRef) {
+    super();
+  }
+
+  protected getInput(e: any): Promise<T> { return super.getInput(e) as Promise<T>; }
+
+  async onChange(e: any) {
+    if ( this.isDisabled ) { e.preventDefault?.(); return; }
+    let next = await this.getInput(e);
+    if ( next != this.value ) {
+      this.valueChange.emit(this.value = next);
+      this.onChanged(this.value);
+    }
+    this.onTouched();
+    this.cd.markForCheck();
+  };
 };
 
 export type RequestPath = 'initialize' | 'data' | 'register' | 'api-token-auth';

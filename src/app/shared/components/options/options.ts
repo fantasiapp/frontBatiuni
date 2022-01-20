@@ -55,7 +55,7 @@ export class OptionsModel extends UIDefaultAccessor<Option[]> {
       window.addEventListener('click', OptionsModel.listener);
   }
 
-  constructor(public ref: ElementRef, private cd: ChangeDetectorRef, private zone: NgZone) {
+  constructor(public ref: ElementRef, protected cd: ChangeDetectorRef, private zone: NgZone) {
     super();
     this.value = [];
   }
