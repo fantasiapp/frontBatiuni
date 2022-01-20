@@ -264,9 +264,8 @@ $space-top-mid: 40px;
     }
   }
 
-  & > section:first-child {
-  height: calc(100vh - #{$web-header-height});
-
+  & > section:first-child, & > section:nth-child(3) {
+    height: calc(100vh - #{$web-header-height});
     background-color: white;
     overflow-y: auto;
     width: 400px;
@@ -284,6 +283,7 @@ $space-top-mid: 40px;
   & > section:nth-child(3){
     right: 0;
     padding: $col-one-padding-y $col-one-padding-x;
+    
   }
 
   @include range($mobile, 1500px) {

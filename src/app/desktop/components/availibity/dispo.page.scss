@@ -1,0 +1,28 @@
+@import 'src/styles/mixins';
+@import 'src/styles/variables';
+
+:host {
+  display: block;
+}
+
+.web-content {
+  searchbar {
+    display: block;
+    width: 80%;
+    font-size: 1em;
+    margin: 0 auto;
+  }
+}
+
+.report-search {
+  padding: 30px 0;
+}
+
+tabs {
+  position: fixed;
+  width: 100%;
+  top: $web-header-height - $tab-height;
+}
+.filters {
+    overflow: hidden !important;
+}

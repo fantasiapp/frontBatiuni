@@ -32,6 +32,8 @@ import { FileIcon } from "./components/FileIcon/file.icon";
 import { UISOSCard } from "./components/SOSCard/SOSCard.ui";
 import { InfoHandler } from "./components/info/info.component";
 import { ConnexionForm } from "./forms/connexion.form";
+import { CalendarUI } from "./components/calendar/calendar.ui";
+import { HorizantaleCalendar } from "./components/horizantalecalendar/horizantale.component";
 
 @NgModule({
   declarations: [
@@ -63,6 +65,8 @@ import { ConnexionForm } from "./forms/connexion.form";
     FileIcon,
     UISOSCard,
     InfoHandler,
+    CalendarUI,
+    HorizantaleCalendar
   ],
   imports: [
     CommonModule,
@@ -99,7 +103,9 @@ import { ConnexionForm } from "./forms/connexion.form";
     ProfileResume,
     FileIcon,
     UISOSCard,
-    InfoHandler
+    CalendarUI,
+    InfoHandler,
+    HorizantaleCalendar
   ],
   providers: [ImageGenerator]
 })
