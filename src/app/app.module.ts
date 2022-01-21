@@ -15,6 +15,7 @@ import { UserState } from 'src/models/user/user.state';
 
 import { GlobalRoutingModule } from './app.routing-module';
 import { DataState } from 'src/models/data/data.state';
+import { MiscState } from 'src/models/misc/misc.state';
 
 
 @Injectable()
@@ -33,7 +34,7 @@ export class CustomConfig extends HammerGestureConfig {
   imports: [
     //Ngxs imports
     NgxsModule.forRoot([
-      AppState, AuthState, UserState, DataState
+      AppState, AuthState, UserState, DataState, MiscState
     ], {
       developmentMode: !environment.production
     }),

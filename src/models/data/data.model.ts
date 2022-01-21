@@ -94,7 +94,7 @@ class __table__ {
     return this.values[this.getIndex(key)!];
   }
 
-  read(value: any) {
+  copy(value: any) {
     this.values = value.slice();
   }
 };
@@ -204,6 +204,13 @@ export class UserProfileRow extends createTable<UserProfileRow>() {
   get proposer(): string { return this.getField('proposer') }
   get role(): RoleRow { return this.getField('role') } /*fix here: role -> Role */
   get cellPhone(): string { return this.getField('cellPhone') }
+};
+
+export class EstablishmentsRow extends createTable<EstablishmentsRow>() {
+
+  get name() { return this.getField('nom'); }
+  get address() { return this.getField('adresse'); }
+  get activity() { return this.getField('activity'); }
 };
 
 //Objectives
@@ -357,3 +364,5 @@ export type Job = Serialized<JobRow>;
 // console.log(UserProfileRow.dependencyMap);
 // console.log(DataMapper.recursiveGetById(data, UserProfileRow, 1));
 // console.log([...RoleRow.instances.values()])
+
+(window as any).RoleRow = RoleRow;

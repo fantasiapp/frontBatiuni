@@ -1,7 +1,7 @@
 //enforce the model and do operations
 
 import { filterMap, getByValue } from 'src/common/functions';
-import { RoleRow, JobRow, LabelRow, CompanyRow, UserProfileRow, JobForCompanyRow, LabelForCompanyRow, FilesRow } from './data.model';
+import { RoleRow, JobRow, LabelRow, CompanyRow, UserProfileRow, JobForCompanyRow, LabelForCompanyRow, FilesRow, EstablishmentsRow } from './data.model';
 
 type Dict<T> = {[key: string]: T};
 type ValueConstructor = {
@@ -15,7 +15,7 @@ type TableConstructor = {
   getById(id: number): any;
 }
 
-const definedTables = ['Company', 'Userprofile', 'JobForCompany', 'LabelForCompany', 'Files'] as const;
+const definedTables = ['Company', 'Userprofile', 'JobForCompany', 'LabelForCompany', 'Files', 'Establishments'] as const;
 const definedValues = ['Role', 'Label', 'Job'] as const;
 export type tableName = typeof definedTables[number];
 export type valueName = typeof definedValues[number];
@@ -34,7 +34,8 @@ export class Mapper {
     'Job': JobRow,
     'JobForCompany': JobForCompanyRow,
     'LabelForCompany': LabelForCompanyRow,
-    'Files': FilesRow
+    'Files': FilesRow,
+    'Establishments': EstablishmentsRow
   };
 
   private static mapped: Dict<boolean> = Object.keys(Mapper.mapping).reduce(

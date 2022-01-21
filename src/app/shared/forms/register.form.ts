@@ -9,6 +9,9 @@ import { SlidesDirective } from "../directives/slides.directive";
 import { Option } from "src/models/option";
 import { Email } from "src/validators/persist";
 import { JobRow, RoleRow } from "src/models/data/data.model";
+import { Subject } from "rxjs";
+import { GetCompanies } from "src/models/misc/misc.actions";
+
 
 
 @Component({
@@ -76,7 +79,9 @@ import { JobRow, RoleRow } from "src/models/data/data.model";
           </div>
       
           <div class="form-input">
-            <label>Nom de l'entreprise</label><input type="text" formControlName="company"/>
+            <label>Nom de l'entreprise</label>
+            <input type="text" formControlName="company" (input)="onCompanySearch($event)"/>
+            <suggestion-box [query]="searchQuery | async" [action]="actions.GetCompanies" (choice)="onChoice($event)"></suggestion-box>
           </div>
         
           <div class="form-input">
@@ -114,6 +119,15 @@ import { JobRow, RoleRow } from "src/models/data/data.model";
     .parrain {
       align-self: flex-end;
       max-width: 50vw;
+    }
+
+    .suggestion-list {
+      position: absolute;
+      z-index: 10;
+      max-height: 100px;
+      overflow: hidden auto;
+      background: white;
+      box-shadow: 0 4px 4px 0 #ccc;
     }
   `],
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -177,6 +191,41 @@ export class RegisterForm {
   onNavigate(dx: number, done?: Function) {
     if ( dx > 0 ) this.slider.left();
     else this.slider.right();
+  }
+
+  searchQuery = new Subject<string>();
+
+  /* input behaviour */
+  /* group this to suggestion box in the end */
+  private lastEmit: number | null = null;
+  private lastLength: number = 0;
+  private timeout: any = null;
+
+  onCompanySearch(e: Event) {
+    const value = (e.target as HTMLInputElement).value,
+      diff = value.length - this.lastLength,
+      now = +(new Date);
+
+    
+    //for future completion
+    if ( this.timeout ) {clearTimeout(this.timeout);}
+    this.timeout = setTimeout(() => {
+      this.searchQuery.next(value);
+      this.lastEmit = null;
+      this.lastLength = value.length;
+    }, 1000);
+    
+    if ( diff >= 4 || (this.lastEmit && (now - this.lastEmit > 4000))) {
+      this.searchQuery.next(value);
+      this.lastEmit = now;
+      this.lastLength = value.length;
+    }
+  }
+
+  actions = {GetCompanies};
+
+  onChoice(name: string) {
+    this.registerForm.get('company')?.setValue(name);
   }
 
   jobs: Option[] = [...JobRow.instances.values()].map(job => ({...job, checked: false}));

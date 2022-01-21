@@ -4,12 +4,6 @@ export type Ref = {
 };
 
 export type Optional<T> = T | null;
-export type Table<Model> = {
-  serialize(): Model;
-};
-
-
-export type getTableModel<T> = T extends Table<infer U> ? U : any;
 
 export type NonFunctionPropNames<T> = {
   [K in keyof T]: T[K] extends Function ? never : K
