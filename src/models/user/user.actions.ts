@@ -72,13 +72,6 @@ export class ModifyUserProfile {
   }
 };
 
-export class GetImage {
-  static readonly type = '[User] Get File';
-  action: string = 'loadImage';
-  constructor(public id: number) { }
-};
-
-
 export class UploadFile {
   static readonly type = '[File] Upload';
   action = 'uploadFile';

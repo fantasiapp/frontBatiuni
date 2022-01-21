@@ -4,7 +4,7 @@ import { Action, Selector, State, StateContext, Store } from "@ngxs/store";
 import { catchError, mergeMap, tap } from "rxjs/operators";
 import { AuthState } from "src/models/auth/auth.state";
 import { environment } from "src/environments/environment";
-import { ChangePassword, ChangeProfileType, ChangeProfilePicture, GetUserData, ModifyUserProfile, GetImage, UploadFile, DownloadFile } from "./user.actions";
+import { ChangePassword, ChangeProfileType, ChangeProfilePicture, GetUserData, ModifyUserProfile, UploadFile, DownloadFile } from "./user.actions";
 import { User } from "./user.model";
 import { Login, Logout } from "../auth/auth.actions";
 import { of, throwError } from "rxjs";
@@ -67,35 +67,6 @@ export class UserState {
     );
   }
 
-  @Action(GetImage)
-  getImage(ctx: StateContext<User>, action: GetImage) {
-    const { token } = this.store.selectSnapshot(AuthState);
-
-    console.log(action);
-    
-    let req = this.http.get(environment.backUrl + `/data/?action=${action.action}&id=${action.id}`, {
-      headers: {
-        "Authorization": `Token ${token}`,
-        'Content-Type': 'application/json'
-      }
-    });
-
-    return req.pipe(
-      catchError((err: HttpErrorResponse) => {
-        this.store.dispatch(new Logout());
-        return throwError(err);
-      }),
-      tap((response: any) => {
-        const file = FilesRow.getById(action.id),
-          updates = response[action.id];
-        
-        file.read(updates);
-        ctx.patchState({imageUrl: `data:image/${file.ext};base64,${file.content}`})
-        console.log(ctx.getState().imageUrl?.length)
-      })
-    )
-  }
-
   @Action(UploadFile)
   uploadFile(ctx: StateContext<User>, action: UploadFile) {
     const { token } = this.store.selectSnapshot(AuthState);
@@ -114,7 +85,7 @@ export class UserState {
         return throwError(err);
       }),
       tap((response: any) => {
-        //add new file locally
+        console.log(response);
       })
     );
   }
@@ -123,7 +94,7 @@ export class UserState {
   downloadFile(ctx: StateContext<User>, action: DownloadFile) {
     const { token } = this.store.selectSnapshot(AuthState);
 
-    console.log(action);
+    console.log('>', action);
     
     let req = this.http.post(environment.backUrl + '/data/', action, {
       headers: {
@@ -137,7 +108,7 @@ export class UserState {
         return throwError(err);
       }),
       tap((response: any) => {
-        //add new file locally
+        console.log(response);
       })
     );
   }
@@ -174,7 +145,7 @@ export class UserState {
         if ( !ctx.getState().imageUrl ) {
           const reversed = currentUser.company.files.slice(); reversed.reverse();
           const newestImage = reversed.find((file) => file.nature == 'userImage');
-          if ( newestImage ) this.store.dispatch(new GetImage(newestImage.id));
+          if ( newestImage ) this.store.dispatch(new DownloadFile(newestImage.id));
         }
         //let avatar: Avatar | null = null;
         //if ( avatar = Avatar.getById(1)! ) partial.imageUrl = 'data:image/' + avatar.ext + ';base64,' + avatar.content;
