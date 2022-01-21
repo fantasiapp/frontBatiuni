@@ -84,10 +84,11 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
     if ( !input.files ) return this.value as FileUIOutput;
 
     const base64 = await this.getBase64(input.files!) as string,
-      name = input.files.item(0)!.name,
-      ext = name.slice(name.lastIndexOf('.') + 1);
-    
-    console.log({...this.value, content: base64, name, ext} as FileUIOutput);
+      fullname = input.files.item(0)!.name,
+      lastDot = fullname.lastIndexOf('.'),
+      name = fullname.slice(0, lastDot),
+      ext = fullname.slice(lastDot + 1);
+
     return {...this.value, content: base64, name, ext} as FileUIOutput;
   }
 }
