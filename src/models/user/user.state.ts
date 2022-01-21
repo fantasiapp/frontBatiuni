@@ -209,7 +209,7 @@ export class UserState {
       
 
       mergeMap(() => ctx.dispatch(
-        action.files.map(file => new UploadFile(file))
+        action.files.map(file => new UploadFile(file, 'label'))
       ))
     );
   }

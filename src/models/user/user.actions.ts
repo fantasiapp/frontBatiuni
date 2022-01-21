@@ -89,12 +89,12 @@ export class UploadFile {
   fileBase64: string;
 
   //tell JLW to unify formats
-  constructor(src: FileUIOutput) {
+  constructor(src: FileUIOutput, nature: string) {
     this.fileBase64 = src.content;
     this.expirationDate = src.expirationDate;
     this.ext = src.ext;
-    this.name = src.name;
-    this.nature = src.nature;
+    this.name = src.nature;
+    this.nature = nature;
   }
 };
 
