@@ -25,11 +25,10 @@ import { AuthGuard } from './auth/auth.guard';
 import { EmailConfirmation } from 'src/app/shared/validators/email_confirmation/emailconfirmation.component';
 import { RegistrationSuccess } from 'src/app/shared/validators/registration_success/registrationsuccess.component';
 import { AuthResolver } from './auth/auth.resolver';
-import { UIHSteps } from 'src/app/shared/components/horizontal-steps/hsteps.ui';
 
 const routes: Routes = [{
     path: 'landing',
-    component: UIHSteps,
+    component: LandingPageComponent,
     canActivate: [AuthGuard],
     data: { animation: 'LandingPage' }
   }, {
