@@ -1,5 +1,5 @@
 import { FormGroup } from "@angular/forms";
-import { FileUIOutput } from "src/app/shared/components/filesUI/files.ui";
+import { FileUI, FileUIOutput } from "src/app/shared/components/filesUI/files.ui";
 import { PropertyTrap } from "src/common/classes";
 import { getDirtyValues } from "src/common/functions";
 import { JobForCompanyRow, JobRow, LabelForCompanyRow, LabelRow, UserProfileRow } from "../data/data.model";
@@ -37,6 +37,7 @@ export class GetUserData {
 export class ModifyUserProfile {
   static readonly type = '[User] Change User Profile';
   readonly action = 'modifyUser';
+  files: any[] = [];
   
   //for now we mark job as dirty, but we should take it directly from the form
   constructor({profile, form}: {profile: UserProfileRow, form: FormGroup}) {    
@@ -47,7 +48,6 @@ export class ModifyUserProfile {
       labels = changes['Userprofile.Company.LabelForCompany'];
     
     if ( jobs ) {
-      console.log('jobs:', jobs, Object.values<JobForCompanyRow>(jobs));
       changes['Userprofile.Company.JobForCompany'] = Object.values<JobForCompanyRow>(jobs).map(
         ({job, number}: {job: JobRow, number: number}) => ([job.id, number])
       );
@@ -58,6 +58,8 @@ export class ModifyUserProfile {
       changes['Userprofile.Company.LabelForCompany'] = Object.values<any>(labels).map(
         ({label, fileData}: {label: LabelRow, fileData: FileUIOutput}) => ([label.id, fileData.expirationDate!])
       );
+
+      this.files = Object.values<any>(labels).map(({fileData}: {fileData: FileUIOutput}) => fileData);
     }
 
     const proxy = new Proxy(this, PropertyTrap);
@@ -70,8 +72,34 @@ export class ModifyUserProfile {
   }
 };
 
-export class GetFile {
+export class GetImage {
   static readonly type = '[User] Get File';
   action: string = 'loadImage';
   constructor(public id: number) { }
 };
+
+
+export class UploadFile {
+  static readonly type = '[File] Upload';
+  action = 'uploadFile';
+  ext: string;
+  name: string;
+  nature: string;
+  expirationDate: string;
+  fileBase64: string;
+
+  //tell JLW to unify formats
+  constructor(src: FileUIOutput) {
+    this.fileBase64 = src.content;
+    this.expirationDate = src.expirationDate;
+    this.ext = src.ext;
+    this.name = src.name;
+    this.nature = src.nature;
+  }
+};
+
+export class DownloadFile {
+  action = 'downloadFile';
+  static readonly type = '[File] Download';
+  constructor(public id: number) {}
+}

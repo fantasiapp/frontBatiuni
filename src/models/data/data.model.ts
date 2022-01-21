@@ -67,7 +67,6 @@ class __table__ {
       if ( !index ) throw `Unknown property ${prop} of table ${this.structure.name}`;
 
       console.log(prop, index, this.values[index], Array.isArray(this.values[index]));
-
       if ( Array.isArray(this.values[index]) ) {
         //Destroy
         this.values[index].forEach((value: __table__) => {

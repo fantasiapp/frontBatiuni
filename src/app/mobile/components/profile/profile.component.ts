@@ -71,6 +71,7 @@ export class ProfileComponent {
   modifyProfile(form: any /*FormGroup*/) {
     const user = this.store.selectSnapshot(UserState);
     const action = this.store.dispatch(new UserActions.ModifyUserProfile({profile: user.profile, form}));
+    this.info.show("info", "Mise à jour en cours...", Infinity);
     action.pipe(take(1))
       .subscribe(success => {
         this.openModifyMenu = false;

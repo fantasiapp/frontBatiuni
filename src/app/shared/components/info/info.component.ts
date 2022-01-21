@@ -17,21 +17,24 @@ export class InfoHandler {
 
   @HostListener('transitionend')
   private onTransitionEnd() {
-    console.log('transitioning');
     this.fadingIn = !this.fadingIn;
     if ( this.fadingIn ) {
-      setTimeout(() => {
-        this.type = '';
-        this.content = '';
-        this.fadingIn = true;
-        this.cd.markForCheck();
-      }, this.time);
+      if ( this.time == Infinity ) {
+        this.fadingIn = !this.fadingIn;
+        //next time this function is called
+        //is when were changing the color
+      } else {
+        setTimeout(() => {
+          this.type = '';
+          this.content = '';
+          this.fadingIn = true;
+          this.cd.markForCheck();
+        }, this.time);
+      }
     }
   }
 
-  constructor(private cd: ChangeDetectorRef) {
-
-  }
+  constructor(private cd: ChangeDetectorRef) { }
 
   show(type: 'error' | 'success' | 'info', content: string, time: number = 2500) {
     if ( !content ) return;

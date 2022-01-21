@@ -4,7 +4,7 @@ import { Action, Selector, State, StateContext, Store } from "@ngxs/store";
 import { catchError, mergeMap, tap } from "rxjs/operators";
 import { AuthState } from "src/models/auth/auth.state";
 import { environment } from "src/environments/environment";
-import { ChangePassword, ChangeProfileType, ChangeProfilePicture, GetUserData, ModifyUserProfile, GetFile } from "./user.actions";
+import { ChangePassword, ChangeProfileType, ChangeProfilePicture, GetUserData, ModifyUserProfile, GetImage, UploadFile, DownloadFile } from "./user.actions";
 import { User } from "./user.model";
 import { Login, Logout } from "../auth/auth.actions";
 import { of, throwError } from "rxjs";
@@ -67,8 +67,8 @@ export class UserState {
     );
   }
 
-  @Action(GetFile)
-  getFile(ctx: StateContext<User>, action: GetFile) {
+  @Action(GetImage)
+  getImage(ctx: StateContext<User>, action: GetImage) {
     const { token } = this.store.selectSnapshot(AuthState);
 
     console.log(action);
@@ -79,8 +79,6 @@ export class UserState {
         'Content-Type': 'application/json'
       }
     });
-
-    console.log('getting file');
 
     return req.pipe(
       catchError((err: HttpErrorResponse) => {
@@ -96,6 +94,52 @@ export class UserState {
         console.log(ctx.getState().imageUrl?.length)
       })
     )
+  }
+
+  @Action(UploadFile)
+  uploadFile(ctx: StateContext<User>, action: UploadFile) {
+    const { token } = this.store.selectSnapshot(AuthState);
+
+    console.log(action);
+    
+    let req = this.http.post(environment.backUrl + '/data/', action, {
+      headers: {
+        "Authorization": `Token ${token}`,
+        'Content-Type': 'application/json'
+      }
+    });
+
+    return req.pipe(
+      catchError((err: HttpErrorResponse) => {
+        return throwError(err);
+      }),
+      tap((response: any) => {
+        //add new file locally
+      })
+    );
+  }
+
+  @Action(DownloadFile)
+  downloadFile(ctx: StateContext<User>, action: DownloadFile) {
+    const { token } = this.store.selectSnapshot(AuthState);
+
+    console.log(action);
+    
+    let req = this.http.post(environment.backUrl + '/data/', action, {
+      headers: {
+        "Authorization": `Token ${token}`,
+        'Content-Type': 'application/json'
+      }
+    });
+
+    return req.pipe(
+      catchError((err: HttpErrorResponse) => {
+        return throwError(err);
+      }),
+      tap((response: any) => {
+        //add new file locally
+      })
+    );
   }
 
   @Action(GetUserData)
@@ -130,7 +174,7 @@ export class UserState {
         if ( !ctx.getState().imageUrl ) {
           const reversed = currentUser.company.files.slice(); reversed.reverse();
           const newestImage = reversed.find((file) => file.nature == 'userImage');
-          if ( newestImage ) this.store.dispatch(new GetFile(newestImage.id));
+          if ( newestImage ) this.store.dispatch(new GetImage(newestImage.id));
         }
         //let avatar: Avatar | null = null;
         //if ( avatar = Avatar.getById(1)! ) partial.imageUrl = 'data:image/' + avatar.ext + ';base64,' + avatar.content;
@@ -147,11 +191,10 @@ export class UserState {
 
   @Action(ModifyUserProfile)
   modifyUser(ctx: StateContext<User>, action: ModifyUserProfile) {
-    let token = this.store.selectSnapshot(AuthState).token;
+    let { token } = this.store.selectSnapshot(AuthState);
 
-    console.log('posting', action);
-
-    let req = this.http.post(environment.backUrl + '/data/', action, {
+    const {files, ...modifyAction} = action;
+    let req = this.http.post(environment.backUrl + '/data/', modifyAction, {
       headers: {
         "Authorization": `Token ${token}`,
         'Content-Type': 'application/json'
@@ -160,10 +203,14 @@ export class UserState {
 
     return req.pipe(
       tap((response: any) => {
-        console.log('response', response);
         const newProfile = Mapper.updateFrom(UserProfileRow, ctx.getState().profile, response.valueModified);
         ctx.patchState({profile: newProfile})
-      })
+      }),
+      
+
+      mergeMap(() => ctx.dispatch(
+        action.files.map(file => new UploadFile(file))
+      ))
     );
   }
 };
