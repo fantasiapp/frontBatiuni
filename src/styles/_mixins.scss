@@ -1,6 +1,7 @@
 @use "sass:list";
 @import './variables';
 @import './responsive';
+@import './positioning';
 
 @mixin cover-background {
   position: absolute;
@@ -135,7 +136,7 @@
   //scroll-behavior: smooth;
   touch-action: pan-y !important;
 }
-
+ 
 %header {
   @include set-safe-area(top);
   padding: $highlight-margin $page-padding;

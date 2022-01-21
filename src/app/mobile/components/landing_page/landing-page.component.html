@@ -1,4 +1,4 @@
-<div class="content">
+<div class="position-relative cover-parent">
   <a *ngIf="slider.index == 0" class="arrow_right" (click)="onSwipeLeft()">
     <img src="assets/Fleche.svg"/>
   </a>
@@ -17,7 +17,7 @@
 <ng-template #sousTraitant>
   <div class="main flex column center">
     <!-- Background image-->
-    <div class="background-image" [style.background-image]="'url(assets/accueil-sous-traitant.png)'">
+    <div class="background-image cover-parent" [style.background-image]="'url(assets/accueil-sous-traitant.png)'">
     </div>
     <!-- Landing text-->
     <div class="center-text overlay">

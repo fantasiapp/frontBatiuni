@@ -2,26 +2,14 @@
 
 %fixed { position: fixed; }
 
-%cover {
-  left: 0; top: 0;
-  right: 0; bottom: 0;
-}
-
 :host {
   display: block;
-  position: absolute;
-  @extend %cover;
-}
-
-.content {
-  position: relative;
-  @extend .cover-parent;
+  @extend %absolute-cover;
 }
 
 div.main {
   color: white;
-  position: absolute;
-  @extend %cover;
+  @extend %absolute-cover;
 }
 
 .background-image {
@@ -61,5 +49,6 @@ div.main {
 
   .discover {
     margin-bottom: 15px;
+    min-width: 280px;
   }
 }
