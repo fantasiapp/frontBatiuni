@@ -1,7 +1,7 @@
 import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Action, Selector, State, StateContext, Store } from "@ngxs/store";
-import { catchError, mergeMap, tap } from "rxjs/operators";
+import { catchError, mergeMap, take, tap } from "rxjs/operators";
 import { AuthState } from "src/models/auth/auth.state";
 import { environment } from "src/environments/environment";
 import { ChangePassword, ChangeProfileType, ChangeProfilePicture, GetUserData, ModifyUserProfile, UploadFile, DownloadFile } from "./user.actions";
@@ -96,7 +96,7 @@ export class UserState {
 
     console.log('>', action);
     
-    let req = this.http.post(environment.backUrl + '/data/', action, {
+    let req = this.http.get(environment.backUrl + `/data/?action=${action.action}&id=${action.id}`, {
       headers: {
         "Authorization": `Token ${token}`,
         'Content-Type': 'application/json'
@@ -108,7 +108,7 @@ export class UserState {
         return throwError(err);
       }),
       tap((response: any) => {
-        console.log(response);
+        new FilesRow(action.id, response[action.id]);
       })
     );
   }
@@ -145,12 +145,18 @@ export class UserState {
         if ( !ctx.getState().imageUrl ) {
           const reversed = currentUser.company.files.slice(); reversed.reverse();
           const newestImage = reversed.find((file) => file.nature == 'userImage');
-          if ( newestImage ) this.store.dispatch(new DownloadFile(newestImage.id));
+          if ( newestImage ) this.store.dispatch(new DownloadFile(newestImage.id))
+            .pipe(take(1)).subscribe( () => {
+              console.log('image finished laoading');
+              const imageFile = FilesRow.getById(newestImage.id);
+              ctx.patchState({
+                imageUrl: `data:image/${imageFile.ext};base64,${imageFile.content}`
+              });
+            });
         }
         //let avatar: Avatar | null = null;
         //if ( avatar = Avatar.getById(1)! ) partial.imageUrl = 'data:image/' + avatar.ext + ';base64,' + avatar.content;
         ctx.patchState(partial);
-        console.log(ctx.getState().imageUrl?.length)
       })
     )
   }
