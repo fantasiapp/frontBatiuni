@@ -2,18 +2,26 @@
 
 %fixed { position: fixed; }
 
+%cover {
+  left: 0; top: 0;
+  right: 0; bottom: 0;
+}
+
 :host {
   display: block;
-  width: 100vw;
-  overflow-x: hidden;
-  @extend %fixed;
-  @extend .full-page;
+  position: absolute;
+  @extend %cover;
+}
+
+.content {
+  position: relative;
+  @extend .cover-parent;
 }
 
 div.main {
   color: white;
-  @extend %fixed;
-  @extend .cover-parent;
+  position: absolute;
+  @extend %cover;
 }
 
 .background-image {
@@ -33,7 +41,7 @@ div.main {
 .arrow_right, .arrow_left {
   /* fix should be 50% 50% */
   transform-origin: 50% 20%;
-  @include absolute-center('y', fixed);
+  @include absolute-center('y', absolute);
   z-index: 1;
 }
 
