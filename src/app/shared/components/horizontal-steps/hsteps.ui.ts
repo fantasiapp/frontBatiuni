@@ -3,19 +3,21 @@ import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
 @Component({
   selector: 'h-steps',
   template: `
-    <div class="hline full-width"></div>
+    <div class="line full-width"></div>
     <ul class="full-width flex row space-between">
-      <li *ngFor="let item of steps" [attr.data-content]="item"></li>
+      <li [class.active]="activeIndex == i" (click)="activeIndex = i" *ngFor="let item of steps; index as i" [attr.data-content]="item"></li>
     </ul>
     `,
   styles: [`
+    @use "sass:math";
     @import 'src/styles/variables';
     @import 'src/styles/mixins';
 
     $ball-size: 40px;
-    $line-thickness: 3px;
+    $line-thickness: 0.75px;
 
     :host {
+      display: block;
       position: relative;
     }
 
@@ -33,12 +35,13 @@ import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
     li {
       position: relative;
       @include circle($ball-size);
-      border: 1px solid $buttonColor;
+      border: (2 * $line-thickness) solid $buttonColor;
 
       &.active { background-color: $buttonColor; }
     }
 
     li::before {
+      color: $buttonColor;
       display: block;
       content: attr(data-content);
       bottom: -1.5em;
@@ -48,7 +51,8 @@ import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UIHSteps {
-  steps: string[] = []
+  steps: string[] = ['hello', 'world']
+  activeIndex: number = 0;
 
   @Input('steps')
   set setSteps(steps: string[]) {
