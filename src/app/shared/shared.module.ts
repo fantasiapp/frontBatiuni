@@ -34,6 +34,7 @@ import { InfoHandler } from "./components/info/info.component";
 import { ConnexionForm } from "./forms/connexion.form";
 import { CalendarUI } from "./components/calendar/calendar.ui";
 import { HorizantaleCalendar } from "./components/horizantalecalendar/horizantale.component";
+import { UIHSteps } from "./components/horizontal-steps/hsteps.ui";
 
 @NgModule({
   declarations: [
@@ -66,7 +67,8 @@ import { HorizantaleCalendar } from "./components/horizantalecalendar/horizantal
     UISOSCard,
     InfoHandler,
     CalendarUI,
-    HorizantaleCalendar
+    HorizantaleCalendar,
+    UIHSteps
   ],
   imports: [
     CommonModule,
@@ -105,7 +107,8 @@ import { HorizantaleCalendar } from "./components/horizantalecalendar/horizantal
     UISOSCard,
     CalendarUI,
     InfoHandler,
-    HorizantaleCalendar
+    HorizantaleCalendar,
+    UIHSteps
   ],
   providers: [ImageGenerator]
 })
