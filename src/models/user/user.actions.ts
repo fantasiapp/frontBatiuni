@@ -31,7 +31,7 @@ export class ChangePassword {
 export class GetUserData {
   static readonly type = '[User] Get User data';
   constructor(public token: string) {}
-  readonly action = 'getUerData';
+  readonly action = 'getUserData';
 };
 
 export class ModifyUserProfile {

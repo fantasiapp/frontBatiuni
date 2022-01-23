@@ -50,7 +50,8 @@ export class CustomConfig extends HammerGestureConfig {
     GlobalRoutingModule,
     HammerModule
   ],
-  providers: [{
+  providers: [
+    HttpService, {
     provide: HAMMER_GESTURE_CONFIG,
     useClass: CustomConfig
   }, {

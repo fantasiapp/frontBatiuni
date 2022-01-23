@@ -162,25 +162,6 @@ export class UIAsyncAccessor<T> extends UIDefaultAccessor<T> {
   };
 };
 
-export type RequestPath = 'initialize' | 'data' | 'register' | 'api-token-auth';
-
-export class HttpAction {
-  constructor(protected http: HttpClient) {}
-
-  static api = ['initialize', 'data', 'register', 'api-token-auth'];
-
-  postAction(path: RequestPath, action: any, authorization: boolean) {
-    const headers = new Headers;
-    headers.append('Content-Type', 'application/json');
-    
-    this.http.post(`${environment.backUrl}/path?action=${action.action}`, {
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    });
-  };
-};
-
 //make it compatible with references ??
 export const PropertyTrap: ProxyHandler<any> = {
   get(target: any, property: string) {

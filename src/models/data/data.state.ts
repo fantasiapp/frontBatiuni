@@ -1,9 +1,9 @@
-import { HttpClient, HttpErrorResponse } from "@angular/common/http";
+import { HttpErrorResponse } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Action, State, StateContext, Store } from "@ngxs/store";
 import { of, throwError } from "rxjs";
 import { catchError, tap } from "rxjs/operators";
-import { environment } from "src/environments/environment";
+import { HttpService } from "src/app/services/http.service";
 import { GetGeneralData } from "./data.actions";
 import { Mapper } from "./mapper.model";
 
@@ -14,15 +14,13 @@ import { Mapper } from "./mapper.model";
 @Injectable()
 export class DataState {
 
-  constructor(private store: Store, private http: HttpClient) {}
+  constructor(private http: HttpService) {}
 
   @Action(GetGeneralData)
   getGeneralData(ctx: StateContext<any>, action: GetGeneralData) {    
     //eventually make a local storage service
     let generalData = localStorage.getItem('general-data'), req;
-    req = generalData ? of(JSON.parse(generalData)) : this.http.get(environment.backUrl + "/initialize/?action=getGeneralData",  {
-      headers: { 'Content-Type': 'application/json' }
-    });
+    req = generalData ? of(JSON.parse(generalData)) : this.http.get('initialize', {action: 'getGeneralData'});
 
     return req.pipe(
       catchError((err: HttpErrorResponse) => {

@@ -11,6 +11,7 @@ import { of, throwError } from "rxjs";
 import { Mapper } from "../data/mapper.model";
 import { FilesRow, UserProfileRow } from "../data/data.model";
 import { AppState } from "src/app/app.state";
+import { HttpService } from "src/app/services/http.service";
 
 @State<User>({
   name: 'user',
@@ -24,8 +25,7 @@ export class UserState {
   @Selector()
   static profile(state: User) { return state.profile; }
 
-  constructor(private store: Store, private http: HttpClient) {
-  }
+  constructor(private store: Store, private http: HttpService) {}
 
   @Action(ChangeProfileType)
   changeProfileType(ctx: StateContext<User>, action: ChangeProfileType) {
@@ -34,17 +34,7 @@ export class UserState {
 
   @Action(ChangeProfilePicture)
   changeProfilePicture(ctx: StateContext<User>, action: ChangeProfilePicture) {
-    let token = this.store.selectSnapshot(AuthState).token;
-    console.log(action);
-
-    let req = this.http.post(environment.backUrl + '/data/', action, {
-      headers: {
-        "Authorization": "Token " + token,
-        'Content-Type': 'application/json'
-      }
-    });
-
-    return req.pipe(
+    this.http.post('data', action).pipe(
       tap(() => {
         ctx.patchState({ imageUrl: 'data:image/' + action.ext + ';base64,' + action.imageBase64 });
       })
@@ -53,31 +43,17 @@ export class UserState {
 
   @Action(ChangePassword)
   modifyPassword(ctx: StateContext<User>, action: ChangePassword) {
-    console.log(this.store.selectSnapshot(AuthState));
-    let token = this.store.selectSnapshot(AuthState).token;
-    let req = this.http.post(environment.backUrl + '/data/', action, {
-      headers: {
-        Authorization: "Token " + token,
-        'Content-Type': 'application/json'
-      }
-    })
-
-    return req.pipe(
+    return this.http.post('data', action).pipe(
       tap((response: any) => console.log(response))
     );
   }
 
   @Action(GetImage)
   getImage(ctx: StateContext<User>, action: GetImage) {
-    const { token } = this.store.selectSnapshot(AuthState);
-
-    console.log(action);
     
-    let req = this.http.get(environment.backUrl + `/data/?action=${action.action}&id=${action.id}`, {
-      headers: {
-        "Authorization": `Token ${token}`,
-        'Content-Type': 'application/json'
-      }
+    const req = this.http.get('data', {
+      action: action.action,
+      id: action.id
     });
 
     return req.pipe(
@@ -91,23 +67,13 @@ export class UserState {
         
         file.read(updates);
         ctx.patchState({imageUrl: `data:image/${file.ext};base64,${file.content}`})
-        console.log(ctx.getState().imageUrl?.length)
       })
     )
   }
 
   @Action(UploadFile)
   uploadFile(ctx: StateContext<User>, action: UploadFile) {
-    const { token } = this.store.selectSnapshot(AuthState);
-
-    console.log(action);
-    
-    let req = this.http.post(environment.backUrl + '/data/', action, {
-      headers: {
-        "Authorization": `Token ${token}`,
-        'Content-Type': 'application/json'
-      }
-    });
+    const req = this.http.post('data', action);
 
     return req.pipe(
       catchError((err: HttpErrorResponse) => {
@@ -121,16 +87,7 @@ export class UserState {
 
   @Action(DownloadFile)
   downloadFile(ctx: StateContext<User>, action: DownloadFile) {
-    const { token } = this.store.selectSnapshot(AuthState);
-
-    console.log(action);
-    
-    let req = this.http.post(environment.backUrl + '/data/', action, {
-      headers: {
-        "Authorization": `Token ${token}`,
-        'Content-Type': 'application/json'
-      }
-    });
+    const req = this.http.post('data', action);
 
     return req.pipe(
       catchError((err: HttpErrorResponse) => {
@@ -144,14 +101,7 @@ export class UserState {
 
   @Action(GetUserData)
   getUserData(ctx: StateContext<User>, action: GetUserData) {
-    let { token } = action;
-    let req = this.http.get(environment.backUrl + '/data/?action=getUserData', {
-      headers: {
-        "Authorization": `Token ${token}`,
-        'Content-Type': 'application/json'
-      }
-    });
-
+    const req = this.http.get('data', { action: action.action })
 
     return req.pipe(
       catchError((err: HttpErrorResponse) => {
@@ -169,17 +119,12 @@ export class UserState {
         const currentUser = [...UserProfileRow.instances.values()][0],
           partial: any = { profile: currentUser.serialize(), viewType: currentUser.role.id == 2 };
 
-        console.log(currentUser.company.files);
-        console.log(ctx.getState());
         if ( !ctx.getState().imageUrl ) {
           const reversed = currentUser.company.files.slice(); reversed.reverse();
           const newestImage = reversed.find((file) => file.nature == 'userImage');
           if ( newestImage ) this.store.dispatch(new GetImage(newestImage.id));
         }
-        //let avatar: Avatar | null = null;
-        //if ( avatar = Avatar.getById(1)! ) partial.imageUrl = 'data:image/' + avatar.ext + ';base64,' + avatar.content;
         ctx.patchState(partial);
-        console.log(ctx.getState().imageUrl?.length)
       })
     )
   }
@@ -191,15 +136,8 @@ export class UserState {
 
   @Action(ModifyUserProfile)
   modifyUser(ctx: StateContext<User>, action: ModifyUserProfile) {
-    let { token } = this.store.selectSnapshot(AuthState);
-
     const {files, ...modifyAction} = action;
-    let req = this.http.post(environment.backUrl + '/data/', modifyAction, {
-      headers: {
-        "Authorization": `Token ${token}`,
-        'Content-Type': 'application/json'
-      }
-    });
+    const req = this.http.post('data', modifyAction);
 
     return req.pipe(
       tap((response: any) => {
