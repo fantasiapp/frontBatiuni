@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
-import { UIDefaultAccessor } from "src/common/classes";
+import { UIDefaultAccessor } from "src/app/shared/common/classes";
 
 @Component({
   selector: 'number',

@@ -1,6 +1,6 @@
 //enforce the model and do operations
 
-import { filterMap, getByValue } from 'src/common/functions';
+import { filterMap, getByValue } from 'src/app/shared/common/functions';
 import { RoleRow, JobRow, LabelRow, CompanyRow, UserProfileRow, JobForCompanyRow, LabelForCompanyRow, FilesRow, EstablishmentsRow } from './data.model';
 
 type Dict<T> = {[key: string]: T};

@@ -1,5 +1,5 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input} from "@angular/core";
-import { UIDefaultAccessor } from "src/common/classes";
+import { ChangeDetectionStrategy, Component, Input} from "@angular/core";
+import { UIDefaultAccessor } from "src/app/shared/common/classes";
 import { NG_VALUE_ACCESSOR } from "@angular/forms";
 
 @Component({

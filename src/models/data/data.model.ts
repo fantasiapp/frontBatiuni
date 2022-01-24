@@ -1,6 +1,6 @@
 //find a way to mark objects as serialized
 
-import { Serialized } from "src/common/types";
+import { Serialized } from "src/app/shared/common/types";
 import { Mapper } from "./mapper.model";
 
 export interface Table {

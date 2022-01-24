@@ -24,16 +24,16 @@ import { GetCompanies } from "src/models/misc/misc.actions";
           <h3 class="form-title">Créer un compte !</h3>
           <h4 class="form-subtitle">Informations contact</h4>
           <div class="form-input">
-            <label>Nom du contact</label> <input type="text" formControlName="lastname"/>
+            <label>Nom du contact</label> <input type="text" class="form-element" formControlName="lastname"/>
           </div>
         
           <div class="form-input">
-            <label>Prénom du contact</label> <input type="text" formControlName="firstname"/>
+            <label>Prénom du contact</label> <input class="form-element" type="text" formControlName="firstname"/>
           </div>
         
           <div class="form-input">
             <label>Adresse e-mail contact</label>
-            <input type="email" formControlName="email"/>
+            <input type="email" class="form-element" formControlName="email"/>
             <div *ngIf="registerForm.get('email')!.dirty && registerForm.get('email')!.errors" class="server-error">
               {{ registerForm.get('email')!.errors?.server }}
             </div>
@@ -41,14 +41,14 @@ import { GetCompanies } from "src/models/misc/misc.actions";
         
           <div class="form-input">
             <label>Vérification addresse e-mail</label>
-            <input type="email" formControlName="emailVerification"/>
+            <input type="email" class="form-element" formControlName="emailVerification"/>
             <div *ngIf="registerForm.get('password')!.dirty  && registerForm.get('emailVerification')!.errors?.mismatch" class="error">
               L'e-mail de confirmation doit être identique à celui du contact.
             </div>
           </div>
         
           <div class="form-input">
-            <label>Mot de passe</label> <input type="password" formControlName="password"/>
+            <label>Mot de passe</label> <input class="form-element" type="password" formControlName="password"/>
             <div *ngIf="registerForm.get('password')!.dirty  && registerForm.get('password')!.errors?.minlength" class="error">
               Le mot de passe doit contenir au moins 8 caractères.
             </div>
@@ -80,7 +80,7 @@ import { GetCompanies } from "src/models/misc/misc.actions";
       
           <div class="form-input">
             <label>Nom de l'entreprise</label>
-            <input type="text" formControlName="company" (input)="onCompanySearch($event)"/>
+            <input type="text" class="form-element" formControlName="company" (input)="onCompanySearch($event)"/>
             <suggestion-box [query]="searchQuery | async" [action]="actions.GetCompanies" (choice)="onChoice($event)"></suggestion-box>
           </div>
         
@@ -91,7 +91,7 @@ import { GetCompanies } from "src/models/misc/misc.actions";
 
           <div class="form-input parrain">
             <label>Code parrain ?</label>
-            <input type="password" formControlName="proposer"/>
+            <input type="password" class="form-element" formControlName="proposer"/>
           </div>
 
           <div class="form-action" style="margin-top: auto;">
@@ -162,16 +162,17 @@ export class RegisterForm {
       Email()
     ]),
     emailVerification: new FormControl('', [
-      Validators.required
+      Validators.required,
+      MatchField('email')
     ]),
     password: new FormControl('', [
-      Validators.minLength(8)
+      ComplexPassword()
     ]),
     proposer: new FormControl(''),
     role: new FormControl([], [Validators.required]),
     company: new FormControl('', [Validators.required]),
     jobs: new FormControl([], [Validators.required])
-  }, {validators: [MatchField('email', 'emailVerification'), ComplexPassword('password')]});
+  }, { });
 
   onSubmit(f: any) {
     console.log(this.registerForm.value);

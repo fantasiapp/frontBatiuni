@@ -186,7 +186,7 @@ export class UserState {
       
 
       mergeMap(() => ctx.dispatch(
-        action.files.map(file => new UploadFile(file, 'label'))
+        action.files.map(file => new UploadFile(file, 'labels'))
       ))
     );
   }

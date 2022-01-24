@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component } from "@angular/core";
-import { DistanceSliderConfig, SalarySliderConfig } from "src/common/config";
+import { DistanceSliderConfig, SalarySliderConfig } from "src/app/shared/common/config";
 
 @Component({
   selector: 'st-filter-form',

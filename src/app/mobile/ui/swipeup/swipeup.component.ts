@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
-import { UIOpenMenu } from "src/common/classes";
+import { UIOpenMenu } from "src/app/shared/common/classes";
 
 @Component({
   selector: 'swipeup',

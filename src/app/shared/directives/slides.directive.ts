@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, ComponentFactoryResolver, Directive, Input, TemplateRef, ViewContainerRef } from "@angular/core";
-import { IndexBased } from "src/common/classes";
-import { Ref } from "src/common/types";
+import { IndexBased } from "src/app/shared/common/classes";
+import { Ref } from "src/app/shared/common/types";
 
 @Directive({
   selector: '[slides]'

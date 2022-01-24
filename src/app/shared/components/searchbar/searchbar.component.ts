@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component } from "@angular/core";
-import { UIDefaultAccessor } from "src/common/classes";
+import { UIDefaultAccessor } from "src/app/shared/common/classes";
 
 @Component({
   selector: 'searchbar',

@@ -1,7 +1,7 @@
 import { Component, Input, ChangeDetectionStrategy, ChangeDetectorRef } from "@angular/core";
 import { NG_VALUE_ACCESSOR } from "@angular/forms";
-import { UIAsyncAccessor } from "src/common/classes";
-import { Serialized } from "src/common/types";
+import { UIAsyncAccessor } from "src/app/shared/common/classes";
+import { Serialized } from "src/app/shared/common/types";
 import { FilesRow } from "src/models/data/data.model";
 
 export type FileUIOutput = Omit<Omit<Serialized<FilesRow>, 'id'>, 'timestamp'>;

@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { Store } from '@ngxs/store';
-import { Destroy$ } from '../common/classes';
+import { Destroy$ } from './shared/common/classes';
 import { SplashScreen } from '@capacitor/splash-screen';
 import { Load } from './app.actions';
 import { RouterOutlet } from '@angular/router';

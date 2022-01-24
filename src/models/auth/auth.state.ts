@@ -6,7 +6,7 @@ import { environment } from 'src/environments/environment';
 import { ConfirmAccount, Login, Logout, Register } from "./auth.actions";
 import { catchError, delay, map, tap, timeout } from "rxjs/operators";
 import { Observable, of, throwError } from "rxjs";
-import * as strings from '../../common/strings';
+import * as strings from '../../app/shared/common/strings';
 import { Router } from "@angular/router";
 
 @State<AuthModel>({

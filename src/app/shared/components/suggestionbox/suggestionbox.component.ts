@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, HostBinding, Input, Output } from "@angular/core";
 import { Select, Store } from "@ngxs/store";
 import { Observable } from "rxjs";
-import { Serialized } from "src/common/types";
+import { Serialized } from "src/app/shared/common/types";
 import { EstablishmentsRow } from "src/models/data/data.model";
 import { MiscState } from "src/models/misc/misc.state";
 

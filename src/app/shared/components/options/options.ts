@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostBinding, HostListener, Input, NgZone, Output, ViewChild } from "@angular/core";
 import { NG_VALUE_ACCESSOR } from "@angular/forms";
-import { UIDefaultAccessor } from "src/common/classes";
-import { focusOutside, getTopmostElement, makeid } from "src/common/functions";
+import { UIDefaultAccessor } from "src/app/shared/common/classes";
+import { focusOutside, getTopmostElement, makeid } from "src/app/shared/common/functions";
 import { Option } from "src/models/option";
 
 @Component({
