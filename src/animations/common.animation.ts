@@ -6,5 +6,6 @@ export const animatingStyle = style({
   left: 0, /*top: '0',*/
   padding: 'inherit',
   height: '100%',
-  overflow: 'hidden'
+  // test this
+  // overflow: 'hidden'
 });

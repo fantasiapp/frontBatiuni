@@ -3,6 +3,7 @@
 :host {
   display: block;
   @extend %overflow-y;
+  @extend %absolute-cover;
 }
 
 .big-sticky-footer {

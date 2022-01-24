@@ -148,7 +148,7 @@
 };
 
 %sticky-footer {
-  position: fixed;
+  position: absolute;
   @include set-safe-area(bottom);
   left: 0;
   height: $sticky-footer-height;
