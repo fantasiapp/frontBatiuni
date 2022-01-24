@@ -4,7 +4,6 @@ import { UISwipeupComponent } from './swipeup/swipeup.component';
 import { UISlideMenuComponent } from './slidemenu/slidemenu.component';
 import { SuiviComments } from './suivi/comment.suivi';
 import { UICreditCard } from './creditcard/credit-card.ui';
-import { UIPopup } from './popup/popup.component';
 import { UIAbonnement } from './abonnementUI/abonnement.ui';
 import { HeaderComponent } from './header/header.component';
 import { UIAnnonceResume } from './annonce-resume/annonce-resume.ui';
@@ -21,7 +20,6 @@ import { SharedModule } from 'src/app/shared/shared.module';
     UISlideMenuComponent,
     SuiviComments,
     UICreditCard,
-    UIPopup,
     UIAbonnement,
     HeaderComponent,
     UIAnnonceResume,
@@ -39,7 +37,6 @@ import { SharedModule } from 'src/app/shared/shared.module';
     UISlideMenuComponent,
     SuiviComments,
     UICreditCard,
-    UIPopup,
     UIAbonnement,
     HeaderComponent,
     UIAnnonceResume,

@@ -6,7 +6,7 @@ import { environment } from 'src/environments/environment';
 import { ConfirmAccount, Login, Logout, Register } from "./auth.actions";
 import { catchError, delay, map, tap, timeout } from "rxjs/operators";
 import { Observable, of, throwError } from "rxjs";
-import * as strings from '../../common/strings';
+import * as strings from '../../app/shared/common/strings';
 import { Router } from "@angular/router";
 
 @State<AuthModel>({
@@ -95,15 +95,21 @@ export class AuthState {
   };
 
   @Action(ConfirmAccount)
-  async confirmAccount(ctx: StateContext<AuthModel>, {token}: ConfirmAccount) {
+  confirmAccount(ctx: StateContext<AuthModel>, {token}: ConfirmAccount) {
     const req = this.http.get(environment.backUrl + `/initialize/`, {
       params: {
         action: 'registerConfirm',
         token
       }
     });
-    const result: any = await req.toPromise();
-    console.log(result);
-    if ( result['registerConfirm'] == 'Error' ) throw result['messages'];
+
+    return req.pipe(
+      tap((result: any) => {
+        if ( result['registerConfirm'] == 'Error' )
+          throw result['messages'];
+        
+        ctx.patchState({pendingEmail: ''});
+      })
+    );
   }
 };

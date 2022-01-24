@@ -52,17 +52,15 @@ export class ModifyPasswordForm {
   // Modify password 
   modifyPwdForm = new FormGroup({
     oldPwd: new FormControl('', [
-      Validators.required
+      ComplexPassword()
     ]),
     newPwd: new FormControl('',[
-      Validators.required,
-      Validators.minLength(8),      
+      ComplexPassword()     
     ]),
     newPwdConfirmation: new FormControl('',[
-      Validators.required,
-      Validators.minLength(8),      
+      MatchField('newPwd')
     ])
-  }, {validators: [MatchField('newPwd', 'newPwdConfirmation'), ComplexPassword('oldPwd'), ComplexPassword('newPwd')]})
+  }, {})
 
   onSubmit() {
     let { oldPwd, newPwd } = this.modifyPwdForm.value;

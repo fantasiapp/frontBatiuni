@@ -3,11 +3,11 @@ import { ActivatedRoute } from "@angular/router";
 import { Store } from "@ngxs/store";
 import { interval, race } from "rxjs";
 import { takeUntil } from "rxjs/operators";
-import { Destroy$ } from "src/common/classes";
+import { Destroy$ } from "src/app/shared/common/classes";
 import { ConfirmAccount } from "src/models/auth/auth.actions";
 
 @Component({
-  selector: 'emailConfirmed',
+  selector: 'email-confirmed',
   templateUrl: 'emailconfirmation.component.html',
   styleUrls: ['emailconfirmation.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush

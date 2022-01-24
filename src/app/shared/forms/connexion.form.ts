@@ -3,9 +3,10 @@ import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
 import { Store } from "@ngxs/store";
 import { take } from "rxjs/operators";
-import { Destroy$ } from "src/common/classes";
+import { Destroy$ } from "src/app/shared/common/classes";
 import { Login } from "src/models/auth/auth.actions";
-import { setErrors } from "src/validators/verify";
+import { Email } from "src/validators/persist";
+import { ComplexPassword, setErrors } from "src/validators/verify";
 
 @Component({
   selector: 'connexion-form',
@@ -62,12 +63,13 @@ export class ConnexionForm extends Destroy$ {
   loginForm = new FormGroup({
     email: new FormControl('', [
       Validators.required,
-      //Validators.email
+      // Email()
     ]),
     password: new FormControl('', [
       Validators.required,
+      // ComplexPassword()
     ])
-  }, { /*validators: ComplexPassword('password')*/ });
+  }, {});
 
   private _errors: string[] = [];
   get errors() { return this._errors; }

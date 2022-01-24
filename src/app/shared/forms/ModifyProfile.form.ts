@@ -1,11 +1,15 @@
-import { ChangeDetectionStrategy, Component, HostListener, Input, ViewChild, EventEmitter, Output, HostBinding, SimpleChanges } from "@angular/core";
+import { ChangeDetectionStrategy, Component, HostListener, Input, ViewChild, EventEmitter, Output, HostBinding, SimpleChanges, ChangeDetectorRef } from "@angular/core";
 import { FormArray, FormControl, FormGroup } from "@angular/forms";
 import { Camera } from "@capacitor/camera";
-import { Serialized } from "src/common/types";
-import { JobRow, LabelRow, UserProfileRow } from "src/models/data/data.model";
+import { Serialized } from "src/app/shared/common/types";
+import { FilesRow, JobRow, LabelRow, UserProfileRow } from "src/models/data/data.model";
 import { Option } from "src/models/option";
 import { SlidesDirective } from "../directives/slides.directive";
 import { defaultFileUIOuput, FileUIOutput } from "../components/filesUI/files.ui";
+import { of } from "rxjs";
+import { Store } from "@ngxs/store";
+import { DownloadFile } from "src/models/user/user.actions";
+import { DomSanitizer } from "@angular/platform-browser";
 
 @Component({
   selector: 'modify-profile-form',
@@ -15,7 +19,7 @@ import { defaultFileUIOuput, FileUIOutput } from "../components/filesUI/files.ui
 
   <ng-template #modifyPage1>
     <section class="full-width section">
-      <form class="form-control" [formGroup]="modifyProfileForm">
+      <form class="form-control" [formGroup]="form">
         <h3 class="form-title font-Roboto">
           Infos personelles:
         </h3>
@@ -45,7 +49,7 @@ import { defaultFileUIOuput, FileUIOutput } from "../components/filesUI/files.ui
 
   <ng-template #modifyPage2>
     <section class="full-width section">
-      <form class="full-width form-control" [formGroup]="modifyProfileForm">
+      <form class="full-width form-control" [formGroup]="form">
         <h3 class="form-title font-Roboto">
           Infos entreprise:
         </h3>
@@ -116,7 +120,7 @@ import { defaultFileUIOuput, FileUIOutput } from "../components/filesUI/files.ui
 
   <ng-template #modifyPage3>
     <section class="full-width section">
-      <form class="full-width form-control" [formGroup]="modifyProfileForm">
+      <form class="full-width form-control" [formGroup]="form">
         <h3 class="form-title font-Roboto">
           Certifications & labels:
         </h3>
@@ -128,7 +132,7 @@ import { defaultFileUIOuput, FileUIOutput } from "../components/filesUI/files.ui
             <span class="position-relative" *ngFor="let control of companyLabelControls; index as i">
               <ng-container [formGroupName]="i">
                 <fileinput [showtitle]="false" [filename]="control.get('label')!.value.name" formControlName="fileData">
-                  <file-svg [name]="control.get('label')!.value.name" image></file-svg>
+                  <file-svg [name]="control.get('label')!.value.name" (click)="openFile(control.get('label')!.value.name)" image></file-svg>
                 </fileinput>
               </ng-container>
             </span>
@@ -137,17 +141,21 @@ import { defaultFileUIOuput, FileUIOutput } from "../components/filesUI/files.ui
     </section>
   </ng-template>
 
-  <div style="margin-top: auto;">
+  <div class="mid-sticky-footer" style="margin-top: auto;">
     <div class="form-step">
       <div (click)="slider.index = 0" [class.active]="slider ? slider.index == 0 : true"></div>
       <div (click)="slider.index = 1" [class.active]="slider && slider.index == 1"></div>
       <div (click)="slider.index = 2" [class.active]="slider && slider.index == 2"></div>
     </div>
     <button class="button gradient full-width" (click)="onSubmit()"
-      [disabled]="(!modifyProfileForm.touched || modifyProfileForm.invalid) || null">
+      [disabled]="(!form.touched || form.invalid) || null">
       Enregistrer
     </button>
   </div>
+
+  <popup [(open)]="fileView.open">
+    <object class="cover-parent" *ngIf="fileView.url" type="application/pdf" [data]="fileView.url"></object>
+  </popup>
   `,
   styles: [`
     @import 'src/styles/variables';
@@ -160,6 +168,7 @@ import { defaultFileUIOuput, FileUIOutput } from "../components/filesUI/files.ui
       display: flex;
       flex-flow: column nowrap;
       flex-shrink: 0;
+      padding-bottom: $mid-sticky-footer-height;
     }
 
     .form-title, .form-input label {
@@ -191,39 +200,50 @@ import { defaultFileUIOuput, FileUIOutput } from "../components/filesUI/files.ui
       @include from($mobile) { background: transparent; }
     }
 
-    .big-sticky-footer {
+    .mid-sticky-footer {
       box-shadow: 0 -3px 3px 0 #ddd;
     
       background-color: white;
       @extend %sticky-footer;
-      height: $big-sticky-footer-height;
+      height: $mid-sticky-footer-height;
       padding: 10px 30px;
-    
-      & > * {
-        margin-bottom: 6px;
-      }
     }
   `],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ModifyProfileForm {
 
-  @Input()
-  user!: Serialized<UserProfileRow>;
+  @Input() user!: Serialized<UserProfileRow>;
+  @Input() index: number = 0;
+  @Input() animate: boolean = true;
+  @Output() submit = new EventEmitter<FormGroup>();
+  @ViewChild(SlidesDirective) slider!: SlidesDirective;
 
-  @Input()
-  index: number = 0;
+  //make class
+  fileView: any= {
+    _open: false,
+    get open() { return this._open; },
+    set open(v) { if (!v) {this.url = null;} this._open = v; },
+    url: null
+  };
 
-  @ViewChild(SlidesDirective)
-  slider!: SlidesDirective;
+  openFile(filename: string) {
+    const companyFiles = this.user.company.files,
+      target = companyFiles.find(file => file.name == filename);
+  
+    if ( !target ) throw `file ${filename} doesn't exist on the current company`;
+    const content = target.content ? of(target.content) : this.store.dispatch(new DownloadFile(target.id));
+    
+    content.subscribe(() => {
+      const url = `data:application/pdf;base64,${FilesRow.getById(target.id).content}`;
+      console.log(url);
+      this.fileView.url = this.sanitizer.bypassSecurityTrustResourceUrl(url);
+      this.fileView.open = true;
+      this.cd.markForCheck();
+    });
+  }
 
-  @Input()
-  animate: boolean = true;
-
-  @Output()
-  submit = new EventEmitter<FormGroup>();
-
-  modifyProfileForm: FormGroup = new FormGroup({
+  form: FormGroup = new FormGroup({
     // User
     'Userprofile.lastName': new FormControl('', [
     ]),
@@ -257,13 +277,11 @@ export class ModifyProfileForm {
   });
 
   get profileJobsControls() {
-    const jobsControl = this.modifyProfileForm.controls['Userprofile.Company.JobForCompany'] as FormArray;
-    return jobsControl.controls;
+    return (this.form.controls['Userprofile.Company.JobForCompany'] as FormArray).controls;
   }
 
   get companyLabelControls() {
-    const labelsControl = this.modifyProfileForm.controls['Userprofile.Company.LabelForCompany'] as FormArray;
-    return labelsControl.controls;
+    return (this.form.controls['Userprofile.Company.LabelForCompany'] as FormArray).controls;
   }
 
   @HostListener('swipeleft')
@@ -272,20 +290,11 @@ export class ModifyProfileForm {
   @HostListener('swiperight')
   onSwipeRight() { this.slider.right(); }
 
-  onSubmit() {
-    this.submit.emit(this.modifyProfileForm);
-  }
+  onSubmit() { this.submit.emit(this.form); }
+
+  constructor(private cd: ChangeDetectorRef, private store: Store, private sanitizer: DomSanitizer) {}
   
   async ngOnInit() {
-    const companyLabels = this.user.company.labels.map(label => label.label.id),
-      companyJobs = this.user.company.jobs.map(job => job.job.id);
-    
-    this.allLabels =[...LabelRow.instances.values()]
-      .map(({name, id}) => ({id, name, checked: companyLabels.includes(id)}));
-        
-    this.allJobs = [...JobRow.instances.values()]
-      .map(({name, id}) => ({id, name, checked: companyJobs.includes(id)}));
-    
     let permissions  = await Camera.checkPermissions();
     if ( permissions.camera != 'granted' || permissions.photos != 'granted' )
       try {
@@ -295,41 +304,54 @@ export class ModifyProfileForm {
       } catch ( e ) {  }
   }
 
-  ngOnChanges(changes: SimpleChanges) {
-    this.modifyProfileForm.controls['Userprofile.lastName']?.setValue(this.user.lastName);
-    this.modifyProfileForm.controls['Userprofile.firstName']?.setValue(this.user.firstName);
-    this.modifyProfileForm.controls['Userprofile.userName']?.setValue(this.user.user);
-    this.modifyProfileForm.controls['Userprofile.cellPhone']?.setValue(this.user.cellPhone);
-    this.modifyProfileForm.controls['Userprofile.Company.name']?.setValue(this.user.company.name);
-    this.modifyProfileForm.controls['Userprofile.Company.siret']?.setValue(this.user.company.siret);
-    this.modifyProfileForm.controls['Userprofile.Company.revenue']?.setValue(this.user.company.revenue);
-    this.modifyProfileForm.controls['Userprofile.Company.capital']?.setValue(this.user.company.capital);
-    this.modifyProfileForm.controls['Userprofile.Company.webSite']?.setValue(this.user.company.webSite);
-    this.modifyProfileForm.controls['Userprofile.Company.companyPhone']?.setValue(this.user.company.companyPhone);
+  reloadData() {
+    const companyLabels = this.user.company.labels.map(label => label.label.id),
+      companyJobs = this.user.company.jobs.map(job => job.job.id);
+    
+    this.allLabels =[...LabelRow.instances.values()]
+      .map(({name, id}) => ({id, name, checked: companyLabels.includes(id)}));
+        
+    this.allJobs = [...JobRow.instances.values()]
+      .map(({name, id}) => ({id, name, checked: companyJobs.includes(id)}));
 
-    const jobControl = this.modifyProfileForm.controls['Userprofile.Company.JobForCompany'] as FormArray;
+    this.form.controls['Userprofile.lastName']?.setValue(this.user.lastName);
+    this.form.controls['Userprofile.firstName']?.setValue(this.user.firstName);
+    this.form.controls['Userprofile.userName']?.setValue(this.user.user);
+    this.form.controls['Userprofile.cellPhone']?.setValue(this.user.cellPhone);
+    this.form.controls['Userprofile.Company.name']?.setValue(this.user.company.name);
+    this.form.controls['Userprofile.Company.siret']?.setValue(this.user.company.siret);
+    this.form.controls['Userprofile.Company.revenue']?.setValue(this.user.company.revenue);
+    this.form.controls['Userprofile.Company.capital']?.setValue(this.user.company.capital);
+    this.form.controls['Userprofile.Company.webSite']?.setValue(this.user.company.webSite);
+    this.form.controls['Userprofile.Company.companyPhone']?.setValue(this.user.company.companyPhone);
+
+    const jobControl = this.form.controls['Userprofile.Company.JobForCompany'] as FormArray;
     jobControl.clear();
-    for ( let job of this.user.company.jobs )
+    for ( let job of this.user.company.jobs ) {
       jobControl.push(new FormGroup({
         job: new FormControl(job.job),
         number: new FormControl(job.number)
       }));
+    }
     
-    const labelControl = this.modifyProfileForm.controls['Userprofile.Company.LabelForCompany'] as FormArray,
-      now = (new Date()).toISOString().slice(0, 10);
+    const labelControl = this.form.controls['Userprofile.Company.LabelForCompany'] as FormArray;
     
     labelControl.clear();
     for ( let label of this.user.company.labels ) {
       labelControl.push(new FormGroup({
-          label: new FormControl(label.label),
-          //get date from server
-          fileData: new FormControl(defaultFileUIOuput(label.label.name, label.date))
-        }));
+        label: new FormControl(label.label),
+        //get date from server
+        fileData: new FormControl(defaultFileUIOuput(label.label.name, label.date))
+      }));
     }
+
+    this.cd.markForCheck();
   }
 
+
+  //make functions to help merge
   updateJobs(jobOptions: Option[]) {
-    const jobsControl = this.modifyProfileForm.controls['Userprofile.Company.JobForCompany'] as FormArray,
+    const jobsControl = this.form.controls['Userprofile.Company.JobForCompany'] as FormArray,
       oldJobs = jobsControl.value as {job: JobRow, number: number}[],
       newJobs = jobOptions.map(option => JobRow.getById(option.id)!);
 
@@ -358,12 +380,12 @@ export class ModifyProfileForm {
     });
     
     jobsControl.markAsTouched(); jobsControl.markAsDirty();
-    this.modifyProfileForm.markAsDirty();
-    this.modifyProfileForm.markAsTouched();
+    this.form.markAsDirty();
+    this.form.markAsTouched();
   };
 
   updateLabels(labelOptions: Option[]) {
-    const labelsControl = this.modifyProfileForm.controls['Userprofile.Company.LabelForCompany'] as FormArray,
+    const labelsControl = this.form.controls['Userprofile.Company.LabelForCompany'] as FormArray,
       newLabels = labelOptions.map(label => LabelRow.getById(label.id)!) as LabelRow[];
     
     //also consider old labels
@@ -379,8 +401,8 @@ export class ModifyProfileForm {
     });
 
     labelsControl.markAsTouched(); labelsControl.markAsDirty();
-    this.modifyProfileForm.markAsDirty();
-    this.modifyProfileForm.markAsTouched();
+    this.form.markAsDirty();
+    this.form.markAsTouched();
   }
   
   allLabels: Option[] = [];

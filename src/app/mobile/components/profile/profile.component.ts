@@ -6,11 +6,11 @@ import { UserState } from "src/models/user/user.state";
 import * as UserActions from "src/models/user/user.actions";
 import { Camera, CameraResultType, CameraSource } from "@capacitor/camera";
 import { UISlideMenuComponent } from "../../ui/slidemenu/slidemenu.component";
-import { UISwipeupComponent } from "../../ui/swipeup/swipeup.component";
 import { Logout } from "src/models/auth/auth.actions";
 import { InfoHandler } from "src/app/shared/components/info/info.component";
 import { take } from "rxjs/operators";
 import { FormGroup } from "@angular/forms";
+import { ModifyProfileForm } from "src/app/shared/forms/ModifyProfile.form";
 
 
 @Component({
@@ -20,11 +20,9 @@ import { FormGroup } from "@angular/forms";
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProfileComponent {
-  @ViewChild(UISwipeupComponent, {static: false})
-  swipeMenu!: UISwipeupComponent;
 
-  @ViewChild(UISlideMenuComponent, {static: false})
-  slideMenu!: UISlideMenuComponent;
+  @ViewChild(ModifyProfileForm)
+  modifyForm!: ModifyProfileForm;
   
   @ViewChild(InfoHandler, {static: true})
   info!: InfoHandler;
@@ -49,10 +47,12 @@ export class ProfileComponent {
     this.openMenu = false;
     this.openModifyMenu = true;
     this.modifyPassword = modifyPassword;
+
+    if ( !this.modifyPassword ) {
+      this.modifyForm.reloadData();
+    }
     this.fixScrollTop();
   }
-
-  openModifyPictureMenu() { this.openModifyPicture = true; }
   
   private fixScrollTop() {
     this.modifyMenu.resetScroll();
@@ -62,6 +62,11 @@ export class ProfileComponent {
   @HostListener('swiperight')
   onSwipe() { 
     this.fixScrollTop();
+  }
+
+  swipeModifyPicture() {
+    console.log('swiping');
+    console.log(this.openModifyPicture = true);
   }
   
   logout() {

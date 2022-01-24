@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, ElementRef, EventEmitter, HostListener, Input, Output, ViewChild } from "@angular/core";
-import { UIOpenMenu } from "src/common/classes";
+import { UIOpenMenu } from "src/app/shared/common/classes";
 
 @Component({
   selector: 'slidemenu',

@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, ComponentFactoryResolver, Directive, ElementRef, Input, TemplateRef, ViewContainerRef } from "@angular/core";
-import { AnimateCSS } from "src/common/classes";
+import { AnimateCSS } from "src/app/shared/common/classes";
 
 @Directive({
   selector: '[scroll-template]'

@@ -2,8 +2,8 @@ import { Component, ChangeDetectionStrategy } from "@angular/core";
 import { Select } from "@ngxs/store";
 import { Observable } from "rxjs";
 import { takeUntil } from "rxjs/operators";
-import { Destroy$ } from "src/common/classes";
-import { DistanceSliderConfig, SalarySliderConfig } from "src/common/config";
+import { Destroy$ } from "src/app/shared/common/classes";
+import { DistanceSliderConfig, SalarySliderConfig } from "src/app/shared/common/config";
 import { User } from "src/models/user/user.model";
 import { UserState } from "src/models/user/user.state";
 

@@ -1,33 +1,29 @@
 import { AbstractControl, ValidationErrors, ValidatorFn } from "@angular/forms";
 import { lowerCase, upperCase } from "./regex";
 
-export const MatchField = (field: string, verification: string): ValidatorFn => {
+export const MatchField = (target: string): ValidatorFn => {
   return (control: AbstractControl) => {
-    const original = control.get(field),
-      verified = control.get(verification);
+    const original = control.parent?.get(target)
 
-    verified  && verified.setErrors(original && verified.value == original.value ? null : {
-      mismatch: true
+    console.log(control.value, original?.value);
+
+    original  && control.setErrors(control.value == original.value ? null : {
+      FIELD_MISMATCH: ['email']
     });
       
     return null;
   };
 };
 
-
-export const ComplexPassword = (fieldName: string): ValidatorFn => {
+export const ComplexPassword = () => {
   return (control: AbstractControl) => {
-    let field = control.get(fieldName),
-      content = field?.value,
+    let content = control?.value,
       errors: ValidationErrors = {};
-    
-    if ( !field ) return null;
-    
-    if ( content.length < 8 ) errors['minlength'] = true;
-    if ( !content.match(lowerCase) ) errors['lowercase'] = true;
-    if ( !content.match(upperCase) ) errors['uppercase'] = true;
-    field.setErrors(Object.keys(errors).length ? errors : null);
-    return null;
+            
+    if ( content.length < 8 ) errors['MIN_LENGTH'] = [];
+    if ( !content.match(lowerCase) ) errors['CASE'] = ['miniscule'];
+    else if ( !content.match(upperCase) ) errors['CASE'] = ['majuscule'];
+    return Object.keys(errors).length ? errors : null;
   }
 };
 

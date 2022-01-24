@@ -5,7 +5,7 @@ import { AppState } from "src/app/app.state";
 import { AuthState } from "src/models/auth/auth.state";
 
 @Component({
-  selector: 'emailConfirmed',
+  selector: 'success',
   templateUrl: 'registrationsuccess.component.html',
   styleUrls: ['registrationsuccess.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush

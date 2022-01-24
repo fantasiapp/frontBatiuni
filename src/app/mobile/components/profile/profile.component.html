@@ -30,6 +30,14 @@
         <span class="text-light-emphasis">Capital : </span>
         <span class="value">{{user.profile!.company.capital | currency: 'EUR':'symbol':'1.0-0' }}</span>
       </span>
+      <span>
+        <span class="text-light-emphasis">Numéro fixe : </span>
+        <span class="value">{{user.profile!.company.companyPhone | space: 2:1 }}</span>
+      </span>
+      <span>
+        <span class="text-light-emphasis">Site internet : </span>
+        <span class="value link"><a [href]="user.profile!.company.webSite">{{user.profile!.company.webSite}}</a></span>
+      </span>
     </section>
 
     <section class="documents">
@@ -57,27 +65,26 @@
     <li (click)="logout()">Se déconnecter</li>
   </swipeup>
 
-  <slidemenu [(open)]="openModifyMenu" #modifyMenu>
+  <slidemenu [(open)]="openModifyMenu" #modifyMenu>    
     <div class="full-width center-text text-emphasis" header>Modifier mon Profil</div>
     <div class="modify-page hosted-page flex column center-cross space-children-margin" content>
+      <swipeup [(open)]="openModifyPicture" #modifyPicture>
+        <li (click)="takePhoto()">Accédez à l'appareil photo</li>
+        <li (click)="selectPhoto()">Télécharger une image</li>
+      </swipeup>
+      
       <section class="section">
         <profile-image [user]="user"></profile-image>
-        <img src="assets/icons/modify.svg" class="modify-icon image" (click)="openModifyPictureMenu()" />
+        <img src="assets/icons/modify.svg" class="modify-icon image" (click)="swipeModifyPicture()"/>
       </section>
   
       <switch off="Profile ST" on="Profil PME"  style="text-align: center;" off="Profil ST" on="Profil PME" [value]="user.viewType" disabled></switch>
       <stars value="3.9"></stars>
   
-      
       <div class="form-container full-width grow flex column position-relative">
         <modify-password-form *ngIf="modifyPassword" class="grow"></modify-password-form>
         <modify-profile-form [user]="user.profile!" *ngIf="!modifyPassword" class="grow" (submit)="modifyProfile($event)" #modifyForm></modify-profile-form>
       </div>
-
-      <swipeup [(open)]="openModifyPicture">
-        <li (click)="takePhoto()">Accédez à l'appareil photo</li>
-        <li (click)="selectPhoto()">Télécharger une image</li>
-      </swipeup>
     </div>
   </slidemenu>
 

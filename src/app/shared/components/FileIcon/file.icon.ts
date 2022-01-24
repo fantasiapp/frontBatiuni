@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
-import { shadeColor } from "src/common/functions";
+import { shadeColor } from "src/app/shared/common/functions";
 
 @Component({
   selector: 'file-svg',
@@ -40,9 +40,9 @@ import { shadeColor } from "src/common/functions";
 export class FileIcon {
   public name: string = 'Fichier';
   @Input('name') set _name(name: string) {
-    if ( name.length >= 8 )
-      this.name = name.slice(0, 2) + '..' + name.slice(name.length-3);
-    this.name = name;
+    if ( name.length > 6 )
+      this.name = name.slice(0, 6) + '..';
+    else this.name = name;
   };
 
   //#ffb347 for orange
@@ -52,7 +52,3 @@ export class FileIcon {
     return shadeColor(this.color, -20);
   }
 }
-
-//make more customizable;
-
-//fix shadow

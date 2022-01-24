@@ -35,6 +35,9 @@ import { ConnexionForm } from "./forms/connexion.form";
 import { CalendarUI } from "./components/calendar/calendar.ui";
 import { HorizantaleCalendar } from "./components/horizantalecalendar/horizantale.component";
 import { UISuggestionBox } from "./components/suggestionbox/suggestionbox.component";
+import { ControlErrorsDirective, ErrorMessageComponent } from "./common/formerrors";
+import { SpacingPipe } from "./pipes/spacing.pipe";
+import { UIPopup } from "./components/popup/popup.component";
 
 @NgModule({
   declarations: [
@@ -68,7 +71,11 @@ import { UISuggestionBox } from "./components/suggestionbox/suggestionbox.compon
     InfoHandler,
     CalendarUI,
     HorizantaleCalendar,
-    UISuggestionBox
+    UISuggestionBox,
+    ErrorMessageComponent,
+    ControlErrorsDirective,
+    SpacingPipe,
+    UIPopup
   ],
   imports: [
     CommonModule,
@@ -108,7 +115,11 @@ import { UISuggestionBox } from "./components/suggestionbox/suggestionbox.compon
     CalendarUI,
     InfoHandler,
     HorizantaleCalendar,
-    UISuggestionBox
+    UISuggestionBox,
+    ErrorMessageComponent,
+    ControlErrorsDirective,
+    SpacingPipe,
+    UIPopup
   ],
   providers: [ImageGenerator]
 })

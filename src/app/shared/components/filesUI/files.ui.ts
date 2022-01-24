@@ -1,7 +1,7 @@
 import { Component, Input, ChangeDetectionStrategy, ChangeDetectorRef } from "@angular/core";
 import { NG_VALUE_ACCESSOR } from "@angular/forms";
-import { UIAsyncAccessor } from "src/common/classes";
-import { Serialized } from "src/common/types";
+import { UIAsyncAccessor } from "src/app/shared/common/classes";
+import { Serialized } from "src/app/shared/common/types";
 import { FilesRow } from "src/models/data/data.model";
 
 export type FileUIOutput = Omit<Omit<Serialized<FilesRow>, 'id'>, 'timestamp'>;
@@ -89,6 +89,7 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
       name = fullname.slice(0, lastDot),
       ext = fullname.slice(lastDot + 1);
 
-    return {...this.value, content: base64, name, ext} as FileUIOutput;
+    console.log('sending', base64.slice(28));
+    return {...this.value, content: base64.slice(28), name, ext} as FileUIOutput;
   }
 }

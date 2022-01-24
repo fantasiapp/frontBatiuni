@@ -1,7 +1,7 @@
 import { FormGroup } from "@angular/forms";
 import { FileUI, FileUIOutput } from "src/app/shared/components/filesUI/files.ui";
-import { PropertyTrap } from "src/common/classes";
-import { getDirtyValues } from "src/common/functions";
+import { PropertyTrap } from "src/app/shared/common/classes";
+import { getDirtyValues } from "src/app/shared/common/functions";
 import { JobForCompanyRow, JobRow, LabelForCompanyRow, LabelRow, UserProfileRow } from "../data/data.model";
 
 export class ChangeProfileType {

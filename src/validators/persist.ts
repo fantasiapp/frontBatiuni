@@ -15,7 +15,7 @@ export const Email = () => {
     
     lastValue = content;
     if ( !content ) return null;
-    if ( !content.match(email) ) errors['email'] = 'Format e-mail invalide.';
+    if ( !content.match(email) ) errors['INVALID_FORMAT'] = ['e-mail'];
     return Object.keys(errors).length ? errors : null
   };
 };
