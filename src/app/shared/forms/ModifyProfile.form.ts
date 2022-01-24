@@ -137,7 +137,7 @@ import { defaultFileUIOuput, FileUIOutput } from "../components/filesUI/files.ui
     </section>
   </ng-template>
 
-  <div style="margin-top: auto;">
+  <div class="mid-sticky-footer" style="margin-top: auto;">
     <div class="form-step">
       <div (click)="slider.index = 0" [class.active]="slider ? slider.index == 0 : true"></div>
       <div (click)="slider.index = 1" [class.active]="slider && slider.index == 1"></div>
@@ -160,6 +160,7 @@ import { defaultFileUIOuput, FileUIOutput } from "../components/filesUI/files.ui
       display: flex;
       flex-flow: column nowrap;
       flex-shrink: 0;
+      padding-bottom: $mid-sticky-footer-height;
     }
 
     .form-title, .form-input label {
@@ -191,17 +192,13 @@ import { defaultFileUIOuput, FileUIOutput } from "../components/filesUI/files.ui
       @include from($mobile) { background: transparent; }
     }
 
-    .big-sticky-footer {
+    .mid-sticky-footer {
       box-shadow: 0 -3px 3px 0 #ddd;
     
       background-color: white;
       @extend %sticky-footer;
-      height: $big-sticky-footer-height;
+      height: $mid-sticky-footer-height;
       padding: 10px 30px;
-    
-      & > * {
-        margin-bottom: 6px;
-      }
     }
   `],
   changeDetection: ChangeDetectionStrategy.OnPush
