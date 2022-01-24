@@ -36,6 +36,7 @@ import { CalendarUI } from "./components/calendar/calendar.ui";
 import { HorizantaleCalendar } from "./components/horizantalecalendar/horizantale.component";
 import { UISuggestionBox } from "./components/suggestionbox/suggestionbox.component";
 import { ControlErrorsDirective, ErrorMessageComponent } from "./common/formerrors";
+import { SpacingPipe } from "./pipes/spacing.pipe";
 
 @NgModule({
   declarations: [
@@ -71,7 +72,8 @@ import { ControlErrorsDirective, ErrorMessageComponent } from "./common/formerro
     HorizantaleCalendar,
     UISuggestionBox,
     ErrorMessageComponent,
-    ControlErrorsDirective
+    ControlErrorsDirective,
+    SpacingPipe
   ],
   imports: [
     CommonModule,
@@ -113,7 +115,8 @@ import { ControlErrorsDirective, ErrorMessageComponent } from "./common/formerro
     HorizantaleCalendar,
     UISuggestionBox,
     ErrorMessageComponent,
-    ControlErrorsDirective
+    ControlErrorsDirective,
+    SpacingPipe
   ],
   providers: [ImageGenerator]
 })

@@ -18,6 +18,11 @@ header {
   font-weight: 300;
 }
 
+.link {
+  text-decoration: underline;
+  color: $secondaryBackground;
+}
+
 .documents {
   width: calc(100% + 2*#{$page-padding});
   padding: 10px 20px 0;
