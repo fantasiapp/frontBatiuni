@@ -14,7 +14,6 @@
 .dashed {
   margin-left: -30px !important;
   // margin-right: -30px;
-  margin: 1rem 0;
   display: block;
   width: 100vw;
   border-top: 1px dashed black;
@@ -22,4 +21,96 @@
 
 .comments {
   margin-top: $page-padding;
+}
+.contrat-title {
+  color: #0D6191;
+  font-size: 1rem;
+}
+.suivi-notification {
+  width: 100vw;
+  // margin-left: -30px;
+  padding-left: 30px;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  color: white;
+  height: 80px;
+  background-color:#0D6191 ;
+  h6 {
+    font-weight: 200;
+    font-size: 1rem; 
+    @extend %has-notifications
+  }
+}
+details[open] summary ~ * {
+  animation: sweep .3s ease-in-out;
+}
+
+@keyframes sweep {
+  0%    {opacity: 0; }
+  50%    {opacity: 0.5; }
+  100%  {opacity: 1; }
+}
+
+
+
+
+*,
+*:before,
+*:after {
+	box-sizing: inherit;
+}
+
+$details-padding: 1em;
+
+details {
+	font-size: 1rem;
+	position: relative;
+	.summary-title {
+		user-select: none;
+    color: #0D6191;
+    font-weight: 500;
+	}
+
+	&:hover {
+		cursor: pointer;
+	}
+
+	.summary-content {
+		cursor: default;
+		font-weight: 300;
+		line-height: 1.5;
+	}
+
+	summary {
+		list-style: none;
+		padding: $details-padding;
+
+		&:focus {
+			outline: none;
+		}
+
+		&:hover .summary-arrow-up svg {
+			opacity: 1;
+		}
+	}
+
+	.summary-arrow-up,
+	.summary-arrow-down {
+		pointer-events: none;
+		position: absolute;
+		top: 0.75em;
+		right: 50%;
+		background: #ffffff;
+
+		svg {
+			display: block;
+		}
+	}
+
+	summary::-webkit-details-marker {
+		display: none;
+	}
 }

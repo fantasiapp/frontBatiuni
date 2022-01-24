@@ -3,6 +3,17 @@
 @import "src/styles/responsive";
 
 :host {
+  position: relative;
+  right: 0;
+  display: flex;
+  transition: all 100ms ease-out 0s;
+}
+
+:host(.delete) {
+  right: 100px;
+}
+
+.container {
   display: flex;
   background: white;
   box-shadow: 0 5px 3px 0 rgba(149, 157, 165, 0.2); // x y spread outline color
@@ -10,6 +21,8 @@
   color: #999999;
   border-radius: 12px;
   justify-content: center;
+  margin-bottom: 1rem;
+  flex-shrink: 0;
 }
 
 .container {
@@ -33,3 +46,13 @@ p {
 }
 
 .adresse { font-weight: 300; }
+
+.showDelete {
+  width: 100px;
+  background-color: red;
+  color: white;
+  position: absolute;
+  right: -100px;
+  top: 0;
+  bottom: 1rem;
+}

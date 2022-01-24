@@ -10,3 +10,18 @@
   background: #FFFFFF !important;
   color: black;
 }
+
+.notification {
+  @extend %has-notifications
+}
+
+
+.response {
+  width: 90vw;
+  // margin-left: -30px;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -45vw;
+  margin-right: -55vw;
+}

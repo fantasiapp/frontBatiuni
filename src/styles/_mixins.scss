@@ -238,12 +238,15 @@
   &::after {
     content: attr(data-notification-number);
     position: absolute;
-    background: red;
-    @include circle(var(--notification-size));
-    right: 0; top: 0;
+    // @include circle(var(--notification-size, #{$notification-size}),red);
+    @include circle($notification-size,red);
+
+    // right: -$notification-size; 
+    top: -$notification-size /2;
     text-align: center;
-    line-height: var(--notification-size);
-    font-size: calc(var(--notification-size) * 0.8);
+    line-height: $notification-size;
+    font-size: $notification-size*0.7;
+    font-weight: bold;
     color: white;
   }
 }
