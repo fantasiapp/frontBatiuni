@@ -118,4 +118,13 @@ export class ProfileComponent {
     let imageName = user.profile.firstName + '_'+ user.profile.lastName +'_'+ user.profile.id ;
     this.store.dispatch(new UserActions.ChangeProfilePicture(photo, imageName));
   }
+
+  downloading(state: boolean) {
+    if ( !state )
+      this.info.show('info', 'Téléchargement du fichier', Infinity);
+    else
+      this.info.show('success', 'Fichier téléchargé', 2000);
+    
+    this.cd.markForCheck();
+  }
 };

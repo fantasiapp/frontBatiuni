@@ -38,6 +38,7 @@ export class ModifyUserProfile {
   static readonly type = '[User] Change User Profile';
   readonly action = 'modifyUser';
   files: any[] = [];
+  adminFiles: any = {};
   
   //for now we mark job as dirty, but we should take it directly from the form
   constructor({profile, form}: {profile: UserProfileRow, form: FormGroup}) {    
@@ -45,7 +46,8 @@ export class ModifyUserProfile {
     if ( Object.keys(changes).length == 0 ) return;
 
     const jobs = changes['Userprofile.Company.JobForCompany'],
-      labels = changes['Userprofile.Company.LabelForCompany'];
+      labels = changes['Userprofile.Company.LabelForCompany'],
+      adminFiles = changes['Userprofile.Company.admin'];
     
     if ( jobs ) {
       changes['Userprofile.Company.JobForCompany'] = Object.values<JobForCompanyRow>(jobs).map(
@@ -62,13 +64,20 @@ export class ModifyUserProfile {
       this.files = Object.values<any>(labels).map(({fileData}: {fileData: FileUIOutput}) => fileData);
     }
 
+    if ( adminFiles ) {
+      const keys = Object.keys(adminFiles);
+      for ( const key of keys ) {
+        if ( !adminFiles[key].content ) continue;
+        
+        this.adminFiles[key] = adminFiles[key];
+      }
+    }
+
     const proxy = new Proxy(this, PropertyTrap);
     //write directly on this object
     proxy['Userprofile.id'] = profile.id;
     for ( const [field, value] of Object.entries<any>(changes) ) 
       proxy[field] = value;
-    
-    console.log(this);
   }
 };
 
@@ -82,11 +91,11 @@ export class UploadFile {
   fileBase64: string;
 
   //tell JLW to unify formats
-  constructor(src: FileUIOutput, nature: string) {
+  constructor(src: FileUIOutput, nature: string, name?: string) {
     this.fileBase64 = src.content;
     this.expirationDate = src.expirationDate;
     this.ext = src.ext;
-    this.name = src.nature;
+    this.name = name || src.nature;
     this.nature = nature;
   }
 };

@@ -188,6 +188,8 @@ export class UserState {
       }
     });
 
+    console.log(Object.keys(action.adminFiles));
+
     return req.pipe(
       tap((response: any) => {
         const newProfile = Mapper.updateFrom(UserProfileRow, ctx.getState().profile, response.valueModified);
@@ -196,6 +198,10 @@ export class UserState {
       
       mergeMap(() => ctx.dispatch(
         action.files.map(file => new UploadFile(file, 'labels'))
+      )),
+
+      mergeMap(() => ctx.dispatch(
+        Object.keys(action.adminFiles).map(key => new UploadFile(action.adminFiles[key], 'admin', key))
       ))
     );
   }

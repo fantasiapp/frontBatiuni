@@ -11,8 +11,6 @@ import { Store } from "@ngxs/store";
 import { DownloadFile } from "src/models/user/user.actions";
 import { DomSanitizer } from "@angular/platform-browser";
 import { b64toBlob } from "../common/functions";
-import { UserState } from "src/models/user/user.state";
-import { take } from "rxjs/operators";
 
 @Component({
   selector: 'modify-profile-form',
@@ -109,14 +107,32 @@ import { take } from "rxjs/operators";
           <input class="form-element" type="text" formControlName="Userprofile.Company.revenue" />
         </div>
 
-        <fileinput [showtitle]="false" filename="Kbis" imgsrc="assets/files/KBIS.svg"></fileinput>
-        <fileinput [showtitle]="false" filename="Attestation travail dissimulé"
-          imgsrc="assets/files/Trav. Dis..svg"></fileinput>
-        <fileinput [showtitle]="false" filename="Attestation RC + DC" imgsrc="assets/files/RC + DC.svg">
-        </fileinput>
-        <fileinput [showtitle]="false" filename="URSSAF" imgsrc="assets/files/urssaf.svg"></fileinput>
-        <fileinput [showtitle]="false" filename="Impôts" imgsrc="assets/files/Impot.svg"></fileinput>
-        <fileinput [showtitle]="false" filename="Congés payés" imgsrc="assets/files/Cong.Payés.svg"></fileinput>
+        <ng-container formGroupName="Userprofile.Company.admin">
+          <fileinput [showtitle]="false" filename="Kbis" formControlName="Kbis">
+            <file-svg name="Kbis" color="#156C9D" (click)="openFile('Kbis')" image></file-svg>
+          </fileinput>
+
+          <fileinput [showtitle]="false" filename="Attestation travail dissimulé" formControlName="Trav. Dis">
+            <file-svg name="Trav. Dis" color="#054162" (click)="openFile('Attestation travail dissimulé')" image></file-svg>
+          </fileinput>
+
+          <fileinput [showtitle]="false" filename="Attestation RC + DC" formControlName="RC + DC">
+            <file-svg name="RC + DC" color="#999999" (click)="openFile('RC + DC')" image></file-svg>
+          </fileinput>
+
+          <fileinput [showtitle]="false" filename="URSSAF" formControlName="URSSAF">
+            <file-svg name="URSSAF" color="#F9C067" (click)="openFile('URSSAF')" image></file-svg>
+          </fileinput>
+
+          <fileinput [showtitle]="false" filename="Impôts" formControlName="Impôts">
+            <file-svg name="Impôts" color="#52D1BD" (click)="openFile('Impôts')" image></file-svg>
+          </fileinput>
+
+          <fileinput [showtitle]="false" filename="Congés payés" formControlName="Congés Payés">
+            <file-svg name="Congés Payés" color="32A290" (click)="openFile('Congés payés')" image></file-svg>
+          </fileinput>
+
+        </ng-container>
       </form>
     </section>
   </ng-template>
@@ -228,6 +244,7 @@ export class ModifyProfileForm {
   @Input() index: number = 0;
   @Input() animate: boolean = true;
   @Output() submit = new EventEmitter<FormGroup>();
+  @Output() requestFile = new EventEmitter<boolean>();
   @ViewChild(SlidesDirective) slider!: SlidesDirective;
 
   //make class
@@ -245,7 +262,8 @@ export class ModifyProfileForm {
   
     if ( !target ) throw `file ${filename} doesn't exist on the current company`;
     const content = target.content ? of(target.content) : this.store.dispatch(new DownloadFile(target.id));
-    
+    this.requestFile.emit(false);
+
     content.subscribe(() => {
       const blob = b64toBlob(FilesRow.getById(target.id).content, 'application/pdf'),
         url = URL.createObjectURL(blob);
@@ -253,6 +271,7 @@ export class ModifyProfileForm {
       this.fileView.url = url;
       this.fileView.safeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
       this.fileView.open = true;
+      this.requestFile.emit(true);
       this.cd.markForCheck();
     });
   }
@@ -292,7 +311,15 @@ export class ModifyProfileForm {
     ]),
     'Userprofile.Company.LabelForCompany': new FormArray([
 
-    ])
+    ]),
+    'Userprofile.Company.admin': new FormGroup({
+      'Kbis': new FormControl(defaultFileUIOuput('admin')),
+      'Trav. Dis': new FormControl(defaultFileUIOuput('admin')),
+      'RC + DC': new FormControl(defaultFileUIOuput('admin')),
+      'URSSAF': new FormControl(defaultFileUIOuput('admin')),
+      'Impôts': new FormControl(defaultFileUIOuput('admin')),
+      'Congés Payés': new FormControl(defaultFileUIOuput('admin'))
+    })
   });
 
   get profileJobsControls() {
