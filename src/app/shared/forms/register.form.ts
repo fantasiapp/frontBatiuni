@@ -55,6 +55,9 @@ import { JobRow, RoleRow } from "src/models/data/data.model";
             Le mot de passe doit contenir une lettre en majuscule.
           </div>
         </div>
+        <div class="form-action">
+          <button *ngIf="showSubmitButton" class="button discover gradient" style="width: 250px" (click)="slider.left()">Etape suivante</button>
+        </div>
         <div *ngIf="showSteps" class="form-step">
           <div class="active"></div>
           <div (click)="slider.left()"></div>
@@ -108,9 +111,8 @@ import { JobRow, RoleRow } from "src/models/data/data.model";
     }
 
     :host(:not(.mobile-view)) {
-      form {
-        // justify-content: center;
-      }
+      max-height: 768px;
+      align-self: center;
     }
 
     .parrain {
