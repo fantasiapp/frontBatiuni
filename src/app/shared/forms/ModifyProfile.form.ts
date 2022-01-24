@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, HostListener, Input, ViewChild, Eve
 import { FormArray, FormControl, FormGroup } from "@angular/forms";
 import { Camera } from "@capacitor/camera";
 import { Serialized } from "src/app/shared/common/types";
-import { JobRow, LabelRow, UserProfileRow } from "src/models/data/data.model";
+import { FilesRow, JobRow, LabelRow, UserProfileRow } from "src/models/data/data.model";
 import { Option } from "src/models/option";
 import { SlidesDirective } from "../directives/slides.directive";
 import { defaultFileUIOuput, FileUIOutput } from "../components/filesUI/files.ui";
@@ -128,7 +128,7 @@ import { defaultFileUIOuput, FileUIOutput } from "../components/filesUI/files.ui
             <span class="position-relative" *ngFor="let control of companyLabelControls; index as i">
               <ng-container [formGroupName]="i">
                 <fileinput [showtitle]="false" [filename]="control.get('label')!.value.name" formControlName="fileData">
-                  <file-svg [name]="control.get('label')!.value.name" image></file-svg>
+                  <file-svg [name]="control.get('label')!.value.name" (click)="openFile(control.get('label')!.value.name)" image></file-svg>
                 </fileinput>
               </ng-container>
             </span>
@@ -148,6 +148,9 @@ import { defaultFileUIOuput, FileUIOutput } from "../components/filesUI/files.ui
       Enregistrer
     </button>
   </div>
+
+  <popup [(open)]="fileView.open">
+  </popup>
   `,
   styles: [`
     @import 'src/styles/variables';
@@ -205,20 +208,20 @@ import { defaultFileUIOuput, FileUIOutput } from "../components/filesUI/files.ui
 })
 export class ModifyProfileForm {
 
-  @Input()
-  user!: Serialized<UserProfileRow>;
+  @Input() user!: Serialized<UserProfileRow>;
+  @Input() index: number = 0;
+  @Input() animate: boolean = true;
+  @Output() submit = new EventEmitter<FormGroup>();
+  @ViewChild(SlidesDirective) slider!: SlidesDirective;
 
-  @Input()
-  index: number = 0;
+  fileView = {
+    open: false
+  };
 
-  @ViewChild(SlidesDirective)
-  slider!: SlidesDirective;
-
-  @Input()
-  animate: boolean = true;
-
-  @Output()
-  submit = new EventEmitter<FormGroup>();
+  async openFile(filename: string) {
+    const companyFiles = this.user.company.files;
+    console.log(companyFiles, companyFiles.find(file => file.name == filename));
+  }
 
   form: FormGroup = new FormGroup({
     // User

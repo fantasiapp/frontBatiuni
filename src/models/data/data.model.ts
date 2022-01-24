@@ -86,6 +86,13 @@ class __table__ {
     return this;
   }
 
+  pushValue(field: string, data: any) {
+    const value = this.getField(field);
+    if ( !value ) throw `Unknow field ${field} on ${this.structure.getName()}`;
+    if ( !Array.isArray(value) ) throw `Field ${field} on ${this.structure.getName()} is not an array.`;
+    value.push(data);
+  };
+
   getIndex(key: string) {
     return this.structure.fields.get(key);
   }

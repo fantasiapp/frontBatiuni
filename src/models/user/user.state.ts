@@ -9,7 +9,7 @@ import { User } from "./user.model";
 import { Login, Logout } from "../auth/auth.actions";
 import { of, throwError } from "rxjs";
 import { Mapper } from "../data/mapper.model";
-import { FilesRow, UserProfileRow } from "../data/data.model";
+import { CompanyRow, FilesRow, UserProfileRow } from "../data/data.model";
 import { AppState } from "src/app/app.state";
 
 @State<User>({
@@ -70,8 +70,7 @@ export class UserState {
   @Action(UploadFile)
   uploadFile(ctx: StateContext<User>, action: UploadFile) {
     const { token } = this.store.selectSnapshot(AuthState);
-
-    console.log(action);
+    const user = ctx.getState();
     
     let req = this.http.post(environment.backUrl + '/data/', action, {
       headers: {
@@ -85,7 +84,16 @@ export class UserState {
         return throwError(err);
       }),
       tap((response: any) => {
-        console.log(response);
+        if ( response['uploadFile'] == 'Error' ) return throwError(response['messages']);
+        delete response['uploadFile'];
+        // add to cached files
+        const files = Object.keys(response).map(id => new FilesRow(+id, [...response[+id], action.fileBase64]));
+        //add to company
+        for ( const file of files )
+          CompanyRow.getById(user.profile!.company.id).pushValue('Files', file);
+        
+        ctx.patchState({profile: UserProfileRow.getById(user.profile!.id).serialize()});
+        return true;
       })
     );
   }
@@ -93,8 +101,7 @@ export class UserState {
   @Action(DownloadFile)
   downloadFile(ctx: StateContext<User>, action: DownloadFile) {
     const { token } = this.store.selectSnapshot(AuthState);
-
-    console.log('>', action);
+    const user = ctx.getState();
     
     let req = this.http.get(environment.backUrl + `/data/?action=${action.action}&id=${action.id}`, {
       headers: {
@@ -108,7 +115,12 @@ export class UserState {
         return throwError(err);
       }),
       tap((response: any) => {
-        new FilesRow(action.id, response[action.id]);
+        const file = new FilesRow(action.id, response[action.id]);
+        console.log('added file', file.serialize(), user);
+        CompanyRow.getById(user.profile!.company.id).pushValue('Files', file);
+        ctx.patchState({profile: UserProfileRow.getById(user.profile!.id).serialize()})
+        console.log('updated profile', ctx.getState().profile);
+        //add to company
       })
     );
   }
@@ -140,8 +152,7 @@ export class UserState {
         const currentUser = [...UserProfileRow.instances.values()][0],
           partial: any = { profile: currentUser.serialize(), viewType: currentUser.role.id == 2 };
 
-        console.log(currentUser.company.files);
-        console.log(ctx.getState());
+        ctx.patchState(partial);
         if ( !ctx.getState().imageUrl ) {
           const reversed = currentUser.company.files.slice(); reversed.reverse();
           const newestImage = reversed.find((file) => file.nature == 'userImage');
@@ -154,9 +165,6 @@ export class UserState {
               });
             });
         }
-        //let avatar: Avatar | null = null;
-        //if ( avatar = Avatar.getById(1)! ) partial.imageUrl = 'data:image/' + avatar.ext + ';base64,' + avatar.content;
-        ctx.patchState(partial);
       })
     )
   }

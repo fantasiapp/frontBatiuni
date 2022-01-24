@@ -53,8 +53,6 @@ export class ProfileComponent {
     }
     this.fixScrollTop();
   }
-
-  openModifyPictureMenu() { this.openModifyPicture = true; }
   
   private fixScrollTop() {
     this.modifyMenu.resetScroll();
@@ -64,6 +62,11 @@ export class ProfileComponent {
   @HostListener('swiperight')
   onSwipe() { 
     this.fixScrollTop();
+  }
+
+  swipeModifyPicture() {
+    console.log('swiping');
+    console.log(this.openModifyPicture = true);
   }
   
   logout() {

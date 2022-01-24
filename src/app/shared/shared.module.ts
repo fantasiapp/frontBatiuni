@@ -37,6 +37,7 @@ import { HorizantaleCalendar } from "./components/horizantalecalendar/horizantal
 import { UISuggestionBox } from "./components/suggestionbox/suggestionbox.component";
 import { ControlErrorsDirective, ErrorMessageComponent } from "./common/formerrors";
 import { SpacingPipe } from "./pipes/spacing.pipe";
+import { UIPopup } from "./components/popup/popup.component";
 
 @NgModule({
   declarations: [
@@ -73,7 +74,8 @@ import { SpacingPipe } from "./pipes/spacing.pipe";
     UISuggestionBox,
     ErrorMessageComponent,
     ControlErrorsDirective,
-    SpacingPipe
+    SpacingPipe,
+    UIPopup
   ],
   imports: [
     CommonModule,
@@ -116,7 +118,8 @@ import { SpacingPipe } from "./pipes/spacing.pipe";
     UISuggestionBox,
     ErrorMessageComponent,
     ControlErrorsDirective,
-    SpacingPipe
+    SpacingPipe,
+    UIPopup
   ],
   providers: [ImageGenerator]
 })

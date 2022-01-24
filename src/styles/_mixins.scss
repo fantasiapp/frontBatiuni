@@ -161,6 +161,11 @@
   @extend %overflow-y;
 }
 
+%safe-page {
+  @include set-safe-area(top);
+  @extend %no-navigation;
+}
+
 %no-navigation {
   height: calc(100vh - env(safe-area-inset-bottom)) !important;
 }
