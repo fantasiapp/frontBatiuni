@@ -40,7 +40,6 @@ import { shadeColor } from "src/app/shared/common/functions";
 export class FileIcon {
   public name: string = 'Fichier';
   @Input('name') set _name(name: string) {
-    console.log(name.length);
     if ( name.length > 6 )
       this.name = name.slice(0, 6) + '..';
     else this.name = name;

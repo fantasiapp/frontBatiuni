@@ -95,7 +95,7 @@ export class AuthState {
   };
 
   @Action(ConfirmAccount)
-  async confirmAccount(ctx: StateContext<AuthModel>, {token}: ConfirmAccount) {
+  confirmAccount(ctx: StateContext<AuthModel>, {token}: ConfirmAccount) {
     const req = this.http.get(environment.backUrl + `/initialize/`, {
       params: {
         action: 'registerConfirm',
@@ -106,7 +106,9 @@ export class AuthState {
     return req.pipe(
       tap((result: any) => {
         if ( result['registerConfirm'] == 'Error' )
-        throw result['messages']
+          throw result['messages'];
+        
+        ctx.patchState({pendingEmail: ''});
       })
     );
   }

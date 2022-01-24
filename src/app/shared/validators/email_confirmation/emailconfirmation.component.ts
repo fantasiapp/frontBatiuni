@@ -7,7 +7,7 @@ import { Destroy$ } from "src/app/shared/common/classes";
 import { ConfirmAccount } from "src/models/auth/auth.actions";
 
 @Component({
-  selector: 'emailConfirmed',
+  selector: 'email-confirmed',
   templateUrl: 'emailconfirmation.component.html',
   styleUrls: ['emailconfirmation.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush

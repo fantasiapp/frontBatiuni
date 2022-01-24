@@ -89,6 +89,7 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
       name = fullname.slice(0, lastDot),
       ext = fullname.slice(lastDot + 1);
 
-    return {...this.value, content: base64, name, ext} as FileUIOutput;
+    console.log('sending', base64.slice(28));
+    return {...this.value, content: base64.slice(28), name, ext} as FileUIOutput;
   }
 }

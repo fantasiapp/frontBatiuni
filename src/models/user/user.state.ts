@@ -115,11 +115,15 @@ export class UserState {
         return throwError(err);
       }),
       tap((response: any) => {
-        const file = new FilesRow(action.id, response[action.id]);
-        console.log('added file', file.serialize(), user);
-        CompanyRow.getById(user.profile!.company.id).pushValue('Files', file);
+        const file = new FilesRow(action.id, response[action.id]),
+          profile = UserProfileRow.getById(user.profile!.id),
+          index = profile.company.files.findIndex(file => file.id == action.id);
+        
+        if ( index < 0 ) throw 'File id conflict.';
+        
+        profile.company.files.splice(index, 1, file);
         ctx.patchState({profile: UserProfileRow.getById(user.profile!.id).serialize()})
-        console.log('updated profile', ctx.getState().profile);
+        console.log(ctx.getState().profile!.company.files);
         //add to company
       })
     );
@@ -134,7 +138,6 @@ export class UserState {
         'Content-Type': 'application/json'
       }
     });
-
 
     return req.pipe(
       catchError((err: HttpErrorResponse) => {
@@ -158,7 +161,6 @@ export class UserState {
           const newestImage = reversed.find((file) => file.nature == 'userImage');
           if ( newestImage ) this.store.dispatch(new DownloadFile(newestImage.id))
             .pipe(take(1)).subscribe( () => {
-              console.log('image finished laoading');
               const imageFile = FilesRow.getById(newestImage.id);
               ctx.patchState({
                 imageUrl: `data:image/${imageFile.ext};base64,${imageFile.content}`
@@ -192,7 +194,6 @@ export class UserState {
         ctx.patchState({profile: newProfile})
       }),
       
-
       mergeMap(() => ctx.dispatch(
         action.files.map(file => new UploadFile(file, 'labels'))
       ))

@@ -6,6 +6,10 @@ import { FilesRow, JobRow, LabelRow, UserProfileRow } from "src/models/data/data
 import { Option } from "src/models/option";
 import { SlidesDirective } from "../directives/slides.directive";
 import { defaultFileUIOuput, FileUIOutput } from "../components/filesUI/files.ui";
+import { of } from "rxjs";
+import { Store } from "@ngxs/store";
+import { DownloadFile } from "src/models/user/user.actions";
+import { DomSanitizer } from "@angular/platform-browser";
 
 @Component({
   selector: 'modify-profile-form',
@@ -150,6 +154,7 @@ import { defaultFileUIOuput, FileUIOutput } from "../components/filesUI/files.ui
   </div>
 
   <popup [(open)]="fileView.open">
+    <object class="cover-parent" *ngIf="fileView.url" type="application/pdf" [data]="fileView.url"></object>
   </popup>
   `,
   styles: [`
@@ -214,13 +219,28 @@ export class ModifyProfileForm {
   @Output() submit = new EventEmitter<FormGroup>();
   @ViewChild(SlidesDirective) slider!: SlidesDirective;
 
-  fileView = {
-    open: false
+  //make class
+  fileView: any= {
+    _open: false,
+    get open() { return this._open; },
+    set open(v) { if (!v) {this.url = null;} this._open = v; },
+    url: null
   };
 
-  async openFile(filename: string) {
-    const companyFiles = this.user.company.files;
-    console.log(companyFiles, companyFiles.find(file => file.name == filename));
+  openFile(filename: string) {
+    const companyFiles = this.user.company.files,
+      target = companyFiles.find(file => file.name == filename);
+  
+    if ( !target ) throw `file ${filename} doesn't exist on the current company`;
+    const content = target.content ? of(target.content) : this.store.dispatch(new DownloadFile(target.id));
+    
+    content.subscribe(() => {
+      const url = `data:application/pdf;base64,${FilesRow.getById(target.id).content}`;
+      console.log(url);
+      this.fileView.url = this.sanitizer.bypassSecurityTrustResourceUrl(url);
+      this.fileView.open = true;
+      this.cd.markForCheck();
+    });
   }
 
   form: FormGroup = new FormGroup({
@@ -257,13 +277,11 @@ export class ModifyProfileForm {
   });
 
   get profileJobsControls() {
-    const jobsControl = this.form.controls['Userprofile.Company.JobForCompany'] as FormArray;
-    return jobsControl.controls;
+    return (this.form.controls['Userprofile.Company.JobForCompany'] as FormArray).controls;
   }
 
   get companyLabelControls() {
-    const labelsControl = this.form.controls['Userprofile.Company.LabelForCompany'] as FormArray;
-    return labelsControl.controls;
+    return (this.form.controls['Userprofile.Company.LabelForCompany'] as FormArray).controls;
   }
 
   @HostListener('swipeleft')
@@ -274,7 +292,7 @@ export class ModifyProfileForm {
 
   onSubmit() { this.submit.emit(this.form); }
 
-  constructor(private cd: ChangeDetectorRef) {}
+  constructor(private cd: ChangeDetectorRef, private store: Store, private sanitizer: DomSanitizer) {}
   
   async ngOnInit() {
     let permissions  = await Camera.checkPermissions();
@@ -330,6 +348,8 @@ export class ModifyProfileForm {
     this.cd.markForCheck();
   }
 
+
+  //make functions to help merge
   updateJobs(jobOptions: Option[]) {
     const jobsControl = this.form.controls['Userprofile.Company.JobForCompany'] as FormArray,
       oldJobs = jobsControl.value as {job: JobRow, number: number}[],
