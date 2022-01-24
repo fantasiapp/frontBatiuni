@@ -68,7 +68,6 @@ export function focusOutside(element: HTMLElement | null, target: HTMLElement) {
 };
 
 /*https://stackoverflow.com/questions/5560248/programmatically-lighten-or-darken-a-hex-color-or-rgb-and-blend-colors*/
-/* Pablo & David Sherret */
 export function shadeColor(color: string, percent: number) {
   let R = parseInt(color.substring(1,3),16);
   let G = parseInt(color.substring(3,5),16);
@@ -86,3 +85,24 @@ export function shadeColor(color: string, percent: number) {
   const BB = ((B.toString(16).length==1)?"0"+B.toString(16):B.toString(16));
   return "#"+RR+GG+BB;
 };
+
+/*https://stackoverflow.com/questions/16245767/creating-a-blob-from-a-base64-string-in-javascript*/
+export const b64toBlob = (b64Data: string, contentType='', sliceSize=512) => {
+  const byteCharacters = atob(b64Data);
+  const byteArrays = [];
+
+  for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+    const slice = byteCharacters.slice(offset, offset + sliceSize);
+
+    const byteNumbers = new Array(slice.length);
+    for (let i = 0; i < slice.length; i++) {
+      byteNumbers[i] = slice.charCodeAt(i);
+    }
+
+    const byteArray = new Uint8Array(byteNumbers);
+    byteArrays.push(byteArray);
+  }
+
+  const blob = new Blob(byteArrays, {type: contentType});
+  return blob;
+}

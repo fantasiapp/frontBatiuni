@@ -10,6 +10,9 @@ import { of } from "rxjs";
 import { Store } from "@ngxs/store";
 import { DownloadFile } from "src/models/user/user.actions";
 import { DomSanitizer } from "@angular/platform-browser";
+import { b64toBlob } from "../common/functions";
+import { UserState } from "src/models/user/user.state";
+import { take } from "rxjs/operators";
 
 @Component({
   selector: 'modify-profile-form',
@@ -154,7 +157,15 @@ import { DomSanitizer } from "@angular/platform-browser";
   </div>
 
   <popup [(open)]="fileView.open">
-    <object class="cover-parent" *ngIf="fileView.url" type="application/pdf" [data]="fileView.url"></object>
+    <object class="cover-parent flex center" *ngIf="fileView.url" type="application/pdf" [data]="fileView.safeUrl">
+      <div>
+        Ne peut pas afficher le PDF dans l'application
+        <div class="external-links" (click)="fileLoadError()">
+          Ouvrir le PDF localement.
+        </div>
+      </div>
+      
+    </object>
   </popup>
   `,
   styles: [`
@@ -220,11 +231,12 @@ export class ModifyProfileForm {
   @ViewChild(SlidesDirective) slider!: SlidesDirective;
 
   //make class
-  fileView: any= {
+  fileView: any = {
     _open: false,
     get open() { return this._open; },
     set open(v) { if (!v) {this.url = null;} this._open = v; },
-    url: null
+    url: null,
+    safeUrl: null
   };
 
   openFile(filename: string) {
@@ -235,12 +247,19 @@ export class ModifyProfileForm {
     const content = target.content ? of(target.content) : this.store.dispatch(new DownloadFile(target.id));
     
     content.subscribe(() => {
-      const url = `data:application/pdf;base64,${FilesRow.getById(target.id).content}`;
-      console.log(url);
-      this.fileView.url = this.sanitizer.bypassSecurityTrustResourceUrl(url);
+      const blob = b64toBlob(FilesRow.getById(target.id).content, 'application/pdf'),
+        url = URL.createObjectURL(blob);
+      
+      this.fileView.url = url;
+      this.fileView.safeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
       this.fileView.open = true;
       this.cd.markForCheck();
     });
+  }
+
+  fileLoadError() {
+    console.log(this.fileView.url, this.fileView.safeUrl);
+    window.open(this.fileView.url);
   }
 
   form: FormGroup = new FormGroup({
@@ -302,9 +321,12 @@ export class ModifyProfileForm {
           permissions: ["camera", "photos"]
         });
       } catch ( e ) {  }
+
+    
+    this.reloadData();
   }
 
-  reloadData() {
+  reloadData() {    
     const companyLabels = this.user.company.labels.map(label => label.label.id),
       companyJobs = this.user.company.jobs.map(job => job.job.id);
     

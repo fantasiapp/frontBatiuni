@@ -22,7 +22,7 @@ import { ModifyProfileForm } from "src/app/shared/forms/ModifyProfile.form";
 export class ProfileComponent {
 
   @ViewChild(ModifyProfileForm)
-  modifyForm!: ModifyProfileForm;
+  modifyForm?: ModifyProfileForm;
   
   @ViewChild(InfoHandler, {static: true})
   info!: InfoHandler;
@@ -49,9 +49,9 @@ export class ProfileComponent {
     this.modifyPassword = modifyPassword;
 
     if ( !this.modifyPassword ) {
-      this.modifyForm.reloadData();
+      this.fixScrollTop();
+      this.modifyForm?.reloadData();
     }
-    this.fixScrollTop();
   }
   
   private fixScrollTop() {
