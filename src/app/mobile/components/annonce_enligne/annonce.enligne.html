@@ -1,17 +1,27 @@
 <header class="clear-margin full-width sticky-header flex center-cross annonce">
-    <img [routerLink]="['','home']"  src="assets/arrowlblack.svg" />
-    <span class="grow center-text text-light-emphasis">Annonce en Ligne</span>
-    <img  (click)="swipemenu = true" src="assets/Option.svg" />
-  </header>
-  <div class="container hosted-page page-content-without-nav">
+  <img [routerLink]="['','home']" src="assets/arrowlblack.svg" />
+  <span class="grow center-text text-light-emphasis">Annonce en Ligne</span>
+  <img (click)="swipemenu = true" src="assets/Option.svg" />
+</header>
+<div class="container hosted-page page-content-without-nav">
   <annonce-resume [collapsed]="false"></annonce-resume>
 </div>
 
-<swipeup [(open)]="swipemenu" >
-    <li>Afficher les réponses</li>
+<swipeup [(open)]="swipemenu" (onClose)="showResponse = false">
+  <ng-container *ngIf="!showResponse;else stResponse;">
+    <li data-notification-number="2" (click)="showResponse = !showResponse" class="notification">Afficher les réponses</li>
     <li [routerLink]="['','booster']">Booster Mon annonce</li>
     <li>Supprimer l'annonce</li>
     <li>Duppliquer l'annonce</li>
     <li (click)="annoncePause = true">Mettre en pause l'annonce</li>
-
+  </ng-container>
+  <ng-template #stResponse >
+    <ng-container >
+      <h6 class="title font-Poppins"> Vous avez 2 réponses</h6>
+     <div class="response space-children-margin">
+      <sos-card ></sos-card>
+      <sos-card ></sos-card>
+    </div>
+    </ng-container> 
+  </ng-template>
 </swipeup>

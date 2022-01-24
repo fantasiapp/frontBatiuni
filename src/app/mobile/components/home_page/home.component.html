@@ -10,10 +10,15 @@
     <ng-container *ngIf="user.viewType; else stview">
       <ng-container [ngSwitch]="activeView">
         <ng-container *ngSwitchCase="0">
+          <!-- <offer
+            *ngFor="let mission of annonces"
+            src="assets/brouillon.svg"
+            [routerLink]="['', 'brouillon']"
+            ></offer> -->
           <offer
             *ngFor="let mission of annonces"
             src="assets/brouillon.svg"
-            [routerLink]="['', 'brouillon']"></offer>
+            ></offer> 
         </ng-container>
         <ng-container *ngSwitchCase="1">
           <offer

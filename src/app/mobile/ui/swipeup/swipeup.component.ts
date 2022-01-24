@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from "@angular/core";
 import { UIOpenMenu } from "src/common/classes";
 
 @Component({
@@ -14,6 +14,9 @@ export class UISwipeupComponent extends UIOpenMenu {
 
   @Input()
   type: 'list' | 'view' = 'list';
+
+  @Output()
+  onClose = new EventEmitter()
   
   willClose = false;
   close() {
@@ -24,6 +27,7 @@ export class UISwipeupComponent extends UIOpenMenu {
     if ( this.willClose ) {
       this.willClose = false;
       this.openChange.emit(this._open = false);
+      this.onClose.emit();
     }
   }
 };

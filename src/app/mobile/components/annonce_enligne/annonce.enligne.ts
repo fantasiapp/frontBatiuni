@@ -10,6 +10,5 @@ export class AnnonceEnlignePage {
 
  swipemenu: boolean = false;
  annoncePause: boolean = false;
-
-
+ showResponse: boolean = false;
 }

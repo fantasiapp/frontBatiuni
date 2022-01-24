@@ -1,4 +1,4 @@
-<div class="container grow flex center-cross space-between">
+<div class="container grow flex center-cross space-between" (click)="showDeleteButton()" [ngClass]="{'moveLeft':delete}" >
   <div class="offres-infos">
     <p class="entreprise">{{company}}</p>
     <p class="metier">{{fourniture}}</p>
@@ -8,4 +8,7 @@
   <div class="offres-logo flex center">
     <img [src]="src"/>
   </div>
+</div>
+<div class="flex center showDelete" [ngClass]="{'delete':delete}">
+  <div>Supprimer</div>
 </div>
