@@ -1,4 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
+import { FormGroup } from "@angular/forms";
+import { JobRow } from "src/models/data/data.model";
+import { Option } from "src/models/option";
 
 @Component({
   selector: 'ad-form',
@@ -139,4 +142,15 @@ export class MakeAdForm {
   imports = {
     currencies: ['$', '€', '£']
   }
+
+  ngOnInit() {
+    const jobs = [...JobRow.instances.values()];
+    this.allJobs = jobs.map(job => ({id: job.id, name: job.name, checked: false}))
+  }
+
+
+  allJobs: Option[] = [];
+  makeAdForm = new FormGroup({
+
+  });
 }
