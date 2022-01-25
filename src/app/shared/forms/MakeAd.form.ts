@@ -92,7 +92,7 @@ import { defaultFileUIOuput } from "../components/filesUI/files.ui";
       <div class="flex row remuneration">
         <input type="number" min="0" max="10000" style="max-height: 51px" class="grow form-element" placeholder="Montant" formControlName="amount">
         <div class="option-container">
-          <options [searchable]="false" type="radio" [options]="currencies" formControlName="currency" ifEmpty="Devise"></options>
+          <options [searchable]="false" type="radio" [options]="currencies" formControlName="currency" ifEmpty="$"></options>
         </div>
       </div>
     </div>
@@ -196,16 +196,16 @@ export class MakeAdForm {
 
   allJobs: Option[] = [];
   makeAdForm = new FormGroup({
-    dueDate: new FormControl(''),
-    startDate: new FormControl(''),
-    endDate: new FormControl(''),
+    dueDate: new FormControl('2022-01-24'),
+    startDate: new FormControl('2022-01-24'),
+    endDate: new FormControl('2022-03-24'),
     manPower: new FormControl(1),
     job: new FormControl('', [Validators.required]),
-    address: new FormControl('', [Validators.required]),
-    numberOfPeople: new FormControl(0),
-    counterOffer: new FormControl(''),
-    hourlyStart: new FormControl(''),
-    hourlyEnd: new FormControl(''),
+    address: new FormControl('1 Rue Joliot Curie, 91190 Gif-sur-Yvette', [Validators.required]),
+    numberOfPeople: new FormControl(1),
+    counterOffer: new FormControl(false),
+    hourlyStart: new FormControl('07:30'),
+    hourlyEnd: new FormControl('17:30'),
     currency: new FormControl(''),
     description: new FormControl(''),
     amount: new FormControl(0),
@@ -220,10 +220,6 @@ export class MakeAdForm {
       }),
       new FormGroup({
         name: new FormControl('Descriptif du chantier'),
-        fileData: new FormControl(defaultFileUIOuput('postdoc'))
-      }),
-      new FormGroup({
-        name: new FormControl('Calendrier d\'éxecution'),
         fileData: new FormControl(defaultFileUIOuput('postdoc'))
       }),
       new FormGroup({
@@ -277,7 +273,6 @@ export class MakeAdForm {
   }
 
   submit() {
-    console.log(this.makeAdForm.value);
-    // this.store.dispatch(CreatePost.fromPostForm(this.makeAdForm.value));
+    this.store.dispatch(CreatePost.fromPostForm(this.makeAdForm.value));
   }
 }

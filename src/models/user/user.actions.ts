@@ -109,7 +109,6 @@ export class DownloadFile {
 export class CreatePost {
   static readonly type = '[User.PME] Create Post';
   action = 'uploadPost';
-
   private constructor(
     public address: string,
     public Job: number,
@@ -124,12 +123,39 @@ export class CreatePost {
     public currency: string,
     public description: string,
     public amount: number,
-    public DetailedPost: string[]
+    public DetailedPost: string[],
+    public files: any[]
   ) {
     console.log(this);
   };
 
-  static fromPostForm(formValue: any) {
+  private static renameAddedFile(doc: any) {
+    doc.fileData.nature = doc.name;
+  };
+
+  static fromPostForm(value: any) {
+    const documents = value.documents.filter((doc: any) => doc.fileData.content),
+      added = value.addedDocuments.filter((doc: any) => doc.fileData.content),
+      allDocs = [...documents, ...added];
+
+    allDocs.forEach(this.renameAddedFile);
     
+    return new CreatePost(
+      value.address,
+      value.job[0].id,
+      value.numberOfPeople,
+      value.dueDate,
+      value.startDate,
+      value.endDate,
+      value.manPower,
+      value.counterOffer,
+      value.hourlyStart,
+      value.hourlyEnd,
+      value.currency[0].name,
+      value.description,
+      value.amount,
+      value.detailedPost.map((detail: any) => detail.description),
+      allDocs
+    );
   }
 };

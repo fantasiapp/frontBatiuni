@@ -209,6 +209,24 @@ export class UserState {
 
   @Action(CreatePost)
   createPost(ctx: StateContext<User>, action: CreatePost) {
-    console.log(action);
+    let { token } = this.store.selectSnapshot(AuthState);
+
+    const {files, ...createPost} = action;
+    let req = this.http.post(environment.backUrl + '/data/', createPost, {
+      headers: {
+        "Authorization": `Token ${token}`,
+        'Content-Type': 'application/json'
+      }
+    });
+
+    return req.pipe(
+      tap((response: any) => {
+        console.log(response);
+      }),
+      
+      mergeMap(() => ctx.dispatch(
+        Object.keys(files).map((key: any) => new UploadFile(files[key], 'post-doc', key))
+      ))
+    );
   };
 };

@@ -186,6 +186,7 @@
     <img class="embedded-image" *ngIf="fileView.image; else objectTag" [src]="fileView.safeUrl"/>
     <ng-template #objectTag>
       <object class="embedded-object cover-parent flex center" [type]="fileView.type" [attr.data]="fileView.safeUrl">
+        <embed>
         <div>
           Ne peut pas afficher le PDF dans l'application
           <div class="external-links" (click)="openWindow(fileView.url)">
