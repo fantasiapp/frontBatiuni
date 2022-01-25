@@ -5,7 +5,7 @@
     J'ai déjà un compte
   </a>
   <button *ngIf="form.slider.index == 0" class="button gradient font-Poppins" (click)="form.slider.index = 1">Etape Suivante</button>
-  <button *ngIf="form.slider.index == 1" class="button gradient full-width" [disabled]="!form.registerForm.valid" (click)="form.onSubmit(null)">Valider</button>
+  <button *ngIf="form.slider.index == 1" class="button gradient font-Poppins full-width" [disabled]="!form.registerForm.valid" (click)="form.onSubmit(null)">Valider</button>
   <div class="form-step">
     <div [class.active]="form.slider.index == 0" (click)="form.slider.index = 0"></div>
     <div [class.active]="form.slider.index == 1" (click)="form.slider.index = 1"></div>
