@@ -1,16 +1,11 @@
-import { ChangeDetectionStrategy, Component, HostListener, Input, ViewChild, EventEmitter, Output, HostBinding, SimpleChanges, ChangeDetectorRef } from "@angular/core";
+import { ChangeDetectionStrategy, Component, HostListener, Input, ViewChild, EventEmitter, Output, ChangeDetectorRef } from "@angular/core";
 import { FormArray, FormControl, FormGroup } from "@angular/forms";
 import { Camera } from "@capacitor/camera";
 import { Serialized } from "src/app/shared/common/types";
-import { FilesRow, JobRow, LabelRow, UserProfileRow } from "src/models/data/data.model";
+import { JobRow, LabelRow, UserProfileRow } from "src/models/data/data.model";
 import { Option } from "src/models/option";
 import { SlidesDirective } from "../directives/slides.directive";
-import { defaultFileUIOuput, FileUIOutput } from "../components/filesUI/files.ui";
-import { of } from "rxjs";
-import { Store } from "@ngxs/store";
-import { DownloadFile } from "src/models/user/user.actions";
-import { DomSanitizer } from "@angular/platform-browser";
-import { b64toBlob } from "../common/functions";
+import { defaultFileUIOuput } from "../components/filesUI/files.ui";
 
 @Component({
   selector: 'modify-profile-form',
@@ -108,28 +103,28 @@ import { b64toBlob } from "../common/functions";
         </div>
 
         <ng-container formGroupName="Userprofile.Company.admin">
-          <fileinput [showtitle]="false" filename="Kbis" formControlName="Kbis">
-            <file-svg name="Kbis" color="#156C9D" (click)="openFile('Kbis')" image></file-svg>
+          <fileinput [showtitle]="false" filename="KBIS" formControlName="KBIS">
+            <file-svg name="KBIS" color="#156C9D" (click)="requestFile('KBIS')" image></file-svg>
           </fileinput>
 
           <fileinput [showtitle]="false" filename="Attestation travail dissimulé" formControlName="Trav. Dis">
-            <file-svg name="Trav. Dis" color="#054162" (click)="openFile('Attestation travail dissimulé')" image></file-svg>
+            <file-svg name="Trav. Dis" color="#054162" (click)="requestFile('Trav. Dis')" image></file-svg>
           </fileinput>
 
           <fileinput [showtitle]="false" filename="Attestation RC + DC" formControlName="RC + DC">
-            <file-svg name="RC + DC" color="#999999" (click)="openFile('RC + DC')" image></file-svg>
+            <file-svg name="RC + DC" color="#999999" (click)="requestFile('RC + DC')" image></file-svg>
           </fileinput>
 
           <fileinput [showtitle]="false" filename="URSSAF" formControlName="URSSAF">
-            <file-svg name="URSSAF" color="#F9C067" (click)="openFile('URSSAF')" image></file-svg>
+            <file-svg name="URSSAF" color="#F9C067" (click)="requestFile('URSSAF')" image></file-svg>
           </fileinput>
 
           <fileinput [showtitle]="false" filename="Impôts" formControlName="Impôts">
-            <file-svg name="Impôts" color="#52D1BD" (click)="openFile('Impôts')" image></file-svg>
+            <file-svg name="Impôts" color="#52D1BD" (click)="requestFile('Impôts')" image></file-svg>
           </fileinput>
 
           <fileinput [showtitle]="false" filename="Congés payés" formControlName="Congés Payés">
-            <file-svg name="Congés Payés" color="32A290" (click)="openFile('Congés payés')" image></file-svg>
+            <file-svg name="Congés Payés" color="#32A290" (click)="requestFile('Congés payés')" image></file-svg>
           </fileinput>
 
         </ng-container>
@@ -151,7 +146,7 @@ import { b64toBlob } from "../common/functions";
             <span class="position-relative" *ngFor="let control of companyLabelControls; index as i">
               <ng-container [formGroupName]="i">
                 <fileinput [showtitle]="false" [filename]="control.get('label')!.value.name" formControlName="fileData">
-                  <file-svg [name]="control.get('label')!.value.name" (click)="openFile(control.get('label')!.value.name)" image></file-svg>
+                  <file-svg [name]="control.get('label')!.value.name" (click)="requestFile(control.get('label')!.value.name)" image></file-svg>
                 </fileinput>
               </ng-container>
             </span>
@@ -171,18 +166,6 @@ import { b64toBlob } from "../common/functions";
       Enregistrer
     </button>
   </div>
-
-  <popup [(open)]="fileView.open">
-    <object class="cover-parent flex center" *ngIf="fileView.url" type="application/pdf" [data]="fileView.safeUrl">
-      <div>
-        Ne peut pas afficher le PDF dans l'application
-        <div class="external-links" (click)="fileLoadError()">
-          Ouvrir le PDF localement.
-        </div>
-      </div>
-      
-    </object>
-  </popup>
   `,
   styles: [`
     @import 'src/styles/variables';
@@ -244,41 +227,12 @@ export class ModifyProfileForm {
   @Input() index: number = 0;
   @Input() animate: boolean = true;
   @Output() submit = new EventEmitter<FormGroup>();
-  @Output() requestFile = new EventEmitter<boolean>();
+  @Output() openFile = new EventEmitter<string>();
   @ViewChild(SlidesDirective) slider!: SlidesDirective;
 
-  //make class
-  fileView: any = {
-    _open: false,
-    get open() { return this._open; },
-    set open(v) { if (!v) {this.url = null;} this._open = v; },
-    url: null,
-    safeUrl: null
-  };
-
-  openFile(filename: string) {
-    const companyFiles = this.user.company.files,
-      target = companyFiles.find(file => file.name == filename);
-  
-    if ( !target ) throw `file ${filename} doesn't exist on the current company`;
-    const content = target.content ? of(target.content) : this.store.dispatch(new DownloadFile(target.id));
-    this.requestFile.emit(false);
-
-    content.subscribe(() => {
-      const blob = b64toBlob(FilesRow.getById(target.id).content, 'application/pdf'),
-        url = URL.createObjectURL(blob);
-      
-      this.fileView.url = url;
-      this.fileView.safeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
-      this.fileView.open = true;
-      this.requestFile.emit(true);
-      this.cd.markForCheck();
-    });
-  }
-
-  fileLoadError() {
-    console.log(this.fileView.url, this.fileView.safeUrl);
-    window.open(this.fileView.url);
+  requestFile(filename: string) {
+    //if this doesn't emit, follow with cd.markForCheck();
+    this.openFile.emit(filename);
   }
 
   form: FormGroup = new FormGroup({
@@ -313,7 +267,7 @@ export class ModifyProfileForm {
 
     ]),
     'Userprofile.Company.admin': new FormGroup({
-      'Kbis': new FormControl(defaultFileUIOuput('admin')),
+      'KBIS': new FormControl(defaultFileUIOuput('admin')),
       'Trav. Dis': new FormControl(defaultFileUIOuput('admin')),
       'RC + DC': new FormControl(defaultFileUIOuput('admin')),
       'URSSAF': new FormControl(defaultFileUIOuput('admin')),
@@ -338,7 +292,7 @@ export class ModifyProfileForm {
 
   onSubmit() { this.submit.emit(this.form); }
 
-  constructor(private cd: ChangeDetectorRef, private store: Store, private sanitizer: DomSanitizer) {}
+  constructor(private cd: ChangeDetectorRef) {}
   
   async ngOnInit() {
     let permissions  = await Camera.checkPermissions();

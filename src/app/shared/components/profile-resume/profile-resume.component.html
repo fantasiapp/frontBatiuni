@@ -4,7 +4,7 @@
   <span class="text-emphasis">{{ (user.profile!.firstName + " " + user.profile!.lastName) | titlecase }}</span>
   <ng-container *ngIf="showMore">
     <span>{{ user.profile!.user }}</span>
-    <span>{{ user.profile!.cellPhone }}</span>
+    <span>{{ user.profile!.cellPhone | space: 2:1 }}</span>
   </ng-container>
   <stars (click)="onStarClicked()" value="3.9"></stars>
 </section>

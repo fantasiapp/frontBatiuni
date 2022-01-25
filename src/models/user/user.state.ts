@@ -115,6 +115,7 @@ export class UserState {
         return throwError(err);
       }),
       tap((response: any) => {
+        console.log(response);
         const file = new FilesRow(action.id, response[action.id]),
           profile = UserProfileRow.getById(user.profile!.id),
           index = profile.company.files.findIndex(file => file.id == action.id);

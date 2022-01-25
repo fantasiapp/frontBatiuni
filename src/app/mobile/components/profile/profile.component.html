@@ -43,10 +43,7 @@
     <section class="documents">
       <h4>Documents importants</h4>
       <div class="flex images">
-        <file-svg name="Impôt" color="#52d1bd"></file-svg>
-        <file-svg name="KBIS" color="#156c9d"></file-svg>
-        <object type="image/svg+xml" data="assets/files/qualibat.svg"></object>
-        <file-svg name="URSSAF" color="#f9c067"></file-svg>
+        <file-svg *ngFor="let file of attachedFiles" [name]="file.name" [color]="getFileColor(file.name)" (click)="openFile(file.name)"></file-svg>
       </div>
     </section>
   </div>
@@ -83,7 +80,7 @@
   
       <div class="form-container full-width grow flex column position-relative">
         <modify-password-form *ngIf="modifyPassword" class="grow"></modify-password-form>
-        <modify-profile-form [user]="user.profile!" *ngIf="!modifyPassword" class="grow" (submit)="modifyProfile($event)" (requestFile)="downloading($event)" #modifyForm></modify-profile-form>
+        <modify-profile-form [user]="user.profile!" *ngIf="!modifyPassword" class="grow" (submit)="modifyProfile($event)" (openFile)="openFile($event)" #modifyForm></modify-profile-form>
       </div>
     </div>
   </slidemenu>
@@ -183,5 +180,21 @@
     <notifications class="hosted-page flex column center-cross space-children-margin" content></notifications>
   </slidemenu>
 </ng-container>
+
+<popup [(open)]="fileView.open">
+  <ng-container *ngIf="fileView.safeUrl">
+    <img class="embedded-image" *ngIf="fileView.image; else objectTag" [src]="fileView.safeUrl"/>
+    <ng-template #objectTag>
+      <object class="embedded-object cover-parent flex center" [type]="fileView.type" [attr.data]="fileView.safeUrl">
+        <div>
+          Ne peut pas afficher le PDF dans l'application
+          <div class="external-links" (click)="openWindow(fileView.url)">
+            Ouvrir le PDF localement.
+          </div>
+        </div>
+      </object>
+    </ng-template>
+  </ng-container>
+</popup>
 
 <info></info>

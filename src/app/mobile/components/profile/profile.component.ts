@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, ViewChild } from "@angular/core";
 import { Select, Store } from "@ngxs/store";
-import { BehaviorSubject } from "rxjs";
+import { BehaviorSubject, of } from "rxjs";
 import { User } from "src/models/user/user.model";
 import { UserState } from "src/models/user/user.state";
 import * as UserActions from "src/models/user/user.actions";
@@ -11,6 +11,10 @@ import { InfoHandler } from "src/app/shared/components/info/info.component";
 import { take } from "rxjs/operators";
 import { FormGroup } from "@angular/forms";
 import { ModifyProfileForm } from "src/app/shared/forms/ModifyProfile.form";
+import { FilesRow, UserProfileRow } from "src/models/data/data.model";
+import { b64toBlob } from "src/app/shared/common/functions";
+import { DomSanitizer } from "@angular/platform-browser";
+import { Serialized } from "src/app/shared/common/types";
 
 
 @Component({
@@ -41,7 +45,7 @@ export class ProfileComponent {
   openModifyPicture: boolean = false;
   openNotifications : boolean = false;
 
-  constructor(private store: Store, private cd: ChangeDetectorRef) {}
+  constructor(private store: Store, private cd: ChangeDetectorRef, private sanitizer: DomSanitizer) {}
 
   slideModifyMenu(modifyPassword: boolean) {
     this.openMenu = false;
@@ -119,12 +123,56 @@ export class ProfileComponent {
     this.store.dispatch(new UserActions.ChangeProfilePicture(photo, imageName));
   }
 
-  downloading(state: boolean) {
-    if ( !state )
-      this.info.show('info', 'Téléchargement du fichier', Infinity);
-    else
+  fileView: any = {
+    _open: false,
+    get open() { return this._open; },
+    set open(v) { if (!v) {this.url = null;} this._open = v; },
+    url: null,
+    safeUrl: null,
+    type: '',
+    image: null
+  };
+
+  openFile(filename: string) {
+    const user = this.store.selectSnapshot(UserState).profile as Serialized<UserProfileRow>,
+      companyFiles = user.company.files,
+      target = companyFiles.find(file => file.name == filename);
+  
+    if ( !target ) throw `file ${filename} doesn't exist on the current company`;
+    const content = target.content ? of(target.content) : this.store.dispatch(new UserActions.DownloadFile(target.id));
+    this.info.show('info', 'Téléchargement du fichier', Infinity);
+
+    content.pipe(take(1)).subscribe(() => {
+      const updatedFile = FilesRow.getById(target.id),
+        type = FilesRow.getFileType(updatedFile.ext);
+                  
+      const blob = b64toBlob(updatedFile.content, type),
+        url = URL.createObjectURL(blob);
+      
+      this.fileView.image = type.startsWith('image') || false;
+      this.fileView.url = url;
+      this.fileView.safeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
+      this.fileView.type = type;
+      this.fileView.open = true;
+      console.log(this.fileView);
       this.info.show('success', 'Fichier téléchargé', 2000);
-    
+      this.cd.markForCheck();
+    });
+
     this.cd.markForCheck();
+  }
+
+  openWindow(url: string) {
+    console.log(url);
+    window.open(url);
+  }
+
+  get attachedFiles(): any[] {
+    const user = this.store.selectSnapshot(UserState).profile as Serialized<UserProfileRow>;
+    return user.company.files.filter(file => file.nature == 'admin' || file.nature == 'labels');
+  }
+
+  getFileColor(filename: string) {
+    return FilesRow.getFileColor(filename);
   }
 };

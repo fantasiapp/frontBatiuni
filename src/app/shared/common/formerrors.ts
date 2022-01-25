@@ -67,10 +67,8 @@ export class ControlErrorsDirective extends Destroy$ {
       .subscribe(() => {
         this.view.clear();
         const errors = this.control.errors;
-        console.log(errors);
         if ( !errors ) return;
         const errorNames = Object.keys(errors);
-        console.log(errors);
         for ( const name of errorNames ) {
           const template = getFormErrorTemplate(name);
           if ( template == null ){
