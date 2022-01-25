@@ -229,10 +229,10 @@ import { b64toBlob } from "../common/functions";
 
     .mid-sticky-footer {
       box-shadow: 0 -3px 3px 0 #ddd;
-    
       background-color: white;
       @extend %sticky-footer;
-      height: $mid-sticky-footer-height;
+      height: calc(#{$mid-sticky-footer-height} + env(safe-area-inset-bottom));
+      @include with-set-safe-area(padding, bottom, 10px);
       padding: 10px 30px;
     }
   `],

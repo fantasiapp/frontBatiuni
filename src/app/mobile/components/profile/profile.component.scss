@@ -1,13 +1,15 @@
 @use "sass:math";
-@import 'src/styles/variables';
-@import 'src/styles/mixins';
+@import "src/styles/variables";
+@import "src/styles/mixins";
 
 :host {
   @extend %page;
 }
 
 header {
-  img { padding: 0 $item-padding; }
+  img {
+    padding: 0 $item-padding;
+  }
 }
 
 .quick-intro::ng-deep {
@@ -24,7 +26,7 @@ header {
 }
 
 .documents {
-  width: calc(100% + 2*#{$page-padding});
+  width: calc(100% + 2 *#{$page-padding});
   padding: 10px 20px 0;
   border-top: 1px dashed #aaa;
 
@@ -39,15 +41,14 @@ header {
 }
 
 .company-rate {
-  font-family:  "Roboto";
+  font-family: "Roboto";
   box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
-  padding : 10px;
+  padding: 10px;
   margin: 10px 0;
- 
 }
 .company-name {
   font-weight: 800;
-  color : #333333;
+  color: #333333;
 }
 
 .criterion {
@@ -60,8 +61,8 @@ header {
   .stars {
     transform: scale(0.7);
   }
-  span{
-    color :#999999;
+  span {
+    color: #999999;
     white-space: normal;
   }
 }

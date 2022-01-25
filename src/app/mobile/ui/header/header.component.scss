@@ -2,9 +2,11 @@
 @import 'src/styles/mixins';
 
 header {
+  display: block;
   @extend %header;
   position: fixed;
-  height: $mission-header-height;
+  // height: $mission-header-height;
+  height: calc(#{$mission-header-height} + env(safe-area-inset-top));
   padding-bottom: 0;
 }
 

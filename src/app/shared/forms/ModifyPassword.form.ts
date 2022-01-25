@@ -39,7 +39,7 @@ import { throwError } from "rxjs";
         Les mots de passes ne sont pas identiques.
       </div>
     </div>
-    <button class="button gradient full-width" style="margin-top: auto;" [attr.disabled]="(!modifyPwdForm.touched || modifyPwdForm.invalid) || null" (click)="onSubmit()">
+    <button class="button gradient full-width" style="margin-top: auto;margin-bottom:10px;" [attr.disabled]="(!modifyPwdForm.touched || modifyPwdForm.invalid) || null" (click)="onSubmit()">
       Enregistrer
     </button>
   </form>
