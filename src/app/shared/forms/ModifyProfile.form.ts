@@ -1,16 +1,11 @@
-import { ChangeDetectionStrategy, Component, HostListener, Input, ViewChild, EventEmitter, Output, HostBinding, SimpleChanges, ChangeDetectorRef } from "@angular/core";
+import { ChangeDetectionStrategy, Component, HostListener, Input, ViewChild, EventEmitter, Output, ChangeDetectorRef } from "@angular/core";
 import { FormArray, FormControl, FormGroup } from "@angular/forms";
 import { Camera } from "@capacitor/camera";
 import { Serialized } from "src/app/shared/common/types";
-import { FilesRow, JobRow, LabelRow, UserProfileRow } from "src/models/data/data.model";
+import { JobRow, LabelRow, UserProfileRow } from "src/models/data/data.model";
 import { Option } from "src/models/option";
 import { SlidesDirective } from "../directives/slides.directive";
-import { defaultFileUIOuput, FileUIOutput } from "../components/filesUI/files.ui";
-import { of } from "rxjs";
-import { Store } from "@ngxs/store";
-import { DownloadFile } from "src/models/user/user.actions";
-import { DomSanitizer } from "@angular/platform-browser";
-import { b64toBlob } from "../common/functions";
+import { defaultFileUIOuput } from "../components/filesUI/files.ui";
 
 @Component({
   selector: 'modify-profile-form',

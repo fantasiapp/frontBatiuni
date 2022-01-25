@@ -11,7 +11,7 @@ export function defaultFileUIOuput(nature: string = '', date?: string): FileUIOu
 
   return {
     content: '',
-    expirationDate,
+    expirationDate: '',
     ext: '???',
     name: 'Veuillez télécharger un document',
     nature
@@ -55,7 +55,7 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
 
     this.value = {
       content: '',
-      expirationDate,
+      expirationDate: '',
       ext: '???',
       name: 'Veuillez télécharger un document',
       nature: this.filename

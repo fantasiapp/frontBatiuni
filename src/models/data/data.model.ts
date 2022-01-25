@@ -190,15 +190,16 @@ export class FilesRow extends createTable<FilesRow>() {
   }
   
   static fileColors: {[key: string]: string} = {
-    'Impôts': "#156C9D",
-    'KBIS': "#156c9d",
-    'URSSAF': "#F9C067",
-    'Trav. Dis': "#054162",
-    'RC + DC': "#999999",
-    'Congés Payés': "32A290",
+    'impôts': "#156C9D",
+    'kbis': "#156c9d",
+    'urssaf': "#F9C067",
+    'trav. dis': "#054162",
+    'rc + dc': "#999999",
+    'congés payés': "32A290",
   };
 
   static getFileColor(name: string) {
+    name = name.toLowerCase();
     if ( this.fileColors[name] ) return this.fileColors[name];
     return "#32a290";
   }
