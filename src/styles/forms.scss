@@ -160,6 +160,10 @@
     & > .form-element { border-bottom-color: #2980b9 !important; }
   }
 
+  li:focus-within {
+    & > .form-element { border-bottom-color: #2980b9 !important; }
+  }
+
   .error { color: #ff0033; font-size: 0.75em; }
 
   & > * {

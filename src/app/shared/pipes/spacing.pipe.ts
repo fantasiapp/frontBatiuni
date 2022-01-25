@@ -11,7 +11,7 @@ export class SpacingPipe implements PipeTransform {
       if ( (i+1) % each == 0 ) result += ' '.repeat(by);
     }
 
-    result += str[str.length - 1];
+    if ( str ) result += str[str.length - 1];
     return result;
   }
 }

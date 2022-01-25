@@ -4,7 +4,7 @@ import { Action, Selector, State, StateContext, Store } from "@ngxs/store";
 import { catchError, mergeMap, take, tap } from "rxjs/operators";
 import { AuthState } from "src/models/auth/auth.state";
 import { environment } from "src/environments/environment";
-import { ChangePassword, ChangeProfileType, ChangeProfilePicture, GetUserData, ModifyUserProfile, UploadFile, DownloadFile } from "./user.actions";
+import { ChangePassword, ChangeProfileType, ChangeProfilePicture, GetUserData, ModifyUserProfile, UploadFile, DownloadFile, CreatePost } from "./user.actions";
 import { User } from "./user.model";
 import { Login, Logout } from "../auth/auth.actions";
 import { of, throwError } from "rxjs";
@@ -206,4 +206,9 @@ export class UserState {
       ))
     );
   }
+
+  @Action(CreatePost)
+  createPost(ctx: StateContext<User>, action: CreatePost) {
+    console.log(action);
+  };
 };

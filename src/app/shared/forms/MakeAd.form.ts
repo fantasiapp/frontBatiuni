@@ -125,7 +125,7 @@ import { defaultFileUIOuput } from "../components/filesUI/files.ui";
       <button class="button passive full-width" (click)="showValue()">
         Brouillon
       </button>
-      <button class="button gradient full-width">
+      <button class="button gradient full-width" (click)="submit()">
         Valider
       </button>
     </div>
@@ -184,6 +184,8 @@ export class MakeAdForm {
 
   currencies = ['$', '€', '£'].map((currency, id) => ({id, name: currency, checked: id == 0}));
 
+
+  
   ngOnInit() {
     const jobs = [...JobRow.instances.values()];
     this.allJobs = jobs.map(job => ({id: job.id, name: job.name, checked: false}))
@@ -270,5 +272,9 @@ export class MakeAdForm {
 
   showValue() {
     console.log(this.makeAdForm.value);
+  }
+
+  submit() {
+
   }
 }

@@ -104,4 +104,32 @@ export class DownloadFile {
   action = 'downloadFile';
   static readonly type = '[File] Download';
   constructor(public id: number) {}
-}
+};
+
+export class CreatePost {
+  static readonly type = '[User.PME] Create Post';
+  action = 'uploadPost';
+
+  private constructor(
+    public address: string,
+    public Job: number,
+    public numberOfPeople: number,
+    public dueDate: string,
+    public startDate: string,
+    public endDate: string,
+    public manPower: boolean,
+    public counterOffer: boolean,
+    public hourlyStart: string,
+    public hourlyEnd: string,
+    public currency: string,
+    public description: string,
+    public amount: number,
+    public DetailedPost: string[]
+  ) {
+    console.log(this);
+  };
+
+  static fromPostForm(formValue: any) {
+
+  }
+};
