@@ -156,7 +156,8 @@ function createValue() {
 // Values
 export class RoleRow extends createValue() {};
 export class JobRow extends createValue() {};
-export class LabelRow extends createValue() {} ;
+export class LabelRow extends createValue() {};
+export class DetailedPostRow extends createValue() {}
 
 // Tables
 export class JobForCompanyRow extends createTable<JobForCompanyRow>() {
@@ -183,7 +184,7 @@ export class FilesRow extends createTable<FilesRow>() {
     return super.serialize();
   }
 
-  static imageExtension = ['png', 'jpeg', 'jpg'];
+  static imageExtension = ['png', 'jpeg', 'jpg', 'svg', 'heic'];
   static getFileType(ext: string) {
     if ( this.imageExtension.includes(ext) ) return 'image/' + ext;
     return 'application/' + ext;
@@ -239,6 +240,25 @@ export class EstablishmentsRow extends createTable<EstablishmentsRow>() {
   get name() { return this.getField('nom'); }
   get address() { return this.getField('adresse'); }
   get activity() { return this.getField('activity'); }
+};
+
+export class PostRow extends createTable<PostRow>() {
+  get company(): CompanyRow { return this.getField('Company'); };
+  get job(): JobRow { return this.getField('job'); }
+  get numberOfPeople(): number { return this.getField('numberOfPeople'); }
+  get address(): string { return this.getField('address'); }
+  get draft(): string { return this.getField('draft'); }
+  get manPower(): boolean { return this.getField('manPower'); }
+  get dueDate(): string { return this.getField('dueDate'); }
+  get startDate(): string { return this.getField('startDate'); }
+  get endDate(): string { return this.getField('endDate'); }
+  get hourlyStart(): string { return this.getField('hourlyStart'); }
+  get hourlyEnd(): string { return this.getField('hourlyEnd'); }
+  get amount(): number { return this.getField('amount'); }
+  get currency(): string { return this.getField('currency'); }
+  get counterOffer(): boolean { return this.getField('counterOffer'); }
+  get description(): string { return this.getField('description'); }
+  get details(): string { return this.getField('DetailedPost'); }
 };
 
 //Objectives

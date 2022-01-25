@@ -9,7 +9,7 @@ import { User } from "./user.model";
 import { Login, Logout } from "../auth/auth.actions";
 import { of, throwError } from "rxjs";
 import { Mapper } from "../data/mapper.model";
-import { CompanyRow, FilesRow, UserProfileRow } from "../data/data.model";
+import { CompanyRow, FilesRow, PostRow, UserProfileRow } from "../data/data.model";
 import { AppState } from "src/app/app.state";
 
 @State<User>({
@@ -149,6 +149,7 @@ export class UserState {
         try {
           Mapper.mapRequest(response);
         } catch ( err ) {
+          console.warn(err);
           this.store.dispatch(new Logout());
           return;
         };
@@ -221,7 +222,15 @@ export class UserState {
 
     return req.pipe(
       tap((response: any) => {
-        console.log(response);
+        console.log('response', response);
+        if ( response['uploadPost'] !== 'OK' )
+          return throwError(response['messages']);
+        
+        delete response['uploadPost'];
+        Object.keys(response).map(id => console.log(new PostRow(+id, response[+id])));
+
+
+        return true;
       }),
       
       mergeMap(() => ctx.dispatch(

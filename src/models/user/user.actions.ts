@@ -124,7 +124,7 @@ export class CreatePost {
     public description: string,
     public amount: number,
     public DetailedPost: string[],
-    public files: any[]
+    public files: any
   ) {
     console.log(this);
   };
@@ -138,7 +138,10 @@ export class CreatePost {
       added = value.addedDocuments.filter((doc: any) => doc.fileData.content),
       allDocs = [...documents, ...added];
 
-    allDocs.forEach(this.renameAddedFile);
+    const files: any = {};
+    allDocs.forEach(doc => {
+      files[doc.name] = doc.fileData;
+    });
     
     return new CreatePost(
       value.address,

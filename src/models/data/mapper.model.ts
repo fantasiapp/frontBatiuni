@@ -1,7 +1,7 @@
 //enforce the model and do operations
 
 import { filterMap, getByValue } from 'src/app/shared/common/functions';
-import { RoleRow, JobRow, LabelRow, CompanyRow, UserProfileRow, JobForCompanyRow, LabelForCompanyRow, FilesRow, EstablishmentsRow } from './data.model';
+import { RoleRow, JobRow, LabelRow, CompanyRow, UserProfileRow, JobForCompanyRow, LabelForCompanyRow, FilesRow, EstablishmentsRow, PostRow, DetailedPostRow } from './data.model';
 
 type Dict<T> = {[key: string]: T};
 type ValueConstructor = {
@@ -15,8 +15,8 @@ type TableConstructor = {
   getById(id: number): any;
 }
 
-const definedTables = ['Company', 'Userprofile', 'JobForCompany', 'LabelForCompany', 'Files', 'Establishments'] as const;
-const definedValues = ['Role', 'Label', 'Job'] as const;
+const definedTables = ['Company', 'Userprofile', 'JobForCompany', 'LabelForCompany', 'Files', 'Establishments', 'Post'] as const;
+const definedValues = ['Role', 'Label', 'Job', 'DetailedPost'] as const;
 export type tableName = typeof definedTables[number];
 export type valueName = typeof definedValues[number];
 type definedType = tableName | valueName;
@@ -35,7 +35,9 @@ export class Mapper {
     'JobForCompany': JobForCompanyRow,
     'LabelForCompany': LabelForCompanyRow,
     'Files': FilesRow,
-    'Establishments': EstablishmentsRow
+    'Establishments': EstablishmentsRow,
+    'Post': PostRow,
+    'DetailedPost': DetailedPostRow
   };
 
   private static mapped: Dict<boolean> = Object.keys(Mapper.mapping).reduce(
@@ -134,6 +136,7 @@ export class Mapper {
     let values = this.getValuesNames(data),
       classes = values.map(value => this.getValueClass(value)) as ValueConstructor[];
     
+    console.log(this.getValuesNames(data), classes);
     values.forEach((name, index) => {
       if ( this.mapped[name] ) return;
       Object.entries<string>(this.readValue(data, name))
@@ -202,10 +205,11 @@ export class Mapper {
   }
 
   static mapRequest(data: any) {
-    console.log(data);
+    console.log('mapping', data);
     this.mapAllFields(data);
     this.staticMap(data);
     this.getTablesNames(data).forEach(tableName => this.mapTable(data, tableName));
+    console.log([...PostRow.instances.values()]);
   };
 
   /*fix here: doesnt work with jobs and labels */
