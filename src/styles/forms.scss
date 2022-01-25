@@ -64,6 +64,24 @@
   }
 }
 
+.big-space-children-margin {
+  & > *:not(:last-child) {
+
+    @include range(0, $small) {
+      margin-bottom: $big-spacing-margin;
+    }
+
+    @include range($small, $medium) {
+      margin-bottom: 1.5 * $big-spacing-margin
+    }
+
+    
+    @include from($medium) {
+      margin-bottom: 2 * $big-spacing-margin
+    }
+  }
+}
+
 .formulaire {
   display: flex;
   flex-direction: column;
@@ -197,7 +215,7 @@
     vertical-align: middle;
   }
   
-  .add-field img { margin: 0 $item-padding; position: static; }
+  .add-field img { margin: 0 $item-padding; position: static !important; }
 }
 
 .external-links {

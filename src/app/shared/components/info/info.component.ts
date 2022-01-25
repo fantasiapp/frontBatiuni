@@ -21,6 +21,7 @@ export class InfoHandler {
     if ( this.fadingIn ) {
       if ( this.time == Infinity ) {
         this.fadingIn = !this.fadingIn;
+        this.time = 500;
         //next time this function is called
         //is when were changing the color
       } else {

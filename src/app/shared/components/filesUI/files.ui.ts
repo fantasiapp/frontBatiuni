@@ -1,19 +1,19 @@
-import { Component, Input, ChangeDetectionStrategy, ChangeDetectorRef } from "@angular/core";
-import { NG_VALUE_ACCESSOR } from "@angular/forms";
+import { Component, Input, ChangeDetectionStrategy, ChangeDetectorRef, Output, EventEmitter } from "@angular/core";
+import { AbstractControl, FormControl, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { UIAsyncAccessor } from "src/app/shared/common/classes";
 import { Serialized } from "src/app/shared/common/types";
 import { FilesRow } from "src/models/data/data.model";
 
 export type FileUIOutput = Omit<Omit<Serialized<FilesRow>, 'id'>, 'timestamp'>;
-export function defaultFileUIOuput(nature: string = '', date?: string): FileUIOutput {
+export function defaultFileUIOuput(nature: string = '', date?: string, name?: string): FileUIOutput {
   const now = new Date,
       expirationDate = date || now.toISOString().slice(0, 10);
 
   return {
     content: '',
-    expirationDate: '',
+    expirationDate: date || '',
     ext: '???',
-    name: 'Veuillez télécharger un document',
+    name: name || 'Veuillez télécharger un document',
     nature
   };
 }
@@ -31,7 +31,16 @@ export function defaultFileUIOuput(nature: string = '', date?: string): FileUIOu
 })
 export class FileUI extends UIAsyncAccessor<FileUIOutput> {
   @Input()
-  filename : string = "Kbis";
+  filename: string = "Kbis";
+
+  @Output()
+  filenameChange = new EventEmitter<string>();
+
+  @Output()
+  kill = new EventEmitter();
+
+  @Input()
+  editName: false | any = false;
 
   @Input()
   comment : string = "(Moins que 3 mois)"
@@ -50,9 +59,6 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
   }
 
   ngOnInit() {
-    const date = new Date,
-      expirationDate = date.toISOString().slice(0, 10);
-
     this.value = {
       content: '',
       expirationDate: '',
@@ -92,4 +98,11 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
 
     return {...this.value, content: base64.slice(FilesRow.getFileType(ext).length + 13), name, ext} as FileUIOutput;
   }
+
+  onFilenameChange(e: Event) {
+    const input = e.target as HTMLInputElement;
+    this.filenameChange.emit(input.value);
+  }
+
+  close() { this.kill.emit(); }
 }

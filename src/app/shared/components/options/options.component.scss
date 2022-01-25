@@ -26,13 +26,22 @@
   }
 }
 
+%chosen-format {
+  display:inline-block;
+  margin: 4px;
+  font-size: 0.75em;
+}
+
 .chosen-items {
   list-style-type: none;
 
   li{
-    display:inline-block;
-    margin: 4px;
-    font-size: 0.75em;
+    @extend %chosen-format;
+  }
+
+  &:empty::after {
+    @extend %chosen-format;
+    content: attr(data-if-empty);
   }
 }
 

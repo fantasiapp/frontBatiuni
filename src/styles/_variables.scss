@@ -2,8 +2,8 @@
 $mainColor: #000000;
 $landingColor: #ffffff;
 $buttonColor: #0C5E8D;
-$secondaryBackground: #134C6C;
-$buttonGradient: #134C6C;
+$secondaryBackground: #0D6191;
+$buttonGradient: $secondaryBackground;
 $formulaireMainColor : #080F18;
 $externelLinks : #0F557C;
 $succesCircleShadow : #CDCFD0;
@@ -24,6 +24,7 @@ $section-margin: 30px;
 $highlight-margin: 20px;
 $spacing-margin: 15px;
 $small-spacing-margin: 10px;
+$big-spacing-margin: 20px;
 
 $form-item-spacing: 40px;
 $form-border-bottom: 2px solid #cdcfd0; 

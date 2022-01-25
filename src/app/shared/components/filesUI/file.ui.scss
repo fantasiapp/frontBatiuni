@@ -64,3 +64,17 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   display: none;
   -webkit-appearance: none;
 }
+
+
+.editName {
+  font: inherit;
+  color: inherit;
+}
+
+.close-button {
+  right: $input-image-offset-x;
+  bottom: $input-image-offset-y;
+  transform-origin: center;
+  transform: scale(0.8);
+  filter: invert(15%) sepia(70%) saturate(5364%) hue-rotate(353deg) brightness(97%) contrast(126%);
+}

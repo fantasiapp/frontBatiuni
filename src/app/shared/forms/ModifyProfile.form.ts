@@ -341,10 +341,11 @@ export class ModifyProfileForm {
     
     labelControl.clear();
     for ( let label of this.user.company.labels ) {
+      console.log(label.date);
       labelControl.push(new FormGroup({
         label: new FormControl(label.label),
         //get date from server
-        fileData: new FormControl(defaultFileUIOuput(label.label.name, label.date))
+        fileData: new FormControl(defaultFileUIOuput(label.label.name, label.date, 'Fichier pris en compte'))
       }));
     }
 
@@ -407,6 +408,8 @@ export class ModifyProfileForm {
     this.form.markAsDirty();
     this.form.markAsTouched();
   }
+
+  /* create utility for getting data around an admin file */
   
   allLabels: Option[] = [];
   allJobs: Option[] = [];

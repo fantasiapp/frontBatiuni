@@ -46,7 +46,7 @@ export class OptionsModel extends UIDefaultAccessor<Option[]> {
   private static listening: boolean = false;
 
   ngAfterViewInit() {
-    console.log('view init');
+
   }
 
   ngOnInit() {
@@ -80,6 +80,9 @@ export class OptionsModel extends UIDefaultAccessor<Option[]> {
 
   @Input()
   searchable: boolean = true;
+
+  @Input()
+  ifEmpty = '';
 
   _type: ['checkbox' | 'radio', string] = ['checkbox', ''];
   

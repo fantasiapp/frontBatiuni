@@ -154,7 +154,6 @@ export class ProfileComponent {
       this.fileView.safeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
       this.fileView.type = type;
       this.fileView.open = true;
-      console.log(this.fileView);
       this.info.show('success', 'Fichier téléchargé', 2000);
       this.cd.markForCheck();
     });
@@ -163,7 +162,6 @@ export class ProfileComponent {
   }
 
   openWindow(url: string) {
-    console.log(url);
     window.open(url);
   }
 

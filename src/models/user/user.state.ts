@@ -154,7 +154,7 @@ export class UserState {
         };
         
         const currentUser = [...UserProfileRow.instances.values()][0],
-          partial: any = { profile: currentUser.serialize(), viewType: currentUser.role.id == 2 };
+          partial: any = { profile: currentUser.serialize() };
 
         ctx.patchState(partial);
         if ( !ctx.getState().imageUrl ) {
