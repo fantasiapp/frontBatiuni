@@ -183,10 +183,24 @@ export class FilesRow extends createTable<FilesRow>() {
     return super.serialize();
   }
 
-  static imageExtension = ['pdf', 'png', 'jpeg', 'jpg'];
+  static imageExtension = ['png', 'jpeg', 'jpg'];
   static getFileType(ext: string) {
     if ( this.imageExtension.includes(ext) ) return 'image/' + ext;
     return 'application/' + ext;
+  }
+  
+  static fileColors: {[key: string]: string} = {
+    'Impôts': "#156C9D",
+    'KBIS': "#156c9d",
+    'URSSAF': "#F9C067",
+    'Trav. Dis': "#054162",
+    'RC + DC': "#999999",
+    'Congés Payés': "32A290",
+  };
+
+  static getFileColor(name: string) {
+    if ( this.fileColors[name] ) return this.fileColors[name];
+    return "#32a290";
   }
 }
 
