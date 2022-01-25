@@ -90,8 +90,6 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
       name = fullname.slice(0, lastDot),
       ext = fullname.slice(lastDot + 1);
 
-    console.log(FilesRow.getFileType(ext), base64.slice(FilesRow.getFileType(ext).length + 13))
-
     return {...this.value, content: base64.slice(FilesRow.getFileType(ext).length + 13), name, ext} as FileUIOutput;
   }
 }

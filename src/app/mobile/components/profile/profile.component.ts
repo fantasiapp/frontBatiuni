@@ -168,6 +168,11 @@ export class ProfileComponent {
   }
 
   get attachedFiles(): any[] {
-    return [];
+    const user = this.store.selectSnapshot(UserState).profile as Serialized<UserProfileRow>;
+    return user.company.files.filter(file => file.nature == 'admin' || file.nature == 'labels');
+  }
+
+  getFileColor(filename: string) {
+    return FilesRow.getFileColor(filename);
   }
 };
