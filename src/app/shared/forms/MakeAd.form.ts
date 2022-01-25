@@ -1,7 +1,9 @@
 import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
 import { Form, FormArray, FormControl, FormGroup, Validators } from "@angular/forms";
+import { Store } from "@ngxs/store";
 import { JobRow } from "src/models/data/data.model";
 import { Option } from "src/models/option";
+import { CreatePost } from "src/models/user/user.actions";
 import { defaultFileUIOuput } from "../components/filesUI/files.ui";
 
 @Component({
@@ -103,7 +105,7 @@ import { defaultFileUIOuput } from "../components/filesUI/files.ui";
 
     <ng-container formArrayName="documents">
       <ng-container *ngFor="let document of documentsControls; index as i" [formGroupName]="i">
-        <fileinput [includeDate]="false" comment="" placeholder="" [filename]="document.get('name')!.value"></fileinput>
+        <fileinput [includeDate]="false" comment="" placeholder="" [filename]="document.get('name')!.value" formControlName="fileData"></fileinput>
       </ng-container>
     </ng-container>
 
@@ -184,7 +186,7 @@ export class MakeAdForm {
 
   currencies = ['$', '€', '£'].map((currency, id) => ({id, name: currency, checked: id == 0}));
 
-
+  constructor(private store: Store) {}
   
   ngOnInit() {
     const jobs = [...JobRow.instances.values()];
@@ -275,6 +277,7 @@ export class MakeAdForm {
   }
 
   submit() {
-
+    console.log(this.makeAdForm.value);
+    // this.store.dispatch(CreatePost.fromPostForm(this.makeAdForm.value));
   }
 }

@@ -13,6 +13,7 @@
   font-family: "Poppins";
   opacity: 0;
   transition: opacity 250ms ease-out 0s;
+  overflow: hidden;
 }
 
 :host(.open) {

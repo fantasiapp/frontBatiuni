@@ -130,6 +130,6 @@ export class CreatePost {
   };
 
   static fromPostForm(formValue: any) {
-
+    
   }
 };
