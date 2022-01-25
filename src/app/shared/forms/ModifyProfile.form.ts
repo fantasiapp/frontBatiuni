@@ -113,7 +113,7 @@ import { b64toBlob } from "../common/functions";
           </fileinput>
 
           <fileinput [showtitle]="false" filename="Attestation travail dissimulé" formControlName="Trav. Dis">
-            <file-svg name="Trav. Dis" color="#054162" (click)="openFile('Attestation travail dissimulé')" image></file-svg>
+            <file-svg name="Trav. Dis" color="#054162" (click)="openFile('Trav. Dis')" image></file-svg>
           </fileinput>
 
           <fileinput [showtitle]="false" filename="Attestation RC + DC" formControlName="RC + DC">
@@ -173,7 +173,7 @@ import { b64toBlob } from "../common/functions";
   </div>
 
   <popup [(open)]="fileView.open">
-    <object class="cover-parent flex center" *ngIf="fileView.url" type="application/pdf" [data]="fileView.safeUrl">
+    <object class="cover-parent flex center" *ngIf="fileView.url" [type]="fileView.type" [data]="fileView.safeUrl">
       <div>
         Ne peut pas afficher le PDF dans l'application
         <div class="external-links" (click)="fileLoadError()">
@@ -253,7 +253,8 @@ export class ModifyProfileForm {
     get open() { return this._open; },
     set open(v) { if (!v) {this.url = null;} this._open = v; },
     url: null,
-    safeUrl: null
+    safeUrl: null,
+    type: ''
   };
 
   openFile(filename: string) {
@@ -265,11 +266,17 @@ export class ModifyProfileForm {
     this.requestFile.emit(false);
 
     content.subscribe(() => {
-      const blob = b64toBlob(FilesRow.getById(target.id).content, 'application/pdf'),
+      const updatedFile = FilesRow.getById(target.id),
+        type = FilesRow.getFileType(updatedFile.ext);
+      
+      console.log('>', updatedFile.serialize(), type);
+      
+      const blob = b64toBlob(updatedFile.content, type),
         url = URL.createObjectURL(blob);
       
       this.fileView.url = url;
       this.fileView.safeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
+      this.fileView.type = type;
       this.fileView.open = true;
       this.requestFile.emit(true);
       this.cd.markForCheck();

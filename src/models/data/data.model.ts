@@ -182,6 +182,12 @@ export class FilesRow extends createTable<FilesRow>() {
     console.log('-- custom serialize -- ');
     return super.serialize();
   }
+
+  static imageExtension = ['pdf', 'png', 'jpeg', 'jpg'];
+  static getFileType(ext: string) {
+    if ( this.imageExtension.includes(ext) ) return 'image/' + ext;
+    return 'application/' + ext;
+  }
 }
 
 // Tables

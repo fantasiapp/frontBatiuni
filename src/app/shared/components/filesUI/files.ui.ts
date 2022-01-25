@@ -64,7 +64,8 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
 
   private getBase64(files: FileList, index: number = 0) {
     const reader = new FileReader();
-    reader.readAsDataURL(files.item(0)!);
+    console.log('reading', files.item(index));
+    reader.readAsDataURL(files.item(index)!);
     return new Promise((res, rej) => {
       reader.onload = () => res(reader.result);
       reader.onerror = (error) => rej('Error: ' + error);
@@ -89,7 +90,6 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
       name = fullname.slice(0, lastDot),
       ext = fullname.slice(lastDot + 1);
 
-    console.log('sending', base64.slice(28));
-    return {...this.value, content: base64.slice(28), name, ext} as FileUIOutput;
+    return {...this.value, content: base64.slice(FilesRow.getFileType(ext).length + 13), name, ext} as FileUIOutput;
   }
 }
