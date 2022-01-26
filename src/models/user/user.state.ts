@@ -72,7 +72,7 @@ export class UserState {
 
   @Action(DownloadFile)
   downloadFile(ctx: StateContext<User>, action: DownloadFile) {
-    const req = this.http.post('data', action),
+    const req = this.http.get('data', action),
       user = ctx.getState();
 
     return req.pipe(
@@ -80,7 +80,7 @@ export class UserState {
         return throwError(err);
       }),
       tap((response: any) => {
-        console.log(response);
+        if ( response['dataPost'] == 'Error' ) return throwError(response['messages']);
         const file = new FilesRow(action.id, response[action.id]),
           profile = UserProfileRow.getById(user.profile!.id),
           index = profile.company.files.findIndex(file => file.id == action.id);
@@ -90,6 +90,7 @@ export class UserState {
         profile.company.files.splice(index, 1, file);
         ctx.patchState({profile: UserProfileRow.getById(user.profile!.id).serialize()})
         console.log(ctx.getState().profile!.company.files);
+        return null;
         //add to company
       })
     );
@@ -126,7 +127,7 @@ export class UserState {
               ctx.patchState({
                 imageUrl: `data:image/${imageFile.ext};base64,${imageFile.content}`
               });
-            });
+            }, err => throwError(err));
         }
       })
     )
