@@ -154,7 +154,7 @@ export class CreatePost {
       value.counterOffer,
       value.hourlyStart,
       value.hourlyEnd,
-      value.currency[0].name,
+      value.currency?.[0]?.name || '$',
       value.description,
       value.amount,
       value.detailedPost.map((detail: any) => detail.description),

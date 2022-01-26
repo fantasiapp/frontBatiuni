@@ -1,4 +1,5 @@
 @use "sass:list";
+@use "sass:math";
 @import './variables';
 @import './responsive';
 
@@ -243,7 +244,7 @@
     @include circle($notification-size,red);
 
     // right: -$notification-size; 
-    top: -$notification-size /2;
+    top: math.div(-$notification-size, 2);
     text-align: center;
     line-height: $notification-size;
     font-size: $notification-size*0.7;
