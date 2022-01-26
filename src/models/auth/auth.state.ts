@@ -8,6 +8,7 @@ import { catchError, delay, map, tap, timeout } from "rxjs/operators";
 import { Observable, of, throwError } from "rxjs";
 import * as strings from '../../app/shared/common/strings';
 import { Router } from "@angular/router";
+import { HttpService } from "src/app/services/http.service";
 
 @State<AuthModel>({
   name: 'auth',
@@ -30,17 +31,13 @@ export class AuthState {
     return throwError({all: error});
   };
 
-  constructor(private http: HttpClient, private router: Router, private zone: NgZone,private store:Store) {}
+  constructor(private http: HttpService, private router: Router, private zone: NgZone) {}
 
   @Action(Login)
   login(ctx: StateContext<AuthModel>, action: Login) {
-    let {username, password} = action;
-    let req = this.http.post(environment.backUrl + '/api-token-auth/', {username, password}, {
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    });
-    
+    let {username, password} = action,
+      req = this.http.post('api-token-auth', {username, password});
+
     return req.pipe(
       catchError((err: HttpErrorResponse) => {
         return AuthState.handleError(err);
@@ -63,7 +60,6 @@ export class AuthState {
     return req.pipe(
       tap(() => {
         ctx.patchState({token: null, username: null});
-        console.log('token in now void');
         this.zone.run(() => {
           console.log('navigating to /connexion')
           this.router.navigate(['', 'connexion']);
@@ -74,11 +70,7 @@ export class AuthState {
   
   @Action(Register)
   register(ctx: StateContext<AuthModel>, action: Register) {
-    let req = this.http.post(environment.backUrl + '/initialize/', action, {
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    });
+    const req = this.http.post('initialize', action);
     return req.pipe(
       catchError((err: HttpErrorResponse) => {
         return AuthState.handleError(err);
@@ -96,11 +88,9 @@ export class AuthState {
 
   @Action(ConfirmAccount)
   confirmAccount(ctx: StateContext<AuthModel>, {token}: ConfirmAccount) {
-    const req = this.http.get(environment.backUrl + `/initialize/`, {
-      params: {
-        action: 'registerConfirm',
-        token
-      }
+    const req = this.http.get('initialize', {
+      action: 'registerConfirm',
+      token
     });
 
     return req.pipe(

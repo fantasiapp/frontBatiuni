@@ -32,6 +32,11 @@ export class ImageGenerator {
     this.offsetY = (this.ctx.measureText("H") as any).fontBoundingBoxAscent / 2;
   }
 
+  widthOf(text: string, font: string) {
+    this.ctx.font = font;
+    return this.ctx.measureText(text).width;
+  }
+
   generate(text: string, options: ImageGenerationOptions = defaultOptions) {
     options = { ...options, ...defaultOptions };
     const size = this.canvas.width = this.canvas.height = options.size;

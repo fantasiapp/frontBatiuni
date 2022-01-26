@@ -38,6 +38,7 @@ import { UISuggestionBox } from "./components/suggestionbox/suggestionbox.compon
 import { ControlErrorsDirective, ErrorMessageComponent } from "./common/formerrors";
 import { SpacingPipe } from "./pipes/spacing.pipe";
 import { UIPopup } from "./components/popup/popup.component";
+import { UIHSteps } from "./components/horizontal-steps/hsteps.ui";
 
 @NgModule({
   declarations: [
@@ -75,7 +76,8 @@ import { UIPopup } from "./components/popup/popup.component";
     ErrorMessageComponent,
     ControlErrorsDirective,
     SpacingPipe,
-    UIPopup
+    UIPopup,
+    UIHSteps
   ],
   imports: [
     CommonModule,
@@ -119,7 +121,8 @@ import { UIPopup } from "./components/popup/popup.component";
     ErrorMessageComponent,
     ControlErrorsDirective,
     SpacingPipe,
-    UIPopup
+    UIPopup,
+    UIHSteps
   ],
   providers: [ImageGenerator]
 })

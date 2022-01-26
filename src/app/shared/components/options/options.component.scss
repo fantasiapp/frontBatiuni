@@ -1,4 +1,6 @@
 @import 'src/styles/variables';
+@import 'src/styles/mixins';
+
 
 :host {
   display: block;
@@ -6,13 +8,8 @@
   outline: none;
 }
 
-.form-select {
-  margin-top: 0.2rem;
-}
-
 .input-select {
   position: relative;
-  margin-top: 10px;
   padding: 5px;
   border-bottom: $form-border-bottom;
   min-height: 30px;
@@ -41,6 +38,7 @@
 
   &:empty::after {
     @extend %chosen-format;
+    @extend %absolute-top-left;
     content: attr(data-if-empty);
   }
 }

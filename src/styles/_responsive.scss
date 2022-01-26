@@ -36,6 +36,12 @@ $high: 1920px;
   }
 }
 
+@mixin mobile-only {
+  @media (max-width: $mobile) {
+    @content;
+  }
+}
+
 @mixin desktop-only {
   @media (min-width: #{$mobile + 1px}) {
     @content;

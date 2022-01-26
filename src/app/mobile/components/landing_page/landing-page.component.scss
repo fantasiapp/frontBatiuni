@@ -4,16 +4,12 @@
 
 :host {
   display: block;
-  width: 100vw;
-  overflow-x: hidden;
-  @extend %fixed;
-  @extend .full-page;
+  @extend %absolute-cover;
 }
 
 div.main {
   color: white;
-  @extend %fixed;
-  @extend .cover-parent;
+  @extend %absolute-cover;
 }
 
 .background-image {
@@ -33,7 +29,7 @@ div.main {
 .arrow_right, .arrow_left {
   /* fix should be 50% 50% */
   transform-origin: 50% 20%;
-  @include absolute-center('y', fixed);
+  @include absolute-center('y', absolute);
   z-index: 1;
 }
 
@@ -53,5 +49,6 @@ div.main {
 
   .discover {
     margin-bottom: 15px;
+    min-width: 280px;
   }
 }

@@ -17,66 +17,58 @@ import { GetCompanies } from "src/models/misc/misc.actions";
 @Component({
   selector: 'register-form',
   template: `
-    <div class="content" type="template" [slides]="[page1, page2]"></div>
+    <div class="content" type="template" [slides]="[page1, page2]" [animate]="onMobile"></div>
     <ng-template #page1>
-      <div class="full-width flex column grow">
-        <form class="grow form-control curved-border" [formGroup]="registerForm">
-          <h3 class="form-title">Créer un compte !</h3>
-          <h4 class="form-subtitle">Informations contact</h4>
-          <div class="form-input">
-            <label>Nom du contact</label> <input type="text" class="form-element" formControlName="lastname"/>
+      <form class="full-width form-control curved-border" [formGroup]="registerForm">
+        <h3 class="form-title">Créer un compte !</h3>
+        <h4 class="form-subtitle">Informations contact</h4>
+        <div class="form-input">
+          <label>Nom du contact</label> <input type="text" formControlName="lastname"/>
+        </div>
+      
+        <div class="form-input">
+          <label>Prénom du contact</label> <input type="text" formControlName="firstname"/>
+        </div>
+      
+        <div class="form-input">
+          <label>Adresse e-mail contact</label>
+          <input type="email" formControlName="email"/>
+          <div *ngIf="registerForm.get('email')!.dirty && registerForm.get('email')!.errors" class="server-error">
+            {{ registerForm.get('email')!.errors?.server }}
           </div>
-        
-          <div class="form-input">
-            <label>Prénom du contact</label> <input class="form-element" type="text" formControlName="firstname"/>
-          </div>
-        
-          <div class="form-input">
-            <label>Adresse e-mail contact</label>
-            <input type="email" class="form-element" formControlName="email"/>
-            <div *ngIf="registerForm.get('email')!.dirty && registerForm.get('email')!.errors" class="server-error">
-              {{ registerForm.get('email')!.errors?.server }}
-            </div>
-          </div>
-        
-          <div class="form-input">
-            <label>Vérification addresse e-mail</label>
-            <input type="email" class="form-element" formControlName="emailVerification"/>
-            <div *ngIf="registerForm.get('password')!.dirty  && registerForm.get('emailVerification')!.errors?.mismatch" class="error">
-              L'e-mail de confirmation doit être identique à celui du contact.
-            </div>
-          </div>
-        
-          <div class="form-input">
-            <label>Mot de passe</label> <input class="form-element" type="password" formControlName="password"/>
-            <div *ngIf="registerForm.get('password')!.dirty  && registerForm.get('password')!.errors?.minlength" class="error">
-              Le mot de passe doit contenir au moins 8 caractères.
-            </div>
-            <div *ngIf="registerForm.get('password')!.dirty  && registerForm.get('password')!.errors?.lowercase" class="error">
-              Le mot de passe doit contenir une lettre en miniscule.
-            </div>
-            <div *ngIf="registerForm.get('password')!.dirty && registerForm.get('password')!.errors?.uppercase" class="error">
-              Le mot de passe doit contenir une lettre en majuscule.
-            </div>
-          </div>
-          <div *ngIf="showSteps" class="form-step">
-            <div class="active"></div>
-            <div (click)="slider.left()"></div>
-          </div>
-        </form>
-      </div>
+        </div>
+      
+        <div class="form-input">
+          <label>Vérification addresse e-mail</label>
+          <input type="email" formControlName="emailVerification"/>
+        </div>
+      
+        <div class="form-input">
+          <label>Mot de passe</label> <input type="password" formControlName="password"/>
+        </div>
+        <div class="form-action">
+          <button *ngIf="showSubmitButton" class="button discover gradient" style="width: 250px" (click)="slider.left()">Etape suivante</button>
+        </div>
+        <div *ngIf="showSteps" class="form-step">
+          <div class="active"></div>
+          <div (click)="slider.left()"></div>
+        </div>
+      </form>
     </ng-template>
     
     <ng-template #page2>
-      <div class="full-width flex column grow">
-        <form class="grow form-control curved-border" [formGroup]="registerForm" (ngSubmit)="onSubmit($event)">
-        <h3 class="form-title">Créer un compte !</h3>
-        <h4 class="form-subtitle">Informations contact</h4>
-          <div class="form-input">
-            <label>Je suis</label>
-            <options formControlName="role" [options]="roles" type="radio" [searchable]="false">
-            </options>
-          </div>
+      <form class="full-width grow form-control curved-border" [formGroup]="registerForm" (ngSubmit)="onSubmit($event)">
+      <h3 class="form-title">Créer un compte !</h3>
+      <h4 class="form-subtitle">Informations contact</h4>
+        <div class="form-input">
+          <label>Je suis</label>
+          <options formControlName="role" [options]="roles" type="radio" [searchable]="false" ifEmpty="...">
+          </options>
+        </div>
+    
+        <div class="form-input">
+          <label>Nom de l'entreprise</label><input type="text" formControlName="company"/>
+        </div>
       
           <div class="form-input">
             <label>Nom de l'entreprise</label>
@@ -94,19 +86,18 @@ import { GetCompanies } from "src/models/misc/misc.actions";
             <input type="password" class="form-element" formControlName="proposer"/>
           </div>
 
-          <div class="form-action" style="margin-top: auto;">
-            <div *ngIf="registerForm.errors?.server" class="server-error">
-              {{ registerForm.errors?.server }}
-            </div>
-            <button *ngIf="showSubmitButton" class="button discover gradient" style="width: 250px" [disabled]="!registerForm.valid">Valider</button>
+        <div class="form-action" style="margin-top: auto;">
+          <div *ngIf="registerForm.errors?.server" class="server-error">
+            {{ registerForm.errors?.server }}
           </div>
-        
-          <div *ngIf="showSteps" class="form-step">
-            <div (click)="slider.right()"></div>
-            <div class="active"></div>
-          </div>
-        </form>
-      </div>
+          <button *ngIf="showSubmitButton" class="button discover gradient" style="width: 250px" [disabled]="!registerForm.valid">Valider</button>
+        </div>
+      
+        <div *ngIf="showSteps" class="form-step">
+          <div (click)="slider.right()"></div>
+          <div class="active"></div>
+        </div>
+      </form>
     </ng-template>
   `,
   styles: [`
@@ -114,6 +105,11 @@ import { GetCompanies } from "src/models/misc/misc.actions";
     
     :host(.mobile-view) {
       @extend %content-with-paging-and-big-footer;
+    }
+
+    :host(:not(.mobile-view)) {
+      max-height: 768px;
+      align-self: center;
     }
 
     .parrain {
@@ -133,12 +129,12 @@ import { GetCompanies } from "src/models/misc/misc.actions";
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RegisterForm {
-  @HostBinding('class')
-  get classes() {
-    const isMobile = window.innerWidth <= 768;
-    return 'hosted-page flex column' + (isMobile ? ' mobile-view' : '');
-  }
 
+  //move this statement to parent
+  @HostBinding('class')
+  get classes() { return 'hosted-page flex column'; }
+
+  onMobile: boolean = window.innerWidth <= 768;
   constructor(private store: Store, private router: Router, private cd: ChangeDetectorRef) {}
 
   @ViewChild(SlidesDirective, {static: true})

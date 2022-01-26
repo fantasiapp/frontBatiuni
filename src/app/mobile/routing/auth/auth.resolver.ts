@@ -3,6 +3,7 @@ import { Resolve, Router } from "@angular/router";
 import { Store } from "@ngxs/store";
 import { throwError } from "rxjs";
 import { catchError, tap } from "rxjs/operators";
+import { Logout } from "src/models/auth/auth.actions";
 import { AuthState } from "src/models/auth/auth.state";
 import { GetUserData } from "src/models/user/user.actions";
 import { UserState } from "src/models/user/user.state";
@@ -21,11 +22,9 @@ export class AuthResolver implements Resolve<any> {
     return this.store.dispatch(new GetUserData(token!))
       .pipe(
         catchError(() => {
+          this.store.dispatch(new Logout());
           this.router.navigate(['']);
           return throwError('GetUserData Failed.');
-        }),
-        tap(() => {
-
         })
       );
   }

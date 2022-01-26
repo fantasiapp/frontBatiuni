@@ -1,20 +1,23 @@
-<a *ngIf="slider.index == 0" class="arrow_right" (click)="onSwipeLeft()">
-  <img src="assets/Fleche.svg"/>
-</a>
+<div class="position-relative cover-parent">
+  <a *ngIf="slider.index == 0" class="arrow_right" (click)="onSwipeLeft()">
+    <img src="assets/Fleche.svg"/>
+  </a>
+  
+  <a *ngIf="slider.index == 1" class="arrow_left" (click)="onSwipeRight()">
+    <img src="assets/Fleche.svg"/>
+  </a>
+  
+  <div class="container"
+    type="template"
+    [slides]="[entreprise, sousTraitant]"
+  ></div>  
+</div>
 
-<a *ngIf="slider.index == 1" class="arrow_left" (click)="onSwipeRight()">
-  <img src="assets/Fleche.svg"/>
-</a>
-
-<div class="container"
-  type="template"
-  [slides]="[entreprise, sousTraitant]"
-></div>
 
 <ng-template #sousTraitant>
   <div class="main flex column center">
     <!-- Background image-->
-    <div class="background-image" [style.background-image]="'url(assets/accueil-sous-traitant.png)'">
+    <div class="background-image cover-parent" [style.background-image]="'url(assets/accueil-sous-traitant.png)'">
     </div>
     <!-- Landing text-->
     <div class="center-text overlay">

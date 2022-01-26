@@ -56,14 +56,15 @@ export abstract class AnimateCSS extends IndexBased {
 
   protected animateWithClass(element: HTMLElement, className: string, callback?: Function) {
     if ( element.parentElement ) element.parentElement.scrollTop = 0;
-    element.classList?.add(className, 'animating');
+    element.scrollTop = 0;
+    element.classList?.add(className);
     
     let save = element.onanimationend;
     element.onanimationend = (e: AnimationEvent) => {
       save && save.call(element, e);
       element.onanimationend = save;
       callback?.(element, e);
-      element.classList.remove('animating', className);
+      element.classList.remove(className);
     };
   }
 };
@@ -159,25 +160,6 @@ export class UIAsyncAccessor<T> extends UIDefaultAccessor<T> {
     }
     this.onTouched();
     this.cd.markForCheck();
-  };
-};
-
-export type RequestPath = 'initialize' | 'data' | 'register' | 'api-token-auth';
-
-export class HttpAction {
-  constructor(protected http: HttpClient) {}
-
-  static api = ['initialize', 'data', 'register', 'api-token-auth'];
-
-  postAction(path: RequestPath, action: any, authorization: boolean) {
-    const headers = new Headers;
-    headers.append('Content-Type', 'application/json');
-    
-    this.http.post(`${environment.backUrl}/path?action=${action.action}`, {
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    });
   };
 };
 

@@ -51,13 +51,13 @@ export class SlidesDirective extends IndexBased {
   };
 
   private animateWithClass(element: HTMLElement, className: string, callback?: Function) {
-    element.classList?.add(className, 'animating');
+    element.classList?.add(className);
     let save = element.onanimationend;
     element.onanimationend = (e: AnimationEvent) => {
       save && save.call(element, e);
       element.onanimationend = save;
       callback?.(element, e);
-      element.classList.remove(className, 'animating');
+      element.classList.remove(className);
     };
   }
 

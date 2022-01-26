@@ -7,7 +7,7 @@ import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppComponent } from './app.component';
 import { AuthState } from 'src/models/auth/auth.state';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AppState } from './app.state';
 import { CommonModule } from '@angular/common';
 
@@ -16,6 +16,7 @@ import { UserState } from 'src/models/user/user.state';
 import { GlobalRoutingModule } from './app.routing-module';
 import { DataState } from 'src/models/data/data.state';
 import { MiscState } from 'src/models/misc/misc.state';
+import { HttpService } from './services/http.service';
 
 
 @Injectable()
@@ -50,9 +51,14 @@ export class CustomConfig extends HammerGestureConfig {
     GlobalRoutingModule,
     HammerModule
   ],
-  providers: [{
+  providers: [
+    HttpService, {
     provide: HAMMER_GESTURE_CONFIG,
     useClass: CustomConfig
+  }, {
+    provide: HTTP_INTERCEPTORS,
+    useClass: HttpService,
+    multi: true
   }],
   bootstrap: [AppComponent]
 })

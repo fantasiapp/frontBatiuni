@@ -1,3 +1,3 @@
-<div *ngIf="ready$ | async" [@routeAnimation]="prepareRoute(outlet)" style="overflow-x: hidden;">
+<div *ngIf="ready$ | async" [@routeAnimation]="prepareRoute(outlet)" class="router">
   <router-outlet #outlet="outlet"></router-outlet>
 </div>

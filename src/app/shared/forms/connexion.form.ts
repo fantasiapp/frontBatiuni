@@ -12,7 +12,7 @@ import { ComplexPassword, setErrors } from "src/validators/verify";
   selector: 'connexion-form',
   template: `
   <!-- Form -->
-  <form class="grow form-control curved-border" [formGroup]="loginForm" (ngSubmit)="onSubmit($event)">
+  <form class="full-height form-control curved-border" [formGroup]="loginForm" (ngSubmit)="onSubmit($event)">
   <!-- Main title ex: Je me connecte, Créer un compte  -->
     <h3 class="form-title">Je me connecte</h3>
     <div class="form-input">
@@ -46,20 +46,10 @@ import { ComplexPassword, setErrors } from "src/validators/verify";
   `,
   styles: [`
     @import 'src/styles/mixins';
-
-    :host(.mobile-view) {
-      @extend %paging-only-content;;
-    }
   `],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ConnexionForm extends Destroy$ {
-  @HostBinding('class')
-  get classes() {
-    const isMobile = window.innerWidth <= 768;
-    return 'hosted-page flex column' + (isMobile ? ' mobile-view' : '');
-  }
-
   loginForm = new FormGroup({
     email: new FormControl('', [
       Validators.required,
