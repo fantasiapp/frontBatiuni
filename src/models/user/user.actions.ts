@@ -124,7 +124,8 @@ export class CreatePost {
     public description: string,
     public amount: number,
     public DetailedPost: string[],
-    public files: any
+    public files: any,
+    public draft: boolean
   ) {
     console.log(this);
   };
@@ -133,7 +134,7 @@ export class CreatePost {
     doc.fileData.nature = doc.name;
   };
 
-  static fromPostForm(value: any) {
+  static fromPostForm(value: any, draft: boolean) {
     const documents = value.documents.filter((doc: any) => doc.fileData.content),
       added = value.addedDocuments.filter((doc: any) => doc.fileData.content),
       allDocs = [...documents, ...added];
@@ -150,7 +151,7 @@ export class CreatePost {
       value.dueDate,
       value.startDate,
       value.endDate,
-      value.manPower,
+      !!value.manPower,
       value.counterOffer,
       value.hourlyStart,
       value.hourlyEnd,
@@ -158,7 +159,8 @@ export class CreatePost {
       value.description,
       value.amount,
       value.detailedPost.map((detail: any) => detail.description),
-      allDocs
+      allDocs,
+      draft
     );
   }
 };

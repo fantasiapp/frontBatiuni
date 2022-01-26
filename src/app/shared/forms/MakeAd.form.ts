@@ -1,9 +1,10 @@
-import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
+import { ChangeDetectionStrategy, Component, HostBinding, Input } from "@angular/core";
 import { Form, FormArray, FormControl, FormGroup, Validators } from "@angular/forms";
 import { Store } from "@ngxs/store";
-import { JobRow } from "src/models/data/data.model";
+import { JobRow, PostRow } from "src/models/data/data.model";
 import { Option } from "src/models/option";
 import { CreatePost } from "src/models/user/user.actions";
+import { Serialized } from "../common/types";
 import { defaultFileUIOuput } from "../components/filesUI/files.ui";
 
 @Component({
@@ -129,14 +130,23 @@ import { defaultFileUIOuput } from "../components/filesUI/files.ui";
     </div>
 
     <div *ngIf="withSubmit" class="flex row space-between full-width submit-container">
-      <button class="button passive full-width" (click)="showValue()">
+      <button class="button passive full-width" (click)="submit(true)">
         Brouillon
       </button>
-      <button class="button gradient full-width" (click)="submit()">
+      <button class="button gradient full-width" (click)="submit(false)">
         Valider
       </button>
     </div>
   </form>
+
+  <footer class="flex row space-between sticky-footer full-width submit-container" style="z-index: 999; background-color: white;">
+    <button class="button passive font-Poppins full-width">
+      Brouillon
+    </button>
+    <button class="button gradient font-Poppins full-width">
+      Valider
+    </button>
+  </footer>
   `,
   styles: [`
     @import 'src/styles/variables';
@@ -182,12 +192,24 @@ import { defaultFileUIOuput } from "../components/filesUI/files.ui";
       font: inherit;
       margin-left: 20px;
     }
+
+    :host(.page) {
+      footer {
+        bottom: $navigation-height;
+      }
+    }
+
+    
   `],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MakeAdForm {
-  @Input()
-  withSubmit: boolean = false;
+  @Input() withSubmit: boolean = false;
+  @HostBinding('class.page')
+
+  @Input() page: boolean = true;
+
+  @Input() post!: Serialized<PostRow>;
 
   currencies = ['$', '€', '£'].map((currency, id) => ({id, name: currency, checked: id == 0}));
 
@@ -273,11 +295,7 @@ export class MakeAdForm {
     }));
   }
 
-  showValue() {
-    console.log(this.makeAdForm.value);
-  }
-
-  submit() {
-    this.store.dispatch(CreatePost.fromPostForm(this.makeAdForm.value));
+  submit(draft: boolean) {
+    this.store.dispatch(CreatePost.fromPostForm(this.makeAdForm.value, draft));
   }
 }

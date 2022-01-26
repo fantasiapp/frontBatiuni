@@ -5,8 +5,7 @@ import { throwError } from "rxjs";
 import { catchError, tap } from "rxjs/operators";
 import { environment } from "src/environments/environment";
 import { AuthState } from "../auth/auth.state";
-import { EstablishmentsRow, Table } from "../data/data.model";
-import { Mapper } from "../data/mapper.model";
+import { EstablishmentsRow, Mapper, Table } from "../data/data.model";
 import { Clear, GetCompanies } from "./misc.actions";
 
 @State<{ [key: string]: Table }>({

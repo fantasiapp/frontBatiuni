@@ -139,6 +139,7 @@
 }
  
 %header {
+  left: 0;
   top: 0;
   padding: 10px $page-padding;
   height: calc(#{$sticky-header-height} + env(safe-area-inset-top));
@@ -199,6 +200,13 @@
   @include with-set-safe-area(margin, top, $paging-height + $paging-decoration-height);
   // @include with-set-safe-area(margin, bottom, $sticky-footer-height);
   height: calc(100vh - #{$paging-height + $paging-decoration-height + $big-sticky-footer-height} - env(safe-area-inset-bottom));
+}
+
+%content-with-header-and-big-footer {
+  @extend %overflow-y;
+  @include with-set-safe-area(margin, top, $sticky-header-height);
+  // @include with-set-safe-area(margin, bottom, $sticky-footer-height);
+  height: calc(100vh - #{$sticky-header-height + $big-sticky-footer-height} - env(safe-area-inset-bottom));
 }
 
 %paging-only-content {

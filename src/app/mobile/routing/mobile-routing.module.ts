@@ -67,9 +67,6 @@ const routes: Routes = [{
   },{
     path: 'annonce',
     component: AnnoncePage,
-  }, {
-    path: 'brouillon',
-    component: MakeAdComponent
   },  {
     path: 'booster',
     component: BoosterPage

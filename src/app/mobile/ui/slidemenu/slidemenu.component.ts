@@ -14,6 +14,9 @@ export class UISlideMenuComponent extends UIOpenMenu {
   @Input()
   footer: boolean = false;
 
+  @Input()
+  header: boolean = true;
+
   constructor() {
     super();
   }

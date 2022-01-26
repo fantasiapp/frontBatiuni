@@ -6,8 +6,7 @@ import { ChangePassword, ChangeProfileType, ChangeProfilePicture, GetUserData, M
 import { User } from "./user.model";
 import { Logout } from "../auth/auth.actions";
 import { throwError } from "rxjs";
-import { Mapper } from "../data/mapper.model";
-import { CompanyRow, FilesRow, PostRow, UserProfileRow } from "../data/data.model";
+import { CompanyRow, FilesRow, Mapper, PostRow, UserProfileRow } from "../data/data.model";
 import { HttpService } from "src/app/services/http.service";
 
 @State<User>({

@@ -1,9 +1,11 @@
 import { Component, ChangeDetectionStrategy } from "@angular/core";
 import { Select } from "@ngxs/store";
-import { Observable } from "rxjs";
+import { BehaviorSubject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { Destroy$ } from "src/app/shared/common/classes";
 import { DistanceSliderConfig, SalarySliderConfig } from "src/app/shared/common/config";
+import { Serialized } from "src/app/shared/common/types";
+import { PostRow } from "src/models/data/data.model";
 import { User } from "src/models/user/user.model";
 import { UserState } from "src/models/user/user.state";
 
@@ -16,7 +18,9 @@ import { UserState } from "src/models/user/user.state";
 export class HomeComponent extends Destroy$ {
   
   @Select(UserState)
-  user$!: Observable<User>;
+  user$!: BehaviorSubject<User>;
+
+  getDrafts(user: User) { return user.profile?.company.posts.filter(post => post.draft); }
 
   constructor() {
     super()
@@ -33,4 +37,18 @@ export class HomeComponent extends Destroy$ {
   openAdFilterMenu: boolean = false;
 
   imports = { DistanceSliderConfig, SalarySliderConfig };
+
+  editMenu: { open: boolean; post: Serialized<PostRow> | null; } = {
+    open: false,
+    post: null
+  };
+
+  openPost(post: Serialized<PostRow>) {
+    console.log('opening', post);
+    this.editMenu = {
+      open: true, post
+    };
+    
+    console.log(this.editMenu);
+  }
 };

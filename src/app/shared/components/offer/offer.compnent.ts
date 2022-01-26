@@ -1,4 +1,6 @@
 import { ChangeDetectionStrategy, Component, HostBinding, HostListener, Input} from "@angular/core";
+import { PostRow } from "src/models/data/data.model";
+import { Serialized } from "../../common/types";
 
 @Component({
   selector: 'offer',
@@ -18,7 +20,9 @@ export class OfferComponent {
   @Input()
   src: string = "assets/confirmation.svg"
   @Input()
-  brouillon: boolean = false;
+  deletable: boolean = false;
+
+  @Input() post!: Serialized<PostRow>;
 
   @HostBinding("class.delete")
   delete: boolean = false;
@@ -32,8 +36,16 @@ export class OfferComponent {
   }
 
   showDeleteButton() {
-    this.delete = this.brouillon && !this.delete
+    this.delete = this.deletable && !this.delete
     if ( this.delete ) this.overflow = 'visible';
   }
 
+  hideDeleteButton() {
+    this.delete = false;
+  }
+
+  deletePost(e: Event) {
+    console.log('deleting', this.post);
+    e.stopPropagation();
+  }
 };

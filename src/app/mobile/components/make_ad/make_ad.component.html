@@ -1,18 +1,7 @@
 <header class="clear-margin full-width sticky-header flex center-cross annonce">
-  <img (click)="goBack()"  src="assets/arrowlblack.svg" />
   <span class="grow text-light-emphasis">Créer une annonce</span>
 </header>
 
-<div class="hosted-page page-content flex column center-cross space-children-margin">
-  <ad-form [withSubmit]="isPage"></ad-form>
+<div class="hosted-page flex column center-cross space-children-margin">
+  <ad-form [withSubmit]="withSubmit" [page]="page"></ad-form>
 </div>
-
-
-<footer class="flex row space-between sticky-footer full-width submit-container" style="z-index: 999; background-color: white;">
-  <button class="button passive full-width">
-    Brouillon
-  </button>
-  <button class="button gradient full-width">
-    Valider
-  </button>
-</footer>
