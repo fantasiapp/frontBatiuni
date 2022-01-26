@@ -5,8 +5,6 @@ export const MatchField = (target: string): ValidatorFn => {
   return (control: AbstractControl) => {
     const original = control.parent?.get(target)
 
-    console.log(control.value, original?.value);
-
     original  && control.setErrors(control.value == original.value ? null : {
       FIELD_MISMATCH: ['email']
     });

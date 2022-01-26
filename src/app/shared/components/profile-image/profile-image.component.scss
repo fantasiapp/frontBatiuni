@@ -24,6 +24,7 @@
     &, img {
       width: $profile-image-size - 2 * $profile-level-thickness;
       height: $profile-image-size - 2 * $profile-level-thickness;
+      object-fit: cover;
     }
   }
 
