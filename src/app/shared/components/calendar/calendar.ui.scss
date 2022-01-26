@@ -26,12 +26,12 @@
     background-color: #fafafa;
     padding: 10px;
     li {
-        height: 1.5rem;
-        width: 1.5rem;
+        height: 25px;
+        width: 25px;
         font-size: 0.8rem;
         cursor: pointer;
         text-align: center;
-        line-height: 1.5rem;
+        line-height: 25px;
         color: #1e2843;                        
     }
 }
@@ -74,8 +74,9 @@ h2 {
     background-color: transparent;
     border: 0;
 }
+
 %bgcolor {
-    color: #ffffff;
+    color: #ffffff !important;
     border-radius: 50%;
 }
 
@@ -91,4 +92,3 @@ h2 {
     background-color: $unAvailable;
     @extend %bgcolor;
 }
-

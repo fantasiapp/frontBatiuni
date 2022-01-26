@@ -69,10 +69,15 @@ import { defaultFileUIOuput } from "../components/filesUI/files.ui";
     </div>
 
     <div class="form-input">
-    <label>Date de la fin du chantier</label>
-    <input type="date" class="form-element" formControlName="endDate"/>
-    <img src="assets/calendar.png"/>
-  </div>
+      <label>Date de la fin du chantier</label>
+      <input type="date" class="form-element" formControlName="endDate"/>
+      <img src="assets/calendar.png"/>
+    </div>
+
+    <div class="form-input">
+      <label>Dates du chantier 🧪</label>
+      <calendar [embedded]="false" formControlName="calendar"></calendar>
+    </div>
 
     <div class="form-input">
       <label>Horaires du chantier</label>
@@ -232,7 +237,8 @@ export class MakeAdForm {
     ]),
     detailedPost: new FormArray([
       new FormGroup({description: new FormControl('Prestation 1....')})
-    ])
+    ]),
+    calendar: new FormControl([])
   });
 
   get documentsControls() {

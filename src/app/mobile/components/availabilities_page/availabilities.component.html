@@ -14,9 +14,9 @@
   </div>
 </div>
 
-<swipeup [(open)]="calendar.openModal">
-  <li (click)="calendar.clickDay('available')" class="disponible">Disponible</li>
-  <li (click)="calendar.clickDay('availablelimits')" class="sous-conditions">Disponible sous conditions</li>
-  <li (click)="calendar.clickDay('unavailable')" class="pas-disponible">Pas disponible</li>
-  <li (click)="calendar.clickDay('nothing')" class="non-renseigne">Non renseigné</li>
+<swipeup [(open)]="calendar.dayClicked">
+  <li (click)="calendar.setCurrentDayState('available')" class="disponible">Disponible</li>
+  <li (click)="calendar.setCurrentDayState('availablelimits')" class="sous-conditions">Disponible sous conditions</li>
+  <li (click)="calendar.setCurrentDayState('unavailable')" class="pas-disponible">Pas disponible</li>
+  <li (click)="calendar.setCurrentDayState('nothing')" class="non-renseigne">Non renseigné</li>
 </swipeup>

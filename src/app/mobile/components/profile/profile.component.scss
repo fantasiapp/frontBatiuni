@@ -4,6 +4,8 @@
 
 :host {
   @extend %page;
+  //maybe extend this
+  overflow-y: hidden;
 }
 
 header {
