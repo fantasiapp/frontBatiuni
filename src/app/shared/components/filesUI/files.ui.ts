@@ -6,8 +6,7 @@ import { FilesRow } from "src/models/data/data.model";
 
 export type FileUIOutput = Omit<Omit<Serialized<FilesRow>, 'id'>, 'timestamp'>;
 export function defaultFileUIOuput(nature: string = '', date?: string, name?: string): FileUIOutput {
-  const now = new Date,
-      expirationDate = date || now.toISOString().slice(0, 10);
+  const now = new Date;
 
   return {
     content: '',

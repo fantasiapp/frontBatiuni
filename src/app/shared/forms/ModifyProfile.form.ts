@@ -377,9 +377,6 @@ export class ModifyProfileForm {
         job: new FormControl(job),
         number: new FormControl(number)
       });
-
-      form.markAsDirty();
-      form.markAsTouched();
       jobsControl.push(form);
     });
     
@@ -390,17 +387,19 @@ export class ModifyProfileForm {
 
   updateLabels(labelOptions: Option[]) {
     const labelsControl = this.form.controls['Userprofile.Company.LabelForCompany'] as FormArray,
-      newLabels = labelOptions.map(label => LabelRow.getById(label.id)!) as LabelRow[];
+      newLabels = labelOptions.map(label => LabelRow.getById(label.id)!) as LabelRow[],
+      companyLabels = this.user.company.labels;
     
     //also consider old labels
     labelsControl.clear();
     newLabels.forEach((label) => {
+      const hasLabel = companyLabels.find(companyLabel => companyLabel.label.id == label.id),
+        fileData = new FormControl(defaultFileUIOuput(label.name, hasLabel?.date, hasLabel ? 'Fichier pris en compte' : undefined)); 
+      
       const form  = new FormGroup({
         label: new FormControl(label),
-        fileData: new FormControl(defaultFileUIOuput(label.name))
+        fileData
       });
-      form.markAsDirty();
-      form.markAsTouched();
       labelsControl.push(form);
     });
 

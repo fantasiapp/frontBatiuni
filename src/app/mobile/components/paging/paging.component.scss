@@ -5,6 +5,7 @@
 :host {
   position: fixed;
   z-index: 100;
+  top: 0;
   height: calc(#{$paging-height + $paging-decoration-height} + env(safe-area-inset-top));
   width: 100%;
   @include set-safe-area(padding, top);

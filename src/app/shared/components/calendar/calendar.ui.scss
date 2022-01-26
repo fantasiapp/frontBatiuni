@@ -92,3 +92,8 @@ h2 {
     background-color: $unAvailable;
     @extend %bgcolor;
 }
+
+.selected {
+    background-color: #1e2843;
+    @extend %bgcolor;
+}

@@ -2,8 +2,9 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { UIDefaultAccessor } from '../../common/classes';
 import * as moment from 'moment';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
+import { filterSplit } from '../../common/functions';
 
-export type Availability = 'available' | 'availablelimits' | 'unavailable' | 'nothing';
+export type Availability = 'available' | 'availablelimits' | 'unavailable' | 'selected' | 'nothing';
 export interface DayState {
   date: string;
   availability: Availability;
@@ -97,26 +98,52 @@ export class CalendarUI extends UIDefaultAccessor<DayState[]> {
     this.currentDay = day;
 
     if ( !this.embedded )
-      this.setCurrentDayState('available');
+      this.toggleDayState(this.currentDay, 'selected');
   }
 
-  setCurrentDayState(state: Availability) {
-    this.value = this.value!.filter(item => item.date != this.currentDay.date);
-
-    if (state != 'nothing')
-      this.value  = [...this.value, {
-        date: this.currentDay.date,
-        availability: state  
-      }];
-    
-    this.onChange(this.value);
-    
-    //remove previous classes
+  private setDOMState(state: Availability | null) {
     const target = this.lastClick.target as HTMLInputElement;
-    const others = ['available', 'availablelimits', 'unavailable'].filter(item => item != state)
+    let others = ['available', 'availablelimits', 'unavailable'];
+    if ( state ) others = others.filter(item => item != state)
     for (let i = 0; i < others.length; i++)
       target.classList.remove(`${others[i]}`);
     
-    target.classList.add(`${state}`);
+    if ( state ) target.classList.add(`${state}`);
   }
+
+  setCurrentDayState(state: Availability) {
+    const remaining = this.value!.filter(item => item.date !== this.currentDay.date);
+    let next;
+
+    if (state != 'nothing') {
+      next  = [...remaining, {
+        date: this.currentDay.date,
+        availability: state  
+      }];
+      this.setDOMState(state);
+    }
+    else {
+      next = remaining;
+      this.setDOMState(null);
+    }
+    
+    this.onChange(next);
+  }
+
+  toggleDayState(day: DayState, targetState: Availability) {
+    const [[current], remaining] = filterSplit(this.value!, (item) => item.date == day.date);
+    let next;
+    if ( current ) {
+      next = remaining;
+      this.setDOMState(null);
+    } else {
+      next = [...remaining, {
+        date: this.currentDay.date,
+        availability: targetState  
+      }];
+      this.setDOMState(targetState);
+    }
+    
+    this.onChange(next);
+  };
 }

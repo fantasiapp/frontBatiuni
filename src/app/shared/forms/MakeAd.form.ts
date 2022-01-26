@@ -195,9 +195,8 @@ export class MakeAdForm {
   
   ngOnInit() {
     const jobs = [...JobRow.instances.values()];
-    this.allJobs = jobs.map(job => ({id: job.id, name: job.name, checked: false}))
+    this.allJobs = jobs.map(job => ({id: job.id, name: job.name, checked: false}));
   }
-
 
   allJobs: Option[] = [];
   makeAdForm = new FormGroup({
