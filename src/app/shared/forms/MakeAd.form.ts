@@ -15,7 +15,7 @@ import { defaultFileUIOuput } from "../components/filesUI/files.ui";
 
     <div class="form-input">
       <label>Je cherche</label>
-      <input type="number" min="0" max="1000" class="form-element" formControlName="numberOfPeople"/>
+      <input type="number" min="0" class="form-element" formControlName="numberOfPeople"/>
     </div>
 
     <div class="form-input">

@@ -147,7 +147,7 @@ function createValue() {
     }
 
     serialize() {
-      return Object.assign({}, this);
+      return {id: this.id, name: this.name};
     }
   };
 };
@@ -208,7 +208,7 @@ export class FilesRow extends createTable<FilesRow>() {
 // Tables
 export class CompanyRow extends createTable<CompanyRow>() {
 
-  get name() { return this.getField('name') }
+  get name(): string { return this.getField('name') }
   get siret() { return this.getField('siret') }
   get capital() { return this.getField('capital') }
   get revenue() { return this.getField('revenue') }
@@ -243,7 +243,6 @@ export class EstablishmentsRow extends createTable<EstablishmentsRow>() {
 };
 
 export class PostRow extends createTable<PostRow>() {
-  get company(): CompanyRow { return this.getField('Company'); };
   get job(): JobRow { return this.getField('job'); }
   get numberOfPeople(): number { return this.getField('numberOfPeople'); }
   get address(): string { return this.getField('address'); }
@@ -259,6 +258,18 @@ export class PostRow extends createTable<PostRow>() {
   get counterOffer(): boolean { return this.getField('counterOffer'); }
   get description(): string { return this.getField('description'); }
   get details(): DetailedPostRow[] { return this.getField('DetailedPost'); }
+  
+
+  //is it expensive ?
+  static getCompanyName(post: Serialized<PostRow>) {
+    for ( const [id, company] of CompanyRow.instances ) {
+      const postIds = company.posts.map(post => post.id);
+      if ( postIds.includes(post.id) )
+        return company.name;
+    }
+    
+    throw "Post doesn't belong to any company. dev: Careful when updating"
+  };
 };
 
 //Objectives

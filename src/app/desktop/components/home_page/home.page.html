@@ -1,44 +1,49 @@
-<tabs [tabs]="3" [(activeView)]="activeView" bottom>
-  <span tab_0>Brouillon</span>
-  <span tab_1>En Ligne</span>
-  <span tab_2>Validées</span>
-</tabs>
-
-<div class="web-page">
-  <section class="filters">
-    <div class="header">
-      <img src="assets/Filtrer par.svg"/> Filtrer par
-    </div>
-    <pme-filter-form [activeView]="activeView"></pme-filter-form>
-  </section>
+<ng-container *ngIf="user$ | async as user">
+  <tabs [tabs]="3" [(activeView)]="activeView" bottom>
+    <span tab_0>Brouillon</span>
+    <span tab_1>En Ligne</span>
+    <span tab_2>Validées</span>
+  </tabs>
   
-  <section class="main web-content font-Poppins">
-    <searchbar></searchbar>
-    <div class="report-search">
-      Resultat <span class="no-result">10 annonces</span>
-    </div>
-  
-    <div class="results space-children-margin">
-      <ng-container [ngSwitch]="activeView">
-        <ng-container *ngSwitchCase="0">
-          <offer
-            *ngFor="let mission of annonces"
-            src="assets/brouillon.svg"
-            [routerLink]="['', 'brouillon']"></offer>
+  <div class="web-page">
+    <section class="filters">
+      <div class="header">
+        <img src="assets/Filtrer par.svg"/> Filtrer par
+      </div>
+      <pme-filter-form [activeView]="activeView"></pme-filter-form>
+    </section>
+    
+    <section class="main web-content font-Poppins">
+      <searchbar></searchbar>
+      <div class="report-search">
+        Resultat <span class="no-result">10 annonces</span>
+      </div>
+    
+      <div class="results space-children-margin">
+        <ng-container [ngSwitch]="activeView">
+          <ng-container *ngSwitchCase="0">
+            <offer
+              *ngFor="let draft of getDrafts(user)"
+              src="assets/brouillon.svg"
+              [deletable]="true"
+              [post]="draft"
+              (click)="openPost(draft)"
+              ></offer> 
+          </ng-container>
+          <ng-container *ngSwitchCase="1">
+            <offer
+              *ngFor="let mission of annonces"
+              src="assets/enligne.svg"
+              [routerLink]="['', 'annonce-en-ligne']"></offer>
+          </ng-container>
+          <ng-container *ngSwitchCase="2">
+            <offer
+              *ngFor="let mission of annonces"
+              src="assets/validée.svg"
+              [routerLink]="['', 'annonce-validee']"></offer>
+          </ng-container>
         </ng-container>
-        <ng-container *ngSwitchCase="1">
-          <offer
-            *ngFor="let mission of annonces"
-            src="assets/enligne.svg"
-            [routerLink]="['', 'annonce-en-ligne']"></offer>
-        </ng-container>
-        <ng-container *ngSwitchCase="2">
-          <offer
-            *ngFor="let mission of annonces"
-            src="assets/validée.svg"
-            [routerLink]="['', 'annonce-validee']"></offer>
-        </ng-container>
-      </ng-container>
-    </div>
-  </section>
-</div>
+      </div>
+    </section>
+  </div>
+</ng-container>

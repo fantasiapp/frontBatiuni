@@ -10,19 +10,18 @@ import { Serialized } from "../../common/types";
 })
 export class OfferComponent { 
   @Input()
-  company: string = "Nom de l'entreprise";
-  @Input()
-  fourniture: string = "Fourniture et pose";
-  @Input()
-  address: string = "Adresse du chantier";
-  @Input()
-  date: string  = 'December 17, 1995 03:24:00'
-  @Input()
   src: string = "assets/confirmation.svg"
+  
   @Input()
   deletable: boolean = false;
 
   @Input() post!: Serialized<PostRow>;
+
+  get companyName() { return PostRow.getCompanyName(this.post); }
+
+  ngOnInit() {
+    console.log(this.post);
+  }
 
   @HostBinding("class.delete")
   delete: boolean = false;

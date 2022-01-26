@@ -254,6 +254,9 @@ input {
 //used for offer and offfer pages
 .offres-logo {
   @include circle(80px, rgb(241, 241, 241));
+
+  img { object-fit: contain; }
+  flex-shrink: 0;
 }
 //--------------------------------------------------
 
