@@ -13,7 +13,7 @@ export class ChangeProfilePicture {
   static readonly type = '[User] Change Profile Picture';
   ext: string = '';
   imageBase64: string = '';
-  expirationDate: string = '31-02-2022';
+  expirationDate: string = '2025-12-31';
   constructor(src: any, public name: string) {
     this.ext = src.format;
     this.imageBase64 = src.base64String;
