@@ -4,15 +4,16 @@ import { Router } from "@angular/router";
 import { Store } from "@ngxs/store";
 import { bufferCount, debounceTime, last, map, take, takeUntil } from "rxjs/operators";
 import { Register } from "src/models/auth/auth.actions";
-import { ComplexPassword, MatchField, setErrors } from "src/validators/verify";
+import { ComplexPassword, MatchField, RequiredType, setErrors } from "src/validators/verify";
 import { SlidesDirective } from "../directives/slides.directive";
 import { Option } from "src/models/option";
 import { Email } from "src/validators/persist";
-import { JobRow, RoleRow } from "src/models/data/data.model";
+import { EstablishmentsRow, JobRow, RoleRow } from "src/models/data/data.model";
 import { merge, race, Subject } from "rxjs";
 import { GetCompanies } from "src/models/misc/misc.actions";
 import { UISuggestionBox } from "../components/suggestionbox/suggestionbox.component";
 import { Destroy$ } from "../common/classes";
+import { Serialized } from "../common/types";
 
 
 
@@ -70,7 +71,8 @@ import { Destroy$ } from "../common/classes";
       
           <div class="form-input">
             <label>Nom de l'entreprise</label>
-            <input type="text" class="form-element" formControlName="company" (input)="onCompanySearch($event)" #search/>
+            <input type="text" class="form-element" formControlName="companyName" (input)="onCompanySearch($event)" #search/>
+            <input type="text" class="form-element" formControlName="company" style="display: none"/>
             <suggestion-box [query]="searchQuery | async" [action]="actions.GetCompanies" (choice)="onChoice($event)"></suggestion-box>
             <img *ngIf="suggestionBox && !suggestionBox.showSuggestions" src="assets/X.svg" class="cancel-company" (click)="cancelCompany() && search.focus()"/>
           </div>
@@ -89,7 +91,7 @@ import { Destroy$ } from "../common/classes";
           <div *ngIf="registerForm.errors?.server" class="server-error">
             {{ registerForm.errors?.server }}
           </div>
-          <button *ngIf="showSubmitButton" class="button discover gradient" style="width: 250px" [disabled]="!registerForm.valid">Valider</button>
+          <button *ngIf="showSubmitButton && suggestionBox && !suggestionBox.showSuggestions"  class="button discover gradient" style="width: 250px" [disabled]="!registerForm.valid">Valider</button>
         </div>
       
         <div *ngIf="showSteps" class="form-step">
@@ -177,7 +179,8 @@ export class RegisterForm extends Destroy$ {
     ]),
     proposer: new FormControl(''),
     role: new FormControl([], [Validators.required]),
-    company: new FormControl('', [Validators.required]),
+    company: new FormControl('', [Validators.required, RequiredType('object', 'CUSTOM', 'Veuillez choisir une entreprise de la liste.')]),
+    companyName: new FormControl(''),
     jobs: new FormControl([], [Validators.required])
   }, { });
 
@@ -215,16 +218,24 @@ export class RegisterForm extends Destroy$ {
   searchQuery = new Subject<string>();
   searchEvent = new Subject<Event>();
 
-  onCompanySearch(e: Event) { this.searchEvent.next(e); }
+  onCompanySearch(e: Event) {
+    if ( !this.suggestionBox!.showSuggestions )
+      this.suggestionBox!.showSuggestions = true;
+
+    this.searchEvent.next(e);
+    this.registerForm.get('company')?.setValue((e.target as HTMLInputElement).value);
+  }
 
   actions = {GetCompanies};
 
-  onChoice(name: string) {
-    this.registerForm.get('company')?.setValue(name);
+  onChoice(establishment: EstablishmentsRow) {
+    this.registerForm.get('company')?.setValue(establishment);
+    this.registerForm.get('companyName')?.setValue(establishment.name);
   }
 
   cancelCompany() {
     this.registerForm.get('company')?.setValue('');
+    this.registerForm.get('companyName')?.setValue('');
     if ( this.suggestionBox ) this.suggestionBox.showSuggestions = true;
     return true;
   }

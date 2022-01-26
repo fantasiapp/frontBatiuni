@@ -23,6 +23,17 @@ export const ComplexPassword = () => {
   }
 };
 
+export const RequiredType = (type: string, error: string, ...args: string[]) => {
+  return (control: AbstractControl) => {
+    let content = control.value,
+    errors: ValidationErrors = {};
+
+    if ( typeof content != type )
+      errors[error] = args;
+    return Object.keys(errors).length ? errors : null;
+  }
+};
+
 export const setErrors = (form: AbstractControl, errors: ValidationErrors | null) => {
   if ( !errors ) return;
   if ( errors.all ) form.setErrors({server: errors.all});

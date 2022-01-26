@@ -94,6 +94,16 @@ export class ProfileComponent {
       });
   }
 
+  changePassword(form: FormGroup) {
+    console.log(form, form.value);
+    let { oldPwd, newPwd } = form.value;
+    let req = this.store.dispatch(new UserActions.ChangePassword(oldPwd, newPwd));
+    req.subscribe(
+      success => { this.info.show("success", "Mot de passe changé avec succès", 2000); },
+      error => { this.info.show("error", "Erreur lors du changement du mot de passe"); }
+    )
+  }
+
   changeProfileType(type: boolean) {
     this.store.dispatch(new UserActions.ChangeProfileType(type));
   };

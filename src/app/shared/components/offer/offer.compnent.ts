@@ -11,13 +11,13 @@ import { Serialized } from "../../common/types";
 export class OfferComponent { 
   @Input()
   src: string = "assets/confirmation.svg"
-  
+
   @Input()
   deletable: boolean = false;
 
   @Input() post!: Serialized<PostRow>;
 
-  get companyName() { return PostRow.getCompanyName(this.post); }
+  get companyName() { return this.post ? PostRow.getCompanyName(this.post) : ''; }
 
   ngOnInit() {
     console.log(this.post);

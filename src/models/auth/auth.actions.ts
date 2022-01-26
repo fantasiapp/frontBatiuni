@@ -22,7 +22,7 @@ export class Register {
     public lastname: string,
     public email: string,
     public password: string,
-    public company: string,
+    public company: any,
     public role: number,
     public proposer: string,
     public jobs: string[]

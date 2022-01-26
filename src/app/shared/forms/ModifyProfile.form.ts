@@ -226,7 +226,7 @@ export class ModifyProfileForm {
   @Input() user!: Serialized<UserProfileRow>;
   @Input() index: number = 0;
   @Input() animate: boolean = true;
-  @Output() submit = new EventEmitter<FormGroup>();
+  @Output() submitted = new EventEmitter<FormGroup>();
   @Output() openFile = new EventEmitter<string>();
   @ViewChild(SlidesDirective) slider!: SlidesDirective;
 
@@ -290,7 +290,7 @@ export class ModifyProfileForm {
   @HostListener('swiperight')
   onSwipeRight() { this.slider.right(); }
 
-  onSubmit() { this.submit.emit(this.form); }
+  onSubmit() { this.submitted.emit(this.form); }
 
   constructor(private cd: ChangeDetectorRef) {}
   

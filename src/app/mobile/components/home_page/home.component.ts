@@ -47,8 +47,6 @@ export class HomeComponent extends Destroy$ {
     console.log('opening', post);
     this.editMenu = {
       open: true, post
-    };
-    
-    console.log(this.editMenu);
+    }
   }
 };

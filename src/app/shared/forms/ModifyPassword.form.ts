@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Output } from "@angular/core";
+import { ChangeDetectionStrategy, Component, EventEmitter, Output } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { ComplexPassword, MatchField } from "src/validators/verify";
 import * as UserActions from "src/models/user/user.actions";
@@ -47,7 +47,9 @@ import { throwError } from "rxjs";
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ModifyPasswordForm {
-  constructor(private store: Store) {}
+  constructor() {}
+
+  @Output() submitted = new EventEmitter<FormGroup>();
 
   // Modify password 
   modifyPwdForm = new FormGroup({
@@ -62,13 +64,5 @@ export class ModifyPasswordForm {
     ])
   }, {})
 
-  onSubmit() {
-    let { oldPwd, newPwd } = this.modifyPwdForm.value;
-    let req = this.store.dispatch(new UserActions.ChangePassword(oldPwd, newPwd));
-    req.pipe(
-      catchError((err: HttpErrorResponse) => {
-        return throwError(err);
-      })
-    ).subscribe(console.info);
-  }
+  onSubmit() { console.log('send'); this.submitted.emit(this.modifyPwdForm); }
 };

@@ -127,11 +127,7 @@ export class CreatePost {
     public files: any,
     public draft: boolean
   ) {
-    console.log(this);
-  };
 
-  private static renameAddedFile(doc: any) {
-    doc.fileData.nature = doc.name;
   };
 
   static fromPostForm(value: any, draft: boolean) {

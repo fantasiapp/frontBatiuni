@@ -1,9 +1,9 @@
 <div class="container grow flex center-cross space-between" (swipeleft)="showDeleteButton()" (swiperight)="hideDeleteButton()" [ngClass]="{'moveLeft':delete}" >
   <div class="offres-infos">
     <p class="entreprise">{{companyName}}</p>
-    <p class="metier">{{post.manPower ? 'Man d\'oeuvre' : 'Fourniture et Pose'}}</p>
-    <p class="adresse">{{post.address}}</p>
-    <p class="date">{{post.dueDate}}</p>
+    <p class="metier">{{post?.manPower ? 'Man d\'oeuvre' : 'Fourniture et Pose'}}</p>
+    <p class="address">{{post?.address || 'addresse'}}</p>
+    <p class="date">{{post?.dueDate ?  (post.dueDate | date) : '19 Janvier 2038'}}</p>
   </div>
   <div class="offres-logo flex center">
     <img [src]="src"/>

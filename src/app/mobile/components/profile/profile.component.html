@@ -83,8 +83,8 @@
       <stars value="3.9"></stars>
   
       <div class="form-container full-width grow flex column position-relative">
-        <modify-password-form *ngIf="modifyPassword" class="grow"></modify-password-form>
-        <modify-profile-form [user]="user.profile!" *ngIf="!modifyPassword" class="grow" (submit)="modifyProfile($event)" (openFile)="openFile($event)" #modifyForm></modify-profile-form>
+        <modify-password-form *ngIf="modifyPassword" class="grow" (submitted)="changePassword($event)"></modify-password-form>
+        <modify-profile-form [user]="user.profile!" *ngIf="!modifyPassword" class="grow" (submitted)="modifyProfile($event)" (openFile)="openFile($event)" #modifyForm></modify-profile-form>
       </div>
     </div>
   </slidemenu>

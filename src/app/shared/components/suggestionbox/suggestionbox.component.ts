@@ -67,10 +67,10 @@ export class UISuggestionBox {
   action: any;
 
   @Output()
-  choice = new EventEmitter<string>();
+  choice = new EventEmitter<EstablishmentsRow>();
 
   choose(suggestion: EstablishmentsRow) {
     this.showSuggestions = false;
-    this.choice.emit(suggestion.name);
+    this.choice.emit(suggestion);
   }
 };

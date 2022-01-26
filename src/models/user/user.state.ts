@@ -40,7 +40,10 @@ export class UserState {
   @Action(ChangePassword)
   modifyPassword(ctx: StateContext<User>, action: ChangePassword) {
     return this.http.post('data', action).pipe(
-      tap((response: any) => console.log(response))
+      tap((response: any) => {
+        console.log(response);
+        if ( response[action.action] != 'OK' ) throw response['messages'];
+      })
     );
   }
 
@@ -55,7 +58,7 @@ export class UserState {
         return throwError(err);
       }),
       tap((response: any) => {
-        if ( response['uploadFile'] == 'Error' ) return throwError(response['messages']);
+        if ( response['uploadFile'] !== 'OK' ) throw response['messages'];
         delete response['uploadFile'];
         // add to cached files
         const files = Object.keys(response).map(id => new FilesRow(+id, [...response[+id], action.fileBase64]));
@@ -64,7 +67,6 @@ export class UserState {
           CompanyRow.getById(user.profile!.company.id).pushValue('Files', file);
         
         ctx.patchState({profile: UserProfileRow.getById(user.profile!.id).serialize()});
-        return true;
       })
     );
   }
@@ -79,7 +81,7 @@ export class UserState {
         return throwError(err);
       }),
       tap((response: any) => {
-        if ( response['dataPost'] == 'Error' ) return throwError(response['messages']);
+        if ( response['dataPost'] !== 'Error' ) throw response['messages'];
         const file = new FilesRow(action.id, response[action.id]),
           profile = UserProfileRow.getById(user.profile!.id),
           index = profile.company.files.findIndex(file => file.id == action.id);
@@ -89,7 +91,6 @@ export class UserState {
         profile.company.files.splice(index, 1, file);
         ctx.patchState({profile: UserProfileRow.getById(user.profile!.id).serialize()})
         console.log(ctx.getState().profile!.company.files);
-        return null;
         //add to company
       })
     );
@@ -169,13 +170,10 @@ export class UserState {
       tap((response: any) => {
         console.log('response', response);
         if ( response['uploadPost'] !== 'OK' )
-          return throwError(response['messages']);
+          throw response['messages'];
         
         delete response['uploadPost'];
         Object.keys(response).map(id => console.log(new PostRow(+id, response[+id])));
-
-
-        return true;
       }),
       
       mergeMap(() => ctx.dispatch(
