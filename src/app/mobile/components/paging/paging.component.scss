@@ -5,9 +5,9 @@
 :host {
   position: fixed;
   z-index: 100;
-  height: $paging-height + $paging-decoration-height;
+  height: calc(#{$paging-height + $paging-decoration-height} + env(safe-area-inset-top));
   width: 100%;
-  @include set-safe-area(top);
+  @include set-safe-area(padding, top);
 
   border-bottom: 5px solid white; //cover the blue line
 }
