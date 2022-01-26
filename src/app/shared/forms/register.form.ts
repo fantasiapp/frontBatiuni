@@ -2,15 +2,17 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostBinding, Inp
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
 import { Store } from "@ngxs/store";
-import { take } from "rxjs/operators";
+import { bufferCount, debounceTime, last, map, take, takeUntil } from "rxjs/operators";
 import { Register } from "src/models/auth/auth.actions";
 import { ComplexPassword, MatchField, setErrors } from "src/validators/verify";
 import { SlidesDirective } from "../directives/slides.directive";
 import { Option } from "src/models/option";
 import { Email } from "src/validators/persist";
 import { JobRow, RoleRow } from "src/models/data/data.model";
-import { Subject } from "rxjs";
+import { merge, race, Subject } from "rxjs";
 import { GetCompanies } from "src/models/misc/misc.actions";
+import { UISuggestionBox } from "../components/suggestionbox/suggestionbox.component";
+import { Destroy$ } from "../common/classes";
 
 
 
@@ -65,15 +67,12 @@ import { GetCompanies } from "src/models/misc/misc.actions";
           <options formControlName="role" [options]="roles" type="radio" [searchable]="false" ifEmpty="...">
           </options>
         </div>
-    
-        <div class="form-input">
-          <label>Nom de l'entreprise</label><input type="text" formControlName="company"/>
-        </div>
       
           <div class="form-input">
             <label>Nom de l'entreprise</label>
-            <input type="text" class="form-element" formControlName="company" (input)="onCompanySearch($event)"/>
+            <input type="text" class="form-element" formControlName="company" (input)="onCompanySearch($event)" #search/>
             <suggestion-box [query]="searchQuery | async" [action]="actions.GetCompanies" (choice)="onChoice($event)"></suggestion-box>
+            <img *ngIf="suggestionBox && !suggestionBox.showSuggestions" src="assets/X.svg" class="cancel-company" (click)="cancelCompany() && search.focus()"/>
           </div>
         
           <div class="form-input">
@@ -125,17 +124,29 @@ import { GetCompanies } from "src/models/misc/misc.actions";
       background: white;
       box-shadow: 0 4px 4px 0 #ccc;
     }
+
+    .cancel-company {
+      bottom: 10px; right: 5px;
+      transform-origin: center;
+      transform: scale(0.7);
+      filter: invert(15%) sepia(70%) saturate(5364%) hue-rotate(353deg) brightness(97%) contrast(126%);
+    }
   `],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class RegisterForm {
+export class RegisterForm extends Destroy$ {
 
   //move this statement to parent
   @HostBinding('class')
   get classes() { return 'hosted-page flex column'; }
 
   onMobile: boolean = window.innerWidth <= 768;
-  constructor(private store: Store, private router: Router, private cd: ChangeDetectorRef) {}
+  constructor(private store: Store, private router: Router, private cd: ChangeDetectorRef) {
+    super();
+  }
+
+  @ViewChild(UISuggestionBox)
+  suggestionBox?: UISuggestionBox;
 
   @ViewChild(SlidesDirective, {static: true})
   slider!: SlidesDirective;
@@ -185,44 +196,37 @@ export class RegisterForm {
       );
   }
 
+  ngOnInit() {
+    const ev = this.searchEvent.pipe(takeUntil(this.destroy$)),
+      eachFour = ev.pipe(bufferCount(4), map((l: Event[]) => l[l.length - 1])),
+      eachSecond = ev.pipe(debounceTime(1000));
+    
+    merge(eachFour, eachSecond).subscribe((e: Event) => {
+      const value = (e.target as HTMLInputElement).value;
+      this.searchQuery.next(value);
+    });
+  }
+
   onNavigate(dx: number, done?: Function) {
     if ( dx > 0 ) this.slider.left();
     else this.slider.right();
   }
 
   searchQuery = new Subject<string>();
+  searchEvent = new Subject<Event>();
 
-  /* input behaviour */
-  /* group this to suggestion box in the end */
-  private lastEmit: number | null = null;
-  private lastLength: number = 0;
-  private timeout: any = null;
-
-  onCompanySearch(e: Event) {
-    const value = (e.target as HTMLInputElement).value,
-      diff = value.length - this.lastLength,
-      now = +(new Date);
-
-    
-    //for future completion
-    if ( this.timeout ) {clearTimeout(this.timeout);}
-    this.timeout = setTimeout(() => {
-      this.searchQuery.next(value);
-      this.lastEmit = null;
-      this.lastLength = value.length;
-    }, 1000);
-    
-    if ( diff >= 4 || (this.lastEmit && (now - this.lastEmit > 4000))) {
-      this.searchQuery.next(value);
-      this.lastEmit = now;
-      this.lastLength = value.length;
-    }
-  }
+  onCompanySearch(e: Event) { this.searchEvent.next(e); }
 
   actions = {GetCompanies};
 
   onChoice(name: string) {
     this.registerForm.get('company')?.setValue(name);
+  }
+
+  cancelCompany() {
+    this.registerForm.get('company')?.setValue('');
+    if ( this.suggestionBox ) this.suggestionBox.showSuggestions = true;
+    return true;
   }
 
   jobs: Option[] = [...JobRow.instances.values()].map(job => ({...job, checked: false}));

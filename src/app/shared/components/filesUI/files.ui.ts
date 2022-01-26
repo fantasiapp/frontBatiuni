@@ -19,7 +19,7 @@ export function defaultFileUIOuput(nature: string = '', date?: string, name?: st
 }
 
 @Component({
-  selector: "fileinput",
+  selector: 'fileinput',
   templateUrl: "./file.ui.html",
   styleUrls: ["./file.ui.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -70,7 +70,6 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
 
   private getBase64(files: FileList, index: number = 0) {
     const reader = new FileReader();
-    console.log('reading', files.item(index));
     reader.readAsDataURL(files.item(index)!);
     return new Promise((res, rej) => {
       reader.onload = () => res(reader.result);
