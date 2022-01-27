@@ -26,7 +26,7 @@
 
       <ng-container [ngSwitch]="activeView">
         <ng-container *ngSwitchCase="0">
-          <profile-resume class="flex row center-cross space-around" [user]="user"></profile-resume>
+          <profile-resume class="flex row center-cross space-around" [user]="user" ></profile-resume>
           <section class="job-description full-width space-children-margin">
 
             <span class="text-light-emphasis">Nom de l'entreprise : </span>
@@ -56,6 +56,22 @@
           </section>
         </ng-container>
         <ng-container *ngSwitchCase="1">
+          <profile-resume class="flex row center-cross space-around"  [changeImage]="true" [user]="user" ></profile-resume>
+
+            <popup>
+            <div class="popup-header flex center-cross ">
+                <h3 class="font-Poppins">Modifier l'image</h3>
+            </div>  
+            <div class="popup-content flex center">
+              
+                  <div class="pic"></div>
+                
+            </div>  
+            <div class="popup-bottom flex center-cross space-around">
+              <button class="button passive">ADD</button>
+              <button class="button passive">DELETE</button>
+            </div>  
+            </popup>
           <step direction="vertical" [tacheList]="[
             {name: 'Infos Personelles'},
             {name: 'Infos entreprise'},

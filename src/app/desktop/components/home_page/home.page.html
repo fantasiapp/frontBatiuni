@@ -14,7 +14,7 @@
     </section>
     
     <section class="main web-content font-Poppins">
-      <searchbar></searchbar>
+      <searchbar [placeholder]="activeView == 0 ? 'Recheche brouillon...' : activeView == 1 ? 'Recheche annonces enligne...' :  'Recheche annonces validées'"></searchbar>
       <div class="report-search">
         Resultat <span class="no-result">10 annonces</span>
       </div>
