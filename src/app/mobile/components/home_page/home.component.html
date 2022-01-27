@@ -62,6 +62,7 @@
       <ad-form [post]="editMenu.post" [withSubmit]="false" [page]="false" content></ad-form>
     </div>
   </slidemenu>
+
   <slidemenu [(open)]="checkMenu.open" [header]="false" #slideOnlinePost>
     <header class="clear-margin full-width sticky-header flex center-cross annonce" customHeader>
       <img (click)="slideOnlinePost.close()" src="assets/arrowlblack.svg" />
@@ -70,7 +71,7 @@
     </header>
 
     <ng-container content>
-      <annonce-resume class="hosted-page" [collapsed]="false" [post]="checkMenu.post"></annonce-resume>
+      <annonce-resume class="hosted-page" [collapsed]="false" [post]="checkMenu.post!"></annonce-resume>
 
       <swipeup [(open)]="checkMenu.swipeup">
         <li data-notification-number="2" class="notification">Afficher les réponses</li>

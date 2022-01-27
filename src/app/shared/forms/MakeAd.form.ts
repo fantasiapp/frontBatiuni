@@ -210,15 +210,41 @@ export class MakeAdForm {
 
   @Input() page: boolean = true;
 
-  @Input() post: Post | null = null;
+  private _post: Post | null = null;
+  get post() { return this._post; }
+  @Input()
+  set post(p: Post | null) {
+    if ( !p || p == this._post ) return;
+
+    this.makeAdForm.get('dueDate')?.setValue(p.dueDate);
+    this.makeAdForm.get('startDate')?.setValue(p.startDate);
+    this.makeAdForm.get('endDate')?.setValue(p.endDate);
+    this.makeAdForm.get('manPower')?.setValue(p.manPower);
+    this.makeAdForm.get('job')?.setValue(p.job ? [{id: p.job.id, name: p.job.name, checked: true}] : []);
+    this.makeAdForm.get('address')?.setValue(p.address);
+    this.makeAdForm.get('numberOfPeople')?.setValue(p.numberOfPeople);
+    this.makeAdForm.get('counterOffer')?.setValue(p.counterOffer);
+    this.makeAdForm.get('hourlyStart')?.setValue(p.hourlyStart);
+    this.makeAdForm.get('hourlyEnd')?.setValue(p.hourlyEnd);
+    // this.makeAdForm.get('currency')?.setValue(p.currency); //writeValue for Options
+    this.makeAdForm.get('description')?.setValue(p.description);
+    this.makeAdForm.get('amount')?.setValue(p.amount);
+    // this.makeAdForm.get('detailedPost')?.setValue(p.details.map(
+    //   detail => new FormGroup({description: new FormControl(detail.name)})
+    // ));
+    //download files
+  };
 
   currencies = ['$', '€', '£'].map((currency, id) => ({id, name: currency, checked: id == 0}));
 
   constructor(private store: Store, private info: InfoService) {}
+
   
   ngOnInit() {
     const jobs = [...JobRow.instances.values()];
     this.allJobs = jobs.map(job => ({id: job.id, name: job.name, checked: false}));
+
+    //call load post    
 
     this.makeAdForm.valueChanges.subscribe(() => console.log(this.makeAdForm.value));
   }
