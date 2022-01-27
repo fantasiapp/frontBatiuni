@@ -96,7 +96,7 @@ import { defaultFileUIOuput } from "../components/filesUI/files.ui";
     <div class="form-input">
       <label>Montant</label>
       <div class="flex row remuneration">
-        <input type="number" min="0" max="10000" style="max-height: 51px" class="grow form-element" placeholder="Montant" formControlName="amount">
+        <input type="number" min="0" style="max-height: 51px" class="grow form-element" placeholder="Montant" formControlName="amount">
         <div class="option-container">
           <options [searchable]="false" type="radio" [options]="currencies" formControlName="currency" ifEmpty="$"></options>
         </div>
@@ -140,10 +140,10 @@ import { defaultFileUIOuput } from "../components/filesUI/files.ui";
   </form>
 
   <footer class="flex row space-between sticky-footer full-width submit-container" style="z-index: 999; background-color: white;">
-    <button class="button passive font-Poppins full-width">
+    <button class="button passive font-Poppins full-width" (click)="submit(true)">
       Brouillon
     </button>
-    <button class="button gradient font-Poppins full-width">
+    <button class="button gradient font-Poppins full-width" (click)="submit(false)">
       Valider
     </button>
   </footer>

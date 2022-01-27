@@ -68,7 +68,7 @@ button {
     }
 
     &.gradient {
-      background: linear-gradient(#134C6C, #0C5E8D);
+      background: linear-gradient($secondaryBackground, #{lighten($secondaryBackground, 5%)});
     }
 
     &.passive {

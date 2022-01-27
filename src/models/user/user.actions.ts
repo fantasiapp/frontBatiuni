@@ -106,6 +106,12 @@ export class DownloadFile {
   constructor(public id: number) {}
 };
 
+export class DeletePost {
+  static readonly type = '[User.PME] Delete Post';
+  action = 'deletePost';
+  constructor(public id: number) { }
+};
+
 export class CreatePost {
   static readonly type = '[User.PME] Create Post';
   action = 'uploadPost';
@@ -142,7 +148,7 @@ export class CreatePost {
     
     return new CreatePost(
       value.address,
-      value.job[0].id,
+      value.job?.[0]?.id || 0,
       value.numberOfPeople,
       value.dueDate,
       value.startDate,

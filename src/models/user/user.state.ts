@@ -2,11 +2,11 @@ import { HttpErrorResponse } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Action, Selector, State, StateContext, Store } from "@ngxs/store";
 import { catchError, mergeMap, take, tap } from "rxjs/operators";
-import { ChangePassword, ChangeProfileType, ChangeProfilePicture, GetUserData, ModifyUserProfile, UploadFile, DownloadFile, CreatePost } from "./user.actions";
+import { ChangePassword, ChangeProfileType, ChangeProfilePicture, GetUserData, ModifyUserProfile, UploadFile, DownloadFile, CreatePost, DeletePost } from "./user.actions";
 import { User } from "./user.model";
 import { Logout } from "../auth/auth.actions";
 import { throwError } from "rxjs";
-import { CompanyRow, FilesRow, Mapper, PostRow, UserProfileRow } from "../data/data.model";
+import { CompanyRow, DetailedPostRow, FilesRow, Mapper, PostRow, UserProfileRow } from "../data/data.model";
 import { HttpService } from "src/app/services/http.service";
 
 @State<User>({
@@ -163,7 +163,8 @@ export class UserState {
 
   @Action(CreatePost)
   createPost(ctx: StateContext<User>, action: CreatePost) {
-    const {files, ...createPost} = action,
+    const {profile} = ctx.getState(),
+      {files, ...createPost} = action,
       req = this.http.post('data', createPost);
     
     return req.pipe(
@@ -173,7 +174,12 @@ export class UserState {
           throw response['messages'];
         
         delete response['uploadPost'];
-        Object.keys(response).map(id => console.log(new PostRow(+id, response[+id])));
+        const newPosts = Object.keys(response).map(id => new PostRow(+id, response[+id])),
+          userProfileData = UserProfileRow.getById(profile!.id),
+          userCompanyData = userProfileData.company;
+
+        newPosts.forEach(post => userCompanyData.pushValue('Post', post));
+        ctx.patchState({profile: userProfileData.serialize()})
       }),
       
       mergeMap(() => ctx.dispatch(
@@ -181,4 +187,36 @@ export class UserState {
       ))
     );
   };
+
+  @Action(DeletePost)
+  deletePost(ctx: StateContext<User>, action: DeletePost) {
+    const {profile} = ctx.getState();
+
+    return this.http.get('data', action).pipe(
+      catchError((err: HttpErrorResponse) => {
+        console.error(err);
+        return throwError('fatal error while retrieving general application data.');
+      }),
+      tap((response: any) => {
+        console.log(response);
+        if ( response['deletePost'] !== 'OK' ) throw response['messages'];
+        delete response['deletePost'];
+        const ids = Object.keys(response);
+        ids.forEach(id => {
+          const post = PostRow.getById(+id),
+            details = post.details;
+
+          details.forEach(detail => DetailedPostRow.destroy(detail.id));
+          PostRow.destroy(post.id);
+
+          const userProfileData = UserProfileRow.getById(profile!.id),
+            userCompanyData = userProfileData.company;
+
+          userCompanyData.removeValue('Post', post.id);
+
+          ctx.patchState({profile: userProfileData.serialize()})
+        });
+      })
+    )
+  }
 };

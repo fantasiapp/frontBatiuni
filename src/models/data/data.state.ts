@@ -4,7 +4,7 @@ import { Action, State, StateContext, Store } from "@ngxs/store";
 import { of, throwError } from "rxjs";
 import { catchError, tap } from "rxjs/operators";
 import { HttpService } from "src/app/services/http.service";
-import { DeletePost, GetGeneralData } from "./data.actions";
+import {GetGeneralData } from "./data.actions";
 import { DetailedPostRow, Mapper, PostRow } from "./data.model";
 
 @State({
@@ -32,28 +32,5 @@ export class DataState {
         localStorage.setItem('general-data', JSON.stringify(response));
       }) 
     );
-  }
-
-  @Action(DeletePost)
-  deletePost(ctx: StateContext<any>, action: DeletePost) {
-    return this.http.get('data', action).pipe(
-      catchError((err: HttpErrorResponse) => {
-        console.error(err);
-        return throwError('fatal error while retrieving general application data.');
-      }),
-      tap((response: any) => {
-        if ( response['deletePost'] == 'Error' ) return throwError(response['messages']);
-        delete response['deletePost'];
-        const ids = Object.keys(response);
-        ids.forEach(id => {
-          const post = PostRow.getById(+id),
-            details = post.details;
-
-          details.forEach(detail => DetailedPostRow.destroy(detail.id));
-          PostRow.destroy(post.id);
-        });
-        return 0;
-      })
-    )
   }
 };

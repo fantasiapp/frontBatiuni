@@ -92,6 +92,14 @@ class __table__ {
     value.push(data);
   };
 
+  removeValue(field: string, id: any) {
+    const value = this.getField(field);
+    if ( !value ) throw `Unknow field ${field} on ${this.structure.getName()}`;
+    if ( !Array.isArray(value) ) throw `Field ${field} on ${this.structure.getName()} is not an array.`;
+    const index = value.findIndex(q => q.id == id);
+    if ( index >= 0 ) value.splice(index, 1);
+  }
+
   getIndex(key: string) {
     return this.structure.fields.get(key);
   }

@@ -44,7 +44,6 @@ export class HomeComponent extends Destroy$ {
   };
 
   openPost(post: Serialized<PostRow>) {
-    console.log('opening', post);
     this.editMenu = {
       open: true, post
     }

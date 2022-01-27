@@ -1,5 +1,7 @@
 import { ChangeDetectionStrategy, Component, HostBinding, HostListener, Input} from "@angular/core";
+import { Store } from "@ngxs/store";
 import { PostRow } from "src/models/data/data.model";
+import { DeletePost } from "src/models/user/user.actions";
 import { Serialized } from "../../common/types";
 
 @Component({
@@ -9,6 +11,9 @@ import { Serialized } from "../../common/types";
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class OfferComponent { 
+
+  constructor(private store: Store) {}
+
   @Input()
   src: string = "assets/confirmation.svg"
 
@@ -44,7 +49,7 @@ export class OfferComponent {
   }
 
   deletePost(e: Event) {
-    console.log('deleting', this.post);
     e.stopPropagation();
+    this.store.dispatch(new DeletePost(this.post.id));
   }
 };
