@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Directive, Input, Output, EventEmitter } from "@angular/core";
+import { ChangeDetectionStrategy, Component, Directive, Input, Output, EventEmitter, ChangeDetectorRef } from "@angular/core";
 import { NG_VALUE_ACCESSOR } from "@angular/forms";
 import { Subscription } from "rxjs";
 import { UIDefaultAccessor } from "src/app/shared/common/classes";
@@ -43,12 +43,20 @@ export class UIRadioAccessor extends UIDefaultAccessor<string | boolean | number
       UIRadioAccessor.map.delete(this.host.name);
     }
   }
+
+  writeValue(value: string | number | boolean): void {
+    let items = UIRadioAccessor.map.get(this.host.name);
+    items?.forEach(item => {
+      item.host.valueChange.emit(item.host.value = (item.host.onselect == value));
+      item.host.forceUpdate();
+    });
+  }
 };
 
 @Component({
   selector: 'radiobox',
   template: `
-    <input type="radio" [attr.name]="name || null" [value]="onselect" (change)="onChange($event)" [checked]="value || null" tabindex="-1"/>
+    <input type="radio" [attr.name]="name || null" [value]="onselect" (change)="onChange($event)" [attr.checked]="value || null" tabindex="-1"/>
     <span></span>
   `,
   styleUrls: ['./box.component.scss'],
@@ -70,10 +78,12 @@ export class UIRadioboxComponent {
   //action used in accessors
   @Output() selection = new EventEmitter<string | boolean | number>();
 
-  constructor() {}
+  constructor(private cd: ChangeDetectorRef) {}
 
   onChange(e: Event) {
     this.valueChange.emit(this.value = true);
     this.selection.emit(this.onselect);
   }
+
+  forceUpdate() { this.cd.markForCheck(); }
 };

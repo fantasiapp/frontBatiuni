@@ -155,7 +155,7 @@ export class UploadPost {
       value.dueDate,
       value.startDate,
       value.endDate,
-      !!value.manPower,
+      value.manPower == "true",
       value.counterOffer,
       value.hourlyStart,
       value.hourlyEnd,

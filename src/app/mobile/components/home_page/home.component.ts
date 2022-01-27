@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy } from "@angular/core";
+import { Component, ChangeDetectionStrategy, SimpleChange, SimpleChanges } from "@angular/core";
 import { Select } from "@ngxs/store";
 import { BehaviorSubject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
@@ -48,13 +48,19 @@ export class HomeComponent extends Destroy$ {
 
   editMenu: PostMenu = { open: false, post: null };
 
-  checkMenu: PostMenu = { open: false, post: null }
+  checkMenu: PostMenu & { swipeup: boolean; } = { open: false, post: null, swipeup: false }
 
   openPost(post: Post) {
+    console.log('setting post', post);
     this.editMenu = { open: true, post };
   }
 
   checkPost(post: Post) {
-
+    this.checkMenu = { open: true, post, swipeup: false };
   }
+
+  checkPostMenu() {
+    console.log('menu');
+    this.checkMenu.swipeup = true;
+  } 
 };

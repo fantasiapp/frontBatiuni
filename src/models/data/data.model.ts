@@ -222,7 +222,7 @@ export class CompanyRow extends createTable<CompanyRow>() {
   get revenue() { return this.getField('revenue') }
   get logo() { return this.getField('logo') }
   get webSite() { return this.getField('webSite') }
-  get stars() { return this.getField('stars') }
+  get stars(): number { return this.getField('stars') }
   get companyPhone() { return this.getField('companyPhone') }
   get files(): FilesRow[] { return this.getField('Files'); }
 
@@ -269,11 +269,11 @@ export class PostRow extends createTable<PostRow>() {
   
 
   //is it expensive ?
-  static getCompanyName(post: Serialized<PostRow>) {
+  static getCompany(post: Post): Company {
     for ( const [id, company] of CompanyRow.instances ) {
       const postIds = company.posts.map(post => post.id);
       if ( postIds.includes(post.id) )
-        return company.name;
+        return company.serialize();
     }
     
     throw "Post doesn't belong to any company. dev: Careful when updating"

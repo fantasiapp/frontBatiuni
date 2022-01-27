@@ -7,3 +7,12 @@
 .submit-container {
   button { max-width: 45%;}
 }
+
+.annonce {
+  background: #FFFFFF !important;
+  color: black;
+}
+
+.notification {
+  @extend %has-notifications
+}
