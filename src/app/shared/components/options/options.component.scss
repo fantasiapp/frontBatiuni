@@ -89,7 +89,7 @@
     justify-content: space-between;
     margin : 8px 0;
 
-    box { transform-origin: 50% 50%; transform: scale(0.75); flex-shrink: 0; }
+    checkbox, radiobox { transform-origin: 50% 50%; transform: scale(0.75); flex-shrink: 0; }
   }
 }
 

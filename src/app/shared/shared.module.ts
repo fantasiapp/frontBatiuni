@@ -7,7 +7,7 @@ import { SOSFilterForm } from "./forms/SOSFilter.form";
 import { STFilterForm } from "./forms/STFilter.form";
 import { NgxSliderModule } from "@angular-slider/ngx-slider";
 import { OptionsModel } from "./components/options/options";
-import { UIBoxComponent } from "./components/box/box.component";
+import { UICheckboxComponent } from "./components/box/checkbox.component";
 import { UiMapComponent } from "./components/map/map.component";
 import { UINumberComponent } from "./components/number/number.component";
 import { UIProfileImageComponent } from "./components/profile-image/profile-image.component";
@@ -39,10 +39,13 @@ import { ControlErrorsDirective, ErrorMessageComponent } from "./common/formerro
 import { SpacingPipe } from "./pipes/spacing.pipe";
 import { UIPopup } from "./components/popup/popup.component";
 import { UIHSteps } from "./components/horizontal-steps/hsteps.ui";
+import { UIRadioAccessor, UIRadioboxComponent } from "./components/box/radiobox.component";
 
 @NgModule({
   declarations: [
-    UIBoxComponent,
+    UICheckboxComponent,
+    UIRadioboxComponent,
+    UIRadioAccessor,
     UiMapComponent,
     UINumberComponent,
     OptionsModel,
@@ -92,7 +95,9 @@ import { UIHSteps } from "./components/horizontal-steps/hsteps.ui";
     PMEFilterForm,
     SOSFilterForm,
     OnlineFilterForm,
-    UIBoxComponent,
+    UICheckboxComponent,
+    UIRadioboxComponent,
+    UIRadioAccessor,
     UiMapComponent,
     UINumberComponent,
     OptionsModel,
@@ -123,6 +128,7 @@ import { UIHSteps } from "./components/horizontal-steps/hsteps.ui";
     SpacingPipe,
     UIPopup,
     UIHSteps
+    
   ],
   providers: [ImageGenerator, InfoService]
 })

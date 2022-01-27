@@ -10,6 +10,8 @@ import { Post, PostRow } from "src/models/data/data.model";
 import { User } from "src/models/user/user.model";
 import { UserState } from "src/models/user/user.state";
 
+type PostMenu = { open: boolean; post: Post | null; };
+
 @Component({
   selector: 'home',
   templateUrl: './home.component.html',
@@ -44,14 +46,15 @@ export class HomeComponent extends Destroy$ {
 
   imports = { DistanceSliderConfig, SalarySliderConfig };
 
-  editMenu: { open: boolean; post: Post | null; } = {
-    open: false,
-    post: null
-  };
+  editMenu: PostMenu = { open: false, post: null };
+
+  checkMenu: PostMenu = { open: false, post: null }
 
   openPost(post: Post) {
-    this.editMenu = {
-      open: true, post
-    }
+    this.editMenu = { open: true, post };
+  }
+
+  checkPost(post: Post) {
+
   }
 };

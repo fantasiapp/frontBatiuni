@@ -189,7 +189,6 @@ export class UserState {
 
         userCompanyData.pushValue('Post', post);
 
-        console.log('id', post.id);
         uploads.forEach(upload => {
           upload.Post = post.id;
         });
