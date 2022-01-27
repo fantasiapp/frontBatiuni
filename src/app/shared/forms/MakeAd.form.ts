@@ -3,9 +3,10 @@ import { Form, FormArray, FormControl, FormGroup, Validators } from "@angular/fo
 import { Store } from "@ngxs/store";
 import { JobRow, PostRow } from "src/models/data/data.model";
 import { Option } from "src/models/option";
-import { CreatePost } from "src/models/user/user.actions";
+import { UploadPost } from "src/models/user/user.actions";
 import { Serialized } from "../common/types";
 import { defaultFileUIOuput } from "../components/filesUI/files.ui";
+import { InfoService } from "../components/info/info.component";
 
 @Component({
   selector: 'ad-form',
@@ -27,11 +28,11 @@ import { defaultFileUIOuput } from "../components/filesUI/files.ui";
       <label>Type</label>
       <div class="flex row radio-container">
         <div class="radio-item">
-          <box type="radio" class="grow" name="job-type" formControlName="manPower"></box>
+          <radiobox class="grow" [onselect]="true" formControlName="manPower"></radiobox>
           <span>Main d'oeuvre</span>
         </div>
         <div class="radio-item">
-          <box type="radio" class="grow" [value]="!makeAdForm.get('manPower')?.value" name="job-type"></box>
+          <radiobox class="grow" [onselect]="false" formControlName="manPower"></radiobox>
           <span>Fourniture et pose</span>
         </div>
       </div>
@@ -104,7 +105,7 @@ import { defaultFileUIOuput } from "../components/filesUI/files.ui";
     </div>
 
     <div class="form-input">
-      <box type="checkbox" formControlName="counterOffer"></box> <span>Autoriser une contre-offre</span>
+      <checkbox formControlName="counterOffer"></checkbox> <span>Autoriser une contre-offre</span>
     </div>
 
     <h2 class="form-section-title">Documents à télécharger</h2>
@@ -213,11 +214,13 @@ export class MakeAdForm {
 
   currencies = ['$', '€', '£'].map((currency, id) => ({id, name: currency, checked: id == 0}));
 
-  constructor(private store: Store) {}
+  constructor(private store: Store, private info: InfoService) {}
   
   ngOnInit() {
     const jobs = [...JobRow.instances.values()];
     this.allJobs = jobs.map(job => ({id: job.id, name: job.name, checked: false}));
+
+    this.makeAdForm.valueChanges.subscribe(() => console.log(this.makeAdForm.value));
   }
 
   allJobs: Option[] = [];
@@ -225,7 +228,7 @@ export class MakeAdForm {
     dueDate: new FormControl('2022-01-24'),
     startDate: new FormControl('2022-01-24'),
     endDate: new FormControl('2022-03-24'),
-    manPower: new FormControl(1),
+    manPower: new FormControl(0),
     job: new FormControl('', [Validators.required]),
     address: new FormControl('1 Rue Joliot Curie, 91190 Gif-sur-Yvette', [Validators.required]),
     numberOfPeople: new FormControl(1),
@@ -296,6 +299,11 @@ export class MakeAdForm {
   }
 
   submit(draft: boolean) {
-    this.store.dispatch(CreatePost.fromPostForm(this.makeAdForm.value, draft));
+    this.store.dispatch(UploadPost.fromPostForm(this.makeAdForm.value, draft)).subscribe(() => {
+    this.info.show("info", "Envoi de l'annonce...", Infinity);
+      this.info.show("success", "Annonce Envoyée", 2000);
+    }, () => {
+      this.info.show("error", "Echec de l'envoi", 5000);
+    });
   }
 }

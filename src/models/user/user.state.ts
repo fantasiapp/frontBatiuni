@@ -1,12 +1,12 @@
 import { HttpErrorResponse } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Action, Selector, State, StateContext, Store } from "@ngxs/store";
-import { catchError, mergeMap, take, tap } from "rxjs/operators";
-import { ChangePassword, ChangeProfileType, ChangeProfilePicture, GetUserData, ModifyUserProfile, UploadFile, DownloadFile, CreatePost, DeletePost } from "./user.actions";
+import { Action, Select, Selector, State, StateContext, Store } from "@ngxs/store";
+import { catchError, concatMap, map, mergeMap, take, tap } from "rxjs/operators";
+import { ChangePassword, ChangeProfileType, ChangeProfilePicture, GetUserData, ModifyUserProfile, UploadFile, DownloadFile, UploadPost, DeletePost } from "./user.actions";
 import { User } from "./user.model";
 import { Logout } from "../auth/auth.actions";
-import { throwError } from "rxjs";
-import { CompanyRow, DetailedPostRow, FilesRow, Mapper, PostRow, UserProfileRow } from "../data/data.model";
+import { of, throwError } from "rxjs";
+import { CompanyRow, DetailedPostRow, FilesRow, Mapper, Post, PostRow, UserProfileRow } from "../data/data.model";
 import { HttpService } from "src/app/services/http.service";
 
 @State<User>({
@@ -15,14 +15,17 @@ import { HttpService } from "src/app/services/http.service";
 })
 @Injectable()
 export class UserState {
+  //Selectors
   @Selector()
   static type(state: User) { return state.viewType; }
 
   @Selector()
   static profile(state: User) { return state.profile; }
 
+
   constructor(private store: Store, private http: HttpService) {}
 
+  //Action handlers
   @Action(ChangeProfileType)
   changeProfileType(ctx: StateContext<User>, action: ChangeProfileType) {
     return ctx.patchState({ viewType: action.type });
@@ -61,11 +64,12 @@ export class UserState {
         if ( response['uploadFile'] !== 'OK' ) throw response['messages'];
         delete response['uploadFile'];
         // add to cached files
-        const files = Object.keys(response).map(id => new FilesRow(+id, [...response[+id], action.fileBase64]));
+        const id = +Object.keys(response)[0];
+        const file = new FilesRow(id, [...response[id], action.fileBase64]);
         //add to company
-        for ( const file of files )
-          CompanyRow.getById(user.profile!.company.id).pushValue('Files', file);
-        
+        CompanyRow.getById(user.profile!.company.id).pushValue('Files', file);
+
+        //find a way to make minimal updates with a tree-like-structure
         ctx.patchState({profile: UserProfileRow.getById(user.profile!.id).serialize()});
       })
     );
@@ -161,30 +165,40 @@ export class UserState {
     );
   }
 
-  @Action(CreatePost)
-  createPost(ctx: StateContext<User>, action: CreatePost) {
+  @Action(UploadPost)
+  createPost(ctx: StateContext<User>, action: UploadPost) {
     const {profile} = ctx.getState(),
       {files, ...createPost} = action,
-      req = this.http.post('data', createPost);
+      req = this.http.post('data', createPost),
+      uploads = Object.keys(files).map((key: any) => new UploadFile(files[key], 'post', key));
     
     return req.pipe(
-      tap((response: any) => {
-        console.log('response', response);
+      map((response: any) => {
         if ( response['uploadPost'] !== 'OK' )
           throw response['messages'];
         
         delete response['uploadPost'];
-        const newPosts = Object.keys(response).map(id => new PostRow(+id, response[+id])),
-          userProfileData = UserProfileRow.getById(profile!.id),
+        const id = +Object.keys(response)[0],
+          post = new PostRow(id, response[id]);
+        
+        return post;
+      }),
+      concatMap((post: PostRow) => {
+        const userProfileData = UserProfileRow.getById(profile!.id),
           userCompanyData = userProfileData.company;
 
-        newPosts.forEach(post => userCompanyData.pushValue('Post', post));
-        ctx.patchState({profile: userProfileData.serialize()})
+        userCompanyData.pushValue('Post', post);
+
+        uploads.forEach(upload => {
+          upload.Post = post.id;
+        });
+
+        return ctx.dispatch(uploads)
       }),
-      
-      mergeMap(() => ctx.dispatch(
-        Object.keys(files).map((key: any) => new UploadFile(files[key], 'post-doc', key))
-      ))
+      concatMap(() => {
+        ctx.patchState({profile: UserProfileRow.getById(profile!.id).serialize()});
+        return of(true);
+      })
     );
   };
 

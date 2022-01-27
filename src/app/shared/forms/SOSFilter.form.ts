@@ -24,11 +24,11 @@ import { DistanceSliderConfig, SalarySliderConfig } from "src/app/shared/common/
       <label>Type</label>
       <div class="flex row radio-container">
         <div class="radio-item">
-          <box type="radio" class="grow" name="job-type"></box>
+          <radiobox class="grow" name="job-type"></radiobox>
           <span>Main d'oeuvre</span>
         </div>
         <div class="radio-item">
-          <box type="radio" class="grow" name="job-type"></box>
+          <radiobox class="grow" name="job-type"></radiobox>
           <span>Fourniture et pose</span>
         </div>
       </div>

@@ -14,13 +14,21 @@
           <input class="form-search" (input)="filterOptions($event)" type="text" placeholder="Rechercher un métier"/>
       </div>
       <div *ngIf="options.length" class="dropdown-content">
-        <ul>
+        <ul *ngIf="_type[0] == 'checkbox'; else radioMenu">
           <li *ngFor="let option of availableOptions; let index = index" class="flex center-cross">
             {{option.name}} 
-            <box [type]="_type[0]" [name]="_type[1] || null" (valueChange)="onChange(['toggle', option.id])" [value]="option.checked"></box>
-            <!-- <input (change)="onChange(['toggle', option.id])" class="option-selected" type="checkbox" [attr.checked]="option.checked || null"/> -->
+            <checkbox (valueChange)="onChange(['toggle', option.id])" [value]="option.checked"></checkbox>
           </li>
         </ul>
+        <ng-template #radioMenu>
+          <ul>
+            <li *ngFor="let option of availableOptions; let index = index" class="flex center-cross">
+              {{option.name}} 
+              <radiobox [name]="_type[1]" (valueChange)="onChange(['toggle', option.id])" [value]="option.checked"></radiobox>
+              <!-- <input (change)="onChange(['toggle', option.id])" class="option-selected" type="checkbox" [attr.checked]="option.checked || null"/> -->
+            </li>
+          </ul>
+        </ng-template>
       </div>
     </div>
 

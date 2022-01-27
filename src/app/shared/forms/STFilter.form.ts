@@ -30,11 +30,11 @@ import { DistanceSliderConfig, SalarySliderConfig } from "src/app/shared/common/
       <label>Type</label>
       <div class="flex row radio-container">
         <div class="radio-item">
-          <box type="radio" class="grow" name="job-type"></box>
+          <radiobox class="grow" name="job-type"></radiobox>
           <span>Main d'oeuvre</span>
         </div>
         <div class="radio-item">
-          <box type="radio" class="grow" name="job-type"></box>
+          <radiobox class="grow" name="job-type"></radiobox>
           <span>Fourniture et pose</span>
         </div>
       </div>
@@ -48,23 +48,23 @@ import { DistanceSliderConfig, SalarySliderConfig } from "src/app/shared/common/
     <div class="form-input space-children-margin">
       <label>Taille de l'entreprise</label>
       <div class="radio-item">
-        <box type="checkbox" class="grow" name="job-type"></box>
+        <checkbox class="grow" name="job-type"></checkbox>
         <span>Moins que 10 salariés</span>
       </div>
       <div class="radio-item">
-        <box type="checkbox" class="grow" name="job-type"></box>
+        <checkbox class="grow" name="job-type"></checkbox>
         <span>Entre 11 et 20 salariés</span>
       </div>
       <div class="radio-item">
-        <box type="checkbox" class="grow" name="job-type"></box>
+        <checkbox class="grow" name="job-type"></checkbox>
         <span>Entre 20 et 25 salariées</span>
       </div>
       <div class="radio-item">
-        <box type="checkbox" class="grow" name="job-type"></box>
+        <checkbox class="grow" name="job-type"></checkbox>
         <span>Entre 50 et 100 salariés</span>
       </div>
       <div class="radio-item">
-        <box type="checkbox" class="grow" name="job-type"></box>
+        <checkbox class="grow" name="job-type"></checkbox>
         <span>Plus de 100 salariés</span>
       </div>
     </div>

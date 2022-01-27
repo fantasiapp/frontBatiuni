@@ -24,7 +24,6 @@ export class HttpService implements HttpInterceptor {
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     const { token } = this.store.selectSnapshot(AuthState);
-    console.log('req', req, 'token', token);
     if ( !token ) return next.handle(req);
 
     return next.handle(req.clone({

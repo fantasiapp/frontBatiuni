@@ -7,7 +7,7 @@ import { SOSFilterForm } from "./forms/SOSFilter.form";
 import { STFilterForm } from "./forms/STFilter.form";
 import { NgxSliderModule } from "@angular-slider/ngx-slider";
 import { OptionsModel } from "./components/options/options";
-import { UIBoxComponent } from "./components/box/box.component";
+import { UICheckboxComponent } from "./components/box/checkbox.component";
 import { UiMapComponent } from "./components/map/map.component";
 import { UINumberComponent } from "./components/number/number.component";
 import { UIProfileImageComponent } from "./components/profile-image/profile-image.component";
@@ -30,7 +30,7 @@ import { ModifyProfileForm } from "./forms/ModifyProfile.form";
 import { ProfileResume } from "./components/profile-resume/profile-resume.component";
 import { FileIcon } from "./components/FileIcon/file.icon";
 import { UISOSCard } from "./components/SOSCard/SOSCard.ui";
-import { InfoHandler } from "./components/info/info.component";
+import { InfoHandler, InfoService } from "./components/info/info.component";
 import { ConnexionForm } from "./forms/connexion.form";
 import { CalendarUI } from "./components/calendar/calendar.ui";
 import { HorizantaleCalendar } from "./components/horizantalecalendar/horizantale.component";
@@ -40,10 +40,13 @@ import { SpacingPipe } from "./pipes/spacing.pipe";
 import { UIPopup } from "./components/popup/popup.component";
 import { UIHSteps } from "./components/horizontal-steps/hsteps.ui";
 import { Notifications } from "./components/notifications/notifications";
+import { UIRadioAccessor, UIRadioboxComponent } from "./components/box/radiobox.component";
 
 @NgModule({
   declarations: [
-    UIBoxComponent,
+    UICheckboxComponent,
+    UIRadioboxComponent,
+    UIRadioAccessor,
     UiMapComponent,
     UINumberComponent,
     OptionsModel,
@@ -94,7 +97,9 @@ import { Notifications } from "./components/notifications/notifications";
     PMEFilterForm,
     SOSFilterForm,
     OnlineFilterForm,
-    UIBoxComponent,
+    UICheckboxComponent,
+    UIRadioboxComponent,
+    UIRadioAccessor,
     UiMapComponent,
     UINumberComponent,
     OptionsModel,
@@ -125,8 +130,10 @@ import { Notifications } from "./components/notifications/notifications";
     SpacingPipe,
     UIPopup,
     UIHSteps,
-    Notifications
+    Notifications,
+    UIHSteps
+    
   ],
-  providers: [ImageGenerator]
+  providers: [ImageGenerator, InfoService]
 })
 export class SharedModule {}

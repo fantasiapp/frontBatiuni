@@ -106,14 +106,15 @@ export abstract class UIDefaultAccessor<T> implements ControlValueAccessor {
   get tabIndex() { return 0; }
 
 
-  onChange(e: any) {
+  onChange(e: any): any {
     if ( this.isDisabled ) { e.preventDefault?.(); return; }
     let next = this.getInput(e) as T;
-    if ( next != this.value ) {
+    if ( next !== this.value ) {
       this.valueChange.emit(this.value = next);
       this.onChanged(this.value);
     }
     this.onTouched();
+    return this.value;
   };
 
   //default implementation

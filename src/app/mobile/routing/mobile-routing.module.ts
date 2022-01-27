@@ -71,9 +71,6 @@ const routes: Routes = [{
     path: 'booster',
     component: BoosterPage
   }, {
-    path: 'annonce-en-ligne',
-    component: AnnonceEnlignePage
-  }, {
     path: 'annonce-validee',
     component: SuiviPME
   },{

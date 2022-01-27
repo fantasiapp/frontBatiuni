@@ -1,5 +1,5 @@
 import { FormGroup } from "@angular/forms";
-import { FileUI, FileUIOutput } from "src/app/shared/components/filesUI/files.ui";
+import { FileUIOutput } from "src/app/shared/components/filesUI/files.ui";
 import { PropertyTrap } from "src/app/shared/common/classes";
 import { getDirtyValues } from "src/app/shared/common/functions";
 import { JobForCompanyRow, JobRow, LabelForCompanyRow, LabelRow, UserProfileRow } from "../data/data.model";
@@ -89,6 +89,7 @@ export class UploadFile {
   nature: string;
   expirationDate: string;
   fileBase64: string;
+  Post?: number;
 
   //tell JLW to unify formats
   constructor(src: FileUIOutput, nature: string, name?: string) {
@@ -112,9 +113,10 @@ export class DeletePost {
   constructor(public id: number) { }
 };
 
-export class CreatePost {
+export class UploadPost {
   static readonly type = '[User.PME] Create Post';
   action = 'uploadPost';
+
   private constructor(
     public address: string,
     public Job: number,
@@ -146,7 +148,7 @@ export class CreatePost {
       files[doc.name] = doc.fileData;
     });
     
-    return new CreatePost(
+    return new UploadPost(
       value.address,
       value.job?.[0]?.id || 0,
       value.numberOfPeople,
@@ -161,7 +163,7 @@ export class CreatePost {
       value.description,
       value.amount,
       value.detailedPost.map((detail: any) => detail.description),
-      allDocs,
+      files,
       draft
     );
   }
