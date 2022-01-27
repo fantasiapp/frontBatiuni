@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
 import * as moment from 'moment';
 
 @Component({
@@ -18,7 +18,8 @@ export class HorizantaleCalendar implements OnInit {
         "Samedi",
         "Dimanche"
     ];
-
+    @Input()
+    hideForDesktop: boolean = true;
 
     monthSelect: any[] = [];
     dateSelect: any;

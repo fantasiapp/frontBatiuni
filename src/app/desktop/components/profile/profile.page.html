@@ -61,8 +61,11 @@
             {name: 'Infos entreprise'},
             {name: 'Certifications & labels'}
           ]" #stepper style="margin-bottom: 40px;"></step>
-          <modify-profile-form [user]="user.profile!" [animate]="false" [index]="stepper.tacheIndex">
+          <modify-profile-form [user]="user.profile!"
+           [animate]="false" [index]="stepper.tacheIndex" #modifyProfile>
           </modify-profile-form>
+          <button [disabled]="(!modifyProfile.form.touched || modifyProfile.form.invalid) || null"
+          class="flex center full-width button active" (click)="modifyProfile.onSubmit()">Enregistrer</button>
         </ng-container>
         <ng-container *ngSwitchCase="2">
           <section class="full-width space-children-margin">

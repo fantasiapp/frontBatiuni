@@ -37,7 +37,7 @@
             </li>
         </ul>
     </div>
-    <div class="changevue center-text ">
+    <div class="changevue center-text " *ngIf="hideForDesktop">
     <span (click)="changeVue()" >{{hori ? "Affichage horizontale" : "Affichage complète du mois"}}</span>
 </div>
 <div class="day-availibility space-children-margin">

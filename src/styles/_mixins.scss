@@ -53,7 +53,7 @@
 
 @mixin triangle($direction, $size, $color) {
   content: ""; // ensures the arrows are visible
-
+  
   // ensures the size of the arrows is correct:
   width: 0;
   height: 0;

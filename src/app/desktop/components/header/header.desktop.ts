@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
 import { Store } from "@ngxs/store";
 import { User } from "src/models/user/user.model";
 import * as UserActions from "src/models/user/user.actions";
+import { Logout } from "src/models/auth/auth.actions";
 
 @Component({
   selector: 'desktop-stickyH',
@@ -17,11 +18,11 @@ export class HeaderDesktop {
   @Input()
   user!: User;
 
-  ngOnInit(){
-    // let userProfile = this.store.selectSnapshot(UserState).profile
-  }
-
   changeProfileType(type: boolean) {
     this.store.dispatch(new UserActions.ChangeProfileType(type));
+  }
+  
+  logout() {
+    this.store.dispatch(new Logout());
   }
 }

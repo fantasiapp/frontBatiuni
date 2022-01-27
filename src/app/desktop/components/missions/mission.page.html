@@ -25,9 +25,12 @@
             [routerLink]="['', 'brouillon']"></offer>
         </ng-container>
         <ng-container *ngSwitchCase="1" >
-            <horizantale-calendar ></horizantale-calendar>
+            <horizantale-calendar [hideForDesktop]="false" ></horizantale-calendar>
         </ng-container>
       </ng-container>
     </div>
+    </section>
+    <section *ngIf="activeView == 1" class="info-sec ">
+      <calendar></calendar>
     </section>
   </div>

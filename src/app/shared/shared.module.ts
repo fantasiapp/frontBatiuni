@@ -39,6 +39,7 @@ import { ControlErrorsDirective, ErrorMessageComponent } from "./common/formerro
 import { SpacingPipe } from "./pipes/spacing.pipe";
 import { UIPopup } from "./components/popup/popup.component";
 import { UIHSteps } from "./components/horizontal-steps/hsteps.ui";
+import { Notifications } from "./components/notifications/notifications";
 
 @NgModule({
   declarations: [
@@ -77,7 +78,8 @@ import { UIHSteps } from "./components/horizontal-steps/hsteps.ui";
     ControlErrorsDirective,
     SpacingPipe,
     UIPopup,
-    UIHSteps
+    UIHSteps,
+    Notifications
   ],
   imports: [
     CommonModule,
@@ -122,7 +124,8 @@ import { UIHSteps } from "./components/horizontal-steps/hsteps.ui";
     ControlErrorsDirective,
     SpacingPipe,
     UIPopup,
-    UIHSteps
+    UIHSteps,
+    Notifications
   ],
   providers: [ImageGenerator]
 })
