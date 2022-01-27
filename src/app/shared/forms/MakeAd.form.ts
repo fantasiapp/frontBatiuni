@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, HostBinding, Input } from "@angular/core";
 import { Form, FormArray, FormControl, FormGroup, Validators } from "@angular/forms";
 import { Store } from "@ngxs/store";
-import { JobRow, PostRow } from "src/models/data/data.model";
+import { JobRow, Post, PostRow } from "src/models/data/data.model";
 import { Option } from "src/models/option";
 import { UploadPost } from "src/models/user/user.actions";
 import { Serialized } from "../common/types";
@@ -210,7 +210,7 @@ export class MakeAdForm {
 
   @Input() page: boolean = true;
 
-  @Input() post!: Serialized<PostRow>;
+  @Input() post: Post | null = null;
 
   currencies = ['$', '€', '£'].map((currency, id) => ({id, name: currency, checked: id == 0}));
 

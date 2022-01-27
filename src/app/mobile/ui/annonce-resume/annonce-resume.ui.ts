@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
+import { Company, Post, PostRow } from "src/models/data/data.model";
 
 @Component({
   selector: 'annonce-resume',
@@ -11,33 +12,27 @@ import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
               <img src="assets/confirmation.svg" />
             </div>
         </div>
-        <span class="company">Nom de l’entreprise</span>
-        <stars class="stars" value="4.5"></stars>
-        <span>Fourniture et pose</span>
-        <span>Du 11/11/2021 Au 13/12/2021</span>
-        <span>Montant</span>
+        <span class="company">{{ company?.name || "Nom de l'entreprise" }}</span>
+        <stars class="stars" [value]="company?.stars || 4"></stars>
+        <span>{{ (post?.manPower) ? "Main d'oeuvre" : "Fourniture et pose" }}</span>
+        <span>Du {{ toLocateDate(post?.startDate) }} Au {{toLocateDate(post?.endDate)}}</span>
+        <span>{{ this.post?.amount || 0 }}</span>
       </div>
       
 
       <div class="needs">
-        <span class="title text-emphasis">Nous avons besoin…….</span>
+        <span class="title text-emphasis">Nous avons besoin de:</span>
         <ul>
-          <li>Besoins ( nombres de personnes + métiers)</li>
-          <li>Horaires du chantier</li>
-          <li>Nom du contact responsable de l’app</li>
+          <li>{{post?.numberOfPeople || 1}} {{post?.job?.name}} </li>
+          <li>Du {{ post?.hourlyStart }} Au {{ post?.hourlyEnd }}</li>
         </ul>
-        <span><small>Date d’échéance Le 24/10/2021</small></span>
+        <span><small>Date d’échéance Le {{ toLocateDate(post?.dueDate) }}</small></span>
       </div>
 
       <div class="description">
         <span class="title text-emphasis">Description des missions</span>
         <ul>
-          <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do</li>
-          <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-              dolore Lorem ipsum dolor sit amet, consectetur adipiscing elit</li>
-          <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-              dolore Lorem ipsum dolor sit amet, consectetur.</li>
-          <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do</li>
+          <li *ngFor="let detail of (post?.details || [])">{{detail.name}}</li>
         </ul>
       </div>
 
@@ -63,4 +58,19 @@ import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
 export class UIAnnonceResume {
   @Input()
   collapsed: boolean = false;
+
+  company: Company | null = null;
+
+  private _post: Post | null = null;
+  @Input()
+  set post(p: Post | null) {
+    this._post = p;
+    this.company = this.post ? PostRow.getCompany(this.post) : null;
+  }
+
+  get post() { return this._post; }
+
+  toLocateDate(date?: string) {
+    return date ? new Date(date).toLocaleDateString('fr') : "(Non renseigné)";
+  }
 };

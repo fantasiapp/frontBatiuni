@@ -48,13 +48,18 @@ export class HomeComponent extends Destroy$ {
 
   editMenu: PostMenu = { open: false, post: null };
 
-  checkMenu: PostMenu = { open: false, post: null }
+  checkMenu: PostMenu & { swipeup: boolean; } = { open: false, post: null, swipeup: false }
 
   openPost(post: Post) {
     this.editMenu = { open: true, post };
   }
 
   checkPost(post: Post) {
-
+    this.checkMenu = { open: true, post, swipeup: false };
   }
+
+  checkPostMenu() {
+    console.log('menu');
+    this.checkMenu.swipeup = true;
+  } 
 };

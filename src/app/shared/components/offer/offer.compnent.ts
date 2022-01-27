@@ -22,7 +22,7 @@ export class OfferComponent {
 
   @Input() post!: Serialized<PostRow>;
 
-  get companyName() { return this.post ? PostRow.getCompanyName(this.post) : ''; }
+  get companyName() { return this.post ? PostRow.getCompany(this.post).name : ''; }
 
   ngOnInit() {
     console.log(this.post);

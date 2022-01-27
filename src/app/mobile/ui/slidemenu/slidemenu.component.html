@@ -1,7 +1,9 @@
-<header class="clear-margin full-width sticky-header flex center-cross" *ngIf="header">
-  <img class="return" src="assets/arrowleft.svg" (click)="close()"><img>
-  <ng-content select='[header]'></ng-content>
-</header>
+<ng-container *ngIf="header; else customHeader" [ngTemplateOutlet]="defaultHeader">
+</ng-container>
+
+<ng-template #customHeader>
+  <ng-content select='[customHeader]'></ng-content>
+</ng-template>
 
 <div class="flex column" [class.content]="!footer" [class.content-with-footer]="footer" #content>
   <ng-content select='[content]'></ng-content>
@@ -10,3 +12,10 @@
 <div class="footer full-width" *ngIf="footer">
   <ng-content select="[footer]"></ng-content>
 </div>
+
+<ng-template #defaultHeader>
+  <header class="clear-margin full-width sticky-header flex center-cross">
+    <img class="return" src="assets/arrowleft.svg" (click)="close()"><img>
+    <ng-content select='[header]'></ng-content>
+  </header>
+</ng-template>
