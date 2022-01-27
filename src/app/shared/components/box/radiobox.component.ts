@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Directive, ElementRef, Input, Output, EventEmitter } from "@angular/core";
+import { ChangeDetectionStrategy, Component, Directive, Input, Output, EventEmitter } from "@angular/core";
 import { NG_VALUE_ACCESSOR } from "@angular/forms";
 import { Subscription } from "rxjs";
 import { UIDefaultAccessor } from "src/app/shared/common/classes";
@@ -8,7 +8,6 @@ import { UIDefaultAccessor } from "src/app/shared/common/classes";
 })
 export class UIRadioAccessor extends UIDefaultAccessor<string | boolean | number> {
   static map = new Map<string, UIRadioAccessor[]>();
-  static valueMap = new Map<string, string | boolean | number>();
 
   @Input('formControlName')
   controlName: string = '';
@@ -19,8 +18,6 @@ export class UIRadioAccessor extends UIDefaultAccessor<string | boolean | number
   }
 
   ngOnInit() {
-    this.value = UIRadioAccessor.valueMap.get(this.host.name);
-
     this.host.name = this.controlName;
     let items = UIRadioAccessor.map.get(this.host.name);
     if ( ! items ) UIRadioAccessor.map.set(this.host.name, items = []);
@@ -44,7 +41,6 @@ export class UIRadioAccessor extends UIDefaultAccessor<string | boolean | number
     
     if ( items.length == 0 ) {
       UIRadioAccessor.map.delete(this.host.name);
-      UIRadioAccessor.valueMap.delete(this.host.name);
     }
   }
 };
