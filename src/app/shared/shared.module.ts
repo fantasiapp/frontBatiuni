@@ -30,7 +30,7 @@ import { ModifyProfileForm } from "./forms/ModifyProfile.form";
 import { ProfileResume } from "./components/profile-resume/profile-resume.component";
 import { FileIcon } from "./components/FileIcon/file.icon";
 import { UISOSCard } from "./components/SOSCard/SOSCard.ui";
-import { InfoHandler } from "./components/info/info.component";
+import { InfoHandler, InfoService } from "./components/info/info.component";
 import { ConnexionForm } from "./forms/connexion.form";
 import { CalendarUI } from "./components/calendar/calendar.ui";
 import { HorizantaleCalendar } from "./components/horizantalecalendar/horizantale.component";
@@ -124,6 +124,6 @@ import { UIHSteps } from "./components/horizontal-steps/hsteps.ui";
     UIPopup,
     UIHSteps
   ],
-  providers: [ImageGenerator]
+  providers: [ImageGenerator, InfoService]
 })
 export class SharedModule {}

@@ -7,7 +7,7 @@ import * as UserActions from "src/models/user/user.actions";
 import { Camera, CameraResultType, CameraSource } from "@capacitor/camera";
 import { UISlideMenuComponent } from "../../ui/slidemenu/slidemenu.component";
 import { Logout } from "src/models/auth/auth.actions";
-import { InfoHandler } from "src/app/shared/components/info/info.component";
+import { InfoHandler, InfoService } from "src/app/shared/components/info/info.component";
 import { take } from "rxjs/operators";
 import { FormGroup } from "@angular/forms";
 import { ModifyProfileForm } from "src/app/shared/forms/ModifyProfile.form";
@@ -27,9 +27,6 @@ export class ProfileComponent {
 
   @ViewChild(ModifyProfileForm)
   modifyForm?: ModifyProfileForm;
-  
-  @ViewChild(InfoHandler, {static: true})
-  info!: InfoHandler;
 
   @ViewChild('modifyMenu', {static: false, read: UISlideMenuComponent})
   modifyMenu!: UISlideMenuComponent;
@@ -45,7 +42,7 @@ export class ProfileComponent {
   openModifyPicture: boolean = false;
   openNotifications : boolean = false;
 
-  constructor(private store: Store, private cd: ChangeDetectorRef, private sanitizer: DomSanitizer) {}
+  constructor(private store: Store, private cd: ChangeDetectorRef, private sanitizer: DomSanitizer, private info: InfoService) {}
 
   slideModifyMenu(modifyPassword: boolean) {
     this.openMenu = false;

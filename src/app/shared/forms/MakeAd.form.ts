@@ -3,9 +3,10 @@ import { Form, FormArray, FormControl, FormGroup, Validators } from "@angular/fo
 import { Store } from "@ngxs/store";
 import { JobRow, PostRow } from "src/models/data/data.model";
 import { Option } from "src/models/option";
-import { CreatePost } from "src/models/user/user.actions";
+import { UploadPost } from "src/models/user/user.actions";
 import { Serialized } from "../common/types";
 import { defaultFileUIOuput } from "../components/filesUI/files.ui";
+import { InfoService } from "../components/info/info.component";
 
 @Component({
   selector: 'ad-form',
@@ -213,7 +214,7 @@ export class MakeAdForm {
 
   currencies = ['$', '€', '£'].map((currency, id) => ({id, name: currency, checked: id == 0}));
 
-  constructor(private store: Store) {}
+  constructor(private store: Store, private info: InfoService) {}
   
   ngOnInit() {
     const jobs = [...JobRow.instances.values()];
@@ -296,6 +297,12 @@ export class MakeAdForm {
   }
 
   submit(draft: boolean) {
-    this.store.dispatch(CreatePost.fromPostForm(this.makeAdForm.value, draft));
+    this.info.show("info", "Envoi de l'annonce...", Infinity);
+    this.store.dispatch(UploadPost.fromPostForm(this.makeAdForm.value, draft)).subscribe(() => {
+      console.log('request ended');
+      this.info.show("success", "Annonce Envoyée", 2000);
+    }, () => {
+      this.info.show("error", "Echec de l'envoi", 5000);
+    });
   }
 }

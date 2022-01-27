@@ -1,4 +1,4 @@
-<ng-container *ngIf="user$ | async as user">
+<ng-container *ngIf="(user$ | async) as user">
   <page-header name="Annonces qui peuvent vous intéresser" [tabs]="user.viewType ? 3 : 2" [(activeView)]="activeView" (filterClicked)="openAdFilterMenu = true">
     <span tab_0>{{ user.viewType ? 'Brouillon' : 'Vue liste' }}</span>
     <span tab_1>{{ user.viewType ? 'En ligne' : 'Carte' }}</span>
@@ -11,7 +11,7 @@
       <ng-container [ngSwitch]="activeView">
         <ng-container *ngSwitchCase="0">
           <offer
-            *ngFor="let draft of getDrafts(user)"
+            *ngFor="let draft of userDrafts"
             src="assets/brouillon.svg"
             [deletable]="true"
             [post]="draft"
@@ -20,7 +20,7 @@
         </ng-container>
         <ng-container *ngSwitchCase="1">
           <offer
-            *ngFor="let mission of annonces"
+            *ngFor="let onlinePost of userOnlinePosts"
             src="assets/enligne.svg"
             [routerLink]="['', 'annonce-en-ligne']"></offer>
         </ng-container>

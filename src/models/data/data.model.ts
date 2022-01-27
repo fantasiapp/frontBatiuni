@@ -295,6 +295,8 @@ export type LabelForCompany = Serialized<LabelForCompanyRow>;
 export type Role = Serialized<RoleRow>;
 export type Label = Serialized<LabelRow>;
 export type Job = Serialized<JobRow>;
+export type Post = Serialized<PostRow>;
+export type PostDetail = Serialized<DetailedPostRow>;
 
 //enforce the model and do operations
 

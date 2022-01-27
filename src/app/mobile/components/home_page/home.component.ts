@@ -4,8 +4,9 @@ import { BehaviorSubject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { Destroy$ } from "src/app/shared/common/classes";
 import { DistanceSliderConfig, SalarySliderConfig } from "src/app/shared/common/config";
+import { filterSplit } from "src/app/shared/common/functions";
 import { Serialized } from "src/app/shared/common/types";
-import { PostRow } from "src/models/data/data.model";
+import { Post, PostRow } from "src/models/data/data.model";
 import { User } from "src/models/user/user.model";
 import { UserState } from "src/models/user/user.state";
 
@@ -20,15 +21,20 @@ export class HomeComponent extends Destroy$ {
   @Select(UserState)
   user$!: BehaviorSubject<User>;
 
-  getDrafts(user: User) { return user.profile?.company.posts.filter(post => post.draft); }
-
   constructor() {
     super()
   }
 
+  userPosts: Post[] = [];
+  userDrafts: Post[] = [];
+  userOnlinePosts: Post[] = [];
+  userValidatedPosts: Post[] = [];
+
   ngOnInit() {
-    this.user$.pipe(takeUntil(this.destroy$)).subscribe(console.log);
-    // console.log(this.user$.subscribe(console.log))
+    this.user$.pipe(takeUntil(this.destroy$)).subscribe((user) => {
+      this.userPosts = user.profile?.company.posts || [];
+      [this.userOnlinePosts, this.userDrafts] = filterSplit(this.userPosts, post => !post.draft);
+    });
   }
   
   activeView: number = 0;
@@ -38,12 +44,12 @@ export class HomeComponent extends Destroy$ {
 
   imports = { DistanceSliderConfig, SalarySliderConfig };
 
-  editMenu: { open: boolean; post: Serialized<PostRow> | null; } = {
+  editMenu: { open: boolean; post: Post | null; } = {
     open: false,
     post: null
   };
 
-  openPost(post: Serialized<PostRow>) {
+  openPost(post: Post) {
     this.editMenu = {
       open: true, post
     }
