@@ -108,3 +108,9 @@ tabs {
   width: 400px;
   padding: $col-one-padding-y $col-one-padding-x;
 }
+
+modify-profile-form::ng-deep {
+  .mid-sticky-footer {
+    display: none !important;
+  }
+}

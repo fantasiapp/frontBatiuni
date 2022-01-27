@@ -39,6 +39,7 @@ import { ControlErrorsDirective, ErrorMessageComponent } from "./common/formerro
 import { SpacingPipe } from "./pipes/spacing.pipe";
 import { UIPopup } from "./components/popup/popup.component";
 import { UIHSteps } from "./components/horizontal-steps/hsteps.ui";
+import { Notifications } from "./components/notifications/notifications";
 import { UIRadioAccessor, UIRadioboxComponent } from "./components/box/radiobox.component";
 
 @NgModule({
@@ -80,7 +81,8 @@ import { UIRadioAccessor, UIRadioboxComponent } from "./components/box/radiobox.
     ControlErrorsDirective,
     SpacingPipe,
     UIPopup,
-    UIHSteps
+    UIHSteps,
+    Notifications
   ],
   imports: [
     CommonModule,
@@ -127,6 +129,8 @@ import { UIRadioAccessor, UIRadioboxComponent } from "./components/box/radiobox.
     ControlErrorsDirective,
     SpacingPipe,
     UIPopup,
+    UIHSteps,
+    Notifications,
     UIHSteps
     
   ],

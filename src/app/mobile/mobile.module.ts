@@ -14,7 +14,6 @@ import { LandingPageComponent } from "./components/landing_page/landing-page.com
 import { MainPage } from "./components/main/main.component";
 import { MakeAdComponent } from "./components/make_ad/make_ad.component";
 import { MissionsComponent } from "./components/missions_page/missions.component";
-import { Notifications } from "./components/notifications/notifications";
 import { PagingComponent } from "./components/paging/paging.component";
 import { ProfileComponent } from "./components/profile/profile.component";
 import { RegisterComponent } from "./components/register/register.component";
@@ -42,7 +41,6 @@ import { AppRoutingModule } from "./routing/mobile-routing.module";
     ScrollTemplate,
     MainPage,
     ProfileComponent,
-    Notifications,
     MissionsComponent,
     HomeComponent,
     AvailabilitiesComponent,

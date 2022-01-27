@@ -100,5 +100,16 @@ $half-square : math.div($square,2);
 }
 
 
+:host{
+  
+}
 
-
+ad-form::ng-deep{
+  width: 100% !important;
+  footer {
+    display: none !important;
+  }
+}
+.info-sec {
+  background-color: transparent !important;
+}

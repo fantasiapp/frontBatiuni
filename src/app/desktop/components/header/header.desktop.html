@@ -1,21 +1,27 @@
-<header class="sticky-desktop-header">
+<header class="sticky-desktop-header" >
   <div class="home-page flex row center-main">
     <a href="#"><img class="logo" src="assets/logo-approx.png"/></a>
   </div>
   <div class="profile-actions center-cross space-between flex">
     <switch off="Profile ST" class="flex white-spacing" on="Profil PME"  style="text-align: center;" [value]="user.viewType" (valueChange)="changeProfileType($event)"></switch>
     <!-- Notifications -->
-    <img class="invert" src="assets/notification.svg"/>
+    <div class="notification flex center-cross">
+      <img class="invert" src="assets/notification.svg"/>
+      <div class="dropdown-notification">
+          <notifications></notifications>
+      </div>
+    </div>
     <!-- Profile Image -->
     <img class="offres-logo " src="assets/profile.png"/>
     <!-- User full name -->
-    <h5 class="username">Jean-Luc</h5>
+    <h5 class="username">{{ (user.profile!.firstName + " " + user.profile!.lastName) | titlecase }}</h5>
     <!-- Drop Down menu -->
     <div class="dropdown flex">
-      <button> <img class="dropdown-action" src="assets/arrowdown.svg" />
+      <button  > <img class="dropdown-action" src="assets/arrowdown.svg" />
       </button>
-      <div class="dropdown-content">
-
+      <div class="dropdown-content" id="dropdown-content">
+          <li [routerLink]="['','home','profile']">Profile</li>
+          <li (click)="logout()">Se déconnecter</li>
       </div>
     </div>
   </div>

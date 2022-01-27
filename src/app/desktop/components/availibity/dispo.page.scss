@@ -26,3 +26,11 @@ tabs {
 .filters {
     overflow: hidden !important;
 }
+
+calendar::ng-deep {
+  .wrapper-calendar {
+    li {
+      width: 100% !important;
+    }
+  }
+}
