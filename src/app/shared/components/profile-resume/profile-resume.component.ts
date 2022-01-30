@@ -15,13 +15,22 @@ export class ProfileResume {
   @Input()
   showMore: boolean = false;
 
+  @Input()
+  changeImage: boolean = false;
+
   @Output()
   ratingsClicked = new EventEmitter();
 
   @Output()
   profileChanged = new EventEmitter<boolean>();
 
+  @Output()
+  changeImageAction = new EventEmitter<boolean>();
+
   onStarClicked() {
     this.ratingsClicked.emit();
+  }
+  onChangeImage() {
+    this.ratingsClicked.emit(true);
   }
 };
