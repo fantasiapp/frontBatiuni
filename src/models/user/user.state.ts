@@ -2,7 +2,7 @@ import { HttpErrorResponse } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Action, Select, Selector, State, StateContext, Store } from "@ngxs/store";
 import { catchError, concatMap, map, mergeMap, take, tap } from "rxjs/operators";
-import { ChangePassword, ChangeProfileType, ChangeProfilePicture, GetUserData, ModifyUserProfile, UploadFile, DownloadFile, UploadPost, DeletePost } from "./user.actions";
+import { ChangePassword, ChangeProfileType, ChangeProfilePicture, GetUserData, ModifyUserProfile, UploadFile, DownloadFile, UploadPost, DeletePost, DuplicatePost, SwitchPostType } from "./user.actions";
 import { User } from "./user.model";
 import { Logout } from "../auth/auth.actions";
 import { of, throwError } from "rxjs";
@@ -202,6 +202,41 @@ export class UserState {
     );
   };
 
+  @Action(DuplicatePost)
+  duplicatePost(ctx: StateContext<User>, action: DuplicatePost) {
+    const {profile} = ctx.getState();
+
+    return this.http.get('data', action).pipe(
+      tap((response: any) => {
+        if ( response['duplicatePost'] !== 'OK' )
+          throw response['messages'];
+        
+        delete response['duplicatePost'];
+        const id = +Object.keys(response)[0],
+          post = new PostRow(id, response[id]);
+        
+        ctx.patchState({profile: UserProfileRow.getById(profile!.id).serialize()});
+      })
+    );
+  }
+
+  @Action(SwitchPostType)
+  switchPostType(ctx: StateContext<User>, action: SwitchPostType) {
+    const {profile} = ctx.getState();
+    return this.http.get('data', action).pipe(
+      tap((response: any) => {
+        if ( response['switchPost'] !== 'OK' )
+          throw response['messages'];
+        
+        delete response['uploadPost'];
+        const id = +Object.keys(response)[0],
+          post = new PostRow(id, response[id]); //override
+                
+        ctx.patchState({profile: UserProfileRow.getById(profile!.id).serialize()});
+      })
+    );
+  };
+
   @Action(DeletePost)
   deletePost(ctx: StateContext<User>, action: DeletePost) {
     const {profile} = ctx.getState();
@@ -209,7 +244,7 @@ export class UserState {
     return this.http.get('data', action).pipe(
       catchError((err: HttpErrorResponse) => {
         console.error(err);
-        return throwError('fatal error while retrieving general application data.');
+        return throwError(err);
       }),
       tap((response: any) => {
         console.log(response);

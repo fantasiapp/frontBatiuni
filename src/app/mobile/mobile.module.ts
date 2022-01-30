@@ -3,7 +3,6 @@ import { Injectable, NgModule } from "@angular/core";
 import { AbonnementPage } from "./components/abonnement/abonnement.page";
 import { EngagementPage } from "./components/abonnement/engagement/engagement";
 import { AnnoncePage } from "./components/annonce/annonce.page";
-import { AnnonceEnlignePage } from "./components/annonce_enligne/annonce.enligne";
 import { AvailabilitiesComponent } from "./components/availabilities_page/availabilities.component";
 import { BoosterPage } from "./components/booster/booster.page";
 import { ConnexionComponent } from "./components/connexion/connexion.component";
@@ -52,7 +51,6 @@ import { AppRoutingModule } from "./routing/mobile-routing.module";
     EngagementPage,
     BoosterPage,
     SuiviPage,
-    AnnonceEnlignePage,
     SuiviPME,
   ],
   imports: [

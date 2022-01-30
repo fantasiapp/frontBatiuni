@@ -1,5 +1,5 @@
 import { Component, ChangeDetectionStrategy, SimpleChange, SimpleChanges } from "@angular/core";
-import { Select } from "@ngxs/store";
+import { Select, Store } from "@ngxs/store";
 import { BehaviorSubject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { Destroy$ } from "src/app/shared/common/classes";
@@ -7,6 +7,7 @@ import { DistanceSliderConfig, SalarySliderConfig } from "src/app/shared/common/
 import { filterSplit } from "src/app/shared/common/functions";
 import { Serialized } from "src/app/shared/common/types";
 import { Post, PostRow } from "src/models/data/data.model";
+import { DeletePost, DuplicatePost, SwitchPostType } from "src/models/user/user.actions";
 import { User } from "src/models/user/user.model";
 import { UserState } from "src/models/user/user.state";
 
@@ -23,7 +24,7 @@ export class HomeComponent extends Destroy$ {
   @Select(UserState)
   user$!: BehaviorSubject<User>;
 
-  constructor() {
+  constructor(private store: Store) {
     super()
   }
 
@@ -62,5 +63,17 @@ export class HomeComponent extends Destroy$ {
   checkPostMenu() {
     console.log('menu');
     this.checkMenu.swipeup = true;
-  } 
+  }
+
+  duplicatePost(id: number) {
+    this.store.dispatch(new DuplicatePost(id));
+  }
+
+  switchDraft(id: number) {
+    this.store.dispatch(new SwitchPostType(id));
+  }
+
+  deletePost(id: number) {
+    this.store.dispatch(new DeletePost(id));
+  }
 };

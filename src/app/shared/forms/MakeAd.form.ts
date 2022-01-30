@@ -3,7 +3,7 @@ import { Form, FormArray, FormControl, FormGroup, Validators } from "@angular/fo
 import { Store } from "@ngxs/store";
 import { JobRow, Post, PostRow } from "src/models/data/data.model";
 import { Option } from "src/models/option";
-import { UploadPost } from "src/models/user/user.actions";
+import { SwitchPostType, UploadPost } from "src/models/user/user.actions";
 import { Serialized } from "../common/types";
 import { defaultFileUIOuput } from "../components/filesUI/files.ui";
 import { InfoService } from "../components/info/info.component";
@@ -325,11 +325,19 @@ export class MakeAdForm {
   }
 
   submit(draft: boolean) {
-    this.store.dispatch(UploadPost.fromPostForm(this.makeAdForm.value, draft)).subscribe(() => {
-    this.info.show("info", "Envoi de l'annonce...", Infinity);
-      this.info.show("success", "Annonce Envoyée", 2000);
-    }, () => {
-      this.info.show("error", "Echec de l'envoi", 5000);
-    });
+    if ( this.post ) {
+      if ( !draft )
+        this.store.dispatch(new SwitchPostType(this.post.id));
+      else
+        this.info.show("error", "Modification des post pas encore implementée", 5000);
+      //switch type
+    } else {
+      this.store.dispatch(UploadPost.fromPostForm(this.makeAdForm.value, draft)).subscribe(() => {
+      this.info.show("info", "Envoi de l'annonce...", Infinity);
+        this.info.show("success", "Annonce Envoyée", 2000);
+      }, () => {
+        this.info.show("error", "Echec de l'envoi", 5000);
+      });
+    }
   }
 }

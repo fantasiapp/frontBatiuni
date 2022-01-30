@@ -168,3 +168,15 @@ export class UploadPost {
     );
   }
 };
+
+export class SwitchPostType {
+  static readonly type = '[User.PME] Switch Post Type';
+  action = 'switchDraft';
+  constructor(public id: number) {}
+};
+
+export class DuplicatePost {
+  static readonly type = '[User.PME] Duplicate Post';
+  action = 'duplicatePost';
+  constructor(public id: number) {}
+};
