@@ -6,8 +6,9 @@ import { ChangePassword, ChangeProfileType, ChangeProfilePicture, GetUserData, M
 import { User } from "./user.model";
 import { Logout } from "../auth/auth.actions";
 import { of, throwError } from "rxjs";
-import { CompanyRow, DetailedPostRow, FilesRow, Mapper, Post, PostRow, UserProfileRow } from "../data/data.model";
+import { CompanyRow, DetailedPostRow, FilesRow, Mapper, Post, PostDetail, PostRow, UserProfileRow } from "../data/data.model";
 import { HttpService } from "src/app/services/http.service";
+import { StoreData } from "../data/data.actions";
 
 @State<User>({
   name: 'user',
@@ -112,6 +113,7 @@ export class UserState {
       tap((response: any) => {
         try {
           Mapper.mapRequest(response);
+          this.store.dispatch(new StoreData('posts', PostRow, {type: 'load', id: 0}));
         } catch ( err ) {
           console.warn(err);
           this.store.dispatch(new Logout());
@@ -121,6 +123,7 @@ export class UserState {
         const currentUser = [...UserProfileRow.instances.values()][0],
           partial: any = { profile: currentUser.serialize() };
 
+        console.log('current User', currentUser.serialize());
         ctx.patchState(partial);
         if ( !ctx.getState().imageUrl ) {
           const reversed = currentUser.company.files.slice(); reversed.reverse();
@@ -179,8 +182,15 @@ export class UserState {
         
         delete response['uploadPost'];
         const id = +Object.keys(response)[0],
-          post = new PostRow(id, response[id]);
-        
+          detailsIndex = PostRow.fields.get('DetailedPost')!,
+          details = response[id][detailsIndex],
+          mappedDetails = Object.entries<any[]>(details).map(([id, details]) => {
+            return new DetailedPostRow(+id, details);
+          });
+          
+        response[id][detailsIndex] = mappedDetails;
+        let post = new PostRow(id, response[id]);
+        this.store.dispatch(new StoreData('posts', PostRow, {type: 'add', id: post.id}));
         return post;
       }),
       concatMap((post: PostRow) => {
@@ -215,6 +225,7 @@ export class UserState {
         const id = +Object.keys(response)[0],
           post = new PostRow(id, response[id]);
         
+        this.store.dispatch(new StoreData('posts', PostRow, {type: 'add', id: post.id}));
         ctx.patchState({profile: UserProfileRow.getById(profile!.id).serialize()});
       })
     );
@@ -225,12 +236,14 @@ export class UserState {
     const {profile} = ctx.getState();
     return this.http.get('data', action).pipe(
       tap((response: any) => {
-        if ( response['switchPost'] !== 'OK' )
+        console.log(response);
+        if ( response['switchDraft'] !== 'OK' )
           throw response['messages'];
         
-        delete response['uploadPost'];
-        const id = +Object.keys(response)[0],
-          post = new PostRow(id, response[id]); //override
+        delete response['switchDraft'];
+        const post = PostRow.getById(action.id);
+        post.setField('draft', !post.getField('draft'));
+        this.store.dispatch(new StoreData('posts', PostRow, {type: 'modify', id: post.id}));
                 
         ctx.patchState({profile: UserProfileRow.getById(profile!.id).serialize()});
       })
@@ -257,6 +270,7 @@ export class UserState {
 
           details.forEach(detail => DetailedPostRow.destroy(detail.id));
           PostRow.destroy(post.id);
+          this.store.dispatch(new StoreData('posts', PostRow, {type: 'delete', id: post.id}));
 
           const userProfileData = UserProfileRow.getById(profile!.id),
             userCompanyData = userProfileData.company;

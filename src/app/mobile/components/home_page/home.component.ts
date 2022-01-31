@@ -1,12 +1,13 @@
 import { Component, ChangeDetectionStrategy, SimpleChange, SimpleChanges } from "@angular/core";
 import { Select, Store } from "@ngxs/store";
-import { BehaviorSubject } from "rxjs";
+import { BehaviorSubject, combineLatest, Observable } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { Destroy$ } from "src/app/shared/common/classes";
 import { DistanceSliderConfig, SalarySliderConfig } from "src/app/shared/common/config";
 import { filterSplit } from "src/app/shared/common/functions";
 import { Serialized } from "src/app/shared/common/types";
 import { Post, PostRow } from "src/models/data/data.model";
+import { DataState } from "src/models/data/data.state";
 import { DeletePost, DuplicatePost, SwitchPostType } from "src/models/user/user.actions";
 import { User } from "src/models/user/user.model";
 import { UserState } from "src/models/user/user.state";
@@ -22,7 +23,10 @@ type PostMenu = { open: boolean; post: Post | null; };
 export class HomeComponent extends Destroy$ {
   
   @Select(UserState)
-  user$!: BehaviorSubject<User>;
+  user$!: Observable<User>;
+
+  @Select(DataState.get('posts'))
+  posts$!: Observable<Post[]>;
 
   constructor(private store: Store) {
     super()
@@ -31,12 +35,20 @@ export class HomeComponent extends Destroy$ {
   userPosts: Post[] = [];
   userDrafts: Post[] = [];
   userOnlinePosts: Post[] = [];
-  userValidatedPosts: Post[] = [];
 
+  allOnlinePosts: Post[] = [];
+
+  
   ngOnInit() {
     this.user$.pipe(takeUntil(this.destroy$)).subscribe((user) => {
       this.userPosts = user.profile?.company.posts || [];
       [this.userOnlinePosts, this.userDrafts] = filterSplit(this.userPosts, post => !post.draft);
+    });
+
+    combineLatest([this.posts$, this.user$]).subscribe(([posts, user]) => {
+      this.userPosts = user.profile?.company.posts || [];
+      [this.userOnlinePosts, this.userDrafts] = filterSplit(this.userPosts, post => !post.draft);
+      this.allOnlinePosts = posts.filter(post => !post.draft);
     });
   }
   

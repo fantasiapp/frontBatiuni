@@ -8,7 +8,7 @@
   <div class="hosted-page space-children-margin page-content-with-tabs">
     <!-- Page pour PME -->
     <ng-container *ngIf="user.viewType; else stview">
-      <ng-container [ngSwitch]="activeView">
+      <ng-container *ngIf="(posts$ | async) as posts" [ngSwitch]="activeView">
         <ng-container *ngSwitchCase="0">
           <offer
             *ngFor="let draft of userDrafts"
@@ -22,7 +22,6 @@
           <offer
             *ngFor="let onlinePost of userOnlinePosts"
             src="assets/enligne.svg"
-            [routerLink]="['', 'annonce-en-ligne']"
             [deletable]="false"
             [post]="onlinePost"
             (click)="checkPost(onlinePost)"
@@ -42,8 +41,12 @@
       <ng-container [ngSwitch]="activeView">
         <ng-container *ngSwitchCase="0">
           <offer
-            *ngFor="let mission of annonces"
-            [routerLink]="['','annonce']"></offer>
+            *ngFor="let post of allOnlinePosts"
+            [deletable]="false"
+            src="assets/enligne.svg"
+            [post]="post"
+            (click)="checkPost(post)"
+            ></offer>
         </ng-container>
         <mapbox-batiuni class="space-children-margin" *ngSwitchCase="1"></mapbox-batiuni>
       </ng-container>

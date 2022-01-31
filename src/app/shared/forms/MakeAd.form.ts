@@ -142,10 +142,10 @@ import { InfoService } from "../components/info/info.component";
 
   <footer class="flex row space-between sticky-footer full-width submit-container" style="z-index: 999; background-color: white;">
     <button class="button passive font-Poppins full-width" (click)="submit(true)">
-      Brouillon
+      Enregistrer
     </button>
     <button class="button gradient font-Poppins full-width" (click)="submit(false)">
-      Valider
+      Passer en ligne
     </button>
   </footer>
   `,
@@ -215,7 +215,7 @@ export class MakeAdForm {
   @Input()
   set post(p: Post | null) {
     if ( !p || p == this._post ) return;
-
+    this._post = p;
     this.makeAdForm.get('dueDate')?.setValue(p.dueDate);
     this.makeAdForm.get('startDate')?.setValue(p.startDate);
     this.makeAdForm.get('endDate')?.setValue(p.endDate);
@@ -229,9 +229,10 @@ export class MakeAdForm {
     // this.makeAdForm.get('currency')?.setValue(p.currency); //writeValue for Options
     this.makeAdForm.get('description')?.setValue(p.description);
     this.makeAdForm.get('amount')?.setValue(p.amount);
-    // this.makeAdForm.get('detailedPost')?.setValue(p.details.map(
-    //   detail => new FormGroup({description: new FormControl(detail.name)})
-    // ));
+    const detailsForm = this.makeAdForm.get('detailedPost')! as FormArray;
+    detailsForm.clear();
+    for ( const detail of p.details )
+      detailsForm.push(new FormGroup({description: new FormControl(detail.content)}));
     //download files
   };
 
@@ -325,6 +326,7 @@ export class MakeAdForm {
   }
 
   submit(draft: boolean) {
+    console.log(draft, this.post);
     if ( this.post ) {
       if ( !draft )
         this.store.dispatch(new SwitchPostType(this.post.id));

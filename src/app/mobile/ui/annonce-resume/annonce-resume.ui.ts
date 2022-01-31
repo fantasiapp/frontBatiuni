@@ -16,7 +16,7 @@ import { Company, Post, PostRow } from "src/models/data/data.model";
         <stars class="stars" [value]="company?.stars || 4"></stars>
         <span>{{ (post?.manPower) ? "Main d'oeuvre" : "Fourniture et pose" }}</span>
         <span>Du {{ toLocateDate(post?.startDate) }} Au {{toLocateDate(post?.endDate)}}</span>
-        <span>{{ this.post?.amount || 0 }}</span>
+        <span>{{ this.post?.amount || 0 }} {{this.post?.currency}} </span>
       </div>
       
 
@@ -32,7 +32,7 @@ import { Company, Post, PostRow } from "src/models/data/data.model";
       <div class="description">
         <span class="title text-emphasis">Description des missions</span>
         <ul>
-          <li *ngFor="let detail of (post?.details || [])">{{detail.name}}</li>
+          <li *ngFor="let detail of (post?.details || [])">{{detail.content}}</li>
         </ul>
       </div>
 
@@ -66,6 +66,7 @@ export class UIAnnonceResume {
   set post(p: Post | null) {
     this._post = p;
     this.company = this.post ? PostRow.getCompany(this.post) : null;
+    console.log(p?.details);
   }
 
   get post() { return this._post; }
