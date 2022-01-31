@@ -41,6 +41,7 @@ import { UIPopup } from "./components/popup/popup.component";
 import { UIHSteps } from "./components/horizontal-steps/hsteps.ui";
 import { Notifications } from "./components/notifications/notifications";
 import { UIRadioAccessor, UIRadioboxComponent } from "./components/box/radiobox.component";
+import { DocusignPage } from "./components/docusign_page/docusign.page";
 
 @NgModule({
   declarations: [
@@ -82,7 +83,8 @@ import { UIRadioAccessor, UIRadioboxComponent } from "./components/box/radiobox.
     SpacingPipe,
     UIPopup,
     UIHSteps,
-    Notifications
+    Notifications,
+    DocusignPage
   ],
   imports: [
     CommonModule,
@@ -131,7 +133,8 @@ import { UIRadioAccessor, UIRadioboxComponent } from "./components/box/radiobox.
     UIPopup,
     UIHSteps,
     Notifications,
-    UIHSteps
+    UIHSteps,
+    DocusignPage
     
   ],
   providers: [ImageGenerator, InfoService]

@@ -27,6 +27,7 @@ import { UIModule } from "./ui/ui.module";
 import { SharedModule } from "../shared/shared.module";
 import { ReactiveFormsModule } from "@angular/forms";
 import { AppRoutingModule } from "./routing/mobile-routing.module";
+import { ForgorPassword } from "./components/forgot_password/forgot.password";
 
 
 @NgModule({
@@ -54,6 +55,7 @@ import { AppRoutingModule } from "./routing/mobile-routing.module";
     SuiviPage,
     AnnonceEnlignePage,
     SuiviPME,
+    ForgorPassword
   ],
   imports: [
     CommonModule,
