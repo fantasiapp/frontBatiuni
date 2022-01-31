@@ -6,7 +6,7 @@ import { ChangePassword, ChangeProfileType, ChangeProfilePicture, GetUserData, M
 import { User } from "./user.model";
 import { Logout } from "../auth/auth.actions";
 import { of, throwError } from "rxjs";
-import { CompanyRow, DetailedPostRow, FilesRow, Mapper, Post, PostDetail, PostRow, UserProfileRow } from "../data/data.model";
+import { CompanyRow, DetailedPostRow, FilesRow, Mapper, PostRow, UserProfileRow } from "../data/data.model";
 import { HttpService } from "src/app/services/http.service";
 import { StoreData } from "../data/data.actions";
 
@@ -177,10 +177,14 @@ export class UserState {
     
     return req.pipe(
       map((response: any) => {
-        if ( response['uploadPost'] !== 'OK' )
+        if ( response['uploadPost'] && response['uploadPost'] !== 'OK' )
+          throw response['messages'];
+
+        if ( response['modifyPost'] && response['modifyPost'] !== 'OK' )
           throw response['messages'];
         
         delete response['uploadPost'];
+        delete response['modifyPost'];
         const id = +Object.keys(response)[0],
           detailsIndex = PostRow.fields.get('DetailedPost')!,
           details = response[id][detailsIndex],

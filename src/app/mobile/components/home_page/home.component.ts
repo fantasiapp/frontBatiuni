@@ -45,9 +45,7 @@ export class HomeComponent extends Destroy$ {
       [this.userOnlinePosts, this.userDrafts] = filterSplit(this.userPosts, post => !post.draft);
     });
 
-    combineLatest([this.posts$, this.user$]).subscribe(([posts, user]) => {
-      this.userPosts = user.profile?.company.posts || [];
-      [this.userOnlinePosts, this.userDrafts] = filterSplit(this.userPosts, post => !post.draft);
+    this.posts$.pipe(takeUntil(this.destroy$)).subscribe((posts) => {
       this.allOnlinePosts = posts.filter(post => !post.draft);
     });
   }

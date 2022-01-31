@@ -133,12 +133,14 @@ export class UploadPost {
     public amount: number,
     public DetailedPost: string[],
     public files: any,
-    public draft: boolean
+    public draft: boolean,
+    public id?:number
   ) {
-
+    if ( this.id ) this.action = 'modifyPost';
+    console.log('sending', this);
   };
 
-  static fromPostForm(value: any, draft: boolean) {
+  static fromPostForm(value: any, draft: boolean, id?: number) {
     const documents = value.documents.filter((doc: any) => doc.fileData.content),
       added = value.addedDocuments.filter((doc: any) => doc.fileData.content),
       allDocs = [...documents, ...added];
@@ -164,7 +166,8 @@ export class UploadPost {
       value.amount,
       value.detailedPost.map((detail: any) => detail.description),
       files,
-      draft
+      draft,
+      id
     );
   }
 };

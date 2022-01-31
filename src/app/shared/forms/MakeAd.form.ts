@@ -330,8 +330,15 @@ export class MakeAdForm {
     if ( this.post ) {
       if ( !draft )
         this.store.dispatch(new SwitchPostType(this.post.id));
-      else
-        this.info.show("error", "Modification des post pas encore implementée", 5000);
+      else {
+        this.info.show("info", "Enregistrement de l'annonce...", Infinity);
+        this.store.dispatch(UploadPost.fromPostForm(this.makeAdForm.value, draft, this.post.id)).subscribe(() => {
+        this.info.show("info", "Envoi de l'annonce...", Infinity);
+          this.info.show("success", "Annonce Enregistrée", 2000);
+        }, () => {
+          this.info.show("error", "Echec de l'enregistrement", 5000);
+        });
+      }
       //switch type
     } else {
       this.store.dispatch(UploadPost.fromPostForm(this.makeAdForm.value, draft)).subscribe(() => {
