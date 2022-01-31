@@ -2,7 +2,7 @@ import { HttpErrorResponse } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Action, Select, Selector, State, StateContext, Store } from "@ngxs/store";
 import { catchError, concatMap, map, mergeMap, take, tap } from "rxjs/operators";
-import { ChangePassword, ChangeProfileType, ChangeProfilePicture, GetUserData, ModifyUserProfile, UploadFile, DownloadFile, UploadPost, DeletePost, DuplicatePost, SwitchPostType } from "./user.actions";
+import { ChangePassword, ChangeProfileType, ChangeProfilePicture, GetUserData, ModifyUserProfile, UploadFile, DownloadFile, UploadPost, DeletePost, DuplicatePost, SwitchPostType, DeleteFile } from "./user.actions";
 import { User } from "./user.model";
 import { Logout } from "../auth/auth.actions";
 import { of, throwError } from "rxjs";
@@ -58,9 +58,6 @@ export class UserState {
       user = ctx.getState();
 
     return req.pipe(
-      catchError((err: HttpErrorResponse) => {
-        return throwError(err);
-      }),
       tap((response: any) => {
         if ( response['uploadFile'] !== 'OK' ) throw response['messages'];
         delete response['uploadFile'];
@@ -75,6 +72,25 @@ export class UserState {
       })
     );
   }
+
+  @Action(DeleteFile)
+  deleteFile(ctx: StateContext<User>, action: DeleteFile) {
+    const req = this.http.get('data', action),
+      user = ctx.getState();
+
+    return req.pipe(
+      tap((response: any) => {
+        if ( response['deleteFile'] !== 'OK' ) throw response['messages'];
+        delete response['deleteFile'];
+        // add to cached files
+
+        CompanyRow.getById(user.profile!.company.id).removeValue('Files', action.id);
+
+        //find a way to make minimal updates with a tree-like-structure
+        ctx.patchState({profile: UserProfileRow.getById(user.profile!.id).serialize()});
+      })
+    );
+  };
 
   @Action(DownloadFile)
   downloadFile(ctx: StateContext<User>, action: DownloadFile) {

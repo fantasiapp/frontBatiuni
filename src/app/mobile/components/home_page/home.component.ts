@@ -6,7 +6,7 @@ import { Destroy$ } from "src/app/shared/common/classes";
 import { DistanceSliderConfig, SalarySliderConfig } from "src/app/shared/common/config";
 import { filterSplit } from "src/app/shared/common/functions";
 import { Serialized } from "src/app/shared/common/types";
-import { Post, PostRow } from "src/models/data/data.model";
+import { Company, Post, PostRow } from "src/models/data/data.model";
 import { DataState } from "src/models/data/data.state";
 import { DeletePost, DuplicatePost, SwitchPostType } from "src/models/user/user.actions";
 import { User } from "src/models/user/user.model";
@@ -36,17 +36,20 @@ export class HomeComponent extends Destroy$ {
   userDrafts: Post[] = [];
   userOnlinePosts: Post[] = [];
 
-  allOnlinePosts: Post[] = [];
+  allOnlinePosts: [Post, Company][] = [];
 
   
   ngOnInit() {
     this.user$.pipe(takeUntil(this.destroy$)).subscribe((user) => {
-      this.userPosts = user.profile?.company.posts || [];
-      [this.userOnlinePosts, this.userDrafts] = filterSplit(this.userPosts, post => !post.draft);
+      
     });
 
-    this.posts$.pipe(takeUntil(this.destroy$)).subscribe((posts) => {
-      this.allOnlinePosts = posts.filter(post => !post.draft);
+    combineLatest([this.user$, this.posts$]).subscribe(([user, posts]) => {
+      this.userPosts = user.profile?.company.posts || [];
+      [this.userOnlinePosts, this.userDrafts] = filterSplit(this.userPosts, post => !post.draft);
+      
+      this.allOnlinePosts = posts.filter(post => !post.draft).map(post => [post, PostRow.getCompany(post)] as [Post, Company])
+        .filter(([post, company]) => company.id != user.profile!.company.id);
     });
   }
   

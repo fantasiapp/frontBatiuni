@@ -1,10 +1,9 @@
-import { ChangeDetectionStrategy, Component, HostBinding, Input } from "@angular/core";
-import { Form, FormArray, FormControl, FormGroup, Validators } from "@angular/forms";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostBinding, Input } from "@angular/core";
+import { FormArray, FormControl, FormGroup, Validators } from "@angular/forms";
 import { Store } from "@ngxs/store";
-import { JobRow, Post, PostRow } from "src/models/data/data.model";
+import { JobRow, Post } from "src/models/data/data.model";
 import { Option } from "src/models/option";
 import { SwitchPostType, UploadPost } from "src/models/user/user.actions";
-import { Serialized } from "../common/types";
 import { defaultFileUIOuput } from "../components/filesUI/files.ui";
 import { InfoService } from "../components/info/info.component";
 
@@ -214,7 +213,11 @@ export class MakeAdForm {
   get post() { return this._post; }
   @Input()
   set post(p: Post | null) {
-    if ( !p || p == this._post ) return;
+    if ( !p || p == this._post ) {
+      this.info.hide();
+      return;
+    };
+
     this._post = p;
     this.makeAdForm.get('dueDate')?.setValue(p.dueDate);
     this.makeAdForm.get('startDate')?.setValue(p.startDate);
@@ -246,7 +249,6 @@ export class MakeAdForm {
     this.allJobs = jobs.map(job => ({id: job.id, name: job.name, checked: false}));
 
     //call load post    
-
     this.makeAdForm.valueChanges.subscribe(() => console.log(this.makeAdForm.value));
   }
 

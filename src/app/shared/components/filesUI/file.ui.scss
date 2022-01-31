@@ -22,6 +22,7 @@ label {
   justify-content: space-between;
   border-bottom: 2px solid #CDCFD0;
   img {
+    cursor: pointer;
     position: absolute;
     right: $input-image-offset-x;
     bottom: $input-image-offset-y;
@@ -35,7 +36,6 @@ label {
   font-size: 0.9em;
   left: 0;
   top: 5px;
-  pointer-events: none;
 }
 
 .file-date {
@@ -50,7 +50,6 @@ label {
   .image {
     width: 100px;
     height: 100px;
-    //padding: 0 20px;
   }
 }
 

@@ -17,6 +17,8 @@ export class InfoHandler {
   content: string = '';
   time: number = 5000;
 
+  private nextTimeout: any = null;
+
   @HostBinding('class')
   type: string = '';
 
@@ -24,27 +26,29 @@ export class InfoHandler {
 
   @HostListener('transitionend')
   private onTransitionEnd() {
-    this.fadingIn = !this.fadingIn;
-    if ( this.fadingIn ) {
-      if ( this.time == Infinity ) {
-        this.fadingIn = !this.fadingIn;
-        this.time = 5000;
-        //next time this function is called
-        //is when were changing the color
-      } else {
-        setTimeout(() => {
-          this.type = '';
-          this.content = '';
-          this.fadingIn = true;
-          this.cd.markForCheck();
-        }, this.time);
-      }
+    if ( !this.fadingIn ) return;
+
+    if ( this.time == Infinity ) {
+      this.fadingIn = true;
+      this.time = 5000;
+      //next time this function is called
+      //is when were changing the color
+    } else {
+      if ( this.nextTimeout ) clearTimeout(this.nextTimeout);
+      this.nextTimeout = setTimeout(() => {
+        this.hide();
+        this.cd.markForCheck();
+      }, this.time);
     }
+    this.fadingIn = !this.fadingIn;
   }
 
   constructor(private cd: ChangeDetectorRef, private service: InfoService) {
     service.infos$.subscribe((info) => {
-      this.show(info);
+      if ( info )
+        this.show(info);
+      else
+        this.hide();
     });
   }
 
@@ -55,16 +59,30 @@ export class InfoHandler {
     this.time = info.time || 250;
     this.cd.markForCheck();
   }
+
+  private hide() {
+    this.type = '';
+    this.content = '';
+    this.fadingIn = true;
+    if ( this.nextTimeout ) {
+      clearTimeout(this.nextTimeout);
+      this.nextTimeout = null;
+    }
+  }
 };
 
 @Injectable()
 export class InfoService {
 
-  infos$ = new Subject<Info>();
+  infos$ = new Subject<Info | null>();
 
   show(type: 'error' | 'success' | 'info', content: string, time: number = 2500) {
     this.infos$.next({
       type, content, time
     });
+  }
+
+  hide() {
+    this.infos$.next(null);
   }
 };

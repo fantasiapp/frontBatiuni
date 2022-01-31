@@ -101,6 +101,12 @@ export class UploadFile {
   }
 };
 
+export class DeleteFile {
+  static readonly type = '[File] Delete';
+  action = 'deleteFile';
+  constructor(public id: number) {}
+}
+
 export class DownloadFile {
   action = 'downloadFile';
   static readonly type = '[File] Download';
@@ -157,7 +163,7 @@ export class UploadPost {
       value.dueDate,
       value.startDate,
       value.endDate,
-      value.manPower == "true",
+      typeof value.manPower == 'boolean' ? value.manPower : (value.manPower == "true"),
       value.counterOffer,
       value.hourlyStart,
       value.hourlyEnd,
