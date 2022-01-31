@@ -101,6 +101,12 @@ export class UploadFile {
   }
 };
 
+export class DeleteFile {
+  static readonly type = '[File] Delete';
+  action = 'deleteFile';
+  constructor(public id: number) {}
+}
+
 export class DownloadFile {
   action = 'downloadFile';
   static readonly type = '[File] Download';
@@ -133,12 +139,14 @@ export class UploadPost {
     public amount: number,
     public DetailedPost: string[],
     public files: any,
-    public draft: boolean
+    public draft: boolean,
+    public id?:number
   ) {
-
+    if ( this.id ) this.action = 'modifyPost';
+    console.log('sending', this);
   };
 
-  static fromPostForm(value: any, draft: boolean) {
+  static fromPostForm(value: any, draft: boolean, id?: number) {
     const documents = value.documents.filter((doc: any) => doc.fileData.content),
       added = value.addedDocuments.filter((doc: any) => doc.fileData.content),
       allDocs = [...documents, ...added];
@@ -155,7 +163,7 @@ export class UploadPost {
       value.dueDate,
       value.startDate,
       value.endDate,
-      value.manPower == "true",
+      typeof value.manPower == 'boolean' ? value.manPower : (value.manPower == "true"),
       value.counterOffer,
       value.hourlyStart,
       value.hourlyEnd,
@@ -164,7 +172,20 @@ export class UploadPost {
       value.amount,
       value.detailedPost.map((detail: any) => detail.description),
       files,
-      draft
+      draft,
+      id
     );
   }
+};
+
+export class SwitchPostType {
+  static readonly type = '[User.PME] Switch Post Type';
+  action = 'switchDraft';
+  constructor(public id: number) {}
+};
+
+export class DuplicatePost {
+  static readonly type = '[User.PME] Duplicate Post';
+  action = 'duplicatePost';
+  constructor(public id: number) {}
 };

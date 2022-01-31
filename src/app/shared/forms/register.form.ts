@@ -13,7 +13,6 @@ import { merge, race, Subject } from "rxjs";
 import { GetCompanies } from "src/models/misc/misc.actions";
 import { UISuggestionBox } from "../components/suggestionbox/suggestionbox.component";
 import { Destroy$ } from "../common/classes";
-import { Serialized } from "../common/types";
 
 
 
@@ -71,7 +70,7 @@ import { Serialized } from "../common/types";
       
           <div class="form-input">
             <label>Nom de l'entreprise</label>
-            <input type="text" class="form-element" formControlName="companyName" (input)="onCompanySearch($event)" #search/>
+            <input type="text" class="form-element" autocomplete="off" formControlName="companyName" (input)="onCompanySearch($event)" #search/>
             <input type="text" class="form-element" formControlName="company" style="display: none"/>
             <suggestion-box [query]="searchQuery | async" [action]="actions.GetCompanies" (choice)="onChoice($event)"></suggestion-box>
             <img *ngIf="suggestionBox && !suggestionBox.showSuggestions" src="assets/X.svg" class="cancel-company" (click)="cancelCompany() && search.focus()"/>

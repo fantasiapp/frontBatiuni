@@ -215,8 +215,8 @@ import { defaultFileUIOuput } from "../components/filesUI/files.ui";
       background-color: white;
       @extend %sticky-footer;
       height: calc(#{$mid-sticky-footer-height} + env(safe-area-inset-bottom));
-      @include with-set-safe-area(padding, bottom, 10px);
       padding: 10px 30px;
+      @include with-set-safe-area(padding, bottom, 10px);
     }
   `],
   changeDetection: ChangeDetectionStrategy.OnPush

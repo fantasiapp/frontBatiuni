@@ -4,9 +4,7 @@
 
 :host {
   font-family: "Poppins";
-  display: block;
-  height: 100vh;
-  width: 100vw;
+  @extend %absolute-cover;
   background-color: $buttonGradient;
 }
 

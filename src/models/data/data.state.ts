@@ -1,11 +1,12 @@
 import { HttpErrorResponse } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Action, State, StateContext, Store } from "@ngxs/store";
+import { Action, createSelector, Selector, State, StateContext, Store } from "@ngxs/store";
 import { of, throwError } from "rxjs";
 import { catchError, tap } from "rxjs/operators";
 import { HttpService } from "src/app/services/http.service";
-import {GetGeneralData } from "./data.actions";
-import { DetailedPostRow, Mapper, PostRow } from "./data.model";
+import { number } from "src/validators/regex";
+import { GetGeneralData, StoreData } from "./data.actions";
+import { Mapper, Post, PostRow } from "./data.model";
 
 @State({
   name: 'data',
@@ -33,4 +34,36 @@ export class DataState {
       }) 
     );
   }
+
+  @Action(StoreData)
+  storeData(ctx: StateContext<any>, action: StoreData) {
+    const state = ctx.getState(),
+      current = state[action.name] || [],
+      table = action.row;
+  
+    if ( action.type == 'delete' ) {
+      return ctx.patchState({[action.name]: current.filter((value: any) => value.id != action.target)});
+    } else if ( action.type == 'add' ) {
+      return ctx.patchState({[action.name]: [...current, table.getById(action.target)!.serialize()]})
+    } else if ( action.type == 'modify') {
+      return ctx.patchState({[action.name]: current.map(
+        (item: Post, index: number) => item.id == action.target ?
+          table.getById(item.id)!.serialize() : item
+      )});
+    } else {
+      return ctx.patchState({
+        [action.name]: table.getAll().map((value: any) => value.serialize())
+      });
+    }
+  };
+
+  static get(type: string) {
+    return createSelector([DataState], (state: any) => {
+      return state[type] || [];
+    })
+  }
 };
+
+function LoadData(LoadData: any) {
+  throw new Error("Function not implemented.");
+}

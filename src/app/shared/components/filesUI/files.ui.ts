@@ -1,4 +1,4 @@
-import { Component, Input, ChangeDetectionStrategy, ChangeDetectorRef, Output, EventEmitter } from "@angular/core";
+import { Component, Input, ChangeDetectionStrategy, ChangeDetectorRef, Output, EventEmitter, ViewChild, ElementRef } from "@angular/core";
 import { AbstractControl, FormControl, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { UIAsyncAccessor } from "src/app/shared/common/classes";
 import { Serialized } from "src/app/shared/common/types";
@@ -38,6 +38,9 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
   @Output()
   kill = new EventEmitter();
 
+  @Output()
+  requestFileMenu = new EventEmitter();
+
   @Input()
   editName: false | any = false;
 
@@ -52,6 +55,9 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
 
   @Input()
   includeDate: boolean = true;
+
+  @ViewChild('input', {static: true, read: ElementRef})
+  inputRef!: ElementRef;
 
   constructor(cd: ChangeDetectorRef) {
     super(cd);
@@ -103,4 +109,8 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
   }
 
   close() { this.kill.emit(); }
+
+  onFileInputClicked(e: Event) {
+    if ( e.isTrusted ) e.preventDefault();
+  }
 }

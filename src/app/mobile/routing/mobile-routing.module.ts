@@ -16,7 +16,6 @@ import { FacturePage } from '../components/factures/facture.page';
 import { EngagementPage } from '../components/abonnement/engagement/engagement';
 import { MakeAdComponent } from '../components/make_ad/make_ad.component';
 import { SOSPageComponent } from '../components/SOS_page/sos-page.component';
-import { AnnonceEnlignePage } from '../components/annonce_enligne/annonce.enligne';
 import { BoosterPage } from '../components/booster/booster.page';
 import { SuiviPage } from '../components/suivi_page/suivi.page';
 import { SuiviPME } from '../components/suivi_pme/suivi_pme.page';
@@ -65,9 +64,6 @@ const routes: Routes = [{
     path: 'abonnement',
     component: AbonnementPage,
   }, {
-    path: 'annonce-enligne',
-    component: AnnonceEnlignePage,
-  },   {
     path: 'engagement',
     component: EngagementPage,
   },{

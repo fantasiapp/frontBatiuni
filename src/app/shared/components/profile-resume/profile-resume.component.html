@@ -1,5 +1,5 @@
 <profile-image [user]="user"></profile-image>
-<switch off="Profile ST" on="Profil PME"  style="text-align: center;" [value]="user.viewType" (valueChange)="profileChanged.emit($event)" [disabled]="user.profile!.role.id !== 3 || null"></switch>
+<switch off="Profile ST" on="Profil PME"  style="text-align: center;" [value]="user.viewType" (valueChange)="profileChanged.emit($event)" [disabled]="user.profile!.company.role.id !== 3 || null"></switch>
 <section class="quick-intro flex column center-cross small-space-children-margin">
   <span class="text-emphasis">{{ (user.profile!.firstName + " " + user.profile!.lastName) | titlecase }}</span>
   <ng-container *ngIf="showMore">

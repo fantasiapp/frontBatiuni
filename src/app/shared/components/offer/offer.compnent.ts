@@ -25,7 +25,7 @@ export class OfferComponent {
   get companyName() { return this.post ? PostRow.getCompany(this.post).name : ''; }
 
   ngOnInit() {
-    console.log(this.post);
+
   }
 
   @HostBinding("class.delete")
