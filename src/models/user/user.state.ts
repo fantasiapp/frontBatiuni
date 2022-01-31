@@ -177,14 +177,11 @@ export class UserState {
     
     return req.pipe(
       map((response: any) => {
-        if ( response['uploadPost'] && response['uploadPost'] !== 'OK' )
+        console.log('>', response);
+        if ( response[action.action] && response[action.action] !== 'OK' )
           throw response['messages'];
 
-        if ( response['modifyPost'] && response['modifyPost'] !== 'OK' )
-          throw response['messages'];
-        
-        delete response['uploadPost'];
-        delete response['modifyPost'];
+        delete response[action.action];
         const id = +Object.keys(response)[0],
           detailsIndex = PostRow.fields.get('DetailedPost')!,
           details = response[id][detailsIndex],
