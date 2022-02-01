@@ -5,8 +5,7 @@
 :host {
   display: block;
   position: fixed;
-  @extend %header;
-  padding: 0;
+  left: 0; top: 0;
   width: 100%;
   height: calc(#{$paging-height + $paging-decoration-height} + env(safe-area-inset-top));
   @include set-safe-area(padding, top);
