@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
 import { UIDefaultAccessor } from '../../common/classes';
 import * as moment from 'moment';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
@@ -42,22 +42,21 @@ export class CalendarUI extends UIDefaultAccessor<DayState[]> {
   monthSelect: any[] = [];
   dateSelect: any;
   currentDay: any;
+  currentMonth: number = 0;
+  currentYear: number = 0;
   dayClicked: boolean = false;
 
-  constructor() {
-    super();
-    this.value = [];
+  constructor(cd: ChangeDetectorRef) {
+    super(cd);
+    let now = new Date(Date.now());
+    this.currentMonth = (now.getMonth()) + 1;
+    this.currentYear = now.getFullYear();
   }
 
-  private formatMonth(month: number) {
+  private fillZero(month: number) {
     if ( month < 10 ) return '0' + month;
     return month;
   };
-
-  ngOnInit(): void {
-    let now = new Date(Date.now());
-    this.getDaysFromDate(this.formatMonth((now.getMonth()) + 1), now.getFullYear());
-  }
 
   getDaysFromDate(month: any, year: any) {
     const startDate = moment.utc(`${year}/${month}/01`,"YYYY-MM-DD")
@@ -65,31 +64,33 @@ export class CalendarUI extends UIDefaultAccessor<DayState[]> {
     this.dateSelect = startDate.locale('fr');
     const diffDays = endDate.diff(startDate, 'days', true)
     const numberDays = Math.round(diffDays);
-    console.log(this.value);
     const arrayDays = Object.keys([...Array(numberDays)]).map((a: any,i) => {
-      a = parseInt(a) + 1;
+      a = this.fillZero(parseInt(a) + 1);
       const dayObject = moment(`${year}/${month}/${a}`,"YYYY-MM-DD");
       const compareDate = moment(`${year}-${month}-${a}`,"YYYY-MM-DD");
-      let flow :any = compareDate
-      let item = this.value!.filter(item => item.date == flow._i)
+      let flow :any = compareDate;
+      let item = this._value!.filter(item => item.date == flow._i)
       return {
         name: dayObject.format("dddd"),
         value: a,
         date: flow._i,
         indexWeek: dayObject.isoWeekday(),
         availability : item[0]?.availability
-        };
+      };
     }); this.monthSelect = arrayDays;
+    console.log(this.monthSelect);
+  }
+  
+  get value() { return this._value; }
+  set value(v: DayState[] | undefined) {
+    this._value = v || [];
+    this.getDaysFromDate(this.fillZero(this.currentMonth), this.currentYear);
   }
 
   changeMonth(flag: any) {
-    if (flag < 0) {
-      const prevDate = this.dateSelect.clone().subtract(1, "month");
-      this.getDaysFromDate(prevDate.format("MM"), prevDate.format("YYYY"));
-    } else {
-      const nextDate = this.dateSelect.clone().add(1, "month");
-      this.getDaysFromDate(nextDate.format("MM"), nextDate.format("YYYY"));
-    }
+    const nextDate = flag < 0 ? this.dateSelect.clone().subtract(1, "month") : this.dateSelect.clone().add(1, "month");
+    this.currentMonth = nextDate.get('M') + 1; this.currentYear = nextDate.get('Y');
+    this.getDaysFromDate(this.fillZero(this.currentMonth), this.currentYear);
   }
 
   lastClick: any;
@@ -118,6 +119,7 @@ export class CalendarUI extends UIDefaultAccessor<DayState[]> {
   }
 
   setCurrentDayState(state: Availability) {
+    console.log(this.value, this._value);
     const remaining = this.value!.filter(item => item.date !== this.currentDay.date);
     let next;
     if (state != 'nothing') {

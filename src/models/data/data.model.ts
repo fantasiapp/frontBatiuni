@@ -1,6 +1,7 @@
 //find a way to mark objects as serialized
 
 import { Serialized } from "src/app/shared/common/types";
+import { Availability as AvailabilityString } from "src/app/shared/components/calendar/calendar.ui";
 
 export interface Table {
   new (id: number, values: string[]): object;
@@ -241,6 +242,12 @@ export class CompanyRow extends createTable<CompanyRow>() {
   get disponibilities(): DisponibilityRow[] {
     return this.getField('Disponibility');
   }
+
+  serialize(): Serialized<CompanyRow> {
+    console.log('serializing company');
+    console.log('my availabilities are', this.getField('Disponibility'))
+    return super.serialize();
+  }
 };
 
 export class UserProfileRow extends createTable<UserProfileRow>() {
@@ -258,7 +265,9 @@ export class EstablishmentsRow extends createTable<EstablishmentsRow>() {
 
   get name() { return this.getField('nom'); }
   get address() { return this.getField('adresse'); }
-  get activity() { return this.getField('activity'); }
+  get activitePrincipale() { return this.getField('activitePrincipale'); }
+  get siret() { return this.getField('siret'); }
+  get NTVAI() { return this.getField('NTVAI'); }
 };
 
 export class PostRow extends createTable<PostRow>() {
@@ -298,7 +307,27 @@ export class DetailedPostRow extends createTable<DetailedPostRow>() {
 
 export class DisponibilityRow extends createTable<DisponibilityRow>() {
   get date() { return this.getField('date'); }
-  get availability() { return this.getField('nature'); }
+  get availability(): AvailabilityString { return DisponibilityRow.getAvailabilityClass(this.getField('nature')); }
+
+  static readonly availabilityMap: {[key: string]: string} = {
+    'available': 'Disponible',
+    'availablelimits': 'Disponibilité Sous Conditions',
+    'unavailable': 'Non Disponible'
+  };
+
+  static getAvailabilityName(availability: AvailabilityString) {
+    const result = this.availabilityMap[availability];
+    if ( !result ) throw `Availability ${availability} should not be used to modify availabilities`;
+    return result;
+  };
+
+  static getAvailabilityClass(availability: string): AvailabilityString {
+    for ( const key in this.availabilityMap )
+      if ( this.availabilityMap[key] == availability )
+        return key as AvailabilityString;
+    
+    throw `No class for availability ${availability}`;
+  }
 };
 
 
@@ -463,7 +492,6 @@ export class Mapper {
       if ( this.mapped[name] ) return;
       Object.entries<string>(this.readValue(data, name))
         .forEach(([id, name]: [string, string]) => {
-          console.log(classes[index]);
           new classes[index](+id, name);
         })
       this.mapped[name] = true;

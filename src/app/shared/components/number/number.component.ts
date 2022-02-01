@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, Output } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { UIDefaultAccessor } from "src/app/shared/common/classes";
 
@@ -18,8 +18,8 @@ import { UIDefaultAccessor } from "src/app/shared/common/classes";
 })
 export class UINumberComponent extends UIDefaultAccessor<number> {
   
-  constructor() {
-    super();
+  constructor(cd: ChangeDetectorRef) {
+    super(cd);
     this.value = this.min + (this.max + this.min) / 2;
   }
   

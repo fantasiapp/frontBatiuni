@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input} from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input} from "@angular/core";
 import { UIDefaultAccessor } from "src/app/shared/common/classes";
 import { NG_VALUE_ACCESSOR } from "@angular/forms";
 
@@ -29,8 +29,8 @@ export class CommentaireUI extends UIDefaultAccessor<FileList>{
   startitle: string = 'backstar';
 
 
-  constructor() {
-    super();
+  constructor(cd: ChangeDetectorRef) {
+    super(cd);
   }
     
   showImage(e :any) {

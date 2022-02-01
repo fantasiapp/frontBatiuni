@@ -1,5 +1,5 @@
 <ng-container *ngIf="(user$ | async) as user">
-  <page-header name="Annonces qui peuvent vous intéresser" [tabs]="user.viewType ? 3 : 2" [(activeView)]="activeView" (filterClicked)="openAdFilterMenu = true">
+  <page-header [name]="user.viewType ? 'Mes Annonces' : 'Annonces qui peuvent vous intéresser'" [tabs]="user.viewType ? 3 : 2" [(activeView)]="activeView" (filterClicked)="openAdFilterMenu = true">
     <span tab_0>{{ user.viewType ? 'Brouillon' : 'Vue liste' }}</span>
     <span tab_1>{{ user.viewType ? 'En ligne' : 'Carte' }}</span>
     <span tab_2>Validées</span>

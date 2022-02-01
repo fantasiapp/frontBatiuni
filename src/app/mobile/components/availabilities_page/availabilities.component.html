@@ -4,7 +4,7 @@
   </header>
   
   <div class="hosted-page flex column center-cross space-children-margin page-content">
-    <calendar #calendar></calendar>
+    <calendar [value]="user.profile!.company.disponibilities" #calendar></calendar>
     <button class="button active" style="margin-top: auto;" (click)="submit(calendar)">Enregistrer</button>
   </div>
   

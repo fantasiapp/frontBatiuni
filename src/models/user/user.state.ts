@@ -207,20 +207,25 @@ export class UserState {
           
         response[id][detailsIndex] = mappedDetails;
         let post = new PostRow(id, response[id]);
-        this.store.dispatch(new StoreData('posts', PostRow, {type: 'add', id: post.id}));
         return post;
       }),
       concatMap((post: PostRow) => {
         const userProfileData = UserProfileRow.getById(profile!.id),
           userCompanyData = userProfileData.company;
 
-        userCompanyData.pushValue('Post', post);
+        
+        if ( action.action == 'modifyPost' ) {
+          userCompanyData.removeValue('Post', post.id);
+          this.store.dispatch(new StoreData('posts', PostRow, {type: 'modify', id: post.id}));
+        } else {
+          this.store.dispatch(new StoreData('posts', PostRow, {type: 'add', id: post.id}));
+        }; userCompanyData.pushValue('Post', post);
 
         uploads.forEach(upload => {
           upload.Post = post.id;
         });
 
-        return ctx.dispatch(uploads)
+        return ctx.dispatch(uploads);
       }),
       concatMap(() => {
         ctx.patchState({profile: UserProfileRow.getById(profile!.id).serialize()});
@@ -315,7 +320,7 @@ export class UserState {
         const userProfileData = UserProfileRow.getById(profile!.id)!;
         
         userProfileData.setField('Disponibility', Object.entries<any[]>(response).map(([id, values]) => {
-          new DisponibilityRow(+id, values);
+          return new DisponibilityRow(+id, values);
         }));
 
         ctx.patchState({profile: userProfileData.serialize()})

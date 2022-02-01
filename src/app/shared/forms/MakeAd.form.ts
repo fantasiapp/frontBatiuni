@@ -104,7 +104,8 @@ import { InfoService } from "../components/info/info.component";
     </div>
 
     <div class="form-input">
-      <checkbox formControlName="counterOffer"></checkbox> <span>Autoriser une contre-offre</span>
+      <checkbox formControlName="counterOffer"></checkbox>
+      <span>Autoriser une contre-offre</span>
     </div>
 
     <h2 class="form-section-title">Documents à télécharger</h2>
@@ -131,11 +132,11 @@ import { InfoService } from "../components/info/info.component";
   </form>
 
   <footer class="flex row space-between sticky-footer full-width submit-container" style="z-index: 999; background-color: white;">
-    <button class="button passive font-Poppins full-width" (click)="submit(true)">
+    <button class="button passive font-Poppins full-width" (click)="submit(true)" [disabled]="!makeAdForm.valid">
       {{this.post ? 'Enregistrer' : 'Brouillon'}}
     </button>
-    <button class="button gradient font-Poppins full-width" (click)="submit(false)">
-      {{this.post ? 'Passer en ligne' : 'Valider}}
+    <button class="button gradient font-Poppins full-width" (click)="submit(false)" [disabled]="!makeAdForm.valid">
+      {{this.post ? 'Passer en ligne' : 'Valider'}}
     </button>
   </footer>
   `,

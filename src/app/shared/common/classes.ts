@@ -73,6 +73,7 @@ export abstract class AnimateCSS extends IndexBased {
 export abstract class UIOpenMenu {
   @HostBinding('class.open')
   protected _open: boolean = false;
+  
   private initialized: boolean = false;
 
   get open() { return this._open; }
@@ -90,7 +91,8 @@ export abstract class UIOpenMenu {
     }
     else {
       document.body.classList.remove('blocked');
-      this.close();
+      this._open = false;
+      //this.close();
     }
   }
 
@@ -102,15 +104,21 @@ export abstract class UIOpenMenu {
 
 @Directive()
 export abstract class UIDefaultAccessor<T> implements ControlValueAccessor {
+  protected _value: T | undefined;
+
+  get value(): T | undefined {
+    return this._value;
+  }
+
   @Input()
-  value: T | undefined;
+  set value(value: T | undefined) {
+    this._value = value;
+  }
   
   @Output()
   valueChange = new EventEmitter<T>();
 
-  constructor() {
-
-  }
+  constructor(protected cd: ChangeDetectorRef) {}
 
   @HostBinding('attr.tabindex')
   get tabIndex() { return 0; }
@@ -146,6 +154,7 @@ export abstract class UIDefaultAccessor<T> implements ControlValueAccessor {
 
   writeValue(value: T) {
     this.valueChange.emit(this.value = value);
+    this.cd.markForCheck();
   }
 
   onChanged: Function = (value: boolean) => {};
@@ -156,8 +165,8 @@ export abstract class UIDefaultAccessor<T> implements ControlValueAccessor {
 
 @Directive()
 export class UIAsyncAccessor<T> extends UIDefaultAccessor<T> {
-  constructor(protected cd: ChangeDetectorRef) {
-    super();
+  constructor(cd: ChangeDetectorRef) {
+    super(cd);
   }
 
   protected getInput(e: any): Promise<T> { return super.getInput(e) as Promise<T>; }

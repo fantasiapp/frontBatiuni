@@ -13,8 +13,8 @@ export class UIRadioAccessor extends UIDefaultAccessor<string | boolean | number
   controlName: string = '';
 
   subscription?: Subscription;
-  constructor(private host: UIRadioboxComponent) {
-    super();
+  constructor(cd: ChangeDetectorRef, private host: UIRadioboxComponent) {
+    super(cd);
   }
 
   ngOnInit() {

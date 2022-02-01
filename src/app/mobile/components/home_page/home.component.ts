@@ -40,10 +40,6 @@ export class HomeComponent extends Destroy$ {
 
   
   ngOnInit() {
-    this.user$.pipe(takeUntil(this.destroy$)).subscribe((user) => {
-      
-    });
-
     combineLatest([this.user$, this.posts$]).subscribe(([user, posts]) => {
       this.userPosts = user.profile?.company.posts || [];
       [this.userOnlinePosts, this.userDrafts] = filterSplit(this.userPosts, post => !post.draft);
@@ -74,7 +70,6 @@ export class HomeComponent extends Destroy$ {
   }
 
   checkPostMenu() {
-    console.log('menu');
     this.checkMenu.swipeup = true;
   }
 

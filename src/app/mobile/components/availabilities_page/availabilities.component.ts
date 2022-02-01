@@ -18,7 +18,9 @@ export class AvailabilitiesComponent {
   user$!: Observable<User>;
 
   constructor(private store: Store) {
-    
+    this.user$.subscribe(user => {
+      console.log(user.profile!.company.disponibilities);
+    })
   }
 
   submit(calendar: CalendarUI) {

@@ -76,6 +76,8 @@ button {
       color: #0C5E8D;
       border: 2px solid #0C5E8D;
       font-weight: 500;
+
+      &:disabled { color: #333; border-color: #333;}
     }
 
     &.active {

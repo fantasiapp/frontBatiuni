@@ -2,7 +2,7 @@ import { FormGroup } from "@angular/forms";
 import { FileUIOutput } from "src/app/shared/components/filesUI/files.ui";
 import { PropertyTrap } from "src/app/shared/common/classes";
 import { getDirtyValues } from "src/app/shared/common/functions";
-import { JobForCompanyRow, JobRow, LabelForCompanyRow, LabelRow, UserProfileRow } from "../data/data.model";
+import { DisponibilityRow, JobForCompanyRow, JobRow, LabelForCompanyRow, LabelRow, UserProfileRow } from "../data/data.model";
 import { Availability, CalendarUI } from "src/app/shared/components/calendar/calendar.ui";
 
 export class ChangeProfileType {
@@ -144,6 +144,7 @@ export class UploadPost {
     public id?:number
   ) {
     if ( this.id ) this.action = 'modifyPost';
+    else delete this['id'];
     console.log('sending', this);
   };
 
@@ -197,21 +198,9 @@ export class ModifyDisponibility {
 
   constructor(public disponibility: [string, string][]) {}
 
-  static readonly availabilityMap: any = {
-    'available': 'Disponible',
-    'availablelimits': 'Disponibile Sous Conditions',
-    'unavailable': 'Non Disponible'
-  };
-
-  private static renameAvailability(availability: string) {
-    const result = this.availabilityMap[availability];
-    if ( !result ) throw `Availability ${availability} should not be used to modify availabilities`;
-    return result;
-  };
-
   static fromCalendar(calendar: CalendarUI) {
     return new ModifyDisponibility(calendar.value!.map(
-      day => [day.date, ModifyDisponibility.renameAvailability(day.availability)]
+      day => [day.date, DisponibilityRow.getAvailabilityName(day.availability)]
     ));
   }
 };
