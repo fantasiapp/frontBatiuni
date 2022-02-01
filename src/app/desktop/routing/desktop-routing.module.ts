@@ -2,6 +2,7 @@ import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
 import { AuthGuard } from "src/app/mobile/routing/auth/auth.guard";
 import { AuthResolver } from "src/app/mobile/routing/auth/auth.resolver";
+import { DocusignPage } from "src/app/shared/components/docusign_page/docusign.page";
 import { EmailConfirmation } from "src/app/shared/validators/email_confirmation/emailconfirmation.component";
 import { RegistrationSuccess } from "src/app/shared/validators/registration_success/registrationsuccess.component";
 import { AnnoncePage } from "../components/annonce_page/annonce.page";
@@ -27,7 +28,11 @@ const routes: Routes = [{
 }, {
   path: 'confirmed/:token',
   component: EmailConfirmation
-}, {
+}, 
+{
+  path:'docusign',component:DocusignPage
+},
+{
   path: 'success',
   component: RegistrationSuccess
 }, {

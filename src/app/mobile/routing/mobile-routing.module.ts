@@ -24,6 +24,8 @@ import { AuthGuard } from './auth/auth.guard';
 import { EmailConfirmation } from 'src/app/shared/validators/email_confirmation/emailconfirmation.component';
 import { RegistrationSuccess } from 'src/app/shared/validators/registration_success/registrationsuccess.component';
 import { AuthResolver } from './auth/auth.resolver';
+import { DocusignPage } from 'src/app/shared/components/docusign_page/docusign.page';
+import { ForgorPassword } from '../components/forgot_password/forgot.password';
 
 const routes: Routes = [{
     path: 'landing',
@@ -34,6 +36,10 @@ const routes: Routes = [{
     path: 'connexion',
     component: ConnexionComponent,
     canActivate: [AuthGuard],
+  }, {
+    path: 'forgot_password/:token',
+    component: ForgorPassword,
+    // canActivate: [AuthGuard],
   }, {
     path: 'discover',
     redirectTo: 'discover/entreprise'
@@ -63,7 +69,9 @@ const routes: Routes = [{
   },{
     path: 'annonce',
     component: AnnoncePage,
-  },  {
+  },{
+    path:'docusign',component:DocusignPage
+  } , {
     path: 'booster',
     component: BoosterPage
   }, {
