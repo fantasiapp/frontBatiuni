@@ -63,10 +63,15 @@ export class UserState {
         if ( response['uploadFile'] !== 'OK' ) throw response['messages'];
         delete response['uploadFile'];
         // add to cached files
-        const id = +Object.keys(response)[0];
-        const file = new FilesRow(id, [...response[id], action.fileBase64]);
+        const id = +Object.keys(response)[0],
+          file = new FilesRow(id, [...response[id], action.fileBase64]),
+          oldFile = user.profile!.company.files.find(companyFile => companyFile.name == file.name),
+          company = CompanyRow.getById(user.profile!.company.id);
         //add to company
-        CompanyRow.getById(user.profile!.company.id).pushValue('Files', file);
+        if ( oldFile )
+          company.spliceValue('Files', oldFile.id, file);
+        else
+          company.pushValue('Files', file);
 
         //find a way to make minimal updates with a tree-like-structure
         ctx.patchState({profile: UserProfileRow.getById(user.profile!.id).serialize()});
@@ -104,11 +109,14 @@ export class UserState {
       }),
       tap((response: any) => {
         if ( response['downloadFile'] !== 'OK' ) throw response['messages'];
+        const oldFile = FilesRow.getById(action.id);
         const file = new FilesRow(action.id, response[action.id]),
           profile = UserProfileRow.getById(user.profile!.id);
         
         //add to company
-        profile.company.spliceValue('Files', file.id, file);
+        if ( oldFile )
+          profile.company.spliceValue('Files', oldFile.id);
+        profile.company.pushValue('Files', file.id);
         ctx.patchState({profile: profile.serialize()})
       })
     );
