@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
 import { UIDefaultAccessor } from '../../common/classes';
 import * as moment from 'moment';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
@@ -42,17 +42,21 @@ export class CalendarUI extends UIDefaultAccessor<DayState[]> {
   monthSelect: any[] = [];
   dateSelect: any;
   currentDay: any;
+  currentMonth: number = 0;
+  currentYear: number = 0;
   dayClicked: boolean = false;
 
-  constructor() {
-    super();
-    this.value = [];
+  constructor(cd: ChangeDetectorRef) {
+    super(cd);
+    let now = new Date(Date.now());
+    this.currentMonth = (now.getMonth()) + 1;
+    this.currentYear = now.getFullYear();
   }
 
-  ngOnInit(): void {
-    let now = new Date(Date.now());
-    this.getDaysFromDate(now.getMonth() + 1, now.getFullYear());
-  }
+  private fillZero(month: number) {
+    if ( month < 10 ) return '0' + month;
+    return month;
+  };
 
   getDaysFromDate(month: any, year: any) {
     const startDate = moment.utc(`${year}/${month}/01`,"YYYY-MM-DD")
@@ -61,31 +65,31 @@ export class CalendarUI extends UIDefaultAccessor<DayState[]> {
     const diffDays = endDate.diff(startDate, 'days', true)
     const numberDays = Math.round(diffDays);
     const arrayDays = Object.keys([...Array(numberDays)]).map((a: any,i) => {
-      a = parseInt(a) + 1;
+      a = this.fillZero(parseInt(a) + 1);
       const dayObject = moment(`${year}/${month}/${a}`,"YYYY-MM-DD");
       const compareDate = moment(`${year}-${month}-${a}`,"YYYY-MM-DD");
-      let flow :any = compareDate
-      let item = this.value!.filter(item => item.date == flow._i)
+      let flow :any = compareDate;
+      let item = this._value!.filter(item => item.date == flow._i)
       return {
         name: dayObject.format("dddd"),
         value: a,
         date: flow._i,
         indexWeek: dayObject.isoWeekday(),
-        availbility : item[0]?.availability
-        };
+        availability : item[0]?.availability
+      };
     }); this.monthSelect = arrayDays;
-    console.log(arrayDays)
+  }
+  
+  get value() { return this._value; }
+  set value(v: DayState[] | undefined) {
+    this._value = v || [];
+    this.getDaysFromDate(this.fillZero(this.currentMonth), this.currentYear);
   }
 
   changeMonth(flag: any) {
-    if (flag < 0) {
-      const prevDate = this.dateSelect.clone().subtract(1, "month");
-      this.getDaysFromDate(prevDate.format("MM"), prevDate.format("YYYY"));
-    } else {
-      const nextDate = this.dateSelect.clone().add(1, "month");
-      this.getDaysFromDate(nextDate.format("MM"), nextDate.format("YYYY"));
-    }
-    console.log(this.value)
+    const nextDate = flag < 0 ? this.dateSelect.clone().subtract(1, "month") : this.dateSelect.clone().add(1, "month");
+    this.currentMonth = nextDate.get('M') + 1; this.currentYear = nextDate.get('Y');
+    this.getDaysFromDate(this.fillZero(this.currentMonth), this.currentYear);
   }
 
   lastClick: any;
@@ -98,7 +102,6 @@ export class CalendarUI extends UIDefaultAccessor<DayState[]> {
   choseDay(day: any, e: Event) {
     this.lastClick = e;
     this.currentDay = day;
-    console.log(day)
 
     if ( !this.embedded )
       this.toggleDayState(this.currentDay, 'selected');  
@@ -112,6 +115,7 @@ export class CalendarUI extends UIDefaultAccessor<DayState[]> {
       target.classList.remove(`${others[i]}`);
     
     if ( state ) target.classList.add(`${state}`);
+    this.cd.markForCheck();
   }
 
   setCurrentDayState(state: Availability) {
@@ -130,6 +134,8 @@ export class CalendarUI extends UIDefaultAccessor<DayState[]> {
     }
     
     this.onChange(next);
+    this.dayClicked = false;
+    console.log(this.value, this._value);
   }
 
   toggleDayState(day: DayState, targetState: Availability) {
@@ -139,15 +145,15 @@ export class CalendarUI extends UIDefaultAccessor<DayState[]> {
       next = remaining;
       this.setDOMState(null);
     } else {
-      console.log(targetState)
       next = [...remaining, {
         date: this.currentDay.date,
         availability: targetState  
       }];
       this.setDOMState(targetState);
     }
-    console.log(next)
 
     this.onChange(next);
   };
+
+  //write value
 }

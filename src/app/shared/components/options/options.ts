@@ -56,7 +56,7 @@ export class OptionsModel extends UIDefaultAccessor<Option[]> {
   }
 
   constructor(public ref: ElementRef, protected cd: ChangeDetectorRef, private zone: NgZone) {
-    super();
+    super(cd);
     this.value = [];
   }
 

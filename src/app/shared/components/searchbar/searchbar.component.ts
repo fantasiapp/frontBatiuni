@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from "@angular/core";
 import { UIDefaultAccessor } from "src/app/shared/common/classes";
 
 @Component({
@@ -8,8 +8,8 @@ import { UIDefaultAccessor } from "src/app/shared/common/classes";
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SearchbarComponent extends UIDefaultAccessor<string> {
-  constructor() {
-    super();
+  constructor(cd: ChangeDetectorRef) {
+    super(cd);
     this.value = '';
   }
 

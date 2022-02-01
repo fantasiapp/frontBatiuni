@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from "@angular/core";
 import { NG_VALUE_ACCESSOR } from "@angular/forms";
 import { UIDefaultAccessor } from "src/app/shared/common/classes";
 
@@ -17,8 +17,8 @@ import { UIDefaultAccessor } from "src/app/shared/common/classes";
   }]
 })
 export class UICheckboxComponent extends UIDefaultAccessor<boolean> {
-  constructor() {
-    super();
+  constructor(cd: ChangeDetectorRef) {
+    super(cd);
     this.value = false;
   }
 

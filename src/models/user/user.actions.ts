@@ -2,7 +2,8 @@ import { FormGroup } from "@angular/forms";
 import { FileUIOutput } from "src/app/shared/components/filesUI/files.ui";
 import { PropertyTrap } from "src/app/shared/common/classes";
 import { getDirtyValues } from "src/app/shared/common/functions";
-import { JobForCompanyRow, JobRow, LabelForCompanyRow, LabelRow, UserProfileRow } from "../data/data.model";
+import { DisponibilityRow, JobForCompanyRow, JobRow, LabelForCompanyRow, LabelRow, UserProfileRow } from "../data/data.model";
+import { Availability, CalendarUI } from "src/app/shared/components/calendar/calendar.ui";
 
 export class ChangeProfileType {
   static readonly type = '[User] Change Profile Type';
@@ -105,7 +106,7 @@ export class DeleteFile {
   static readonly type = '[File] Delete';
   action = 'deleteFile';
   constructor(public id: number) {}
-}
+};
 
 export class DownloadFile {
   action = 'downloadFile';
@@ -143,6 +144,7 @@ export class UploadPost {
     public id?:number
   ) {
     if ( this.id ) this.action = 'modifyPost';
+    else delete this['id'];
     console.log('sending', this);
   };
 
@@ -188,4 +190,17 @@ export class DuplicatePost {
   static readonly type = '[User.PME] Duplicate Post';
   action = 'duplicatePost';
   constructor(public id: number) {}
+};
+
+export class ModifyDisponibility {
+  static readonly type = '[User.ST Modify Disponibility';
+  action = 'modifyDisponibility';
+
+  constructor(public disponibility: [string, string][]) {}
+
+  static fromCalendar(calendar: CalendarUI) {
+    return new ModifyDisponibility(calendar.value!.map(
+      day => [day.date, DisponibilityRow.getAvailabilityName(day.availability)]
+    ));
+  }
 };

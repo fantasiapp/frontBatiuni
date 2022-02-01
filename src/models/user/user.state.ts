@@ -2,11 +2,11 @@ import { HttpErrorResponse } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Action, Select, Selector, State, StateContext, Store } from "@ngxs/store";
 import { catchError, concatMap, map, mergeMap, take, tap } from "rxjs/operators";
-import { ChangePassword, ChangeProfileType, ChangeProfilePicture, GetUserData, ModifyUserProfile, UploadFile, DownloadFile, UploadPost, DeletePost, DuplicatePost, SwitchPostType, DeleteFile } from "./user.actions";
+import { ChangePassword, ChangeProfileType, ChangeProfilePicture, GetUserData, ModifyUserProfile, UploadFile, DownloadFile, UploadPost, DeletePost, DuplicatePost, SwitchPostType, DeleteFile, ModifyDisponibility } from "./user.actions";
 import { User } from "./user.model";
 import { Logout } from "../auth/auth.actions";
 import { of, throwError } from "rxjs";
-import { CompanyRow, DetailedPostRow, FilesRow, Mapper, PostRow, UserProfileRow } from "../data/data.model";
+import { DisponibilityRow, CompanyRow, DetailedPostRow, FilesRow, Mapper, PostRow, UserProfileRow } from "../data/data.model";
 import { HttpService } from "src/app/services/http.service";
 import { StoreData } from "../data/data.actions";
 
@@ -84,7 +84,7 @@ export class UserState {
         delete response['deleteFile'];
         // add to cached files
 
-        CompanyRow.getById(user.profile!.company.id).removeValue('Files', action.id);
+        CompanyRow.getById(user.profile!.company.id).spliceValue('Files', action.id);
 
         //find a way to make minimal updates with a tree-like-structure
         ctx.patchState({profile: UserProfileRow.getById(user.profile!.id).serialize()});
@@ -96,23 +96,19 @@ export class UserState {
   downloadFile(ctx: StateContext<User>, action: DownloadFile) {
     const req = this.http.get('data', action),
       user = ctx.getState();
-
+    
     return req.pipe(
       catchError((err: HttpErrorResponse) => {
         return throwError(err);
       }),
       tap((response: any) => {
-        if ( response['dataPost'] !== 'Error' ) throw response['messages'];
+        if ( response['downloadFile'] !== 'OK' ) throw response['messages'];
         const file = new FilesRow(action.id, response[action.id]),
-          profile = UserProfileRow.getById(user.profile!.id),
-          index = profile.company.files.findIndex(file => file.id == action.id);
+          profile = UserProfileRow.getById(user.profile!.id);
         
-        if ( index < 0 ) throw 'File id conflict.';
-        
-        profile.company.files.splice(index, 1, file);
-        ctx.patchState({profile: UserProfileRow.getById(user.profile!.id).serialize()})
-        console.log(ctx.getState().profile!.company.files);
         //add to company
+        profile.company.spliceValue('Files', file.id, file);
+        ctx.patchState({profile: profile.serialize()})
       })
     );
   }
@@ -127,7 +123,9 @@ export class UserState {
         return throwError(err);
       }),
       tap((response: any) => {
+        let currentUserId: number = 0;
         try {
+          currentUserId = response['currentUser'];
           Mapper.mapRequest(response);
           this.store.dispatch(new StoreData('posts', PostRow, {type: 'load', id: 0}));
         } catch ( err ) {
@@ -136,10 +134,10 @@ export class UserState {
           return;
         };
         
-        const currentUser = [...UserProfileRow.instances.values()][0],
+        console.log([...UserProfileRow.instances.values()], currentUserId);
+        const currentUser = UserProfileRow.getById(currentUserId),
           partial: any = { profile: currentUser.serialize() };
 
-        console.log('current User', currentUser.serialize());
         ctx.patchState(partial);
         if ( !ctx.getState().imageUrl ) {
           const reversed = currentUser.company.files.slice(); reversed.reverse();
@@ -158,6 +156,7 @@ export class UserState {
 
   @Action(Logout)
   logout(ctx: StateContext<User>) {
+    Mapper.reset();
     ctx.patchState({ imageUrl: null, profile: null });
   }
 
@@ -207,20 +206,25 @@ export class UserState {
           
         response[id][detailsIndex] = mappedDetails;
         let post = new PostRow(id, response[id]);
-        this.store.dispatch(new StoreData('posts', PostRow, {type: 'add', id: post.id}));
         return post;
       }),
       concatMap((post: PostRow) => {
         const userProfileData = UserProfileRow.getById(profile!.id),
           userCompanyData = userProfileData.company;
 
-        userCompanyData.pushValue('Post', post);
+        
+        if ( action.action == 'modifyPost' ) {
+          userCompanyData.spliceValue('Post', post.id);
+          this.store.dispatch(new StoreData('posts', PostRow, {type: 'modify', id: post.id}));
+        } else {
+          this.store.dispatch(new StoreData('posts', PostRow, {type: 'add', id: post.id}));
+        }; userCompanyData.pushValue('Post', post);
 
         uploads.forEach(upload => {
           upload.Post = post.id;
         });
 
-        return ctx.dispatch(uploads)
+        return ctx.dispatch(uploads);
       }),
       concatMap(() => {
         ctx.patchState({profile: UserProfileRow.getById(profile!.id).serialize()});
@@ -292,11 +296,34 @@ export class UserState {
           const userProfileData = UserProfileRow.getById(profile!.id),
             userCompanyData = userProfileData.company;
 
-          userCompanyData.removeValue('Post', post.id);
+          userCompanyData.spliceValue('Post', post.id);
 
           ctx.patchState({profile: userProfileData.serialize()})
         });
       })
     )
+  }
+
+  @Action(ModifyDisponibility)
+  modifyDisponibilities(ctx: StateContext<User>, action: ModifyDisponibility) {
+    const {profile} = ctx.getState();
+    return this.http.post('data', action).pipe(
+      tap((response: any) => {
+        if ( response[action.action] != 'OK' )
+          throw response['messages'];
+        
+        delete response[action.action];
+        const current = profile!.company.disponibilities;
+        current?.forEach(item => DisponibilityRow.destroy(item.id));
+
+        const userProfileData = UserProfileRow.getById(profile!.id)!;
+        
+        userProfileData.company.setField('Disponibility', Object.entries<any[]>(response).map(([id, values]) => {
+          return new DisponibilityRow(+id, values);
+        }));
+        
+        ctx.patchState({profile: userProfileData.serialize()})
+      })
+    );
   }
 };

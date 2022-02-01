@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, HostBinding, Input } from "@angular
 
 export const ratingStarWidth = 25;
 
+//add to forms
 @Component({
   selector: 'stars',
   template: `

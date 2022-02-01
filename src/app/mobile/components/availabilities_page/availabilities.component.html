@@ -1,14 +1,17 @@
-<header class="clear-margin full-width sticky-header flex center-cross">
-  <span class="grow text-light-emphasis">Mes disponibilités</span>
-</header>
-
-<div class="hosted-page flex column center-cross space-children-margin page-content">
-  <calendar #calendar></calendar>
-</div>
-
-<swipeup [(open)]="calendar.dayClicked">
-  <li (click)="calendar.setCurrentDayState('available')" class="disponible">Disponible</li>
-  <li (click)="calendar.setCurrentDayState('availablelimits')" class="sous-conditions">Disponible sous conditions</li>
-  <li (click)="calendar.setCurrentDayState('unavailable')" class="pas-disponible">Pas disponible</li>
-  <li (click)="calendar.setCurrentDayState('nothing')" class="non-renseigne">Non renseigné</li>
-</swipeup>
+<ng-container *ngIf="(user$ | async) as user">
+  <header class="clear-margin full-width sticky-header flex center-cross">
+    <span class="grow text-light-emphasis">Mes disponibilités</span>
+  </header>
+  
+  <div class="hosted-page flex column center-cross space-children-margin page-content">
+    <calendar [value]="user.profile!.company.disponibilities" #calendar></calendar>
+    <button class="button active" style="align-self: flex-end;" (click)="submit(calendar)">Enregistrer</button>
+  </div>
+  
+  <swipeup [(open)]="calendar.dayClicked">
+    <li (click)="setCalendarDayState(calendar, 'available')" class="disponible">Disponible</li>
+    <li (click)="setCalendarDayState(calendar, 'availablelimits')" class="sous-conditions">Disponible sous conditions</li>
+    <li (click)="setCalendarDayState(calendar, 'unavailable')" class="pas-disponible">Pas disponible</li>
+    <li (click)="setCalendarDayState(calendar, 'nothing')" class="non-renseigne">Non renseigné</li>
+  </swipeup>
+</ng-container>

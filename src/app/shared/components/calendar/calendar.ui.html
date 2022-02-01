@@ -13,7 +13,7 @@
 			<li *ngFor="let day of week; let index = index" class="day-name center-text">{{day | slice:0:1}}</li>
 			<li (click)="onDayClicked(day, $event)"
 				[style.gridColumnStart]="first ? day?.indexWeek : 'auto'"
-				*ngFor="let day of monthSelect;let first = first" [class]="day.availbility" class="center-text">
+				*ngFor="let day of monthSelect;let first = first" [class]="day.availability" class="center-text">
 				{{day?.value}}
 			</li>
 		</ol>

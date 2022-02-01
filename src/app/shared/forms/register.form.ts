@@ -228,6 +228,7 @@ export class RegisterForm extends Destroy$ {
   actions = {GetCompanies};
 
   onChoice(establishment: EstablishmentsRow) {
+    console.log('choice', establishment);
     this.registerForm.get('company')?.setValue(establishment);
     this.registerForm.get('companyName')?.setValue(establishment.name);
   }

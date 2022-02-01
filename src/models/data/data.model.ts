@@ -1,6 +1,7 @@
 //find a way to mark objects as serialized
 
 import { Serialized } from "src/app/shared/common/types";
+import { Availability as AvailabilityString } from "src/app/shared/components/calendar/calendar.ui";
 
 export interface Table {
   new (id: number, values: string[]): object;
@@ -93,12 +94,12 @@ class __table__ {
     value.push(data);
   };
 
-  removeValue(field: string, id: any) {
+  spliceValue(field: string, id: any, replacement?: any) {
     const value = this.getField(field);
     if ( !value ) throw `Unknow field ${field} on ${this.structure.getName()}`;
     if ( !Array.isArray(value) ) throw `Field ${field} on ${this.structure.getName()} is not an array.`;
     const index = value.findIndex(q => q.id == id);
-    if ( index >= 0 ) value.splice(index, 1);
+    if ( index >= 0 ) replacement ? value.splice(index, 1, replacement) : value.splice(index, 1);
   }
 
   getIndex(key: string) {
@@ -110,7 +111,8 @@ class __table__ {
   }
 
   setField(key: string, x: any) {
-    return this.values[this.getIndex(key)!] = x;
+    this.values[this.getIndex(key)!] = x;
+    return x;
   }
 
   copy(value: any) {
@@ -224,6 +226,9 @@ export class CompanyRow extends createTable<CompanyRow>() {
   get name(): string { return this.getField('name') }
   get role(): RoleRow { return this.getField('role') }
   get siret() { return this.getField('siret') }
+  get address() { return this.getField('address'); }
+  get activity() { return this.getField('acitivity'); }
+  get ntva() { return this.getField('ntva'); }
   get capital() { return this.getField('capital') }
   get revenue() { return this.getField('revenue') }
   get logo() { return this.getField('logo') }
@@ -235,6 +240,13 @@ export class CompanyRow extends createTable<CompanyRow>() {
   get jobs(): JobForCompanyRow[] { return this.getField('JobForCompany'); }
   get labels():  LabelForCompanyRow[] { return this.getField('LabelForCompany'); }
   get posts(): PostRow[] { return this.getField('Post'); }
+  get disponibilities(): DisponibilityRow[] {
+    return this.getField('Disponibility');
+  }
+
+  serialize(): Serialized<CompanyRow> {
+    return super.serialize();
+  }
 };
 
 export class UserProfileRow extends createTable<UserProfileRow>() {
@@ -252,7 +264,9 @@ export class EstablishmentsRow extends createTable<EstablishmentsRow>() {
 
   get name() { return this.getField('nom'); }
   get address() { return this.getField('adresse'); }
-  get activity() { return this.getField('activity'); }
+  get activitePrincipale() { return this.getField('activitePrincipale'); }
+  get siret() { return this.getField('siret'); }
+  get NTVAI() { return this.getField('NTVAI'); }
 };
 
 export class PostRow extends createTable<PostRow>() {
@@ -290,6 +304,32 @@ export class DetailedPostRow extends createTable<DetailedPostRow>() {
   get supervisions() { return null; }
 };
 
+export class DisponibilityRow extends createTable<DisponibilityRow>() {
+  get date() { return this.getField('date'); }
+  get availability(): AvailabilityString { return DisponibilityRow.getAvailabilityClass(this.getField('nature')); }
+
+  static readonly availabilityMap: {[key: string]: string} = {
+    'available': 'Disponible',
+    'availablelimits': 'Disponibilité Sous Conditions',
+    'unavailable': 'Non Disponible'
+  };
+
+  static getAvailabilityName(availability: AvailabilityString) {
+    const result = this.availabilityMap[availability];
+    if ( !result ) throw `Availability ${availability} should not be used to modify availabilities`;
+    return result;
+  };
+
+  static getAvailabilityClass(availability: string): AvailabilityString {
+    for ( const key in this.availabilityMap )
+      if ( this.availabilityMap[key] == availability )
+        return key as AvailabilityString;
+    
+    throw `No class for availability ${availability}`;
+  }
+};
+
+
 //Objectives
 //Move mapper here
 //Make a model interface and these types should implement it
@@ -305,6 +345,7 @@ export type LabelForCompany = Serialized<LabelForCompanyRow>;
 export type Role = Serialized<RoleRow>;
 export type Label = Serialized<LabelRow>;
 export type Job = Serialized<JobRow>;
+export type Availability = Serialized<DisponibilityRow>;
 export type Post = Serialized<PostRow>;
 export type PostDetail = Serialized<DetailedPostRow>;
 
@@ -324,7 +365,7 @@ type TableConstructor = {
   getById(id: number): any;
 }
 
-const definedTables = ['Company', 'Userprofile', 'JobForCompany', 'LabelForCompany', 'Files', 'Establishments', 'Post', 'DetailedPost'] as const;
+const definedTables = ['Company', 'Userprofile', 'JobForCompany', 'LabelForCompany', 'Files', 'Establishments', 'Post', 'DetailedPost', 'Disponibility'] as const;
 const definedValues = ['Role', 'Label', 'Job'] as const;
 export type tableName = typeof definedTables[number];
 export type valueName = typeof definedValues[number];
@@ -337,6 +378,7 @@ export class Mapper {
     'Role': RoleRow, 'role': RoleRow, /* fix here: Report this to JLW */
     'Label': LabelRow,
     'Job': JobRow,
+    'Disponibility': DisponibilityRow,
     'JobForCompany': JobForCompanyRow,
     'LabelForCompany': LabelForCompanyRow,
     'Files': FilesRow,
@@ -348,6 +390,12 @@ export class Mapper {
   private static mapped: Dict<boolean> = Object.keys(Mapper.mapping).reduce(
     (mapped, key) => {mapped[key] = false; return mapped}, ({} as Dict<boolean>)
   );
+
+  static reset() {
+    this.mapped = Object.keys(Mapper.mapping).reduce(
+      (mapped, key) => {mapped[key] = false; return mapped}, ({} as Dict<boolean>)
+    );
+  }
 
   static readonly definedValues = definedValues;
   static readonly definedTables = definedTables;
@@ -489,14 +537,13 @@ export class Mapper {
       indices.forEach((index, i) => {
         values[index] = Array.isArray(values[index]) ?
           values[index].map((id: string) => dependencies[i].class.getById(+id))
-          : dependencies[i].class.getById(values[index])
+          : dependencies[i].class.getById(values[index]);        
       });
 
       new table(+id, values);
     });
 
     this.mapped[name] = true;
-    (window as any).mapper = Mapper;
   };
 
   static mapTable(data: any, name: tableName, onlyIfUnmapped: boolean = true) {
