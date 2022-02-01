@@ -4,7 +4,7 @@ import { Router } from "@angular/router";
 import { Store } from "@ngxs/store";
 import { bufferCount, debounceTime, last, map, take, takeUntil } from "rxjs/operators";
 import { Register } from "src/models/auth/auth.actions";
-import { ComplexPassword, MatchField, RequiredType, setErrors } from "src/validators/verify";
+import { ComplexPassword, MatchField, RequiredType, setErrors, TransferError } from "src/validators/verify";
 import { SlidesDirective } from "../directives/slides.directive";
 import { Option } from "src/models/option";
 import { Email } from "src/validators/persist";
@@ -177,7 +177,7 @@ export class RegisterForm extends Destroy$ {
     ]),
     proposer: new FormControl(''),
     role: new FormControl([], [Validators.required]),
-    company: new FormControl('', [Validators.required, RequiredType('object', 'MESSAGE', 'Veuillez choisir une entreprise de la liste.')]),
+    company: new FormControl('', [Validators.required, RequiredType('object', 'MESSAGE', 'Veuillez choisir une entreprise de la liste.'), TransferError('companyName')]),
     companyName: new FormControl(''),
     jobs: new FormControl([], [Validators.required])
   }, { });

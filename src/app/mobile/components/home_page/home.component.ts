@@ -1,11 +1,12 @@
 import { Component, ChangeDetectionStrategy, SimpleChange, SimpleChanges } from "@angular/core";
 import { Select, Store } from "@ngxs/store";
 import { BehaviorSubject, combineLatest, Observable } from "rxjs";
-import { takeUntil } from "rxjs/operators";
+import { take, takeUntil } from "rxjs/operators";
 import { Destroy$ } from "src/app/shared/common/classes";
 import { DistanceSliderConfig, SalarySliderConfig } from "src/app/shared/common/config";
 import { filterSplit } from "src/app/shared/common/functions";
 import { Serialized } from "src/app/shared/common/types";
+import { InfoService } from "src/app/shared/components/info/info.component";
 import { Company, Post, PostRow } from "src/models/data/data.model";
 import { DataState } from "src/models/data/data.state";
 import { DeletePost, DuplicatePost, SwitchPostType } from "src/models/user/user.actions";
@@ -28,7 +29,7 @@ export class HomeComponent extends Destroy$ {
   @Select(DataState.get('posts'))
   posts$!: Observable<Post[]>;
 
-  constructor(private store: Store) {
+  constructor(private store: Store, private info: InfoService) {
     super()
   }
 
@@ -74,14 +75,26 @@ export class HomeComponent extends Destroy$ {
   }
 
   duplicatePost(id: number) {
-    this.store.dispatch(new DuplicatePost(id));
+    this.store.dispatch(new DuplicatePost(id)).pipe(take(1)).subscribe(() => {
+      this.checkMenu = {open: false, post: null, swipeup: false};
+    }, () => {
+      this.info.show("error", "Erreur lors de la duplication du compte");
+    });
   }
 
   switchDraft(id: number) {
-    this.store.dispatch(new SwitchPostType(id));
+    this.store.dispatch(new SwitchPostType(id)).pipe(take(1)).subscribe(() => {
+      this.checkMenu = {open: false, post: null, swipeup: false};
+    }, () => {
+      this.info.show("error", "Echec");
+    });
   }
 
   deletePost(id: number) {
-    this.store.dispatch(new DeletePost(id));
+    this.store.dispatch(new DeletePost(id)).pipe(take(1)).subscribe(() => {
+      this.checkMenu = {open: false, post: null, swipeup: false};
+    }, () => {
+      this.info.show("error", 'Echec de suppression..');
+    });
   }
 };

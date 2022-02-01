@@ -1,6 +1,7 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostBinding, Input } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, HostBinding, Input, Output } from "@angular/core";
 import { FormArray, FormControl, FormGroup, Validators } from "@angular/forms";
 import { Store } from "@ngxs/store";
+import { take } from "rxjs/operators";
 import { JobRow, Post } from "src/models/data/data.model";
 import { Option } from "src/models/option";
 import { SwitchPostType, UploadPost } from "src/models/user/user.actions";
@@ -76,7 +77,7 @@ import { InfoService } from "../components/info/info.component";
     </div>
 
     <div class="form-input">
-      <label>Dates du chantier 🧪</label>
+      <label>Dates du chantier (N'est pas branché) 🧪</label>
       <calendar [embedded]="false" formControlName="calendar"></calendar>
     </div>
 
@@ -199,6 +200,7 @@ export class MakeAdForm {
   @HostBinding('class.page')
 
   @Input() page: boolean = true;
+  @Output() done = new EventEmitter();
 
   private _post: Post | null = null;
   get post() { return this._post; }
@@ -319,24 +321,31 @@ export class MakeAdForm {
   }
 
   submit(draft: boolean) {
-    console.log(draft, this.post);
     if ( this.post ) {
-      if ( !draft )
-        this.store.dispatch(new SwitchPostType(this.post.id));
-      else {
+      if ( !draft ) {
+        this.info.show("info", "Mise en ligne de l'annonce...", Infinity);
+        this.store.dispatch(new SwitchPostType(this.post.id)).pipe(take(1)).subscribe(() => {
+          this.info.show("success", "Annonce mise en ligne", 2000);
+          this.done.emit();
+        }, () => {
+          this.info.show("error", "Echec", 5000);
+        });
+      } else {
         this.info.show("info", "Enregistrement de l'annonce...", Infinity);
-        this.store.dispatch(UploadPost.fromPostForm(this.makeAdForm.value, draft, this.post.id)).subscribe(() => {
+        this.store.dispatch(UploadPost.fromPostForm(this.makeAdForm.value, draft, this.post.id)).pipe(take(1)).subscribe(() => {
         this.info.show("info", "Envoi de l'annonce...", Infinity);
           this.info.show("success", "Annonce Enregistrée", 2000);
+          this.done.emit();
         }, () => {
           this.info.show("error", "Echec de l'enregistrement", 5000);
         });
       }
       //switch type
     } else {
-      this.store.dispatch(UploadPost.fromPostForm(this.makeAdForm.value, draft)).subscribe(() => {
+      this.store.dispatch(UploadPost.fromPostForm(this.makeAdForm.value, draft)).pipe(take(1)).subscribe(() => {
       this.info.show("info", "Envoi de l'annonce...", Infinity);
         this.info.show("success", "Annonce Envoyée", 2000);
+        this.done.emit();
       }, () => {
         this.info.show("error", "Echec de l'envoi", 5000);
       });

@@ -34,8 +34,14 @@ export const RequiredType = (type: string, error: string, ...args: string[]) => 
   }
 };
 
-export const InheritError = () => {
+export const TransferError = (to: string) => {
+  return (control: AbstractControl) => {
+    const target = control.parent?.get(to);
 
+    if ( !target ) return control.errors;
+    target.setErrors(control.errors);
+    return null;
+  };
 };
 
 export const setErrors = (form: AbstractControl, errors: ValidationErrors | null) => {

@@ -310,7 +310,7 @@ export class DisponibilityRow extends createTable<DisponibilityRow>() {
 
   static readonly availabilityMap: {[key: string]: string} = {
     'available': 'Disponible',
-    'availablelimits': 'Disponibilité Sous Conditions',
+    'availablelimits': 'Disponible Sous Conditions',
     'unavailable': 'Non Disponible'
   };
 
