@@ -73,15 +73,25 @@ export abstract class AnimateCSS extends IndexBased {
 export abstract class UIOpenMenu {
   @HostBinding('class.open')
   protected _open: boolean = false;
+  private initialized: boolean = false;
 
   get open() { return this._open; }
   @Input()
   set open(value: boolean) {
-    this._open = value;
-    if ( value )
-      document.body.classList.add('blocked')
-    else
+    if ( !this.initialized ) {
+      this.initialized = true;
+      this._open = value;
+      return;
+    }
+    
+    if ( value ) {
+      document.body.classList.add('blocked');
+      this._open = value;
+    }
+    else {
       document.body.classList.remove('blocked');
+      this.close();
+    }
   }
 
   @Output()

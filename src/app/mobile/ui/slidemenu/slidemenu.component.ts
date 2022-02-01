@@ -30,6 +30,6 @@ export class UISlideMenuComponent extends UIOpenMenu {
   }
 
   close() {
-    this.openChange.emit(this.open = false);
+    this.openChange.emit(this._open = false);
   }
 }

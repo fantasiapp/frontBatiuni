@@ -49,9 +49,14 @@ export class CalendarUI extends UIDefaultAccessor<DayState[]> {
     this.value = [];
   }
 
+  private formatMonth(month: number) {
+    if ( month < 10 ) return '0' + month;
+    return month;
+  };
+
   ngOnInit(): void {
     let now = new Date(Date.now());
-    this.getDaysFromDate(now.getMonth() + 1, now.getFullYear());
+    this.getDaysFromDate(this.formatMonth((now.getMonth()) + 1), now.getFullYear());
   }
 
   getDaysFromDate(month: any, year: any) {
@@ -60,6 +65,7 @@ export class CalendarUI extends UIDefaultAccessor<DayState[]> {
     this.dateSelect = startDate.locale('fr');
     const diffDays = endDate.diff(startDate, 'days', true)
     const numberDays = Math.round(diffDays);
+    console.log(this.value);
     const arrayDays = Object.keys([...Array(numberDays)]).map((a: any,i) => {
       a = parseInt(a) + 1;
       const dayObject = moment(`${year}/${month}/${a}`,"YYYY-MM-DD");
@@ -71,10 +77,9 @@ export class CalendarUI extends UIDefaultAccessor<DayState[]> {
         value: a,
         date: flow._i,
         indexWeek: dayObject.isoWeekday(),
-        availbility : item[0]?.availability
+        availability : item[0]?.availability
         };
     }); this.monthSelect = arrayDays;
-    console.log(arrayDays)
   }
 
   changeMonth(flag: any) {
@@ -85,7 +90,6 @@ export class CalendarUI extends UIDefaultAccessor<DayState[]> {
       const nextDate = this.dateSelect.clone().add(1, "month");
       this.getDaysFromDate(nextDate.format("MM"), nextDate.format("YYYY"));
     }
-    console.log(this.value)
   }
 
   lastClick: any;
@@ -98,7 +102,6 @@ export class CalendarUI extends UIDefaultAccessor<DayState[]> {
   choseDay(day: any, e: Event) {
     this.lastClick = e;
     this.currentDay = day;
-    console.log(day)
 
     if ( !this.embedded )
       this.toggleDayState(this.currentDay, 'selected');  
@@ -130,6 +133,7 @@ export class CalendarUI extends UIDefaultAccessor<DayState[]> {
     }
     
     this.onChange(next);
+    this.dayClicked = false;
   }
 
   toggleDayState(day: DayState, targetState: Availability) {
@@ -139,15 +143,15 @@ export class CalendarUI extends UIDefaultAccessor<DayState[]> {
       next = remaining;
       this.setDOMState(null);
     } else {
-      console.log(targetState)
       next = [...remaining, {
         date: this.currentDay.date,
         availability: targetState  
       }];
       this.setDOMState(targetState);
     }
-    console.log(next)
 
     this.onChange(next);
   };
+
+  //write value
 }

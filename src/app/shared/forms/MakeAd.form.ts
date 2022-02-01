@@ -128,23 +128,14 @@ import { InfoService } from "../components/info/info.component";
         <span>Ajouter un document</span>
       </div>
     </div>
-
-    <div *ngIf="withSubmit" class="flex row space-between full-width submit-container">
-      <button class="button passive full-width" (click)="submit(true)">
-        Brouillon
-      </button>
-      <button class="button gradient full-width" (click)="submit(false)">
-        Valider
-      </button>
-    </div>
   </form>
 
   <footer class="flex row space-between sticky-footer full-width submit-container" style="z-index: 999; background-color: white;">
     <button class="button passive font-Poppins full-width" (click)="submit(true)">
-      Enregistrer
+      {{this.post ? 'Enregistrer' : 'Brouillon'}}
     </button>
     <button class="button gradient font-Poppins full-width" (click)="submit(false)">
-      Passer en ligne
+      {{this.post ? 'Passer en ligne' : 'Valider}}
     </button>
   </footer>
   `,
@@ -204,7 +195,6 @@ import { InfoService } from "../components/info/info.component";
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MakeAdForm {
-  @Input() withSubmit: boolean = false;
   @HostBinding('class.page')
 
   @Input() page: boolean = true;

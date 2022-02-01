@@ -224,6 +224,9 @@ export class CompanyRow extends createTable<CompanyRow>() {
   get name(): string { return this.getField('name') }
   get role(): RoleRow { return this.getField('role') }
   get siret() { return this.getField('siret') }
+  get address() { return this.getField('address'); }
+  get activity() { return this.getField('acitivity'); }
+  get ntva() { return this.getField('ntva'); }
   get capital() { return this.getField('capital') }
   get revenue() { return this.getField('revenue') }
   get logo() { return this.getField('logo') }
@@ -235,6 +238,9 @@ export class CompanyRow extends createTable<CompanyRow>() {
   get jobs(): JobForCompanyRow[] { return this.getField('JobForCompany'); }
   get labels():  LabelForCompanyRow[] { return this.getField('LabelForCompany'); }
   get posts(): PostRow[] { return this.getField('Post'); }
+  get disponibilities(): DisponibilityRow[] {
+    return this.getField('Disponibility');
+  }
 };
 
 export class UserProfileRow extends createTable<UserProfileRow>() {
@@ -290,6 +296,12 @@ export class DetailedPostRow extends createTable<DetailedPostRow>() {
   get supervisions() { return null; }
 };
 
+export class DisponibilityRow extends createTable<DisponibilityRow>() {
+  get date() { return this.getField('date'); }
+  get availability() { return this.getField('nature'); }
+};
+
+
 //Objectives
 //Move mapper here
 //Make a model interface and these types should implement it
@@ -305,6 +317,7 @@ export type LabelForCompany = Serialized<LabelForCompanyRow>;
 export type Role = Serialized<RoleRow>;
 export type Label = Serialized<LabelRow>;
 export type Job = Serialized<JobRow>;
+export type Availability = Serialized<DisponibilityRow>;
 export type Post = Serialized<PostRow>;
 export type PostDetail = Serialized<DetailedPostRow>;
 
@@ -324,7 +337,7 @@ type TableConstructor = {
   getById(id: number): any;
 }
 
-const definedTables = ['Company', 'Userprofile', 'JobForCompany', 'LabelForCompany', 'Files', 'Establishments', 'Post', 'DetailedPost'] as const;
+const definedTables = ['Company', 'Userprofile', 'JobForCompany', 'LabelForCompany', 'Files', 'Establishments', 'Post', 'DetailedPost', 'Disponibility'] as const;
 const definedValues = ['Role', 'Label', 'Job'] as const;
 export type tableName = typeof definedTables[number];
 export type valueName = typeof definedValues[number];
@@ -337,6 +350,7 @@ export class Mapper {
     'Role': RoleRow, 'role': RoleRow, /* fix here: Report this to JLW */
     'Label': LabelRow,
     'Job': JobRow,
+    'Disponibility': DisponibilityRow,
     'JobForCompany': JobForCompanyRow,
     'LabelForCompany': LabelForCompanyRow,
     'Files': FilesRow,
@@ -449,6 +463,7 @@ export class Mapper {
       if ( this.mapped[name] ) return;
       Object.entries<string>(this.readValue(data, name))
         .forEach(([id, name]: [string, string]) => {
+          console.log(classes[index]);
           new classes[index](+id, name);
         })
       this.mapped[name] = true;

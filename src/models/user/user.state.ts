@@ -2,11 +2,11 @@ import { HttpErrorResponse } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Action, Select, Selector, State, StateContext, Store } from "@ngxs/store";
 import { catchError, concatMap, map, mergeMap, take, tap } from "rxjs/operators";
-import { ChangePassword, ChangeProfileType, ChangeProfilePicture, GetUserData, ModifyUserProfile, UploadFile, DownloadFile, UploadPost, DeletePost, DuplicatePost, SwitchPostType, DeleteFile } from "./user.actions";
+import { ChangePassword, ChangeProfileType, ChangeProfilePicture, GetUserData, ModifyUserProfile, UploadFile, DownloadFile, UploadPost, DeletePost, DuplicatePost, SwitchPostType, DeleteFile, ModifyDisponibility } from "./user.actions";
 import { User } from "./user.model";
 import { Logout } from "../auth/auth.actions";
 import { of, throwError } from "rxjs";
-import { CompanyRow, DetailedPostRow, FilesRow, Mapper, PostRow, UserProfileRow } from "../data/data.model";
+import { DisponibilityRow, CompanyRow, DetailedPostRow, FilesRow, Mapper, PostRow, UserProfileRow } from "../data/data.model";
 import { HttpService } from "src/app/services/http.service";
 import { StoreData } from "../data/data.actions";
 
@@ -298,5 +298,28 @@ export class UserState {
         });
       })
     )
+  }
+
+  @Action(ModifyDisponibility)
+  modifyDisponibilities(ctx: StateContext<User>, action: ModifyDisponibility) {
+    const {profile} = ctx.getState();
+    return this.http.post('data', action).pipe(
+      tap((response: any) => {
+        if ( response[action.action] != 'OK' )
+          throw response['messages'];
+        
+        delete response[action.action];
+        const current = profile!.company.disponibilities;
+        current?.forEach(item => DisponibilityRow.destroy(item.id));
+
+        const userProfileData = UserProfileRow.getById(profile!.id)!;
+        
+        userProfileData.setField('Disponibility', Object.entries<any[]>(response).map(([id, values]) => {
+          new DisponibilityRow(+id, values);
+        }));
+
+        ctx.patchState({profile: userProfileData.serialize()})
+      })
+    );
   }
 };

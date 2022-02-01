@@ -3,6 +3,7 @@ import { FileUIOutput } from "src/app/shared/components/filesUI/files.ui";
 import { PropertyTrap } from "src/app/shared/common/classes";
 import { getDirtyValues } from "src/app/shared/common/functions";
 import { JobForCompanyRow, JobRow, LabelForCompanyRow, LabelRow, UserProfileRow } from "../data/data.model";
+import { Availability, CalendarUI } from "src/app/shared/components/calendar/calendar.ui";
 
 export class ChangeProfileType {
   static readonly type = '[User] Change Profile Type';
@@ -105,7 +106,7 @@ export class DeleteFile {
   static readonly type = '[File] Delete';
   action = 'deleteFile';
   constructor(public id: number) {}
-}
+};
 
 export class DownloadFile {
   action = 'downloadFile';
@@ -188,4 +189,29 @@ export class DuplicatePost {
   static readonly type = '[User.PME] Duplicate Post';
   action = 'duplicatePost';
   constructor(public id: number) {}
+};
+
+export class ModifyDisponibility {
+  static readonly type = '[User.ST Modify Disponibility';
+  action = 'modifyDisponibility';
+
+  constructor(public disponibility: [string, string][]) {}
+
+  static readonly availabilityMap: any = {
+    'available': 'Disponible',
+    'availablelimits': 'Disponibilité Sous Conditions',
+    'unavailable': 'Non Disponible'
+  };
+
+  private static renameAvailability(availability: string) {
+    const result = this.availabilityMap[availability];
+    if ( !result ) throw 'Unknown availability ' + availability;
+    return result;
+  };
+
+  static fromCalendar(calendar: CalendarUI) {
+    return new ModifyDisponibility(calendar.value!.map(
+      day => [day.date, ModifyDisponibility.renameAvailability(day.availability)]
+    ));
+  }
 };
