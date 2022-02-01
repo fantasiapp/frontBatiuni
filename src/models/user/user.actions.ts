@@ -199,13 +199,13 @@ export class ModifyDisponibility {
 
   static readonly availabilityMap: any = {
     'available': 'Disponible',
-    'availablelimits': 'Disponibilité Sous Conditions',
+    'availablelimits': 'Disponibile Sous Conditions',
     'unavailable': 'Non Disponible'
   };
 
   private static renameAvailability(availability: string) {
     const result = this.availabilityMap[availability];
-    if ( !result ) throw 'Unknown availability ' + availability;
+    if ( !result ) throw `Availability ${availability} should not be used to modify availabilities`;
     return result;
   };
 
