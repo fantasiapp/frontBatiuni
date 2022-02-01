@@ -78,7 +78,6 @@ export class CalendarUI extends UIDefaultAccessor<DayState[]> {
         availability : item[0]?.availability
       };
     }); this.monthSelect = arrayDays;
-    console.log(this.monthSelect);
   }
   
   get value() { return this._value; }
@@ -116,10 +115,10 @@ export class CalendarUI extends UIDefaultAccessor<DayState[]> {
       target.classList.remove(`${others[i]}`);
     
     if ( state ) target.classList.add(`${state}`);
+    this.cd.markForCheck();
   }
 
   setCurrentDayState(state: Availability) {
-    console.log(this.value, this._value);
     const remaining = this.value!.filter(item => item.date !== this.currentDay.date);
     let next;
     if (state != 'nothing') {
@@ -136,6 +135,7 @@ export class CalendarUI extends UIDefaultAccessor<DayState[]> {
     
     this.onChange(next);
     this.dayClicked = false;
+    console.log(this.value, this._value);
   }
 
   toggleDayState(day: DayState, targetState: Availability) {

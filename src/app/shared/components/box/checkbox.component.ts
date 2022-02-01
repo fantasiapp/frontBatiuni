@@ -26,9 +26,4 @@ export class UICheckboxComponent extends UIDefaultAccessor<boolean> {
     let target = e.target as HTMLInputElement;
     return target.checked;
   }
-
-  writeValue(value: boolean): void {
-    super.writeValue(value);
-    console.log('just wrote', value, this.cd);
-  }
 };

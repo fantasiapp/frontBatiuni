@@ -28,7 +28,6 @@ export class UISwipeupComponent extends UIOpenMenu {
       this.willClose = false;
       this.openChange.emit(this._open = false);
       this.onClose.emit();
-      console.log(this.open, this.willClose);
     }
   }
 };

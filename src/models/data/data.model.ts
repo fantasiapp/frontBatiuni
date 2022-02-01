@@ -94,12 +94,12 @@ class __table__ {
     value.push(data);
   };
 
-  removeValue(field: string, id: any) {
+  spliceValue(field: string, id: any, replacement?: any) {
     const value = this.getField(field);
     if ( !value ) throw `Unknow field ${field} on ${this.structure.getName()}`;
     if ( !Array.isArray(value) ) throw `Field ${field} on ${this.structure.getName()} is not an array.`;
     const index = value.findIndex(q => q.id == id);
-    if ( index >= 0 ) value.splice(index, 1);
+    if ( index >= 0 ) replacement ? value.splice(index, 1, replacement) : value.splice(index, 1);
   }
 
   getIndex(key: string) {
@@ -111,7 +111,8 @@ class __table__ {
   }
 
   setField(key: string, x: any) {
-    return this.values[this.getIndex(key)!] = x;
+    this.values[this.getIndex(key)!] = x;
+    return x;
   }
 
   copy(value: any) {
@@ -244,8 +245,6 @@ export class CompanyRow extends createTable<CompanyRow>() {
   }
 
   serialize(): Serialized<CompanyRow> {
-    console.log('serializing company');
-    console.log('my availabilities are', this.getField('Disponibility'))
     return super.serialize();
   }
 };
@@ -392,6 +391,12 @@ export class Mapper {
     (mapped, key) => {mapped[key] = false; return mapped}, ({} as Dict<boolean>)
   );
 
+  static reset() {
+    this.mapped = Object.keys(Mapper.mapping).reduce(
+      (mapped, key) => {mapped[key] = false; return mapped}, ({} as Dict<boolean>)
+    );
+  }
+
   static readonly definedValues = definedValues;
   static readonly definedTables = definedTables;
 
@@ -532,14 +537,13 @@ export class Mapper {
       indices.forEach((index, i) => {
         values[index] = Array.isArray(values[index]) ?
           values[index].map((id: string) => dependencies[i].class.getById(+id))
-          : dependencies[i].class.getById(values[index])
+          : dependencies[i].class.getById(values[index]);        
       });
 
       new table(+id, values);
     });
 
     this.mapped[name] = true;
-    (window as any).mapper = Mapper;
   };
 
   static mapTable(data: any, name: tableName, onlyIfUnmapped: boolean = true) {

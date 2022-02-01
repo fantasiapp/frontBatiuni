@@ -5,7 +5,7 @@
   
   <div class="hosted-page flex column center-cross space-children-margin page-content">
     <calendar [value]="user.profile!.company.disponibilities" #calendar></calendar>
-    <button class="button active" style="margin-top: auto;" (click)="submit(calendar)">Enregistrer</button>
+    <button class="button active" style="align-self: flex-end;" (click)="submit(calendar)">Enregistrer</button>
   </div>
   
   <swipeup [(open)]="calendar.dayClicked">

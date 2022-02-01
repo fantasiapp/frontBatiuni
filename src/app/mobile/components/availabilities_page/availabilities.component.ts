@@ -17,11 +17,7 @@ export class AvailabilitiesComponent {
   @Select(UserState)
   user$!: Observable<User>;
 
-  constructor(private store: Store) {
-    this.user$.subscribe(user => {
-      console.log(user.profile!.company.disponibilities);
-    })
-  }
+  constructor(private store: Store) { }
 
   submit(calendar: CalendarUI) {
     this.store.dispatch(ModifyDisponibility.fromCalendar(calendar));
