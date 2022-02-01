@@ -25,7 +25,7 @@ import { EmailConfirmation } from 'src/app/shared/validators/email_confirmation/
 import { RegistrationSuccess } from 'src/app/shared/validators/registration_success/registrationsuccess.component';
 import { AuthResolver } from './auth/auth.resolver';
 import { DocusignPage } from 'src/app/shared/components/docusign_page/docusign.page';
-import { ForgorPassword } from '../components/forgot_password/forgot.password';
+import { ForgotPassword } from '../components/forgot_password/forgot.password';
 
 const routes: Routes = [{
     path: 'landing',
@@ -38,7 +38,7 @@ const routes: Routes = [{
     canActivate: [AuthGuard],
   }, {
     path: 'forgot_password/:token',
-    component: ForgorPassword,
+    component: ForgotPassword,
     // canActivate: [AuthGuard],
   }, {
     path: 'discover',

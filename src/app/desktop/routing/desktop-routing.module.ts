@@ -8,6 +8,7 @@ import { RegistrationSuccess } from "src/app/shared/validators/registration_succ
 import { AnnoncePage } from "../components/annonce_page/annonce.page";
 import { DispoPage } from "../components/availibity/dispo.page";
 import { ConnexionPageComponent } from "../components/connexion/connexion.page";
+import { ForgotPasswordComponent } from "../components/forgot_password/forgot.password";
 import { HomePageComponent } from "../components/home_page/home.page";
 import { LandingPageComponent } from "../components/landing_page/landing.page";
 import { MainPageComponent } from "../components/main/main.page";
@@ -31,6 +32,9 @@ const routes: Routes = [{
 }, 
 {
   path:'docusign',component:DocusignPage
+},
+{
+  path:'forgot_password/:token',component:ForgotPasswordComponent
 },
 {
   path: 'success',
