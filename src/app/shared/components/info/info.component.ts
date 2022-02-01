@@ -34,7 +34,7 @@ export class InfoHandler {
       //next time this function is called
       //is when were changing the color
     } else {
-      if ( this.nextTimeout ) clearTimeout(this.nextTimeout);
+      this.resetTimer();
       this.nextTimeout = setTimeout(() => {
         this.hide();
         this.cd.markForCheck();
@@ -52,8 +52,20 @@ export class InfoHandler {
     });
   }
 
+  private resetTimer() {
+    if ( this.nextTimeout ) {
+      clearTimeout(this.nextTimeout);
+      this.nextTimeout = null;
+    }
+  }
+
+  private createTimer(f: Function) {
+    
+  }
+
   private show(info: Info) {
     if ( !info.content ) return;
+    this.resetTimer();
     this.content = info.content;
     this.type = info.type;
     this.time = info.time || 250;
@@ -64,10 +76,7 @@ export class InfoHandler {
     this.type = '';
     this.content = '';
     this.fadingIn = true;
-    if ( this.nextTimeout ) {
-      clearTimeout(this.nextTimeout);
-      this.nextTimeout = null;
-    }
+    this.resetTimer();
   }
 };
 

@@ -9,7 +9,8 @@ const forms = {
   MIN_LENGTH: '$2=(Le champ) doit contenir au moins $1=(8) caractères',
   CASE: '$2=(Le champ) doit contenir une lettre en $1=(miniscule)',
   INVALID_FORMAT: 'Le format $1<() est invalide',
-  CUSTOM: '$1'
+  MESSAGE: '$1',
+  //server: '$1'
 };
 
 export function getFormErrorTemplate(name: string) {

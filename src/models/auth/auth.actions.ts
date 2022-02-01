@@ -26,7 +26,7 @@ export class Register {
     public role: number,
     public proposer: string,
     public jobs: string[]
-  ) { }
+  ) {}
 
   static fromFormGroup(group: FormGroup) {
     let input = group.value;

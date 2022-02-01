@@ -36,9 +36,9 @@ export const RequiredType = (type: string, error: string, ...args: string[]) => 
 
 export const setErrors = (form: AbstractControl, errors: ValidationErrors | null) => {
   if ( !errors ) return;
-  if ( errors.all ) form.setErrors({server: errors.all});
+  if ( errors.all ) form.setErrors({MESSAGE: errors.all});
   let errorFields = Object.keys(errors).filter(field => field != 'all');
   for ( let field of errorFields ) {
-    form.get(field)?.setErrors({server: errors[field]});
+    form.get(field)?.setErrors({MESSAGE: errors[field]});
   }
 };

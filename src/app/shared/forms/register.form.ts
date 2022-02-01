@@ -178,7 +178,7 @@ export class RegisterForm extends Destroy$ {
     ]),
     proposer: new FormControl(''),
     role: new FormControl([], [Validators.required]),
-    company: new FormControl('', [Validators.required, RequiredType('object', 'CUSTOM', 'Veuillez choisir une entreprise de la liste.')]),
+    company: new FormControl('', [Validators.required, RequiredType('object', 'MESSAGE', 'Veuillez choisir une entreprise de la liste.')]),
     companyName: new FormControl(''),
     jobs: new FormControl([], [Validators.required])
   }, { });
