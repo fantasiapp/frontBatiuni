@@ -18,6 +18,7 @@ import { UIAbonnement } from "./ui/abonnementUI/abonnement.ui";
 import { ConnexionPageComponent } from "./components/connexion/connexion.page";
 import { MissionPage } from "./components/missions/mission.page";
 import { DispoPage } from "./components/availibity/dispo.page";
+import { ForgotPasswordComponent } from "./components/forgot_password/forgot.password";
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import { DispoPage } from "./components/availibity/dispo.page";
     UIAbonnement,
     ConnexionPageComponent,
     MissionPage,
-    DispoPage
+    DispoPage,
+    ForgotPasswordComponent
   ],
   imports: [
     CommonModule,

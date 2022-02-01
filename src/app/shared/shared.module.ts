@@ -42,6 +42,7 @@ import { UIHSteps } from "./components/horizontal-steps/hsteps.ui";
 import { Notifications } from "./components/notifications/notifications";
 import { UIRadioAccessor, UIRadioboxComponent } from "./components/box/radiobox.component";
 import { DocusignPage } from "./components/docusign_page/docusign.page";
+import { ForgotPasswordForm } from "./forms/forgot.password";
 
 @NgModule({
   declarations: [
@@ -84,7 +85,8 @@ import { DocusignPage } from "./components/docusign_page/docusign.page";
     UIPopup,
     UIHSteps,
     Notifications,
-    DocusignPage
+    DocusignPage,
+    ForgotPasswordForm
   ],
   imports: [
     CommonModule,
@@ -134,7 +136,8 @@ import { DocusignPage } from "./components/docusign_page/docusign.page";
     UIHSteps,
     Notifications,
     UIHSteps,
-    DocusignPage
+    DocusignPage,
+    ForgotPasswordForm
     
   ],
   providers: [ImageGenerator, InfoService]

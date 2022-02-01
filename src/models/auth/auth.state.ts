@@ -3,7 +3,7 @@ import { HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/htt
 import { Injectable, NgZone } from "@angular/core";
 import { AuthModel } from "./auth.model";
 import { environment } from 'src/environments/environment';
-import { ConfirmAccount, Login, Logout, Register } from "./auth.actions";
+import { ConfirmAccount, Login, Logout, Register, ForgotPassword } from "./auth.actions";
 import { catchError, delay, map, tap, timeout } from "rxjs/operators";
 import { Observable, of, throwError } from "rxjs";
 import * as strings from '../../app/shared/common/strings';
@@ -101,5 +101,21 @@ export class AuthState {
         ctx.patchState({pendingEmail: ''});
       })
     );
+  }
+  @Action(ForgotPassword)
+  forgotPassword({token,password,confirmedPassword}: ForgotPassword){
+    const req = this.http.post('initialize',{
+      action: 'forgotPassword',
+      token,
+      password,
+      confirmedPassword
+    })
+    return req.pipe(
+      tap((res:any)=>{
+        if( res['forgotPassword'] == 'Error')
+          throw res['messages']
+        else return true
+      })
+    )
   }
 };

@@ -1,16 +1,11 @@
+import { ChangeDetectionStrategy } from "@angular/core";
 import { Component } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
 
 @Component({
     selector:'forgot-password',
     templateUrl:'forgot.password.html',
-    styleUrls:['forgot.password.scss']
+    styleUrls:['forgot.password.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
+
 })
-export class ForgorPassword {
-    token:string = '';
-    constructor(private route:ActivatedRoute){}
-    ngOnInit() {
-        this.token = this.route.snapshot.params.token;
-        
-    }
-}
+export class ForgotPassword {}
