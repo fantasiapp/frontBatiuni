@@ -114,9 +114,7 @@ export class UserState {
           profile = UserProfileRow.getById(user.profile!.id);
         
         //add to company
-        if ( oldFile )
-          profile.company.spliceValue('Files', oldFile.id);
-        profile.company.pushValue('Files', file.id);
+        profile.company.spliceValue('Files', oldFile.id, file);
         ctx.patchState({profile: profile.serialize()})
       })
     );
