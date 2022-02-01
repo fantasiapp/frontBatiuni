@@ -5,7 +5,7 @@ import { of, throwError } from "rxjs";
 import { catchError, tap } from "rxjs/operators";
 import { HttpService } from "src/app/services/http.service";
 import { number } from "src/validators/regex";
-import { GetGeneralData, StoreData } from "./data.actions";
+import { DeleteData, GetGeneralData, StoreData } from "./data.actions";
 import { Mapper, Post, PostRow } from "./data.model";
 
 @State({
@@ -56,6 +56,11 @@ export class DataState {
       });
     }
   };
+
+  @Action(DeleteData)
+  deleteData(ctx: StateContext<any>, action: DeleteData) {
+    ctx.patchState({[action.name]: []});
+  }
 
   static get(type: string) {
     return createSelector([DataState], (state: any) => {

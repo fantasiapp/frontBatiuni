@@ -289,6 +289,7 @@ export class PostRow extends createTable<PostRow>() {
 
   //is it expensive ?
   static getCompany(post: Post): Company {
+    console.log(post);
     for ( const [id, company] of CompanyRow.instances ) {
       const postIds = company.posts.map(post => post.id);
       if ( postIds.includes(post.id) )
@@ -354,16 +355,6 @@ export type PostDetail = Serialized<DetailedPostRow>;
 import { filterMap, getByValue } from 'src/app/shared/common/functions';
 
 type Dict<T> = {[key: string]: T};
-type ValueConstructor = {
-  new (id: number, name: string): object;
-  getById(id: number): any;
-}
-
-type TableConstructor = {
-  new (id: number, values: string[]): object;
-  fields: Map<string, number>;
-  getById(id: number): any;
-}
 
 const definedTables = ['Company', 'Userprofile', 'JobForCompany', 'LabelForCompany', 'Files', 'Establishments', 'Post', 'DetailedPost', 'Disponibility'] as const;
 const definedValues = ['Role', 'Label', 'Job'] as const;
@@ -372,7 +363,7 @@ export type valueName = typeof definedValues[number];
 type definedType = tableName | valueName;
 
 export class Mapper {
-  private static mapping: {[key: string]: ValueConstructor | TableConstructor } = {
+  private static mapping: {[key: string]: Value | Table } = {
     'Company': CompanyRow,
     'Userprofile': UserProfileRow,
     'Role': RoleRow, 'role': RoleRow, /* fix here: Report this to JLW */
@@ -392,6 +383,11 @@ export class Mapper {
   );
 
   static reset() {
+    Object.entries<Value | Table>(this.mapping).forEach(
+      ([name, clazz]) => {
+        clazz.getAll().forEach(({id}) => clazz.destroy(id));
+      }
+    )
     this.mapped = Object.keys(Mapper.mapping).reduce(
       (mapped, key) => {mapped[key] = false; return mapped}, ({} as Dict<boolean>)
     );
@@ -402,7 +398,7 @@ export class Mapper {
 
   static getField(name: string): {
     name: definedType;
-    class: ValueConstructor | TableConstructor;
+    class: Value | Table;
   } {
     if ( this.mapping[name] ) return {
       name: name as definedType,
@@ -444,15 +440,15 @@ export class Mapper {
     return this.definedValues.filter(valueName => data[valueName + 'Values']);
   }
 
-  static getTableClass(name: tableName): TableConstructor {
+  static getTableClass(name: tableName): Table {
     if ( this.definedTables.includes(name) )
-      return Mapper.mapping[name] as TableConstructor;
+      return Mapper.mapping[name] as Table;
     throw `Unknown table ${name}.`;
   }
 
-  static getValueClass(name: valueName): ValueConstructor {
+  static getValueClass(name: valueName): Value {
     if ( Mapper.definedValues.includes(name) )
-      return Mapper.mapping[name] as ValueConstructor;
+      return Mapper.mapping[name] as Value;
     throw `Unknown value ${name}.`;
   }
 
@@ -470,7 +466,7 @@ export class Mapper {
   }
 
   private static mapFields(data: any, name: tableName) {
-    if ( (this.mapping[name] as TableConstructor).fields.size )
+    if ( (this.mapping[name] as Table).fields.size )
       return; //already mapped
 
     let fields = data[name + 'Fields'],
@@ -491,7 +487,7 @@ export class Mapper {
 
   static staticMap(data: any) {
     let values = this.getValuesNames(data),
-      classes = values.map(value => this.getValueClass(value)) as ValueConstructor[];
+      classes = values.map(value => this.getValueClass(value)) as Value[];
     
     values.forEach((name, index) => {
       if ( this.mapped[name] ) return;
@@ -506,10 +502,10 @@ export class Mapper {
   //map field method
   static getTableDependencies(data: any, name: tableName) {
     this.mapFields(data, name);
-    const table = this.mapping[name] as TableConstructor;
+    const table = this.mapping[name] as Table;
     const fields = [...table.fields.keys()];
-    return filterMap<string, TableConstructor>(fields, field => {
-      if ( this.mapping[field] ) return this.mapping[field] as TableConstructor;
+    return filterMap<string, Table>(fields, field => {
+      if ( this.mapping[field] ) return this.mapping[field] as Table;
       return null;
     });
   }
@@ -577,7 +573,7 @@ export class Mapper {
 
   /*fix here: doesnt work with jobs and labels */
   /*fix here: Ask JLW to move company inside Userprofil */
-  static updateFrom(table: TableConstructor, context: any, data: any) {
+  static updateFrom(table: Table, context: any, data: any) {
     const row = table.getById(context.id),
       newContext = row.update(data['Userprofile']);
 

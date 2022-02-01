@@ -30,7 +30,7 @@ import { ComplexPassword, setErrors } from "src/validators/verify";
         <!-- <div *ngIf="loginForm.get('password')!.touched && loginForm.get('password')!.errors?.uppercase" class="error">Doit contenir au moins une lettre en majuscule</div> -->
         <!-- <div *ngIf="loginForm.get('password')!.touched && loginForm.get('password')!.errors?.lowercase" class="error">Doit contenir au moins une lettre en miniscule</div> -->
     </div>
-    <a class="external-links form-links block text-right">
+    <a class="external-links form-links block text-right" [routerLink]="['', 'forget_password']">
       Mot de passe oublié !
     </a>
     <div class="form-action" style="margin-top: auto;">

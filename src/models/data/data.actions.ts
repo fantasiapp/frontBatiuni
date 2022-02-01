@@ -12,3 +12,8 @@ export class StoreData {
     this.target = changes.id;
   }
 };
+
+export class DeleteData {
+  static readonly type = '[Data] Delete';
+  constructor(public name: string, public row: any) { }
+}

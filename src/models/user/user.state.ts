@@ -8,7 +8,8 @@ import { Logout } from "../auth/auth.actions";
 import { of, throwError } from "rxjs";
 import { DisponibilityRow, CompanyRow, DetailedPostRow, FilesRow, Mapper, PostRow, UserProfileRow } from "../data/data.model";
 import { HttpService } from "src/app/services/http.service";
-import { StoreData } from "../data/data.actions";
+import { DeleteData, StoreData } from "../data/data.actions";
+import { DataState } from "../data/data.state";
 
 @State<User>({
   name: 'user',
@@ -157,6 +158,7 @@ export class UserState {
   @Action(Logout)
   logout(ctx: StateContext<User>) {
     Mapper.reset();
+    this.store.dispatch(new DeleteData('posts', PostRow));
     ctx.patchState({ imageUrl: null, profile: null });
   }
 
