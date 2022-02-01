@@ -7,6 +7,8 @@ export type Info = {
   time: number;
 };
 
+const TRANSITION_TIME = 150;
+
 @Component({
   selector: 'info',
   templateUrl: './info.component.html',
@@ -17,33 +19,12 @@ export class InfoHandler {
   content: string = '';
   time: number = 5000;
 
-  private nextTimeout: any = null;
 
   @HostBinding('class')
   type: string = '';
 
-  private fadingIn: boolean = false;
 
-  @HostListener('transitionend')
-  private onTransitionEnd() {
-    if ( !this.fadingIn ) return;
-
-    if ( this.time == Infinity ) {
-      this.fadingIn = true;
-      this.time = 5000;
-      //next time this function is called
-      //is when were changing the color
-    } else {
-      this.resetTimer();
-      this.nextTimeout = setTimeout(() => {
-        this.hide();
-        this.cd.markForCheck();
-      }, this.time);
-    }
-    this.fadingIn = !this.fadingIn;
-  }
-
-  constructor(private cd: ChangeDetectorRef, private service: InfoService) {
+  constructor(private cd: ChangeDetectorRef, service: InfoService) {
     service.infos$.subscribe((info) => {
       if ( info )
         this.show(info);
@@ -52,6 +33,7 @@ export class InfoHandler {
     });
   }
 
+  private nextTimeout: any = null;
   private resetTimer() {
     if ( this.nextTimeout ) {
       clearTimeout(this.nextTimeout);
@@ -59,8 +41,9 @@ export class InfoHandler {
     }
   }
 
-  private createTimer(f: Function) {
-    
+  private createTimer(f: Function, time: number) {
+    this.resetTimer();
+    this.nextTimeout = setTimeout(f, time);
   }
 
   private show(info: Info) {
@@ -68,14 +51,21 @@ export class InfoHandler {
     this.resetTimer();
     this.content = info.content;
     this.type = info.type;
-    this.time = info.time || 250;
+    this.time = info.time || 2500;
+    
+    if ( this.time != Infinity ) {
+      this.createTimer(() => {
+        this.hide();
+        this.cd.markForCheck();
+      }, this.time + TRANSITION_TIME);
+    }
+
     this.cd.markForCheck();
   }
 
   private hide() {
     this.type = '';
     this.content = '';
-    this.fadingIn = true;
     this.resetTimer();
   }
 };
