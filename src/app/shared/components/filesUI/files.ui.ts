@@ -111,6 +111,6 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
   close() { this.kill.emit(); }
 
   onFileInputClicked(e: Event) {
-    if ( e.isTrusted ) e.preventDefault();
+    //if ( e.isTrusted ) e.preventDefault();
   }
 }
