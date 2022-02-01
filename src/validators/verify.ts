@@ -34,6 +34,10 @@ export const RequiredType = (type: string, error: string, ...args: string[]) => 
   }
 };
 
+export const InheritError = () => {
+
+};
+
 export const setErrors = (form: AbstractControl, errors: ValidationErrors | null) => {
   if ( !errors ) return;
   if ( errors.all ) form.setErrors({MESSAGE: errors.all});

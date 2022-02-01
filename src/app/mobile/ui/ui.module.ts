@@ -13,7 +13,6 @@ import { RouterModule } from '@angular/router';
 import { SharedModule } from 'src/app/shared/shared.module';
 
 
-
 @NgModule({
   declarations: [
     UISwipeupComponent,
@@ -24,7 +23,7 @@ import { SharedModule } from 'src/app/shared/shared.module';
     HeaderComponent,
     UIAnnonceResume,
     CommentaireUI,
-    FactureUI,
+    FactureUI
   ],
   imports: [
     CommonModule,

@@ -53,3 +53,4 @@ build.sh
 /src/styles/fonts.scss
 /src/assets/fonts/Roboto
 /src/assets/fonts/Poppins
+/src/environments

@@ -130,7 +130,6 @@ import { Destroy$ } from "../common/classes";
       bottom: 10px; right: 5px;
       transform-origin: center;
       transform: scale(0.7);
-      filter: invert(15%) sepia(70%) saturate(5364%) hue-rotate(353deg) brightness(97%) contrast(126%);
     }
   `],
   changeDetection: ChangeDetectionStrategy.OnPush

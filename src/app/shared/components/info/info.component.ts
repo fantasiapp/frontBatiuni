@@ -84,4 +84,8 @@ export class InfoService {
   hide() {
     this.infos$.next(null);
   }
+
+  ngOnDestroy() {
+    this.infos$.complete();
+  }
 };
