@@ -385,9 +385,12 @@ export class Mapper {
   static reset() {
     Object.entries<Value | Table>(this.mapping).forEach(
       ([name, clazz]) => {
-        clazz.getAll().forEach(({id}) => clazz.destroy(id));
+        if ( __table__.isTable(clazz) )
+          clazz.getAll().forEach(({id}) => clazz.destroy(id));
       }
-    )
+    );
+    
+
     this.mapped = Object.keys(Mapper.mapping).reduce(
       (mapped, key) => {mapped[key] = false; return mapped}, ({} as Dict<boolean>)
     );
