@@ -1,6 +1,6 @@
-<div class="position-absolute cover-parent" (click)="close()"></div>
+<div class="position-absolute cover-parent" (click)="close()" [class.open]="open && !willClose"></div>
 
-<div class="menu hosted-page flex column center space-children-margin center-text">
+<div class="menu hosted-page flex column center space-children-margin center-text" [class.open]="open && !willClose">
   <img src="assets/X.svg" (click)="close()" class="position-absolute close-button"/>
   <ng-content></ng-content>
 </div>

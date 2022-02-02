@@ -91,8 +91,8 @@ export abstract class UIOpenMenu {
     }
     else {
       document.body.classList.remove('blocked');
-      this._open = false;
-      //this.close()
+      //this._open = false;
+      this.close()
     }
   }
 

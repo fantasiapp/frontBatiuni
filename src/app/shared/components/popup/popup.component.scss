@@ -11,25 +11,35 @@
   display: flex; align-items: center; justify-content: center;
   color: black;
   font-family: "Poppins";
-  opacity: 0;
-  transition: opacity 250ms ease-out 0s;
-  overflow: hidden;
+  overflow: hidden auto;
+  visibility: hidden;
 }
 
 :host(.open) {
-  opacity: 1;
+  visibility: visible;
   z-index: 1000;
 }
 
 .cover-parent {
   background-color: #ccc;
-  opacity: 0.5;
+  opacity: 0;
+  transition: opacity 200ms ease-out 0s;
+
+  &.open {
+    opacity: 0.5;
+  }
 }
 
 .menu {
   width: 90vw;
   height: 90vh;
   box-shadow: 0 3px 6px 0 #aaa;
+  opacity: 0;
+  transition: opacity 200ms ease-out 0s;
+
+  &.open {
+    opacity: 1;
+  }
 }
 
 .close-button {
