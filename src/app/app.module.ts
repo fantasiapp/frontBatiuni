@@ -17,6 +17,7 @@ import { GlobalRoutingModule } from './app.routing-module';
 import { DataState } from 'src/models/data/data.state';
 import { MiscState } from 'src/models/misc/misc.state';
 import { HttpService } from './services/http.service';
+import { SharedModule } from './shared/shared.module';
 
 
 @Injectable()
@@ -49,7 +50,8 @@ export class CustomConfig extends HammerGestureConfig {
     BrowserModule,
     BrowserAnimationsModule,
     GlobalRoutingModule,
-    HammerModule
+    HammerModule,
+    SharedModule
   ],
   providers: [
     HttpService, {

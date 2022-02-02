@@ -45,7 +45,7 @@ import { ComplexPassword, setErrors } from "src/validators/verify";
   </form>
   `,
   styles: [`
-    @import 'src/styles/mixins';
+
   `],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
