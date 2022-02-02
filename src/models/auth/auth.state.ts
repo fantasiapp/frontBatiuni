@@ -105,14 +105,14 @@ export class AuthState {
   @Action(ForgotPassword)
   forgotPassword({token,password,confirmedPassword}: ForgotPassword){
     const req = this.http.post('initialize',{
-      action: 'forgotPassword',
+      action: 'newPassword',
       token,
       password,
-      confirmedPassword
     })
     return req.pipe(
       tap((res:any)=>{
-        if( res['forgotPassword'] == 'Error')
+        console.log("HEEEEE")
+        if( res['newPassword'] == 'Error')
           throw res['messages']
         else return true
       })

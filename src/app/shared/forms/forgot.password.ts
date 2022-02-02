@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { Store } from "@ngxs/store";
 import { ForgotPassword } from "src/models/auth/auth.actions";
 import { take } from "rxjs/operators";
-import { setErrors } from "src/validators/verify";
+import { ComplexPassword, MatchField, setErrors } from "src/validators/verify";
 
 
 @Component({
@@ -14,7 +14,7 @@ import { setErrors } from "src/validators/verify";
     <!-- Form -->
     <form class="full-height form-control curved-border" [formGroup]="forgotPassword" (ngSubmit)="onSubmit($event)">
     <!-- Main title ex: Je me connecte, Créer un compte  -->
-      <h3 class="form-title">Mot de passe Oublie</h3>
+      <h3 class="form-title">Modifier le mot de passe</h3>
       <div class="form-input">
           <label >Nouveau mot de passe</label>
           <input class="form-element" type="password" formControlName="password"/>
@@ -51,9 +51,9 @@ export class ForgotPasswordForm {
 
   forgotPassword = new FormGroup({
     password: new FormControl('',
-      [Validators.required]),
+      [ComplexPassword()]),
     confirmedPassword: new FormControl('',
-      [Validators.required]
+      [MatchField('password', 'Le mot de passe')]
     )
   })
   ngOnInit() {

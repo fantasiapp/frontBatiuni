@@ -1,12 +1,12 @@
 import { AbstractControl, ValidationErrors, ValidatorFn } from "@angular/forms";
 import { lowerCase, upperCase } from "./regex";
 
-export const MatchField = (target: string): ValidatorFn => {
+export const MatchField = (target: string, filed: string = 'email'): ValidatorFn => {
   return (control: AbstractControl) => {
     const original = control.parent?.get(target)
 
     return original && control.value == original.value ? null : {
-      FIELD_MISMATCH: ['email']
+      FIELD_MISMATCH: [filed]
     };
   };
 };
