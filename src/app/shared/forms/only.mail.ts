@@ -21,7 +21,7 @@ import { Email } from "src/validators/persist";
       <h3 class="form-title">Récupérer votre mot de passe</h3>
       <div class="form-input">
           <label >Votre adresse mail </label>
-          <input class="form-element" type="mail" formControlName="mail" placeholder="email@email.com"/>
+          <input class="form-element" type="mail" formControlName="email" placeholder="email@email.com"/>
       </div>
       
       <div class="form-action">
@@ -43,10 +43,10 @@ import { Email } from "src/validators/persist";
 
 export class MailForm {
   constructor(private http: HttpService,private info: InfoService,
-    private router: Router) { }
+    private cd: ChangeDetectorRef) { }
   mailsent : boolean = false;
   mailSender = new FormGroup({
-    mail: new FormControl('',
+    email: new FormControl('',
       [Validators.required,
     Email()]),
     
@@ -54,7 +54,7 @@ export class MailForm {
   onSubmit(e:Event){
     this.info.show("info","loading....",Infinity);
     let req = this.http.get('initialize', {
-        email: this.mailSender.value.mail, 
+        email: this.mailSender.value.email, 
         action: "forgetPassword"
     });
 
@@ -63,18 +63,18 @@ export class MailForm {
         (data:any) => {
 
             if(data?.messages == "work in progress"){
-              this.info.show('success',data?.messages,200)
-              this.mailsent = true
+              this.info.show('success',data?.messages,2000, 'paging')
             }else {
-              this.info.show('error',"L'adresse n'est pas reconnue",3000)
-              this.mailsent = true
+              this.info.hide()
+              setErrors(this.mailSender, {email: "L'adresse n'est pas reconnue"})
+              this.cd.markForCheck();
 
             }
         },
-        error => {
-            console.log(error)
-            this.info.show("error","",5000);
-
+        errors => {
+          console.log(errors)
+          setErrors(this.mailSender, errors);
+          this.cd.markForCheck();
         }
     )
   }
