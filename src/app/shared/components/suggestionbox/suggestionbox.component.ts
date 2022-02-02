@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, HostBinding, Input, Output } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, HostBinding, Input, Output } from "@angular/core";
 import { Select, Store } from "@ngxs/store";
 import { Observable } from "rxjs";
 import { Serialized } from "src/app/shared/common/types";
@@ -47,20 +47,26 @@ import { MiscState } from "src/models/misc/misc.state";
 })
 export class UISuggestionBox {
   query: string = '';
-  showSuggestions: boolean = true;
+  showSuggestions: boolean = false;
   
   @HostBinding('attr.tabindex') get nonFocusable() { return -1; }
 
   @Select(MiscState.get('register.company'))
   suggestions$!: Observable<EstablishmentsRow[]>;
 
-  constructor(private store: Store) {}
+  constructor(private store: Store, private cd: ChangeDetectorRef) {}
 
   @Input('query')
   set setQuery(query: string | null) {
     if ( !query ) return;
+    console.log('new query', query);
     this.query = query;
-    this.store.dispatch(new this.action(query, 'register.company')).subscribe(console.log);
+    this.store.dispatch(new this.action(query, 'register.company')).subscribe(() => {
+      if ( !this.picked && !this.showSuggestions ) {
+        this.showSuggestions = true;
+        this.cd.markForCheck();
+      }
+    });
   };
 
   @Input()
@@ -69,8 +75,21 @@ export class UISuggestionBox {
   @Output()
   choice = new EventEmitter<EstablishmentsRow>();
 
+  picked: boolean = false;
+
   choose(suggestion: EstablishmentsRow) {
     this.showSuggestions = false;
+    this.picked = true;
     this.choice.emit(suggestion);
   }
-};
+
+  hideSuggestions() {
+    this.showSuggestions = false;
+    this.cd.markForCheck();
+  }
+
+  cancel() {
+    this.hideSuggestions();
+    this.picked = false;
+  }
+}; 

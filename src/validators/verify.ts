@@ -38,8 +38,7 @@ export const TransferError = (to: string) => {
   return (control: AbstractControl) => {
     const target = control.parent?.get(to);
 
-    if ( !target ) return control.errors;
-    target.setErrors(control.errors);
+    if ( target ) target.setErrors(control.errors);
     return null;
   };
 };
