@@ -46,5 +46,6 @@ export class Register {
 
 export class ForgotPassword {
   static readonly type= "[Auth] Frogot password"
-  constructor(public token: string,public password: string, public confirmedPassword:string){}
+  constructor(public token: string,public password: string){
+  }
 }
