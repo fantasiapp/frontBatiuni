@@ -17,15 +17,14 @@
         <ul *ngIf="_type[0] == 'checkbox'; else radioMenu">
           <li *ngFor="let option of availableOptions; let index = index" class="flex center-cross">
             {{option.name}} 
-            <checkbox (valueChange)="onChange(['toggle', option.id])" [value]="option.checked"></checkbox>
+            <checkbox (valueChange)="onChange(['toggle', option.id])" [value]="value!.includes(option)"></checkbox>
           </li>
         </ul>
         <ng-template #radioMenu>
           <ul>
             <li *ngFor="let option of availableOptions; let index = index" class="flex center-cross">
               {{option.name}} 
-              <radiobox [name]="_type[1]" (valueChange)="onChange(['toggle', option.id])" [value]="option.checked"></radiobox>
-              <!-- <input (change)="onChange(['toggle', option.id])" class="option-selected" type="checkbox" [attr.checked]="option.checked || null"/> -->
+              <radiobox [name]="_type[1]" (valueChange)="onChange(['toggle', option.id])" [value]="value!.includes(option)"></radiobox>
             </li>
           </ul>
         </ng-template>

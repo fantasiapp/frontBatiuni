@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, HostBinding, HostListener, Input} from "@angular/core";
 import { Store } from "@ngxs/store";
-import { PostRow } from "src/models/data/data.model";
+import { Company, PostRow } from "src/models/data/data.model";
 import { DeletePost } from "src/models/user/user.actions";
 import { Serialized } from "../../common/types";
 
@@ -21,11 +21,10 @@ export class OfferComponent {
   deletable: boolean = false;
 
   @Input() post!: Serialized<PostRow>;
-
-  get companyName() { return this.post ? PostRow.getCompany(this.post).name : ''; }
+  company!: Serialized<Company>;
 
   ngOnInit() {
-
+    this.company = PostRow.getCompany(this.post);
   }
 
   @HostBinding("class.delete")

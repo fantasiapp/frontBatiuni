@@ -36,12 +36,11 @@ export class HomeComponent extends Destroy$ {
   userPosts: Post[] = [];
   userDrafts: Post[] = [];
   userOnlinePosts: Post[] = [];
-
   allOnlinePosts: [Post, Company][] = [];
 
   
   ngOnInit() {
-    combineLatest([this.user$, this.posts$]).subscribe(([user, posts]) => {
+    combineLatest([this.user$, this.posts$]).pipe(takeUntil(this.destroy$)).subscribe(([user, posts]) => {
       this.userPosts = user.profile?.company.posts || [];
       [this.userOnlinePosts, this.userDrafts] = filterSplit(this.userPosts, post => !post.draft);
       
@@ -78,7 +77,8 @@ export class HomeComponent extends Destroy$ {
     this.store.dispatch(new DuplicatePost(id)).pipe(take(1)).subscribe(() => {
       this.checkMenu = {open: false, post: null, swipeup: false};
     }, () => {
-      this.info.show("error", "Erreur lors de la duplication du compte");
+      console.log('duplication error')
+      this.info.show("error", "Erreur lors de la duplication de l'annonce");
     });
   }
 

@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostBinding, HostListener, Input, NgZone, Output, ViewChild } from "@angular/core";
 import { NG_VALUE_ACCESSOR } from "@angular/forms";
 import { UIDefaultAccessor } from "src/app/shared/common/classes";
-import { focusOutside, getTopmostElement, makeid } from "src/app/shared/common/functions";
+import { filterMap, focusOutside, getTopmostElement, makeid } from "src/app/shared/common/functions";
 import { Option } from "src/models/option";
 
 @Component({
@@ -66,14 +66,14 @@ export class OptionsModel extends UIDefaultAccessor<Option[]> {
   }
 
   private _options: Option[] = [];
-  get options() { return this._options; }  
+  get options() { return this._options; }
+
   @Input()
   set options(val: Option[]) {
     this.search = '';
     this._options = val;
-    this.value = val.filter(option => option.checked);
+    this.value = [];
   }
-
 
   @Input()
   showChosenItems: boolean = true;
@@ -101,23 +101,25 @@ export class OptionsModel extends UIDefaultAccessor<Option[]> {
   }
 
   getInput(action: ['delete' | 'toggle', number]) {
-    const isCheckbox = this._type[0] == 'checkbox';
-    if ( isCheckbox && action[0] == 'delete' ) {
-      let idx = action[1];
-      let indexOf = this.options.findIndex(option => option == this.value![idx]);
+    const isRadio = this._type[0] != 'checkbox';
+
+    if ( action[0] == 'delete' ) {
+      let idx = action[1],
+        id = this.value![idx].id;
       
-      this.options[indexOf] = {...this.options[indexOf], checked: false};
-    } else if ( action[0] == 'toggle' ) {
+      return this.value!.filter(option => option.id != id);
+    } else {
       let id = action[1],
-        indexOf = this.options.findIndex(option => option.id == id);
+        option = this.options.find(option => option.id == id)!;
 
-      if ( isCheckbox )
-        this.options[indexOf] = {...this.options[indexOf], checked: !this.options[indexOf].checked};
+      if ( isRadio )
+        return [option];
+
+      if ( this.value!.find(option => option.id == id) )
+        return this.value!.filter(option => option.id != id);
       else
-        this.options.forEach((option, idx) => option.checked = idx == indexOf);
+        return [...this.value!, option];
     }
-
-    return this.options.filter(choice => choice.checked);
   };
 
   ngOnDestroy() {
@@ -127,5 +129,14 @@ export class OptionsModel extends UIDefaultAccessor<Option[]> {
       window.removeEventListener('click', OptionsModel.listener)
       OptionsModel.listening = false;
     }
+  }
+
+  writeValue(value: Option[]) {
+    const ids = value.map(({id}) => id);
+    this.value = filterMap(this.options, (option) => {
+      return ids.includes(option.id) ? option : null;
+    });
+    this.valueChange.emit(this.value);
+    this.cd.markForCheck();
   }
 };

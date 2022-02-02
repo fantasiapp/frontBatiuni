@@ -309,13 +309,9 @@ export class ModifyProfileForm {
 
   reloadData() {    
     const companyLabels = this.user.company.labels.map(label => label.label.id),
-      companyJobs = this.user.company.jobs.map(job => job.job.id);
+      companyJobs = this.user.company.jobs.map(job => job.job);
     
-    this.allLabels =[...LabelRow.instances.values()]
-      .map(({name, id}) => ({id, name, checked: companyLabels.includes(id)}));
-        
-    this.allJobs = [...JobRow.instances.values()]
-      .map(({name, id}) => ({id, name, checked: companyJobs.includes(id)}));
+    
 
     this.form.controls['Userprofile.lastName']?.setValue(this.user.lastName);
     this.form.controls['Userprofile.firstName']?.setValue(this.user.firstName);
@@ -327,7 +323,10 @@ export class ModifyProfileForm {
     this.form.controls['Userprofile.Company.capital']?.setValue(this.user.company.capital);
     this.form.controls['Userprofile.Company.webSite']?.setValue(this.user.company.webSite);
     this.form.controls['Userprofile.Company.companyPhone']?.setValue(this.user.company.companyPhone);
-
+    this.form.controls['Userprofile.Company.JobForComapny']?.setValue(companyJobs);
+    this.form.controls['Userprofile.Company.LabelForComapny']?.setValue(companyJobs);
+    
+    
     const jobControl = this.form.controls['Userprofile.Company.JobForCompany'] as FormArray;
     jobControl.clear();
     for ( let job of this.user.company.jobs ) {
@@ -410,7 +409,7 @@ export class ModifyProfileForm {
 
   /* create utility for getting data around an admin file */
   
-  allLabels: Option[] = [];
-  allJobs: Option[] = [];
+  allLabels =[...LabelRow.instances.values()];        
+  allJobs = [...JobRow.instances.values()];;
   addingField: boolean = false;
 };

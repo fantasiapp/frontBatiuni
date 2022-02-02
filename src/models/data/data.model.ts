@@ -193,11 +193,6 @@ export class FilesRow extends createTable<FilesRow>() {
   get timestamp(): number { return this.getField('timestamp') }
   get content(): string { return this.getField('content') }
 
-  serialize() {
-    console.log('-- custom serialize -- ');
-    return super.serialize();
-  }
-
   static imageExtension = ['png', 'jpeg', 'jpg', 'svg', 'heic'];
   static getFileType(ext: string) {
     if ( this.imageExtension.includes(ext) ) return 'image/' + ext;
@@ -296,6 +291,7 @@ export class PostRow extends createTable<PostRow>() {
         return company.serialize();
     }
     
+    console.trace();
     throw "Post doesn't belong to any company. dev: Careful when updating"
   };
 };

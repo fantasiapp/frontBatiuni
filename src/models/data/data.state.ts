@@ -42,6 +42,7 @@ export class DataState {
       table = action.row;
   
     if ( action.type == 'delete' ) {
+      console.log('got delete post');
       return ctx.patchState({[action.name]: current.filter((value: any) => value.id != action.target)});
     } else if ( action.type == 'add' ) {
       return ctx.patchState({[action.name]: [...current, table.getById(action.target)!.serialize()]})

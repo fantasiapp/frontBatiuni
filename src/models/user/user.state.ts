@@ -141,7 +141,6 @@ export class UserState {
           return;
         };
         
-        console.log([...UserProfileRow.instances.values()], currentUserId);
         const currentUser = UserProfileRow.getById(currentUserId),
           partial: any = { profile: currentUser.serialize() };
 
@@ -219,7 +218,6 @@ export class UserState {
       concatMap((post: PostRow) => {
         const userProfileData = UserProfileRow.getById(profile!.id),
           userCompanyData = userProfileData.company;
-
         
         if ( action.action == 'modifyPost' ) {
           userCompanyData.spliceValue('Post', post.id);
@@ -265,7 +263,6 @@ export class UserState {
     const {profile} = ctx.getState();
     return this.http.get('data', action).pipe(
       tap((response: any) => {
-        console.log(response);
         if ( response['switchDraft'] !== 'OK' )
           throw response['messages'];
         
@@ -289,25 +286,23 @@ export class UserState {
         return throwError(err);
       }),
       tap((response: any) => {
-        console.log(response);
         if ( response['deletePost'] !== 'OK' ) throw response['messages'];
         delete response['deletePost'];
-        const ids = Object.keys(response);
-        ids.forEach(id => {
-          const post = PostRow.getById(+id),
-            details = post.details;
+        const id = +response['id'];
 
-          details.forEach(detail => DetailedPostRow.destroy(detail.id));
-          PostRow.destroy(post.id);
-          this.store.dispatch(new StoreData('posts', PostRow, {type: 'delete', id: post.id}));
+        const post = PostRow.getById(id),
+          details = post.details;
 
-          const userProfileData = UserProfileRow.getById(profile!.id),
-            userCompanyData = userProfileData.company;
+        details.forEach(detail => DetailedPostRow.destroy(detail.id));
+        PostRow.destroy(post.id);
+        this.store.dispatch(new StoreData('posts', PostRow, {type: 'delete', id: post.id}));
 
-          userCompanyData.spliceValue('Post', post.id);
+        const userProfileData = UserProfileRow.getById(profile!.id),
+          userCompanyData = userProfileData.company;
 
-          ctx.patchState({profile: userProfileData.serialize()})
-        });
+        userCompanyData.spliceValue('Post', post.id);
+
+        ctx.patchState({profile: userProfileData.serialize()})
       })
     )
   }

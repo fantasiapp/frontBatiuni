@@ -216,13 +216,13 @@ export class MakeAdForm {
     this.makeAdForm.get('startDate')?.setValue(p.startDate);
     this.makeAdForm.get('endDate')?.setValue(p.endDate);
     this.makeAdForm.get('manPower')?.setValue(p.manPower);
-    this.makeAdForm.get('job')?.setValue(p.job ? [{id: p.job.id, name: p.job.name, checked: true}] : []);
+    this.makeAdForm.get('job')?.setValue(p.job ? [p.job] : []);
     this.makeAdForm.get('address')?.setValue(p.address);
     this.makeAdForm.get('numberOfPeople')?.setValue(p.numberOfPeople);
     this.makeAdForm.get('counterOffer')?.setValue(p.counterOffer);
     this.makeAdForm.get('hourlyStart')?.setValue(p.hourlyStart);
     this.makeAdForm.get('hourlyEnd')?.setValue(p.hourlyEnd);
-    // this.makeAdForm.get('currency')?.setValue(p.currency); //writeValue for Options
+    this.makeAdForm.get('currency')?.setValue(this.currencies.filter(currency => currency.name == p.currency));
     this.makeAdForm.get('description')?.setValue(p.description);
     this.makeAdForm.get('amount')?.setValue(p.amount);
     const detailsForm = this.makeAdForm.get('detailedPost')! as FormArray;
@@ -232,32 +232,30 @@ export class MakeAdForm {
     //download files
   };
 
-  currencies = ['$', '€', '£'].map((currency, id) => ({id, name: currency, checked: id == 0}));
+  //get put checked allJobs
+  currencies = ['$', '€', '£'].map((currency, id) => ({id, name: currency}));
+  allJobs = [...JobRow.instances.values()].map(job => ({id: job.id, name: job.name}))
 
   constructor(private store: Store, private info: InfoService) {}
 
   
   ngOnInit() {
-    const jobs = [...JobRow.instances.values()];
-    this.allJobs = jobs.map(job => ({id: job.id, name: job.name, checked: false}));
-
     //call load post    
     this.makeAdForm.valueChanges.subscribe(() => console.log(this.makeAdForm.value));
   }
 
-  allJobs: Option[] = [];
   makeAdForm = new FormGroup({
     dueDate: new FormControl('2022-01-24'),
     startDate: new FormControl('2022-01-24'),
     endDate: new FormControl('2022-03-24'),
     manPower: new FormControl(0),
-    job: new FormControl('', [Validators.required]),
+    job: new FormControl([], [Validators.required]),
     address: new FormControl('1 Rue Joliot Curie, 91190 Gif-sur-Yvette', [Validators.required]),
     numberOfPeople: new FormControl(1),
     counterOffer: new FormControl(false),
     hourlyStart: new FormControl('07:30'),
     hourlyEnd: new FormControl('17:30'),
-    currency: new FormControl(''),
+    currency: new FormControl([]),
     description: new FormControl(''),
     amount: new FormControl(0),
     documents: new FormArray([
