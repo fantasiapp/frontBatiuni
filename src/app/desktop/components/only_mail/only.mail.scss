@@ -12,8 +12,11 @@
   height: 100%;
 }
 
-mail-form {
+mail-form::ng-deep {
   max-height: 600px;
   top: 50%;
   transform: translateY(-50%);
+  form {
+    justify-content: center;
+  }
 }

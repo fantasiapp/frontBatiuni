@@ -35,7 +35,6 @@ import { Email } from "src/validators/persist";
     `,
   styles: [`
     @import 'src/styles/mixins';
-    
   `],
   changeDetection: ChangeDetectionStrategy.OnPush
 
