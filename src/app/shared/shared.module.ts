@@ -43,6 +43,7 @@ import { Notifications } from "./components/notifications/notifications";
 import { UIRadioAccessor, UIRadioboxComponent } from "./components/box/radiobox.component";
 import { DocusignPage } from "./components/docusign_page/docusign.page";
 import { ForgotPasswordForm } from "./forms/forgot.password";
+import { MailForm } from "./forms/only.mail";
 
 @NgModule({
   declarations: [
@@ -86,7 +87,8 @@ import { ForgotPasswordForm } from "./forms/forgot.password";
     UIHSteps,
     Notifications,
     DocusignPage,
-    ForgotPasswordForm
+    ForgotPasswordForm,
+    MailForm
   ],
   imports: [
     CommonModule,
@@ -137,9 +139,10 @@ import { ForgotPasswordForm } from "./forms/forgot.password";
     Notifications,
     UIHSteps,
     DocusignPage,
-    ForgotPasswordForm
+    ForgotPasswordForm,
+    MailForm
     
   ],
-  providers: [ImageGenerator, InfoService]
+  providers: [ImageGenerator]
 })
 export class SharedModule {}

@@ -26,6 +26,7 @@ import { RegistrationSuccess } from 'src/app/shared/validators/registration_succ
 import { AuthResolver } from './auth/auth.resolver';
 import { DocusignPage } from 'src/app/shared/components/docusign_page/docusign.page';
 import { ForgotPassword } from '../components/forgot_password/forgot.password';
+import { MailSender } from '../components/only_mail/only.mail';
 
 const routes: Routes = [{
     path: 'landing',
@@ -39,6 +40,10 @@ const routes: Routes = [{
   }, {
     path: 'forgot_password/:token',
     component: ForgotPassword,
+    // canActivate: [AuthGuard],
+  }, {
+    path: 'mail',
+    component: MailSender,
     // canActivate: [AuthGuard],
   }, {
     path: 'discover',

@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, HostBinding, HostListener, Injectable } from "@angular/core";
-import { BehaviorSubject, Observable, Subject } from "rxjs";
+import { Subject } from "rxjs";
 
 export type Info = {
   type: 'error' | 'success' | 'info';
@@ -70,7 +70,9 @@ export class InfoHandler {
   }
 };
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class InfoService {
 
   infos$ = new Subject<Info | null>();

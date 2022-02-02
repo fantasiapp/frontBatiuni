@@ -8,53 +8,74 @@ import { take } from "rxjs/operators";
 import { setErrors } from "src/validators/verify";
 import { HttpClient } from "@angular/common/http";
 import { HttpService } from "src/app/services/http.service";
+import { InfoService } from "../components/info/info.component";
+import { Email } from "src/validators/persist";
 
 
 @Component({
-  selector: 'forgot-password-form',
+  selector: 'mail-form',
   template: `
     <!-- Form -->
     <form class="full-height form-control curved-border" [formGroup]="mailSender" (ngSubmit)="onSubmit($event)">
     <!-- Main title ex: Je me connecte, Créer un compte  -->
       <h3 class="form-title">Récupérer votre mot de passe</h3>
       <div class="form-input">
-          <label >Nouveau mot de passe</label>
-          <input class="form-element" type="mail" formControlName="mail"/>
+          <label >Votre adresse mail </label>
+          <input class="form-element" type="mail" formControlName="mail" placeholder="email@email.com"/>
       </div>
       
       <div class="form-action">
         
-        <button class="button discover gradient" style="width: 250px;" [disabled]="!forgotPassword.touched || forgotPassword.status === 'INVALID'">Valider</button>
+        <button class="button discover gradient" 
+         
+        style="width: 250px;" [disabled]="!mailSender.valid">Valider</button>
       </div>
      
-    </form>`,
+    </form>
+    `,
   styles: [`
     @import 'src/styles/mixins';
-
+    
   `],
   changeDetection: ChangeDetectionStrategy.OnPush
 
 })
 
-export class ForgotPasswordForm {
-
-  constructor(private http: HttpService) { }
-  token: any;
-
+export class MailForm {
+  constructor(private http: HttpService,private info: InfoService,
+    private router: Router) { }
+  mailsent : boolean = false;
   mailSender = new FormGroup({
     mail: new FormControl('',
       [Validators.required,
-    Validators.email]),
+    Email()]),
     
   })
-  onSubmit(){
-    let req = this.http.post('initialize', {
-        mail:this.mailSender.value,
-        action: "requestPassword"
-    })
+  onSubmit(e:Event){
+    this.info.show("info","loading....",Infinity);
+    let req = this.http.get('initialize', {
+        email: this.mailSender.value.mail, 
+        action: "forgetPassword"
+    });
+
 
     req.pipe(take(1)).subscribe(
-        data => 
+        (data:any) => {
+
+            if(data?.messages == "work in progress"){
+              this.info.show('success',data?.messages,200)
+              this.mailsent = true
+            }else {
+              this.info.show('error',"L'adresse n'est pas reconnue",3000)
+              this.mailsent = true
+
+            }
+        },
+        error => {
+            console.log(error)
+            this.info.show("error","",5000);
+
+        }
     )
   }
  

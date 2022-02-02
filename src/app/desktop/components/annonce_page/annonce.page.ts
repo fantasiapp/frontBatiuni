@@ -9,4 +9,12 @@ import { ChangeDetectionStrategy, Component } from "@angular/core";
 })
 export class AnnoncePage {
   activeView: number = 0;
+  // constructor(private router:ActivatedRoute){
+
+  // }
+  // ngOnInit() {
+  //   let id = this.router.snapshot.params.id
+  //   let post = PostRow.getById(+id).serialize()
+  //   console.log(post)
+  // }
 }

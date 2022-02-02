@@ -48,6 +48,7 @@ const routes: Routes = [{
     { path: 'profile', component: ProfilePageComponent, data: { animation: 'profile' } },
     { path: 'sos', component: SosPageComponenet, data: { animation: 'sos' } },
     { path: 'make', component: AnnoncePage, data: { animation: 'annonce'} },
+    { path: 'make/:id', component: AnnoncePage, data: { animation: 'annonce'} },
     { path: 'availabilities', component: DispoPage, data: { animation: 'annonce'} },
     { path: 'missions', component: MissionPage, data: { animation: 'annonce'} },
     { path: '', pathMatch: 'full', component: HomePageComponent, data: { animation: 'home' } },

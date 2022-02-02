@@ -1,6 +1,6 @@
 import { NgModule } from "@angular/core";
 import { RouterModule } from "@angular/router";
-import { DocusignPage } from "./shared/components/docusign_page/docusign.page";
+import { SharedModule } from "./shared/shared.module";
 
 @NgModule({
   imports: [

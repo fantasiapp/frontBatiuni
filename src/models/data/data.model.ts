@@ -390,7 +390,6 @@ export class Mapper {
       }
     );
     
-
     this.mapped = Object.keys(Mapper.mapping).reduce(
       (mapped, key) => {mapped[key] = false; return mapped}, ({} as Dict<boolean>)
     );

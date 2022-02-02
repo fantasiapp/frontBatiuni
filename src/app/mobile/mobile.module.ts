@@ -27,6 +27,7 @@ import { SharedModule } from "../shared/shared.module";
 import { ReactiveFormsModule } from "@angular/forms";
 import { AppRoutingModule } from "./routing/mobile-routing.module";
 import { ForgotPassword } from "./components/forgot_password/forgot.password";
+import { MailSender } from "./components/only_mail/only.mail";
 
 
 @NgModule({
@@ -53,7 +54,8 @@ import { ForgotPassword } from "./components/forgot_password/forgot.password";
     BoosterPage,
     SuiviPage,
     SuiviPME,
-    ForgotPassword
+    ForgotPassword,
+    MailSender
   ],
   imports: [
     CommonModule,
