@@ -8,9 +8,14 @@ export class AuthGuard implements CanActivate {
   constructor(private router: Router, private store: Store) {}
   
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-    if ( route.url[0]?.path == 'home' )
-      return this.store.selectSnapshot(AuthState.isAutheticated) || this.router.parseUrl('/connexion');
-    
-    return !this.store.selectSnapshot(AuthState.isAutheticated) || this.router.parseUrl('/home');
+    const authenticated = this.store.selectSnapshot(AuthState.isAutheticated);
+
+    if ( route.url[0]?.path == 'home' ) {
+      //if we want to access home
+      return authenticated ? true : this.router.parseUrl('/connexion');
+    };
+
+    //for other pages that shouldnt be seen if we're connected
+    return !authenticated ? true : this.router.parseUrl('/home');
   }
 }
