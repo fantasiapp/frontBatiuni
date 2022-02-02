@@ -58,11 +58,10 @@ export class ForgotPasswordForm {
   })
   ngOnInit() {
     this.token = this.route.snapshot.params.token;
-    console.log(this.token)
   }
   async onSubmit(e: any) {
     let { password, confirmedPassword } = this.forgotPassword.value;
-    this.store.dispatch(new ForgotPassword(this.token, password, confirmedPassword))
+    this.store.dispatch(new ForgotPassword(this.token, password))
     .pipe(take(1)).subscribe(
       async (success) => {
           let res = await this.router.navigate(['','connexion'])
