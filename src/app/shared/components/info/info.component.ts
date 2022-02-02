@@ -14,7 +14,7 @@ export type InfoAlignType = 'header' | 'paging' | 'header_search';
 
 const TRANSITION_TIME = 150;
 const HEADER_HEIGHT = 60;
-const PAGING_HEIGHT = 87;
+const PAGING_HEIGHT = 75;
 const HEADER_SEARCH_HEIGHT = 150;
 
 function getHeight(top: InfoAlignType) {
