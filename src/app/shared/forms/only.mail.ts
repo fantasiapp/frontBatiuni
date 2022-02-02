@@ -52,7 +52,7 @@ export class MailForm {
     
   })
   onSubmit(e:Event){
-    this.info.show("info","loading....",Infinity);
+    this.info.show("info","loading....",2000);
     let req = this.http.get('initialize', {
         email: this.mailSender.value.email, 
         action: "forgetPassword"
@@ -65,7 +65,6 @@ export class MailForm {
             if(data?.messages == "work in progress"){
               this.info.show('success',data?.messages,2000, 'paging')
             }else {
-              this.info.hide()
               setErrors(this.mailSender, {email: "L'adresse n'est pas reconnue"})
               this.cd.markForCheck();
 
