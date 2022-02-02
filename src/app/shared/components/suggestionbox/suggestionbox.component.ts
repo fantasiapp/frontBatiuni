@@ -59,7 +59,7 @@ export class UISuggestionBox {
   @Input('query')
   set setQuery(query: string | null) {
     if ( !query ) return;
-    console.log('new query', query);
+    this.picked = false;
     this.query = query;
     this.store.dispatch(new this.action(query, 'register.company')).subscribe(() => {
       if ( !this.picked && !this.showSuggestions ) {
