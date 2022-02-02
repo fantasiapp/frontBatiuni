@@ -111,7 +111,6 @@ export class AuthState {
     })
     return req.pipe(
       tap((res:any)=>{
-        console.log("HEEEEE")
         if( res['newPassword'] == 'Error')
           throw res['messages']
         else return true
