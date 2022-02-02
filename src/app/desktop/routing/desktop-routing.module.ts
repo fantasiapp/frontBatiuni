@@ -13,6 +13,7 @@ import { HomePageComponent } from "../components/home_page/home.page";
 import { LandingPageComponent } from "../components/landing_page/landing.page";
 import { MainPageComponent } from "../components/main/main.page";
 import { MissionPage } from "../components/missions/mission.page";
+import { MailSender } from "../components/only_mail/only.mail";
 import { ProfilePageComponent } from "../components/profile/profile.page";
 import { RegisterPageComponent } from "../components/register/register.page";
 import { SosPageComponenet } from "../components/sos_page/sos.page";
@@ -27,6 +28,10 @@ const routes: Routes = [{
   path: 'connexion',
   component: ConnexionPageComponent
 }, {
+  path: 'mail',
+  component: MailSender,
+  // canActivate: [AuthGuard],
+},{
   path: 'confirmed/:token',
   component: EmailConfirmation
 }, 

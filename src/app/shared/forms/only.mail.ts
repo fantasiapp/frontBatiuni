@@ -35,7 +35,6 @@ import { Email } from "src/validators/persist";
     `,
   styles: [`
     @import 'src/styles/mixins';
-    
   `],
   changeDetection: ChangeDetectionStrategy.OnPush
 
@@ -52,7 +51,7 @@ export class MailForm {
     
   })
   onSubmit(e:Event){
-    this.info.show("info","loading....",Infinity);
+    this.info.show("info","Envoi du mail....",2000,'paging');
     let req = this.http.get('initialize', {
         email: this.mailSender.value.email, 
         action: "forgetPassword"
@@ -63,9 +62,8 @@ export class MailForm {
         (data:any) => {
 
             if(data?.messages == "work in progress"){
-              this.info.show('success',data?.messages,2000, 'paging')
+              this.info.show('success','Vérifier votre mail',3000, 'paging')
             }else {
-              this.info.hide()
               setErrors(this.mailSender, {email: "L'adresse n'est pas reconnue"})
               this.cd.markForCheck();
 

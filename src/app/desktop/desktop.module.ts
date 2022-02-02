@@ -19,6 +19,7 @@ import { ConnexionPageComponent } from "./components/connexion/connexion.page";
 import { MissionPage } from "./components/missions/mission.page";
 import { DispoPage } from "./components/availibity/dispo.page";
 import { ForgotPasswordComponent } from "./components/forgot_password/forgot.password";
+import { MailSender } from "./components/only_mail/only.mail";
 
 @NgModule({
   declarations: [
@@ -37,7 +38,8 @@ import { ForgotPasswordComponent } from "./components/forgot_password/forgot.pas
     ConnexionPageComponent,
     MissionPage,
     DispoPage,
-    ForgotPasswordComponent
+    ForgotPasswordComponent,
+    MailSender
   ],
   imports: [
     CommonModule,
