@@ -22,7 +22,7 @@
   
   <section class="main web-content flex font-Poppins">
     <div class="allow-overflow">
-      <ad-form class="adform" #addFrom></ad-form>
+      <ad-form class="adform" #addForm></ad-form>
     </div>
     <!-- <div class="info-bar space-children-margin">
     <button class="button active">HEY</button>
@@ -32,8 +32,8 @@
 
   <section class="info-sec flex">
     <div class="flex info space-children-margin">
-    <button class="button active" (click)="addFrom.submit(true)">Valider</button>
-    <button class="button passive" (click)="addFrom.submit(false)">Brouillon</button>
+    <button class="button active" (click)="addForm.submit(false)" [disabled]="!addForm.makeAdForm.valid">Valider</button>
+    <button class="button passive" (click)="addForm.submit(true)" [disabled]="!addForm.makeAdForm.valid">Brouillon</button>
   </div>
   </section>
   <!-- <section class="info flex">

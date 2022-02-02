@@ -92,7 +92,9 @@ export class InfoHandler {
   }
 };
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class InfoService {
 
   infos$ = new Subject<Info | null>();

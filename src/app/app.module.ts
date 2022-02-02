@@ -18,6 +18,7 @@ import { DataState } from 'src/models/data/data.state';
 import { MiscState } from 'src/models/misc/misc.state';
 import { HttpService } from './services/http.service';
 import { SharedModule } from './shared/shared.module';
+import { InfoService } from './shared/components/info/info.component';
 
 
 @Injectable()
