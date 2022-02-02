@@ -207,7 +207,7 @@ export class MakeAdForm {
   @Input()
   set post(p: Post | null) {
     if ( !p || p == this._post ) {
-      this.info.hide();
+      this.info.alignWith('header_search');
       return;
     };
 
