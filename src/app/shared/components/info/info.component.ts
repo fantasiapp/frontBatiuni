@@ -84,7 +84,6 @@ export class InfoHandler extends Destroy$ {
     if ( this.time != Infinity ) {
       this.createTimer(() => {
         this.hide();
-        this.cd.markForCheck();
       }, this.time + TRANSITION_TIME);
     }
 
@@ -95,6 +94,7 @@ export class InfoHandler extends Destroy$ {
     this.type = '';
     this.content = '';
     this.resetTimer();
+    this.cd.markForCheck();
   }
 };
 
