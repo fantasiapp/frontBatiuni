@@ -31,14 +31,10 @@ export class NavigationMenu extends Destroy$ {
   currentIndex: BehaviorSubject<number> = new BehaviorSubject(0);
   mobileView = window.innerWidth <= 768;
 
-  @Input()
-  menu: BehaviorSubject<MenuItem[]> = new BehaviorSubject(STMenu);
+  menu: BehaviorSubject<MenuItem[]>;
 
   @Output()
-  routeChange = new EventEmitter<string>();
-
-  @Select(UserState)
-  user$!: Observable<User>;
+  routeChange = new EventEmitter<string>();  
 
   private changeRouteOnMenu(menu: MenuItem[], index: number) {
     let route = menu[index].route;
@@ -52,9 +48,11 @@ export class NavigationMenu extends Destroy$ {
     this.changeRouteOnMenu(menu, index);
   }
 
-  constructor(private router: Router) {
+  constructor(private router: Router, private store: Store) {
     super();
+    this.menu = new BehaviorSubject(this.store.selectSnapshot<User>(UserState).viewType ? PMEMenu : STMenu);
     this.router.events.pipe(takeUntil(this.destroy$)).subscribe((event) => {
+      console.log(event);
       if ( !(event instanceof NavigationEnd) ) return;
       let menu = this.menu.getValue();
       let segments = event.urlAfterRedirects.split('/');
@@ -65,11 +63,17 @@ export class NavigationMenu extends Destroy$ {
         let child = segments[2],
           index = menu.findIndex(item => item.route == child);
         
+        console.log(child, segments, index);
         if ( index >= 0 ) { this.currentIndex.next(index); }
         else this.redirectHome()
       }
     });
+  }
 
+  @Select(UserState)
+  user$!: Observable<User>;
+
+  ngOnInit() {
     this.user$.pipe(takeUntil(this.destroy$)).subscribe((user: User) => {
       const nextMenu = user.viewType ? PMEMenu : STMenu;
       this.menu.next(nextMenu);

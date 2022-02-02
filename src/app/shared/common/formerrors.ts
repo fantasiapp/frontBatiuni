@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, ComponentFactoryResolver, Directive, HostBinding, Inject, InjectionToken, ViewContainerRef } from "@angular/core";
+import { ChangeDetectionStrategy, Component, ComponentFactoryResolver, Directive, HostBinding, Inject, InjectionToken, Input, ViewContainerRef } from "@angular/core";
 import { NgControl } from "@angular/forms";
 import { takeUntil } from "rxjs/operators";
 import { Destroy$ } from "./classes";
@@ -63,27 +63,39 @@ export class ControlErrorsDirective extends Destroy$ {
     super();
   }
 
+  @Input('novalidate')
+  novalidate: boolean = false;
+
+  displayErrors() {
+    this.view.clear();
+    const errors = this.control.errors;
+    if ( !errors ) return;
+    const errorNames = Object.keys(errors);
+    for ( const name of errorNames ) {
+      const template = getFormErrorTemplate(name);
+      if ( template == null ){
+        console.warn(`Unknown form error "${name}"`);
+        return;
+      }
+      let err = build(template, ...errors[name]);
+      const factory = this.resolver.resolveComponentFactory(ErrorMessageComponent),
+        component = this.view.createComponent(factory);
+      
+      component.instance.message = err;
+    }
+  }
+
   ngOnInit() {
-    this.control.valueChanges
+    if ( this.novalidate ) return;
+
+    this.control.statusChanges
       ?.pipe(takeUntil(this.destroy$))
       .subscribe(() => {
-        this.view.clear();
-        const errors = this.control.errors;
-        if ( !errors ) return;
-        const errorNames = Object.keys(errors);
-        for ( const name of errorNames ) {
-          const template = getFormErrorTemplate(name);
-          if ( template == null ){
-            console.warn(`Unknown form error "${name}"`);
-            return;
-          }
-          let err = build(template, ...errors[name]);
-          const factory = this.resolver.resolveComponentFactory(ErrorMessageComponent),
-            component = this.view.createComponent(factory);
-          
-          component.instance.message = err;
-        }
+        this.displayErrors();
       });
+    
+    if ( this.control.value )
+      this.displayErrors();
   }
 };
 

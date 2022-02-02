@@ -33,9 +33,7 @@ export class FadeTemplate<T> extends AnimateCSS {
 
   protected fadeIn(ref: Ref) {
     if ( !ref.element ) return;
-    this.animateWithClass(ref.element, 'fade-in', () => {
-      
-    });
+    this.animateWithClass(ref.element, 'fade-in');
     //slide in the other direction
     if ( this.ref.element ) {
       this.animateWithClass(this.ref.element, 'fade-out', () => {

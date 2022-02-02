@@ -99,6 +99,7 @@ const routes: Routes = [{
       {path: 'availabilities', component: AvailabilitiesComponent, data: { animation: 'availabilities' }},
       {path: 'sos', component: SOSPageComponent, data: { animation: 'sos' } },
       {path: 'make', component: MakeAdComponent, data: { animation: 'make'} },
+      {path: 'make/:id', component: MakeAdComponent, data: { animation: 'make'} },
       {path: '', pathMatch: 'full', component: HomeComponent, data: { animation: 'home' } },
       {path: '**', component: HomeComponent}
     ]

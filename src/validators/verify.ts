@@ -38,8 +38,7 @@ export const TransferError = (to: string) => {
   return (control: AbstractControl) => {
     const target = control.parent?.get(to);
 
-    if ( !target ) return control.errors;
-    target.setErrors(control.errors);
+    if ( target ) target.setErrors(control.errors);
     return null;
   };
 };
@@ -49,6 +48,6 @@ export const setErrors = (form: AbstractControl, errors: ValidationErrors | null
   if ( errors.all ) form.setErrors({server: errors.all});
   let errorFields = Object.keys(errors).filter(field => field != 'all');
   for ( let field of errorFields ) {
-    form.get(field)?.setErrors({server: errors[field]});
+    form.get(field)?.setErrors({MESSAGE: [errors[field]]});
   }
 };

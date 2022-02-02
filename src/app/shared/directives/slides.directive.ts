@@ -69,7 +69,6 @@ export class SlidesDirective extends IndexBased {
     if ( this.componentRef )
       this.animateWithClass(this.componentRef.element, 'slide-out-' + direction, () => {
         this.view.remove(0);
-        this.cd.markForCheck();
       });
   }
 
@@ -86,7 +85,7 @@ export class SlidesDirective extends IndexBased {
       else this.view.remove(0);
       this.componentRef = componentRef;
       this.view.insert(componentRef.view);
-//      this.cd.markForCheck();
+      this.cd.markForCheck();
       done && done();
     }
   }
@@ -100,7 +99,7 @@ export class SlidesDirective extends IndexBased {
       else this.view.remove(0);
       this.componentRef = componentRef;
       this.view.insert(componentRef.view);
-//      this.cd.markForCheck();
+      this.cd.markForCheck();
       done && done();
     }
   }

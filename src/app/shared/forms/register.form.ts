@@ -35,9 +35,6 @@ import { Destroy$ } from "../common/classes";
         <div class="form-input">
           <label>Adresse e-mail contact</label>
           <input type="email" formControlName="email"/>
-          <div *ngIf="registerForm.get('email')!.dirty && registerForm.get('email')!.errors" class="server-error">
-            {{ registerForm.get('email')!.errors?.server }}
-          </div>
         </div>
       
         <div class="form-input">
@@ -70,10 +67,12 @@ import { Destroy$ } from "../common/classes";
       
           <div class="form-input">
             <label>Nom de l'entreprise</label>
-            <input type="text" class="form-element" autocomplete="off" formControlName="companyName" (input)="onCompanySearch($event)" #search/>
             <input type="text" class="form-element" formControlName="company" style="display: none"/>
+            <span class="position-relative">
+              <input type="text" class="form-element" autocomplete="off" formControlName="companyName" [novalidate]="true" (input)="onCompanySearch($event)" #search/>
+              <img *ngIf="suggestionBox && suggestionBox.picked" src="assets/X.svg" class="cancel-company" (click)="cancelCompany() && search.focus()"/>
+            </span>
             <suggestion-box [query]="searchQuery | async" [action]="actions.GetCompanies" (choice)="onChoice($event)"></suggestion-box>
-            <img *ngIf="suggestionBox && !suggestionBox.showSuggestions" src="assets/X.svg" class="cancel-company" (click)="cancelCompany() && search.focus()"/>
           </div>
         
           <div class="form-input">
@@ -86,11 +85,12 @@ import { Destroy$ } from "../common/classes";
             <input type="password" class="form-element" formControlName="proposer"/>
           </div>
 
-        <div class="form-action" style="margin-top: auto;">
-          <div *ngIf="registerForm.errors?.server" class="server-error">
-            {{ registerForm.errors?.server }}
-          </div>
-          <button *ngIf="showSubmitButton && suggestionBox && !suggestionBox.showSuggestions"  class="button discover gradient" style="width: 250px" [disabled]="!registerForm.valid">Valider</button>
+        <div *ngIf="showSubmitButton" class="form-action" style="margin-top: auto;">
+          <button class="button discover gradient" style="width: 250px" [disabled]="!registerForm.valid">Valider</button>
+        </div>
+
+        <div *ngIf="registerForm.errors?.server" class="server-error center-text">
+          {{ registerForm.errors?.server }}
         </div>
       
         <div *ngIf="showSteps" class="form-step">
@@ -127,6 +127,7 @@ import { Destroy$ } from "../common/classes";
     }
 
     .cancel-company {
+      position: absolute;
       bottom: 10px; right: 5px;
       transform-origin: center;
       transform: scale(0.7);
@@ -189,9 +190,10 @@ export class RegisterForm extends Destroy$ {
       .subscribe(
         success => this.router.navigate(['', 'success']),
         errors => {
-          if ( !errors.all ) this.onNavigate(-1)
+          if ( errors.email ) {
+            errors.all = errors.all ? errors.all + '\n' + errors.email : errors.email;
+          }
           setErrors(this.registerForm, errors);
-          console.log(this.registerForm.errors);
           this.cd.markForCheck();
         }
       );
@@ -202,14 +204,18 @@ export class RegisterForm extends Destroy$ {
       eachFour = ev.pipe(bufferCount(4), map((l: Event[]) => l[l.length - 1])),
       eachSecond = ev.pipe(debounceTime(1000));
     
+    let lastValue = '';
     merge(eachFour, eachSecond).subscribe((e: Event) => {
       const value = (e.target as HTMLInputElement).value;
-      this.searchQuery.next(value);
+      if ( value !== lastValue ) {
+        lastValue = value;
+        this.searchQuery.next(value);
+      }
     });
   }
 
   onNavigate(dx: number, done?: Function) {
-    if ( dx > 0 ) this.slider.left();
+    if ( dx > 0 )this.slider.left();
     else this.slider.right();
   }
 
@@ -217,17 +223,17 @@ export class RegisterForm extends Destroy$ {
   searchEvent = new Subject<Event>();
 
   onCompanySearch(e: Event) {
-    if ( !this.suggestionBox!.showSuggestions )
-      this.suggestionBox!.showSuggestions = true;
+    const value = (e.target as HTMLInputElement).value;
+
+    if ( !value ) this.suggestionBox?.hideSuggestions();
 
     this.searchEvent.next(e);
-    this.registerForm.get('company')?.setValue((e.target as HTMLInputElement).value);
+    this.registerForm.get('company')?.setValue(value);
   }
 
   actions = {GetCompanies};
 
   onChoice(establishment: EstablishmentsRow) {
-    console.log('choice', establishment);
     this.registerForm.get('company')?.setValue(establishment);
     this.registerForm.get('companyName')?.setValue(establishment.name);
   }
@@ -235,7 +241,7 @@ export class RegisterForm extends Destroy$ {
   cancelCompany() {
     this.registerForm.get('company')?.setValue('');
     this.registerForm.get('companyName')?.setValue('');
-    if ( this.suggestionBox ) this.suggestionBox.showSuggestions = true;
+    if ( this.suggestionBox ) this.suggestionBox!.cancel();
     return true;
   }
 
