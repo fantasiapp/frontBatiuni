@@ -187,8 +187,8 @@
 
 <popup [(open)]="fileView.open">
   <ng-template #fileViewerTemplate>
-    <img class="embedded-image" *ngIf="fileView.image; else objectTag" [src]="fileView.safeUrl"/>
-    <ng-template>
+    <img class="embedded-image" *ngIf="fileView.image; else object" [src]="fileView.safeUrl"/>
+    <ng-template #object>
       <object class="embedded-object cover-parent flex center" [type]="fileView.type" [attr.data]="fileView.safeUrl">
         <embed>
         <div>
