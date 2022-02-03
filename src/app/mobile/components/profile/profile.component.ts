@@ -15,6 +15,7 @@ import { FilesRow, UserProfileRow } from "src/models/data/data.model";
 import { b64toBlob } from "src/app/shared/common/functions";
 import { DomSanitizer } from "@angular/platform-browser";
 import { Serialized } from "src/app/shared/common/types";
+import { PopupService } from "src/app/shared/components/popup/popup.component";
 
 
 @Component({
@@ -42,7 +43,7 @@ export class ProfileComponent {
   openModifyPicture: boolean = false;
   openNotifications : boolean = false;
 
-  constructor(private store: Store, private cd: ChangeDetectorRef, private sanitizer: DomSanitizer, private info: InfoService) {}
+  constructor(private store: Store, private cd: ChangeDetectorRef, private popup: PopupService	, private info: InfoService) {}
 
   slideModifyMenu(modifyPassword: boolean) {
     this.openMenu = false;
@@ -129,17 +130,6 @@ export class ProfileComponent {
     let imageName = user.profile.firstName + '_'+ user.profile.lastName +'_'+ user.profile.id ;
     this.store.dispatch(new UserActions.ChangeProfilePicture(photo, imageName));
   }
-
-  fileView: any = {
-    _open: false,
-    get open() { return this._open; },
-    set open(v) { if (!v) { URL.revokeObjectURL(this.url); this.url = null;} this._open = v; },
-    url: null,
-    safeUrl: null,
-    type: '',
-    image: null
-  };
-
   openFile(filename: string) {
     const user = this.store.selectSnapshot(UserState).profile as Serialized<UserProfileRow>,
       companyFiles = user.company.files,
@@ -150,26 +140,10 @@ export class ProfileComponent {
     this.info.show('info', 'Téléchargement du fichier', Infinity);
 
     content.pipe(take(1)).subscribe(() => {
-      const updatedFile = FilesRow.getById(target.id),
-        type = FilesRow.getFileType(updatedFile.ext);
-                  
-      const blob = b64toBlob(updatedFile.content, type),
-        url = URL.createObjectURL(blob);
-      
-      this.fileView.image = type.startsWith('image') || false;
-      this.fileView.url = url;
-      this.fileView.safeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
-      this.fileView.type = type;
-      this.fileView.open = true;
+      const file = FilesRow.getById(target.id);
+      this.popup.openFile(file);
       this.info.show('success', 'Fichier téléchargé', 2000);
-      this.cd.markForCheck();
     });
-
-    this.cd.markForCheck();
-  }
-
-  openWindow(url: string) {
-    window.open(url);
   }
 
   get attachedFiles(): any[] {

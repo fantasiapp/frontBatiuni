@@ -184,20 +184,3 @@
     <notifications class="hosted-page flex column center-cross space-children-margin" content></notifications>
   </slidemenu>
 </ng-container>
-
-<popup [(open)]="fileView.open">
-  <ng-template #fileViewerTemplate>
-    <img class="embedded-image" *ngIf="fileView.image; else object" [src]="fileView.safeUrl"/>
-    <ng-template #object>
-      <object class="embedded-object cover-parent flex center" [type]="fileView.type" [attr.data]="fileView.safeUrl">
-        <embed>
-        <div>
-          Ne peut pas afficher le PDF dans l'application
-          <div class="external-links" (click)="openWindow(fileView.url)">
-            Ouvrir le PDF localement.
-          </div>
-        </div>
-      </object>
-    </ng-template>
-  </ng-template>
-</popup>

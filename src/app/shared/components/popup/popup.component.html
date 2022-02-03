@@ -1,4 +1,4 @@
-<div class="position-absolute cover-parent" (click)="close()" [class.open]="open && !willClose"></div>
+<div class="position-absolute cover-parent cover" (click)="close()" [class.open]="open && !willClose"></div>
 
 <div class="menu hosted-page flex column center space-children-margin center-text" [class.open]="open && !willClose">
   <img src="assets/X.svg" (click)="close()" class="position-absolute close-button"/>
@@ -6,3 +6,18 @@
     <ng-content></ng-content>
   </ng-container>
 </div>
+
+<ng-template #file let-fileView>
+  <img class="embedded-image" *ngIf="fileView.type.startsWith('image'); else object" [src]="fileView.safeUrl"/>
+  <ng-template #object>
+    <object class="embedded-object cover-parent flex center" [type]="fileView.type" [attr.data]="fileView.safeUrl">
+      <embed>
+      <div>
+        Ne peut pas afficher le PDF dans l'application
+        <div class="external-links" (click)="openWindow(fileView.url)">
+          Ouvrir le PDF localement.
+        </div>
+      </div>
+    </object>
+  </ng-template>
+</ng-template>
