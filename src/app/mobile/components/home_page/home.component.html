@@ -81,9 +81,15 @@
         <li [routerLink]="['','booster']">Booster Mon annonce</li>
         <li (click)="deletePost(checkMenu.post!.id)">Supprimer l'annonce</li>
         <li (click)="duplicatePost(checkMenu.post!.id)">Dupliquer l'annonce</li>
-        <li (click)="switchDraft(checkMenu.post!.id)">Mettre en pause l'annonce</li>
+        <li (click)="pausePost(checkMenu.post!.id)">Mettre en pause l'annonce</li>
       </swipeup>
     </ng-container>    
   </slidemenu>
   <!-- Maybe slide menu should hide their content when they are not open ?? -->
 </ng-container>
+
+<ng-template #pausePostTemplate>
+  <img src="assets/pause.svg">
+  <p>Votre annonce a bien été mise en pause</p>
+  <p>Vous pouvez toujours l'accéder à partir de vos brouillons.</p>
+</ng-template>

@@ -186,9 +186,9 @@
 </ng-container>
 
 <popup [(open)]="fileView.open">
-  <ng-container *ngIf="fileView.safeUrl">
+  <ng-template #fileViewerTemplate>
     <img class="embedded-image" *ngIf="fileView.image; else objectTag" [src]="fileView.safeUrl"/>
-    <ng-template #objectTag>
+    <ng-template>
       <object class="embedded-object cover-parent flex center" [type]="fileView.type" [attr.data]="fileView.safeUrl">
         <embed>
         <div>
@@ -199,5 +199,5 @@
         </div>
       </object>
     </ng-template>
-  </ng-container>
+  </ng-template>
 </popup>

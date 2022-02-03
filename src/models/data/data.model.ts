@@ -542,7 +542,6 @@ export class Mapper {
 
   static mapTable(data: any, name: tableName, onlyIfUnmapped: boolean = true) {
     if ( onlyIfUnmapped && this.mapped[name] ) return;
-    this.mapFields(data, name);
     if ( this.isSimpleTable(data, name) )
       this.mapSimpleTable(data, name);
     else

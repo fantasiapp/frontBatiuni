@@ -133,7 +133,7 @@ export class ProfileComponent {
   fileView: any = {
     _open: false,
     get open() { return this._open; },
-    set open(v) { if (!v) {this.url = null;} this._open = v; },
+    set open(v) { if (!v) { URL.revokeObjectURL(this.url); this.url = null;} this._open = v; },
     url: null,
     safeUrl: null,
     type: '',
