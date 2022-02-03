@@ -7,8 +7,7 @@ import { Option } from "src/models/option";
 import { SlidesDirective } from "../directives/slides.directive";
 import { defaultFileUIOuput } from "../components/filesUI/files.ui";
 import { Email } from "src/validators/persist";
-import { Regexp } from "src/validators/verify";
-import { number, phone } from "src/validators/regex";
+import { FieldType } from "src/validators/verify";
 
 @Component({
   selector: 'modify-profile-form',
@@ -83,7 +82,7 @@ import { number, phone } from "src/validators/regex";
         
           <ng-template #addfield_tpl>
               <label>Ajoutez des métiers</label>
-              <options [options]="allJobs" (valueChange)="updateJobs($event)"></options>
+              <options [options]="allJobs" [value]="companyJobs" (valueChange)="updateJobs($event)"></options>
             <div class="form-input center-text">
               <button (click)="addingField = false" style="display:inline; width: 80%; padding: 5px;" class="button gradient"> Terminer </button>
             </div>
@@ -143,7 +142,7 @@ import { number, phone } from "src/validators/regex";
         </h3>
         <div class="form-input">
           <label>Vos labels</label>
-          <options [options]="allLabels" (valueChange)="updateLabels($event)"></options>
+          <options [options]="allLabels" [value]="companyLabels" (valueChange)="updateLabels($event)"></options>
         </div>
         <ng-container formArrayName="Userprofile.Company.LabelForCompany">
             <span class="position-relative" *ngFor="let control of companyLabelControls; index as i">
@@ -247,10 +246,10 @@ export class ModifyProfileForm {
       
     ]),
     'Userprofile.userName': new FormControl('', [
-      Email()
+      //Email()
     ]),
     'Userprofile.cellPhone': new FormControl('', [
-      Regexp(phone, 'FIELD_TYPE', ['un numéro de telephone.'])
+      FieldType('phone')
     ]),
     'Userprofile.Company.JobForCompany': new FormArray([
 
@@ -259,18 +258,19 @@ export class ModifyProfileForm {
     'Userprofile.Company.name': new FormControl('', [
     ]),
     'Userprofile.Company.siret': new FormControl('', [
-      Regexp(number, 'FIELD_TYPE', ['le numéro SIRET.'])
+      FieldType('number', ['un numéro de SIRET'])
     ]),
     'Userprofile.Company.capital': new FormControl('', [
-      Regexp(number, 'FIELD_TYPE', ['un nombre.'])
+      FieldType('number')
     ]),
     'Userprofile.Company.revenue': new FormControl('', [
-      Regexp(number, 'FIELD_TYPE', ['un nombre.'])
+      FieldType('number')
     ]),
     'Userprofile.Company.webSite': new FormControl('', [
+      FieldType('url')
     ]),
     'Userprofile.Company.companyPhone': new FormControl('', [
-      
+      FieldType('phone')
     ]),
     'Userprofile.Company.LabelForCompany': new FormArray([
 
@@ -317,11 +317,9 @@ export class ModifyProfileForm {
   }
 
   reloadData() {    
-    const companyLabels = this.user.company.labels.map(label => label.label.id),
-      companyJobs = this.user.company.jobs.map(job => job.job);
+    this.companyLabels = this.user.company.labels.map(label => label.label);
+    this.companyJobs = this.user.company.jobs.map(job => job.job);
     
-    
-
     this.form.controls['Userprofile.lastName']?.setValue(this.user.lastName);
     this.form.controls['Userprofile.firstName']?.setValue(this.user.firstName);
     this.form.controls['Userprofile.userName']?.setValue(this.user.user);
@@ -332,9 +330,6 @@ export class ModifyProfileForm {
     this.form.controls['Userprofile.Company.capital']?.setValue(this.user.company.capital);
     this.form.controls['Userprofile.Company.webSite']?.setValue(this.user.company.webSite);
     this.form.controls['Userprofile.Company.companyPhone']?.setValue(this.user.company.companyPhone);
-    this.form.controls['Userprofile.Company.JobForComapny']?.setValue(companyJobs);
-    this.form.controls['Userprofile.Company.LabelForComapny']?.setValue(companyJobs);
-    
     
     const jobControl = this.form.controls['Userprofile.Company.JobForCompany'] as FormArray;
     jobControl.clear();
@@ -349,7 +344,7 @@ export class ModifyProfileForm {
     
     labelControl.clear();
     for ( let label of this.user.company.labels ) {
-      console.log(label.date);
+      console.log(label);
       labelControl.push(new FormGroup({
         label: new FormControl(label.label),
         //get date from server
@@ -379,8 +374,9 @@ export class ModifyProfileForm {
       ...oldEntries
     ]);
 
-    jobsControl.clear();
+    jobsControl.clear(); this.companyJobs.length = 0;
     [...countMap.entries()].forEach(([job, number]) => {
+      this.companyJobs.push(job);
       const form = new FormGroup({
         job: new FormControl(job),
         number: new FormControl(number)
@@ -399,11 +395,12 @@ export class ModifyProfileForm {
       companyLabels = this.user.company.labels;
     
     //also consider old labels
-    labelsControl.clear();
+    labelsControl.clear(); this.companyLabels.length = 0;
     newLabels.forEach((label) => {
       const hasLabel = companyLabels.find(companyLabel => companyLabel.label.id == label.id),
         fileData = new FormControl(defaultFileUIOuput(label.name, hasLabel?.date, hasLabel ? 'Fichier pris en compte' : undefined)); 
       
+      this.companyLabels.push(label);
       const form  = new FormGroup({
         label: new FormControl(label),
         fileData
@@ -418,7 +415,10 @@ export class ModifyProfileForm {
 
   /* create utility for getting data around an admin file */
   
-  allLabels =[...LabelRow.instances.values()];        
+  allLabels = [...LabelRow.instances.values()];        
   allJobs = [...JobRow.instances.values()];;
+  companyLabels: Option[] = [];
+  companyJobs: Option[] = [];
+
   addingField: boolean = false;
 };

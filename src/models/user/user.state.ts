@@ -6,7 +6,7 @@ import { ChangePassword, ChangeProfileType, ChangeProfilePicture, GetUserData, M
 import { User } from "./user.model";
 import { Logout } from "../auth/auth.actions";
 import { of, throwError } from "rxjs";
-import { DisponibilityRow, CompanyRow, DetailedPostRow, FilesRow, Mapper, PostRow, UserProfileRow } from "../data/data.model";
+import { DisponibilityRow, CompanyRow, DetailedPostRow, FilesRow, Mapper, PostRow, UserProfileRow, JobRow } from "../data/data.model";
 import { HttpService } from "src/app/services/http.service";
 import { DeleteData, StoreData } from "../data/data.actions";
 import { DataState } from "../data/data.state";
@@ -205,12 +205,15 @@ export class UserState {
 
         delete response[action.action];
         const id = +Object.keys(response)[0],
+          jobIndex = PostRow.fields.get('Job')!,
+          jobId = response[id][jobIndex],
           detailsIndex = PostRow.fields.get('DetailedPost')!,
           details = response[id][detailsIndex],
           mappedDetails = Object.entries<any[]>(details).map(([id, details]) => {
             return new DetailedPostRow(+id, details);
           });
           
+        response[id][jobIndex] = JobRow.getById(jobId);
         response[id][detailsIndex] = mappedDetails;
         let post = new PostRow(id, response[id]);
         return post;

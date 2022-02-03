@@ -10,6 +10,7 @@ const forms = {
   CASE: '$2=(Le champ) doit contenir une lettre en $1=(miniscule)',
   INVALID_FORMAT: 'Le format $1<() est invalide',
   MESSAGE: '$1',
+  FIELD_TYPE: 'Ce champs attend $1.'
   //server: '$1'
 };
 

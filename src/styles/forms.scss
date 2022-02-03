@@ -180,7 +180,7 @@
     border-bottom: $form-border-bottom !important; //override default
     font-family: inherit;
 
-    &.ng-invalid:not(.ng-pristine) {
+    &.ng-invalid {
       border-bottom-color: red !important;
     }
 

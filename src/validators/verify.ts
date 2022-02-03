@@ -1,5 +1,5 @@
 import { AbstractControl, ValidationErrors, ValidatorFn } from "@angular/forms";
-import { lowerCase, upperCase } from "./regex";
+import { lowerCase, number, phone, upperCase, url } from "./regex";
 
 export const MatchField = (target: string, filed: string = 'email'): ValidatorFn => {
   return (control: AbstractControl) => {
@@ -51,6 +51,25 @@ export const Regexp = (regexp: RegExp, error: string, args: any[]) => {
 
     if ( !content.match(regexp) )
       errors[error] = args;
+    return Object.keys(errors).length ? errors : null;
+  }
+};
+
+export const FieldType = (type: 'phone' | 'number' | 'url', messages?: string[]) => {
+  return (control: AbstractControl) => {
+    let content = control.value,
+    errors: ValidationErrors = {};
+
+    if ( type == 'number' ) {
+      if ( !((typeof content == 'number') || content.match(number)) )
+        errors['FIELD_TYPE'] = messages || ['un nombre'];
+    } else if ( type == 'phone' ) {
+      if ( !content.replace(/\s/g, '').match(phone) )
+        errors['FIELD_TYPE'] = messages || ['un numéro de téléphone'];
+    } else {
+      if ( !content.match(url) )
+        errors['FIELD_TYPE'] = messages || ['un site web'];
+    }
     return Object.keys(errors).length ? errors : null;
   }
 };

@@ -99,7 +99,7 @@ import { InfoService } from "../components/info/info.component";
       <div class="flex row remuneration">
         <input type="number" min="0" style="max-height: 51px" class="grow form-element" placeholder="Montant" formControlName="amount">
         <div class="option-container">
-          <options [searchable]="false" type="radio" [options]="currencies" formControlName="currency" ifEmpty="$"></options>
+          <options [searchable]="false" type="radio" [options]="currencies" formControlName="currency"></options>
         </div>
       </div>
     </div>
@@ -137,7 +137,7 @@ import { InfoService } from "../components/info/info.component";
       {{this.post ? 'Enregistrer' : 'Brouillon'}}
     </button>
     <button class="button gradient font-Poppins full-width" (click)="submit(false)" [disabled]="!makeAdForm.valid">
-      {{this.post ? 'Passer en ligne' : 'Valider'}}
+      Passer en ligne
     </button>
   </footer>
   `,
@@ -239,11 +239,6 @@ export class MakeAdForm {
 
   constructor(private store: Store, private info: InfoService) {}
 
-  
-  ngOnInit() {
-    //call load post    
-    this.makeAdForm.valueChanges.subscribe(() => console.log(this.makeAdForm.value));
-  }
 
   makeAdForm = new FormGroup({
     dueDate: new FormControl('2022-01-24'),
@@ -256,7 +251,7 @@ export class MakeAdForm {
     counterOffer: new FormControl(false),
     hourlyStart: new FormControl('07:30'),
     hourlyEnd: new FormControl('17:30'),
-    currency: new FormControl([]),
+    currency: new FormControl(this.currencies.filter(currency => currency.name == '€')),
     description: new FormControl(''),
     amount: new FormControl(0),
     documents: new FormArray([
