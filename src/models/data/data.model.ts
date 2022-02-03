@@ -280,7 +280,7 @@ export class PostRow extends createTable<PostRow>() {
   get counterOffer(): boolean { return this.getField('counterOffer'); }
   get description(): string { return this.getField('description'); }
   get details(): DetailedPostRow[] { return this.getField('DetailedPost'); }
-  
+  get files(): FilesRow[] { return this.getField('Files'); }
 
   //is it expensive ?
   static getCompany(post: Post): Company {

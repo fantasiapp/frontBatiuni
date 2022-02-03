@@ -230,6 +230,7 @@ export class MakeAdForm {
     for ( const detail of p.details )
       detailsForm.push(new FormGroup({description: new FormControl(detail.content)}));
     //download files
+
   };
 
   //get put checked allJobs
