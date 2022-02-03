@@ -6,6 +6,9 @@ import { JobRow, LabelRow, UserProfileRow } from "src/models/data/data.model";
 import { Option } from "src/models/option";
 import { SlidesDirective } from "../directives/slides.directive";
 import { defaultFileUIOuput } from "../components/filesUI/files.ui";
+import { Email } from "src/validators/persist";
+import { Regexp } from "src/validators/verify";
+import { number, phone } from "src/validators/regex";
 
 @Component({
   selector: 'modify-profile-form',
@@ -238,13 +241,16 @@ export class ModifyProfileForm {
   form: FormGroup = new FormGroup({
     // User
     'Userprofile.lastName': new FormControl('', [
+    
     ]),
     'Userprofile.firstName': new FormControl('', [
+      
     ]),
     'Userprofile.userName': new FormControl('', [
-      //Email()
+      Email()
     ]),
     'Userprofile.cellPhone': new FormControl('', [
+      Regexp(phone, 'FIELD_TYPE', ['un numéro de telephone.'])
     ]),
     'Userprofile.Company.JobForCompany': new FormArray([
 
@@ -253,10 +259,13 @@ export class ModifyProfileForm {
     'Userprofile.Company.name': new FormControl('', [
     ]),
     'Userprofile.Company.siret': new FormControl('', [
+      Regexp(number, 'FIELD_TYPE', ['le numéro SIRET.'])
     ]),
     'Userprofile.Company.capital': new FormControl('', [
+      Regexp(number, 'FIELD_TYPE', ['un nombre.'])
     ]),
     'Userprofile.Company.revenue': new FormControl('', [
+      Regexp(number, 'FIELD_TYPE', ['un nombre.'])
     ]),
     'Userprofile.Company.webSite': new FormControl('', [
     ]),

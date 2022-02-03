@@ -24,7 +24,8 @@ export class OfferComponent {
   company!: Serialized<Company>;
 
   ngOnInit() {
-    this.company = PostRow.getCompany(this.post);
+    if ( this.post )
+      this.company = PostRow.getCompany(this.post);
   }
 
   @HostBinding("class.delete")

@@ -11,6 +11,16 @@ export const MatchField = (target: string, filed: string = 'email'): ValidatorFn
   };
 };
 
+export const Required = (fieldname: string = '') => {
+  return (control: AbstractControl) => {
+    let content = control?.value,
+      errors: ValidationErrors = {};
+            
+    if ( !content ) errors['REQUIRED_FIELD'] = fieldname ? [fieldname] : [];
+    return Object.keys(errors).length ? errors : null;
+  }
+}
+
 export const ComplexPassword = () => {
   return (control: AbstractControl) => {
     let content = control?.value,
@@ -29,6 +39,17 @@ export const RequiredType = (type: string, error: string, ...args: string[]) => 
     errors: ValidationErrors = {};
 
     if ( typeof content != type )
+      errors[error] = args;
+    return Object.keys(errors).length ? errors : null;
+  }
+};
+
+export const Regexp = (regexp: RegExp, error: string, args: any[]) => {
+  return (control: AbstractControl) => {
+    let content = control.value,
+    errors: ValidationErrors = {};
+
+    if ( !content.match(regexp) )
       errors[error] = args;
     return Object.keys(errors).length ? errors : null;
   }

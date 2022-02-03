@@ -33,4 +33,4 @@ export const HoldError = (validator: ValidatorFn) => {
     if ( !newErrors ) return oldErrors;
     return {...oldErrors, ...newErrors};
   };
-}
+};
