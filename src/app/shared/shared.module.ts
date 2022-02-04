@@ -8,7 +8,7 @@ import { STFilterForm } from "./forms/STFilter.form";
 import { NgxSliderModule } from "@angular-slider/ngx-slider";
 import { OptionsModel } from "./components/options/options";
 import { UICheckboxComponent } from "./components/box/checkbox.component";
-import { UiMapComponent } from "./components/map/map.component";
+import { UIMapComponent } from "./components/map/map.component";
 import { UINumberComponent } from "./components/number/number.component";
 import { UIProfileImageComponent } from "./components/profile-image/profile-image.component";
 import { SearchbarComponent } from "./components/searchbar/searchbar.component";
@@ -51,7 +51,7 @@ import { UISwipeupComponent } from "./components/swipeup/swipeup.component";
     UICheckboxComponent,
     UIRadioboxComponent,
     UIRadioAccessor,
-    UiMapComponent,
+    UIMapComponent,
     UINumberComponent,
     OptionsModel,
     UIProfileImageComponent,
@@ -108,7 +108,7 @@ import { UISwipeupComponent } from "./components/swipeup/swipeup.component";
     UICheckboxComponent,
     UIRadioboxComponent,
     UIRadioAccessor,
-    UiMapComponent,
+    UIMapComponent,
     UINumberComponent,
     OptionsModel,
     UIProfileImageComponent,

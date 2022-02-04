@@ -10,7 +10,7 @@ export type NonFunctionPropNames<T> = {
 }[keyof T];
 
 export type Serialized<T> ={
-  [P in NonFunctionPropNames<T>]: T[P] extends (string | number) ? T[P] : (T[P] extends (infer U)[] ? Serialized<U>[] : Serialized<T[P]>);
+  [P in NonFunctionPropNames<T>]: T[P] extends (string | number | null) ? T[P] : (T[P] extends (infer U)[] ? Serialized<U>[] : Serialized<T[P]>);
 };
 
 export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;

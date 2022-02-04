@@ -39,7 +39,7 @@ export class HomeComponent extends Destroy$ {
   userPosts: Post[] = [];
   userDrafts: Post[] = [];
   userOnlinePosts: Post[] = [];
-  allOnlinePosts: [Post, Company][] = [];
+  allOnlinePosts: Post[] = [];
 
   
   ngOnInit() {
@@ -47,8 +47,8 @@ export class HomeComponent extends Destroy$ {
       this.userPosts = user.profile?.company.posts || [];
       [this.userOnlinePosts, this.userDrafts] = filterSplit(this.userPosts, post => !post.draft);
       
-      this.allOnlinePosts = posts.filter(post => !post.draft).map(post => [post, PostRow.getCompany(post)] as [Post, Company])
-        .filter(([post, company]) => company.id != user.profile!.company.id);
+      const userOnlinePostsIds = this.userOnlinePosts.map(onlinePost => onlinePost.id);
+      this.allOnlinePosts = posts.filter(post => !post.draft).filter(post => !userOnlinePostsIds.includes(post.id));
     });
   }
   
@@ -64,7 +64,7 @@ export class HomeComponent extends Destroy$ {
   checkMenu: PostMenu & { swipeup: boolean; } = { open: false, post: null, swipeup: false }
 
   openPost(post: Post) {
-    console.log('setting post', post);
+    this.info.hide();
     this.editMenu = { open: true, post };
   }
 

@@ -41,14 +41,14 @@
       <ng-container [ngSwitch]="activeView">
         <ng-container *ngSwitchCase="0">
           <offer
-            *ngFor="let pair of allOnlinePosts"
+            *ngFor="let onlinePost of allOnlinePosts"
             [deletable]="false"
             src="assets/enligne.svg"
-            [post]="pair[0]"
-            (click)="checkPost(pair[0])"
+            [post]="onlinePost"
+            (click)="checkPost(onlinePost)"
             ></offer>
         </ng-container>
-        <mapbox-batiuni class="space-children-margin" *ngSwitchCase="1"></mapbox-batiuni>
+        <mapbox-batiuni [posts]="allOnlinePosts" class="space-children-margin" *ngSwitchCase="1" (postClick)="checkPost($event)"></mapbox-batiuni>
       </ng-container>
     </ng-template>
   </div>
