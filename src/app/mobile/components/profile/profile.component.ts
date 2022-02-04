@@ -7,13 +7,11 @@ import * as UserActions from "src/models/user/user.actions";
 import { Camera, CameraResultType, CameraSource } from "@capacitor/camera";
 import { UISlideMenuComponent } from "../../ui/slidemenu/slidemenu.component";
 import { Logout } from "src/models/auth/auth.actions";
-import { InfoHandler, InfoService } from "src/app/shared/components/info/info.component";
+import { InfoService } from "src/app/shared/components/info/info.component";
 import { take } from "rxjs/operators";
 import { FormGroup } from "@angular/forms";
 import { ModifyProfileForm } from "src/app/shared/forms/ModifyProfile.form";
 import { FilesRow, UserProfileRow } from "src/models/data/data.model";
-import { b64toBlob } from "src/app/shared/common/functions";
-import { DomSanitizer } from "@angular/platform-browser";
 import { Serialized } from "src/app/shared/common/types";
 import { PopupService } from "src/app/shared/components/popup/popup.component";
 
@@ -43,7 +41,7 @@ export class ProfileComponent {
   openModifyPicture: boolean = false;
   openNotifications : boolean = false;
 
-  constructor(private store: Store, private cd: ChangeDetectorRef, private popup: PopupService	, private info: InfoService) {}
+  constructor(private store: Store, private cd: ChangeDetectorRef, private info: InfoService, private popup: PopupService) {}
 
   slideModifyMenu(modifyPassword: boolean) {
     this.openMenu = false;
@@ -127,23 +125,8 @@ export class ProfileComponent {
     });
     let user = this.store.selectSnapshot(UserState)
 
-    let imageName = user.profile.firstName + '_'+ user.profile.lastName +'_'+ user.profile.id ;
+    let imageName = user.profile.firstName + '_' + user.profile.lastName + '_' + user.profile.id ;
     this.store.dispatch(new UserActions.ChangeProfilePicture(photo, imageName));
-  }
-  openFile(filename: string) {
-    const user = this.store.selectSnapshot(UserState).profile as Serialized<UserProfileRow>,
-      companyFiles = user.company.files,
-      target = companyFiles.find(file => file.name == filename);
-  
-    if ( !target ) throw `file ${filename} doesn't exist on the current company`;
-    const content = target.content ? of(target.content) : this.store.dispatch(new UserActions.DownloadFile(target.id));
-    this.info.show('info', 'Téléchargement du fichier', Infinity);
-
-    content.pipe(take(1)).subscribe(() => {
-      const file = FilesRow.getById(target.id);
-      this.popup.openFile(file);
-      this.info.show('success', 'Fichier téléchargé', 2000);
-    });
   }
 
   get attachedFiles(): any[] {
@@ -153,5 +136,28 @@ export class ProfileComponent {
 
   getFileColor(filename: string) {
     return FilesRow.getFileColor(filename);
+  }
+
+  //easier than requestFile, we can have direct access
+  openFile(file: Serialized<FilesRow>) {
+    const target = FilesRow.getById(file.id);
+  
+    if ( !target ) {
+      this.info.show('error', `Le fichier "${file.name}" n'existe pas.`, 2000);
+      return;
+    }
+
+    if ( target.content ) {
+      this.popup.openFile(target);
+    } else {
+      this.info.show('info', 'Téléchargement du fichier ...', Infinity);
+
+      this.store.dispatch(new UserActions.DownloadFile(target.id)).pipe(take(1))
+        .subscribe(() => {
+          const file = FilesRow.getById(target.id);
+          this.popup.openFile(file);
+          this.info.show('success', 'Fichier téléchargé', 1000);
+        })
+    }
   }
 };

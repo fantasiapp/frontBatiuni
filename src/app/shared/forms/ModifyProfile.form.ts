@@ -2,12 +2,18 @@ import { ChangeDetectionStrategy, Component, HostListener, Input, ViewChild, Eve
 import { FormArray, FormControl, FormGroup } from "@angular/forms";
 import { Camera } from "@capacitor/camera";
 import { Serialized } from "src/app/shared/common/types";
-import { JobRow, LabelRow, UserProfileRow } from "src/models/data/data.model";
+import { FilesRow, JobRow, LabelRow, UserProfileRow } from "src/models/data/data.model";
 import { Option } from "src/models/option";
 import { SlidesDirective } from "../directives/slides.directive";
-import { defaultFileUIOuput } from "../components/filesUI/files.ui";
+import { defaultFileUIOuput, FileUIOutput } from "../components/filesUI/files.ui";
 import { Email } from "src/validators/persist";
 import { FieldType } from "src/validators/verify";
+import { of } from "rxjs";
+import { PopupService } from "../components/popup/popup.component";
+import { InfoService } from "../components/info/info.component";
+import { DownloadFile } from "src/models/user/user.actions";
+import { Store } from "@ngxs/store";
+import { take } from "rxjs/operators";
 
 @Component({
   selector: 'modify-profile-form',
@@ -105,30 +111,29 @@ import { FieldType } from "src/validators/verify";
         </div>
 
         <ng-container formGroupName="Userprofile.Company.admin">
-          <fileinput [showtitle]="false" filename="KBIS" formControlName="KBIS">
-            <file-svg name="KBIS" color="#156C9D" (click)="requestFile('KBIS')" image></file-svg>
+          <fileinput [showtitle]="false" filename="Kbis" formControlName="Kbis">
+            <file-svg name="Kbis" color="#156C9D" (click)="requestFile('admin', 'Kbis')" image></file-svg>
           </fileinput>
 
           <fileinput [showtitle]="false" filename="Attestation travail dissimulé" formControlName="Trav. Dis">
-            <file-svg name="Trav. Dis" color="#054162" (click)="requestFile('Trav. Dis')" image></file-svg>
+            <file-svg name="Trav. Dis" color="#054162" (click)="requestFile('admin', 'Trav. Dis')" image></file-svg>
           </fileinput>
 
           <fileinput [showtitle]="false" filename="Attestation RC + DC" formControlName="RC + DC">
-            <file-svg name="RC + DC" color="#999999" (click)="requestFile('RC + DC')" image></file-svg>
+            <file-svg name="RC + DC" color="#999999" (click)="requestFile('admin', 'RC + DC')" image></file-svg>
           </fileinput>
 
           <fileinput [showtitle]="false" filename="URSSAF" formControlName="URSSAF">
-            <file-svg name="URSSAF" color="#F9C067" (click)="requestFile('URSSAF')" image></file-svg>
+            <file-svg name="URSSAF" color="#F9C067" (click)="requestFile('admin', 'URSSAF')" image></file-svg>
           </fileinput>
 
           <fileinput [showtitle]="false" filename="Impôts" formControlName="Impôts">
-            <file-svg name="Impôts" color="#52D1BD" (click)="requestFile('Impôts')" image></file-svg>
+            <file-svg name="Impôts" color="#52D1BD" (click)="requestFile('admin', 'Impôts')" image></file-svg>
           </fileinput>
 
           <fileinput [showtitle]="false" filename="Congés payés" formControlName="Congés Payés">
-            <file-svg name="Congés Payés" color="#32A290" (click)="requestFile('Congés payés')" image></file-svg>
+            <file-svg name="Congés Payés" color="#32A290" (click)="requestFile('admin', 'Congés payés')" image></file-svg>
           </fileinput>
-
         </ng-container>
       </form>
     </section>
@@ -148,7 +153,7 @@ import { FieldType } from "src/validators/verify";
             <span class="position-relative" *ngFor="let control of companyLabelControls; index as i">
               <ng-container [formGroupName]="i">
                 <fileinput [showtitle]="false" [filename]="control.get('label')!.value.name" formControlName="fileData">
-                  <file-svg [name]="control.get('label')!.value.name" (click)="requestFile(control.get('label')!.value.name)" image></file-svg>
+                  <file-svg [name]="control.get('label')!.value.name" (click)="requestFile('labels', control.get('label')!.value.name)" image></file-svg>
                 </fileinput>
               </ng-container>
             </span>
@@ -229,12 +234,49 @@ export class ModifyProfileForm {
   @Input() index: number = 0;
   @Input() animate: boolean = true;
   @Output() submitted = new EventEmitter<FormGroup>();
-  @Output() openFile = new EventEmitter<string>();
   @ViewChild(SlidesDirective) slider!: SlidesDirective;
 
-  requestFile(filename: string) {
-    //if this doesn't emit, follow with cd.markForCheck();
-    this.openFile.emit(filename);
+  constructor(private cd: ChangeDetectorRef, private store: Store, private popup: PopupService, private info: InfoService) {
+
+  } 
+
+  requestFile(type: 'admin' | 'labels', filename: string) {
+    let target: Serialized<FilesRow> | undefined,
+      content: FileUIOutput | undefined;
+    
+    if ( type == 'admin' ) {
+      const field = this.form.controls['Userprofile.Company.admin'] as FormGroup,
+        input = field.controls[filename];
+      
+      if ( input && (input.value as FileUIOutput).content )
+        content = input.value;      
+    } else {
+      const field = this.form.controls['Userprofile.Company.LabelForCompany'] as FormArray,
+        group = (field.controls as FormGroup[]).find(group => group.controls['label']?.value.name == filename);
+      
+      if ( group && (group.controls['fileData'].value as FileUIOutput).content )
+        content = group.controls['fileData'].value;      
+    }
+
+    if ( !content )
+      target = this.user.company.files.find(file => file.name == filename);
+    
+    if ( !content && !target ) {
+      this.info.show('error', `Le fichier "${filename}" n'existe pas.`, 2000);
+      return;
+    }
+
+    if ( !content ) {
+      this.info.show('info', 'Téléchargement du fichier', Infinity);
+      const req = this.store.dispatch(new DownloadFile(target!.id));
+      req.pipe(take(1)).subscribe(() => {
+        const file = FilesRow.getById(target!.id);
+        this.popup.openFile(file);
+        this.info.show('success', 'Fichier téléchargé', 2000);
+      })
+    } else {
+      this.popup.openFile(content);
+    }
   }
 
   form: FormGroup = new FormGroup({
@@ -276,7 +318,7 @@ export class ModifyProfileForm {
 
     ]),
     'Userprofile.Company.admin': new FormGroup({
-      'KBIS': new FormControl(defaultFileUIOuput('admin')),
+      'Kbis': new FormControl(defaultFileUIOuput('admin')),
       'Trav. Dis': new FormControl(defaultFileUIOuput('admin')),
       'RC + DC': new FormControl(defaultFileUIOuput('admin')),
       'URSSAF': new FormControl(defaultFileUIOuput('admin')),
@@ -300,8 +342,6 @@ export class ModifyProfileForm {
   onSwipeRight() { this.slider.right(); }
 
   onSubmit() { this.submitted.emit(this.form); }
-
-  constructor(private cd: ChangeDetectorRef) {}
   
   async ngOnInit() {
     let permissions  = await Camera.checkPermissions();

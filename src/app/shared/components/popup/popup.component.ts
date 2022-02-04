@@ -6,6 +6,7 @@ import { UIOpenMenu } from "src/app/shared/common/classes";
 import { FilesRow } from "src/models/data/data.model";
 import { b64toBlob } from "../../common/functions";
 import { Serialized, TemplateContext } from "../../common/types";
+import { FileUIOutput } from "../filesUI/files.ui";
 
 const TRANSITION_DURATION = 200;
 @Component({
@@ -114,7 +115,7 @@ export class PopupService {
     this.popups$.next({template, context});
   }
 
-  openFile(file: Serialized<FilesRow>) {
+  openFile(file: FileUIOutput) {
     const type = FilesRow.getFileType(file.ext),
       blob = b64toBlob(file.content, type),
       url = URL.createObjectURL(blob),

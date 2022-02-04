@@ -60,11 +60,13 @@ export const FieldType = (type: 'phone' | 'number' | 'url', messages?: string[])
     let content = control.value,
     errors: ValidationErrors = {};
 
+    if ( !content ) return control.errors;
+
     if ( type == 'number' ) {
       if ( !((typeof content == 'number') || content.match(number)) )
         errors['FIELD_TYPE'] = messages || ['un nombre'];
     } else if ( type == 'phone' ) {
-      if ( content && !content.replace(/\s/g, '').match(phone) )
+      if ( !content.replace(/\s/g, '').match(phone) )
         errors['FIELD_TYPE'] = messages || ['un numéro de téléphone'];
     } else {
       if ( !content.match(url) )
