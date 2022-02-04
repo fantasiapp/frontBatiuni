@@ -49,12 +49,14 @@ export class HomePageComponent extends Destroy$ {
 
   activeView: number = 0;
   annonces = new Array(10).fill(0);
+  editMenu: PostMenu = { open: false, post: null };
 
   getDrafts(user: User) { return user.profile?.company.posts.filter(post => post.draft); }
   
   openPost(post: Serialized<PostRow>) {
-    console.log('opening post row');
+    this.editMenu = { open: true, post };
   }
+  
   ngOnInit() {
     combineLatest([this.user$, this.posts$]).subscribe(([user, posts]) => {
       this.userPosts = user.profile?.company.posts || [];

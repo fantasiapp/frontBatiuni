@@ -66,6 +66,71 @@
     </div>
   </slidemenu>
 
+
+  <slidemenu [open]="true" [header]="false" #reponse>
+      <header class="clear-margin full-width sticky-header flex center-cross annonce" customHeader>
+        <img (click)="reponse.close()" src="assets/arrowlblack.svg" />
+
+        <span class="grow center-text text-light-emphasis">Annonce en Ligne</span>
+      </header>
+  
+      <ng-container content>
+
+        <div class="space-children-margin page-content-without-nav hosted-page flex  center-cross column candidature">
+          <profile-resume [switch]="false"class="flex column center-cross space-children-margin " [user]="user" >
+            <span>
+              <span class="text-light-emphasis">Montant proposé : </span> <span
+                class="value">0,00$</span>
+            </span>
+          </profile-resume>
+          
+          <section class="job-description full-width flex column space-children-margin">
+            <span>
+              <span class="text-light-emphasis">Nom de l'entreprise : </span> <span
+                class="value">{{user.profile!.company.name}}</span>
+            </span>
+            <span>
+              <span class="text-light-emphasis">N SIRET : </span> <span
+                class="value">{{user.profile!.company.siret}}</span>
+            </span>
+            <span>
+              <span class="text-light-emphasis">Métier : </span>
+              <span *ngFor="let job of user.profile!.company.jobs!" class="value">{{ job.number }} {{ job.job.name }}, </span>
+            </span>
+            <span>
+              <span class="text-light-emphasis">Chiffres d'affaires : </span>
+              <span class="value">{{user.profile!.company.revenue | currency: 'EUR':'symbol':'1.0-0' }}</span>
+            </span>
+          
+            <span>
+              <span class="text-light-emphasis">Numéro fixe : </span>
+              <span class="value">{{user.profile!.company.companyPhone | space: 2:1 }}</span>
+            </span>
+           
+          </section>
+          <hr class="dashed">
+          <section class="">
+            <h4>Documents importants</h4>
+            <div class="flex images">
+            <file-svg *ngFor="let file of attachedFiles" [name]="file.name" [color]="getFileColor(file.name)" (click)="openFile(file.name)"></file-svg>
+              </div>
+          </section>
+          <hr class="dashed">
+          <section class="contact-user full-width space-children-margin">
+            <h4>Contact</h4>
+            <div class="flex space-between">
+              <li><img src="assets/phone.png"/></li>
+            <li><img src="assets/phone.png"/></li>
+            <li><img src="assets/phone.png"/></li>
+            </div>
+          </section>
+
+        </div>
+        <footer class="clear-margin full-width sticky-footer flex center-text center reponse-footer">
+          <button class="button active reponse-footer-button" (click)="openReponseMenu = true" > Passer la commande</button>
+      </footer>
+      </ng-container>
+  </slidemenu>
   <slidemenu [(open)]="checkMenu.open" [header]="false" #slideOnlinePost>
     <header class="clear-margin full-width sticky-header flex center-cross annonce" customHeader>
       <img (click)="slideOnlinePost.close()" src="assets/arrowlblack.svg" />
@@ -86,4 +151,24 @@
     </ng-container>    
   </slidemenu>
   <!-- Maybe slide menu should hide their content when they are not open ?? -->
+  <swipeup [(open)]="openReponseMenu">
+    <li class="flex center-cross" (click)="validerCandidature = true"><img src="a " />Valider la candidature</li>
+    <li class="flex center-cross"><img src="a " />Refuser la candidature</li>
+    <li class="flex center-cross"><img src=" a" />Bloquer le contact</li>
+  </swipeup>
+  <popup [(open)]="validerCandidature" class=" ">
+    <div class="offres-logo"><img src="assets/validée.svg"/>
+    
+    </div>
+    <p>Vous avez bien validé la candidature de 
+      <br> 
+      <span class="text-emphasis">{{ (user.profile!.firstName + " " + user.profile!.lastName) | titlecase }} </span><br>Veuillez 
+      confirmer votre opération pour recevoir le contrat !
+    </p>
+    <div class="flex column space-children-margin full-width">
+      <button class="button active">Valider</button>
+      <button class="button passive">Annuler</button>
+    </div>
+  </popup>
 </ng-container>
+

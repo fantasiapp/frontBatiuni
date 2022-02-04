@@ -28,6 +28,7 @@ import { ReactiveFormsModule } from "@angular/forms";
 import { AppRoutingModule } from "./routing/mobile-routing.module";
 import { ForgotPassword } from "./components/forgot_password/forgot.password";
 import { MailSender } from "./components/only_mail/only.mail";
+import { ResponsePage } from "./components/response/reponse.page";
 
 
 @NgModule({
@@ -55,7 +56,8 @@ import { MailSender } from "./components/only_mail/only.mail";
     SuiviPage,
     SuiviPME,
     ForgotPassword,
-    MailSender
+    MailSender,
+    ResponsePage
   ],
   imports: [
     CommonModule,

@@ -16,3 +16,35 @@
 .notification {
   @extend %has-notifications
 }
+.reponse {
+  background-color: #ffffff !important;
+  color: black !important;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+
+}
+// .hosted-page {margin-top: 0 !important;}
+
+.dashed {
+  // margin-left: -30px !important;
+  margin: 1rem 0;
+  display: block;
+  width: 100vw;
+  border-top: 1px dashed rgb(145, 145, 145);
+}
+.reponse-footer {
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
+.reponse-footer-button {
+  padding: 1rem 1rem;
+  width: 80%;
+}
+.contact-user {
+  justify-content: space-between;
+  li {
+    list-style-type: none;
+  }
+  
+}
+.candidature {
+  margin-top: 0px;
+}

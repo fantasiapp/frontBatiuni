@@ -27,6 +27,7 @@ import { AuthResolver } from './auth/auth.resolver';
 import { DocusignPage } from 'src/app/shared/components/docusign_page/docusign.page';
 import { ForgotPassword } from '../components/forgot_password/forgot.password';
 import { MailSender } from '../components/only_mail/only.mail';
+import { ResponsePage } from '../components/response/reponse.page';
 
 const routes: Routes = [{
     path: 'landing',
@@ -45,7 +46,7 @@ const routes: Routes = [{
     path: 'mail',
     component: MailSender,
     // canActivate: [AuthGuard],
-  }, {
+  },  {
     path: 'discover',
     redirectTo: 'discover/entreprise'
   }, {
@@ -88,6 +89,9 @@ const routes: Routes = [{
   }, {
     path: 'factures',
     component: FacturePage,
+  },{
+    path: 'reponse',
+    component: ResponsePage,
   }, {
     path: 'home',
     component: MainPage,
@@ -96,8 +100,7 @@ const routes: Routes = [{
     children: [
       {path: 'profile', component: ProfileComponent, data: { animation: 'profile' }},
       {path: 'missions', component: MissionsComponent, data: { animation: 'missions' }},
-      {path: 'availabilities', component: AvailabilitiesComponent, data: { animation: 'availabilities' }},
-      {path: 'sos', component: SOSPageComponent, data: { animation: 'sos' } },
+      {path: 'availabilities', component: AvailabilitiesComponent, data: { animation: 'availabilities' }},      {path: 'sos', component: SOSPageComponent, data: { animation: 'sos' } },
       {path: 'make', component: MakeAdComponent, data: { animation: 'make'} },
       {path: 'make/:id', component: MakeAdComponent, data: { animation: 'make'} },
       {path: '', pathMatch: 'full', component: HomeComponent, data: { animation: 'home' } },

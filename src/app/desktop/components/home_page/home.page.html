@@ -34,16 +34,15 @@
             <offer
               *ngFor="let onlinePost of userOnlinePosts"
               [deletable]="false"
-
               src="assets/enligne.svg"
-              [routerLink]="['', 'annonce-en-ligne']"
               ></offer>
           </ng-container>
           <ng-container *ngSwitchCase="2">
             <offer
+              [deletable]="false"
               *ngFor="let mission of annonces"
               src="assets/validée.svg"
-              [routerLink]="['', 'annonce-validee']"></offer>
+              ></offer>
           </ng-container>
         </ng-container>
       </div>

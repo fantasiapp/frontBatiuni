@@ -1,0 +1,14 @@
+@import "src/styles/variables";
+@import "src/styles/mixins";
+
+:host {
+    @extend %page;
+    background: white !important;
+}
+
+.reponse {
+    background: #ffffff !important;
+    color: black;
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+
+}

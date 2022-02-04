@@ -13,6 +13,9 @@ export class ProfileResume {
   user!: User;
 
   @Input()
+  switch: boolean = true;
+
+  @Input()
   showMore: boolean = false;
 
   @Input()

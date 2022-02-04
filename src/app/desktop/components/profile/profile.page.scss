@@ -44,7 +44,7 @@ profile-resume {
 
 .action-menu {
   padding-left: 0 !important; padding-right: 0 !important;
-
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
   ul {
     list-style-type: none;
     font-family: "Poppins";
@@ -59,8 +59,8 @@ profile-resume {
     line-height: $tab-height;
     position: relative;
     cursor: pointer;
-
-    &.separate { margin-bottom: math.div($tab-height, 2); }
+    &.separate { margin-bottom: math.div($tab-height, 2); 
+    }
     &.active {
       color: $buttonGradient;
       position: relative;
