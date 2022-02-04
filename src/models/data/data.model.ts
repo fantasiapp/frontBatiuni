@@ -284,7 +284,6 @@ export class PostRow extends createTable<PostRow>() {
 
   //is it expensive ?
   static getCompany(post: Post): Company {
-    console.log(post);
     for ( const [id, company] of CompanyRow.instances ) {
       const postIds = company.posts.map(post => post.id);
       if ( postIds.includes(post.id) )

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, Output, EventEmitter } from '@angular/core';
 import { UIDefaultAccessor } from '../../common/classes';
 import * as moment from 'moment';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
@@ -28,6 +28,9 @@ export class CalendarUI extends UIDefaultAccessor<DayState[]> {
 
   @Input()
   embedded: boolean = true;
+
+  @Output()
+  dayClick = new EventEmitter();
 
   week: any = [
     "Lundi",
@@ -94,9 +97,11 @@ export class CalendarUI extends UIDefaultAccessor<DayState[]> {
 
   lastClick: any;
 
+  
   onDayClicked(day: string, e: Event) {
     this.dayClicked = true;
     this.choseDay(day, e);
+    this.dayClick.emit(this.currentDay);
   }
 
   choseDay(day: any, e: Event) {

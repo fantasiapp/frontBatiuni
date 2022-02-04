@@ -44,6 +44,7 @@ import { UIRadioAccessor, UIRadioboxComponent } from "./components/box/radiobox.
 import { DocusignPage } from "./components/docusign_page/docusign.page";
 import { ForgotPasswordForm } from "./forms/forgot.password";
 import { MailForm } from "./forms/only.mail";
+import { UISwipeupComponent } from "./components/swipeup/swipeup.component";
 
 @NgModule({
   declarations: [
@@ -88,7 +89,8 @@ import { MailForm } from "./forms/only.mail";
     Notifications,
     DocusignPage,
     ForgotPasswordForm,
-    MailForm
+    MailForm,
+    UISwipeupComponent
   ],
   imports: [
     CommonModule,
@@ -140,8 +142,8 @@ import { MailForm } from "./forms/only.mail";
     UIHSteps,
     DocusignPage,
     ForgotPasswordForm,
-    MailForm
-    
+    MailForm,
+    UISwipeupComponent
   ],
   providers: [ImageGenerator]
 })

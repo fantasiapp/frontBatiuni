@@ -1,11 +1,10 @@
 import { Component, ChangeDetectionStrategy, SimpleChange, SimpleChanges, ViewChild, TemplateRef } from "@angular/core";
 import { Select, Store } from "@ngxs/store";
-import { BehaviorSubject, combineLatest, Observable } from "rxjs";
+import { combineLatest, Observable } from "rxjs";
 import { take, takeUntil } from "rxjs/operators";
 import { Destroy$ } from "src/app/shared/common/classes";
 import { DistanceSliderConfig, SalarySliderConfig } from "src/app/shared/common/config";
 import { filterSplit } from "src/app/shared/common/functions";
-import { Serialized } from "src/app/shared/common/types";
 import { InfoService } from "src/app/shared/components/info/info.component";
 import { PopupService } from "src/app/shared/components/popup/popup.component";
 import { Company, Post, PostRow } from "src/models/data/data.model";

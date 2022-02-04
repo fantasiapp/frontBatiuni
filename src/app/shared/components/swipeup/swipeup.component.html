@@ -1,0 +1,22 @@
+<div class="cover-parent" (click)="close()"></div>
+
+<div class="menu full-width" [class.open]="open && !willClose">
+  <div class="decoration background-white" (click)="close()">
+  </div>
+
+  <ul *ngIf="type == 'list'" class="hosed-page list background-white font-Poppins text-light-emphasis content">
+    <ng-content></ng-content>
+  </ul>
+
+  <ul *ngIf="type == 'view'" class="content background-white hosted-page">
+    <ng-content select="[view]"></ng-content>
+  </ul>
+
+  <ng-container *ngIf="type == 'shared'" #view></ng-container>
+</div>
+
+<ng-template #menuTemplate let-menu>
+  <ul class="hosed-page list background-white font-Poppins text-light-emphasis content">
+    <li *ngFor="let item of menu" (click)="onListItemClicked(item)" [class]="item.class || ''"> {{item.name}} </li> 
+  </ul>
+</ng-template>

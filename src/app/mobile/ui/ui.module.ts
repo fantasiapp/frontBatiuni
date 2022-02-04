@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { UISwipeupComponent } from './swipeup/swipeup.component';
 import { UISlideMenuComponent } from './slidemenu/slidemenu.component';
 import { SuiviComments } from './suivi/comment.suivi';
 import { UICreditCard } from './creditcard/credit-card.ui';
@@ -15,7 +14,6 @@ import { SharedModule } from 'src/app/shared/shared.module';
 
 @NgModule({
   declarations: [
-    UISwipeupComponent,
     UISlideMenuComponent,
     SuiviComments,
     UICreditCard,
@@ -32,7 +30,6 @@ import { SharedModule } from 'src/app/shared/shared.module';
 
   ],
   exports: [
-    UISwipeupComponent,
     UISlideMenuComponent,
     SuiviComments,
     UICreditCard,

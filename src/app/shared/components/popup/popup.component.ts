@@ -5,7 +5,7 @@ import { takeUntil } from "rxjs/operators";
 import { UIOpenMenu } from "src/app/shared/common/classes";
 import { FilesRow } from "src/models/data/data.model";
 import { b64toBlob } from "../../common/functions";
-import { Serialized } from "../../common/types";
+import { Serialized, TemplateContext } from "../../common/types";
 
 const TRANSITION_DURATION = 200;
 @Component({
@@ -31,12 +31,15 @@ export class UIPopup extends UIOpenMenu {
   @Input()
   params?: any;
 
+  @Input()
+  keepAlive: boolean = true;
+
   ngOnChanges(changes: SimpleChanges) {
     if ( changes['content'] || changes['params'] )
-      this.render();
+      this.show();
   }
 
-  private render() {
+  private show() {
     this.view.clear();
     if ( this.content ) {
       this.view.createEmbeddedView(this.content, this.params);
@@ -50,9 +53,8 @@ export class UIPopup extends UIOpenMenu {
       this.params = params.context;
       console.log(params.context);
       this.content = params.template;
-      if ( params.name ) this.content = this[params.name];
-      console.log(params.name, this.content);
-      this.render();
+      if ( params.name && !this.content) this.content = this[params.name];
+      this.show();
       this.cd.markForCheck();
     });
   }
@@ -61,7 +63,7 @@ export class UIPopup extends UIOpenMenu {
   close() {
     this.willClose = true;
     setTimeout(() => {
-      this.view.clear();
+      if ( !this.keepAlive ) this.view.clear();
       this.willClose = false;
       this.openChange.emit(this._open = false);
       if ( this.params?.close ) this.params.close();
@@ -84,9 +86,7 @@ export class UIPopup extends UIOpenMenu {
 export type PopupConfig = {
   name: 'file';
   template: TemplateRef<any>;
-  context: {
-    $implicit: any;
-  } & {[key: string]: any};
+  context: TemplateContext;
 };
 
 export type FileViewConfig = {
@@ -110,7 +110,7 @@ export class PopupService {
     this.popups$.next({context});
   }
 
-  show(template: TemplateRef<any>, context?: PopupConfig['context']) {
+  show(template: TemplateRef<any>, context?: TemplateContext) {
     this.popups$.next({template, context});
   }
 

@@ -249,6 +249,7 @@ export class UserState {
 
     return this.http.get('data', action).pipe(
       tap((response: any) => {
+        console.log(response);
         if ( response['duplicatePost'] !== 'OK' )
           throw response['messages'];
         

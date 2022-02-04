@@ -143,6 +143,7 @@ import { InfoService } from "../components/info/info.component";
   `,
   styles: [`
     @import 'src/styles/variables';
+    @import 'src/styles/mixins';
 
     :host {
       display: block;
@@ -157,10 +158,6 @@ import { InfoService } from "../components/info/info.component";
       border: 1px dashed #ccc;
       outline: none;
     }
-    
-    .submit-container {
-      button { max-width: 45%;}
-    }
 
     .option-container {
       margin-left: 30px;
@@ -174,6 +171,7 @@ import { InfoService } from "../components/info/info.component";
     .submit-container {
       height: $sticky-footer-height;
       padding: 10px;
+      button { max-width: 45%;}
     }
 
     .add-detail {
@@ -188,7 +186,7 @@ import { InfoService } from "../components/info/info.component";
 
     :host(.page) {
       footer {
-        bottom: $navigation-height;
+        @include with-set-safe-area(bottom, bottom, $navigation-height);
       }
     }
 
@@ -198,8 +196,8 @@ import { InfoService } from "../components/info/info.component";
 })
 export class MakeAdForm {
   @HostBinding('class.page')
-
   @Input() page: boolean = true;
+  
   @Output() done = new EventEmitter();
 
   private _post: Post | null = null;

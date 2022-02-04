@@ -64,7 +64,7 @@ export const FieldType = (type: 'phone' | 'number' | 'url', messages?: string[])
       if ( !((typeof content == 'number') || content.match(number)) )
         errors['FIELD_TYPE'] = messages || ['un nombre'];
     } else if ( type == 'phone' ) {
-      if ( !content.replace(/\s/g, '').match(phone) )
+      if ( content && !content.replace(/\s/g, '').match(phone) )
         errors['FIELD_TYPE'] = messages || ['un numéro de téléphone'];
     } else {
       if ( !content.match(url) )
