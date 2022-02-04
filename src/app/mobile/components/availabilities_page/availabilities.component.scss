@@ -35,7 +35,7 @@
   }
   .pas-disponible::before {
     @extend %before-element;
-    @include circle(1.2em, $unAvailable);
+    @include circle(1.2em, $unavailable);
   }
   .non-renseigne::before {
     @extend %before-element;
