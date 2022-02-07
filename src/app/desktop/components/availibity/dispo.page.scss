@@ -29,8 +29,9 @@ tabs {
 
 calendar::ng-deep {
   .wrapper-calendar {
+    padding: 20px;
     li {
-      width: 100% !important;
+      justify-self: center !important;
     }
   }
 }

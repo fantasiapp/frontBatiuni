@@ -6,6 +6,7 @@ import { DocusignPage } from "src/app/shared/components/docusign_page/docusign.p
 import { EmailConfirmation } from "src/app/shared/validators/email_confirmation/emailconfirmation.component";
 import { RegistrationSuccess } from "src/app/shared/validators/registration_success/registrationsuccess.component";
 import { AnnoncePage } from "../components/annonce_page/annonce.page";
+import { AnnonceValidePage } from "../components/annonce_valider/annonce.valide";
 import { DispoPage } from "../components/availibity/dispo.page";
 import { ConnexionPageComponent } from "../components/connexion/connexion.page";
 import { ForgotPasswordComponent } from "../components/forgot_password/forgot.password";
@@ -44,6 +45,11 @@ const routes: Routes = [{
 {
   path: 'success',
   component: RegistrationSuccess
+},
+{
+  path: 'annonce_valide',
+  component: AnnonceValidePage,
+  canActivate:[AuthGuard]
 }, {
   path: 'home',
   component: MainPageComponent,
