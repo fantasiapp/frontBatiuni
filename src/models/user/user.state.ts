@@ -229,6 +229,7 @@ export class UserState {
           this.store.dispatch(new StoreData('posts', PostRow, {type: 'add', id: post.id}));
         }; userCompanyData.pushValue('Post', post);
 
+        console.log(uploads);
         uploads.forEach(upload => {
           upload.Post = post.id;
         });
@@ -255,7 +256,7 @@ export class UserState {
         const id = +Object.keys(response)[0],
           post = new PostRow(id, response[id]);
         
-        this.store.dispatch(new StoreData('posts', PostRow, {type: 'add', id: post.id}));
+        this.store.dispatch(new StoreData('posts', PostRow, {type: 'add', id}));
         ctx.patchState({profile: UserProfileRow.getById(profile!.id).serialize()});
       })
     );

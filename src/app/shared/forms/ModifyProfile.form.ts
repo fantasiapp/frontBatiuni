@@ -246,7 +246,7 @@ export class ModifyProfileForm {
       
     ]),
     'Userprofile.userName': new FormControl('', [
-      //Email()
+      Email()
     ]),
     'Userprofile.cellPhone': new FormControl('', [
       FieldType('phone')

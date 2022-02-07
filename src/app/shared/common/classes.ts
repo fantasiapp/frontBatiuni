@@ -84,6 +84,8 @@ export abstract class UIOpenMenu {
       this._open = value;
       return;
     }
+
+    if ( value == this._open ) return;
     
     if ( value ) {
       document.body.classList.add('blocked');

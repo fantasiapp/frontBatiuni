@@ -67,7 +67,7 @@ export class UiMapComponent {
 
       return marker;
     })
-
+    
     
   }
 }

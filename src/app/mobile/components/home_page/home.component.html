@@ -111,9 +111,7 @@
           <hr class="dashed">
           <section class="">
             <h4>Documents importants</h4>
-            <div class="flex images">
-            <file-svg *ngFor="let file of attachedFiles" [name]="file.name" [color]="getFileColor(file.name)" (click)="openFile(file.name)"></file-svg>
-              </div>
+            
           </section>
           <hr class="dashed">
           <section class="contact-user full-width space-children-margin">
@@ -146,29 +144,39 @@
         <li [routerLink]="['','booster']">Booster Mon annonce</li>
         <li (click)="deletePost(checkMenu.post!.id)">Supprimer l'annonce</li>
         <li (click)="duplicatePost(checkMenu.post!.id)">Dupliquer l'annonce</li>
-        <li (click)="switchDraft(checkMenu.post!.id)">Mettre en pause l'annonce</li>
+        <li (click)="pausePost(checkMenu.post!.id)">Mettre en pause l'annonce</li>
       </swipeup>
     </ng-container>    
   </slidemenu>
   <!-- Maybe slide menu should hide their content when they are not open ?? -->
   <swipeup [(open)]="openReponseMenu">
-    <li class="flex center-cross" (click)="validerCandidature = true"><img src="a " />Valider la candidature</li>
+    <li class="flex center-cross" (click)="showUserOffer()"><img src="a " />Valider la candidature</li>
     <li class="flex center-cross"><img src="a " />Refuser la candidature</li>
     <li class="flex center-cross"><img src=" a" />Bloquer le contact</li>
   </swipeup>
-  <popup [(open)]="validerCandidature" class=" ">
-    <div class="offres-logo"><img src="assets/validée.svg"/>
-    
-    </div>
-    <p>Vous avez bien validé la candidature de 
-      <br> 
-      <span class="text-emphasis">{{ (user.profile!.firstName + " " + user.profile!.lastName) | titlecase }} </span><br>Veuillez 
-      confirmer votre opération pour recevoir le contrat !
-    </p>
-    <div class="flex column space-children-margin full-width">
-      <button class="button active">Valider</button>
-      <button class="button passive">Annuler</button>
-    </div>
-  </popup>
+
+
+  
 </ng-container>
 
+<!-- </ng-container> -->
+
+<ng-template #pausePostTemplate>
+  <img src="assets/pause.svg">
+  <p>Votre annonce a bien été mise en pause</p>
+  <p>Vous pouvez toujours l'accéder à partir de vos brouillons.</p>
+</ng-template>
+<ng-template #acceptOffer let-user>
+  <div class="offres-logo"><img src="assets/validée.svg"/>
+  
+  </div>
+  <p>Vous avez bien validé la candidature de 
+    <br> 
+    <span class="text-emphasis">{{ (user.profile!.firstName + " " + user.profile!.lastName) | titlecase }} </span><br>Veuillez 
+    confirmer votre opération pour recevoir le contrat !
+  </p>
+  <div class="flex column space-children-margin full-width">
+    <button class="button active">Valider</button>
+    <button class="button passive">Annuler</button>
+  </div>
+</ng-template>
