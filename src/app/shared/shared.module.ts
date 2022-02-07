@@ -45,6 +45,7 @@ import { DocusignPage } from "./components/docusign_page/docusign.page";
 import { ForgotPasswordForm } from "./forms/forgot.password";
 import { MailForm } from "./forms/only.mail";
 import { UISwipeupComponent } from "./components/swipeup/swipeup.component";
+import { UISlideMenuComponent } from "./components/slidemenu/slidemenu.component";
 
 @NgModule({
   declarations: [
@@ -90,7 +91,8 @@ import { UISwipeupComponent } from "./components/swipeup/swipeup.component";
     DocusignPage,
     ForgotPasswordForm,
     MailForm,
-    UISwipeupComponent
+    UISwipeupComponent,
+    UISlideMenuComponent
   ],
   imports: [
     CommonModule,
@@ -143,7 +145,8 @@ import { UISwipeupComponent } from "./components/swipeup/swipeup.component";
     DocusignPage,
     ForgotPasswordForm,
     MailForm,
-    UISwipeupComponent
+    UISwipeupComponent,
+    UISlideMenuComponent
   ],
   providers: [ImageGenerator]
 })

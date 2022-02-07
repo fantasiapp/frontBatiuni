@@ -7,6 +7,7 @@
 
 <div class="flex column" [class.content]="!footer" [class.content-with-footer]="footer" #content>
   <ng-content select='[content]'></ng-content>
+  <ng-container *ngIf="fromService" #view></ng-container>
 </div>
 
 <div class="footer full-width" *ngIf="footer">
@@ -16,6 +17,9 @@
 <ng-template #defaultHeader>
   <header class="clear-margin full-width sticky-header flex center-cross">
     <img class="return" src="assets/arrowleft.svg" (click)="close()"><img>
-    <ng-content select='[header]'></ng-content>
+    <div class="grow center-text text-light-emphasis" #ref><ng-content></ng-content></div> 
+    <span class="grow center-text text-light-emphasis" *ngIf="ref.children.length == 0">
+      {{title}}
+    </span>
   </header>
 </ng-template>

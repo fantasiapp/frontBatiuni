@@ -33,6 +33,9 @@ export class UIPopup extends UIOpenMenu {
   params?: any;
 
   @Input()
+  fromService: boolean = false;
+
+  @Input()
   keepAlive: boolean = true;
 
   ngOnChanges(changes: SimpleChanges) {
@@ -50,6 +53,8 @@ export class UIPopup extends UIOpenMenu {
   }
 
   ngOnInit() {
+    if ( !this.fromService ) return;
+  
     this.popupService.popups$.pipe(takeUntil(this.destroy$)).subscribe((params: Partial<PopupConfig>) => {
       this.params = params.context;
       console.log(params.context);

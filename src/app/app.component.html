@@ -1,6 +1,7 @@
 <div *ngIf="ready$ | async" [@routeAnimation]="prepareRoute(outlet)" class="router">
   <router-outlet #outlet="outlet"></router-outlet>
 </div>
-<info></info>
-<popup></popup>
-<swipeup type="shared"></swipeup>
+<info [fromService]="true"></info>
+<popup [fromService]="true"></popup>
+<swipeup [fromService]="true"></swipeup>
+<slidemenu [fromService]="true"></slidemenu>

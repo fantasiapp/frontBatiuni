@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ComponentFactory
 import { Observable, Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { UIOpenMenu } from "src/app/shared/common/classes";
-import { TemplateContext } from "src/app/shared/common/types";
+import { ContextUpdate, TemplateContext, ViewComponent, ViewMenu, ViewMenuItem, ViewTemplate } from "src/app/shared/common/types";
 
 const TRANSITION_DURATION = 250;
 
@@ -18,7 +18,7 @@ export class UISwipeupComponent extends UIOpenMenu {
   }
 
   @Input()
-  content?: SwipeUpMenu | SwipeUpTemplate | SwipeUpComponent;
+  content?: ViewMenu | ViewTemplate | ViewComponent;
 
   @ViewChild('view', {read: ViewContainerRef, static: false})
   view?: ViewContainerRef;
@@ -27,17 +27,18 @@ export class UISwipeupComponent extends UIOpenMenu {
   menuTemplate!: TemplateRef<any>;
 
   @Input()
-  type: 'list' | 'view' | 'shared' = 'list';
+  type: 'list' | 'view' = 'list';
+
+  @Input()
+  fromService: boolean = false;
 
   @Input()
   keepAlive: boolean = true;
 
   ngOnInit() {
-    if ( this.type !== 'shared' ) return;
-
-    console.log(this.type);
+    if ( !this.fromService ) return;
+  
     this.swipeupService.views$.pipe(takeUntil(this.destroy$)).subscribe(view => {
-      console.log('rescieve', view);
       if ( !view )
         return this.close();
       
@@ -88,50 +89,23 @@ export class UISwipeupComponent extends UIOpenMenu {
     this.destroy$.complete();
   }
   
-  onListItemClicked(item: MenuItem) {
+  onListItemClicked(item: ViewMenuItem) {
     item.click?.();
-    if ( (this.content as SwipeUpMenu).hideOnClick ) this.close();
+    if ( (this.content as ViewMenu).hideOnClick ) this.close();
   }
 };
 
-type MenuItem = {
-  name: string;
-  class?: string;
-  click?: Function;
-};
 
-export type SwipeUpMenu = {
-  readonly type: 'menu';
-  items: MenuItem[];
-  hideOnClick?: boolean;
-};
-
-export type SwipeUpTemplate = {
-  readonly type: 'template';
-  template: TemplateRef<any>;
-  context: TemplateContext;
-};
-
-export type SwipeUpComponent = {
-  readonly type: 'component';
-  component: Type<any>;
-  init?: Function;
-};
-
-type ContextUpdate = {
-  readonly type: 'context';
-  context: TemplateContext;
-};
 
 @Injectable({
   providedIn: 'root'
 })
 export class SwipeupService {
-  views$ = new Subject<SwipeUpMenu | SwipeUpTemplate | SwipeUpComponent | ContextUpdate | undefined>();
+  views$ = new Subject<ViewMenu | ViewTemplate | ViewComponent | ContextUpdate | undefined>();
 
   constructor() {}
 
-  show(view: SwipeUpMenu | SwipeUpTemplate | SwipeUpComponent) {
+  show(view: ViewMenu | ViewTemplate | ViewComponent) {
     this.views$.next(view);
   }
 
@@ -139,7 +113,7 @@ export class SwipeupService {
     this.views$.next(undefined);
   }
 
-  updateTemplate(context: SwipeUpTemplate['context']) {
+  updateTemplate(context: ViewTemplate['context']) {
     this.views$.next({type: 'context', context})
   }
 };
