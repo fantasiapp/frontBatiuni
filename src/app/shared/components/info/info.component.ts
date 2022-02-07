@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, HostBinding, HostListener, Injectable } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, HostBinding, HostListener, Injectable, Input } from "@angular/core";
 import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { Destroy$ } from "../../common/classes";
@@ -38,15 +38,23 @@ export class InfoHandler extends Destroy$ {
   @HostBinding('class')
   type: string = '';
 
+  @Input()
+  fromService: boolean = false;
+
   private top: number = HEADER_HEIGHT;
   @HostBinding('style.top')
   get alignTop() {
     return `calc(env(safe-area-inset-top) + ${this.top}px)`;
   }
 
-  constructor(private cd: ChangeDetectorRef, service: InfoService) {
+  constructor(private cd: ChangeDetectorRef, private service: InfoService) {
     super();
-    service.infos$.pipe(takeUntil(this.destroy$)).subscribe((info) => {
+  }
+
+  ngOnInit() {
+    if ( ! this.fromService ) return;
+  
+    this.service.infos$.pipe(takeUntil(this.destroy$)).subscribe((info) => {
       if ( info ) {
         this.top = getHeight(info.alignWith || 'header');
         this.show(info);
@@ -55,7 +63,7 @@ export class InfoHandler extends Destroy$ {
       }
     });
 
-    service.alignWith$.pipe(takeUntil(this.destroy$)).subscribe((alignWith) => {
+    this.service.alignWith$.pipe(takeUntil(this.destroy$)).subscribe((alignWith) => {
       this.top = getHeight(alignWith);
       this.cd.markForCheck();
     });

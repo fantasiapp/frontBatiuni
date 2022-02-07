@@ -5,7 +5,7 @@ import { User } from "src/models/user/user.model";
 import { UserState } from "src/models/user/user.state";
 import * as UserActions from "src/models/user/user.actions";
 import { Camera, CameraResultType, CameraSource } from "@capacitor/camera";
-import { UISlideMenuComponent } from "../../ui/slidemenu/slidemenu.component";
+import { UISlideMenuComponent } from "../../../shared/components/slidemenu/slidemenu.component";
 import { Logout } from "src/models/auth/auth.actions";
 import { InfoService } from "src/app/shared/components/info/info.component";
 import { take } from "rxjs/operators";

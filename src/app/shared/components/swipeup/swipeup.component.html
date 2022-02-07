@@ -12,7 +12,7 @@
     <ng-content select="[view]"></ng-content>
   </ul>
 
-  <ng-container *ngIf="type == 'shared'" #view></ng-container>
+  <ng-container *ngIf="fromService" #view></ng-container>
 </div>
 
 <ng-template #menuTemplate let-menu>

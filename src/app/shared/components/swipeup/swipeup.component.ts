@@ -27,14 +27,17 @@ export class UISwipeupComponent extends UIOpenMenu {
   menuTemplate!: TemplateRef<any>;
 
   @Input()
-  type: 'list' | 'view' | 'shared' = 'list';
+  type: 'list' | 'view' = 'list';
+
+  @Input()
+  fromService: boolean = false;
 
   @Input()
   keepAlive: boolean = true;
 
   ngOnInit() {
-    if ( this.type !== 'shared' ) return;
-
+    if ( !this.fromService ) return;
+  
     this.swipeupService.views$.pipe(takeUntil(this.destroy$)).subscribe(view => {
       if ( !view )
         return this.close();

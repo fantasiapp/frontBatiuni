@@ -9,6 +9,9 @@ import { SlideChildrenLeft, SlideChildrenRight } from 'src/animations/slide.anim
 import { AsyncSubject } from 'rxjs';
 import { GetGeneralData } from 'src/models/data/data.actions';
 import { environment } from 'src/environments/environment';
+import { SlidemenuService } from './shared/components/slidemenu/slidemenu.component';
+import { AnnoncePage } from './desktop/components/annonce_page/annonce.page';
+import { UISwitchComponent } from './shared/components/switch/switch.component';
 
 
 @Component({
@@ -24,7 +27,7 @@ import { environment } from 'src/environments/environment';
   ]
 })
 export class AppComponent extends Destroy$ {
-  constructor(private store: Store) {
+  constructor(private store: Store, private slideService: SlidemenuService) {
     super();
     (window as any).app = this;
   }
