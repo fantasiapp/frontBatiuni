@@ -71,10 +71,12 @@ export abstract class AnimateCSS extends IndexBased {
 
 @Directive()
 export abstract class UIOpenMenu {
+  private initialized: boolean = false;
+
   @HostBinding('class.open')
   protected _open: boolean = false;
   
-  private initialized: boolean = false;
+  @Input() block: boolean = true;
 
   get open() { return this._open; }
   @Input()
@@ -88,11 +90,11 @@ export abstract class UIOpenMenu {
     if ( value == this._open ) return;
     
     if ( value ) {
-      document.body.classList.add('blocked');
+      if ( this.block ) document.body.classList.add('blocked');
       this._open = value;
     }
     else {
-      document.body.classList.remove('blocked');
+      if ( this.block ) document.body.classList.remove('blocked');
       //this._open = false;
       this.close()
     }

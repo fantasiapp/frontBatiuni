@@ -29,6 +29,7 @@ export type ViewMenu = {
   readonly type: 'menu';
   items: ViewMenuItem[];
   hideOnClick?: boolean;
+  class?: string;
 };
 
 export type ViewTemplate = {

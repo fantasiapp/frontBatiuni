@@ -4,7 +4,7 @@
   <div class="decoration background-white" (click)="close()">
   </div>
 
-  <ul *ngIf="type == 'list'" class="hosed-page list background-white font-Poppins text-light-emphasis content">
+  <ul *ngIf="type == 'list'" class="list background-white font-Poppins text-light-emphasis content">
     <ng-content></ng-content>
   </ul>
 
@@ -15,8 +15,8 @@
   <ng-container *ngIf="fromService" #view></ng-container>
 </div>
 
-<ng-template #menuTemplate let-menu>
-  <ul class="hosed-page list background-white font-Poppins text-light-emphasis content">
-    <li *ngFor="let item of menu" (click)="onListItemClicked(item)" [class]="item.class || ''"> {{item.name}} </li> 
+<ng-template #menuTemplate let-menu let-items="items">
+  <ul class="list background-white font-Poppins text-light-emphasis" [class]="menu.class">
+    <li *ngFor="let item of items" (click)="onListItemClicked(item)" [class]="item.class || ''"> {{item.name}} </li> 
   </ul>
 </ng-template>

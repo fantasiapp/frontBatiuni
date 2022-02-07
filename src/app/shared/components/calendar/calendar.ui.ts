@@ -101,7 +101,7 @@ export class CalendarUI extends UIDefaultAccessor<DayState[]> {
   onDayClicked(day: string, e: Event) {
     this.dayClicked = true;
     this.choseDay(day, e);
-    this.dayClick.emit(this.currentDay);
+    this.dayClick.emit([e, this.currentDay]);
   }
 
   choseDay(day: any, e: Event) {

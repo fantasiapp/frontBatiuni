@@ -16,31 +16,3 @@
     bottom: 0;
   }
 }
-
-%before-element {
-  content: "";
-  display: inline-block;
-  vertical-align: middle;
-  margin-right: 10px;
-}
-
-::ng-deep {
-  .disponible::before {
-    @extend %before-element;
-    @include circle(1.2em, $available);
-  }
-  .sous-conditions::before {
-    @extend %before-element;
-    @include circle(1.2em, $availableWithLimits);
-  }
-  .pas-disponible::before {
-    @extend %before-element;
-    @include circle(1.2em, $unavailable);
-  }
-  .non-renseigne::before {
-    @extend %before-element;
-    @include circle(1.1em, #fafafa);
-    border: 1px solid black;
-  }  
-}
-

@@ -12,6 +12,7 @@ import { environment } from 'src/environments/environment';
 import { SlidemenuService } from './shared/components/slidemenu/slidemenu.component';
 import { AnnoncePage } from './desktop/components/annonce_page/annonce.page';
 import { UISwitchComponent } from './shared/components/switch/switch.component';
+import { UITooltipService } from './shared/components/tooltip/tooltip.component';
 
 
 @Component({
@@ -27,7 +28,7 @@ import { UISwitchComponent } from './shared/components/switch/switch.component';
   ]
 })
 export class AppComponent extends Destroy$ {
-  constructor(private store: Store, private slideService: SlidemenuService) {
+  constructor(private store: Store) {
     super();
     (window as any).app = this;
   }

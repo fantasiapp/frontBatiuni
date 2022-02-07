@@ -464,8 +464,8 @@ export class Mapper {
     throw `Unknown value ${name}.`;
   }
 
-  private static mapFields(data: any, name: tableName) {
-    if ( (this.mapping[name] as Table).fields.size )
+  static mapFields(data: any, name: tableName, onlyIfUnmapped: boolean = true) {
+    if ( onlyIfUnmapped && (this.mapping[name] as Table).fields.size )
       return; //already mapped
 
     let fields = data[name + 'Fields'],

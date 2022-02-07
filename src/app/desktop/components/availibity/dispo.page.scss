@@ -35,3 +35,11 @@ calendar::ng-deep {
     }
   }
 }
+::ng-deep {
+  .availability-picker {
+    padding: 20px;
+    & > *:not(:last-child) {
+      margin-bottom: 8px;
+    }
+  }
+}
