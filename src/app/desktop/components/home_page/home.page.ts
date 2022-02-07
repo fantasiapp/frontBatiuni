@@ -38,7 +38,6 @@ export class HomePageComponent extends Destroy$ {
     if(this.activeView == 1) length = this.userOnlinePosts.length
     return length
   }
-
   userPosts: Post[] = [];
   userDrafts: Post[] = [];
   userOnlinePosts: Post[] = [];

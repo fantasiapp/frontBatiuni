@@ -30,7 +30,7 @@ export class StepUI {
 
   @Input()
   tacheList = [
-      {name:"Besoins de l’entreprise"},
+      {name:"Besoins de l’entreprise",href:"remuniration"},
       {name:"Infos chantiers"},
       {name:"Rémunération "},
       {name:"Document important à télécharger"}
