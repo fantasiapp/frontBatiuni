@@ -38,6 +38,7 @@ export class HomePageComponent extends Destroy$ {
     if(this.activeView == 1) length = this.userOnlinePosts.length
     return length
   }
+ 
   userPosts: Post[] = [];
   userDrafts: Post[] = [];
   userOnlinePosts: Post[] = [];
@@ -63,7 +64,11 @@ export class HomePageComponent extends Destroy$ {
       
       this.allOnlinePosts = posts.filter(post => !post.draft).map(post => [post, PostRow.getCompany(post)] as [Post, Company])
         .filter(([post, company]) => company.id != user.profile!.company.id);
+      
+      this.userOnlinePosts.reverse();
+      this.userDrafts.reverse();
     });
+    console.log('UserOnlinePOsts',this.userOnlinePosts)
   }
   switchDraft(id: number) {
     this.store.dispatch(new SwitchPostType(id)).pipe(take(1)).subscribe(() => {
