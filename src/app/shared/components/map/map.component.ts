@@ -8,6 +8,8 @@ export type MarkerData = {
   longitude: number;
 };
 
+export type markerType = 'disponible' | 'sous-conditions' | 'ST'
+
 @Component({
   selector: 'mapbox-batiuni',
   templateUrl: 'map.component.html',
@@ -63,6 +65,14 @@ export class UIMapComponent {
     };
 
     return new mapboxgl.Popup().setDOMContent(this.popupContent);
+  }
+
+  createMarker(icon:markerType ) {
+    const marker: HTMLElement= document.createElement('div');
+    const WH = 50
+    marker.className = 'marker-icon'
+    marker.style.backgroundImage =  'url(assets/Icon-map.svg)';
+
   }
 
   ngOnInit() {

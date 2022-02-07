@@ -32,7 +32,7 @@ tabs {
 calendar::ng-deep {
   .wrapper-calendar {
     li {
-      width: 100% !important;
+      justify-self: center !important;
     }
   }
 }

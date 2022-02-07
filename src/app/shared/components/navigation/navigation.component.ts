@@ -18,7 +18,7 @@ const PMEMenu = [
   {name: "Home", src: "assets/navigation/st/home.svg", route: ''},
   {name: "Créer une Annonce", src: "assets/navigation/pme/make.svg", route: 'make'},
   {name: "SOS", src: "assets/navigation/pme/sos.svg", route: 'sos'},
-  {name: "Profile", src: "assets/navigation/st/profile.svg", route: 'profile'}
+  {name: "Profile", src: "assets/navigation/st/profile.svg", route: 'profile'},
 ];
 
 @Component({
