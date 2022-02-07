@@ -10,8 +10,23 @@
     </section>
 
     <section class="main web-content font-Poppins">
-      <searchbar placeholder="Mes missions ..."></searchbar>
+      <!-- <searchbar placeholder="Mes missions ..."></searchbar> -->
       <calendar [value]="user.profile!.company.disponibilities"></calendar>
+    </section>
+    <section class="space-children-margin back">
+      <div class="flex center full-width info-bar">&#9432;</div>
+      <li class="disponible">
+        Disponible
+      </li>
+      <li class="sous-conditions">
+        Disponible sous-conditions
+      </li>
+      <li class="pas-disponible">
+        Pas disponible
+      </li>
+      <li class="non-renseigne">
+        Non-renseigner
+      </li>
     </section>
   </div>
 </ng-container>

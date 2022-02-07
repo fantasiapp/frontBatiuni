@@ -68,13 +68,18 @@ export class UIMapComponent {
   }
 
   createMarker(icon:markerType ) {
-    const marker: HTMLElement= document.createElement('div');
-    const WH = 50
+    const marker = document.createElement('div');
+    const WH = 70
     marker.className = 'marker-icon'
-    marker.style.backgroundImage =  'url(assets/Icon-map.svg)';
-
+    marker.style.backgroundImage =  `url(assets/Icon-map-${icon}.svg)`;
+    marker.style.backgroundSize = '100%';
+    marker.style.width = `${WH}px`;
+    marker.style.height = `${WH}px`;
+    return marker
   }
-
+  testCorrdo = [
+    {lat:48.856614,long:2.3522219}
+  ]
   ngOnInit() {
     this.mapbox = new mapboxgl.Map({
       accessToken: 'pk.eyJ1IjoiemV1c2NoYXRvdWkiLCJhIjoiY2t3c2h0Yjk0MGo2NDJvcWh3azNwNnF6ZSJ9.ZBbZHpP2RFSzCUPkjfEvMQ',
@@ -86,20 +91,33 @@ export class UIMapComponent {
     });
 
     this.createPopup();
+    console.log('Hello from post', this.posts)
 
-    this.posts.forEach((post, i) => {
-      if ( post.latitude == null || post.longitude == null ) return;
-
-      let marker = new mapboxgl.Marker({color: "blue"})
-        .setLngLat([post.longitude, post.latitude])
-        .addTo(this.mapbox);
+    this.testCorrdo.forEach((cord)=>{
+      let marker = new mapboxgl.Marker(this.createMarker('sous-conditions'))
+      .setLngLat([cord.long,cord.lat])
+      .addTo(this.mapbox)
       
-      marker.getElement().onclick = () => {
-        marker.setPopup(this.loadPopup(post, this.companies[i]));
-      }
-
-      return marker;
+      return marker
     })
+
+    // this.posts.forEach((post, i) => {
+    //   if ( post.latitude == null || post.longitude == null ) return;
+
+    //   let marker = new mapboxgl.Marker({color:'red'})
+    //     .setLngLat([post.longitude, post.latitude])
+    //     .addTo(this.mapbox);
+      
+    //   marker.getElement().onclick = () => {
+    //     marker.setPopup(this.loadPopup(post, this.companies[i]));
+    //   }
+
+    //   return marker;
+    // })
   }
 }
+
+
+
+
 

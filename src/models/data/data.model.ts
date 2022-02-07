@@ -256,7 +256,6 @@ export class UserProfileRow extends createTable<UserProfileRow>() {
 };
 
 export class EstablishmentsRow extends createTable<EstablishmentsRow>() {
-
   get name() { return this.getField('nom'); }
   get address() { return this.getField('adresse'); }
   get activitePrincipale() { return this.getField('activitePrincipale'); }
@@ -350,6 +349,7 @@ export type PostDetail = Serialized<DetailedPostRow>;
 //enforce the model and do operations
 
 import { filterMap, getByValue } from 'src/app/shared/common/functions';
+import { number } from "src/validators/regex";
 
 type Dict<T> = {[key: string]: T};
 
