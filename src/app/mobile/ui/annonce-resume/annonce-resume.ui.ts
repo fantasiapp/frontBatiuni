@@ -1,5 +1,11 @@
 import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
-import { Company, Post, PostRow } from "src/models/data/data.model";
+import { Store } from "@ngxs/store";
+import { of } from "rxjs";
+import { take } from "rxjs/operators";
+import { Serialized } from "src/app/shared/common/types";
+import { PopupService } from "src/app/shared/components/popup/popup.component";
+import { Company, FilesRow, Post, PostRow } from "src/models/data/data.model";
+import { DownloadFile } from "src/models/user/user.actions";
 
 @Component({
   selector: 'annonce-resume',
@@ -32,17 +38,16 @@ import { Company, Post, PostRow } from "src/models/data/data.model";
       <div class="description">
         <span class="title text-emphasis">Description des missions</span>
         <ul>
-          <li *ngFor="let detail of (post?.details || [])">{{detail.content}}</li>
+          <li *ngFor="let detail of (details || [])">{{detail.content}}</li>
         </ul>
       </div>
 
       <div class="documents">
         <span class="title text-emphasis">Documents importants</span>
         <ul>
-          <li><a>Plan</a></li>
-          <li><a>Document technique</a></li>
-          <li><a>Descriptif de chantier</a></li>
-          <li><a>Calendrier d’exécution</a></li>
+          <li *ngFor="let file of files">
+            <a (click)="openFile(file)">{{file.name}}</a>
+          </li>
         </ul>
       </div>
     </div>
@@ -66,10 +71,21 @@ export class UIAnnonceResume {
   set post(p: Post | null) {
     this._post = p;
     this.company = this.post ? PostRow.getCompany(this.post) : null;
-    console.log(p?.details);
+    console.log(p);
   }
 
   get post() { return this._post; }
+  get files() { return this._post?.files || []; }
+  get details() { return this._post?.details || []; }
+
+  constructor(private store: Store, private popup: PopupService) {}
+
+  openFile(file: Serialized<FilesRow>) {
+    const content = file.content ? of(file.content) : this.store.dispatch(new DownloadFile(file.id));
+    content.pipe(take(1)).subscribe(() => {
+      this.popup.openFile(FilesRow.getById(file.id));
+    });
+  }
 
   toLocateDate(date?: string) {
     return date ? new Date(date).toLocaleDateString('fr') : "(Non renseigné)";

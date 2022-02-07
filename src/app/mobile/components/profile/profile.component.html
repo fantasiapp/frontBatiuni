@@ -47,7 +47,7 @@
     <section class="documents">
       <h4>Documents importants</h4>
       <div class="flex images">
-        <file-svg *ngFor="let file of attachedFiles" [name]="file.name" [color]="getFileColor(file.name)" (click)="openFile(file.name)"></file-svg>
+        <file-svg *ngFor="let file of attachedFiles" [name]="file.name" [color]="getFileColor(file.name)" (click)="openFile(file)"></file-svg>
       </div>
     </section>
   </div>
@@ -84,7 +84,7 @@
   
       <div class="form-container full-width grow flex column position-relative">
         <modify-password-form *ngIf="modifyPassword" class="grow" (submitted)="changePassword($event)"></modify-password-form>
-        <modify-profile-form [user]="user.profile!" *ngIf="!modifyPassword" class="grow" (submitted)="modifyProfile($event)" (openFile)="openFile($event)" #modifyForm></modify-profile-form>
+        <modify-profile-form [user]="user.profile!" *ngIf="!modifyPassword" class="grow" (submitted)="modifyProfile($event)" #modifyForm></modify-profile-form>
       </div>
     </div>
   </slidemenu>

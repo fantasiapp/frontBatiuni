@@ -1,9 +1,11 @@
-import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy, Input, ViewChild, ElementRef, Output, EventEmitter, NgZone } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
 import * as mapboxgl from 'mapbox-gl';
+import { Company, Post, PostRow } from 'src/models/data/data.model';
 
 export type MarkerData = {
-  position: [number, number]
-  name: string;
+  latitude: number;
+  longitude: number;
 };
 
 @Component({
@@ -12,63 +14,82 @@ export type MarkerData = {
   styleUrls: ['map.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class UiMapComponent {
+export class UIMapComponent {
+  
+  _posts: Post[] = [];
+  companies: Company[] = [];
+  
+  get posts() { return this._posts; }
+  
+  @Input()
+  set posts(values: Post[]) {
+    console.log('>', values);
+    this._posts = values;
+    this.companies = values.map(post => PostRow.getCompany(post));
+  }
+  
+  @Input()
+  center: MarkerData = {
+    longitude: 2.349014,
+    latitude: 48.864716
+  };
 
-  map: any;
-  style = 'mapbox://styles/zeuschatoui/ckxj0zqovi9lf15p5gysrfax4';
-  lat = 48.864716;
-  lng = 2.349014;
+  @Output()
+  postClick = new EventEmitter<Post>();
 
-  constructor() {}
+  @ViewChild('map', {read: ElementRef, static: true})
+  view!: ElementRef;
 
-  places: MarkerData[] = [
-    {position: [2.352558675604982, 48.83011647720049], name: 'New York'},
-    {position: [2.3114995493, 48.8611235443], name: 'Paris'},
-    {position: [2.285813409112486, 48.850739049625446], name: 'Rabat'},
-    {position: [2.268915048260837, 48.85421018352511], name: 'Beijing'}
-  ];
+  mapbox: any;
+  mapboxStyles = 'mapbox://styles/zeuschatoui/ckxj0zqovi9lf15p5gysrfax4';
+
+  constructor(private cd: ChangeDetectorRef) {}
 
   popupContent!: HTMLElement;
-
-  initializePopup() {
+  createPopup() {
     let span = document.createElement('span');
     span.classList.add('mapbox-popup-content');
-    span.innerText = "Hello world";
+    span.innerText = "";
     span.onclick = () => { };
 
     this.popupContent = span;
   }
 
-  createPopup(data: MarkerData) {
+  loadPopup(post: Post, company: Company) {
+    this.popupContent.innerHTML = `${company.name}`;
+    this.popupContent.onclick = () => {
+      this.postClick.emit(post);
+      this.cd.markForCheck();
+    };
+
     return new mapboxgl.Popup().setDOMContent(this.popupContent);
   }
 
   ngOnInit() {
-    this.map = new mapboxgl.Map({
+    this.mapbox = new mapboxgl.Map({
       accessToken: 'pk.eyJ1IjoiemV1c2NoYXRvdWkiLCJhIjoiY2t3c2h0Yjk0MGo2NDJvcWh3azNwNnF6ZSJ9.ZBbZHpP2RFSzCUPkjfEvMQ',
-      container: 'map',
-      style: this.style,
+      container: this.view.nativeElement,
+      style: this.mapboxStyles,
       zoom: 11,
-      center: [this.lng, this.lat],
+      center: [this.center.longitude, this.center.latitude],
       attributionControl:false
     });
-    this.initializePopup();
-    // Add map controls
-    // this.map.addControl(new mapboxgl.NavigationControl());
 
-    this.places.forEach(item => {
-      let marker = new mapboxgl.Marker({color: "green"})
-        .setLngLat(item.position)
-        .addTo(this.map);
+    this.createPopup();
+
+    this.posts.forEach((post, i) => {
+      if ( post.latitude == null || post.longitude == null ) return;
+
+      let marker = new mapboxgl.Marker({color: "blue"})
+        .setLngLat([post.longitude, post.latitude])
+        .addTo(this.mapbox);
       
       marker.getElement().onclick = () => {
-        marker.setPopup(this.createPopup(item));
+        marker.setPopup(this.loadPopup(post, this.companies[i]));
       }
 
       return marker;
     })
-    
-    
   }
 }
 

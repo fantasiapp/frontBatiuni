@@ -281,10 +281,11 @@ export class PostRow extends createTable<PostRow>() {
   get description(): string { return this.getField('description'); }
   get details(): DetailedPostRow[] { return this.getField('DetailedPost'); }
   get files(): FilesRow[] { return this.getField('Files'); }
+  get latitude(): number | null { return this.getField('latitude'); }
+  get longitude(): number | null { return this.getField('longitude'); }
 
   //is it expensive ?
   static getCompany(post: Post): Company {
-    console.log(post);
     for ( const [id, company] of CompanyRow.instances ) {
       const postIds = company.posts.map(post => post.id);
       if ( postIds.includes(post.id) )

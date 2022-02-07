@@ -60,6 +60,8 @@ export const FieldType = (type: 'phone' | 'number' | 'url', messages?: string[])
     let content = control.value,
     errors: ValidationErrors = {};
 
+    if ( !content ) return control.errors;
+
     if ( type == 'number' ) {
       if ( !((typeof content == 'number') || content.match(number)) )
         errors['FIELD_TYPE'] = messages || ['un nombre'];

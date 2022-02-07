@@ -52,4 +52,8 @@ export class OfferComponent {
     e.stopPropagation();
     this.store.dispatch(new DeletePost(this.post.id));
   }
+
+  toLocateDate(date?: string) {
+    return date ? new Date(date).toLocaleDateString('fr') : "(Non renseigné)";
+  }
 };

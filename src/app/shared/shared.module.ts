@@ -8,7 +8,7 @@ import { STFilterForm } from "./forms/STFilter.form";
 import { NgxSliderModule } from "@angular-slider/ngx-slider";
 import { OptionsModel } from "./components/options/options";
 import { UICheckboxComponent } from "./components/box/checkbox.component";
-import { UiMapComponent } from "./components/map/map.component";
+import { UIMapComponent } from "./components/map/map.component";
 import { UINumberComponent } from "./components/number/number.component";
 import { UIProfileImageComponent } from "./components/profile-image/profile-image.component";
 import { SearchbarComponent } from "./components/searchbar/searchbar.component";
@@ -44,13 +44,14 @@ import { UIRadioAccessor, UIRadioboxComponent } from "./components/box/radiobox.
 import { DocusignPage } from "./components/docusign_page/docusign.page";
 import { ForgotPasswordForm } from "./forms/forgot.password";
 import { MailForm } from "./forms/only.mail";
+import { UISwipeupComponent } from "./components/swipeup/swipeup.component";
 
 @NgModule({
   declarations: [
     UICheckboxComponent,
     UIRadioboxComponent,
     UIRadioAccessor,
-    UiMapComponent,
+    UIMapComponent,
     UINumberComponent,
     OptionsModel,
     UIProfileImageComponent,
@@ -88,7 +89,8 @@ import { MailForm } from "./forms/only.mail";
     Notifications,
     DocusignPage,
     ForgotPasswordForm,
-    MailForm
+    MailForm,
+    UISwipeupComponent
   ],
   imports: [
     CommonModule,
@@ -106,7 +108,7 @@ import { MailForm } from "./forms/only.mail";
     UICheckboxComponent,
     UIRadioboxComponent,
     UIRadioAccessor,
-    UiMapComponent,
+    UIMapComponent,
     UINumberComponent,
     OptionsModel,
     UIProfileImageComponent,
@@ -140,8 +142,8 @@ import { MailForm } from "./forms/only.mail";
     UIHSteps,
     DocusignPage,
     ForgotPasswordForm,
-    MailForm
-    
+    MailForm,
+    UISwipeupComponent
   ],
   providers: [ImageGenerator]
 })
