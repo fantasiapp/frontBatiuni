@@ -1,0 +1,11 @@
+<div class="cover-parent background" (click)="close()"></div>
+
+<div class="content cover-parent" [class.open]="open && !willClose">
+  <ng-container #view></ng-container>
+</div>
+
+<ng-template #menuTemplate let-menu let-items="items">
+  <ul class="list background-white font-Poppins text-light-emphasis" [class]="menu.class">
+    <li *ngFor="let item of items" (click)="onListItemClicked(item)" [class]="item.class || ''"> {{item.name}} </li> 
+  </ul>
+</ng-template>

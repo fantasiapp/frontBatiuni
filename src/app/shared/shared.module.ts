@@ -46,6 +46,7 @@ import { ForgotPasswordForm } from "./forms/forgot.password";
 import { MailForm } from "./forms/only.mail";
 import { UISwipeupComponent } from "./components/swipeup/swipeup.component";
 import { UISlideMenuComponent } from "./components/slidemenu/slidemenu.component";
+import { UITooltipComponent } from "./components/tooltip/tooltip.component";
 
 @NgModule({
   declarations: [
@@ -92,7 +93,8 @@ import { UISlideMenuComponent } from "./components/slidemenu/slidemenu.component
     ForgotPasswordForm,
     MailForm,
     UISwipeupComponent,
-    UISlideMenuComponent
+    UISlideMenuComponent,
+    UITooltipComponent
   ],
   imports: [
     CommonModule,
@@ -146,7 +148,8 @@ import { UISlideMenuComponent } from "./components/slidemenu/slidemenu.component
     ForgotPasswordForm,
     MailForm,
     UISwipeupComponent,
-    UISlideMenuComponent
+    UISlideMenuComponent,
+    UITooltipComponent
   ],
   providers: [ImageGenerator]
 })

@@ -1,24 +1,32 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ComponentFactoryResolver, ComponentRef, EventEmitter, HostBinding, Injectable, Input, Output, TemplateRef, Type, ViewChild, ViewContainerRef } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ComponentFactoryResolver, Host, HostBinding, Injectable, Input, TemplateRef, ViewChild, ViewContainerRef } from "@angular/core";
 import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
-import { UIOpenMenu } from "src/app/shared/common/classes";
 import { ContextUpdate, ViewComponent, ViewMenu, ViewMenuItem, ViewTemplate } from "src/app/shared/common/types";
+import { UIOpenMenu } from "../../common/classes";
 
 const TRANSITION_DURATION = 250;
 
+//only works with a service
 @Component({
-  selector: 'swipeup',
-  templateUrl: './swipeup.component.html',
-  styleUrls: ['./swipeup.component.scss'],
+  selector: 'tooltip',
+  templateUrl: './tooltip.component.html',
+  styleUrls: ['./tooltip.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class UISwipeupComponent extends UIOpenMenu {
-  constructor(private cd: ChangeDetectorRef, private componentFactoryResolver: ComponentFactoryResolver, private swipeupService: SwipeupService) {
+export class UITooltipComponent extends UIOpenMenu {
+  constructor(private cd: ChangeDetectorRef, private componentFactoryResolver: ComponentFactoryResolver, private service: UITooltipService) {
     super();
+    this.block = false;
   }
+  
+  @Input()
+  dimension: TooltipDimension = {left: '0', top: '0'};
 
   @Input()
-  content?: ViewMenu | ViewTemplate | ViewComponent;
+  content?: ViewTemplate | ViewComponent | ViewMenu;
+
+  @Input()
+  fromService: boolean = false;
 
   @ViewChild('view', {read: ViewContainerRef, static: false})
   view?: ViewContainerRef;
@@ -27,19 +35,24 @@ export class UISwipeupComponent extends UIOpenMenu {
   menuTemplate!: TemplateRef<any>;
 
   @Input()
-  type: 'list' | 'view' | 'none' = 'list';
-
-  @Input()
-  fromService: boolean = false;
-
-  @Input()
   keepAlive: boolean = true;
+
+  @HostBinding('style.left')
+  get dimensionX() { return this.dimension.left; }
+
+  @HostBinding('style.top')
+  get dimensionY() { return this.dimension.top; }
+
+  @HostBinding('style.width')
+  get width() { return this.dimension.width || '400px'; }
+
+  @HostBinding('style.height')
+  get height() { return this.dimension.height || '300px'; }
 
   ngOnInit() {
     if ( !this.fromService ) return;
-    
-    //factorize this
-    this.swipeupService.views$.pipe(takeUntil(this.destroy$)).subscribe(view => {
+
+    this.service.views$.pipe(takeUntil(this.destroy$)).subscribe(view => {
       if ( !view )
         return this.close();
       
@@ -70,6 +83,11 @@ export class UISwipeupComponent extends UIOpenMenu {
       this.open = true;
       this.cd.markForCheck();
     });
+
+    this.service.dimension$.pipe(takeUntil(this.destroy$)).subscribe(dimension => {
+      this.dimension = dimension;
+      this.cd.markForCheck();
+    })
   }
 
   willClose = false;
@@ -84,31 +102,40 @@ export class UISwipeupComponent extends UIOpenMenu {
     }, TRANSITION_DURATION);
   }
 
-//extends destroy, no multiple inheritance :(
+  onListItemClicked(item: ViewMenuItem) {
+    item.click?.();
+    if ( (this.content as ViewMenu).hideOnClick ) this.close();
+  }
+
   protected destroy$ = new Subject<void>();
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
   }
-  
-  onListItemClicked(item: ViewMenuItem) {
-    item.click?.();
-    if ( (this.content as ViewMenu).hideOnClick ) this.close();
-  }
 };
 
-
+export type TooltipDimension = {
+  left: string;
+  top: string;
+  width?: string;
+  height?: string;
+};
 
 @Injectable({
   providedIn: 'root'
 })
-export class SwipeupService {
-  views$ = new Subject<ViewMenu | ViewTemplate | ViewComponent | ContextUpdate | undefined>();
+export class UITooltipService {
+  dimension$ = new Subject<TooltipDimension>();
+  views$ = new Subject<(ViewTemplate | ViewComponent | ViewMenu | ContextUpdate) | undefined>(); 
 
-  constructor() {}
-
-  show(view: ViewMenu | ViewTemplate | ViewComponent) {
+  show(view: ViewTemplate | ViewComponent | ViewMenu, dimension?: TooltipDimension) {
     this.views$.next(view);
+    if ( dimension )
+      this.dimension$.next(dimension);
+  }
+
+  reshape(dimension: TooltipDimension) {
+    this.dimension$.next(dimension);
   }
 
   hide() {
@@ -119,3 +146,6 @@ export class SwipeupService {
     this.views$.next({type: 'context', context})
   }
 };
+
+//TODO, make content work without service
+//All these should inherit from a common class

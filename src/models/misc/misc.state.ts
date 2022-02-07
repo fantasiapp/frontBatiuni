@@ -38,7 +38,8 @@ export class MiscState {
       tap((response: any) => {
         console.log('$', response)
         if ( !response ) return;
-        //EstablishmentsRow.instances.clear();
+        EstablishmentsRow.instances.clear();
+        Mapper.mapFields(response, "Establishments", false);
         Mapper.mapTable(response, "Establishments", false);
         //clear and reset company descriptor
         ctx.setState({...ctx.getState(), [action.storeId]: [...EstablishmentsRow.instances.values()].map(row => row.serialize()) });
