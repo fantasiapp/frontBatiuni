@@ -134,7 +134,7 @@ import { InfoService } from "../components/info/info.component";
     </div>
   </form>
 
-  <footer class="flex row space-between sticky-footer full-width submit-container" style="z-index: 999; background-color: white;">
+  <footer class="flex row space-between sticky-footer full-width submit-container" style="background-color: white;">
     <button class="button passive font-Poppins full-width" (click)="submit(true)" [disabled]="!makeAdForm.valid">
       {{this.post ? 'Enregistrer' : 'Brouillon'}}
     </button>

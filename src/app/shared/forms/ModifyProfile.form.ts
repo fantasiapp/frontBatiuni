@@ -288,7 +288,7 @@ export class ModifyProfileForm {
       
     ]),
     'Userprofile.userName': new FormControl('', [
-      Email()
+      //Email()
     ]),
     'Userprofile.cellPhone': new FormControl('', [
       FieldType('phone')
@@ -359,6 +359,11 @@ export class ModifyProfileForm {
   reloadData() {    
     this.companyLabels = this.user.company.labels.map(label => label.label);
     this.companyJobs = this.user.company.jobs.map(job => job.job);
+    
+    const filesInput = this.form.controls['Userprofile.Company.admin'];
+    this.user.company.files.forEach(({name}) => {
+      filesInput.get(name)?.patchValue({name});
+    });
     
     this.form.controls['Userprofile.lastName']?.setValue(this.user.lastName);
     this.form.controls['Userprofile.firstName']?.setValue(this.user.firstName);
