@@ -50,6 +50,8 @@ calendar::ng-deep {
   margin-right: 10px;
 }
 
+::ng-deep {
+
   .disponible::before {
     @extend %before-element;
     @include circle(1.2em, $available);
@@ -68,16 +70,14 @@ calendar::ng-deep {
     border: 1px solid black;
   }  
 
-::ng-deep {
-
   .availability-picker {
     box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
     border-radius: 12px;
     padding: 20px;
     li:hover {
       background-color: rgb(252, 252, 252);
-    color: $secondaryBackground !important;
-    transform: scale(1.01) !important;
+      color: $secondaryBackground !important;
+      transform: scale(1.01) !important;
     }
     & > *:not(:last-child) {
       margin-bottom: 8px;
