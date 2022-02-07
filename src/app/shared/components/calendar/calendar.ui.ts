@@ -57,32 +57,32 @@ export class CalendarUI extends UIDefaultAccessor<DayState[]> {
   }
 
   private fillZero(month: number) {
-    if ( month < 10 ) return '0' + month;
+    if (month < 10) return '0' + month;
     return month;
   };
 
   getDaysFromDate(month: any, year: any) {
-    const startDate = moment.utc(`${year}/${month}/01`,"YYYY-MM-DD")
+    const startDate = moment.utc(`${year}/${month}/01`, "YYYY-MM-DD")
     const endDate = startDate.clone().endOf('month')
     this.dateSelect = startDate.locale('fr');
     const diffDays = endDate.diff(startDate, 'days', true)
     const numberDays = Math.round(diffDays);
-    const arrayDays = Object.keys([...Array(numberDays)]).map((a: any,i) => {
+    const arrayDays = Object.keys([...Array(numberDays)]).map((a: any, i) => {
       a = this.fillZero(parseInt(a) + 1);
-      const dayObject = moment(`${year}/${month}/${a}`,"YYYY-MM-DD");
-      const compareDate = moment(`${year}-${month}-${a}`,"YYYY-MM-DD");
-      let flow :any = compareDate;
+      const dayObject = moment(`${year}/${month}/${a}`, "YYYY-MM-DD");
+      const compareDate = moment(`${year}-${month}-${a}`, "YYYY-MM-DD");
+      let flow: any = compareDate;
       let item = this._value!.filter(item => item.date == flow._i)
       return {
         name: dayObject.format("dddd"),
         value: a,
         date: flow._i,
         indexWeek: dayObject.isoWeekday(),
-        availability : item[0]?.availability
+        availability: item[0]?.availability
       };
     }); this.monthSelect = arrayDays;
   }
-  
+
   get value() { return this._value; }
   set value(v: DayState[] | undefined) {
     this._value = v || [];
@@ -97,7 +97,7 @@ export class CalendarUI extends UIDefaultAccessor<DayState[]> {
 
   lastClick: any;
 
-  
+
   onDayClicked(day: string, e: Event) {
     this.dayClicked = true;
     this.choseDay(day, e);
@@ -108,18 +108,18 @@ export class CalendarUI extends UIDefaultAccessor<DayState[]> {
     this.lastClick = e;
     this.currentDay = day;
 
-    if ( !this.embedded )
-      this.toggleDayState(this.currentDay, 'selected');  
+    if (!this.embedded)
+      this.toggleDayState(this.currentDay, 'selected');
   }
 
   private setDOMState(state: Availability | null) {
     const target = this.lastClick.target as HTMLInputElement;
     let others = ['available', 'availablelimits', 'unavailable', 'selected'];
-    if ( state ) others = others.filter(item => item != state)
+    if (state) others = others.filter(item => item != state)
     for (let i = 0; i < others.length; i++)
       target.classList.remove(`${others[i]}`);
-    
-    if ( state ) target.classList.add(`${state}`);
+
+    if (state) target.classList.add(`${state}`);
     this.cd.markForCheck();
   }
 
@@ -127,9 +127,9 @@ export class CalendarUI extends UIDefaultAccessor<DayState[]> {
     const remaining = this.value!.filter(item => item.date !== this.currentDay.date);
     let next;
     if (state != 'nothing') {
-      next  = [...remaining, {
+      next = [...remaining, {
         date: this.currentDay.date,
-        availability: state  
+        availability: state
       }];
       this.setDOMState(state);
     }
@@ -137,7 +137,7 @@ export class CalendarUI extends UIDefaultAccessor<DayState[]> {
       next = remaining;
       this.setDOMState(null);
     }
-    
+
     this.onChange(next);
     this.dayClicked = false;
     console.log(this.value, this._value);
@@ -146,13 +146,13 @@ export class CalendarUI extends UIDefaultAccessor<DayState[]> {
   toggleDayState(day: DayState, targetState: Availability) {
     const [[current], remaining] = filterSplit(this.value!, (item) => item.date == day.date);
     let next;
-    if ( current ) {
+    if (current) {
       next = remaining;
       this.setDOMState(null);
     } else {
       next = [...remaining, {
         date: this.currentDay.date,
-        availability: targetState  
+        availability: targetState
       }];
       this.setDOMState(targetState);
     }

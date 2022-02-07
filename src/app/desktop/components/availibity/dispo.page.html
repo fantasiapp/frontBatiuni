@@ -1,16 +1,17 @@
+<ng-container *ngIf="(user$ | async) as user">
 
-  
   <div class="web-page">
     <section class="filters">
-        <div class="header">
-            <img src="assets/Filtrer par.svg"/>
-             Filtrer par
-          </div>
+      <div class="header">
+        <img src="assets/Filtrer par.svg" />
+        Filtrer par
+      </div>
       <online-filter-form></online-filter-form>
     </section>
-    
+
     <section class="main web-content font-Poppins">
       <searchbar placeholder="Mes missions ..."></searchbar>
-     <calendar></calendar>
+      <calendar [value]="user.profile!.company.disponibilities"></calendar>
     </section>
   </div>
+</ng-container>
