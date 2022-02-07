@@ -60,10 +60,15 @@ $half-square : math.div($square,2);
     overflow-y: scroll;
     width: 100%;
 }
-.space {
-  margin-top: 2rem !important;
 
+.space {
+  margin-top: 50px !important;
 }
+
+adform {
+  height: unset;
+}
+
 .info-bar {
     height: calc(100vh - 300px);
     width: 30%;
@@ -80,8 +85,8 @@ $half-square : math.div($square,2);
 .companyinfo {
   position: absolute;  
   left: 500px;
-  height: 200px;
-  margin-bottom: 2rem;
+  height: 100px;
+
   .weight {
     font-weight: 500;
   }
@@ -93,8 +98,12 @@ $half-square : math.div($square,2);
   margin-top: 1rem;
   display: flex;
   justify-content: space-between;
-  min-width: 700px;
+
+  & > *:not(:last-child) {
+    margin-right: 20px;
+  }
 }
+
 .info{
   flex-direction: column;
   width: 80%;
