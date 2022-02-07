@@ -15,8 +15,11 @@ export const Required = (fieldname: string = '') => {
   return (control: AbstractControl) => {
     let content = control?.value,
       errors: ValidationErrors = {};
+    
+    console.log(content);
             
     if ( !content ) errors['REQUIRED_FIELD'] = fieldname ? [fieldname] : [];
+    console.log('errors:', errors);
     return Object.keys(errors).length ? errors : null;
   }
 }

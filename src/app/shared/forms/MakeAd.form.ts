@@ -5,6 +5,7 @@ import { take } from "rxjs/operators";
 import { JobRow, Post } from "src/models/data/data.model";
 import { Option } from "src/models/option";
 import { SwitchPostType, UploadPost } from "src/models/user/user.actions";
+import { Required } from "src/validators/verify";
 import { defaultFileUIOuput } from "../components/filesUI/files.ui";
 import { InfoService } from "../components/info/info.component";
 
@@ -58,8 +59,9 @@ import { InfoService } from "../components/info/info.component";
     <div class="form-input">
       <label class="position-relative">Détail de la prestation<img class="position-absolute add-detail" src="assets/icons/add.svg" (click)="addDetail()"/></label>
       <ol class="prestation big-space-children-margin" formArrayName="detailedPost">
-        <li *ngFor="let detail of detailedPostControls; index as i" [formGroupName]="i">
-           <input type="text" class="full-width form-element detail" formControlName="description"/>
+        <li *ngFor="let detail of detailedPostControls; index as i" [formGroupName]="i" class="position-relative">
+          <input type="text" class="full-width form-element detail" formControlName="description"/>
+          <img src="assets/X.svg" class="cancel-detail" (click)="cancelDetail(i)"/>
         </li>
       </ol>
     </div>
@@ -181,7 +183,6 @@ import { InfoService } from "../components/info/info.component";
 
     .detail {
       font: inherit;
-      margin-left: 20px;
     }
 
     :host(.page) {
@@ -190,7 +191,16 @@ import { InfoService } from "../components/info/info.component";
       }
     }
 
-    
+    ol {
+      list-style: none;
+    }
+
+    .cancel-detail {
+      position: absolute;
+      top: 0px; right: 5px;
+      transform-origin: center;
+      transform: scale(0.7);
+    }
   `],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -274,7 +284,7 @@ export class MakeAdForm {
 
     ]),
     detailedPost: new FormArray([
-      new FormGroup({description: new FormControl('Prestation 1....')})
+
     ]),
     calendar: new FormControl([])
   });
@@ -308,8 +318,13 @@ export class MakeAdForm {
   addDetail() {
     const details = this.makeAdForm.get('detailedPost') as FormArray;
     details.push(new FormGroup({
-      description: new FormControl('')
+      description: new FormControl('', [Required()])
     }));
+  }
+
+  cancelDetail(index: number) {
+    const details = this.makeAdForm.get('detailedPost') as FormArray;
+    details.removeAt(index);
   }
 
   submit(draft: boolean) {
