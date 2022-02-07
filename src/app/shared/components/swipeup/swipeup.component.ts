@@ -1,8 +1,8 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ComponentFactoryResolver, ComponentRef, EventEmitter, Injectable, Input, Output, TemplateRef, Type, ViewChild, ViewContainerRef } from "@angular/core";
-import { Observable, Subject } from "rxjs";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ComponentFactoryResolver, ComponentRef, EventEmitter, HostBinding, Injectable, Input, Output, TemplateRef, Type, ViewChild, ViewContainerRef } from "@angular/core";
+import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { UIOpenMenu } from "src/app/shared/common/classes";
-import { ContextUpdate, TemplateContext, ViewComponent, ViewMenu, ViewMenuItem, ViewTemplate } from "src/app/shared/common/types";
+import { ContextUpdate, ViewComponent, ViewMenu, ViewMenuItem, ViewTemplate } from "src/app/shared/common/types";
 
 const TRANSITION_DURATION = 250;
 
@@ -27,7 +27,7 @@ export class UISwipeupComponent extends UIOpenMenu {
   menuTemplate!: TemplateRef<any>;
 
   @Input()
-  type: 'list' | 'view' = 'list';
+  type: 'list' | 'view' | 'none' = 'list';
 
   @Input()
   fromService: boolean = false;

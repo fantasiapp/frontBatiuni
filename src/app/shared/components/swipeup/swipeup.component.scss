@@ -21,7 +21,11 @@
   opacity: 0.5;
 }
 
-.menu {  position: absolute;
+.menu {
+  position: absolute;
+}
+
+.menu { 
   bottom: 0;
   transform: translateY(100%);
   transition: transform 250ms ease-out 0s;

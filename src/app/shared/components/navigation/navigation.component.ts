@@ -29,6 +29,7 @@ const PMEMenu = [
 })
 export class NavigationMenu extends Destroy$ {
   currentIndex: BehaviorSubject<number> = new BehaviorSubject(0);
+  private segments: string[] = [];
   mobileView = window.innerWidth <= 768;
 
   menu: BehaviorSubject<MenuItem[]>;
@@ -39,7 +40,8 @@ export class NavigationMenu extends Destroy$ {
   private changeRouteOnMenu(menu: MenuItem[], index: number) {
     let route = menu[index].route;
     this.routeChange.emit(route);
-    this.router.navigate(route ? ['', 'home', route] : ['', 'home']);
+    this.router.navigate(route ? ['', 'home', route, ...this.segments] : ['', 'home']);
+    this.segments = [];
   }
 
   changeRoute(index: number) {
@@ -55,14 +57,14 @@ export class NavigationMenu extends Destroy$ {
       if ( !(event instanceof NavigationEnd) ) return;
       let menu = this.menu.getValue();
       let segments = event.urlAfterRedirects.split('/');
-      console.log(segments);
+      this.segments = segments.slice(3);
       if ( segments.length < 2 ) this.redirectHome();
       if ( segments.length == 2 ) this.currentIndex.next(0);
       if ( segments.length > 2 ) {
         let child = segments[2],
           index = menu.findIndex(item => item.route == child);
-        
-        console.log(child, segments, index);
+                
+        this.segments = segments.slice(3); //save ids and params to use them later
         if ( index >= 0 ) { this.currentIndex.next(index); }
         else this.redirectHome()
       }
