@@ -28,11 +28,15 @@
                 (click)="openPost(draft)" [routerLink]="['','home','make',draft.id]"></offer>
             </ng-container>
             <ng-container *ngSwitchCase="1">
-              <offer *ngFor="let onlinePost of userOnlinePosts" [deletable]="false" [post]="onlinePost"
-                [routerLink]="['','home','make',onlinePost.id]" src="assets/enligne.svg"></offer>
+              <offer *ngFor="let onlinePost of userOnlinePosts" 
+              [deletable]="false"
+               [post]="onlinePost"
+              (click)="showPostResumer(onlinePost.id)"
+               src="assets/enligne.svg"></offer>
             </ng-container>
             <ng-container *ngSwitchCase="2">
-              <offer [deletable]="false" *ngFor="let mission of annonces" (click)="showValidePost = true"
+              <offer [deletable]="false" *ngFor="let mission of annonces" 
+              (click)="showValidePost = true"
                 src="assets/validée.svg"></offer>
             </ng-container>
           </ng-container>
@@ -64,14 +68,20 @@
     </desktop-stickyH>
     <div class="companyinfo">
   <div class="company-logo flex center">
+    
     <img src="assets/enligne.svg" />
+    
   </div>
-  <div class="company-text">
-    <span class="weight">COMPANY NAME</span>
+  <div class="company-text space-children-margin ">
+    <div class="flex column data-star ">
+      <span class="weight white">{{companyResumer?.name | uppercase}}</span>
+      <stars  [value]="companyResumer?.stars || 5"></stars>
+    </div>
+
     <div class="company-data">
-      <span class="weight">N SIRET</span>
-      <span class="weight">Métier </span>
-      <span class="weight">Chiffres d'affaires: </span>
+      <span class="weight">{{postResumer?.numberOfPeople || 1}} {{postResumer?.job?.name}} </span>
+      <span class="weight">{{ postResumer?.dueDate }} </span>
+      <span class="weight">{{this.postResumer?.amount || 0}} {{this.postResumer?.currency}} </span>
     </div>
 </div>
 </div>
@@ -80,10 +90,15 @@
         <step></step>
       </section>
       <section class="main web-content font-Poppins">
-        <h1>&</h1>
+        <h1 class="title-with-line">Résumé de la mission</h1>
       </section>
       <section class="">
-
+        <div class="flex column space-children-margin">
+          <li class="felx row"><img />Modifier les horaires de présence</li>
+          <li class="flex row"><img />Afficher le numéro portable</li>
+          <li class="flex row"><img />Clôturer la mission</li>
+          <li class="flex row"><img />Dupliquer l’annonce</li>
+        </div>
       </section>
     </div>
   </div>

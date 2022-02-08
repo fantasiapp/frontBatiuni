@@ -1,5 +1,5 @@
-@import 'src/styles/mixins';
-@import 'src/styles/variables';
+@import "src/styles/mixins";
+@import "src/styles/variables";
 
 :host {
   display: block;
@@ -48,11 +48,10 @@ offer:hover {
     justify-content: left !important;
   }
 }
-$square : 150px;
+$square: 150px;
 
 .companyinfo {
-  background-color: #f7f7f7;
-  position: absolute;  
+  position: absolute;
   left: 500px;
   height: 100px;
   width: 30%;
@@ -60,12 +59,14 @@ $square : 150px;
   .weight {
     font-weight: 500;
   }
+  .white {
+    color: #fff;
+  }
   .value {
     font-weight: 200;
   }
 }
 .company-data {
-  margin-top: 1rem;
   display: flex;
   justify-content: space-between;
 
@@ -74,7 +75,7 @@ $square : 150px;
   }
 }
 
-.company-logo{
+.company-logo {
   position: fixed;
   top: calc(220px - 60px);
   background-color: white;
@@ -86,9 +87,19 @@ $square : 150px;
 
 .company-text {
   position: relative;
-  left : $square + 50px;
+  left: $square + 50px;
   height: 100px;
-  padding: 1rem;
-  background-color: #f7f7f7;
+  top: -59px;
   z-index: 999;
+  .data-star {
+    & > * {
+      margin-bottom: 0.9rem;
+    }
+  }
+}
+
+.title-with-line {
+  letter-spacing: 0px;
+  color: #333333;
+  font-size: 1.2rem;
 }

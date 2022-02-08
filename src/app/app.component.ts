@@ -33,9 +33,8 @@ export class AppComponent extends Destroy$ {
     super();
     (window as any).app = this;
     this.router.events.pipe(takeUntil(this.destroy$)).subscribe((event) => {
-      if ( event instanceof NavigationStart )
-        console.trace();
-      console.log(event)
+      // if ( event instanceof NavigationStart )
+      // console.log(event)
     })
   }
 

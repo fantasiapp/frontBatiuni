@@ -291,7 +291,6 @@ export class PostRow extends createTable<PostRow>() {
         return company.serialize();
     }
     
-    console.trace();
     throw "Post doesn't belong to any company. dev: Careful when updating"
   };
 };

@@ -32,6 +32,16 @@ export class HomePageComponent extends Destroy$ {
     super()
   }
 
+  // Resumer d'annonce ------->
+  showPostResumer(id:Number) {
+    this.showValidePost = true
+    this.postResumer = PostRow.getById(+id).serialize();
+    this.companyResumer = this.postResumer ? PostRow.getCompany(this.postResumer) : null;
+  }
+  companyResumer: Company | null = null;
+  postResumer!: Post;
+  // END RESUMER D'ANNONCE
+
   viewPostLength() {
     let length = 0;
     if(this.activeView == 0) length = this.userDrafts.length
