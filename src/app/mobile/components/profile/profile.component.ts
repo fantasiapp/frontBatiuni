@@ -65,8 +65,7 @@ export class ProfileComponent {
   }
 
   swipeModifyPicture() {
-    console.log('swiping');
-    console.log(this.openModifyPicture = true);
+    this.openModifyPicture = true;
   }
   
   logout() {

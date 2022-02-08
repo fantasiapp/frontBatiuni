@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, SimpleChange, SimpleChanges, ViewChild, TemplateRef } from "@angular/core";
+import { Component, ChangeDetectionStrategy, SimpleChange, SimpleChanges, ViewChild, TemplateRef, ChangeDetectorRef } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { Select, Store } from "@ngxs/store";
 import { combineLatest, Observable } from "rxjs";
@@ -8,6 +8,8 @@ import { DistanceSliderConfig, SalarySliderConfig } from "src/app/shared/common/
 import { filterSplit } from "src/app/shared/common/functions";
 import { InfoService } from "src/app/shared/components/info/info.component";
 import { PopupService } from "src/app/shared/components/popup/popup.component";
+import { ProfileCardComponent } from "src/app/shared/components/profile-card/profile.card";
+import { SlidemenuService } from "src/app/shared/components/slidemenu/slidemenu.component";
 import { SwipeupService } from "src/app/shared/components/swipeup/swipeup.component";
 import { Company, Post, PostRow } from "src/models/data/data.model";
 import { DataState } from "src/models/data/data.state";
@@ -37,7 +39,7 @@ export class HomeComponent extends Destroy$ {
   @ViewChild('candidates', {read: TemplateRef, static: true})
   candidatesTemplate!: TemplateRef<any>;
 
-  constructor(private store: Store, private info: InfoService, private popup: PopupService, private swipeupService: SwipeupService) {
+  constructor(private cd: ChangeDetectorRef, private store: Store, private info: InfoService, private popup: PopupService, private swipeupService: SwipeupService) {
     super()
   }
 
@@ -81,17 +83,23 @@ export class HomeComponent extends Destroy$ {
   }
 
   duplicatePost(id: number) {
+    this.info.show("info", "Duplication en cours...", Infinity);
     this.store.dispatch(new DuplicatePost(id)).pipe(take(1)).subscribe(() => {
       this.checkMenu = {open: false, post: null, swipeup: false};
+      this.info.hide();
+      this.cd.markForCheck();
     }, () => {
       this.info.show("error", "Erreur lors de la duplication de l'annonce");
     });
   }
 
   pausePost(id: number) {
+    this.info.show("info", "En cours...", Infinity);
     this.store.dispatch(new SwitchPostType(id)).pipe(take(1)).subscribe(() => {
       this.checkMenu = {open: false, post: null, swipeup: false};
       this.popup.show(this.pausePostTemplate);
+      this.info.hide();
+      this.cd.markForCheck();
     }, () => {
       this.info.show("error", "Echec");
     });
@@ -100,6 +108,7 @@ export class HomeComponent extends Destroy$ {
   deletePost(id: number) {
     this.store.dispatch(new DeletePost(id)).pipe(take(1)).subscribe(() => {
       this.checkMenu = {open: false, post: null, swipeup: false};
+      this.cd.markForCheck();
     }, () => {
       this.info.show("error", 'Echec de suppression..');
     });
@@ -113,12 +122,14 @@ export class HomeComponent extends Destroy$ {
   }
 
   showCandidates() {
+    const candidates = (this.checkMenu.post?.candidates || []).map(({company}) => company);
     this.checkMenu.swipeup = false;
     this.swipeupService.show({
       type: 'template',
       template: this.candidatesTemplate,
       context: {
-        $implicit: [1]
+        $implicit: candidates,
+        job: this.checkMenu.post!.job
       }
     })
   }
@@ -129,8 +140,7 @@ export class HomeComponent extends Destroy$ {
       .subscribe(
         success => this.info.show("success", "Candidature envoyée", 2000),
         error => this.info.show("error", "Echec de l'envoi de la candidature", 5000)
-      );
-    
+      ); 
   }
 
   devis = ['Par Heure', 'Par Jour', 'Par Semaine'].map((name, id) => ({id, name}));

@@ -52,7 +52,7 @@ import { DownloadFile } from "src/models/user/user.actions";
         </ul>
       </div>
     </div>
-    <div (click)="collapsed = !collapsed" class="collapse-controller full-width center-text">
+    <div *ngIf="collapsible" (click)="collapsed = !collapsed" class="collapse-controller full-width center-text">
       <span>{{collapsed ? 'Lire la suite' : 'Lire moins'}}</span>  <img src="assets/arrowdown.svg" [style.transform]="'rotate(' + (180 * +!collapsed) + 'deg)'"/>
     </div>
   </div>
@@ -64,6 +64,13 @@ import { DownloadFile } from "src/models/user/user.actions";
 export class UIAnnonceResume {
   @Input()
   collapsed: boolean = false;
+  collapsible: boolean = true;
+
+  @Input('collapsible')
+  set collapsibleSet(value: boolean) {
+    this.collapsible = value;
+    if ( !value ) this.collapsed = false;
+  }
 
   company: Company | null = null;
 
@@ -73,6 +80,7 @@ export class UIAnnonceResume {
   set post(p: Post | null) {
     this._post = p;
     this.company = this.post ? PostRow.getCompany(this.post) : null;
+    console.log(p, this.company);
   }
 
   get post() { return this._post; }

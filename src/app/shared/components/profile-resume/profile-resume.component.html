@@ -1,4 +1,8 @@
-<profile-image [user]="user"></profile-image>
+<section class="section">
+  <profile-image [user]="user"></profile-image>
+  <img *ngIf="canChangePicture" src="assets/icons/modify.svg" class="modify-icon image" (click)="changePicture.emit()"/>
+</section>
+
 <switch *ngIf="switch" off="Profile ST" on="Profil PME"  style="text-align: center;" [value]="user.viewType" 
 (valueChange)="profileChanged.emit($event)" [disabled]="user.profile!.company.role.id !== 3 || null"></switch>
 <section class="quick-intro flex column center-cross small-space-children-margin">
@@ -8,6 +12,6 @@
     <span>{{ user.profile!.cellPhone | space: 2:1 }}</span>
   </ng-container>
   <a *ngIf="changeImage" class="blue">Modifier l’image de profil</a>
-  <stars *ngIf="star" (click)="onStarClicked()" value="3.9"></stars>
+  <stars *ngIf="star" (click)="ratingsClicked.emit()" value="3.9"></stars>
 </section>
 <ng-content></ng-content>

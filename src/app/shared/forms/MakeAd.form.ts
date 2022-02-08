@@ -349,8 +349,8 @@ export class MakeAdForm {
       }
       //switch type
     } else {
-      this.store.dispatch(UploadPost.fromPostForm(this.makeAdForm.value, draft)).pipe(take(1)).subscribe(() => {
       this.info.show("info", "Envoi de l'annonce...", Infinity);
+      this.store.dispatch(UploadPost.fromPostForm(this.makeAdForm.value, draft)).pipe(take(1)).subscribe(() => {
         this.info.show("success", "Annonce Envoyée", 2000);
         this.done.emit();
       }, () => {

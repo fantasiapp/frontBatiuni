@@ -28,6 +28,7 @@ import { AppRoutingModule } from "./routing/mobile-routing.module";
 import { ForgotPassword } from "./components/forgot_password/forgot.password";
 import { MailSender } from "./components/only_mail/only.mail";
 import { ResponsePage } from "./components/response/reponse.page";
+import { ExtendedProfileComponent } from "./components/extended-profile/extended-profile.component";
 
 
 @NgModule({
@@ -55,7 +56,8 @@ import { ResponsePage } from "./components/response/reponse.page";
     SuiviPME,
     ForgotPassword,
     MailSender,
-    ResponsePage
+    ResponsePage,
+    ExtendedProfileComponent
   ],
   imports: [
     CommonModule,

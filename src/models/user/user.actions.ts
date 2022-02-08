@@ -91,6 +91,8 @@ export class UploadFile {
   expirationDate: string;
   fileBase64: string;
   Post?: number;
+  companyFile: boolean = true;
+  id?: number = 0;
 
   //tell JLW to unify formats
   constructor(src: FileUIOutput, nature: string, name?: string) {
@@ -105,12 +107,16 @@ export class UploadFile {
 export class DeleteFile {
   static readonly type = '[File] Delete';
   action = 'deleteFile';
+  companyFile: boolean = true;
+
   constructor(public id: number) {}
 };
 
 export class DownloadFile {
   action = 'downloadFile';
   static readonly type = '[File] Download';
+  companyFile: boolean = true;
+
   constructor(public id: number) {}
 };
 

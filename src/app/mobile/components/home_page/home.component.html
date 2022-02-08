@@ -70,12 +70,9 @@
   <slidemenu [open]="false" [header]="false" #reponse>
       <header class="clear-margin full-width sticky-header flex center-cross annonce" customHeader>
         <img (click)="reponse.close()" src="assets/arrowlblack.svg" />
-
         <span class="grow center-text text-light-emphasis">Annonce en Ligne</span>
       </header>
-  
       <ng-container content>
-
         <div class="space-children-margin page-content-without-nav hosted-page flex  center-cross column candidature">
           <profile-resume [switch]="false"class="flex column center-cross space-children-margin " [user]="user" >
             <span>
@@ -139,7 +136,7 @@
     </header>
 
     <ng-container content>
-      <annonce-resume class="hosted-page" [collapsed]="false" [post]="checkMenu.post!" #resume></annonce-resume>
+      <annonce-resume class="hosted-page" [collapsible]="false" [post]="checkMenu.post!" #resume></annonce-resume>
 
       <div class="hosted-page" style="padding-top: 0;" *ngIf="!user.viewType">
         <hr class="dashed"/>
@@ -159,7 +156,7 @@
       </div>
 
       <swipeup [(open)]="checkMenu.swipeup">
-        <li data-notification-number="2" class="notification" (click)="showCandidates()">Afficher les réponses</li>
+        <li [attr.data-notification-number]="(checkMenu.post?.candidates || []).length" class="notification" (click)="showCandidates()">Afficher les réponses</li>
         <li [routerLink]="['','booster']">Booster Mon annonce</li>
         <li (click)="deletePost(checkMenu.post!.id)">Supprimer l'annonce</li>
         <li (click)="duplicatePost(checkMenu.post!.id)">Dupliquer l'annonce</li>
@@ -202,9 +199,9 @@
   </div>
 </ng-template>
 
-<ng-template #candidates let-candidates>
+<ng-template #candidates let-candidates let-job="job">
   <div class="hosted-page">
-    <p class="font-Poppins">Vous avez deux réponses</p>
-    <profile-card *ngFor="let candidate of candidates" [company]="candidate"></profile-card>
+    <p class="font-Poppins">Vous avez: {{ candidates.length }} réponses</p>
+    <profile-card *ngFor="let candidate of candidates" [job]="job" [company]="candidate"></profile-card>
   </div>
 </ng-template>
