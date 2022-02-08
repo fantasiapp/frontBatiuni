@@ -5,7 +5,7 @@ import { catchError, concatMap, map, mergeMap, take, tap } from "rxjs/operators"
 import { ChangePassword, ChangeProfileType, ChangeProfilePicture, GetUserData, ModifyUserProfile, UploadFile, DownloadFile, UploadPost, DeletePost, DuplicatePost, SwitchPostType, DeleteFile, ModifyDisponibility, ApplyPost } from "./user.actions";
 import { User } from "./user.model";
 import { Logout } from "../auth/auth.actions";
-import { of, throwError } from "rxjs";
+import { concat, of, throwError } from "rxjs";
 import { DisponibilityRow, CompanyRow, DetailedPostRow, FilesRow, Mapper, PostRow, UserProfileRow, JobRow, CandidateRow } from "../data/data.model";
 import { HttpService } from "src/app/services/http.service";
 import { DeleteData, StoreData } from "../data/data.actions";
@@ -64,15 +64,20 @@ export class UserState {
         delete response['uploadFile'];
         // add to cached files
         const id = +Object.keys(response)[0],
-          file = new FilesRow(id, [...response[id], action.fileBase64]),
-          oldFile = user.profile!.company.files.find(companyFile => companyFile.name == file.name),
-          company = CompanyRow.getById(user.profile!.company.id);
+          file = new FilesRow(id, [...response[id], action.fileBase64]);
+          
         //add to company
-        if ( oldFile )
-          company.spliceValue('Files', oldFile.id, file);
-        else
-          company.pushValue('Files', file);
-
+        if ( action.companyFile ) {
+          const oldFile = user.profile!.company.files.find(companyFile => companyFile.name == file.name),
+            company = CompanyRow.getById(user.profile!.company.id);
+          
+          if ( oldFile )
+            company.spliceValue('Files', oldFile.id, file);
+          else
+            company.pushValue('Files', file);
+        }
+        
+        action.id = id;
         //find a way to make minimal updates with a tree-like-structure
         ctx.patchState({profile: UserProfileRow.getById(user.profile!.id).serialize()});
       })
@@ -90,7 +95,8 @@ export class UserState {
         delete response['deleteFile'];
         // add to cached files
 
-        CompanyRow.getById(user.profile!.company.id).spliceValue('Files', action.id);
+        if ( action.companyFile )
+          CompanyRow.getById(user.profile!.company.id).spliceValue('Files', action.id);
 
         //find a way to make minimal updates with a tree-like-structure
         ctx.patchState({profile: UserProfileRow.getById(user.profile!.id).serialize()});
@@ -114,7 +120,8 @@ export class UserState {
           profile = UserProfileRow.getById(user.profile!.id);
         
         //add to company
-        profile.company.spliceValue('Files', oldFile.id, file);
+        if ( action.companyFile )
+          profile.company.spliceValue('Files', oldFile.id, file);
         ctx.patchState({profile: profile.serialize()})
       })
     );
@@ -234,9 +241,10 @@ export class UserState {
           upload.Post = post.id;
         });
 
-        return ctx.dispatch(uploads);
+        return ctx.dispatch(uploads).pipe(map(() => post));
       }),
-      concatMap(() => {
+      concatMap((post: any) => {
+        post.setField('Files', uploads.map(({id}) => FilesRow.getById(id!)));
         ctx.patchState({profile: UserProfileRow.getById(profile!.id).serialize()});
         return of(true);
       })
@@ -337,8 +345,6 @@ export class UserState {
 
   @Action(ApplyPost)
   applyPost(ctx: StateContext<User>, action: ApplyPost) {
-    console.log('applying for post');
-
     return this.http.get('data', action).pipe(
       tap((response: any) => {
         if ( response[action.action] != 'OK' )

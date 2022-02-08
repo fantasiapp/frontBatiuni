@@ -385,6 +385,10 @@ export class Mapper {
     (mapped, key) => {mapped[key] = false; return mapped}, ({} as Dict<boolean>)
   );
 
+  private static ongoing: Dict<boolean> = Object.keys(Mapper.mapping).reduce(
+    (ongoing, key) => {ongoing[key] = false; return ongoing}, ({} as Dict<boolean>)
+  );
+
   static reset() {
     Object.entries<Value | Table>(this.mapping).forEach(
       ([name, clazz]) => {
@@ -395,6 +399,10 @@ export class Mapper {
     
     this.mapped = Object.keys(Mapper.mapping).reduce(
       (mapped, key) => {mapped[key] = false; return mapped}, ({} as Dict<boolean>)
+    );
+
+    this.ongoing = Object.keys(Mapper.mapping).reduce(
+      (ongoing, key) => {ongoing[key] = false; return ongoing}, ({} as Dict<boolean>)
     );
   }
 
@@ -519,16 +527,19 @@ export class Mapper {
     let indices = data[name + 'Indices'] as number[],
       table = this.getTableClass(name);
         
-    this.mapped[name] = true;
+    this.ongoing[name] = true;
     let dependencies = indices.map(index => {
       let name = getByValue(table.fields, index)!,
         field = this.getField(name);
       
         //map this class before
       if ( !this.mapped[field.name] ) {;
-        if ( (definedTables as any).includes(field.name) )
-          this.mapTable(data, field.name as tableName);
-        else this.staticMap(data);
+        if ( (definedTables as any).includes(field.name) ) {
+          if ( !this.ongoing[name] )
+            this.mapTable(data, field.name as tableName);
+          else
+            ;
+        } else this.staticMap(data);
       };
       return field;
     });
@@ -536,17 +547,31 @@ export class Mapper {
     Object.entries(this.readTable(data, name)).forEach(([id, src]) => {
       let values = src.slice();
       indices.forEach((index, i) => {
-        values[index] = Array.isArray(values[index]) ?
-          values[index].map((id: string) => dependencies[i].class.getById(+id))
-          : dependencies[i].class.getById(values[index]);        
+        if ( !this.ongoing[dependencies[i].name] ) {
+          values[index] = Array.isArray(values[index]) ?
+            values[index].map((id: string) => dependencies[i].class.getById(+id))
+            : dependencies[i].class.getById(values[index]); 
+        }
       });
 
       new table(+id, values);
     });
+    this.mapped[name] = true;
+    this.ongoing[name] = false;
   };
 
   static mapTable(data: any, name: tableName, onlyIfUnmapped: boolean = true) {
     if ( onlyIfUnmapped && this.mapped[name] ) return;
+    if ( this.isSimpleTable(data, name) )
+      this.mapSimpleTable(data, name);
+    else
+      this.mapTableDependencies(data, name);
+  }
+
+  static mapTableLater(data: any, name: tableName) {
+    if ( this.mapped[name] ) return;
+
+
     if ( this.isSimpleTable(data, name) )
       this.mapSimpleTable(data, name);
     else

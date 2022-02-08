@@ -11,8 +11,10 @@
   <ul *ngIf="type == 'view'" class="content background-white hosted-page">
     <ng-content select="[view]"></ng-content>
   </ul>
-
-  <ng-container *ngIf="fromService" #view></ng-container>
+  
+  <div class="content background-white">
+    <ng-container *ngIf="fromService" #view></ng-container>
+  </div>
 </div>
 
 <ng-template #menuTemplate let-menu let-items="items">

@@ -24,6 +24,9 @@ export class ProfileResume {
   @Input()
   changeImage: boolean = false;
 
+  @Input()
+  canChangePicture: boolean = false;
+
   @Output()
   ratingsClicked = new EventEmitter();
 
@@ -31,12 +34,5 @@ export class ProfileResume {
   profileChanged = new EventEmitter<boolean>();
 
   @Output()
-  changeImageAction = new EventEmitter<boolean>();
-
-  onStarClicked() {
-    this.ratingsClicked.emit();
-  }
-  onChangeImage() {
-    this.ratingsClicked.emit(true);
-  }
+  changePicture = new EventEmitter();
 };

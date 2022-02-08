@@ -54,7 +54,6 @@ export class NavigationMenu extends Destroy$ {
     super();
     this.menu = new BehaviorSubject(this.store.selectSnapshot<User>(UserState).viewType ? PMEMenu : STMenu);
     this.router.events.pipe(takeUntil(this.destroy$)).subscribe((event) => {
-      console.log(event)
       if (!(event instanceof NavigationEnd)) return;
       let menu = this.menu.getValue();
       let segments = event.urlAfterRedirects.split('/');
