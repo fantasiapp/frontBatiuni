@@ -1,13 +1,12 @@
 <section class="section">
-  <profile-image [user]="user"></profile-image>
+  <profile-image [company]="company"></profile-image>
   <img *ngIf="canChangePicture" src="assets/icons/modify.svg" class="modify-icon image" (click)="changePicture.emit()"/>
 </section>
 
-<switch *ngIf="switch" off="Profile ST" on="Profil PME"  style="text-align: center;" [value]="user.viewType" 
-(valueChange)="profileChanged.emit($event)" [disabled]="user.profile!.company.role.id !== 3 || null"></switch>
+<switch *ngIf="switch" off="Profile ST" on="Profil PME"  style="text-align: center;" [value]="user?.viewType || false"  (valueChange)="profileChanged.emit($event)" [disabled]="company.role.id !== 3 || null"></switch>
 <section class="quick-intro flex column center-cross small-space-children-margin">
-  <span class="text-emphasis">{{ (user.profile!.firstName + " " + user.profile!.lastName) | titlecase }}</span>
-  <ng-container *ngIf="showMore">
+  <span class="text-emphasis">{{ (user ? (user.profile!.firstName + " " + user.profile!.lastName) : company.name) | titlecase }}</span>
+  <ng-container *ngIf="user && showMore">
     <span>{{ user.profile!.user }}</span>
     <span>{{ user.profile!.cellPhone | space: 2:1 }}</span>
   </ng-container>

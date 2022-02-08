@@ -1,34 +1,34 @@
 <div class="hosted-page flex column center-cross space-children-margin page-content font-Poppins">
-  <profile-resume [canChangePicture]="false" class="flex column center-cross space-children-margin" (profileChanged)="profileChanged.emit($event)" (ratingsClicked)="ratingsClicked.emit($event)"  [showMore]="true" [user]="user"></profile-resume>
+  <profile-resume [canChangePicture]="false" class="flex column center-cross space-children-margin" (profileChanged)="profileChanged.emit($event)" (ratingsClicked)="ratingsClicked.emit($event)"  [showMore]="true" [company]="company"></profile-resume>
 
   <section class="job-description full-width flex column space-children-margin">
     <span>
       <span class="text-light-emphasis">Nom de l'entreprise : </span> <span
-        class="value">{{user.profile!.company.name}}</span>
+        class="value">{{company.name}}</span>
     </span>
     <span>
       <span class="text-light-emphasis">N SIRET : </span> <span
-        class="value">{{user.profile!.company.siret}}</span>
+        class="value">{{company.siret}}</span>
     </span>
     <span>
       <span class="text-light-emphasis">Métier : </span>
-      <span *ngFor="let job of user.profile!.company.jobs!" class="value">{{ job.number }} {{ job.job.name }}, </span>
+      <span *ngFor="let job of company.jobs!" class="value">{{ job.number }} {{ job.job.name }}, </span>
     </span>
     <span>
       <span class="text-light-emphasis">Chiffres d'affaires : </span>
-      <span class="value">{{user.profile!.company.revenue | currency: 'EUR':'symbol':'1.0-0' }}</span>
+      <span class="value">{{company.revenue | currency: 'EUR':'symbol':'1.0-0' }}</span>
     </span>
     <span>
       <span class="text-light-emphasis">Capital : </span>
-      <span class="value">{{user.profile!.company.capital | currency: 'EUR':'symbol':'1.0-0' }}</span>
+      <span class="value">{{company.capital | currency: 'EUR':'symbol':'1.0-0' }}</span>
     </span>
     <span>
       <span class="text-light-emphasis">Numéro fixe : </span>
-      <span class="value">{{user.profile!.company.companyPhone | space: 2:1 }}</span>
+      <span class="value">{{company.companyPhone | space: 2:1 }}</span>
     </span>
     <span>
       <span class="text-light-emphasis">Site internet : </span>
-      <span class="value link"><a [href]="user.profile!.company.webSite">{{user.profile!.company.webSite}}</a></span>
+      <span class="value link"><a [href]="company.webSite">{{company.webSite}}</a></span>
     </span>
     <span>
       <span class="text-light-emphasis">Montant Fixe : </span>

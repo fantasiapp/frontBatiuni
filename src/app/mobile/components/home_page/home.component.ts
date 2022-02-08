@@ -129,7 +129,7 @@ export class HomeComponent extends Destroy$ {
       template: this.candidatesTemplate,
       context: {
         $implicit: candidates,
-        job: this.checkMenu.post!.job
+        job: this.checkMenu.post!.job.id
       }
     })
   }

@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, HostBinding, Input, Output } from "@angular/core";
+import { Company } from "src/models/data/data.model";
 import { User } from "src/models/user/user.model";
 
 @Component({
@@ -9,8 +10,16 @@ import { User } from "src/models/user/user.model";
 })
 export class ProfileResume {
 
+  @Input('user')
+  set companyFromUser(user: User) {
+    this.company = user.profile!.company;
+    this.user = user;
+  }
+
+  user?: User;
+
   @Input()
-  user!: User;
+  company!: Company;
 
   @Input()
   switch: boolean = true;

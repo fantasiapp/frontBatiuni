@@ -1,4 +1,8 @@
 import { ChangeDetectionStrategy, Component, Input, SimpleChanges } from "@angular/core";
+import { Store } from "@ngxs/store";
+import { take } from "rxjs/operators";
+import { Company, FilesRow } from "src/models/data/data.model";
+import { DownloadFile } from "src/models/user/user.actions";
 import { User } from "src/models/user/user.model";
 import { ImageGenerator } from "../../services/image-generator.service";
 @Component({
@@ -12,21 +16,34 @@ export class UIProfileImageComponent {
   @Input()
   src: string | null = null;
 
-  @Input()
   user?: User;
-  
-  constructor(private imageGenerator: ImageGenerator) {}
 
-  ngOnInit() {
-    if ( !this.src && this.user ) {
-      const fullname = this.user.profile!.firstName[0].toUpperCase() + this.user.profile!.lastName[0].toUpperCase();
-      this.src = this.user.imageUrl || this.imageGenerator.generate(fullname);
-    }
+  @Input('user')
+  set companyFromUser(user: User) {
+    this.company = user.profile!.company;
+    this.user = user;
   }
 
+  @Input()
+  company!: Company;
+  
+  constructor(private store: Store, private imageGenerator: ImageGenerator) {}
+
   ngOnChanges(changes: SimpleChanges) {
-    if ( changes['user'] )
-      this.src = this.user?.imageUrl || this.src;
+    const file = this.company ? this.company.files.find(file => file.nature == 'userImage') : null;
+    console.log(changes, file?.content.length);
+    if ( file ) {
+      if ( file.content ) this.src = `data:image/${file.ext};base64,${file.content}`;
+      else {
+        this.store.dispatch(new DownloadFile(file.id)).pipe(take(1))
+        .subscribe(() => {
+          this.src = `data:image/${file.ext};base64,${FilesRow.getById(file.id).content}`;
+        });
+      }
+    } else if ( this.user ) {
+      const fullname = this.user.profile!.firstName[0].toUpperCase() + this.user.profile!.lastName[0].toUpperCase();
+      this.src = this.imageGenerator.generate(fullname);
+    }
   }
 
   static getAvailabilityColor(availability: number) {

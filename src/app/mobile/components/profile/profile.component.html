@@ -6,7 +6,7 @@
     <img src="assets/menu.svg" (click)="openMenu = true" />
   </header>
 
-  <extended-profile (ratingsClicked)="openRatings = true" (profileChanged)="changeProfileType($event)" [user]="user">
+  <extended-profile [user]="user" (ratingsClicked)="openRatings = true" (profileChanged)="changeProfileType($event)">
 
   </extended-profile>
 
@@ -32,7 +32,7 @@
         <li (click)="selectPhoto()">Télécharger une image</li>
       </swipeup>
 
-      <profile-resume [canChangePicture]="!modifyPassword" class="flex column center-cross space-children-margin" [user]="user" (changePicture)="swipeModifyPicture()"></profile-resume>
+      <profile-resume [company]="user.profile!.company" [canChangePicture]="!modifyPassword" class="flex column center-cross space-children-margin" (changePicture)="swipeModifyPicture()"></profile-resume>
   
       <div class="form-container full-width grow flex column position-relative">
         <modify-password-form *ngIf="modifyPassword" class="grow" (submitted)="changePassword($event)"></modify-password-form>
@@ -45,10 +45,8 @@
     <div class="full-width center-text text-emphasis" header>Mes notes</div>
     <div class="hosted-page flex column center-cross space-children-margin" content>
 
-      <profile-image [user]="user"></profile-image>
-      <switch off="Profile ST" on="Profil PME" style="text-align: center;"></switch>
+      <profile-resume [company]="user.profile!.company" class="flex column center-cross space-children-margin"></profile-resume>
 
-      <stars value="3.9"></stars>
       <span class="full-width section " style="text-align: center;font-size: 12px; margin-bottom: 10px;">Demander une
         recommandation</span>
       <section class="full-width section modify-profile">

@@ -355,6 +355,7 @@ export type Candidate = Serialized<CandidateRow>;
 //enforce the model and do operations
 
 import { filterMap, getByValue } from 'src/app/shared/common/functions';
+import { Observable } from "rxjs";
 
 type Dict<T> = {[key: string]: T};
 
