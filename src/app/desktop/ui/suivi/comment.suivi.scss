@@ -1,0 +1,55 @@
+@import 'src/styles/variables';
+
+.suivi-chantier{
+    padding: 0;
+    background-color: white;
+}
+
+.user-info{
+    span {
+        display: inline-block;
+        font-size: 0.9em;
+    }
+    .user-name{
+        font-weight: 500;
+        margin-bottom: 0.3em;
+    }
+    .post-date{
+        font-weight: 200;
+    }
+}
+.comment-provider{
+    height: 100px;
+}
+.user-image{
+    transform: scale(0.5) rotate(45deg);
+    margin: 0;
+}
+.comment-image{
+    img{
+        height: 225px;
+        width: 100%;
+    }
+}
+.suivi-comment{
+    white-space: normal;
+    border-bottom: inherit;
+    padding: $tab-spacing;
+    line-height: 1.5em;
+}
+.response{
+    justify-content: space-between;
+    padding: $tab-spacing;
+    input{
+    width: 80%;
+    white-space: normal;
+    }
+}
+
+.title {
+    display: block;
+    color: $secondaryBackground;
+    font-size: 1.1em;
+    margin-bottom: $spacing-margin;
+    font-weight: 500;
+}

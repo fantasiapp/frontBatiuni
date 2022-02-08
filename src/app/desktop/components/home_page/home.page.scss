@@ -91,6 +91,9 @@ $square: 150px;
   height: 100px;
   top: -59px;
   z-index: 999;
+  @include range(1000px , 1500px) {
+    display: none;
+  }
   .data-star {
     & > * {
       margin-bottom: 0.9rem;
@@ -101,6 +104,7 @@ $square: 150px;
 .title-with-line {
   letter-spacing: 0px;
   color: #333333;
+  margin-left: 100px auto;
   font-size: 1.2rem;
   position: relative;
 }
@@ -109,9 +113,89 @@ $square: 150px;
   content: "";
   display: block;
   width: 50px;
-  height: 2px;
+  height: 4px;
   background: $secondaryBackground;
-  left: 0;
+  left: -10%;
   top: 50%;
   position: absolute;
 }
+.web-content {
+  margin-top: 2rem !important;
+}
+$options : 26px;
+.options-list {
+  li {
+    list-style-type: none;
+    cursor: pointer;
+    img {
+      height: $options;
+      margin-right: 0.4rem;
+
+    }
+  }
+  li:hover{
+    transform: scale(1.02);
+  }
+}
+.description {
+  color: #999999 !important;
+}
+
+$details-padding: 1em;
+
+details {
+  height: fit-content;
+	font-size: 1rem;
+	position: relative;
+	.summary-title {
+		user-select: none;
+    color: #0D6191;
+    font-weight: 500;
+	}
+
+	&:hover {
+		cursor: pointer;
+	}
+
+	.summary-content {
+		cursor: default;
+		font-weight: 300;
+		line-height: 1.5;
+	}
+
+ 
+
+	summary {
+    background-color: white;
+
+		list-style: none;
+		padding: $details-padding;
+
+		&:focus {
+			outline: none;
+		}
+
+		&:hover .summary-arrow-up svg {
+			opacity: 1;
+		}
+	}
+
+	.summary-arrow-up,
+	.summary-arrow-down {
+		pointer-events: none;
+		position: absolute;
+		top: 0.75em;
+		left: 20%;
+		background: #ffffff;
+
+		svg {
+			display: block;
+		}
+	}
+
+	summary::-webkit-details-marker {
+		display: none;
+	}
+}
+
+

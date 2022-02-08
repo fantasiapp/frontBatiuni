@@ -129,24 +129,47 @@
       </footer>
       </ng-container>
   </slidemenu>
-  <slidemenu [(open)]="checkMenu.open" [header]="false" #slideOnlinePost>
+
+  <slidemenu [(open)]="checkMenu.open" [footer]="!user.viewType" [header]="false" #slideOnlinePost>
     <header class="clear-margin full-width sticky-header flex center-cross annonce" customHeader>
       <img (click)="slideOnlinePost.close()" src="assets/arrowlblack.svg" />
       <span class="grow center-text text-light-emphasis">Annonce en Ligne</span>
-      <img (click)="checkPostMenu()" src="assets/Option.svg" />
+      <img *ngIf="user.viewType; else star" (click)="checkPostMenu()" src="assets/Option.svg"/>
+      <ng-template #star><star-systeme [nstars]="1"></star-systeme></ng-template>
     </header>
 
     <ng-container content>
-      <annonce-resume class="hosted-page" [collapsed]="false" [post]="checkMenu.post!"></annonce-resume>
+      <annonce-resume class="hosted-page" [collapsed]="false" [post]="checkMenu.post!" #resume></annonce-resume>
+
+      <div class="hosted-page" style="padding-top: 0;" *ngIf="!user.viewType">
+        <hr class="dashed"/>
+        <form class="devis form-control" [formGroup]="form">
+          <h5>Pour postuler veuillez proposer votre devis</h5>
+  
+          <div class="form-input">
+            <label>Montant</label>
+            <div class="flex row space-between remuneration">
+              <input type="number" min="0" style="max-height: 51px" class="grow form-element" placeholder="Montant" formControlName="amount">
+              <div class="option-container">
+                <options [searchable]="false" type="radio" [options]="devis" formControlName="devis"></options>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
 
       <swipeup [(open)]="checkMenu.swipeup">
-        <li data-notification-number="2" class="notification">Afficher les réponses</li>
+        <li data-notification-number="2" class="notification" (click)="showCandidates()">Afficher les réponses</li>
         <li [routerLink]="['','booster']">Booster Mon annonce</li>
         <li (click)="deletePost(checkMenu.post!.id)">Supprimer l'annonce</li>
         <li (click)="duplicatePost(checkMenu.post!.id)">Dupliquer l'annonce</li>
         <li (click)="pausePost(checkMenu.post!.id)">Mettre en pause l'annonce</li>
       </swipeup>
     </ng-container>    
+
+    <button class="button full-width active" [disabled]="form.invalid" (click)="applyPost(checkMenu.post!)" footer>
+      Postuler
+    </button>
   </slidemenu>
   <!-- Maybe slide menu should hide their content when they are not open ?? -->
   <swipeup [(open)]="openReponseMenu">
@@ -154,9 +177,6 @@
     <li class="flex center-cross"><img src="a " />Refuser la candidature</li>
     <li class="flex center-cross"><img src=" a" />Bloquer le contact</li>
   </swipeup>
-
-
-  
 </ng-container>
 
 <!-- </ng-container> -->
@@ -166,6 +186,7 @@
   <p>Votre annonce a bien été mise en pause</p>
   <p>Vous pouvez toujours l'accéder à partir de vos brouillons.</p>
 </ng-template>
+
 <ng-template #acceptOffer let-user>
   <div class="offres-logo"><img src="assets/validée.svg"/>
   
@@ -178,5 +199,12 @@
   <div class="flex column space-children-margin full-width">
     <button class="button active">Valider</button>
     <button class="button passive">Annuler</button>
+  </div>
+</ng-template>
+
+<ng-template #candidates let-candidates>
+  <div class="hosted-page">
+    <p class="font-Poppins">Vous avez deux réponses</p>
+    <profile-card *ngFor="let candidate of candidates" [company]="candidate"></profile-card>
   </div>
 </ng-template>

@@ -28,16 +28,12 @@
                 (click)="openPost(draft)" [routerLink]="['','home','make',draft.id]"></offer>
             </ng-container>
             <ng-container *ngSwitchCase="1">
-              <offer *ngFor="let onlinePost of userOnlinePosts" 
-              [deletable]="false"
-               [post]="onlinePost"
-              (click)="showPostResumer(onlinePost.id)"
-               src="assets/enligne.svg"></offer>
+              <offer *ngFor="let onlinePost of userOnlinePosts" [deletable]="false" [post]="onlinePost"
+                (click)="showPostResumer(onlinePost.id,'enligne')" src="assets/enligne.svg"></offer>
             </ng-container>
             <ng-container *ngSwitchCase="2">
-              <offer [deletable]="false" *ngFor="let mission of annonces" 
-              (click)="showValidePost = true"
-                src="assets/validée.svg"></offer>
+              <offer [deletable]="false" *ngFor="let mission of annonces"
+                (click)="showPostResumer(mission.id,'valider')" src="assets/validée.svg"></offer>
             </ng-container>
           </ng-container>
         </div>
@@ -67,47 +63,137 @@
       </div>
     </desktop-stickyH>
     <div class="companyinfo">
-  <div class="company-logo flex center">
-    
-    <img src="assets/enligne.svg" />
-    
-  </div>
-  <div class="company-text space-children-margin ">
-    <div class="flex column data-star ">
-      <span class="weight white">{{companyResumer?.name | uppercase}}</span>
-      <stars  [value]="companyResumer?.stars || 5"></stars>
-    </div>
+      <div class="company-logo flex center">
 
-    <div class="company-data">
-      <span class="weight">{{postResumer?.numberOfPeople || 1}} {{postResumer?.job?.name}} </span>
-      <span class="weight">{{ postResumer?.dueDate }} </span>
-      <span class="weight">{{this.postResumer?.amount || 0}} {{this.postResumer?.currency}} </span>
+        <img src="assets/enligne.svg" />
+
+      </div>
+      <div class="company-text space-children-margin ">
+        <div class="flex column data-star ">
+          <span class="weight white">{{companyResumer?.name | uppercase}}</span>
+          <stars [value]="companyResumer?.stars || 5"></stars>
+        </div>
+
+        <div class="company-data">
+          <span class="weight">{{postResumer?.numberOfPeople || 1}} {{postResumer?.job?.name}} </span>
+          <span class="weight">{{ postResumer?.dueDate }} </span>
+          <span class="weight">{{this.postResumer?.amount || 0}} {{this.postResumer?.currency}} </span>
+        </div>
+      </div>
     </div>
-</div>
-</div>
     <div class="web-page">
       <section class="filters">
         <step></step>
       </section>
-      <section class="main web-content font-Poppins">
+
+      <!-- Validee -->
+      <section class="main web-content font-Poppins space-children-margin"
+        *ngIf="resumerType == 'valider';else valider">
         <h1 class="title-with-line">Résumé de la mission</h1>
+        <div class="needs">
+          <ul class="description">
+            <li>{{postResumer?.numberOfPeople || 1}} {{postResumer?.job?.name}} </li>
+            <li>Du {{ postResumer?.hourlyStart }} Au {{ postResumer?.hourlyEnd }}</li>
+          </ul>
+        </div>
+
+        <div class="description">
+          <ul>
+            <li class="description" *ngFor="let detail of (postResumer?.details || [])">{{detail.content}}</li>
+          </ul>
+        </div>
         <h1 class="title-with-line">Le contrat</h1>
-        <div class="flex row">
+        <div class="flex row center">
           <file-svg name="Contrat" color="red"></file-svg>
           <h6 class="font-Poppins">
             Signer le contrat
-          </h6> 
+          </h6>
         </div>
         <h1 class="title-with-line">Suivi de chantier</h1>
+
+        <!-- COMPOSANT A FAIRE START -->
+        <details class="full-width space-children-margin">
+          <summary>
+            <span class="summary-title">22/24/1997</span>
+            <div class="summary-arrow-up">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                stroke="#0D6191" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
+                class="feather feather-arrow-down">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </div>
+          </summary>
+
+          <div class="summary-content space-children-margin">
+            <p class="">Liste des tâches pour ce jour</p>
+            <comment-suivi></comment-suivi>
+          </div>
+          <div class="summary-arrow-down">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+              stroke="#0D6191" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
+              class="feather feather-arrow-up">
+              <polyline points="18 15 12 9 6 15">
+
+              </polyline>
+            </svg>
+          </div>
+
+        </details>
+        <!-- COMPOSANT A FAIRE END-->
+
       </section>
-      <section class="">
-        <div class="flex column space-children-margin">
-          <li class="felx row"><img />Modifier les horaires de présence</li>
-          <li class="flex row"><img />Afficher le numéro portable</li>
-          <li class="flex row"><img />Clôturer la mission</li>
-          <li class="flex row"><img />Dupliquer l’annonce</li>
-        </div>
+
+      <!-- Enlgine -->
+
+      <ng-template #valider>
+        <section class="main web-content font-Poppins space-children-margin">
+          <h1 class="title-with-line">Nous avons besoin de</h1>
+          <div class="needs">
+            <ul class="description">
+              <li>{{postResumer?.numberOfPeople || 1}} {{postResumer?.job?.name}} </li>
+              <li>Du {{ postResumer?.hourlyStart }} Au {{ postResumer?.hourlyEnd }}</li>
+            </ul>
+          </div>
+
+          <h1 class="title-with-line">Description des missions</h1>
+          <div class="description">
+            <span class="title text-emphasis"></span>
+            <ul class="description">
+              <li *ngFor="let detail of (postResumer?.details || [])">{{detail.content}}</li>
+            </ul>
+          </div>
+          <h1 class="title-with-line">Documents</h1>
+          <div class="documents">
+            <ul class="description">
+              <li *ngFor="let file of postResumer?.files">
+                <a>{{file.name}}</a>
+              </li>
+            </ul>
+          </div>
+          <h1 class="title-with-line">Réponses</h1>
+        </section>
+      </ng-template>
+      <section class="" *ngIf="resumerType == 'valider';else options">
+        <ul class=" flex column space-children-margin  options-list">
+          <li class="felx row center-cross"><img src="assets/Modifier.svg" />Modifier les horaires de présence</li>
+          <li class="flex row center-cross"><img src="assets/Numero.svg" />Afficher le numéro portable</li>
+          <li class="flex row center-cross"><img src="assets/cloturer.svg" />Clôturer la mission</li>
+          <li class="flex row center-cross "><img src="assets/Dupliquer.svg" />Dupliquer l’annonce</li>
+
+        </ul>
       </section>
+
+      <ng-template #options>
+        <section>
+          <ul class="flex column space-children-margin options-list">
+            <li class="felx row center-cross"><img src="assets/responses.svg" />Afficher les réponses</li>
+            <li class="flex row center-cross"><img src="assets/booster.svg" />Booster l’annonce</li>
+            <li class="flex row center-cross"><img src="assets/cloturer.svg" />Supprimer l’annonce</li>
+            <li class="flex row center-cross"><img src="assets/Dupliquer.svg" />Dupliquer l’annonce</li>
+            <li class="flex row center-cross"><img src="assets/pauseicon.svg" />Mettre en pause l’annonce</li>
+          </ul>
+        </section>
+      </ng-template>
     </div>
   </div>
 </ng-container>

@@ -11,7 +11,6 @@ import { HomeComponent } from '../components/home_page/home.component';
 import { AvailabilitiesComponent } from '../components/availabilities_page/availabilities.component';
 
 import { AbonnementPage } from '../components/abonnement/abonnement.page';
-import { AnnoncePage } from '../components/annonce/annonce.page';
 import { FacturePage } from '../components/factures/facture.page';
 import { EngagementPage } from '../components/abonnement/engagement/engagement';
 import { MakeAdComponent } from '../components/make_ad/make_ad.component';
@@ -72,9 +71,6 @@ const routes: Routes = [{
   }, {
     path: 'engagement',
     component: EngagementPage,
-  },{
-    path: 'annonce',
-    component: AnnoncePage,
   },{
     path:'docusign',component:DocusignPage
   } , {

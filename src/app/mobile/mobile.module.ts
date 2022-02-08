@@ -2,7 +2,6 @@ import { CommonModule } from "@angular/common";
 import { Injectable, NgModule } from "@angular/core";
 import { AbonnementPage } from "./components/abonnement/abonnement.page";
 import { EngagementPage } from "./components/abonnement/engagement/engagement";
-import { AnnoncePage } from "./components/annonce/annonce.page";
 import { AvailabilitiesComponent } from "./components/availabilities_page/availabilities.component";
 import { BoosterPage } from "./components/booster/booster.page";
 import { ConnexionComponent } from "./components/connexion/connexion.component";
@@ -47,7 +46,6 @@ import { ResponsePage } from "./components/response/reponse.page";
     HomeComponent,
     AvailabilitiesComponent,
     MakeAdComponent,
-    AnnoncePage,
     AbonnementPage,
     FacturePage,
     SOSPageComponent,

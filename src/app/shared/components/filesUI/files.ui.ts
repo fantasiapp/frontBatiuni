@@ -1,12 +1,12 @@
 import { Component, Input, ChangeDetectionStrategy, ChangeDetectorRef, Output, EventEmitter, ViewChild, ElementRef } from "@angular/core";
-import { AbstractControl, FormControl, NG_VALUE_ACCESSOR } from "@angular/forms";
+import { NG_VALUE_ACCESSOR } from "@angular/forms";
 import { UIAsyncAccessor } from "src/app/shared/common/classes";
 import { Serialized } from "src/app/shared/common/types";
 import { FilesRow } from "src/models/data/data.model";
+import { SwipeupService } from "../swipeup/swipeup.component";
 
 export type FileUIOutput = Omit<Omit<Serialized<FilesRow>, 'id'>, 'timestamp'>;
 export function defaultFileUIOuput(nature: string = '', date?: string, name?: string): FileUIOutput {
-  const now = new Date;
 
   return {
     content: '',
@@ -59,7 +59,7 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
   @ViewChild('input', {static: true, read: ElementRef})
   inputRef!: ElementRef;
 
-  constructor(cd: ChangeDetectorRef) {
+  constructor(cd: ChangeDetectorRef, private swipeupService: SwipeupService) {
     super(cd);
   }
 
@@ -110,7 +110,38 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
 
   close() { this.kill.emit(); }
 
+  openInput() {
+    this.inputRef.nativeElement.click();
+  }
+
   onFileInputClicked(e: Event) {
-    //if ( e.isTrusted ) e.preventDefault();
+    if ( e.isTrusted ) e.preventDefault();
+
+    this.swipeupService.show({
+      type: 'menu',
+      hideOnClick: true,
+      items: [{
+        name: 'Supprimer un Fichier',
+        click: () => {
+          //search file having the same name and delete it
+          console.log(this._value);
+        }
+      }, {
+        name: 'Accéder au caméra',
+        click: () => {
+          console.log('Accès au caméra')
+        }
+      }, {
+        name: 'Télécharger un fichier',
+        click: () => {
+
+        }
+      }, {
+        name: 'Visualiser un fichier',
+        click: () => {
+
+        }
+      }]
+    })
   }
 }

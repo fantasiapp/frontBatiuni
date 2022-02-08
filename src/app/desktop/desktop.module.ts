@@ -21,6 +21,7 @@ import { DispoPage } from "./components/availibity/dispo.page";
 import { ForgotPasswordComponent } from "./components/forgot_password/forgot.password";
 import { MailSender } from "./components/only_mail/only.mail";
 import { AnnonceValidePage } from "./components/annonce_valider/annonce.valide";
+import { SuiviComments } from "./ui/suivi/comment.suivi";
 
 @NgModule({
   declarations: [
@@ -41,7 +42,8 @@ import { AnnonceValidePage } from "./components/annonce_valider/annonce.valide";
     DispoPage,
     ForgotPasswordComponent,
     MailSender,
-    AnnonceValidePage
+    AnnonceValidePage,
+    SuiviComments
   ],
   imports: [
     CommonModule,

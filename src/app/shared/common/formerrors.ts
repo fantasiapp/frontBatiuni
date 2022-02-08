@@ -5,9 +5,9 @@ import { Destroy$ } from "./classes";
 
 const forms = {
   FIELD_MISMATCH: '$1 doit être identique $2<().',
-  REQUIRED_FIELD: '$1=(Le champ) est obligatoire.',
-  MIN_LENGTH: '$2=(Le champ) doit contenir au moins $1=(8) caractères',
-  CASE: '$2=(Le champ) doit contenir une lettre en $1=(miniscule)',
+  REQUIRED_FIELD: '$1=(Ce champ) est obligatoire.',
+  MIN_LENGTH: '$2=(Ce champ) doit contenir au moins $1=(8) caractères',
+  CASE: '$2=(Ce champ) doit contenir une lettre en $1=(miniscule)',
   INVALID_FORMAT: 'Le format $1<() est invalide',
   MESSAGE: '$1',
   FIELD_TYPE: 'Ce champs attend $1.'

@@ -13,6 +13,7 @@ import { User } from "src/models/user/user.model";
 import { UserState } from "src/models/user/user.state";
 type PostMenu = { open: boolean; post: Post | null; };
 
+type resumerType = 'enligne' | 'valider';
 
 @Component({
   selector: 'home',
@@ -31,13 +32,14 @@ export class HomePageComponent extends Destroy$ {
   constructor(private store: Store, private info: InfoService) {
     super()
   }
-
   // Resumer d'annonce ------->
-  showPostResumer(id:Number) {
+  showPostResumer(id:Number, type:resumerType) {
+    this.resumerType = type;
     this.showValidePost = true
     this.postResumer = PostRow.getById(+id).serialize();
     this.companyResumer = this.postResumer ? PostRow.getCompany(this.postResumer) : null;
   }
+  resumerType!:resumerType;
   companyResumer: Company | null = null;
   postResumer!: Post;
   // END RESUMER D'ANNONCE

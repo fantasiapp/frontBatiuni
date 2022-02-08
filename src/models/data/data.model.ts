@@ -282,6 +282,7 @@ export class PostRow extends createTable<PostRow>() {
   get files(): FilesRow[] { return this.getField('Files'); }
   get latitude(): number | null { return this.getField('latitude'); }
   get longitude(): number | null { return this.getField('longitude'); }
+  get candidates(): CandidateRow[] { return this.getField('Candidate'); }
 
   //is it expensive ?
   static getCompany(post: Post): Company {
@@ -293,6 +294,11 @@ export class PostRow extends createTable<PostRow>() {
     
     throw "Post doesn't belong to any company. dev: Careful when updating"
   };
+};
+
+export class CandidateRow extends createTable<CandidateRow>() {
+  get company(): Company { return this.getField('Company'); }
+  get chosen(): boolean { return this.getField('isChoosen'); }
 };
 
 export class DetailedPostRow extends createTable<DetailedPostRow>() {
@@ -344,15 +350,15 @@ export type Job = Serialized<JobRow>;
 export type Availability = Serialized<DisponibilityRow>;
 export type Post = Serialized<PostRow>;
 export type PostDetail = Serialized<DetailedPostRow>;
+export type Candidate = Serialized<CandidateRow>;
 
 //enforce the model and do operations
 
 import { filterMap, getByValue } from 'src/app/shared/common/functions';
-import { number } from "src/validators/regex";
 
 type Dict<T> = {[key: string]: T};
 
-const definedTables = ['Company', 'Userprofile', 'JobForCompany', 'LabelForCompany', 'Files', 'Establishments', 'Post', 'DetailedPost', 'Disponibility'] as const;
+const definedTables = ['Company', 'Userprofile', 'JobForCompany', 'LabelForCompany', 'Files', 'Establishments', 'Post', 'DetailedPost', 'Disponibility', 'Candidate'] as const;
 const definedValues = ['Role', 'Label', 'Job'] as const;
 export type tableName = typeof definedTables[number];
 export type valueName = typeof definedValues[number];
@@ -371,7 +377,8 @@ export class Mapper {
     'Files': FilesRow,
     'Establishments': EstablishmentsRow,
     'Post': PostRow,
-    'DetailedPost': DetailedPostRow
+    'DetailedPost': DetailedPostRow,
+    'Candidate': CandidateRow
   };
 
   private static mapped: Dict<boolean> = Object.keys(Mapper.mapping).reduce(
@@ -512,7 +519,7 @@ export class Mapper {
     let indices = data[name + 'Indices'] as number[],
       table = this.getTableClass(name);
         
-    const _name = name;
+    this.mapped[name] = true;
     let dependencies = indices.map(index => {
       let name = getByValue(table.fields, index)!,
         field = this.getField(name);
@@ -536,8 +543,6 @@ export class Mapper {
 
       new table(+id, values);
     });
-
-    this.mapped[name] = true;
   };
 
   static mapTable(data: any, name: tableName, onlyIfUnmapped: boolean = true) {

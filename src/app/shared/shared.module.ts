@@ -47,6 +47,7 @@ import { MailForm } from "./forms/only.mail";
 import { UISwipeupComponent } from "./components/swipeup/swipeup.component";
 import { UISlideMenuComponent } from "./components/slidemenu/slidemenu.component";
 import { UITooltipComponent } from "./components/tooltip/tooltip.component";
+import { ProfileCardComponent } from "./components/profile-card/profile.card";
 
 @NgModule({
   declarations: [
@@ -94,7 +95,8 @@ import { UITooltipComponent } from "./components/tooltip/tooltip.component";
     MailForm,
     UISwipeupComponent,
     UISlideMenuComponent,
-    UITooltipComponent
+    UITooltipComponent,
+    ProfileCardComponent
   ],
   imports: [
     CommonModule,
@@ -149,7 +151,8 @@ import { UITooltipComponent } from "./components/tooltip/tooltip.component";
     MailForm,
     UISwipeupComponent,
     UISlideMenuComponent,
-    UITooltipComponent
+    UITooltipComponent,
+    ProfileCardComponent
   ],
   providers: [ImageGenerator]
 })
