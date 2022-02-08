@@ -1,4 +1,4 @@
-<div class="hosted-page flex column center-cross space-children-margin page-content font-Poppins">
+<div class="hosted-page flex column center-cross space-children-margin font-Poppins">
   <profile-resume [canChangePicture]="false" class="flex column center-cross space-children-margin" (profileChanged)="profileChanged.emit($event)" (ratingsClicked)="ratingsClicked.emit($event)"  [showMore]="true" [company]="company"></profile-resume>
 
   <section class="job-description full-width flex column space-children-margin">
@@ -36,10 +36,20 @@
     </span>
   </section>
 
-  <section class="documents">
+  <section class="documents dashed">
     <h4>Documents importants</h4>
     <div class="flex images">
       <file-svg *ngFor="let file of attachedFiles" [name]="file.name" [color]="getFileColor(file.name)" (click)="openFile(file)"></file-svg>
     </div>
+  </section>
+
+  <section *ngIf="showContact" class="dashed">
+    <h4>Contact</h4>
+    <br/>
+    <ul class="list flex space-around">
+      <li><img src="assets/missions/call.svg"/></li>
+      <li><img src="assets/missions/envoyer-un-message.svg"/></li>
+      <li><img src="assets/missions/envoyer-un-mail.svg"/></li>
+    </ul>
   </section>
 </div>

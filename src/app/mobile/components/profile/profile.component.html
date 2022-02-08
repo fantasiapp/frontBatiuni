@@ -6,7 +6,7 @@
     <img src="assets/menu.svg" (click)="openMenu = true" />
   </header>
 
-  <extended-profile [user]="user" (ratingsClicked)="openRatings = true" (profileChanged)="changeProfileType($event)">
+  <extended-profile class="page-content" [user]="user" (ratingsClicked)="openRatings = true" (profileChanged)="changeProfileType($event)">
 
   </extended-profile>
 

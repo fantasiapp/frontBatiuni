@@ -14,7 +14,8 @@ import { PopupService } from "src/app/shared/components/popup/popup.component";
   selector: 'extended-profile',
   templateUrl: './extended-profile.component.html',
   styleUrls: ['../profile/profile.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  styles: [':host { overflow-y: auto; }'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ExtendedProfileComponent {
   
@@ -28,6 +29,9 @@ export class ExtendedProfileComponent {
 
   @Input()
   company!: Company;
+
+  @Input()
+  showContact: boolean = false;
 
   constructor(private store: Store, private info: InfoService, private popup: PopupService) {}
 

@@ -11,7 +11,7 @@ import { PopupService } from "src/app/shared/components/popup/popup.component";
 import { ProfileCardComponent } from "src/app/shared/components/profile-card/profile.card";
 import { SlidemenuService } from "src/app/shared/components/slidemenu/slidemenu.component";
 import { SwipeupService } from "src/app/shared/components/swipeup/swipeup.component";
-import { Company, Post, PostRow } from "src/models/data/data.model";
+import { Company, CompanyRow, Post, PostRow } from "src/models/data/data.model";
 import { DataState } from "src/models/data/data.state";
 import { ApplyPost, DeletePost, DuplicatePost, SwitchPostType } from "src/models/user/user.actions";
 import { User } from "src/models/user/user.model";
@@ -39,7 +39,10 @@ export class HomeComponent extends Destroy$ {
   @ViewChild('candidates', {read: TemplateRef, static: true})
   candidatesTemplate!: TemplateRef<any>;
 
-  constructor(private cd: ChangeDetectorRef, private store: Store, private info: InfoService, private popup: PopupService, private swipeupService: SwipeupService) {
+  @ViewChild('candidature', {read: TemplateRef, static: true})
+  candidature!: TemplateRef<any>;
+
+  constructor(private cd: ChangeDetectorRef, private store: Store, private info: InfoService, private popup: PopupService, private swipeupService: SwipeupService, private slideService: SlidemenuService) {
     super()
   }
 
@@ -148,4 +151,19 @@ export class HomeComponent extends Destroy$ {
     amount: new FormControl(0),
     devis: new FormControl([{id: 0}])
   });
+
+  handleApplication() {
+
+  }
+
+  showCompany(id: number) {
+    const company = CompanyRow.getById(id)!.serialize();
+    this.slideService.show(company.name, {
+      type: 'template',
+      template: this.candidature,
+      context: {
+        $implicit: company
+      }
+    })
+  }
 };

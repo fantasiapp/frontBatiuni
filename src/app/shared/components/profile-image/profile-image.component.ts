@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, SimpleChanges } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, SimpleChanges } from "@angular/core";
 import { Store } from "@ngxs/store";
 import { take } from "rxjs/operators";
 import { Company, FilesRow } from "src/models/data/data.model";
@@ -27,17 +27,22 @@ export class UIProfileImageComponent {
   @Input()
   company!: Company;
   
-  constructor(private store: Store, private imageGenerator: ImageGenerator) {}
+  constructor(private cd: ChangeDetectorRef, private store: Store, private imageGenerator: ImageGenerator) {}
+
+  ngOnInit() {
+    console.log('on init')
+  }
 
   ngOnChanges(changes: SimpleChanges) {
     const file = this.company ? this.company.files.find(file => file.nature == 'userImage') : null;
-    console.log(changes, file?.content.length);
+    console.log(changes, file);
     if ( file ) {
       if ( file.content ) this.src = `data:image/${file.ext};base64,${file.content}`;
       else {
         this.store.dispatch(new DownloadFile(file.id)).pipe(take(1))
         .subscribe(() => {
           this.src = `data:image/${file.ext};base64,${FilesRow.getById(file.id).content}`;
+          this.cd.markForCheck();
         });
       }
     } else if ( this.user ) {
