@@ -93,27 +93,27 @@ export class UIMapComponent {
     this.createPopup();
     console.log('Hello from post', this.posts)
 
-    this.testCorrdo.forEach((cord)=>{
-      let marker = new mapboxgl.Marker(this.createMarker('sous-conditions'))
-      .setLngLat([cord.long,cord.lat])
-      .addTo(this.mapbox)
-      
-      return marker
-    })
+    // this.testCorrdo.forEach((cord)=>{
+    //   let marker = new mapboxgl.Marker(this.createMarker('sous-conditions'))
+    //   .setLngLat([cord.long,cord.lat])
+    //   .addTo(this.mapbox)
 
-    // this.posts.forEach((post, i) => {
-    //   if ( post.latitude == null || post.longitude == null ) return;
-
-    //   let marker = new mapboxgl.Marker({color:'red'})
-    //     .setLngLat([post.longitude, post.latitude])
-    //     .addTo(this.mapbox);
-      
-    //   marker.getElement().onclick = () => {
-    //     marker.setPopup(this.loadPopup(post, this.companies[i]));
-    //   }
-
-    //   return marker;
+    //   return marker
     // })
+
+    this.posts.forEach((post, i) => {
+      if ( post.latitude == null || post.longitude == null ) return;
+
+      let marker = new mapboxgl.Marker(this.createMarker('sous-conditions'))
+        .setLngLat([post.longitude, post.latitude])
+        .addTo(this.mapbox);
+      
+      marker.getElement().onclick = () => {
+        marker.setPopup(this.loadPopup(post, this.companies[i]));
+      }
+
+      return marker;
+    })
   }
 }
 

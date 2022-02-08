@@ -1,5 +1,5 @@
-@import 'src/styles/mixins';
-@import 'src/styles/variables';
+@import "src/styles/mixins";
+@import "src/styles/variables";
 
 :host {
   display: block;
@@ -22,4 +22,84 @@ tabs {
   position: fixed;
   width: 100%;
   top: $web-header-height - $tab-height;
+}
+
+offer:hover {
+  transform: scale(1.02);
+  cursor: pointer;
+}
+
+.full-screen {
+  width: 100vw;
+  height: 100vw;
+  background-color: #ffffff;
+  z-index: 15000;
+  position: absolute;
+  top: 0;
+}
+
+.nav-back {
+  position: relative;
+  right: 0;
+}
+
+.nav-left::ng-deep {
+  section {
+    justify-content: left !important;
+  }
+}
+$square: 150px;
+
+.companyinfo {
+  position: absolute;
+  left: 500px;
+  height: 100px;
+  width: 30%;
+  z-index: 999;
+  .weight {
+    font-weight: 500;
+  }
+  .white {
+    color: #fff;
+  }
+  .value {
+    font-weight: 200;
+  }
+}
+.company-data {
+  display: flex;
+  justify-content: space-between;
+
+  & > *:not(:last-child) {
+    margin-right: 20px;
+  }
+}
+
+.company-logo {
+  position: fixed;
+  top: calc(220px - 60px);
+  background-color: white;
+  width: $square;
+  height: $square;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+  z-index: 999;
+}
+
+.company-text {
+  position: relative;
+  left: $square + 50px;
+  height: 100px;
+  top: -59px;
+  z-index: 999;
+  .data-star {
+    & > * {
+      margin-bottom: 0.9rem;
+    }
+  }
+}
+
+.title-with-line {
+  letter-spacing: 0px;
+  color: #333333;
+  font-size: 1.2rem;
 }

@@ -18,6 +18,9 @@ export class HeaderDesktop {
   @Input()
   user!: User;
 
+  @Input()
+  navigation: boolean = true;
+
   changeProfileType(type: boolean) {
     this.store.dispatch(new UserActions.ChangeProfileType(type));
   }

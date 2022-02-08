@@ -4,69 +4,102 @@
     <span tab_1>{{ user.viewType ? 'En ligne' : 'Carte' }}</span>
     <span tab_2>Validées</span>
   </tabs>
-  
+
   <div class="web-page">
     <section class="filters">
       <div class="header">
-        <img src="assets/Filtrer par.svg"/> Filtrer par
+        <img src="assets/Filtrer par.svg" /> Filtrer par
       </div>
       <pme-filter-form [activeView]="activeView"></pme-filter-form>
     </section>
     <ng-container *ngIf="user.viewType; else stview">
-    <section class="main web-content font-Poppins">
-      <searchbar [placeholder]="activeView == 0 ? 'Recheche brouillon...' : activeView == 1 ? 'Recheche annonces enligne...' :  'Recheche annonces validées'"></searchbar>
-      <div class="report-search">
-        Resultat <span class="no-result">{{ viewPostLength() }}</span>
-      </div>
-    <!-- Page pme -->
-      <div class="results space-children-margin">
-        <ng-container [ngSwitch]="activeView">
-          <ng-container *ngSwitchCase="0">
-            <offer
-              *ngFor="let draft of userDrafts"
-              src="assets/brouillon.svg"
-              [deletable]="true"
-              [post]="draft"
-              (click)="openPost(draft)"
-              ></offer> 
-          </ng-container>
-          <ng-container *ngSwitchCase="1">
-            <offer
-              *ngFor="let onlinePost of userOnlinePosts"
+      <section class="main web-content font-Poppins">
+        <searchbar
+          [placeholder]="activeView == 0 ? 'Recheche brouillon...' : activeView == 1 ? 'Recheche annonces enligne...' :  'Recheche annonces validées'">
+        </searchbar>
+        <div class="report-search">
+          Resultat <span class="no-result">{{ viewPostLength() }}</span>
+        </div>
+        <!-- Page pme -->
+        <div class="results space-children-margin">
+          <ng-container [ngSwitch]="activeView">
+            <ng-container *ngSwitchCase="0">
+              <offer *ngFor="let draft of userDrafts" src="assets/brouillon.svg" [deletable]="true" [post]="draft"
+                (click)="openPost(draft)" [routerLink]="['','home','make',draft.id]"></offer>
+            </ng-container>
+            <ng-container *ngSwitchCase="1">
+              <offer *ngFor="let onlinePost of userOnlinePosts" 
               [deletable]="false"
-              src="assets/enligne.svg"
-              ></offer>
+               [post]="onlinePost"
+              (click)="showPostResumer(onlinePost.id)"
+               src="assets/enligne.svg"></offer>
+            </ng-container>
+            <ng-container *ngSwitchCase="2">
+              <offer [deletable]="false" *ngFor="let mission of annonces" 
+              (click)="showValidePost = true"
+                src="assets/validée.svg"></offer>
+            </ng-container>
           </ng-container>
-          <ng-container *ngSwitchCase="2">
-            <offer
-              [deletable]="false"
-              *ngFor="let mission of annonces"
-              src="assets/validée.svg"
-              ></offer>
-          </ng-container>
-        </ng-container>
-      </div>
+        </div>
 
-     <!-- pAGE ST -->
-    </section>
-  </ng-container>
-  <ng-template #stview>
-    <ng-container [ngSwitch]="activeView">
-      <ng-container *ngSwitchCase="0">
-        <section class="main web-content font-Poppins">
-          <offer
-              *ngFor="let onlinePost of userOnlinePosts"
-              [deletable]="false"
-              src="assets/enligne.svg"
-              ></offer>
-        </section>
-      </ng-container>
-      <ng-container *ngSwitchCase="1">
-        <mapbox-batiuni></mapbox-batiuni>
-      </ng-container>
+        <!-- pAGE ST -->
+      </section>
     </ng-container>
-  </ng-template>
+    <ng-template #stview>
+      <ng-container [ngSwitch]="activeView">
+        <ng-container *ngSwitchCase="0">
+          <section class="main web-content font-Poppins">
+            <offer *ngFor="let onlinePost of userOnlinePosts" [deletable]="false" src="assets/enligne.svg"></offer>
+          </section>
+        </ng-container>
+        <ng-container *ngSwitchCase="1">
+          <mapbox-batiuni></mapbox-batiuni>
+        </ng-container>
+      </ng-container>
+    </ng-template>
   </div>
 
+  <div class="full-screen" *ngIf="showValidePost">
+    <desktop-stickyH [user]="user" [navigation]="false" class="nav-left">
+      <div class="nav-back flex row center-cross " (click)="showValidePost = false">
+        <img src="assets/arrow_left.svg" />
+        <h6 class="text-light-emphasis">Annonces validées</h6>
+      </div>
+    </desktop-stickyH>
+    <div class="companyinfo">
+  <div class="company-logo flex center">
+    
+    <img src="assets/enligne.svg" />
+    
+  </div>
+  <div class="company-text space-children-margin ">
+    <div class="flex column data-star ">
+      <span class="weight white">{{companyResumer?.name | uppercase}}</span>
+      <stars  [value]="companyResumer?.stars || 5"></stars>
+    </div>
 
+    <div class="company-data">
+      <span class="weight">{{postResumer?.numberOfPeople || 1}} {{postResumer?.job?.name}} </span>
+      <span class="weight">{{ postResumer?.dueDate }} </span>
+      <span class="weight">{{this.postResumer?.amount || 0}} {{this.postResumer?.currency}} </span>
+    </div>
+</div>
+</div>
+    <div class="web-page">
+      <section class="filters">
+        <step></step>
+      </section>
+      <section class="main web-content font-Poppins">
+        <h1 class="title-with-line">Résumé de la mission</h1>
+      </section>
+      <section class="">
+        <div class="flex column space-children-margin">
+          <li class="felx row"><img />Modifier les horaires de présence</li>
+          <li class="flex row"><img />Afficher le numéro portable</li>
+          <li class="flex row"><img />Clôturer la mission</li>
+          <li class="flex row"><img />Dupliquer l’annonce</li>
+        </div>
+      </section>
+    </div>
+  </div>
 </ng-container>

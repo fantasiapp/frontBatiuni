@@ -1,9 +1,11 @@
-@import 'src/styles/variables';
-    @import 'src/styles/mixins';
-    
-    :host {
-      display: block;
-      height: 100vh;
-    }
+@import "src/styles/variables";
+@import "src/styles/mixins";
 
-    .router::ng-deep > * { width: 100vw; }
+:host {
+    display: block;
+    height: 100vh;
+}
+
+.router::ng-deep > * {
+    width: 100vw;
+}

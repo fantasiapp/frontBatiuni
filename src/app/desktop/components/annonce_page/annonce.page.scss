@@ -53,7 +53,10 @@ $half-square : math.div($square,2);
 .company-text {
     position: relative;
     left : $square + 50px;
-    top:1rem;
+    height: 100px;
+    padding: 1rem;
+    background-color: #f7f7f7;
+    z-index: 999;
 }
 
 .allow-overflow {
@@ -83,10 +86,12 @@ adform {
 
 
 .companyinfo {
+  background-color: #f7f7f7;
   position: absolute;  
   left: 500px;
   height: 100px;
-
+  width: 30%;
+  z-index: 999;
   .weight {
     font-weight: 500;
   }

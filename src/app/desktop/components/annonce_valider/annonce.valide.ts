@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, Input } from "@angular/core";
 import { Select, Store } from "@ngxs/store";
 import { BehaviorSubject } from "rxjs";
 import { AuthState } from "src/models/auth/auth.state";
@@ -16,8 +16,9 @@ export class AnnonceValidePage {
     constructor(private store:Store){
 
     }
-    @Select(UserState)
-    user$!: BehaviorSubject<User>
+    
+    @Input()
+    user!: User;
 
     ngOnInit() {
         

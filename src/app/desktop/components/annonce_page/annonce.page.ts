@@ -1,4 +1,6 @@
 import { ChangeDetectionStrategy, Component } from "@angular/core";
+import { ActivatedRoute } from "@angular/router";
+import { Post, PostRow } from "src/models/data/data.model";
 
 
 @Component({
@@ -9,12 +11,12 @@ import { ChangeDetectionStrategy, Component } from "@angular/core";
 })
 export class AnnoncePage {
   activeView: number = 0;
-  // constructor(private router:ActivatedRoute){
+  constructor(private router:ActivatedRoute){
 
-  // }
-  // ngOnInit() {
-  //   let id = this.router.snapshot.params.id
-  //   let post = PostRow.getById(+id).serialize()
-  //   console.log(post)
-  // }
+  }
+  post!:Post
+  ngOnInit() {
+    let id = this.router.snapshot.params.id
+    if(id) this.post = PostRow.getById(+id).serialize();
+  }
 }
