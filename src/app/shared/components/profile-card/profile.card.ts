@@ -67,7 +67,7 @@ export class ProfileCardComponent {
     if ( !this.company ) return;
 
     this.employeeCount = this.company.jobs.find(({job, number}) => {
-      console.log(this.job?.id, job.id);
+      console.log(this.job, job.id);
       return job.id == this.job?.id;
     })?.number || 0;
     

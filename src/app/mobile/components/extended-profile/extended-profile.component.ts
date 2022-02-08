@@ -5,7 +5,7 @@ import { UserState } from "src/models/user/user.state";
 import * as UserActions from "src/models/user/user.actions";
 import { InfoService } from "src/app/shared/components/info/info.component";
 import { take } from "rxjs/operators";
-import { FilesRow, UserProfileRow } from "src/models/data/data.model";
+import { Company, FilesRow, UserProfileRow } from "src/models/data/data.model";
 import { Serialized } from "src/app/shared/common/types";
 import { PopupService } from "src/app/shared/components/popup/popup.component";
 
@@ -17,8 +17,17 @@ import { PopupService } from "src/app/shared/components/popup/popup.component";
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ExtendedProfileComponent {
+  
+  user?: User;
+
+  @Input('user')
+  set companyFromUser(user: User) {
+    this.company = user.profile!.company;
+    this.user = user;
+  }
+
   @Input()
-  user!: User;
+  company!: Company;
 
   constructor(private store: Store, private info: InfoService, private popup: PopupService) {}
 

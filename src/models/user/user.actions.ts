@@ -116,7 +116,6 @@ export class DownloadFile {
   action = 'downloadFile';
   static readonly type = '[File] Download';
   companyFile: boolean = true;
-
   constructor(public id: number) {}
 };
 

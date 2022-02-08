@@ -36,7 +36,8 @@ export class UserState {
   @Action(ChangeProfilePicture)
   changeProfilePicture(ctx: StateContext<User>, action: ChangeProfilePicture) {
     return  this.http.post('data', action).pipe(
-      tap(() => {
+      tap((response) => {
+        console.log('>', response);
         ctx.patchState({ imageUrl: 'data:image/' + action.ext + ';base64,' + action.imageBase64 });
       })
     );
