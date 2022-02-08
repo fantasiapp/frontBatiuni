@@ -193,7 +193,7 @@ export class DuplicatePost {
 };
 
 export class ModifyDisponibility {
-  static readonly type = '[User.ST Modify Disponibility';
+  static readonly type = '[User.ST] Modify Disponibility';
   action = 'modifyDisponibility';
 
   constructor(public disponibility: [string, string][]) {}
@@ -204,3 +204,9 @@ export class ModifyDisponibility {
     ));
   }
 };
+
+export class ApplyPost {
+  static readonly type = '[User.ST] Apply Post';
+  action = 'applyPost';
+  constructor(public Post: number) { }
+}

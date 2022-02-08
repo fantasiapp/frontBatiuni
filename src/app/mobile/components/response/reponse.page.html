@@ -1,11 +1,8 @@
 <ng-container *ngIf="(user$ | async) as user">
-
-
     <header class="clear-margin full-width sticky-header flex center-cross">
         <img [routerLink]="['','home','profile']" src="assets/arrowlblack.svg" />
         <span class="grow text-light-emphasis center-text">Réponse</span>
     </header>
-
 
     <div class="space-children-margin page-content-without-nav hosted-page flex  center-cross column ">
         <profile-image [user]="user"></profile-image>
@@ -14,5 +11,4 @@
         <stars value="3.9"></stars>
         <h1>{{ user}}</h1>
     </div>
-
 </ng-container>

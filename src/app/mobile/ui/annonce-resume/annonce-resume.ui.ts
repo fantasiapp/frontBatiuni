@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
+import { FormControl, FormGroup } from "@angular/forms";
 import { Store } from "@ngxs/store";
 import { of } from "rxjs";
 import { take } from "rxjs/operators";
@@ -67,11 +68,11 @@ export class UIAnnonceResume {
   company: Company | null = null;
 
   private _post: Post | null = null;
+  
   @Input()
   set post(p: Post | null) {
     this._post = p;
     this.company = this.post ? PostRow.getCompany(this.post) : null;
-    console.log(p);
   }
 
   get post() { return this._post; }

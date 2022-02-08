@@ -25,7 +25,7 @@
 // .hosted-page {margin-top: 0 !important;}
 
 .dashed {
-  // margin-left: -30px !important;
+  margin-left: -30px !important;
   margin: 1rem 0;
   display: block;
   width: 100vw;
@@ -47,4 +47,8 @@
 }
 .candidature {
   margin-top: 0px;
+}
+
+.devis h5 {
+  color: $secondaryBackground;
 }

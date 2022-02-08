@@ -1,5 +1,5 @@
 import { Component, Input, ChangeDetectionStrategy, ChangeDetectorRef, Output, EventEmitter, ViewChild, ElementRef } from "@angular/core";
-import { AbstractControl, FormControl, NG_VALUE_ACCESSOR } from "@angular/forms";
+import { NG_VALUE_ACCESSOR } from "@angular/forms";
 import { UIAsyncAccessor } from "src/app/shared/common/classes";
 import { Serialized } from "src/app/shared/common/types";
 import { FilesRow } from "src/models/data/data.model";
@@ -7,7 +7,6 @@ import { SwipeupService } from "../swipeup/swipeup.component";
 
 export type FileUIOutput = Omit<Omit<Serialized<FilesRow>, 'id'>, 'timestamp'>;
 export function defaultFileUIOuput(nature: string = '', date?: string, name?: string): FileUIOutput {
-  const now = new Date;
 
   return {
     content: '',

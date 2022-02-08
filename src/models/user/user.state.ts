@@ -2,11 +2,11 @@ import { HttpErrorResponse } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Action, Select, Selector, State, StateContext, Store } from "@ngxs/store";
 import { catchError, concatMap, map, mergeMap, take, tap } from "rxjs/operators";
-import { ChangePassword, ChangeProfileType, ChangeProfilePicture, GetUserData, ModifyUserProfile, UploadFile, DownloadFile, UploadPost, DeletePost, DuplicatePost, SwitchPostType, DeleteFile, ModifyDisponibility } from "./user.actions";
+import { ChangePassword, ChangeProfileType, ChangeProfilePicture, GetUserData, ModifyUserProfile, UploadFile, DownloadFile, UploadPost, DeletePost, DuplicatePost, SwitchPostType, DeleteFile, ModifyDisponibility, ApplyPost } from "./user.actions";
 import { User } from "./user.model";
 import { Logout } from "../auth/auth.actions";
 import { of, throwError } from "rxjs";
-import { DisponibilityRow, CompanyRow, DetailedPostRow, FilesRow, Mapper, PostRow, UserProfileRow, JobRow } from "../data/data.model";
+import { DisponibilityRow, CompanyRow, DetailedPostRow, FilesRow, Mapper, PostRow, UserProfileRow, JobRow, CandidateRow } from "../data/data.model";
 import { HttpService } from "src/app/services/http.service";
 import { DeleteData, StoreData } from "../data/data.actions";
 import { DataState } from "../data/data.state";
@@ -333,5 +333,21 @@ export class UserState {
         ctx.patchState({profile: userProfileData.serialize()})
       })
     );
+  }
+
+  @Action(ApplyPost)
+  applyPost(ctx: StateContext<User>, action: ApplyPost) {
+    console.log('applying for post');
+
+    return this.http.get('data', action).pipe(
+      tap((response: any) => {
+        if ( response[action.action] != 'OK' )
+          throw response['messages'];
+        
+        delete response[action.action];
+        const id = +(Object.keys(response)[0]);
+        new CandidateRow(+id, response[id]);
+      })
+    )
   }
 };

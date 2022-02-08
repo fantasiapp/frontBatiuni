@@ -9,6 +9,7 @@ import { CommentaireUI } from './commentaire/commentaire.ui';
 import { FactureUI } from './factureUI/facture.ui';
 import { RouterModule } from '@angular/router';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -25,7 +26,7 @@ import { SharedModule } from 'src/app/shared/shared.module';
     CommonModule,
     RouterModule,
     SharedModule,
-
+    ReactiveFormsModule
   ],
   exports: [
     SuiviComments,

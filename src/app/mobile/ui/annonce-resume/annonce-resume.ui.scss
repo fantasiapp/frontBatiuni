@@ -39,7 +39,7 @@
 }
 
 .needs, .description, .documents {
-  .title { color: #333; }
+  .title { color: #333; font-size: 1.1em; }
   ul {
     color: #999;
     white-space: normal;
@@ -49,4 +49,8 @@
       a { text-decoration: underline; }
     }
   }
+}
+
+.remuneration > * {
+  width: 45%;
 }

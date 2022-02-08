@@ -26,25 +26,25 @@ export class StarSysteme {
   ngAfterViewInit() {
     for(let star = 0; star < this.nstars; star++) {
       let thisone = document.getElementById(`${this.title}${star}`)
-      thisone!.style.fill = "white";
+      thisone && (thisone.style.fill = "white");
     }
   }
   changeBack(id: number) {
     if(this.note == (id+1)){
       for(let star = 0; star < this.nstars; star++) {
         let thisone = document.getElementById(`${this.title}${star}`)
-        thisone!.style.fill = "white";
+        thisone && (thisone.style.fill = "white");
       }
       this.note = 0;
     }else{
     this.note = id +1;
     for(let star = 0; star < this.nstars; star++) {
       let thisone = document.getElementById(`${this.title}${star}`)
-      thisone!.style.fill = "white";
+      thisone && (thisone.style.fill = "white");
     }
     for(let star = 0; star <= id; star++) {
       let thisone = document.getElementById(`${this.title}${star}`)
-      thisone!.style.fill = "#F7D454";
+      thisone && (thisone.style.fill = "#F7D454");
     }
   }
   }
