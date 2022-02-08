@@ -12,7 +12,7 @@
       </div>
     </div>
     <!-- Profile Image -->
-    <img class="offres-logo " src="assets/profile.png"/>
+    <img class="offres-logo " [src]="user.imageUrl"/>
     <!-- User full name -->
     <h5 class="username">{{ (user.profile!.firstName + " " + user.profile!.lastName) | titlecase }}</h5>
     <!-- Drop Down menu -->

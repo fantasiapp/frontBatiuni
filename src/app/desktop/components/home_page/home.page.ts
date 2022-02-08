@@ -38,6 +38,7 @@ export class HomePageComponent extends Destroy$ {
     this.showValidePost = true
     this.postResumer = PostRow.getById(+id).serialize();
     this.companyResumer = this.postResumer ? PostRow.getCompany(this.postResumer) : null;
+    console.log(this.postResumer)
   }
   resumerType!:resumerType;
   companyResumer: Company | null = null;
@@ -70,6 +71,9 @@ export class HomePageComponent extends Destroy$ {
   }
   
   ngOnInit() {
+    this.user$.subscribe(user=>{
+      console.log('"Heeelo ', user?.viewType)
+    })
     this.user$.subscribe(console.log)
     combineLatest([this.user$, this.posts$]).subscribe(([user, posts]) => {
       this.userPosts = user.profile?.company.posts || [];
