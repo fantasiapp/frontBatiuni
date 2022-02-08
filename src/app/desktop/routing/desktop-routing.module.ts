@@ -45,11 +45,6 @@ const routes: Routes = [{
 {
   path: 'success',
   component: RegistrationSuccess
-},
-{
-  path: 'annonce_valide',
-  component: AnnonceValidePage,
-  canActivate:[AuthGuard]
 }, {
   path: 'home',
   component: MainPageComponent,
@@ -58,8 +53,8 @@ const routes: Routes = [{
   children: [
     { path: 'profile', component: ProfilePageComponent, data: { animation: 'profile' } },
     { path: 'sos', component: SosPageComponenet, data: { animation: 'sos' } },
-    { path: 'make', component: AnnoncePage, data: { animation: 'annonce'} },
-    { path: 'make/:id', component: AnnoncePage, data: { animation: 'annonce'} },
+    { path: 'make', component: AnnoncePage, data: { animation: 'make'} },
+    { path: 'make/:id', component: AnnoncePage, data: { animation: 'make'} },
     { path: 'availabilities', component: DispoPage, data: { animation: 'annonce'} },
     { path: 'missions', component: MissionPage, data: { animation: 'annonce'} },
     { path: '', pathMatch: 'full', component: HomePageComponent, data: { animation: 'home' } },

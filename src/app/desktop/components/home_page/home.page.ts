@@ -38,7 +38,7 @@ export class HomePageComponent extends Destroy$ {
     if(this.activeView == 1) length = this.userOnlinePosts.length
     return length
   }
- 
+  showValidePost:boolean = false;
   userPosts: Post[] = [];
   userDrafts: Post[] = [];
   userOnlinePosts: Post[] = [];
@@ -58,6 +58,7 @@ export class HomePageComponent extends Destroy$ {
   }
   
   ngOnInit() {
+    this.user$.subscribe(console.log)
     combineLatest([this.user$, this.posts$]).subscribe(([user, posts]) => {
       this.userPosts = user.profile?.company.posts || [];
       [this.userOnlinePosts, this.userDrafts] = filterSplit(this.userPosts, post => !post.draft);

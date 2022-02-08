@@ -3,7 +3,7 @@ import { Store } from '@ngxs/store';
 import { Destroy$ } from './shared/common/classes';
 import { SplashScreen } from '@capacitor/splash-screen';
 import { Load } from './app.actions';
-import { RouterOutlet } from '@angular/router';
+import { NavigationStart, Router, RouterOutlet } from '@angular/router';
 import { transition, trigger } from '@angular/animations';
 import { SlideChildrenLeft, SlideChildrenRight } from 'src/animations/slide.animation';
 import { AsyncSubject } from 'rxjs';
@@ -13,6 +13,7 @@ import { SlidemenuService } from './shared/components/slidemenu/slidemenu.compon
 import { AnnoncePage } from './desktop/components/annonce_page/annonce.page';
 import { UISwitchComponent } from './shared/components/switch/switch.component';
 import { UITooltipService } from './shared/components/tooltip/tooltip.component';
+import { takeUntil } from 'rxjs/operators';
 
 
 @Component({
@@ -28,9 +29,14 @@ import { UITooltipService } from './shared/components/tooltip/tooltip.component'
   ]
 })
 export class AppComponent extends Destroy$ {
-  constructor(private store: Store) {
+  constructor(private store: Store, private router: Router) {
     super();
     (window as any).app = this;
+    this.router.events.pipe(takeUntil(this.destroy$)).subscribe((event) => {
+      if ( event instanceof NavigationStart )
+        console.trace();
+      console.log(event)
+    })
   }
 
   ready$ = new AsyncSubject<true>();

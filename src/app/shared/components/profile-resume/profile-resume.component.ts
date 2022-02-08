@@ -19,6 +19,9 @@ export class ProfileResume {
   showMore: boolean = false;
 
   @Input()
+  star: boolean = true;
+
+  @Input()
   changeImage: boolean = false;
 
   @Output()

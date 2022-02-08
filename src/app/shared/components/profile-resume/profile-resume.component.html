@@ -7,7 +7,7 @@
     <span>{{ user.profile!.user }}</span>
     <span>{{ user.profile!.cellPhone | space: 2:1 }}</span>
   </ng-container>
-  <stars (click)="onStarClicked()" value="3.9"></stars>
-  <button *ngIf="changeImage" (click)c="onChangeImage()" lass="button active">Modifier l’image de profil</button>
+  <a *ngIf="changeImage" class="blue">Modifier l’image de profil</a>
+  <stars *ngIf="star" (click)="onStarClicked()" value="3.9"></stars>
 </section>
 <ng-content></ng-content>

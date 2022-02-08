@@ -28,9 +28,10 @@
 </header>
 
 <section class="subheader-menu flex">
-  <div class="profile-menus">
+  <div class="profile-menus" *ngIf="navigation">
     <navigation></navigation>    
   </div>
+  <ng-content></ng-content>
 </section>
 
 <!-- <section  class="flex" style="padding:5rem;">
