@@ -44,8 +44,14 @@
     <ng-template #stview>
       <ng-container [ngSwitch]="activeView">
         <ng-container *ngSwitchCase="0">
-          <section class="main web-content font-Poppins">
-            <offer *ngFor="let onlinePost of userOnlinePosts" [deletable]="false" src="assets/enligne.svg"></offer>
+          <section class="main web-content font-Poppins ">
+            <searchbar
+            placeholder="Recheche liste...">
+          </searchbar>
+          <div class="report-search">
+            Resultat <span class="no-result">{{ userOnlinePosts.length }}</span>
+          </div>
+            <offer *ngFor="let onlinePost of userOnlinePosts" [deletable]="false" (click)="showPostResumer(onlinePost.id,'enligne')" src="assets/enligne.svg"></offer>
           </section>
         </ng-container>
         <ng-container *ngSwitchCase="1">
@@ -59,7 +65,7 @@
     <desktop-stickyH [user]="user" [navigation]="false" class="nav-left">
       <div class="nav-back flex row center-cross " (click)="showValidePost = false">
         <img src="assets/arrow_left.svg" />
-        <h6 class="text-light-emphasis">Annonces validées</h6>
+        <h6 class="text-light-emphasis">{{user.viewType ? "Annonces validées" : "Liste"}}</h6>
       </div>
     </desktop-stickyH>
     <div class="companyinfo">
@@ -87,7 +93,7 @@
       </section>
 
       <!-- Validee -->
-      <section class="main web-content font-Poppins space-children-margin"
+      <section class="main web-content font-Poppins space-children-margin responsive"
         *ngIf="resumerType == 'valider';else valider">
         <h1 class="title-with-line">Résumé de la mission</h1>
         <div class="needs">
@@ -103,7 +109,7 @@
           </ul>
         </div>
         <h1 class="title-with-line">Le contrat</h1>
-        <div class="flex row center">
+        <div class="flex row center-cross">
           <file-svg name="Contrat" color="red"></file-svg>
           <h6 class="font-Poppins">
             Signer le contrat
@@ -146,7 +152,7 @@
       <!-- Enlgine -->
 
       <ng-template #valider>
-        <section class="main web-content font-Poppins space-children-margin">
+        <section class="main web-content font-Poppins space-children-margin responsive">
           <h1 class="title-with-line">Nous avons besoin de</h1>
           <div class="needs">
             <ul class="description">
@@ -170,12 +176,12 @@
               </li>
             </ul>
           </div>
-          <h1 class="title-with-line">Réponses</h1>
+          <h1 class="title-with-line" *ngIf="user.viewType">Réponses</h1>
         </section>
       </ng-template>
-      <section class="" *ngIf="resumerType == 'valider';else options">
+      <section class="transparent" *ngIf="resumerType == 'valider';else options">
         <ul class=" flex column space-children-margin  options-list">
-          <li class="felx row center-cross"><img src="assets/Modifier.svg" />Modifier les horaires de présence</li>
+          <li class="flex row center-cross"><img src="assets/Modifier.svg" />Modifier les horaires de présence</li>
           <li class="flex row center-cross"><img src="assets/Numero.svg" />Afficher le numéro portable</li>
           <li class="flex row center-cross"><img src="assets/cloturer.svg" />Clôturer la mission</li>
           <li class="flex row center-cross "><img src="assets/Dupliquer.svg" />Dupliquer l’annonce</li>
@@ -184,15 +190,28 @@
       </section>
 
       <ng-template #options>
-        <section>
+        <section *ngIf="user.viewType; else stview" class="transparent">
           <ul class="flex column space-children-margin options-list">
-            <li class="felx row center-cross"><img src="assets/responses.svg" />Afficher les réponses</li>
+            <li class="flex row center-cross"><img src="assets/responses.svg" />Afficher les réponses</li>
             <li class="flex row center-cross"><img src="assets/booster.svg" />Booster l’annonce</li>
             <li class="flex row center-cross"><img src="assets/cloturer.svg" />Supprimer l’annonce</li>
             <li class="flex row center-cross"><img src="assets/Dupliquer.svg" />Dupliquer l’annonce</li>
             <li class="flex row center-cross"><img src="assets/pauseicon.svg" />Mettre en pause l’annonce</li>
           </ul>
         </section>
+        <ng-template #stview>
+          <section class="flex column space-children-margin transparent">
+            <ul class="options-list space-children-margin">
+              <li class="flex row center-cross">LE POSTE</li>
+              <li class="flex row center-cross"><img src="assets/Job.svg" />{{ postResumer?.job?.name }}</li>
+              <li class="flex row center-cross"><img src="assets/Dates.svg" />{{postResumer?.dueDate}}</li>
+              <li class="flex row center-cross"><img src="assets/Adresse.svg" />{{postResumer?.address}}</li>
+              
+            </ul>
+            <button class="button active full-width">Postuler</button>
+            
+          </section>
+        </ng-template>
       </ng-template>
     </div>
   </div>

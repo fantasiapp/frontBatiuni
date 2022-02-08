@@ -51,6 +51,8 @@ offer:hover {
 $square: 150px;
 
 .companyinfo {
+  background-color: #f7f7f7;
+
   position: absolute;
   left: 500px;
   height: 100px;
@@ -67,9 +69,12 @@ $square: 150px;
   }
 }
 .company-data {
+
+  @include range(1000px , 1500px) {
+    display: none;
+  }
   display: flex;
   justify-content: space-between;
-
   & > *:not(:last-child) {
     margin-right: 20px;
   }
@@ -91,9 +96,7 @@ $square: 150px;
   height: 100px;
   top: -59px;
   z-index: 999;
-  @include range(1000px , 1500px) {
-    display: none;
-  }
+  
   .data-star {
     & > * {
       margin-bottom: 0.9rem;
@@ -129,7 +132,8 @@ $options : 26px;
     cursor: pointer;
     img {
       height: $options;
-      margin-right: 0.4rem;
+      width: $options;
+      margin-right: 0.5rem;
 
     }
   }
@@ -196,6 +200,10 @@ details {
 	summary::-webkit-details-marker {
 		display: none;
 	}
+}
+
+.transparent{
+  background-color: transparent !important;
 }
 
 
