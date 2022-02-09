@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, TemplateRef, ViewChild } from "@angular/core";
+import { FormControl, FormGroup } from "@angular/forms";
 import { Select, Store } from "@ngxs/store";
 import { BehaviorSubject, combineLatest, Observable } from "rxjs";
 import { take } from "rxjs/operators";
@@ -6,9 +7,10 @@ import { Destroy$ } from "src/app/shared/common/classes";
 import { filterSplit } from "src/app/shared/common/functions";
 import { Serialized } from "src/app/shared/common/types";
 import { InfoService } from "src/app/shared/components/info/info.component";
-import { Company, Post, PostRow } from "src/models/data/data.model";
+import { PopupService } from "src/app/shared/components/popup/popup.component";
+import { Company, CompanyRow, Post, PostRow } from "src/models/data/data.model";
 import { DataState } from "src/models/data/data.state";
-import { DeletePost, SwitchPostType } from "src/models/user/user.actions";
+import { ApplyPost, DeletePost, SwitchPostType } from "src/models/user/user.actions";
 import { User } from "src/models/user/user.model";
 import { UserState } from "src/models/user/user.state";
 type PostMenu = { open: boolean; post: Post | null; };
@@ -23,40 +25,50 @@ type resumerType = 'enligne' | 'valider';
 })
 export class HomePageComponent extends Destroy$ {
 
+
+  @ViewChild('testTemplate', {read: TemplateRef, static: true})
+  testTemplate!: TemplateRef<any>;
+
   @Select(UserState)
   user$!: Observable<User>;
 
   @Select(DataState.get('posts'))
   posts$!: Observable<Post[]>;
 
-  constructor(private store: Store, private info: InfoService) {
+  constructor(private cd: ChangeDetectorRef,private store: Store, private info: InfoService, private popup: PopupService ) {
     super()
   }
   // Resumer d'annonce ------->
-  showPostResumer(id:Number, type:resumerType) {
+  candidate:any;
+  candidateData: CompanyRow[] | undefined;
+  showPostResumer(post: Post, type: resumerType) {
     this.resumerType = type;
     this.showValidePost = true
-    this.postResumer = PostRow.getById(+id).serialize();
+    this.postResumer = PostRow.getById(post.id).serialize();
     this.companyResumer = this.postResumer ? PostRow.getCompany(this.postResumer) : null;
-    console.log(this.postResumer)
+    const candidate = this.userOnlinePosts.filter(chosen=> chosen.id === post.id)
+    this.candidate = candidate.map(user => user.candidates)
+    this.candidateData = this.candidate[0].map((user : any)=>{
+      return CompanyRow.getById(user.company).serialize()
+    })
   }
-  resumerType!:resumerType;
+  resumerType!: resumerType;
   companyResumer: Company | null = null;
   postResumer!: Post;
   // END RESUMER D'ANNONCE
 
   viewPostLength() {
     let length = 0;
-    if(this.activeView == 0) length = this.userDrafts.length
-    if(this.activeView == 1) length = this.userOnlinePosts.length
+    if (this.activeView == 0) length = this.userDrafts.length
+    if (this.activeView == 1) length = this.userOnlinePosts.length
     return length
   }
-  showValidePost:boolean = false;
+  showValidePost: boolean = false;
   userPosts: Post[] = [];
   userDrafts: Post[] = [];
   userOnlinePosts: Post[] = [];
 
-  allOnlinePosts: [Post, Company][] = [];
+  allOnlinePosts: Post[] = [];
 
   checkMenu: PostMenu & { swipeup: boolean; } = { open: false, post: null, swipeup: false }
 
@@ -65,31 +77,27 @@ export class HomePageComponent extends Destroy$ {
   editMenu: PostMenu = { open: false, post: null };
 
   getDrafts(user: User) { return user.profile?.company.posts.filter(post => post.draft); }
-  
+
   openPost(post: Serialized<PostRow>) {
     this.editMenu = { open: true, post };
   }
-  
+
   ngOnInit() {
-    this.user$.subscribe(user=>{
-      console.log('"Heeelo ', user?.viewType)
-    })
-    this.user$.subscribe(console.log)
     combineLatest([this.user$, this.posts$]).subscribe(([user, posts]) => {
       this.userPosts = user.profile?.company.posts || [];
       [this.userOnlinePosts, this.userDrafts] = filterSplit(this.userPosts, post => !post.draft);
-      
-      this.allOnlinePosts = posts.filter(post => !post.draft).map(post => [post, PostRow.getCompany(post)] as [Post, Company])
-        .filter(([post, company]) => company.id != user.profile!.company.id);
-      
+      const userOnlinePostsIds = this.userOnlinePosts.map(onlinePost => onlinePost.id);
+
+      this.allOnlinePosts = posts.filter(post => !post.draft).filter(post => !userOnlinePostsIds.includes(post.id));
+      console.log(this.allOnlinePosts)
       this.userOnlinePosts.reverse();
       this.userDrafts.reverse();
     });
-    console.log('UserOnlinePOsts',this.userOnlinePosts)
   }
+  
   switchDraft(id: number) {
     this.store.dispatch(new SwitchPostType(id)).pipe(take(1)).subscribe(() => {
-      this.checkMenu = {open: false, post: null, swipeup: false};
+      this.checkMenu = { open: false, post: null, swipeup: false };
     }, () => {
       this.info.show("error", "Echec");
     });
@@ -97,9 +105,29 @@ export class HomePageComponent extends Destroy$ {
 
   deletePost(id: number) {
     this.store.dispatch(new DeletePost(id)).pipe(take(1)).subscribe(() => {
-      this.checkMenu = {open: false, post: null, swipeup: false};
+      this.checkMenu = { open: false, post: null, swipeup: false };
     }, () => {
       this.info.show("error", 'Echec de suppression..');
     });
+  }
+
+  applyPost(post: Post) {
+    this.info.show("info", "Candidature en cours...", Infinity);
+    this.store.dispatch(new ApplyPost(post.id)).pipe(take(1))
+      .subscribe(
+        success => this.info.show("success", "Candidature envoyée", 2000),
+        error => this.info.show("error", "Echec de l'envoi de la candidature", 5000)
+      ); 
+  }
+  devis = ['Par Heure', 'Par Jour', 'Par Semaine'].map((name, id) => ({id, name}));
+  devisForm = new FormGroup({
+    amount: new FormControl(0),
+    devis: new FormControl([{id: 0}])
+  });
+
+  testPopup() {
+    this.popup.show(this.testTemplate);
+    console.log(this.testTemplate)
+    this.cd.markForCheck();
   }
 };

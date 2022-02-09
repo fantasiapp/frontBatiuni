@@ -22,6 +22,8 @@ import { ForgotPasswordComponent } from "./components/forgot_password/forgot.pas
 import { MailSender } from "./components/only_mail/only.mail";
 import { AnnonceValidePage } from "./components/annonce_valider/annonce.valide";
 import { SuiviComments } from "./ui/suivi/comment.suivi";
+import { ReactiveFormsModule } from "@angular/forms";
+import { ReponseCard } from "./ui/reponse-card/reponse-card";
 
 @NgModule({
   declarations: [
@@ -43,13 +45,16 @@ import { SuiviComments } from "./ui/suivi/comment.suivi";
     ForgotPasswordComponent,
     MailSender,
     AnnonceValidePage,
-    SuiviComments
+    SuiviComments,
+    ReponseCard
   ],
   imports: [
     CommonModule,
     SharedModule,
     AppRoutingModule,
     HammerModule,
+    ReactiveFormsModule,
+
   ]
 })
 export class DesktopModule {}

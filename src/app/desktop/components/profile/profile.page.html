@@ -77,7 +77,7 @@
             {name: 'Infos entreprise'},
             {name: 'Certifications & labels'}
           ]" #stepper style="margin-bottom: 40px;"></step>
-          <modify-profile-form [user]="user.profile!"
+          <modify-profile-form [user]="user.profile!" 
            [animate]="false" [index]="stepper.tacheIndex" #modifyProfile>
           </modify-profile-form>
           <button [disabled]="(!modifyProfile.form.touched || modifyProfile.form.invalid) || null"

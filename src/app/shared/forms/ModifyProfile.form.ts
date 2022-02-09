@@ -341,7 +341,7 @@ export class ModifyProfileForm {
   @HostListener('swiperight')
   onSwipeRight() { this.slider.right(); }
 
-  onSubmit() { this.submitted.emit(this.form); }
+  onSubmit() { this.submitted.emit(this.form);}
   
   async ngOnInit() {
     let permissions  = await Camera.checkPermissions();

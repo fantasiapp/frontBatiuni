@@ -86,7 +86,7 @@ import { Destroy$ } from "../common/classes";
           </div>
 
         <div *ngIf="showSubmitButton" class="form-action" style="margin-top: auto;">
-          <button class="button discover gradient" style="width: 250px" [disabled]="!registerForm.valid">Valider</button>
+          <button class="button discover gradient" style="width: 250px" [disabled]="!registerForm.valid" >Valider</button>
         </div>
 
         <div *ngIf="registerForm.errors?.server" class="server-error center-text">
@@ -158,6 +158,9 @@ export class RegisterForm extends Destroy$ {
   @Input()
   showSubmitButton: boolean = true;
 
+  pending:boolean = false;
+
+
   registerForm = new FormGroup({
     lastname: new FormControl('', [
       Validators.required
@@ -182,14 +185,16 @@ export class RegisterForm extends Destroy$ {
     companyName: new FormControl(''),
     jobs: new FormControl([], [Validators.required])
   }, { });
-
   onSubmit(f: any) {
-    console.log(this.registerForm.value);
+    this.pending = !this.pending;
     this.store.dispatch(Register.fromFormGroup(this.registerForm))
       .pipe(take(1))
       .subscribe(
-        success => this.router.navigate(['', 'success']),
+        success => {
+          this.router.navigate(['', 'success'])
+        },
         errors => {
+          this.pending = !this.pending;
           if ( errors.email ) {
             errors.all = errors.all ? errors.all + '\n' + errors.email : errors.email;
           }

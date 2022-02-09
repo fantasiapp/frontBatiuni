@@ -1,4 +1,4 @@
-<ng-container *ngIf="user$ | async as user">
+<ng-container *ngIf="user$ | async as user" >
   <tabs [tabs]="user.viewType ? 3 : 2" [(activeView)]="activeView" bottom>
     <span tab_0>{{ user.viewType ? 'Brouillon' : 'Vue liste' }}</span>
     <span tab_1>{{ user.viewType ? 'En ligne' : 'Carte' }}</span>
@@ -29,11 +29,11 @@
             </ng-container>
             <ng-container *ngSwitchCase="1">
               <offer *ngFor="let onlinePost of userOnlinePosts" [deletable]="false" [post]="onlinePost"
-                (click)="showPostResumer(onlinePost.id,'enligne')" src="assets/enligne.svg"></offer>
+                (click)="showPostResumer(onlinePost,'enligne')" src="assets/enligne.svg"></offer>
             </ng-container>
             <ng-container *ngSwitchCase="2">
               <offer [deletable]="false" *ngFor="let mission of annonces"
-                (click)="showPostResumer(mission.id,'valider')" src="assets/validée.svg"></offer>
+                (click)="showPostResumer(mission,'valider')" src="assets/validée.svg"></offer>
             </ng-container>
           </ng-container>
         </div>
@@ -49,9 +49,9 @@
             placeholder="Recheche liste...">
           </searchbar>
           <div class="report-search">
-            Resultat <span class="no-result">{{ userOnlinePosts.length }}</span>
+            Resultat <span class="no-result">{{ allOnlinePosts.length }}</span>
           </div>
-            <offer *ngFor="let onlinePost of userOnlinePosts" [deletable]="false" (click)="showPostResumer(onlinePost.id,'enligne')" src="assets/enligne.svg"></offer>
+            <offer *ngFor="let onlinePost of allOnlinePosts" [deletable]="false" (click)="showPostResumer(onlinePost,'enligne')" src="assets/enligne.svg"></offer>
           </section>
         </ng-container>
         <ng-container *ngSwitchCase="1">
@@ -63,9 +63,9 @@
 
   <div class="full-screen" *ngIf="showValidePost">
     <desktop-stickyH [user]="user" [navigation]="false" class="nav-left">
-      <div class="nav-back flex row center-cross " (click)="showValidePost = false">
+      <div class="nav-back flex row center-cross " (click)="showValidePost = false" style="cursor: pointer;"> 
         <img src="assets/arrow_left.svg" />
-        <h6 class="text-light-emphasis">{{user.viewType ? "Annonces validées" : "Liste"}}</h6>
+        <h5 class="text-emphasis" >{{user.viewType ? "Annonces validées" : "Liste"}}</h5>
       </div>
     </desktop-stickyH>
     <div class="companyinfo">
@@ -176,7 +176,8 @@
               </li>
             </ul>
           </div>
-          <h1 class="title-with-line" *ngIf="user.viewType">Réponses</h1>
+          <h1 class="title-with-line notif" *ngIf="user.viewType" [attr.data-notification-number]="(candidateData || []).length">Réponses</h1>
+          <reponse-card (click)="testPopup()" class="full-width"*ngFor="let company of candidateData" [company]="company" ></reponse-card>
         </section>
       </ng-template>
       <section class="transparent" *ngIf="resumerType == 'valider';else options">
@@ -192,14 +193,14 @@
       <ng-template #options>
         <section *ngIf="user.viewType; else stview" class="transparent">
           <ul class="flex column space-children-margin options-list">
-            <li class="flex row center-cross"><img src="assets/responses.svg" />Afficher les réponses</li>
+            <li  class="flex row center-cross"><img src="assets/responses.svg" />Afficher les réponses</li>
             <li class="flex row center-cross"><img src="assets/booster.svg" />Booster l’annonce</li>
             <li class="flex row center-cross"><img src="assets/cloturer.svg" />Supprimer l’annonce</li>
             <li class="flex row center-cross"><img src="assets/Dupliquer.svg" />Dupliquer l’annonce</li>
             <li class="flex row center-cross"><img src="assets/pauseicon.svg" />Mettre en pause l’annonce</li>
           </ul>
         </section>
-        <ng-template #stview>
+        <ng-template #stview let-form="devisForm">
           <section class="flex column space-children-margin transparent">
             <ul class="options-list space-children-margin">
               <li class="flex row center-cross">LE POSTE</li>
@@ -208,7 +209,18 @@
               <li class="flex row center-cross"><img src="assets/Adresse.svg" />{{postResumer?.address}}</li>
               
             </ul>
-            <button class="button active full-width">Postuler</button>
+            <div [formGroup]="devisForm" class="flex column space-children-margin" >
+              <h5>Pour postuler veuillez proposer votre devis</h5>
+                <div class="form-input">
+                  <input type="number" min="0" style="max-height: 51px" class="grow form-element" placeholder="Montant" formControlName="amount">
+                
+                </div>
+                <div class="option-container">
+                  <options [searchable]="false" type="radio" [options]="devis" formControlName="devis"></options>
+                </div>
+              </div>
+        
+            <button class="button active full-width" [disabled]="!devisForm.valid" (click)="applyPost(postResumer)" >Postuler</button>
             
           </section>
         </ng-template>
@@ -216,3 +228,9 @@
     </div>
   </div>
 </ng-container>
+
+<ng-template #testTemplate>
+  <p>Votre annonce a bien été mise en pause</p>
+  <p>Vous pouvez toujours l'accéder à partir de vos brouillons.</p>
+</ng-template>
+

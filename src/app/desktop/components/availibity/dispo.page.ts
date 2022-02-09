@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, ViewChild } from "@angular/core";
+import { Router } from "@angular/router";
 import { Select, Store } from "@ngxs/store";
 import { BehaviorSubject, fromEvent, Observable } from "rxjs";
 import { takeUntil } from "rxjs/operators";
@@ -56,6 +57,7 @@ export class DispoPage extends Destroy$ {
 
   constructor(private store: Store, private tooltipService: UITooltipService) {
     super();
+    
   }
 
   private getDimensionFromEvent(e: MouseEvent) {
@@ -68,7 +70,7 @@ export class DispoPage extends Destroy$ {
       left: pageX + 'px', top: pageY + 'px'
     };
   }
-
+  
   submit(calendar: CalendarUI) {
     this.store.dispatch(ModifyDisponibility.fromCalendar(calendar));
   }
