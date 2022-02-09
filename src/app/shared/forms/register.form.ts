@@ -86,7 +86,7 @@ import { Destroy$ } from "../common/classes";
           </div>
 
         <div *ngIf="showSubmitButton" class="form-action" style="margin-top: auto;">
-          <button class="button discover gradient" style="width: 250px" [disabled]="!registerForm.valid" >Valider</button>
+          <button class="button discover gradient" style="width: 250px" [disabled]="!registerForm.valid && !pending" >Valider</button>
         </div>
 
         <div *ngIf="registerForm.errors?.server" class="server-error center-text">
