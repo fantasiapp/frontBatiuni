@@ -65,7 +65,7 @@
     <desktop-stickyH [user]="user" [navigation]="false" class="nav-left">
       <div class="nav-back flex row center-cross " (click)="showValidePost = false" style="cursor: pointer;"> 
         <img src="assets/arrow_left.svg" />
-        <h5 class="text-emphasis" >{{user.viewType ? "Annonces validées" : "Liste"}}</h5>
+        <span class="lighter" >{{user.viewType ? "Annonces validées" : "Liste"}}</span>
       </div>
     </desktop-stickyH>
     <div class="companyinfo">
@@ -81,9 +81,9 @@
         </div>
 
         <div class="company-data">
-          <span class="weight">{{postResumer?.numberOfPeople || 1}} {{postResumer?.job?.name}} </span>
+          <span class="weight">Métier : {{postResumer?.numberOfPeople || 1}} {{postResumer?.job?.name}} </span>
           <span class="weight">{{ postResumer?.dueDate }} </span>
-          <span class="weight">{{this.postResumer?.amount || 0}} {{this.postResumer?.currency}} </span>
+          <span class="weight">Montant : {{this.postResumer?.amount || 0}} {{this.postResumer?.currency}} </span>
         </div>
       </div>
     </div>
@@ -93,27 +93,27 @@
       </section>
 
       <!-- Validee -->
-      <section class="main web-content font-Poppins space-children-margin responsive"
+      <section class="main web-content font-Poppins space-children-margin  addMargin responsive"
         *ngIf="resumerType == 'valider';else valider">
         <h1 class="title-with-line">Résumé de la mission</h1>
-        <div class="needs">
-          <ul class="description">
+        <div class="description">
+          <ul >
             <li>{{postResumer?.numberOfPeople || 1}} {{postResumer?.job?.name}} </li>
             <li>Du {{ postResumer?.hourlyStart }} Au {{ postResumer?.hourlyEnd }}</li>
           </ul>
-        </div>
-
-        <div class="description">
           <ul>
-            <li class="description" *ngFor="let detail of (postResumer?.details || [])">{{detail.content}}</li>
+            <!-- Nom du profile -->
+            <!-- Date echeance -->
+    
+            <li *ngFor="let detail of (postResumer?.details || [])">{{detail.content}}</li>
           </ul>
         </div>
         <h1 class="title-with-line">Le contrat</h1>
         <div class="flex row center-cross">
           <file-svg name="Contrat" color="red"></file-svg>
-          <h6 class="font-Poppins">
+          <span class="signature">
             Signer le contrat
-          </h6>
+          </span>
         </div>
         <h1 class="title-with-line">Suivi de chantier</h1>
         <suivi-chantier></suivi-chantier>
@@ -123,31 +123,34 @@
       <!-- Enlgine -->
 
       <ng-template #valider>
-        <section class="main web-content font-Poppins space-children-margin responsive">
-          <h1 class="title-with-line">Nous avons besoin de</h1>
-          <div class="needs">
-            <ul class="description">
+        <section class="main web-content font-Poppins space-children-margin addMargin responsive">
+          <span class="title-with-line">Nous avons besoin de</span>
+          <div class="description">
+            <ul class="small-space-children-margin">
               <li>{{postResumer?.numberOfPeople || 1}} {{postResumer?.job?.name}} </li>
               <li>Du {{ postResumer?.hourlyStart }} Au {{ postResumer?.hourlyEnd }}</li>
             </ul>
+            <!-- Nom du profile -->
+            <!-- Date echeance -->
           </div>
 
-          <h1 class="title-with-line">Description des missions</h1>
+          <span class="title-with-line">Description des missions</span>
           <div class="description">
-            <span class="title text-emphasis"></span>
-            <ul class="description">
+            <!-- <span class="title text-emphasis"></span> -->
+            <!-- Desctiption des mission hors taches -->
+            <ul class="small-space-children-margin">
               <li *ngFor="let detail of (postResumer?.details || [])">{{detail.content}}</li>
             </ul>
           </div>
-          <h1 class="title-with-line">Documents</h1>
+          <span class="title-with-line">Documents</span>
           <div class="documents">
-            <ul class="description">
+            <ul class="small-space-children-margin">
               <li *ngFor="let file of postResumer?.files">
                 <a>{{file.name}}</a>
               </li>
             </ul>
           </div>
-          <h1 class="title-with-line notif" *ngIf="user.viewType" [attr.data-notification-number]="(candidateData || []).length">Réponses</h1>
+          <span class="title-with-line notif" *ngIf="user.viewType" [attr.data-notification-number]="(candidateData || []).length">Réponses</span>
           <reponse-card (click)="testPopup()" class="full-width"*ngFor="let company of candidateData" [company]="company" ></reponse-card>
         </section>
       </ng-template>

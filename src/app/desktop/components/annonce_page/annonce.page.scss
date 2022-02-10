@@ -53,7 +53,7 @@ $half-square : math.div($square,2);
 .company-text {
     position: relative;
     left : $square + 50px;
-    height: 100px;
+    height: 150px;
     padding: 1rem;
     background-color: #f7f7f7;
     z-index: 999;
@@ -65,7 +65,7 @@ $half-square : math.div($square,2);
 }
 
 .space {
-  margin-top: 50px !important;
+  margin-top: 5rem !important;
 }
 
 adform {
@@ -89,11 +89,15 @@ adform {
   background-color: #f7f7f7;
   position: absolute;  
   left: 500px;
-  height: 100px;
+  height: 150px;
   width: 30%;
   z-index: 999;
+  white-space: nowrap;
   .weight {
-    font-weight: 500;
+    font-weight: 600;
+  }
+  .twenty{
+    font-size: 20px;
   }
   .value {
     font-weight: 200;
@@ -113,7 +117,7 @@ adform {
   flex-direction: column;
   width: 80%;
   button{
-    height: 60px;
+    height: 50px;
   }
 }
 .info-sec{ 
@@ -126,6 +130,12 @@ adform {
 
 ad-form::ng-deep{
   width: 100% !important;
+  label {
+    margin-bottom: 1.5rem !important;
+  }
+  .form-input {
+    margin-bottom: 3rem !important;
+  }
   footer {
     display: none !important;
   }
@@ -133,3 +143,4 @@ ad-form::ng-deep{
 .info-sec {
   background-color: transparent !important;
 }
+
