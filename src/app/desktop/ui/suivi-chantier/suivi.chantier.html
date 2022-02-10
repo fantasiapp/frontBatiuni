@@ -1,0 +1,34 @@
+<!-- COMPOSANT A FAIRE START -->
+<details class="full-width space-children-margin">
+    <summary>
+      <span class="summary-title">22/24/1997</span>
+      <div class="summary-arrow-up">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+          stroke="#0D6191" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
+          class="feather feather-arrow-down">
+          <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+      </div>
+    </summary>
+
+    <div class="summary-content space-children-margin">
+      <p class="">Liste des tâches pour ce jour</p>
+      <div class="flex row center-cross" *ngFor="let b of [1,2]">
+        <li class="">Lorem ipsum dolor sit amet </li>
+        <img src="assets/ValiderIcon.svg" /> 
+        <img src="assets/refuser.svg" />
+      </div>
+      <comment-suivi></comment-suivi>
+    </div>
+    <div class="summary-arrow-down">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+        stroke="#0D6191" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
+        class="feather feather-arrow-up">
+        <polyline points="18 15 12 9 6 15">
+
+        </polyline>
+      </svg>
+    </div>
+
+  </details>
+  <!-- COMPOSANT A FAIRE END-->

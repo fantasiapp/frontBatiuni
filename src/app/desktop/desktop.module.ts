@@ -24,6 +24,7 @@ import { AnnonceValidePage } from "./components/annonce_valider/annonce.valide";
 import { SuiviComments } from "./ui/suivi/comment.suivi";
 import { ReactiveFormsModule } from "@angular/forms";
 import { ReponseCard } from "./ui/reponse-card/reponse-card";
+import { SuiviChantier } from "./ui/suivi-chantier/suivi.chantier";
 
 @NgModule({
   declarations: [
@@ -46,7 +47,8 @@ import { ReponseCard } from "./ui/reponse-card/reponse-card";
     MailSender,
     AnnonceValidePage,
     SuiviComments,
-    ReponseCard
+    ReponseCard,
+    SuiviChantier
   ],
   imports: [
     CommonModule,

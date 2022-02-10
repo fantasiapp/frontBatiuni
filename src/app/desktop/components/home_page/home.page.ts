@@ -26,7 +26,7 @@ type resumerType = 'enligne' | 'valider';
 export class HomePageComponent extends Destroy$ {
 
 
-  @ViewChild('testTemplate', {read: TemplateRef, static: true})
+  @ViewChild('testTemplate', { read: TemplateRef, static: true })
   testTemplate!: TemplateRef<any>;
 
   @Select(UserState)
@@ -35,20 +35,20 @@ export class HomePageComponent extends Destroy$ {
   @Select(DataState.get('posts'))
   posts$!: Observable<Post[]>;
 
-  constructor(private cd: ChangeDetectorRef,private store: Store, private info: InfoService, private popup: PopupService ) {
+  constructor(private cd: ChangeDetectorRef, private store: Store, private info: InfoService, private popup: PopupService) {
     super()
   }
   // Resumer d'annonce ------->
-  candidate:any;
+  candidate: any;
   candidateData: CompanyRow[] | undefined;
   showPostResumer(post: Post, type: resumerType) {
     this.resumerType = type;
     this.showValidePost = true
-    this.postResumer = PostRow.getById(post.id).serialize();
+    this.postResumer = PostRow.getById(+post.id).serialize();
     this.companyResumer = this.postResumer ? PostRow.getCompany(this.postResumer) : null;
-    const candidate = this.userOnlinePosts.filter(chosen=> chosen.id === post.id)
+    const candidate = this.userOnlinePosts.filter(chosen => chosen.id === post.id)
     this.candidate = candidate.map(user => user.candidates)
-    this.candidateData = this.candidate[0].map((user : any)=>{
+    this.candidateData = (this.candidate[0] || []).map((user: any) => {
       return CompanyRow.getById(user.company).serialize()
     })
   }
@@ -94,7 +94,7 @@ export class HomePageComponent extends Destroy$ {
       this.userDrafts.reverse();
     });
   }
-  
+
   switchDraft(id: number) {
     this.store.dispatch(new SwitchPostType(id)).pipe(take(1)).subscribe(() => {
       this.checkMenu = { open: false, post: null, swipeup: false };
@@ -116,13 +116,15 @@ export class HomePageComponent extends Destroy$ {
     this.store.dispatch(new ApplyPost(post.id)).pipe(take(1))
       .subscribe(
         success => this.info.show("success", "Candidature envoyée", 2000),
-        error => this.info.show("error", "Echec de l'envoi de la candidature", 5000)
-      ); 
+        error => {
+          this.info.show("error", "Echec de l'envoi de la candidature", 5000);
+        }
+      );
   }
-  devis = ['Par Heure', 'Par Jour', 'Par Semaine'].map((name, id) => ({id, name}));
+  devis = ['Par Heure', 'Par Jour', 'Par Semaine'].map((name, id) => ({ id, name }));
   devisForm = new FormGroup({
     amount: new FormControl(0),
-    devis: new FormControl([{id: 0}])
+    devis: new FormControl([{ id: 0 }])
   });
 
   testPopup() {
