@@ -132,4 +132,7 @@ export class HomePageComponent extends Destroy$ {
     console.log(this.testTemplate)
     this.cd.markForCheck();
   }
+
+  
 };
+// function to add two numbers

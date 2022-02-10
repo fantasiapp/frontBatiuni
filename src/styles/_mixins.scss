@@ -318,7 +318,7 @@ $space-top-mid: 40px;
   @include from(1500px) {
     & > section:first-child, & > section:nth-child(3){
       position: fixed;
-      top: 220px;
+      top: 210px;
       bottom: 0;
     }
   }

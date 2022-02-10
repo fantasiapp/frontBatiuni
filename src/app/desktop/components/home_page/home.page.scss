@@ -20,10 +20,17 @@
   padding: 30px 0;
 }
 
+.header {
+  margin-bottom: 20px !important;
+}
 tabs {
   position: fixed;
   width: 100%;
   top: $web-header-height - $tab-height;
+  font-weight: 200;
+  li.active{
+    font-weight: 500;
+  }
 }
 
 offer:hover {
@@ -126,9 +133,6 @@ $square: 150px;
   left: -10%;
   top: 50%;
   position: absolute;
-}
-.web-content {
-  margin-top: 2rem !important;
 }
 $options: 26px;
 .options-list {

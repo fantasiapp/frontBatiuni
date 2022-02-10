@@ -9,7 +9,7 @@
 }
 
 .sticky-desktop-header {
-  height: 80px;
+  height: 70px;
   box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
   display: flex;
   justify-content: space-between;
@@ -23,8 +23,7 @@
 }
 
 .profile-actions {
-  flex: 0 0 550px;
-
+  
 }
 
 .logo {
@@ -32,7 +31,8 @@
 }
 
 .offres-logo {
-  @include circle(50px, rgb(241, 241, 241));
+  @include circle(40px, rgb(241, 241, 241));
+  margin-left: 3rem;
 }
 button {
   background-color: unset !important;
@@ -46,6 +46,9 @@ button {
 .username {
   color: #171725;
   font-size: 0.9em;
+  font-weight: 500;
+  margin-left: 1rem;
+  margin-right: 3rem;
 }
 
 .subheader-menu {
@@ -71,6 +74,7 @@ button {
   display: flex;
   justify-content: center;
   list-style-type: none;
+  margin-left: 3rem;
 }
 .dropdown-content {
     display: none;
@@ -153,4 +157,25 @@ notifications::ng-deep {
 profile-image::ng-deep {
   height: 50px !important;
   width: 50px !important;
+}
+
+navigation::ng-deep {
+  nav {
+    ul {
+      font-weight: 200;
+      font-size: 1rem;
+      color: #FFF !important;
+      img {
+        filter: brightness(0) invert(1) !important;
+      }
+    }
+    li.active {
+      font-weight: 700;
+      a {
+        color: #6CB5BC !important;
+      }
+      img {
+        filter: invert(71%) sepia(9%) saturate(1485%) hue-rotate(137deg) brightness(93%) contrast(88%);      }
+    }
+  }
 }
