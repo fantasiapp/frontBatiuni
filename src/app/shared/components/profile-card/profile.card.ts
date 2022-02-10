@@ -6,7 +6,7 @@ import { SlidemenuService } from "../slidemenu/slidemenu.component";
 @Component({
   selector: 'profile-card',
   template: `
-    <profile-image [company]="company!"></profile-image>
+    <!-- <profile-image [company]="company!"></profile-image> -->
     <div class="flex column small-space-children-margin font-Poppins description">
       <span>{{ company?.name || "Nom de l'entreprise" }}</span>
       <span>Propose {{ employeeCount }} {{job?.name || 'Employées'}}</span>

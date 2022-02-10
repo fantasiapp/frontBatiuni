@@ -29,23 +29,23 @@ import { take } from "rxjs/operators";
         </h3>
         <div class="form-input">
           <label>Nom du contact</label>
-          <input class="form-element" type="text" formControlName="Userprofile.lastName" />
+          <input class="form-element" type="text" formControlName="UserProfile.lastName" />
         </div>
         <div class="form-input">
           <label>Prénom du contact</label>
-          <input class="form-element" type="text" formControlName="Userprofile.firstName" />
+          <input class="form-element" type="text" formControlName="UserProfile.firstName" />
         </div>
         <div class="form-input">
           <label>Adresse e-mail contact</label>
-          <input class="form-element" type="email" formControlName="Userprofile.userName" />
+          <input class="form-element" type="email" formControlName="UserProfile.userName" />
         </div>
         <div class="form-input">
           <label>Téléphone de l'entreprise</label>
-          <input class="form-element" type="tel" formControlName="Userprofile.Company.companyPhone" />
+          <input class="form-element" type="tel" formControlName="UserProfile.Company.companyPhone" />
         </div>
         <div class="form-input">
           <label>Téléphone portable</label>
-          <input class="form-element" type="tel" formControlName="Userprofile.cellPhone" />
+          <input class="form-element" type="tel" formControlName="UserProfile.cellPhone" />
         </div>
       </form>
     </section>
@@ -59,18 +59,18 @@ import { take } from "rxjs/operators";
         </h3>
         <div class="form-input">
           <label>Nom de l'entreprise</label>
-          <input class="form-element" type="text" formControlName="Userprofile.Company.name" />
+          <input class="form-element" type="text" formControlName="UserProfile.Company.name" />
         </div>
         <div class="form-input">
           <label>N SIRET</label>
-          <input class="form-element" type="text" formControlName="Userprofile.Company.siret" />
+          <input class="form-element" type="text" formControlName="UserProfile.Company.siret" />
         </div>
         <!-- change the structure -->
         <!-- all elements are selected -->
         <div class="form-input metiers">
           <ng-container *ngIf="!addingField; else addfield_tpl">
             <label>Métiers</label>
-            <ng-container formArrayName="Userprofile.Company.JobForCompany">
+            <ng-container formArrayName="UserProfile.Company.JobForCompany">
               <span class="position-relative number form-element" *ngFor="let control of profileJobsControls; index as i">
                 <ng-container [formGroupName]="i">
                   <span class="number-name">{{control.get('job')!.value.name}}</span>
@@ -97,20 +97,20 @@ import { take } from "rxjs/operators";
 
         <div class="form-input">
           <label>Site internet</label>
-          <input class="form-element" type="text" formControlName="Userprofile.Company.webSite" />
+          <input class="form-element" type="text" formControlName="UserProfile.Company.webSite" />
         </div>
 
         <div class="form-input">
           <label>Chiffres d'affaires</label>
-          <input class="form-element" type="text" formControlName="Userprofile.Company.capital" />
+          <input class="form-element" type="text" formControlName="UserProfile.Company.capital" />
         </div>
 
         <div class="form-input">
           <label>Capital</label>
-          <input class="form-element" type="text" formControlName="Userprofile.Company.revenue" />
+          <input class="form-element" type="text" formControlName="UserProfile.Company.revenue" />
         </div>
 
-        <ng-container formGroupName="Userprofile.Company.admin">
+        <ng-container formGroupName="UserProfile.Company.admin">
           <fileinput [showtitle]="false" filename="Kbis" formControlName="Kbis">
             <file-svg name="Kbis" color="#156C9D" (click)="requestFile('admin', 'Kbis')" image></file-svg>
           </fileinput>
@@ -149,7 +149,7 @@ import { take } from "rxjs/operators";
           <label>Vos labels</label>
           <options [options]="allLabels" [value]="companyLabels" (valueChange)="updateLabels($event)"></options>
         </div>
-        <ng-container formArrayName="Userprofile.Company.LabelForCompany">
+        <ng-container formArrayName="UserProfile.Company.LabelForCompany">
             <span class="position-relative" *ngFor="let control of companyLabelControls; index as i">
               <ng-container [formGroupName]="i">
                 <fileinput [showtitle]="false" [filename]="control.get('label')!.value.name" formControlName="fileData">
@@ -245,13 +245,13 @@ export class ModifyProfileForm {
       content: FileUIOutput | undefined;
     
     if ( type == 'admin' ) {
-      const field = this.form.controls['Userprofile.Company.admin'] as FormGroup,
+      const field = this.form.controls['UserProfile.Company.admin'] as FormGroup,
         input = field.controls[filename];
       
       if ( input && (input.value as FileUIOutput).content )
         content = input.value;      
     } else {
-      const field = this.form.controls['Userprofile.Company.LabelForCompany'] as FormArray,
+      const field = this.form.controls['UserProfile.Company.LabelForCompany'] as FormArray,
         group = (field.controls as FormGroup[]).find(group => group.controls['label']?.value.name == filename);
       
       if ( group && (group.controls['fileData'].value as FileUIOutput).content )
@@ -281,43 +281,43 @@ export class ModifyProfileForm {
 
   form: FormGroup = new FormGroup({
     // User
-    'Userprofile.lastName': new FormControl('', [
+    'UserProfile.lastName': new FormControl('', [
     
     ]),
-    'Userprofile.firstName': new FormControl('', [
+    'UserProfile.firstName': new FormControl('', [
       
     ]),
-    'Userprofile.userName': new FormControl('', [
+    'UserProfile.userName': new FormControl('', [
       //Email()
     ]),
-    'Userprofile.cellPhone': new FormControl('', [
+    'UserProfile.cellPhone': new FormControl('', [
       FieldType('phone')
     ]),
-    'Userprofile.Company.JobForCompany': new FormArray([
+    'UserProfile.Company.JobForCompany': new FormArray([
 
     ]),
     //Company
-    'Userprofile.Company.name': new FormControl('', [
+    'UserProfile.Company.name': new FormControl('', [
     ]),
-    'Userprofile.Company.siret': new FormControl('', [
+    'UserProfile.Company.siret': new FormControl('', [
       FieldType('number', ['un numéro de SIRET'])
     ]),
-    'Userprofile.Company.capital': new FormControl('', [
+    'UserProfile.Company.capital': new FormControl('', [
       FieldType('number')
     ]),
-    'Userprofile.Company.revenue': new FormControl('', [
+    'UserProfile.Company.revenue': new FormControl('', [
       FieldType('number')
     ]),
-    'Userprofile.Company.webSite': new FormControl('', [
+    'UserProfile.Company.webSite': new FormControl('', [
       FieldType('url')
     ]),
-    'Userprofile.Company.companyPhone': new FormControl('', [
+    'UserProfile.Company.companyPhone': new FormControl('', [
       FieldType('phone')
     ]),
-    'Userprofile.Company.LabelForCompany': new FormArray([
+    'UserProfile.Company.LabelForCompany': new FormArray([
 
     ]),
-    'Userprofile.Company.admin': new FormGroup({
+    'UserProfile.Company.admin': new FormGroup({
       'Kbis': new FormControl(defaultFileUIOuput('admin')),
       'Trav. Dis': new FormControl(defaultFileUIOuput('admin')),
       'RC + DC': new FormControl(defaultFileUIOuput('admin')),
@@ -328,11 +328,11 @@ export class ModifyProfileForm {
   });
 
   get profileJobsControls() {
-    return (this.form.controls['Userprofile.Company.JobForCompany'] as FormArray).controls;
+    return (this.form.controls['UserProfile.Company.JobForCompany'] as FormArray).controls;
   }
 
   get companyLabelControls() {
-    return (this.form.controls['Userprofile.Company.LabelForCompany'] as FormArray).controls;
+    return (this.form.controls['UserProfile.Company.LabelForCompany'] as FormArray).controls;
   }
 
   @HostListener('swipeleft')
@@ -360,23 +360,23 @@ export class ModifyProfileForm {
     this.companyLabels = this.user.company.labels.map(label => label.label);
     this.companyJobs = this.user.company.jobs.map(job => job.job);
     
-    const filesInput = this.form.controls['Userprofile.Company.admin'];
+    const filesInput = this.form.controls['UserProfile.Company.admin'];
     this.user.company.files.forEach(({name}) => {
       filesInput.get(name)?.patchValue({name});
     });
     
-    this.form.controls['Userprofile.lastName']?.setValue(this.user.lastName);
-    this.form.controls['Userprofile.firstName']?.setValue(this.user.firstName);
-    this.form.controls['Userprofile.userName']?.setValue(this.user.user);
-    this.form.controls['Userprofile.cellPhone']?.setValue(this.user.cellPhone);
-    this.form.controls['Userprofile.Company.name']?.setValue(this.user.company.name);
-    this.form.controls['Userprofile.Company.siret']?.setValue(this.user.company.siret);
-    this.form.controls['Userprofile.Company.revenue']?.setValue(this.user.company.revenue);
-    this.form.controls['Userprofile.Company.capital']?.setValue(this.user.company.capital);
-    this.form.controls['Userprofile.Company.webSite']?.setValue(this.user.company.webSite);
-    this.form.controls['Userprofile.Company.companyPhone']?.setValue(this.user.company.companyPhone);
+    this.form.controls['UserProfile.lastName']?.setValue(this.user.lastName);
+    this.form.controls['UserProfile.firstName']?.setValue(this.user.firstName);
+    this.form.controls['UserProfile.userName']?.setValue(this.user.user);
+    this.form.controls['UserProfile.cellPhone']?.setValue(this.user.cellPhone);
+    this.form.controls['UserProfile.Company.name']?.setValue(this.user.company.name);
+    this.form.controls['UserProfile.Company.siret']?.setValue(this.user.company.siret);
+    this.form.controls['UserProfile.Company.revenue']?.setValue(this.user.company.revenue);
+    this.form.controls['UserProfile.Company.capital']?.setValue(this.user.company.capital);
+    this.form.controls['UserProfile.Company.webSite']?.setValue(this.user.company.webSite);
+    this.form.controls['UserProfile.Company.companyPhone']?.setValue(this.user.company.companyPhone);
     
-    const jobControl = this.form.controls['Userprofile.Company.JobForCompany'] as FormArray;
+    const jobControl = this.form.controls['UserProfile.Company.JobForCompany'] as FormArray;
     jobControl.clear();
     for ( let job of this.user.company.jobs ) {
       jobControl.push(new FormGroup({
@@ -385,7 +385,7 @@ export class ModifyProfileForm {
       }));
     }
     
-    const labelControl = this.form.controls['Userprofile.Company.LabelForCompany'] as FormArray;
+    const labelControl = this.form.controls['UserProfile.Company.LabelForCompany'] as FormArray;
     
     labelControl.clear();
     for ( let label of this.user.company.labels ) {
@@ -403,7 +403,7 @@ export class ModifyProfileForm {
 
   //make functions to help merge
   updateJobs(jobOptions: Option[]) {
-    const jobsControl = this.form.controls['Userprofile.Company.JobForCompany'] as FormArray,
+    const jobsControl = this.form.controls['UserProfile.Company.JobForCompany'] as FormArray,
       oldJobs = jobsControl.value as {job: JobRow, number: number}[],
       newJobs = jobOptions.map(option => JobRow.getById(option.id)!);
 
@@ -435,7 +435,7 @@ export class ModifyProfileForm {
   };
 
   updateLabels(labelOptions: Option[]) {
-    const labelsControl = this.form.controls['Userprofile.Company.LabelForCompany'] as FormArray,
+    const labelsControl = this.form.controls['UserProfile.Company.LabelForCompany'] as FormArray,
       newLabels = labelOptions.map(label => LabelRow.getById(label.id)!) as LabelRow[],
       companyLabels = this.user.company.labels;
     

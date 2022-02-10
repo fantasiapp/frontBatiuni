@@ -16,6 +16,12 @@ export class ProfileResume {
     this.user = user;
   }
 
+  @Input('profile')
+  set profile({user, company}: {user: User, company: Company}) {
+    this.user = user;
+    this.company = company;
+  };
+
   user?: User;
 
   @Input()

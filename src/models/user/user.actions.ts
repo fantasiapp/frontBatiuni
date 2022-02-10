@@ -30,7 +30,7 @@ export class ChangePassword {
 };
 
 export class GetUserData {
-  static readonly type = '[User] Get User data';
+  static readonly type = '[Data] Get User data';
   constructor(public token: string) {}
   readonly action = 'getUserData';
 };
@@ -46,19 +46,19 @@ export class ModifyUserProfile {
     const changes = getDirtyValues(form);
     if ( Object.keys(changes).length == 0 ) return;
 
-    const jobs = changes['Userprofile.Company.JobForCompany'],
-      labels = changes['Userprofile.Company.LabelForCompany'],
-      adminFiles = changes['Userprofile.Company.admin'];
+    const jobs = changes['UserProfile.Company.JobForCompany'],
+      labels = changes['UserProfile.Company.LabelForCompany'],
+      adminFiles = changes['UserProfile.Company.admin'];
     
     if ( jobs ) {
-      changes['Userprofile.Company.JobForCompany'] = Object.values<JobForCompanyRow>(jobs).map(
+      changes['UserProfile.Company.JobForCompany'] = Object.values<JobForCompanyRow>(jobs).map(
         ({job, number}: {job: JobRow, number: number}) => ([job.id, number])
       );
     }
 
     if ( labels ) {
       console.log('label:', labels, Object.values<LabelForCompanyRow>(labels));
-      changes['Userprofile.Company.LabelForCompany'] = Object.values<any>(labels).map(
+      changes['UserProfile.Company.LabelForCompany'] = Object.values<any>(labels).map(
         ({label, fileData}: {label: LabelRow, fileData: FileUIOutput}) => ([label.id, fileData.expirationDate!])
       );
 
@@ -76,7 +76,7 @@ export class ModifyUserProfile {
 
     const proxy = new Proxy(this, PropertyTrap);
     //write directly on this object
-    proxy['Userprofile.id'] = profile.id;
+    proxy['UserProfile.id'] = profile.id;
     for ( const [field, value] of Object.entries<any>(changes) ) 
       proxy[field] = value;
   }
