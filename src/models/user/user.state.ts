@@ -28,20 +28,20 @@ export class UserState {
   constructor(private store: Store, private http: HttpService) {}
 
   //Action handlers
-  @Action(ChangeProfileType)
-  changeProfileType(ctx: StateContext<User>, action: ChangeProfileType) {
-    return ctx.patchState({ viewType: action.type });
-  }
+  // @Action(ChangeProfileType)
+  // changeProfileType(ctx: StateContext<User>, action: ChangeProfileType) {
+  //   return ctx.patchState({ viewType: action.type });
+  // }
 
-  @Action(ChangeProfilePicture)
-  changeProfilePicture(ctx: StateContext<User>, action: ChangeProfilePicture) {
-    return  this.http.post('data', action).pipe(
-      tap((response) => {
-        console.log('>', response);
-        ctx.patchState({ imageUrl: 'data:image/' + action.ext + ';base64,' + action.imageBase64 });
-      })
-    );
-  }
+  // @Action(ChangeProfilePicture)
+  // changeProfilePicture(ctx: StateContext<User>, action: ChangeProfilePicture) {
+  //   return  this.http.post('data', action).pipe(
+  //     tap((response) => {
+  //       console.log('>', response);
+  //       ctx.patchState({ imageUrl: 'data:image/' + action.ext + ';base64,' + action.imageBase64 });
+  //     })
+  //   );
+  // }
 
   @Action(ChangePassword)
   modifyPassword(ctx: StateContext<User>, action: ChangePassword) {

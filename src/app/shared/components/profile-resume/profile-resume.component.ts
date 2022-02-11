@@ -1,6 +1,8 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, HostBinding, Input, Output } from "@angular/core";
-import { Company } from "src/models/data/data.model";
-import { User } from "src/models/user/user.model";
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from "@angular/core";
+import { Select } from "@ngxs/store";
+import { Observable } from "rxjs";
+import { Profile } from "src/models/new/data.interfaces";
+import { DataState } from "src/models/new/data.state";
 
 @Component({
   selector: 'profile-resume',
@@ -10,22 +12,11 @@ import { User } from "src/models/user/user.model";
 })
 export class ProfileResume {
 
-  @Input('user')
-  set companyFromUser(user: User) {
-    this.company = user.profile!.company;
-    this.user = user;
-  }
+  @Select(DataState.view)
+  view$!: Observable<string>;
 
   @Input('profile')
-  set profile({user, company}: {user: User, company: Company}) {
-    this.user = user;
-    this.company = company;
-  };
-
-  user?: User;
-
-  @Input()
-  company!: Company;
+  profile!: Profile;
 
   @Input()
   switch: boolean = true;
@@ -50,4 +41,8 @@ export class ProfileResume {
 
   @Output()
   changePicture = new EventEmitter();
+
+  ngOnInit() {
+    console.log('#', this.profile);
+  }
 };

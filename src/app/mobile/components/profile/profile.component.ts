@@ -14,8 +14,8 @@ import { FilesRow, UserProfileRow } from "src/models/data/data.model";
 import { Serialized } from "src/app/shared/common/types";
 import { PopupService } from "src/app/shared/components/popup/popup.component";
 import { DataQueries, QueryAll } from "src/models/new/data.state";
-import { Company, File, User } from "src/models/new/data.interfaces";
 import { Destroy$ } from "src/app/shared/common/classes";
+import { Profile } from "src/models/new/data.interfaces";
 
 
 @Component({
@@ -42,12 +42,10 @@ export class ProfileComponent extends Destroy$ {
   openNotifications : boolean = false;
   
   @Select(DataQueries.currentProfile)
-  profile$!: Observable<{user: User, company: Company}>;
-
+  profile$!: Observable<Profile>;
 
   constructor(private store: Store, private cd: ChangeDetectorRef, private info: InfoService, private popup: PopupService) {
     super();
-    
     this.profile$.subscribe(console.log);
   }
 
@@ -111,9 +109,8 @@ export class ProfileComponent extends Destroy$ {
     this.store.dispatch(new UserActions.ChangeProfileType(type));
   };
 
-  async takePhoto() {
+  async takePhoto() {    
     let user = this.store.selectSnapshot(UserState)
-
     let imageName = user.profile.firstName + '-'+ user.profile.lastName +'-'+ user.profile.id ;
     
     const photo = await Camera.getPhoto({
@@ -134,37 +131,5 @@ export class ProfileComponent extends Destroy$ {
 
     let imageName = user.profile.firstName + '_' + user.profile.lastName + '_' + user.profile.id ;
     this.store.dispatch(new UserActions.ChangeProfilePicture(photo, imageName));
-  }
-
-  get attachedFiles(): any[] {
-    const user = this.store.selectSnapshot(UserState).profile as Serialized<UserProfileRow>;
-    return user.company.files.filter(file => file.nature == 'admin' || file.nature == 'labels');
-  }
-
-  getFileColor(filename: string) {
-    return FilesRow.getFileColor(filename);
-  }
-
-  //easier than requestFile, we can have direct access
-  openFile(file: Serialized<FilesRow>) {
-    const target = FilesRow.getById(file.id);
-  
-    if ( !target ) {
-      this.info.show('error', `Le fichier "${file.name}" n'existe pas.`, 2000);
-      return;
-    }
-
-    if ( target.content ) {
-      this.popup.openFile(target);
-    } else {
-      this.info.show('info', 'Téléchargement du fichier ...', Infinity);
-
-      this.store.dispatch(new UserActions.DownloadFile(target.id)).pipe(take(1))
-        .subscribe(() => {
-          const file = FilesRow.getById(target.id);
-          this.popup.openFile(file);
-          this.info.show('success', 'Fichier téléchargé', 1000);
-        })
-    }
   }
 };

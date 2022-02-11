@@ -11,7 +11,7 @@ export const NameMapping: any = {
   'Userprofile': 'User',
   'Company': 'company',
   'Files': 'files',
-  'File': 'file',
+  'File': 'files',
   'Post': 'posts',
   'userName': 'username',
   'Candidate': 'application',
@@ -27,6 +27,38 @@ export class DataReader {
 
   constructor(private store: Store) {
     
+  }
+
+  getFieldIndex(data: any, type: DataTypes, child: DataTypes) {
+    return data[type + 'Fields'].indexOf(child);
+  }
+
+  getValueById(data: any, type: DataTypes, id: number) {
+    return data[type + 'Values'][id];
+  }
+
+  getField(data: any, type: DataTypes, id: number, child: DataTypes) {
+    const index = this.getFieldIndex(data, type, child);
+    return this.getValueById(data, type, id)[index];
+  }
+
+  readCurrentUserId(data: any) {
+    return data['currentUser'];
+  }
+
+  readCurrentUser(data: any) {
+    const id = this.readCurrentUserId(data);
+    return this.getValueById(data, 'UserProfile', id);
+  }
+
+  readCurrentCompanyId(data: any) {
+    const userId = this.readCurrentUserId(data);
+    return this.getField(data, 'UserProfile', userId, 'Company');
+  }
+
+  readCurrentCompany(data: any) {
+    const id = this.readCurrentCompanyId(data);
+    return this.getValueById(data, 'Company', id);
   }
 
   readStaticData(data: any) {

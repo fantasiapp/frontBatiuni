@@ -1,11 +1,11 @@
 import { Injectable } from "@angular/core";
 import { Action, createSelector, Selector, State, StateContext, Store } from "@ngxs/store";
 import { Observable, of, Subject } from "rxjs";
-import { tap } from "rxjs/operators";
+import { take, tap } from "rxjs/operators";
 import { HttpService } from "src/app/services/http.service";
 import { number } from "src/validators/regex";
 import { GetGeneralData } from "../data/data.actions";
-import { DownloadFile, GetUserData, ModifyUserProfile } from "../user/user.actions";
+import { ChangeProfilePicture, ChangeProfileType, DownloadFile, GetUserData, ModifyUserProfile } from "../user/user.actions";
 import { Company, Interface, User } from "./data.interfaces";
 import { DataReader, NameMapping } from "./data.mapper";
 
@@ -20,7 +20,8 @@ export type DataTypes = 'Job' | 'Label' | 'Role' | 'UserProfile' | 'Company' |
 export interface DataModel {
   fields: Record<string[]>;
   session: {
-    currentUser: number
+    currentUser: number;
+    view: 'ST' | 'PME';
   };
   [key: string]: Record<any>;
 };
@@ -50,13 +51,13 @@ export class Clear {
   constructor(public data?: string) {}
 };
 
-//maybe use immer
 @State<DataModel>({
   name: 'd',
   defaults: {
     fields: {},
     session: {
-      currentUser: 0
+      currentUser: 0,
+      view: 'ST'
     }
   }
 })
@@ -65,73 +66,24 @@ export class DataState {
 
   constructor(private http: HttpService, private store: Store, private reader: DataReader) {}
 
-  @Action(GetGeneralData)
-  getGeneralData() {    
-    //eventually make a local storage service
-    let data = localStorage.getItem('general-data'), req;
-    req = data ? of(JSON.parse(data)) : this.http.get('initialize', {action: 'getGeneralData'});
+  private pending$: Record<Subject<any>> = {};
 
-    return req.pipe(
-      tap((response: any) => {
-        localStorage.setItem('general-data', JSON.stringify(response));
-        this.reader.readStaticData(response);
-      }) 
-    );
+  private registerPending<T>(key: string, pending: Subject<T>) {
+    this.pending$[key] = pending;
+    return key;
+  };
+
+  private getPending<T = any>(key: string): Subject<T> | undefined {
+    return this.pending$[key];
   }
 
-  @Action(GetUserData)
-  getUserData(ctx: StateContext<DataModel>, action: GetUserData) {
-    const req = this.http.get('data', { action: action.action })
-    return req.pipe(
-      tap((response: any) => {
-        this.reader.readInitialData(response);
-        ctx.patchState({
-          session: { currentUser: response['currentUser'] }
-        });
-      })
-    );
-  }
-
-  @Action(ModifyUserProfile)
-  modifyUser(ctx: StateContext<DataModel>, action: ModifyUserProfile) {
-    const {files, ...modifyAction} = action;
-    const req = this.http.post('data', modifyAction);
-
-    console.log(Object.keys(action.adminFiles));
-    return req.pipe(
-      tap((response: any) => {
-        if ( response[action.action] !== 'OK' )
-          throw response['messages'];
-        
-        delete response[action.action];
-        this.reader.readManyUpdates(response);
-      })
-    )
-  }
-
-  @Action(DownloadFile)
-  downloadFile(ctx: StateContext<DataModel>, download: DownloadFile) {
-    let req;
-    const state = ctx.getState(),
-      file = state['File'][download.id],
-      contentIndex = state.fields['File'].indexOf('content');
-    
-    if ( file[contentIndex] instanceof Observable ) return file[contentIndex];
-    
-    const observedFile = file.slice(); observedFile[contentIndex] = new Subject<string>();
-    this.store.dispatch(new Concat('File', observedFile));
-    
-    req = this.http.get('data', download)
-    return req.pipe(
-      tap((response: any) => {
-        if ( response[download.action] !== 'OK' ) throw response['messages'];
-        delete response[download.action];
-        observedFile[contentIndex].next(response[contentIndex]);
-        observedFile[contentIndex].complete();
-        this.store.dispatch(new Concat('File', response));
-      })
-    );
-  }
+  private completePending<T = any>(key: string): void {
+    const pending = this.getPending(key);
+    if ( pending ) {
+      pending.complete();
+      delete this.pending$[key];
+    }
+  };
 
   @Action(Load)
   load(ctx: StateContext<DataModel>, load: Load) {
@@ -168,6 +120,25 @@ export class DataState {
     const remaining: Record<any> = {};
     for ( let id of remainingIds)
       remaining[id] = current[id];
+    
+    return {[target]: remaining};
+  }
+
+  private replaceIds(state: DataModel, target: DataTypes, ids: number[], values: Record<any>) {
+    const current = state[target] || {},
+      keys = Object.keys(current);
+    
+    const remainingIds = ids.length ?  keys.filter(
+      key => !(ids as number[]).includes(+key)
+    ) : keys;
+
+    const remaining: Record<any> = {};
+    for ( let id of remainingIds)
+      remaining[id] = current[id];
+    
+    Object.entries<any[]>(values).forEach(([id, values]) => {
+      remaining[id] = values;
+    })
     
     return {[target]: remaining};
   }
@@ -229,7 +200,8 @@ export class DataState {
     else ctx.setState({
       fields: {},
       session: {
-        currentUser: 0
+        currentUser: 0,
+        view: 'ST'
       }
     });
   }
@@ -239,17 +211,150 @@ export class DataState {
     return state.fields;
   }
 
-  //don't injectContainerState
+  //try to avoid container state in the future
   @Selector()
   static currentUserId(state: DataModel) {
     return state.session.currentUser;
   };
+
+  @Selector()
+  static view(state: DataModel) {
+    return state.session.view;
+  };
+
+  @Selector([DataState])
+  static companies(state: DataModel) {
+    return state['Company'] || {};
+  }
+
+  @Selector([DataState])
+  static users(state: DataModel) {
+    return state['UserProfile'] || {};
+  }
+
+  @Selector([DataState])
+  static files(state: DataModel) {
+    return state['File'] || {};
+  }
+
+  @Selector([DataState])
+  static posts(state: DataModel) {
+    return state['Post'] || {};
+  }
 
   static getType<K extends DataTypes>(type: K) {
     return createSelector([DataState], (state: DataModel) => {
       return state[type] || {};
     });
   };
+
+  //------------------------------------------------------------------------
+  @Action(GetGeneralData)
+  getGeneralData() {    
+    //eventually make a local storage service
+    let data = localStorage.getItem('general-data'), req;
+    req = data ? of(JSON.parse(data)) : this.http.get('initialize', {action: 'getGeneralData'});
+
+    return req.pipe(
+      tap((response: any) => {
+        localStorage.setItem('general-data', JSON.stringify(response));
+        this.reader.readStaticData(response);
+      }) 
+    );
+  }
+
+  @Action(GetUserData)
+  getUserData(ctx: StateContext<DataModel>, action: GetUserData) {
+    const req = this.http.get('data', { action: action.action });
+    
+    return req.pipe(
+      tap((response: any) => {
+        this.reader.readInitialData(response);
+
+        const companyId = this.reader.readCurrentCompanyId(response),
+          roles = this.reader.getField(response, 'Company', companyId, 'Role');
+
+        ctx.patchState({
+          session: {
+            currentUser: response['currentUser'],
+            view: roles == 2 ? 'PME' : 'ST'
+          }
+        });
+      })
+    );
+  }
+
+  @Action(ModifyUserProfile)
+  modifyUser(ctx: StateContext<DataModel>, action: ModifyUserProfile) {
+    const {files, ...modifyAction} = action;
+    const req = this.http.post('data', modifyAction);
+
+    console.log(Object.keys(action.adminFiles));
+    return req.pipe(
+      tap((response: any) => {
+        if ( response[action.action] !== 'OK' )
+          throw response['messages'];
+        
+        delete response[action.action];
+        this.reader.readManyUpdates(response);
+      })
+    )
+  }
+
+  @Action(ChangeProfilePicture)
+  changeProfilePicture(ctx: StateContext<DataModel>, picture: ChangeProfilePicture) {
+    const state = ctx.getState(),
+      profile = this.store.selectSnapshot(DataQueries.currentProfile),
+      image = this.store.selectSnapshot(DataQueries.getProfileImage(profile.company.id)),
+      req = this.http.post('data', picture);
+        
+    return req.pipe(
+      tap((response: any) => {
+        if ( response[picture.action] !== 'OK' )
+          throw response['messages'];
+        
+        ctx.patchState({
+          ...this.replaceIds(state, 'File', image ? [image.id] : [], response)
+        })
+      })
+    )
+  };
+
+  @Action(ChangeProfileType)
+  changeProfileType(ctx: StateContext<DataModel>, action: ChangeProfileType) {
+    const state = ctx.getState();
+    return ctx.patchState({
+      session: {
+        ...state.session,
+        view: action.type ? 'PME' : 'ST'
+      }
+    });
+  }
+
+  @Action(DownloadFile)
+  downloadFile(ctx: StateContext<DataModel>, download: DownloadFile) {
+    const state = ctx.getState(),
+      contentIndex = state.fields['File'].indexOf('content'),
+      key = `file_${download.id}`;
+    
+    let pending = this.getPending(key);
+    
+    if ( pending ) return pending;
+    
+    let req = this.http.get('data', download);
+    pending = new Subject<string>();
+    this.registerPending(key, pending);
+    
+    return req.pipe(
+      tap((response: any) => {
+        if ( response[download.action] !== 'OK' ) throw response['messages'];
+        delete response[download.action];
+        this.concat(ctx, new Concat('File', response));
+        pending!.next(response[contentIndex]);
+        this.completePending(key);
+      })
+    );
+  }
 };
 
 export class DataQueries {
@@ -257,16 +362,21 @@ export class DataQueries {
     const fields = allFields[target];
     if ( !fields )
       throw `No structure with name ${target}`;
-      
-    if ( fields.length != values.length )
-      throw `Value is probably not of type ${target}`;
     
     const output: any = {};
-    for ( let i = 0; i < values.length; i++ ) {
-      const name = fields[i],
-        jsonName = NameMapping[name] || name;
-      output[jsonName] = values[i];
+    if ( Array.isArray(values) ) {
+      if ( fields.length != values.length )
+      throw `Value is probably not of type ${target}`;
+    
+      for ( let i = 0; i < values.length; i++ ) {
+        const name = fields[i],
+          jsonName = NameMapping[name] || name;
+        output[jsonName] = values[i];
+      }
+    } else {
+      output.name = values;
     }
+    
 
     output.id = id;
 
@@ -277,12 +387,12 @@ export class DataQueries {
   //maybe already set injectContainerState to false
   //each of these have seperate memoization
 
-  @Selector([DataState.getType("UserProfile"), DataState.fields, DataState.currentUserId])
+  @Selector([DataState.users, DataState.fields, DataState.currentUserId])
   static currentUser(profiles: Record<any[]>, fields: Record<string[]>, id: number) {
     return DataQueries.toJson(fields, "UserProfile", id, profiles[id]);
   }
 
-  @Selector([DataState.getType("Company"), DataState.fields, DataState.currentUserId])
+  @Selector([DataState.companies, DataState.fields, DataState.currentUserId])
   static currentCompany(profiles: Record<any[]>, fields: Record<string[]>, id: number) {
     return DataQueries.toJson(fields, "Company", id, profiles[id]);
   }
@@ -293,11 +403,39 @@ export class DataQueries {
   };
 
   private static getDataById<K extends DataTypes>(type: K, id: number) {
-    //no id => get All
     return createSelector([DataState.getType(type)], (record: Record<any[]>) => {
       return record[id];
     });
   }
+
+  // a profile is a company
+  static getProfileById(id: number) {
+    return createSelector([DataState.fields, DataState.companies],
+      (fields: Record<string[]>, companies: Record<any[]>) => {
+      const company = companies[id];
+      
+      if ( !company ) return null;
+      return {
+        user: null,
+        company: DataQueries.toJson(fields, 'Company', id, companies[id])
+      };
+    });
+  }
+
+  static getProfileByUserId(id: number) {
+    return createSelector([DataState.fields, DataState.users, DataState.companies],
+      (fields: Record<string[]>, users: Record<any[]>, companies: Record<any[]>) => {
+      const companyIndex = fields['UserProfile'].indexOf('Company'),
+        user = users[id],
+        companyId = user?.[companyIndex];
+      
+      if ( !user || companyId == undefined ) return null;
+      return {
+        user: DataQueries.toJson(fields, 'UserProfile', id, users[id]),
+        company: DataQueries.toJson(fields, 'Company', companyId, companies[companyId])
+      };
+    });
+  };
 
   static getById<K extends DataTypes>(type: K, id: number) {
     //no id => get All
@@ -325,7 +463,7 @@ export class DataQueries {
     });
   }
 
-  private static contentOf<K extends DataTypes, V extends DataTypes>(parent: K, parentId: number, child: V) {
+  static contentOf<K extends DataTypes, V extends DataTypes>(parent: K, parentId: number, child: V) {
     return createSelector(
       [DataState.fields, DataState.getType(child), DataQueries.getDataById(parent, parentId)],
       (fields: Record<string[]>, childItems: Record<any[]>, parentItem: any[]) => {
@@ -356,6 +494,7 @@ export class DataQueries {
 
 //Decorator
 //Assumes object has store
+//if an object or an observable is given, it won't query
 export function Query<K extends DataTypes>(type: K) {
   return function(target: any, key: string) {
     const hiddenKey = '#' + key;
@@ -386,6 +525,7 @@ export function Query<K extends DataTypes>(type: K) {
   }
 };
 
+//Same as Query but returns a snapshot
 export function Snapshot<K extends DataTypes>(type: K) {
   return function(target: any, key: string) {
     const hiddenKey = '#' + key;
@@ -419,6 +559,74 @@ export function QueryAll<K extends DataTypes>(type: K) {
       get(this: any) {
         if ( !this[hiddenKey] ) this[hiddenKey] = this.store.select(DataQueries.getAll(type));
         return this[hiddenKey];
+      },
+      enumerable: false,
+      configurable: false,
+    });
+  }
+};
+
+export function QueryArray<K extends DataTypes>(type: K) {
+  return function(target: any, key: string) {
+    const hiddenKey = '#' + key;
+
+    Object.defineProperty(target, key, {
+      get(this: any) {
+        return this[hiddenKey] ? this[hiddenKey] : [];
+      },
+      set(this: any, ids: number[]) {
+        this[hiddenKey] = this.store.select(DataQueries.getMany(type, ids));
+      },
+      enumerable: false,
+      configurable: false,
+    });
+  }
+};
+
+export function SnapshotArray<K extends DataTypes>(type: K) {
+  return function(target: any, key: string) {
+    const hiddenKey = '#' + key;
+
+    Object.defineProperty(target, key, {
+      get(this: any) {
+        return this[hiddenKey] ? this[hiddenKey] : null;
+      },
+      set(this: any, ids: number[]) {
+        console.log('snapshot of', type, ids);
+        this[hiddenKey] = this.store.selectSnapshot(DataQueries.getMany(type, ids));
+      },
+      enumerable: false,
+      configurable: false,
+    });
+  }
+}
+
+export function QueryProfile(byUserId: boolean = false) {
+  return function(target: any, key: string) {
+    const hiddenKey = '#' + key;
+
+    Object.defineProperty(target, key, {
+      get(this: any) {
+        return this[hiddenKey] ? this[hiddenKey].value : new Observable(subscriber => {
+          subscriber.next(null);
+          subscriber.complete();
+          subscriber.unsubscribe();
+        });
+      },
+      set(this: any, id: any) {
+        if ( typeof id == 'number' ) {
+          if ( this[hiddenKey] && this[hiddenKey].id === id ) return;
+          this[hiddenKey] = {
+            id,
+            value: byUserId ?
+              this.store.select(DataQueries.getProfileByUserId(id)) :
+              this.store.select(DataQueries.getProfileById(id))
+          }
+        } else if ( id instanceof Observable ) {
+          this[hiddenKey] = { id: undefined, value: id }
+        } else {
+          this[hiddenKey] = { id: id.id, value: of(id) }
+        }
       },
       enumerable: false,
       configurable: false,

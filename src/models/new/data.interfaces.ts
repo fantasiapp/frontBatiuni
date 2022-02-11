@@ -42,6 +42,7 @@ export interface Company {
   logo: any;
   stars: string;
   companyPhone: string;
+  webSite: string;
   jobs: Ref<JobForCompany>[];
   labels: Ref<LabelForCompany>[];
   files: Ref<File>[];
@@ -73,7 +74,7 @@ export interface File {
   ext: string;
   expirationDate: string;
   timestamp: number;
-  content: string | Observable<string>;
+  content: string;
 };
 
 export interface JobForCompany {
@@ -138,3 +139,8 @@ export type Interface<K extends DataTypes> =
   K extends 'JobApplication' ? JobApplication :
   K extends 'Mission' ? Mission :
   K;
+
+export type Profile = {
+  user: User | null;
+  company: Company;
+}

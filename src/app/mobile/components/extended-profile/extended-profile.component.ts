@@ -1,13 +1,13 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from "@angular/core";
-import { Store } from "@ngxs/store";
-import { User } from "src/models/user/user.model";
-import { UserState } from "src/models/user/user.state";
+import { Select, Store } from "@ngxs/store";
 import * as UserActions from "src/models/user/user.actions";
 import { InfoService } from "src/app/shared/components/info/info.component";
 import { take } from "rxjs/operators";
-import { Company, FilesRow, UserProfileRow } from "src/models/data/data.model";
+import { FilesRow, JobForCompany, UserProfileRow } from "src/models/data/data.model";
 import { Serialized } from "src/app/shared/common/types";
 import { PopupService } from "src/app/shared/components/popup/popup.component";
+import { SnapshotArray } from "src/models/new/data.state";
+import { Job, File, Profile } from "src/models/new/data.interfaces";
 
 
 @Component({
@@ -18,26 +18,34 @@ import { PopupService } from "src/app/shared/components/popup/popup.component";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ExtendedProfileComponent {
+
+  @SnapshotArray('JobForCompany')
+  companyJobs!: JobForCompany[];
+
+  @SnapshotArray('Job')
+  jobs!: Job[];
+
+  @SnapshotArray('File')
+  files!: File[];
+
+  _profile!: Profile;
+  get profile() { return this._profile; }
   
-  user?: User;
-
-  @Input('user')
-  set companyFromUser(user: User) {
-    this.company = user.profile!.company;
-    this.user = user;
-  }
-
   @Input()
-  company!: Company;
-
+  set profile(profile: Profile) {
+    this._profile = profile;
+    this.files = profile.company.files as any;
+    this.companyJobs = profile.company.jobs as any;
+    this.jobs = this.companyJobs.map(({job}) => job);
+  }
+  
   @Input()
   showContact: boolean = false;
 
   constructor(private store: Store, private info: InfoService, private popup: PopupService) {}
 
   get attachedFiles(): any[] {
-    const user = this.store.selectSnapshot(UserState).profile as Serialized<UserProfileRow>;
-    return user.company.files.filter(file => file.nature == 'admin' || file.nature == 'labels');
+    return this.files.filter(file => file.nature == 'admin' || file.nature == 'labels');
   }
 
   getFileColor(filename: string) {

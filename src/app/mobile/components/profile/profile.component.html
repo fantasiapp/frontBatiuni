@@ -6,12 +6,8 @@
     <img src="assets/menu.svg" (click)="openMenu = true" />
   </header>
 
-  <div class="page-content">
-    <profile-image [profile]="profile"></profile-image>
-  </div>
-
-  <!-- <extended-profile class="page-content" [user]="user" (ratingsClicked)="openRatings = true" (profileChanged)="changeProfileType($event)"> -->
-  <!-- </extended-profile> -->
+  <extended-profile class="page-content" [profile]="profile" (ratingsClicked)="openRatings = true" (profileChanged)="changeProfileType($event)">
+  </extended-profile>
 
   <swipeup [(open)]="openMenu">
     <li (click)="slideModifyMenu(false)">Modifier mon profil</li>
