@@ -1,0 +1,19 @@
+
+.stepper {
+  width: 100vw;
+  height: 100vh;
+  padding: 1rem;
+  position: relative;
+  .test {
+    border: 1px solid;
+    width: 100px;
+    height: 100px;
+  }
+  svg {
+    position: absolute;
+  }
+}
+#circleV:hover,
+#circleH:hover {
+  cursor: pointer;
+}

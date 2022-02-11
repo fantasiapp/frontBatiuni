@@ -25,6 +25,7 @@ import { SuiviComments } from "./ui/suivi/comment.suivi";
 import { ReactiveFormsModule } from "@angular/forms";
 import { ReponseCard } from "./ui/reponse-card/reponse-card";
 import { SuiviChantier } from "./ui/suivi-chantier/suivi.chantier";
+import { StepperSys } from "./ui/stepper-sys/stepper.componenet";
 
 @NgModule({
   declarations: [
@@ -48,7 +49,8 @@ import { SuiviChantier } from "./ui/suivi-chantier/suivi.chantier";
     AnnonceValidePage,
     SuiviComments,
     ReponseCard,
-    SuiviChantier
+    SuiviChantier,
+    StepperSys
   ],
   imports: [
     CommonModule,
