@@ -1,0 +1,74 @@
+@import "src/styles/mixins";
+@import "src/styles/variables";
+$textColor : #44444F;
+
+:host {
+    position: absolute;
+    top: 145px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: inherit;
+    z-index: 999;
+    @include range($mobile, 1500px) {
+        // .company {
+        //     display: flex;
+        //     flex-direction: column;
+        // }
+        .info {
+            // .company-data {
+            //     flex-direction: row;
+            //     span:not(:last-child) {
+            //         margin-right: 1rem;
+            //     }
+            // }
+            // .seconde-info {
+            //     display: none;
+            // }
+        }
+        .logo {
+            margin-bottom: 1rem;
+            transform: scale(0.9);
+        }
+    }
+}
+
+.company {
+    backdrop-filter: revert;
+
+    background: inherit;
+    display: flex;
+    align-items: center;
+    div:not(:last-child) {
+        margin-right: 2rem;
+    }
+}
+
+.logo {
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+    width: 150px;
+    height: 150px;
+    background-color: #fcfcfc;
+    img {width: inherit; height: fit-content;}
+}
+.info {
+    .company-data {
+        font-weight: 400;
+        font-size: 2rem;
+        span:not(:last-child) {
+            color: white;
+            margin-bottom: 1rem;
+        }
+        display: flex;
+        flex-direction: column;
+    }
+    & > *:not(:last-child) {
+        margin-bottom: 2rem;
+    }
+    .seconde-info {
+        span:not(:last-child) {
+            margin-right: 1rem;
+        }
+    }
+}

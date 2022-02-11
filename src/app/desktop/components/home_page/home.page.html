@@ -14,9 +14,12 @@
     </section>
     <ng-container *ngIf="user.viewType; else stview">
       <section class="main web-content font-Poppins">
+       <div class="flex row center">
         <searchbar
           [placeholder]="activeView == 0 ? 'Recheche brouillon...' : activeView == 1 ? 'Recheche annonces enligne...' :  'Recheche annonces validées'">
         </searchbar>
+        <img class="filterOnly" (click)="showFilters = !showFilters" src="assets/Filter.svg">
+      </div>
         <div class="report-search">
           Resultat <span class="no-result">{{ viewPostLength() }}</span>
         </div>
@@ -200,6 +203,12 @@
         </ng-template>
       </ng-template>
     </div>
+  </div>
+  <div *ngIf="showFilters" [@enterAnimation] class="showFilters flex center column">
+    <div class="flex close" (click)="showFilters = !showFilters">
+      <img  src="assets/X-ICON.svg" >
+    </div>
+    <pme-filter-form [activeView]="activeView"></pme-filter-form>
   </div>
 </ng-container>
 

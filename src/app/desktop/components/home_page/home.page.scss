@@ -1,9 +1,20 @@
 @import "src/styles/mixins";
 @import "src/styles/variables";
+@import 'src/styles/animations.scss';
+
 :host {
   display: block;
 }
-
+.web-page {
+  @include range($mobile , 1500px){
+   .filters {
+     display: none;
+   }
+   .filterOnly{
+     display: block !important;
+   }
+  }
+}
 .web-content {
   min-height: 90vh !important;
   height: fit-content;
@@ -206,4 +217,29 @@ pme-filter-form::ng-deep {
   font-weight: 300 !important;
   font-size: 14px;
   margin-left: 0.5rem;
+}
+.showFilters{
+  padding: 2rem;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+  width: 30vw;
+  height: 100%;
+  left: 0;
+  top: 210px;
+  position: absolute;
+  z-index: 999;
+  background: white;
+  // @extend .animating;
+  overflow-y: auto;
+  // animation: $slide 50ms normal both slide-in-right;
+  cursor: pointer;
+  .close
+  {
+    width: 100%;
+    justify-content: end;
+  }
+}
+.filterOnly {
+  display: none !important;
+  height: 100%;
+  cursor: pointer;
 }

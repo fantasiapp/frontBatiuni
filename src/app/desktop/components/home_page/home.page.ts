@@ -1,3 +1,4 @@
+import { animate, style, transition, trigger } from "@angular/animations";
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, TemplateRef, ViewChild } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { Select, Store } from "@ngxs/store";
@@ -19,6 +20,20 @@ type resumerType = 'enligne' | 'valider';
 
 @Component({
   selector: 'home',
+  animations: [
+    trigger(
+      'enterAnimation', [
+        transition(':enter', [
+          style({transform: 'translateX(-100%)', opacity: 0}),
+          animate('300ms', style({transform: 'translateX(0)', opacity: 1}))
+        ]),
+        transition(':leave', [
+          style({transform: 'translateX(0)', opacity: 1}),
+          animate('200ms', style({transform: 'translateX(-100%)', opacity: 0}))
+        ])
+      ]
+    )
+  ],
   templateUrl: './home.page.html',
   styleUrls: ['./home.page.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -132,7 +147,7 @@ export class HomePageComponent extends Destroy$ {
     console.log(this.testTemplate)
     this.cd.markForCheck();
   }
-
+  showFilters: boolean = false;
   
 };
 // function to add two numbers
