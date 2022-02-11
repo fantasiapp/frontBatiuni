@@ -6,8 +6,9 @@ import { take } from "rxjs/operators";
 import { FilesRow, JobForCompany, UserProfileRow } from "src/models/data/data.model";
 import { Serialized } from "src/app/shared/common/types";
 import { PopupService } from "src/app/shared/components/popup/popup.component";
-import { SnapshotArray } from "src/models/new/data.state";
+import { QueryProfile, SnapshotArray } from "src/models/new/data.state";
 import { Job, File, Profile } from "src/models/new/data.interfaces";
+import { Observable } from "rxjs";
 
 
 @Component({
@@ -28,21 +29,24 @@ export class ExtendedProfileComponent {
   @SnapshotArray('File')
   files!: File[];
 
-  _profile!: Profile;
-  get profile() { return this._profile; }
-  
+  @QueryProfile(true)
   @Input()
-  set profile(profile: Profile) {
-    this._profile = profile;
-    this.files = profile.company.files as any;
-    this.companyJobs = profile.company.jobs as any;
-    this.jobs = this.companyJobs.map(({job}) => job);
-  }
+  profile!: any;
+
+  get profile$() { return this.profile as Observable<Profile>; }
   
   @Input()
   showContact: boolean = false;
 
   constructor(private store: Store, private info: InfoService, private popup: PopupService) {}
+
+  ngOnInit() {
+    this.profile$.subscribe((profile) => {
+      this.files = profile.company.files as any;
+      this.companyJobs = profile.company.jobs as any;
+      this.jobs = this.companyJobs.map(({job}) => job);
+    });
+  }
 
   get attachedFiles(): any[] {
     return this.files.filter(file => file.nature == 'admin' || file.nature == 'labels');

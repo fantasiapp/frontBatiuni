@@ -48,6 +48,7 @@ import { UISwipeupComponent } from "./components/swipeup/swipeup.component";
 import { UISlideMenuComponent } from "./components/slidemenu/slidemenu.component";
 import { UITooltipComponent } from "./components/tooltip/tooltip.component";
 import { ProfileCardComponent } from "./components/profile-card/profile.card";
+import { CastPipe } from "./pipes/cast.pipe";
 
 @NgModule({
   declarations: [
@@ -96,7 +97,8 @@ import { ProfileCardComponent } from "./components/profile-card/profile.card";
     UISwipeupComponent,
     UISlideMenuComponent,
     UITooltipComponent,
-    ProfileCardComponent
+    ProfileCardComponent,
+    CastPipe
   ],
   imports: [
     CommonModule,
@@ -152,7 +154,8 @@ import { ProfileCardComponent } from "./components/profile-card/profile.card";
     UISwipeupComponent,
     UISlideMenuComponent,
     UITooltipComponent,
-    ProfileCardComponent
+    ProfileCardComponent,
+    CastPipe
   ],
   providers: [ImageGenerator]
 })

@@ -566,6 +566,21 @@ export function QueryAll<K extends DataTypes>(type: K) {
   }
 };
 
+export function SnapshotAll<K extends DataTypes>(type: K) {
+  return function(target: any, key: string) {
+    const hiddenKey = '#' + key;
+
+    Object.defineProperty(target, key, {
+      get(this: any) {
+        if ( !this[hiddenKey] ) this[hiddenKey] = this.store.selectSnapshot(DataQueries.getAll(type));
+        return this[hiddenKey];
+      },
+      enumerable: false,
+      configurable: false,
+    });
+  }
+};
+
 export function QueryArray<K extends DataTypes>(type: K) {
   return function(target: any, key: string) {
     const hiddenKey = '#' + key;
@@ -592,7 +607,6 @@ export function SnapshotArray<K extends DataTypes>(type: K) {
         return this[hiddenKey] ? this[hiddenKey] : null;
       },
       set(this: any, ids: number[]) {
-        console.log('snapshot of', type, ids);
         this[hiddenKey] = this.store.selectSnapshot(DataQueries.getMany(type, ids));
       },
       enumerable: false,
@@ -614,6 +628,7 @@ export function QueryProfile(byUserId: boolean = false) {
         });
       },
       set(this: any, id: any) {
+        console.log('set query profile');
         if ( typeof id == 'number' ) {
           if ( this[hiddenKey] && this[hiddenKey].id === id ) return;
           this[hiddenKey] = {

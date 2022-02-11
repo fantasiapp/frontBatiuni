@@ -4,9 +4,9 @@
 </section>
 
 <switch *ngIf="switch"
-  off="Profile ST" on="Profil PME"  style="text-align: center;"
+  off="Profil ST" on="Profil PME"  style="text-align: center;"
   [value]="(view$ | async) == 'PME'" 
-  (valueChange)="profileChanged.emit($event)"
+  (valueChange)="changeProfileType($event)"
   [disabled]="profile.company.role !== 3 || null">
 </switch>
 
@@ -18,7 +18,7 @@
     <span>{{ profile.user!.email }}</span>
     <span>{{ profile.user!.cellPhone | space: 2:1 }}</span>
   </ng-container>
-  <a *ngIf="changeImage" class="blue">Modifier l’image de profil</a>
+  <a *ngIf="canChangePicture" class="blue">Modifier l’image de profil</a>
   <stars *ngIf="star" (click)="ratingsClicked.emit()" value="3.9"></stars>
 </section>
 <ng-content></ng-content>

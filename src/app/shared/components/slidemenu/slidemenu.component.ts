@@ -94,6 +94,10 @@ export class UISlideMenuComponent extends UIOpenMenu {
   }
 };
 
+export type Menu = {
+
+};
+
 @Injectable({
   providedIn: 'root'
 })

@@ -10,10 +10,8 @@ import { InfoService } from "src/app/shared/components/info/info.component";
 import { take } from "rxjs/operators";
 import { FormGroup } from "@angular/forms";
 import { ModifyProfileForm } from "src/app/shared/forms/ModifyProfile.form";
-import { FilesRow, UserProfileRow } from "src/models/data/data.model";
-import { Serialized } from "src/app/shared/common/types";
 import { PopupService } from "src/app/shared/components/popup/popup.component";
-import { DataQueries, QueryAll } from "src/models/new/data.state";
+import { DataQueries } from "src/models/new/data.state";
 import { Destroy$ } from "src/app/shared/common/classes";
 import { Profile } from "src/models/new/data.interfaces";
 
@@ -56,7 +54,7 @@ export class ProfileComponent extends Destroy$ {
 
     if ( !this.modifyPassword ) {
       this.fixScrollTop();
-      this.modifyForm?.reloadData();
+      this.modifyForm?.reload();
     }
   }
   
@@ -104,10 +102,6 @@ export class ProfileComponent extends Destroy$ {
       error => { this.info.show("error", "Erreur lors du changement du mot de passe"); }
     )
   }
-
-  changeProfileType(type: boolean) {
-    this.store.dispatch(new UserActions.ChangeProfileType(type));
-  };
 
   async takePhoto() {    
     let user = this.store.selectSnapshot(UserState)

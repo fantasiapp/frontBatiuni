@@ -2,18 +2,17 @@ import { ChangeDetectionStrategy, Component, HostListener, Input, ViewChild, Eve
 import { FormArray, FormControl, FormGroup } from "@angular/forms";
 import { Camera } from "@capacitor/camera";
 import { Serialized } from "src/app/shared/common/types";
-import { FilesRow, JobRow, LabelRow, UserProfileRow } from "src/models/data/data.model";
 import { Option } from "src/models/option";
 import { SlidesDirective } from "../directives/slides.directive";
 import { defaultFileUIOuput, FileUIOutput } from "../components/filesUI/files.ui";
-import { Email } from "src/validators/persist";
 import { FieldType } from "src/validators/verify";
-import { of } from "rxjs";
 import { PopupService } from "../components/popup/popup.component";
 import { InfoService } from "../components/info/info.component";
 import { DownloadFile } from "src/models/user/user.actions";
 import { Store } from "@ngxs/store";
 import { take } from "rxjs/operators";
+import { DataQueries, DataState, SnapshotAll, SnapshotArray } from "src/models/new/data.state";
+import { Job, Label, File, Profile, User, Company, LabelForCompany, JobForCompany } from "src/models/new/data.interfaces";
 
 @Component({
   selector: 'modify-profile-form',
@@ -71,7 +70,7 @@ import { take } from "rxjs/operators";
           <ng-container *ngIf="!addingField; else addfield_tpl">
             <label>Métiers</label>
             <ng-container formArrayName="UserProfile.Company.JobForCompany">
-              <span class="position-relative number form-element" *ngFor="let control of profileJobsControls; index as i">
+              <span class="position-relative number form-element" *ngFor="let control of companyJobsControls; index as i">
                 <ng-container [formGroupName]="i">
                   <span class="number-name">{{control.get('job')!.value.name}}</span>
                   <div class="position-absolute number-container">
@@ -88,7 +87,7 @@ import { take } from "rxjs/operators";
         
           <ng-template #addfield_tpl>
               <label>Ajoutez des métiers</label>
-              <options [options]="allJobs" [value]="companyJobs" (valueChange)="updateJobs($event)"></options>
+              <options [options]="allJobs" [value]="toOptions('Job', companyJobs)" (valueChange)="updateJobs($event)"></options>
             <div class="form-input center-text">
               <button (click)="addingField = false" style="display:inline; width: 80%; padding: 5px;" class="button gradient"> Terminer </button>
             </div>
@@ -147,7 +146,7 @@ import { take } from "rxjs/operators";
         </h3>
         <div class="form-input">
           <label>Vos labels</label>
-          <options [options]="allLabels" [value]="companyLabels" (valueChange)="updateLabels($event)"></options>
+          <options [options]="allLabels" [value]="toOptions('Label', companyLabels)" (valueChange)="updateLabels($event)"></options>
         </div>
         <ng-container formArrayName="UserProfile.Company.LabelForCompany">
             <span class="position-relative" *ngFor="let control of companyLabelControls; index as i">
@@ -230,53 +229,94 @@ import { take } from "rxjs/operators";
 })
 export class ModifyProfileForm {
 
-  @Input() user!: Serialized<UserProfileRow>;
+  //swipe events
+  @ViewChild(SlidesDirective) slider!: SlidesDirective;
+  @HostListener('swipeleft')
+  onSwipeLeft() { this.slider.left(); }
+  
+  @HostListener('swiperight')
+  onSwipeRight() { this.slider.right(); }
+
+  //outputs
+  onSubmit() { this.submit.emit(this.form); }
+  @Output() submit = new EventEmitter<FormGroup>();
+
   @Input() index: number = 0;
   @Input() animate: boolean = true;
-  @Output() submitted = new EventEmitter<FormGroup>();
-  @ViewChild(SlidesDirective) slider!: SlidesDirective;
+
+  //get all labels and jobs
+  @SnapshotAll('Label')
+  allLabels!: Label[];
+
+  @SnapshotAll('Job')
+  allJobs!: Job[];
+
+  //params that depend on the profile
+  @SnapshotArray('LabelForCompany')
+  companyLabels!: LabelForCompany[];
+  
+  @SnapshotArray('JobForCompany')
+  companyJobs!: JobForCompany[];
+
+  toOptions(field: 'Label' | 'Job', fieldForCompany: LabelForCompany[] | JobForCompany[]): Option[] {
+    const ids = field == 'Label' ?
+      (fieldForCompany as LabelForCompany[]).map(({label}) => label) : 
+      (fieldForCompany as JobForCompany[]).map(({job}) => job);
+    
+    if ( field == 'Label' )
+      return this.allLabels.filter(({id}) => ids.includes(id))
+    else
+      return this.allJobs.filter(({id}) => ids.includes(id));
+  }
+
+  @SnapshotArray('File')
+  companyFiles!: File[];
+
+  @Input() profile!: Profile;
+  @Input() user: any;
+
 
   constructor(private cd: ChangeDetectorRef, private store: Store, private popup: PopupService, private info: InfoService) {
 
   } 
 
   requestFile(type: 'admin' | 'labels', filename: string) {
-    let target: Serialized<FilesRow> | undefined,
-      content: FileUIOutput | undefined;
+  //   let target: Serialized<FilesRow> | undefined,
+  //     content: FileUIOutput | undefined;
     
-    if ( type == 'admin' ) {
-      const field = this.form.controls['UserProfile.Company.admin'] as FormGroup,
-        input = field.controls[filename];
+  //   if ( type == 'admin' ) {
+  //     const field = this.form.controls['UserProfile.Company.admin'] as FormGroup,
+  //       input = field.controls[filename];
       
-      if ( input && (input.value as FileUIOutput).content )
-        content = input.value;      
-    } else {
-      const field = this.form.controls['UserProfile.Company.LabelForCompany'] as FormArray,
-        group = (field.controls as FormGroup[]).find(group => group.controls['label']?.value.name == filename);
+  //     if ( input && (input.value as FileUIOutput).content )
+  //       content = input.value;      
+  //   } else {
+  //     const field = this.form.controls['UserProfile.Company.LabelForCompany'] as FormArray,
+  //       group = (field.controls as FormGroup[]).find(group => group.controls['label']?.value.name == filename);
       
-      if ( group && (group.controls['fileData'].value as FileUIOutput).content )
-        content = group.controls['fileData'].value;      
-    }
+  //     if ( group && (group.controls['fileData'].value as FileUIOutput).content )
+  //       content = group.controls['fileData'].value;      
+  //   }
 
-    if ( !content )
-      target = this.user.company.files.find(file => file.name == filename);
+  //   if ( !content )
+  //     target = this.user.company.files.find(file => file.name == filename);
     
-    if ( !content && !target ) {
-      this.info.show('error', `Le fichier "${filename}" n'existe pas.`, 2000);
-      return;
-    }
+  //   if ( !content && !target ) {
+  //     this.info.show('error', `Le fichier "${filename}" n'existe pas.`, 2000);
+  //     return;
+  //   }
 
-    if ( !content ) {
-      this.info.show('info', 'Téléchargement du fichier', Infinity);
-      const req = this.store.dispatch(new DownloadFile(target!.id));
-      req.pipe(take(1)).subscribe(() => {
-        const file = FilesRow.getById(target!.id);
-        this.popup.openFile(file);
-        this.info.show('success', 'Fichier téléchargé', 2000);
-      })
-    } else {
-      this.popup.openFile(content);
-    }
+  //   if ( !content ) {
+  //     this.info.show('info', 'Téléchargement du fichier', Infinity);
+  //     const req = this.store.dispatch(new DownloadFile(target!.id));
+  //     req.pipe(take(1)).subscribe(() => {
+  //       const file = FilesRow.getById(target!.id);
+  //       this.popup.openFile(file);
+  //       this.info.show('success', 'Fichier téléchargé', 2000);
+  //     })
+  //   } else {
+  //     this.popup.openFile(content);
+  //   }
   }
 
   form: FormGroup = new FormGroup({
@@ -327,21 +367,13 @@ export class ModifyProfileForm {
     })
   });
 
-  get profileJobsControls() {
+  get companyJobsControls() {
     return (this.form.controls['UserProfile.Company.JobForCompany'] as FormArray).controls;
   }
 
   get companyLabelControls() {
     return (this.form.controls['UserProfile.Company.LabelForCompany'] as FormArray).controls;
   }
-
-  @HostListener('swipeleft')
-  onSwipeLeft() { this.slider.left(); }
-  
-  @HostListener('swiperight')
-  onSwipeRight() { this.slider.right(); }
-
-  onSubmit() { this.submitted.emit(this.form); }
   
   async ngOnInit() {
     let permissions  = await Camera.checkPermissions();
@@ -353,117 +385,116 @@ export class ModifyProfileForm {
       } catch ( e ) {  }
 
     
-    this.reloadData();
+    this.reload();
   }
 
-  reloadData() {    
-    this.companyLabels = this.user.company.labels.map(label => label.label);
-    this.companyJobs = this.user.company.jobs.map(job => job.job);
+  reload() {
+    const { user, company} = this.profile as {user: User, company: Company};
+    this.companyFiles = this.profile.company.files as any;
+    this.companyLabels = this.profile.company.labels as any;
+    this.companyJobs = this.profile.company.jobs as any;
     
     const filesInput = this.form.controls['UserProfile.Company.admin'];
-    this.user.company.files.forEach(({name}) => {
+    this.companyFiles.forEach(({name}) => {
       filesInput.get(name)?.patchValue({name});
     });
+
+    console.log(this.profile.company.labels, this.profile.company.jobs);
+    console.log(this.companyJobs, this.companyLabels);
     
-    this.form.controls['UserProfile.lastName']?.setValue(this.user.lastName);
-    this.form.controls['UserProfile.firstName']?.setValue(this.user.firstName);
-    this.form.controls['UserProfile.userName']?.setValue(this.user.user);
-    this.form.controls['UserProfile.cellPhone']?.setValue(this.user.cellPhone);
-    this.form.controls['UserProfile.Company.name']?.setValue(this.user.company.name);
-    this.form.controls['UserProfile.Company.siret']?.setValue(this.user.company.siret);
-    this.form.controls['UserProfile.Company.revenue']?.setValue(this.user.company.revenue);
-    this.form.controls['UserProfile.Company.capital']?.setValue(this.user.company.capital);
-    this.form.controls['UserProfile.Company.webSite']?.setValue(this.user.company.webSite);
-    this.form.controls['UserProfile.Company.companyPhone']?.setValue(this.user.company.companyPhone);
+    this.form.controls['UserProfile.lastName']?.setValue(user.lastName);
+    this.form.controls['UserProfile.firstName']?.setValue(user.firstName);
+    this.form.controls['UserProfile.userName']?.setValue(user.email);
+    this.form.controls['UserProfile.cellPhone']?.setValue(user.cellPhone);
+    this.form.controls['UserProfile.Company.name']?.setValue(company.name);
+    this.form.controls['UserProfile.Company.siret']?.setValue(company.siret);
+    this.form.controls['UserProfile.Company.revenue']?.setValue(company.revenue);
+    this.form.controls['UserProfile.Company.capital']?.setValue(company.capital);
+    this.form.controls['UserProfile.Company.webSite']?.setValue(company.webSite);
+    this.form.controls['UserProfile.Company.companyPhone']?.setValue(company.companyPhone);
     
     const jobControl = this.form.controls['UserProfile.Company.JobForCompany'] as FormArray;
-    jobControl.clear();
-    for ( let job of this.user.company.jobs ) {
-      jobControl.push(new FormGroup({
-        job: new FormControl(job.job),
-        number: new FormControl(job.number)
-      }));
-    }
+    // jobControl.clear();
+    // for ( let job of this.companyJobs ) {
+    //   jobControl.push(new FormGroup({
+    //     job: new FormControl(job.job),
+    //     number: new FormControl(job.number)
+    //   }));
+    // }
     
-    const labelControl = this.form.controls['UserProfile.Company.LabelForCompany'] as FormArray;
+    // const labelControl = this.form.controls['UserProfile.Company.LabelForCompany'] as FormArray;
     
-    labelControl.clear();
-    for ( let label of this.user.company.labels ) {
-      console.log(label);
-      labelControl.push(new FormGroup({
-        label: new FormControl(label.label),
-        //get date from server
-        fileData: new FormControl(defaultFileUIOuput(label.label.name, label.date, 'Fichier pris en compte'))
-      }));
-    }
+    // labelControl.clear();
+    // for ( let label of this.companyLabels ) {
+    //   console.log(label);
+    //   this.store.selectSnapshot(DataQueries.getById('Label', ))
+    //   labelControl.push(new FormGroup({
+    //     label: new FormControl(label.label),
+    //     //get date from server
+    //     fileData: new FormControl(defaultFileUIOuput(label.label.name, label.date, 'Fichier pris en compte'))
+    //   }));
+    // }
 
-    this.cd.markForCheck();
+    // this.cd.markForCheck();
   }
 
 
   //make functions to help merge
   updateJobs(jobOptions: Option[]) {
-    const jobsControl = this.form.controls['UserProfile.Company.JobForCompany'] as FormArray,
-      oldJobs = jobsControl.value as {job: JobRow, number: number}[],
-      newJobs = jobOptions.map(option => JobRow.getById(option.id)!);
+    // const jobsControl = this.form.controls['UserProfile.Company.JobForCompany'] as FormArray,
+    //   oldJobs = jobsControl.value as {job: JobRow, number: number}[],
+    //   newJobs = jobOptions.map(option => JobRow.getById(option.id)!);
 
-    const
-      newEntries = newJobs.map(newJob => [newJob, 1] as [JobRow, number]),
-      oldEntries = oldJobs
-        .filter(oldJob => newJobs.includes(oldJob.job))
-        .map(oldJob => [oldJob.job, oldJob.number] as [JobRow, number]);
+    // const
+    //   newEntries = newJobs.map(newJob => [newJob, 1] as [JobRow, number]),
+    //   oldEntries = oldJobs
+    //     .filter(oldJob => newJobs.includes(oldJob.job))
+    //     .map(oldJob => [oldJob.job, oldJob.number] as [JobRow, number]);
 
 
-    const countMap = new Map<JobRow, number>([
-      ...newEntries,
-      ...oldEntries
-    ]);
+    // const countMap = new Map<JobRow, number>([
+    //   ...newEntries,
+    //   ...oldEntries
+    // ]);
 
-    jobsControl.clear(); this.companyJobs.length = 0;
-    [...countMap.entries()].forEach(([job, number]) => {
-      this.companyJobs.push(job);
-      const form = new FormGroup({
-        job: new FormControl(job),
-        number: new FormControl(number)
-      });
-      jobsControl.push(form);
-    });
+    // jobsControl.clear(); this.companyJobs.length = 0;
+    // [...countMap.entries()].forEach(([job, number]) => {
+    //   this.companyJobs.push(job);
+    //   const form = new FormGroup({
+    //     job: new FormControl(job),
+    //     number: new FormControl(number)
+    //   });
+    //   jobsControl.push(form);
+    // });
     
-    jobsControl.markAsTouched(); jobsControl.markAsDirty();
-    this.form.markAsDirty();
-    this.form.markAsTouched();
+    // jobsControl.markAsTouched(); jobsControl.markAsDirty();
+    // this.form.markAsDirty();
+    // this.form.markAsTouched();
   };
 
   updateLabels(labelOptions: Option[]) {
-    const labelsControl = this.form.controls['UserProfile.Company.LabelForCompany'] as FormArray,
-      newLabels = labelOptions.map(label => LabelRow.getById(label.id)!) as LabelRow[],
-      companyLabels = this.user.company.labels;
+    // const labelsControl = this.form.controls['UserProfile.Company.LabelForCompany'] as FormArray,
+    //   newLabels = labelOptions.map(label => LabelRow.getById(label.id)!) as LabelRow[],
+    //   companyLabels = this.user.company.labels;
     
-    //also consider old labels
-    labelsControl.clear(); this.companyLabels.length = 0;
-    newLabels.forEach((label) => {
-      const hasLabel = companyLabels.find(companyLabel => companyLabel.label.id == label.id),
-        fileData = new FormControl(defaultFileUIOuput(label.name, hasLabel?.date, hasLabel ? 'Fichier pris en compte' : undefined)); 
+    // //also consider old labels
+    // labelsControl.clear(); this.companyLabels.length = 0;
+    // newLabels.forEach((label) => {
+    //   const hasLabel = companyLabels.find(companyLabel => companyLabel.label.id == label.id),
+    //     fileData = new FormControl(defaultFileUIOuput(label.name, hasLabel?.date, hasLabel ? 'Fichier pris en compte' : undefined)); 
       
-      this.companyLabels.push(label);
-      const form  = new FormGroup({
-        label: new FormControl(label),
-        fileData
-      });
-      labelsControl.push(form);
-    });
+    //   this.companyLabels.push(label);
+    //   const form  = new FormGroup({
+    //     label: new FormControl(label),
+    //     fileData
+    //   });
+    //   labelsControl.push(form);
+    // });
 
-    labelsControl.markAsTouched(); labelsControl.markAsDirty();
-    this.form.markAsDirty();
-    this.form.markAsTouched();
+    // labelsControl.markAsTouched(); labelsControl.markAsDirty();
+    // this.form.markAsDirty();
+    // this.form.markAsTouched();
   }
-
-  /* create utility for getting data around an admin file */
-  
-  allLabels = [...LabelRow.instances.values()];        
-  allJobs = [...JobRow.instances.values()];;
-  companyLabels: Option[] = [];
-  companyJobs: Option[] = [];
 
   addingField: boolean = false;
 };
