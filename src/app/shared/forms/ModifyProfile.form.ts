@@ -1,18 +1,16 @@
-import { ChangeDetectionStrategy, Component, HostListener, Input, ViewChild, EventEmitter, Output, ChangeDetectorRef } from "@angular/core";
+import { ChangeDetectionStrategy, Component, HostListener, Input, ViewChild, EventEmitter, Output, ChangeDetectorRef, SimpleChanges } from "@angular/core";
 import { FormArray, FormControl, FormGroup } from "@angular/forms";
 import { Camera } from "@capacitor/camera";
-import { Serialized } from "src/app/shared/common/types";
 import { Option } from "src/models/option";
 import { SlidesDirective } from "../directives/slides.directive";
-import { defaultFileUIOuput, FileUIOutput } from "../components/filesUI/files.ui";
+import { defaultFileUIOuput } from "../components/filesUI/files.ui";
 import { FieldType } from "src/validators/verify";
 import { PopupService } from "../components/popup/popup.component";
 import { InfoService } from "../components/info/info.component";
-import { DownloadFile } from "src/models/user/user.actions";
 import { Store } from "@ngxs/store";
-import { take } from "rxjs/operators";
-import { DataQueries, DataState, SnapshotAll, SnapshotArray } from "src/models/new/data.state";
+import { SnapshotAll, SnapshotArray } from "src/models/new/data.state";
 import { Job, Label, File, Profile, User, Company, LabelForCompany, JobForCompany } from "src/models/new/data.interfaces";
+import { SpacingPipe } from "../pipes/spacing.pipe";
 
 @Component({
   selector: 'modify-profile-form',
@@ -87,9 +85,9 @@ import { Job, Label, File, Profile, User, Company, LabelForCompany, JobForCompan
         
           <ng-template #addfield_tpl>
               <label>Ajoutez des métiers</label>
-              <options [options]="allJobs" [value]="toOptions('Job', companyJobs)" (valueChange)="updateJobs($event)"></options>
+              <options [options]="allJobs" [value]="selectedJobs" #jobOptions></options>
             <div class="form-input center-text">
-              <button (click)="addingField = false" style="display:inline; width: 80%; padding: 5px;" class="button gradient"> Terminer </button>
+              <button (click)="updateJobs(jobOptions.value!)" style="display:inline; width: 80%; padding: 5px;" class="button gradient"> Terminer </button>
             </div>
           </ng-template>
         </div>            
@@ -146,7 +144,7 @@ import { Job, Label, File, Profile, User, Company, LabelForCompany, JobForCompan
         </h3>
         <div class="form-input">
           <label>Vos labels</label>
-          <options [options]="allLabels" [value]="toOptions('Label', companyLabels)" (valueChange)="updateLabels($event)"></options>
+          <options [options]="allLabels" [value]="selectedLabels" (valueChange)="updateLabels($event)" #labelOptions></options>
         </div>
         <ng-container formArrayName="UserProfile.Company.LabelForCompany">
             <span class="position-relative" *ngFor="let control of companyLabelControls; index as i">
@@ -224,6 +222,16 @@ import { Job, Label, File, Profile, User, Company, LabelForCompany, JobForCompan
       padding: 10px 30px;
       @include with-set-safe-area(padding, bottom, 10px);
     }
+
+    .metiers {
+      & > .form-element {
+        border-bottom: 2px solid #cdcfd0 !important; //otherwise it will focus all fields
+      }
+
+      .form-element:focus-within {
+        border-bottom-color: #2980b9 !important;
+      }
+    }
   `],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -254,20 +262,11 @@ export class ModifyProfileForm {
   //params that depend on the profile
   @SnapshotArray('LabelForCompany')
   companyLabels!: LabelForCompany[];
+  selectedLabels!: Label[];
   
   @SnapshotArray('JobForCompany')
   companyJobs!: JobForCompany[];
-
-  toOptions(field: 'Label' | 'Job', fieldForCompany: LabelForCompany[] | JobForCompany[]): Option[] {
-    const ids = field == 'Label' ?
-      (fieldForCompany as LabelForCompany[]).map(({label}) => label) : 
-      (fieldForCompany as JobForCompany[]).map(({job}) => job);
-    
-    if ( field == 'Label' )
-      return this.allLabels.filter(({id}) => ids.includes(id))
-    else
-      return this.allJobs.filter(({id}) => ids.includes(id));
-  }
+  selectedJobs!: Label[];
 
   @SnapshotArray('File')
   companyFiles!: File[];
@@ -383,9 +382,16 @@ export class ModifyProfileForm {
           permissions: ["camera", "photos"]
         });
       } catch ( e ) {  }
-
     
-    this.reload();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if ( changes['profile'] )
+      this.reload();
+  }
+
+  space(value: any, each: number = 2, by: number = 1) {
+    return SpacingPipe.prototype.transform(value, each, by);
   }
 
   reload() {
@@ -393,47 +399,64 @@ export class ModifyProfileForm {
     this.companyFiles = this.profile.company.files as any;
     this.companyLabels = this.profile.company.labels as any;
     this.companyJobs = this.profile.company.jobs as any;
-    
+
+    const jobMapping = new Map(),
+      labelMapping = new Map();
+
+    this.selectedJobs = [];
+    this.allJobs.forEach(job => {
+      const used = this.companyJobs.find(jobForCompany => jobForCompany.job == job.id);
+      if ( used ) {
+        jobMapping.set(used.id, job);
+        this.selectedJobs.push(job);
+      }
+    });
+
+    this.selectedLabels = [];
+    this.allLabels.forEach(label => {
+      const used = this.companyLabels.find(labelForCompany => labelForCompany.label == label.id);
+      if ( used ) {
+        labelMapping.set(used.id, label);
+        this.selectedLabels.push(label);
+      }
+    });
+
     const filesInput = this.form.controls['UserProfile.Company.admin'];
     this.companyFiles.forEach(({name}) => {
       filesInput.get(name)?.patchValue({name});
     });
-
-    console.log(this.profile.company.labels, this.profile.company.jobs);
-    console.log(this.companyJobs, this.companyLabels);
     
     this.form.controls['UserProfile.lastName']?.setValue(user.lastName);
     this.form.controls['UserProfile.firstName']?.setValue(user.firstName);
-    this.form.controls['UserProfile.userName']?.setValue(user.email);
-    this.form.controls['UserProfile.cellPhone']?.setValue(user.cellPhone);
+    this.form.controls['UserProfile.userName']?.setValue(user.username);
+    this.form.controls['UserProfile.cellPhone']?.setValue(this.space(user.cellPhone));
     this.form.controls['UserProfile.Company.name']?.setValue(company.name);
     this.form.controls['UserProfile.Company.siret']?.setValue(company.siret);
     this.form.controls['UserProfile.Company.revenue']?.setValue(company.revenue);
     this.form.controls['UserProfile.Company.capital']?.setValue(company.capital);
     this.form.controls['UserProfile.Company.webSite']?.setValue(company.webSite);
-    this.form.controls['UserProfile.Company.companyPhone']?.setValue(company.companyPhone);
+    this.form.controls['UserProfile.Company.companyPhone']?.setValue(this.space(company.companyPhone));
     
     const jobControl = this.form.controls['UserProfile.Company.JobForCompany'] as FormArray;
-    // jobControl.clear();
-    // for ( let job of this.companyJobs ) {
-    //   jobControl.push(new FormGroup({
-    //     job: new FormControl(job.job),
-    //     number: new FormControl(job.number)
-    //   }));
-    // }
+    jobControl.clear();
+    for ( let jobForCompany of this.companyJobs ) {
+      const jobObject = jobMapping.get(jobForCompany.id)!;
+      jobControl.push(new FormGroup({
+        job: new FormControl(jobObject),
+        number: new FormControl(jobForCompany.number)
+      }));
+    }
     
-    // const labelControl = this.form.controls['UserProfile.Company.LabelForCompany'] as FormArray;
-    
-    // labelControl.clear();
-    // for ( let label of this.companyLabels ) {
-    //   console.log(label);
-    //   this.store.selectSnapshot(DataQueries.getById('Label', ))
-    //   labelControl.push(new FormGroup({
-    //     label: new FormControl(label.label),
-    //     //get date from server
-    //     fileData: new FormControl(defaultFileUIOuput(label.label.name, label.date, 'Fichier pris en compte'))
-    //   }));
-    // }
+    const labelControl = this.form.controls['UserProfile.Company.LabelForCompany'] as FormArray;
+    labelControl.clear();
+    for ( let labelForCompany of this.companyLabels ) {
+      const labelObject = labelMapping.get(labelForCompany.id)!;
+      labelControl.push(new FormGroup({
+        label: new FormControl(labelObject),
+        //get date from server
+        fileData: new FormControl(defaultFileUIOuput(labelObject.name, labelForCompany.date, `Fichier "${labelObject.name}" pris en compte`))
+      }));
+    }
 
     // this.cd.markForCheck();
   }
@@ -441,59 +464,48 @@ export class ModifyProfileForm {
 
   //make functions to help merge
   updateJobs(jobOptions: Option[]) {
-    // const jobsControl = this.form.controls['UserProfile.Company.JobForCompany'] as FormArray,
-    //   oldJobs = jobsControl.value as {job: JobRow, number: number}[],
-    //   newJobs = jobOptions.map(option => JobRow.getById(option.id)!);
-
-    // const
-    //   newEntries = newJobs.map(newJob => [newJob, 1] as [JobRow, number]),
-    //   oldEntries = oldJobs
-    //     .filter(oldJob => newJobs.includes(oldJob.job))
-    //     .map(oldJob => [oldJob.job, oldJob.number] as [JobRow, number]);
-
-
-    // const countMap = new Map<JobRow, number>([
-    //   ...newEntries,
-    //   ...oldEntries
-    // ]);
-
-    // jobsControl.clear(); this.companyJobs.length = 0;
-    // [...countMap.entries()].forEach(([job, number]) => {
-    //   this.companyJobs.push(job);
-    //   const form = new FormGroup({
-    //     job: new FormControl(job),
-    //     number: new FormControl(number)
-    //   });
-    //   jobsControl.push(form);
-    // });
+    this.addingField = false;
+    const
+      oldJobs = this.selectedJobs,
+      newJobs = jobOptions,
+      oldJobsId = new Set(oldJobs.map(({id}) => id)),
+      overlap = newJobs.filter(job => oldJobsId.has(job.id)),
+      difference = newJobs.filter(job => !oldJobsId.has(job.id));
     
-    // jobsControl.markAsTouched(); jobsControl.markAsDirty();
-    // this.form.markAsDirty();
-    // this.form.markAsTouched();
+    let jobControl = this.form.controls['UserProfile.Company.JobForCompany'] as FormArray;
+    jobControl.clear();
+
+    for ( const item of difference )
+      jobControl.push(new FormGroup({
+        job: new FormControl(item),
+        number: new FormControl(1)
+      }))
+
+    for ( const item of overlap ) {
+      const target = this.companyJobs.find(jobForCompany => jobForCompany.job == item.id)!;
+      jobControl.push(new FormGroup({
+        job: new FormControl(item),
+        number: new FormControl(target.number)
+      }))
+    }
+
+    this.selectedJobs = jobOptions;
   };
 
   updateLabels(labelOptions: Option[]) {
-    // const labelsControl = this.form.controls['UserProfile.Company.LabelForCompany'] as FormArray,
-    //   newLabels = labelOptions.map(label => LabelRow.getById(label.id)!) as LabelRow[],
-    //   companyLabels = this.user.company.labels;
+    this.addingField = false;
+    const newLabels = labelOptions;
     
-    // //also consider old labels
-    // labelsControl.clear(); this.companyLabels.length = 0;
-    // newLabels.forEach((label) => {
-    //   const hasLabel = companyLabels.find(companyLabel => companyLabel.label.id == label.id),
-    //     fileData = new FormControl(defaultFileUIOuput(label.name, hasLabel?.date, hasLabel ? 'Fichier pris en compte' : undefined)); 
-      
-    //   this.companyLabels.push(label);
-    //   const form  = new FormGroup({
-    //     label: new FormControl(label),
-    //     fileData
-    //   });
-    //   labelsControl.push(form);
-    // });
+    let labelControl = this.form.controls['UserProfile.Company.LabelForCompany'] as FormArray;
+    for ( const item of newLabels ) {
+      const target = this.companyLabels.find(labelForCompany => labelForCompany.label == item.id);
+      labelControl.push(new FormGroup({
+        label: new FormControl(item),
+        fileData: new FormControl(defaultFileUIOuput(item.name, target?.date || '', `Fichier "${item.name}" pris en charge.`))
+      }))
+    }
 
-    // labelsControl.markAsTouched(); labelsControl.markAsDirty();
-    // this.form.markAsDirty();
-    // this.form.markAsTouched();
+    this.selectedLabels = labelOptions;
   }
 
   addingField: boolean = false;

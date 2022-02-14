@@ -44,7 +44,9 @@ export class ProfileComponent extends Destroy$ {
 
   constructor(private store: Store, private cd: ChangeDetectorRef, private info: InfoService, private popup: PopupService) {
     super();
-    this.profile$.subscribe(console.log);
+    this.profile$.subscribe((profile) => {
+      console.log('profile emit', profile);
+    });
   }
 
   slideModifyMenu(modifyPassword: boolean) {

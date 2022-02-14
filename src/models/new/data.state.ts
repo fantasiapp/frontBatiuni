@@ -1,21 +1,17 @@
 import { Injectable } from "@angular/core";
-import { Action, createSelector, Selector, State, StateContext, Store } from "@ngxs/store";
+import { Action, createSelector, Selector, State, StateContext, StateOperator, Store } from "@ngxs/store";
 import { Observable, of, Subject } from "rxjs";
-import { take, tap } from "rxjs/operators";
+import { concatMap, mergeMap, tap } from "rxjs/operators";
 import { HttpService } from "src/app/services/http.service";
-import { number } from "src/validators/regex";
 import { GetGeneralData } from "../data/data.actions";
-import { ChangeProfilePicture, ChangeProfileType, DownloadFile, GetUserData, ModifyUserProfile } from "../user/user.actions";
+import { ChangeProfilePicture, ChangeProfileType, DownloadFile, GetUserData, ModifyUserProfile, UploadFile } from "../user/user.actions";
 import { Company, Interface, User } from "./data.interfaces";
 import { DataReader, NameMapping } from "./data.mapper";
-
-type Record<T> = {
-  [key: string]: T;
-};
-
-export type DataTypes = 'Job' | 'Label' | 'Role' | 'UserProfile' | 'Company' |
-  'Post' | 'DetailedPost' | 'Supervision' | 'Disponibility' | 'File' |
-  'JobForCompany' | 'LabelForCompany' | 'JobApplication' | 'Mission'; //..
+import { Record, DataTypes } from "./data.interfaces";
+import { addValues, compose, deleteIds, pushChildValues } from "./state.operators";
+import produce from "immer";
+import { Logout } from "../auth/auth.actions";
+import { InfoService } from "src/app/shared/components/info/info.component";
 
 export interface DataModel {
   fields: Record<string[]>;
@@ -24,26 +20,6 @@ export interface DataModel {
     view: 'ST' | 'PME';
   };
   [key: string]: Record<any>;
-};
-
-export class Load<K extends DataTypes = any> {
-  static readonly type = '[Data] Load';
-  constructor(public data: K, public fields: string[], public values: Record<any>) {}
-};
-
-export class Concat<K extends DataTypes = any> {
-  static readonly type = '[Data] Concat';
-  constructor(public data: K, public values: Record<any>) {}
-};
-
-export class Delete<K extends DataTypes = any> {
-  static readonly type = '[Data] Delete';
-  constructor(public data: K, public ids: number | number[]) {}
-};
-
-export class Mutate<K extends DataTypes = any> {
-  static readonly type = '[Data] Mutate';
-  constructor(public data: K, public values: Record<any>) {}
 };
 
 export class Clear {
@@ -64,7 +40,10 @@ export class Clear {
 @Injectable()
 export class DataState {
 
-  constructor(private http: HttpService, private store: Store, private reader: DataReader) {}
+  constructor(
+    private store: Store, private reader: DataReader,
+    private http: HttpService, private info: InfoService
+  ) {}
 
   private pending$: Record<Subject<any>> = {};
 
@@ -85,108 +64,6 @@ export class DataState {
     }
   };
 
-  @Action(Load)
-  load(ctx: StateContext<DataModel>, load: Load) {
-    const current = ctx.getState();
-    ctx.patchState({
-      fields: { ...current.fields, [load.data]: load.fields },
-      [load.data]: load.values
-    });
-  }
-
-  private concatValues(state: DataModel, target: DataTypes, values: Record<any>) {
-    const current = state[target] || {};
-    return {[target]: {...current, ...values}};
-  }
-
-  @Action(Concat)
-  concat(ctx: StateContext<DataModel>, concat: Concat) {
-    if ( !Object.keys(concat.values).length )
-      return;
-    
-    ctx.patchState(
-      this.concatValues(ctx.getState(), concat.data, concat.values)
-    );
-  }
-
-  private deleteIds(state: DataModel, target: DataTypes, ids: number[]) {
-    const current = state[target] || {};
-
-    if ( !ids.length ) return current;
-    const remainingIds = Object.keys(current).filter(
-      key => !(ids as number[]).includes(+key)
-    );
-
-    const remaining: Record<any> = {};
-    for ( let id of remainingIds)
-      remaining[id] = current[id];
-    
-    return {[target]: remaining};
-  }
-
-  private replaceIds(state: DataModel, target: DataTypes, ids: number[], values: Record<any>) {
-    const current = state[target] || {},
-      keys = Object.keys(current);
-    
-    const remainingIds = ids.length ?  keys.filter(
-      key => !(ids as number[]).includes(+key)
-    ) : keys;
-
-    const remaining: Record<any> = {};
-    for ( let id of remainingIds)
-      remaining[id] = current[id];
-    
-    Object.entries<any[]>(values).forEach(([id, values]) => {
-      remaining[id] = values;
-    })
-    
-    return {[target]: remaining};
-  }
-
-  @Action(Delete)
-  delete(ctx: StateContext<DataModel>, del: Delete) {
-    const state = ctx.getState(),
-      ids = typeof del.ids == 'number' ? [del.ids] : del.ids;
-
-    if ( !state[del.data] ) return;
-    
-    ctx.patchState(
-      this.deleteIds(state, del.data, ids)
-    );
-  }
-  
-  @Action(Mutate)
-  mutate(ctx: StateContext<DataModel>, mutate: Mutate) {
-    const state = ctx.getState(),
-      current = state[mutate.data],
-      fields = state.fields[mutate.data];
-    
-    let changes: Record<any> = {};
-    
-    if ( !current ) return;
-
-    //This assumes that data has no conflicts
-    Object.entries<any>(mutate.values).forEach(([id, values]) => {
-      const old = current[id];
-      if ( !old ) return;
-      for ( let i = 0; i < old.length; i++ ) {
-        if ( Array.isArray(old[i]) ) {
-          //delete old JobForCompany, Files, etc... wasteful
-          if ( old[i].length )
-            changes = {...changes, ...(this.deleteIds(state, fields[i] as DataTypes, old[i]))}
-
-          const keys = Object.keys(values[i]);
-          if ( keys.length)
-            changes = { ...changes, ...(this.concatValues(state, fields[i] as DataTypes, values[i]))};
-        
-          values[i] = keys.map(x => +x);
-        } 
-      }
-    });
-
-    //overwrite
-    ctx.patchState({...changes, [mutate.data]: mutate.values});
-  }
 
   @Action(Clear)
   clear(ctx: StateContext<DataModel>, clear: Clear) {
@@ -224,11 +101,13 @@ export class DataState {
 
   @Selector([DataState])
   static companies(state: DataModel) {
+    console.log('Company: state change')
     return state['Company'] || {};
   }
 
   @Selector([DataState])
   static users(state: DataModel) {
+    console.log('UserProfile: state change');
     return state['UserProfile'] || {};
   }
 
@@ -250,7 +129,7 @@ export class DataState {
 
   //------------------------------------------------------------------------
   @Action(GetGeneralData)
-  getGeneralData() {    
+  getGeneralData(ctx: StateContext<DataModel>) {    
     //eventually make a local storage service
     let data = localStorage.getItem('general-data'), req;
     req = data ? of(JSON.parse(data)) : this.http.get('initialize', {action: 'getGeneralData'});
@@ -258,7 +137,8 @@ export class DataState {
     return req.pipe(
       tap((response: any) => {
         localStorage.setItem('general-data', JSON.stringify(response));
-        this.reader.readStaticData(response);
+        const operations = this.reader.readStaticData(response);
+        ctx.setState(compose(...operations));
       }) 
     );
   }
@@ -269,34 +149,42 @@ export class DataState {
     
     return req.pipe(
       tap((response: any) => {
-        this.reader.readInitialData(response);
+        const loadOperations = this.reader.readInitialData(response),
+          sessionOperation = this.reader.readCurrentSession(response);
 
-        const companyId = this.reader.readCurrentCompanyId(response),
-          roles = this.reader.getField(response, 'Company', companyId, 'Role');
-
-        ctx.patchState({
-          session: {
-            currentUser: response['currentUser'],
-            view: roles == 2 ? 'PME' : 'ST'
-          }
-        });
+        ctx.setState(compose(...loadOperations, sessionOperation));
       })
     );
   }
 
-  @Action(ModifyUserProfile)
-  modifyUser(ctx: StateContext<DataModel>, action: ModifyUserProfile) {
-    const {files, ...modifyAction} = action;
-    const req = this.http.post('data', modifyAction);
+  @Action(Logout)
+  logout(ctx: StateContext<DataModel>) {
+    ctx.setState({fields: {}, session: {view: 'ST', currentUser: 0}});
+  }
 
-    console.log(Object.keys(action.adminFiles));
+  @Action(ModifyUserProfile)
+  modifyUser(ctx: StateContext<DataModel>, modify: ModifyUserProfile) {
+    const {labelFiles, adminFiles, ...modifyAction} = modify;
+    let req;
+    if ( modifyAction.onlyFiles )
+      req = of({[modify.action]: 'OK'});
+    else 
+      req = this.http.post('data', modifyAction);
+
     return req.pipe(
       tap((response: any) => {
-        if ( response[action.action] !== 'OK' )
+        if ( response[modify.action] !== 'OK' )
           throw response['messages'];
         
-        delete response[action.action];
-        this.reader.readManyUpdates(response);
+        delete response[modify.action];
+
+        ctx.setState(compose(...this.reader.readManyUpdates(response)));
+      }),
+      concatMap(() => {
+        console.log('upload files');
+        labelFiles.forEach(file => ctx.dispatch(new UploadFile(file, 'labels', file.nature, 'Company')));
+        Object.keys(adminFiles).forEach(name => ctx.dispatch(new UploadFile(adminFiles[name], 'admin', name, 'Company')))
+        return of(true);
       })
     )
   }
@@ -313,9 +201,10 @@ export class DataState {
         if ( response[picture.action] !== 'OK' )
           throw response['messages'];
         
-        ctx.patchState({
-          ...this.replaceIds(state, 'File', image ? [image.id] : [], response)
-        })
+        ctx.setState(compose(
+          deleteIds('File', image ? [image.id] : []),
+          addValues('File', response)
+        ));
       })
     )
   };
@@ -331,25 +220,68 @@ export class DataState {
     });
   }
 
+  @Action(UploadFile)
+  uploadFile(ctx: StateContext<DataModel>, upload: UploadFile) {
+    console.log('>>   sending', upload);
+
+    const req = this.http.post('data', upload);
+    return req.pipe(
+      tap((response: any) => {
+        if ( response[upload.action] !== 'OK' )
+          throw response['messages'];
+        delete response[upload.action];
+
+        console.log('>>', response);
+        
+        const assignedId = Object.keys(response)[0],
+          fields = ctx.getState()['fields'],
+          contentIndex = fields['File'].indexOf('content');
+        
+        response[assignedId][contentIndex] = upload.fileBase64;
+        if ( upload.category == 'Company' ) {
+          //add it to company
+          const company = this.store.selectSnapshot(DataQueries.currentCompany);
+          ctx.setState(pushChildValues('Company', company.id, 'File', response, 'name'));
+        }
+
+      })
+    )
+  };
+
   @Action(DownloadFile)
   downloadFile(ctx: StateContext<DataModel>, download: DownloadFile) {
     const state = ctx.getState(),
+      nameIndex = state.fields['File'].indexOf('name'),
       contentIndex = state.fields['File'].indexOf('content'),
-      key = `file_${download.id}`;
+      key = `file_${download.id}`,
+      file = ctx.getState()['File'][download.id];
     
+    //check if the file is already downloaded
+    if ( file && file[contentIndex] )
+      return file.content;
+    
+    //check if we are currently downloading the file
     let pending = this.getPending(key);
-    
     if ( pending ) return pending;
     
+    //download the file and register that we downloading;
     let req = this.http.get('data', download);
     pending = new Subject<string>();
     this.registerPending(key, pending);
+
+    if ( download.notify ) this.info.show("info", `Téléchargement du fichier ${file[nameIndex] || ''}...`)
     
     return req.pipe(
       tap((response: any) => {
-        if ( response[download.action] !== 'OK' ) throw response['messages'];
+        if ( response[download.action] !== 'OK' ) {
+          if ( download.notify ) this.info.show('error', response['messages'], 5000);
+          throw response['messages'];
+        }
         delete response[download.action];
-        this.concat(ctx, new Concat('File', response));
+        if ( download.notify ) this.info.show('success', `Fichier ${file[nameIndex]} téléchargé.`, 1000);
+        //overwrite
+        ctx.setState(addValues('File', response));
+        //file is now downloaded
         pending!.next(response[contentIndex]);
         this.completePending(key);
       })
@@ -357,11 +289,11 @@ export class DataState {
   }
 };
 
+//make a deep version of toJSON
+
 export class DataQueries {
-  static toJson<K extends DataTypes>(allFields: Record<string[]>, target: K, id: number, values: any[]): Interface<K> {
+  static toJson<K extends DataTypes>(allFields: Record<string[]>, target: K, id: number, values: any[] | string): Interface<K> {
     const fields = allFields[target];
-    if ( !fields )
-      throw `No structure with name ${target}`;
     
     const output: any = {};
     if ( Array.isArray(values) ) {
@@ -389,12 +321,14 @@ export class DataQueries {
 
   @Selector([DataState.users, DataState.fields, DataState.currentUserId])
   static currentUser(profiles: Record<any[]>, fields: Record<string[]>, id: number) {
+    console.log('current user change');
     return DataQueries.toJson(fields, "UserProfile", id, profiles[id]);
   }
 
   @Selector([DataState.companies, DataState.fields, DataState.currentUserId])
-  static currentCompany(profiles: Record<any[]>, fields: Record<string[]>, id: number) {
-    return DataQueries.toJson(fields, "Company", id, profiles[id]);
+  static currentCompany(companies: Record<any[]>, fields: Record<string[]>, id: number) {
+    console.log('company change');
+    return DataQueries.toJson(fields, "Company", id, companies[id]);
   }
 
   @Selector([DataQueries.currentUser, DataQueries.currentCompany])
@@ -490,6 +424,8 @@ export class DataQueries {
       }
     )
   };
+
+  
 };
 
 //Decorator
@@ -507,8 +443,8 @@ export function Query<K extends DataTypes>(type: K) {
         });
       },
       set(this: any, id: any) {
+        if ( this[hiddenKey] && (this[hiddenKey].id === id || this[hiddenKey].value === id) ) return;
         if ( typeof id == 'number' ) {
-          if ( this[hiddenKey] && this[hiddenKey].id === id ) return;
           this[hiddenKey] = {
             id,
             value: this.store.select(DataQueries.getById(type, id)) //what about unsubscribe
@@ -535,8 +471,8 @@ export function Snapshot<K extends DataTypes>(type: K) {
         return this[hiddenKey] ? this[hiddenKey].value : null;
       },
       set(this: any, id: any) {
+        if ( this[hiddenKey] && (this[hiddenKey].id === id || this[hiddenKey].value === id) ) return; //id
         if ( typeof id == 'number' ) {
-          if ( this[hiddenKey] && this[hiddenKey].id === id ) return; //id
           this[hiddenKey] = {
             id,
             value: this.store.selectSnapshot(DataQueries.getById(type, id))
@@ -628,9 +564,8 @@ export function QueryProfile(byUserId: boolean = false) {
         });
       },
       set(this: any, id: any) {
-        console.log('set query profile');
+        if ( this[hiddenKey] && (this[hiddenKey].id === id || this[hiddenKey].value === id) ) return;
         if ( typeof id == 'number' ) {
-          if ( this[hiddenKey] && this[hiddenKey].id === id ) return;
           this[hiddenKey] = {
             id,
             value: byUserId ?
@@ -640,7 +575,11 @@ export function QueryProfile(byUserId: boolean = false) {
         } else if ( id instanceof Observable ) {
           this[hiddenKey] = { id: undefined, value: id }
         } else {
+          //this is wasteful because it can set multiple times
+          //but apparently fires as many
           this[hiddenKey] = { id: id.id, value: of(id) }
+          //but this doesn't work :(
+          // this[hiddenKey] = { id: id.id, value: id }
         }
       },
       enumerable: false,

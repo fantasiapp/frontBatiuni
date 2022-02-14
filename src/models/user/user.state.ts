@@ -54,36 +54,36 @@ export class UserState {
   }
 
 
-  @Action(UploadFile)
-  uploadFile(ctx: StateContext<User>, action: UploadFile) {
-    const req = this.http.post('data', action),
-      user = ctx.getState();
+  // @Action(UploadFile)
+  // uploadFile(ctx: StateContext<User>, action: UploadFile) {
+  //   const req = this.http.post('data', action),
+  //     user = ctx.getState();
 
-    return req.pipe(
-      tap((response: any) => {
-        if ( response['uploadFile'] !== 'OK' ) throw response['messages'];
-        delete response['uploadFile'];
-        // add to cached files
-        const id = +Object.keys(response)[0],
-          file = new FilesRow(id, [...response[id], action.fileBase64]);
+  //   return req.pipe(
+  //     tap((response: any) => {
+  //       if ( response['uploadFile'] !== 'OK' ) throw response['messages'];
+  //       delete response['uploadFile'];
+  //       // add to cached files
+  //       const id = +Object.keys(response)[0],
+  //         file = new FilesRow(id, [...response[id], action.fileBase64]);
           
-        //add to company
-        if ( action.companyFile ) {
-          const oldFile = user.profile!.company.files.find(companyFile => companyFile.name == file.name),
-            company = CompanyRow.getById(user.profile!.company.id);
+  //       //add to company
+  //       if ( action.companyFile ) {
+  //         const oldFile = user.profile!.company.files.find(companyFile => companyFile.name == file.name),
+  //           company = CompanyRow.getById(user.profile!.company.id);
           
-          if ( oldFile )
-            company.spliceValue('Files', oldFile.id, file);
-          else
-            company.pushValue('Files', file);
-        }
+  //         if ( oldFile )
+  //           company.spliceValue('Files', oldFile.id, file);
+  //         else
+  //           company.pushValue('Files', file);
+  //       }
         
-        action.id = id;
-        //find a way to make minimal updates with a tree-like-structure
-        ctx.patchState({profile: UserProfileRow.getById(user.profile!.id).serialize()});
-      })
-    );
-  }
+  //       action.id = id;
+  //       //find a way to make minimal updates with a tree-like-structure
+  //       ctx.patchState({profile: UserProfileRow.getById(user.profile!.id).serialize()});
+  //     })
+  //   );
+  // }
 
   @Action(DeleteFile)
   deleteFile(ctx: StateContext<User>, action: DeleteFile) {
@@ -168,12 +168,12 @@ export class UserState {
     )
   }
 
-  @Action(Logout)
-  logout(ctx: StateContext<User>) {
-    Mapper.reset();
-    this.store.dispatch(new DeleteData('posts', PostRow));
-    ctx.patchState({ imageUrl: null, profile: null });
-  }
+  // @Action(Logout)
+  // logout(ctx: StateContext<User>) {
+  //   Mapper.reset();
+  //   this.store.dispatch(new DeleteData('posts', PostRow));
+  //   ctx.patchState({ imageUrl: null, profile: null });
+  // }
 
   // @Action(ModifyUserProfile)
   // modifyUser(ctx: StateContext<User>, action: ModifyUserProfile) {
@@ -204,7 +204,7 @@ export class UserState {
     const {profile} = ctx.getState(),
       {files, ...createPost} = action,
       req = this.http.post('data', createPost),
-      uploads = Object.keys(files).map((key: any) => new UploadFile(files[key], 'post', key));
+      uploads = Object.keys(files).map((key: any) => new UploadFile(files[key], 'post', key, 'Post'));
     
     return req.pipe(
       map((response: any) => {
@@ -239,7 +239,7 @@ export class UserState {
 
         console.log(uploads);
         uploads.forEach(upload => {
-          upload.Post = post.id;
+          upload.id = post.id;
         });
 
         return ctx.dispatch(uploads).pipe(map(() => post));
@@ -321,6 +321,7 @@ export class UserState {
     )
   }
 
+  //HERE !
   @Action(ModifyDisponibility)
   modifyDisponibilities(ctx: StateContext<User>, action: ModifyDisponibility) {
     const {profile} = ctx.getState();

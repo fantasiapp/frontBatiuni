@@ -1,5 +1,10 @@
-import { Observable } from "rxjs";
-import { DataTypes } from "./data.state";
+export type Record<T = any> = {
+  [key: string]: T;
+};
+
+export type DataTypes = 'Job' | 'Label' | 'Role' | 'UserProfile' | 'Company' |
+  'Post' | 'DetailedPost' | 'Supervision' | 'Disponibility' | 'File' |
+  'JobForCompany' | 'LabelForCompany' | 'JobApplication' | 'Mission'; //..
 
 //just to indicate
 export type Ref<T> = number;
@@ -22,6 +27,7 @@ export type Label = {
 export interface User {
   id: Ref<User>;
   email: string;
+  username: string;
   company: Ref<Company>;
   firstName: string;
   lastName: string;

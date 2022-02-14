@@ -15,7 +15,7 @@
     (profile.user ? (profile.user.firstName + " " + profile.user.lastName) : profile.company.name) | titlecase
   }}</span>
   <ng-container *ngIf="profile.user && showMore">
-    <span>{{ profile.user!.email }}</span>
+    <span>{{ profile.user!.username }}</span>
     <span>{{ profile.user!.cellPhone | space: 2:1 }}</span>
   </ng-container>
   <a *ngIf="canChangePicture" class="blue">Modifier l’image de profil</a>

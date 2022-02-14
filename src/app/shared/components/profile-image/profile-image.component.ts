@@ -2,8 +2,8 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, Sanitizer
 import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser";
 import { Store } from "@ngxs/store";
 import { Observable, of } from "rxjs";
-import { switchMap, take, takeUntil } from "rxjs/operators";
-import { File, User, Company, Profile } from "src/models/new/data.interfaces";
+import { switchMap, takeUntil } from "rxjs/operators";
+import { File, Company, Profile } from "src/models/new/data.interfaces";
 import { DataQueries } from "src/models/new/data.state";
 import { DownloadFile } from "src/models/user/user.actions";
 import { Destroy$ } from "../../common/classes";

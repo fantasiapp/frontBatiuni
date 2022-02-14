@@ -4,6 +4,7 @@ import { PropertyTrap } from "src/app/shared/common/classes";
 import { getDirtyValues } from "src/app/shared/common/functions";
 import { DisponibilityRow, JobForCompanyRow, JobRow, LabelForCompanyRow, LabelRow, UserProfileRow } from "../data/data.model";
 import { Availability, CalendarUI } from "src/app/shared/components/calendar/calendar.ui";
+import { DataTypes, JobForCompany, LabelForCompany } from "../new/data.interfaces";
 
 export class ChangeProfileType {
   static readonly type = '[User] Change Profile Type';
@@ -38,7 +39,8 @@ export class GetUserData {
 export class ModifyUserProfile {
   static readonly type = '[User] Change User Profile';
   readonly action = 'modifyUser';
-  files: any[] = [];
+  onlyFiles?: boolean = false;
+  labelFiles: any[] = [];
   adminFiles: any = {};
   
   //for now we mark job as dirty, but we should take it directly from the form
@@ -46,23 +48,22 @@ export class ModifyUserProfile {
     const changes = getDirtyValues(form);
     if ( Object.keys(changes).length == 0 ) return;
 
-    const jobs = changes['UserProfile.Company.JobForCompany'],
-      labels = changes['UserProfile.Company.LabelForCompany'],
+    const jobsForm = changes['UserProfile.Company.JobForCompany'],
+      labelsForm = changes['UserProfile.Company.LabelForCompany'],
       adminFiles = changes['UserProfile.Company.admin'];
     
-    if ( jobs ) {
-      changes['UserProfile.Company.JobForCompany'] = Object.values<JobForCompanyRow>(jobs).map(
-        ({job, number}: {job: JobRow, number: number}) => ([job.id, number])
+    if ( jobsForm ) {
+      changes['UserProfile.Company.JobForCompany'] = Object.values<any>(jobsForm).map(
+        ({job, number}) => ([job.id, number])
       );
     }
 
-    if ( labels ) {
-      console.log('label:', labels, Object.values<LabelForCompanyRow>(labels));
-      changes['UserProfile.Company.LabelForCompany'] = Object.values<any>(labels).map(
-        ({label, fileData}: {label: LabelRow, fileData: FileUIOutput}) => ([label.id, fileData.expirationDate!])
+    if ( labelsForm ) {
+      changes['UserProfile.Company.LabelForCompany'] = Object.values<any>(labelsForm).map(
+        ({label, fileData}) => ([label.id, fileData.expirationDate!])
       );
 
-      this.files = Object.values<any>(labels).map(({fileData}: {fileData: FileUIOutput}) => fileData);
+      this.labelFiles = Object.values<any>(labelsForm).map(({fileData}: {fileData: FileUIOutput}) => fileData);
     }
 
     if ( adminFiles ) {
@@ -72,8 +73,13 @@ export class ModifyUserProfile {
         
         this.adminFiles[key] = adminFiles[key];
       }
+
+      delete changes['UserProfile.Company.admin']; 
     }
 
+    if ( Object.keys(changes).length == 0 )
+      this.onlyFiles = true;
+    
     const proxy = new Proxy(this, PropertyTrap);
     //write directly on this object
     proxy['UserProfile.id'] = profile.id;
@@ -82,7 +88,7 @@ export class ModifyUserProfile {
   }
 };
 
-export class UploadFile {
+export class UploadFile<K extends DataTypes = any> {
   static readonly type = '[File] Upload';
   action = 'uploadFile';
   ext: string;
@@ -90,17 +96,20 @@ export class UploadFile {
   nature: string;
   expirationDate: string;
   fileBase64: string;
-  Post?: number;
   companyFile: boolean = true;
+  category?: K;
   id?: number = 0;
 
   //tell JLW to unify formats
-  constructor(src: FileUIOutput, nature: string, name?: string) {
+  constructor(src: FileUIOutput, nature: string, name?: string, category?: K) {
     this.fileBase64 = src.content;
     this.expirationDate = src.expirationDate;
     this.ext = src.ext;
     this.name = name || src.nature;
     this.nature = nature;
+    if ( category ) {
+      this.category = category;
+    };
   }
 };
 
@@ -115,8 +124,8 @@ export class DeleteFile {
 export class DownloadFile {
   action = 'downloadFile';
   static readonly type = '[File] Download';
-  companyFile: boolean = true;
-  constructor(public id: number) {}
+  get companyFile() {return true;};
+  constructor(public id: number, public notify: boolean = false) {}
 };
 
 export class DeletePost {

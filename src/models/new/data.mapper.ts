@@ -1,6 +1,9 @@
 import { Injectable } from "@angular/core";
 import { Store } from "@ngxs/store";
-import { DataTypes, Load, Mutate } from "./data.state";
+import { DataTypes } from "./data.interfaces";
+import { addValues, addRecord, replace } from "./state.operators";
+import { patch } from '@ngxs/store/operators';
+
 
 export const NameMapping: any = {
   'JobForCompany': 'jobs',
@@ -64,28 +67,38 @@ export class DataReader {
   readStaticData(data: any) {
     const suffix = 'Values',
       keys = Object.keys(data),
-      names = keys.map(key => key.slice(0, -suffix.length)) as DataTypes[];
-    
-    for ( let i = 0; i < names.length; i++ )
-      this.store.dispatch(new Load(names[i], [], data[keys[i]]));
+      names = keys.map(key => key.slice(0, -suffix.length)) as DataTypes[],
+      operations = names.map((name, i) => addValues(name, data[keys[i]]));
+
+    return operations;    
   }
 
   readInitialData(data: any) {
     const suffix = 'Values',
       keys = Object.keys(data).filter(key => key.endsWith('Values')),
-      names = keys.map(key => key.slice(0, -suffix.length)) as DataTypes[];
-    
-    const loads = [];
-    for ( let i = 0; i < names.length; i++ ) {
-      const fields = data[names[i] + 'Fields'] as string[];
-      loads.push(new Load(names[i], fields, data[keys[i]]));
-    }
+      names = keys.map(key => key.slice(0, -suffix.length)) as DataTypes[],
+      operations = names.map((name, i) => addRecord(name, data[name+ 'Fields'], data[keys[i]]));
 
-    this.store.dispatch(loads);
+    return operations;
+  }
+
+  readCurrentSession(data: any) {
+    const companyId = this.readCurrentCompanyId(data),
+      roles = this.getField(data, 'Company', companyId, 'Role');
+    
+    return patch({
+      session: {
+        currentUser: data['currentUser'],
+        view: roles == 2 ? 'PME' : 'ST'
+      }
+    })
+  }
+
+  readUpdate(data: any) {
+    //..
   }
 
   readManyUpdates(data: any) {
-    for ( const name in data )
-      this.store.dispatch(new Mutate(name as DataTypes, data[name]));
+    return Object.keys(data).map(name => replace(name as DataTypes, data[name]));
   }
 };

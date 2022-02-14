@@ -49,6 +49,7 @@ import { UISlideMenuComponent } from "./components/slidemenu/slidemenu.component
 import { UITooltipComponent } from "./components/tooltip/tooltip.component";
 import { ProfileCardComponent } from "./components/profile-card/profile.card";
 import { CastPipe } from "./pipes/cast.pipe";
+import { SpreadPipe } from "./pipes/spread.pipe";
 
 @NgModule({
   declarations: [
@@ -98,7 +99,8 @@ import { CastPipe } from "./pipes/cast.pipe";
     UISlideMenuComponent,
     UITooltipComponent,
     ProfileCardComponent,
-    CastPipe
+    CastPipe,
+    SpreadPipe
   ],
   imports: [
     CommonModule,
@@ -155,7 +157,8 @@ import { CastPipe } from "./pipes/cast.pipe";
     UISlideMenuComponent,
     UITooltipComponent,
     ProfileCardComponent,
-    CastPipe
+    CastPipe,
+    SpreadPipe
   ],
   providers: [ImageGenerator]
 })

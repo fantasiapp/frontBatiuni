@@ -121,6 +121,7 @@ export class PopupService {
   }
 
   openFile(file: FileUIOutput) {
+    if ( !file.content ) throw `Unloaded file ${file.nature} ${file.name}. Load before using popup.`;
     const type = FilesRow.getFileType(file.ext),
       blob = b64toBlob(file.content, type),
       url = URL.createObjectURL(blob),
