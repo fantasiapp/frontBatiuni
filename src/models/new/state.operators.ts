@@ -61,7 +61,7 @@ namespace mutable {
         console.log('comparing ids', newId, 'vs', oldId, objects[newId][uniqueIndex], objects[oldId][uniqueIndex]);
         if ( objects[newId][uniqueIndex] == objects[oldId][uniqueIndex] ) {
           deletedIds.push(oldId);
-          continue newList;
+          //continue newList;
         }
       }
     
@@ -81,10 +81,19 @@ namespace mutable {
     if ( !parentObject || childIndex <= -1 ) return;
 
     if ( uniqueBy ) {
+      console.log('will remove duplicates by', uniqueBy);
       const uniqueIndex = draft.fields[child].indexOf(uniqueBy);
-      if ( uniqueIndex )
+      if ( uniqueIndex !== void 0 )
         parentObject[childIndex] = removeDuplicates(draft, child, parentObject[childIndex], ids, uniqueIndex);
     }
+
+    parentObject[childIndex].push(...ids);
+  }
+
+  export function pushChildIds<K extends DataTypes>(draft: any, parent: DataTypes, parentId: number, child: K, ids: number[]) {
+    const parentObject = draft[parent]?.[parentId],
+      childIndex = draft.fields[parent].indexOf(child);
+    if ( !parentObject || childIndex <= -1 ) return;
 
     parentObject[childIndex].push(...ids);
   }
@@ -120,6 +129,10 @@ export function replace(target: DataTypes, values: any) {
   return produce(draft => mutable.replace(draft, target, values));
 };
 
+//maybe add a uniqueBy or check first
+export function pushChildIds<K extends DataTypes>(parent: DataTypes, parentId: number, child: K, ids: number[]) {
+  return produce(draft => mutable.pushChildIds(draft, parent, parentId, child, ids));
+};
 export function pushChildValues<K extends DataTypes>(parent: DataTypes, parentId: number, child: K, values: Record<any>, uniqueBy?: keyof Interface<K>) {
   return produce(draft => mutable.pushChildValues(draft, parent, parentId, child, values, uniqueBy));
-}  
+};

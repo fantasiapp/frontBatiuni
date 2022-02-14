@@ -199,58 +199,58 @@ export class UserState {
   //   );
   // }
 
-  @Action(UploadPost)
-  createPost(ctx: StateContext<User>, action: UploadPost) {
-    const {profile} = ctx.getState(),
-      {files, ...createPost} = action,
-      req = this.http.post('data', createPost),
-      uploads = Object.keys(files).map((key: any) => new UploadFile(files[key], 'post', key, 'Post'));
+  // @Action(UploadPost)
+  // createPost(ctx: StateContext<User>, action: UploadPost) {
+  //   const {profile} = ctx.getState(),
+  //     {files, ...createPost} = action,
+  //     req = this.http.post('data', createPost),
+  //     uploads = Object.keys(files).map((key: any) => new UploadFile(files[key], 'post', key, 'Post'));
     
-    return req.pipe(
-      map((response: any) => {
-        if ( response[action.action] && response[action.action] !== 'OK' )
-          throw response['messages'];
+  //   return req.pipe(
+  //     map((response: any) => {
+  //       if ( response[action.action] && response[action.action] !== 'OK' )
+  //         throw response['messages'];
 
-        delete response[action.action];
-        const id = +Object.keys(response)[0],
-          jobIndex = PostRow.fields.get('Job')!,
-          jobId = response[id][jobIndex],
-          detailsIndex = PostRow.fields.get('DetailedPost')!,
-          details = response[id][detailsIndex],
-          mappedDetails = Object.entries<any[]>(details).map(([id, details]) => {
-            return new DetailedPostRow(+id, details);
-          });
+  //       delete response[action.action];
+  //       const id = +Object.keys(response)[0],
+  //         jobIndex = PostRow.fields.get('Job')!,
+  //         jobId = response[id][jobIndex],
+  //         detailsIndex = PostRow.fields.get('DetailedPost')!,
+  //         details = response[id][detailsIndex],
+  //         mappedDetails = Object.entries<any[]>(details).map(([id, details]) => {
+  //           return new DetailedPostRow(+id, details);
+  //         });
           
-        response[id][jobIndex] = JobRow.getById(jobId);
-        response[id][detailsIndex] = mappedDetails;
-        let post = new PostRow(id, response[id]);
-        return post;
-      }),
-      concatMap((post: PostRow) => {
-        const userProfileData = UserProfileRow.getById(profile!.id),
-          userCompanyData = userProfileData.company;
+  //       response[id][jobIndex] = JobRow.getById(jobId);
+  //       response[id][detailsIndex] = mappedDetails;
+  //       let post = new PostRow(id, response[id]);
+  //       return post;
+  //     }),
+  //     concatMap((post: PostRow) => {
+  //       const userProfileData = UserProfileRow.getById(profile!.id),
+  //         userCompanyData = userProfileData.company;
         
-        if ( action.action == 'modifyPost' ) {
-          userCompanyData.spliceValue('Post', post.id);
-          this.store.dispatch(new StoreData('posts', PostRow, {type: 'modify', id: post.id}));
-        } else {
-          this.store.dispatch(new StoreData('posts', PostRow, {type: 'add', id: post.id}));
-        }; userCompanyData.pushValue('Post', post);
+  //       if ( action.action == 'modifyPost' ) {
+  //         userCompanyData.spliceValue('Post', post.id);
+  //         this.store.dispatch(new StoreData('posts', PostRow, {type: 'modify', id: post.id}));
+  //       } else {
+  //         this.store.dispatch(new StoreData('posts', PostRow, {type: 'add', id: post.id}));
+  //       }; userCompanyData.pushValue('Post', post);
 
-        console.log(uploads);
-        uploads.forEach(upload => {
-          upload.id = post.id;
-        });
+  //       console.log(uploads);
+  //       uploads.forEach(upload => {
+  //         upload.assignedId = post.id;
+  //       });
 
-        return ctx.dispatch(uploads).pipe(map(() => post));
-      }),
-      concatMap((post: any) => {
-        post.setField('Files', uploads.map(({id}) => FilesRow.getById(id!)));
-        ctx.patchState({profile: UserProfileRow.getById(profile!.id).serialize()});
-        return of(true);
-      })
-    );
-  };
+  //       return ctx.dispatch(uploads).pipe(map(() => post));
+  //     }),
+  //     concatMap((post: any) => {
+  //       post.setField('Files', uploads.map(({assignedId}) => FilesRow.getById(assignedId!)));
+  //       ctx.patchState({profile: UserProfileRow.getById(profile!.id).serialize()});
+  //       return of(true);
+  //     })
+  //   );
+  // };
 
   @Action(DuplicatePost)
   duplicatePost(ctx: StateContext<User>, action: DuplicatePost) {

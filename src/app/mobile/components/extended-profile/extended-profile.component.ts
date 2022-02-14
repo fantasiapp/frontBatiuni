@@ -42,7 +42,6 @@ export class ExtendedProfileComponent extends Destroy$ {
         this.companyJobs = profile.company.jobs as any;
         this.jobs = this.companyJobs.map(({job}) => job);
       });
-
     }
   } 
 

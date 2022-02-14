@@ -1,8 +1,11 @@
 import { Component, Input, ChangeDetectionStrategy, ChangeDetectorRef, Output, EventEmitter, ViewChild, ElementRef } from "@angular/core";
 import { NG_VALUE_ACCESSOR } from "@angular/forms";
+import { Camera, CameraResultType, CameraSource } from "@capacitor/camera";
 import { UIAsyncAccessor } from "src/app/shared/common/classes";
 import { Serialized } from "src/app/shared/common/types";
 import { FilesRow } from "src/models/data/data.model";
+import { getFileType } from "../../common/functions";
+import { InfoService } from "../info/info.component";
 import { SwipeupService } from "../swipeup/swipeup.component";
 
 export type FileUIOutput = Omit<Omit<Serialized<FilesRow>, 'id'>, 'timestamp'>;
@@ -59,7 +62,7 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
   @ViewChild('input', {static: true, read: ElementRef})
   inputRef!: ElementRef;
 
-  constructor(cd: ChangeDetectorRef, private swipeupService: SwipeupService) {
+  constructor(cd: ChangeDetectorRef, private info: InfoService, private swipeupService: SwipeupService) {
     super(cd);
   }
 
@@ -100,7 +103,7 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
       name = fullname.slice(0, lastDot),
       ext = fullname.slice(lastDot + 1);
 
-    return {...this.value, content: base64.slice(FilesRow.getFileType(ext).length + 13), name, ext} as FileUIOutput;
+    return {...this.value, content: base64.slice(getFileType(ext).length + 13), name, ext} as FileUIOutput;
   }
 
   onFilenameChange(e: Event) {
@@ -110,8 +113,27 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
 
   close() { this.kill.emit(); }
 
-  openInput() {
-    this.inputRef.nativeElement.click();
+  openInput() { this.inputRef.nativeElement.click(); }
+
+  private async takePhoto() {
+    const photo = await Camera.getPhoto({
+      allowEditing: false,
+      resultType: CameraResultType.Base64,
+      source: CameraSource.Photos,
+    });
+
+    this.value = {
+      expirationDate: '',
+      nature: '',
+      name: photo.path || 'image du caméra',
+      ext: photo.format,
+      content: photo.base64String as string    
+    };
+
+    this.valueChange.emit(this.value);
+    this.onChanged(this.value);
+    this.onTouched();
+    this.cd.markForCheck();
   }
 
   onFileInputClicked(e: Event) {
@@ -128,13 +150,21 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
         }
       }, {
         name: 'Accéder au caméra',
-        click: () => {
-          console.log('Accès au caméra')
+        click: async () => {
+          let permissions = await Camera.checkPermissions();
+          if ( permissions.camera != 'granted' ) {
+            //try to get permission
+            permissions = await Camera.requestPermissions({permissions: ['camera']});
+            if ( permissions.camera !='granted' )
+              return this.info.show("error", "L'Accès au caméra n'est pas accordé", 3000);
+            
+            this.takePhoto();
+          } else this.takePhoto();
         }
       }, {
         name: 'Télécharger un fichier',
         click: () => {
-
+          this.openInput();
         }
       }, {
         name: 'Visualiser un fichier',

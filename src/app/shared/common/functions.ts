@@ -105,4 +105,10 @@ export const b64toBlob = (b64Data: string, contentType='', sliceSize=512) => {
 
   const blob = new Blob(byteArrays, {type: contentType});
   return blob;
+};
+
+let imageExtension = ['png', 'jpeg', 'jpg', 'svg', 'heic'];
+export function getFileType(ext: string) {
+  if ( imageExtension.includes(ext) ) return 'image/' + ext;
+  return 'application/' + ext;
 }

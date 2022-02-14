@@ -1,8 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, Sanitizer, SimpleChanges } from "@angular/core";
 import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser";
 import { Store } from "@ngxs/store";
-import { Observable, of } from "rxjs";
-import { switchMap, takeUntil } from "rxjs/operators";
+import { take } from "rxjs/operators";
 import { File, Company, Profile } from "src/models/new/data.interfaces";
 import { DataQueries } from "src/models/new/data.state";
 import { DownloadFile } from "src/models/user/user.actions";
@@ -17,35 +16,30 @@ import { ImageGenerator } from "../../services/image-generator.service";
 })
 export class UIProfileImageComponent extends Destroy$ {
 
-  image$!: Observable<File | null>;
+  image: File | null = null;
   src: SafeResourceUrl | string = '';
 
   @Input('profile')
   set profile({user, company}: Profile) {
+    //when the image changes, so does the profile (new index is added)
     this.company = company;
-    this.image$ = this.store.select(DataQueries.getProfileImage(this.company.id));
-    console.log('new profile');
+    this.image = this.store.selectSnapshot(DataQueries.getProfileImage(this.company.id));
 
-    this.image$.pipe(
-      switchMap((file: File | null) => {
-        console.log('new image', file);
-        if ( !file ) return of(null);
-        if ( file.content ) return of(file);
-        this.store.dispatch(new DownloadFile(file.id));
-        return of(null);
-      }),
-      takeUntil(this.destroy$)
-    ).subscribe((file: File | null) => {
-      if ( file )
-        this.src = this.imageFromFile(file);
-      else {
-        if ( this.src ) return; //keep current
-        const fullname = this.company.name[0].toUpperCase();
-        this.src = this.imageGenerator.generate(fullname);
-      }
-
-      this.cd.markForCheck();
-    });
+    if ( this.image ) {
+      if ( this.image.content )
+        this.src = this.imageFromFile(this.image);
+      else
+        this.store.dispatch(new DownloadFile(this.image.id))
+          .pipe(take(1))
+          .subscribe(() => {
+            this.image = this.store.selectSnapshot(DataQueries.getProfileImage(this.company.id));
+            this.src = this.imageFromFile(this.image!);
+            this.cd.markForCheck();
+          });
+    } else {
+      const fullname = this.company.name[0].toUpperCase();
+      this.src = this.imageGenerator.generate(fullname);
+    }
   };
   
   private imageFromFile(file: File) {
