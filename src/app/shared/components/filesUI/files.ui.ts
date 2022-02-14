@@ -2,13 +2,13 @@ import { Component, Input, ChangeDetectionStrategy, ChangeDetectorRef, Output, E
 import { NG_VALUE_ACCESSOR } from "@angular/forms";
 import { Camera, CameraResultType, CameraSource } from "@capacitor/camera";
 import { UIAsyncAccessor } from "src/app/shared/common/classes";
-import { Serialized } from "src/app/shared/common/types";
-import { FilesRow } from "src/models/data/data.model";
+import { File } from "src/models/new/data.interfaces";
 import { getFileType } from "../../common/functions";
 import { InfoService } from "../info/info.component";
+import { PopupService } from "../popup/popup.component";
 import { SwipeupService } from "../swipeup/swipeup.component";
 
-export type FileUIOutput = Omit<Omit<Serialized<FilesRow>, 'id'>, 'timestamp'>;
+export type FileUIOutput = Omit<Omit<File, 'timestamp'>, 'id'> & {id?: number};
 export function defaultFileUIOuput(nature: string = '', date?: string, name?: string): FileUIOutput {
 
   return {
@@ -62,7 +62,7 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
   @ViewChild('input', {static: true, read: ElementRef})
   inputRef!: ElementRef;
 
-  constructor(cd: ChangeDetectorRef, private info: InfoService, private swipeupService: SwipeupService) {
+  constructor(cd: ChangeDetectorRef, private popup: PopupService, private info: InfoService, private swipeup: SwipeupService) {
     super(cd);
   }
 
@@ -111,7 +111,9 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
     this.filenameChange.emit(input.value);
   }
 
-  close() { this.kill.emit(); }
+  close() {
+    this.kill.emit();
+  }
 
   openInput() { this.inputRef.nativeElement.click(); }
 
@@ -139,7 +141,7 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
   onFileInputClicked(e: Event) {
     if ( e.isTrusted ) e.preventDefault();
 
-    this.swipeupService.show({
+    this.swipeup.show({
       type: 'menu',
       hideOnClick: true,
       items: [{
@@ -169,7 +171,11 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
       }, {
         name: 'Visualiser un fichier',
         click: () => {
-
+          console.log(this.value);
+          if ( !this.value || (!this.value.content && (this.value.id == void 0)) )
+            return this.info.show("error", "Aucun fichier à affichier", 3000);
+          
+          this.popup.openFile(this.value);
         }
       }]
     })

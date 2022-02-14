@@ -5,18 +5,14 @@ import { combineLatest, Observable } from "rxjs";
 import { take, takeUntil } from "rxjs/operators";
 import { Destroy$ } from "src/app/shared/common/classes";
 import { DistanceSliderConfig, SalarySliderConfig } from "src/app/shared/common/config";
-import { filterSplit } from "src/app/shared/common/functions";
+import { filterSplit, splitByOutput } from "src/app/shared/common/functions";
 import { InfoService } from "src/app/shared/components/info/info.component";
 import { PopupService } from "src/app/shared/components/popup/popup.component";
-import { ProfileCardComponent } from "src/app/shared/components/profile-card/profile.card";
 import { SlidemenuService } from "src/app/shared/components/slidemenu/slidemenu.component";
 import { SwipeupService } from "src/app/shared/components/swipeup/swipeup.component";
-import { Company, CompanyRow, Post, PostRow } from "src/models/data/data.model";
-import { DataState } from "src/models/data/data.state";
 import { ApplyPost, DeletePost, DuplicatePost, SwitchPostType } from "src/models/user/user.actions";
-import { User } from "src/models/user/user.model";
-import { UserState } from "src/models/user/user.state";
-import { DataState as NewDataState } from 'src/models/new/data.state';
+import { DataQueries, DataState, QueryAll, SnapshotAll } from 'src/models/new/data.state';
+import { Profile, Post } from "src/models/new/data.interfaces";
 
 type PostMenu = { open: boolean; post: Post | null; };
 @Component({
@@ -26,14 +22,26 @@ type PostMenu = { open: boolean; post: Post | null; };
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HomeComponent extends Destroy$ {
-  @Select(UserState)
-  user$!: Observable<User>;
+  
+  @Select(DataQueries.currentProfile)
+  profile$!: Observable<Profile>;
 
-  @Select(NewDataState.view)
+  @Select(DataState.view)
   view$!: Observable<"PME" | "ST">;
 
-  @Select(DataState.get('posts'))
+  @QueryAll('Post')
   posts$!: Observable<Post[]>;
+
+  //split the set all of posts into these (what we need)
+  private symbols = {
+    userDraft: 0, userOnlinePost: 1,
+    otherOnlinePost: 2, discard: -1
+  };
+
+  userDrafts: Post[] = [];
+  userOnlinePosts: Post[] = [];
+  allOnlinePosts: Post[] = [];
+
 
   @ViewChild('pausePostTemplate', {read: TemplateRef, static: true})
   pausePostTemplate!: TemplateRef<any>;
@@ -48,22 +56,23 @@ export class HomeComponent extends Destroy$ {
   candidature!: TemplateRef<any>;
 
   constructor(private cd: ChangeDetectorRef, private store: Store, private info: InfoService, private popup: PopupService, private swipeupService: SwipeupService, private slideService: SlidemenuService) {
-    super()
+    super();
   }
-
-  userPosts: Post[] = [];
-  userDrafts: Post[] = [];
-  userOnlinePosts: Post[] = [];
-  allOnlinePosts: Post[] = [];
-
   
   ngOnInit() {
-    combineLatest([this.user$, this.posts$]).pipe(takeUntil(this.destroy$)).subscribe(([user, posts]) => {
-      this.userPosts = user.profile?.company.posts || [];
-      [this.userOnlinePosts, this.userDrafts] = filterSplit(this.userPosts, post => !post.draft);
+    combineLatest([this.profile$, this.posts$]).pipe(takeUntil(this.destroy$)).subscribe(([profile, posts]) => {
       
-      const userOnlinePostsIds = this.userOnlinePosts.map(onlinePost => onlinePost.id);
-      this.allOnlinePosts = posts.filter(post => !post.draft).filter(post => !userOnlinePostsIds.includes(post.id));
+      const mapping = splitByOutput(posts, (post) => {
+        //0 -> userOnlinePosts | 1 -> userDrafts
+        if ( profile.company.posts.includes(post.id) )
+          return post.draft ? this.symbols.userDraft : this.symbols.userOnlinePost; 
+        
+        return post.draft ? this.symbols.discard : this.symbols.otherOnlinePost;
+      });
+
+      this.userDrafts = mapping.get(this.symbols.userDraft) || [];
+      this.userOnlinePosts = mapping.get(this.symbols.userOnlinePost) || [];
+      this.allOnlinePosts = mapping.get(this.symbols.otherOnlinePost) || [];
     });
   }
   activeView: number = 0;
@@ -83,6 +92,7 @@ export class HomeComponent extends Destroy$ {
   checkPost(post: Post) {
     this.info.hide();
     this.checkMenu = { open: true, post, swipeup: false };
+    console.log(post, post.candidates);
   }
 
   checkPostMenu() {
@@ -123,21 +133,24 @@ export class HomeComponent extends Destroy$ {
   }
 
   showUserOffer() {
-    let user  = this.store.selectSnapshot(UserState)
-    this.popup.show(this.acceptOfferTemplate, {
-      $implicit: user
-    })
+    this.profile$.pipe(take(1)).subscribe(profile => {
+      this.popup.show(this.acceptOfferTemplate, {
+        $implicit: profile
+      })
+    });
   }
 
   showCandidates() {
-    const candidates = (this.checkMenu.post?.candidates || []).map(({company}) => company);
+    const candidatesIds = this.checkMenu.post?.candidates || [],
+      candidates = this.store.selectSnapshot(DataQueries.getMany('Candidate', candidatesIds));
+
     this.checkMenu.swipeup = false;
     this.swipeupService.show({
       type: 'template',
       template: this.candidatesTemplate,
       context: {
         $implicit: candidates,
-        job: this.checkMenu.post!.job.id
+        job: this.checkMenu.post!.job
       }
     })
   }
@@ -162,12 +175,13 @@ export class HomeComponent extends Destroy$ {
   }
 
   showCompany(id: number) {
-    const company = CompanyRow.getById(id)!.serialize();
-    this.slideService.show(company.name, {
+    //QueryProfile(true) is problematic here
+    //const company = CompanyRow.getById(id)!.serialize();
+    this.slideService.show('Candidature', {
       type: 'template',
       template: this.candidature,
       context: {
-        $implicit: company
+        $implicit: id
       }
     })
   }

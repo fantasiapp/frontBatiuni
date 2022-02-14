@@ -1,7 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy, Input, ViewChild, ElementRef, Output, EventEmitter, NgZone } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
 import * as mapboxgl from 'mapbox-gl';
-import { Company, Post, PostRow } from 'src/models/data/data.model';
+import { Company, Post } from 'src/models/new/data.interfaces';
 
 export type MarkerData = {
   latitude: number;
@@ -19,15 +18,14 @@ export type markerType = 'disponible' | 'sous-conditions' | 'ST'
 export class UIMapComponent {
   
   _posts: Post[] = [];
-  companies: Company[] = [];
+  // companies: Company[] = [];
   
   get posts() { return this._posts; }
   
   @Input()
   set posts(values: Post[]) {
-    console.log('>', values);
     this._posts = values;
-    this.companies = values.map(post => PostRow.getCompany(post));
+    // this.companies = values.map(post => PostRow.getCompany(post));
   }
   
   @Input()
@@ -109,7 +107,7 @@ export class UIMapComponent {
         .addTo(this.mapbox);
       
       marker.getElement().onclick = () => {
-        marker.setPopup(this.loadPopup(post, this.companies[i]));
+        marker.setPopup(this.loadPopup(post, {name: 'troll'} as any));
       }
 
       return marker;

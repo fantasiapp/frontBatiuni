@@ -28,12 +28,12 @@
           <div class="results space-children-margin">
             <ng-container [ngSwitch]="activeView">
               <ng-container *ngSwitchCase="0">
-                <offer *ngFor="let draft of userDrafts" src="assets/brouillon.svg" [deletable]="true" [post]="draft"
-                  (click)="openPost(draft)" [routerLink]="['','home','make',draft.id]"></offer>
+                <!-- <offer *ngFor="let draft of userDrafts" src="assets/brouillon.svg" [deletable]="true" [post]="draft"
+                  (click)="openPost(draft)" [routerLink]="['','home','make',draft.id]"></offer> -->
               </ng-container>
               <ng-container *ngSwitchCase="1">
-                <offer *ngFor="let onlinePost of userOnlinePosts" [deletable]="false" [post]="onlinePost"
-                  (click)="showPostResumer(onlinePost,'enligne')" src="assets/enligne.svg"></offer>
+                <!-- <offer *ngFor="let onlinePost of userOnlinePosts" [deletable]="false" [post]="onlinePost"
+                  (click)="showPostResumer(onlinePost,'enligne')" src="assets/enligne.svg"></offer> -->
               </ng-container>
               <ng-container *ngSwitchCase="2">
                 <offer [deletable]="false" *ngFor="let mission of annonces" (click)="showPostResumer(mission,'valider')"

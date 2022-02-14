@@ -1,6 +1,10 @@
 import { StateOperator } from "@ngxs/store";
 import produce from "immer";
 import { Record, DataTypes, Interface } from "./data.interfaces";
+import { getOriginalName, NameMapping } from "./data.mapper";
+
+type RepresentedType<K extends DataTypes, V extends keyof Interface<K>> =
+  Interface<K>[V];
 
 namespace mutable {
   export function addDataField(draft: any, target: DataTypes, fields: string[]) {
@@ -97,6 +101,16 @@ namespace mutable {
 
     parentObject[childIndex].push(...ids);
   }
+
+  export function transformField<K extends DataTypes, V extends keyof Interface<K>>(draft: any, target: K, id: number, field: V, transform: (value: RepresentedType<K, V>, object: any[], fields: string[]) => RepresentedType<K, V>) {
+    const fields = draft.fields,
+      targetObject = draft[target][id];
+    
+    let fieldIndex = fields[target].indexOf(getOriginalName(field as string));
+    
+    if ( !targetObject ) return;
+    targetObject[fieldIndex] = transform(targetObject[fieldIndex], targetObject, fields);
+  }
 };
 
 //use immer to makes changes immutable
@@ -135,4 +149,8 @@ export function pushChildIds<K extends DataTypes>(parent: DataTypes, parentId: n
 };
 export function pushChildValues<K extends DataTypes>(parent: DataTypes, parentId: number, child: K, values: Record<any>, uniqueBy?: keyof Interface<K>) {
   return produce(draft => mutable.pushChildValues(draft, parent, parentId, child, values, uniqueBy));
+};
+
+export function transformField<K extends DataTypes, V extends keyof Interface<K>>(target: K, id: number, field: V, transform: (value: RepresentedType<K, V>, object: any[], fields: string[]) => RepresentedType<K, V>) {
+  return produce(draft => mutable.transformField(draft, target, id, field, transform));
 };

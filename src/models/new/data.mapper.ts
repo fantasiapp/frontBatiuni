@@ -17,11 +17,19 @@ export const NameMapping: any = {
   'File': 'files',
   'Post': 'posts',
   'userName': 'username',
-  'Candidate': 'application',
-  'DeailedPost': 'details',
+  'Candidate': 'candidates',
+  'DetailedPost': 'details',
   'Supervisions': 'supervisions',
   'Disponibility': 'availabilities'
 };
+
+export function getOriginalName(name: string) {
+  for ( const transformed in NameMapping ) {
+    if ( NameMapping[transformed] == name )
+      return transformed;
+  }
+  return name;
+}
 
 @Injectable({
   providedIn: 'root'

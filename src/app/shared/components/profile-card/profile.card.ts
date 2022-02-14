@@ -1,20 +1,25 @@
 import { ChangeDetectionStrategy, Component, HostListener, Input } from "@angular/core";
+import { Store } from "@ngxs/store";
+import { Observable } from "rxjs";
 import { ExtendedProfileComponent } from "src/app/mobile/components/extended-profile/extended-profile.component";
-import { Company, CompanyRow, FilesRow, Job, JobRow } from "src/models/data/data.model";
+import { Company, Job } from "src/models/new/data.interfaces";
+import { DataQueries, Snapshot } from "src/models/new/data.state";
 import { SlidemenuService } from "../slidemenu/slidemenu.component";
 
 @Component({
   selector: 'profile-card',
   template: `
-    <!-- <profile-image [company]="company!"></profile-image> -->
-    <div class="flex column small-space-children-margin font-Poppins description">
-      <span>{{ company?.name || "Nom de l'entreprise" }}</span>
-      <span>Propose {{ employeeCount }} {{job?.name || 'Employées'}}</span>
-      <span>Note générale (4.5 par 35 personnes)</span>
-      <stars [value]="4.5"></stars>
-    </div>
-    
-    
+    <ng-container *ngIf="(company | snapshot) as company">
+      <ng-container *ngIf="(job | snapshot) as job">
+        <profile-image [profile]="company.id"></profile-image>
+        <div class="flex column small-space-children-margin font-Poppins description">
+          <span>{{ company.name || "Nom de l'entreprise" }}</span>
+          <span>Propose {{ employeeCount }} {{job.name || 'Employées'}}</span>
+          <span>Note générale (4.5 par 35 personnes)</span>
+          <stars [value]="4.5"></stars>
+        </div>
+      </ng-container>
+    </ng-container>
   `,
   styles: [`
     @use "sass:math";
@@ -41,34 +46,29 @@ import { SlidemenuService } from "../slidemenu/slidemenu.component";
       margin-top: $profile-size-target;
     }
   `],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProfileCardComponent {
-  @Input('company')
-  set companyId(id: number) {
-    this.company = CompanyRow.getById(id).serialize();
-  }
+  
+  @Snapshot('Company')
+  @Input()
+  company!: number | Company;
 
-  @Input('job')
-  set jobId(id: number) {
-    this.job = JobRow.getById(id)?.serialize();
-  }
+  @Snapshot('Job')
+  @Input()
+  job!: number | Job;
 
-  company?: Company;
-  job?: Job;
   employeeCount: number = 0;
   src: string = '';
 
-  constructor() {}
+  constructor(private store: Store) {}
   
   ngOnInit() {
-    console.log(this.company?.jobs);
-    if ( !this.company ) return;
+    if ( this.company !== void 0 ) return;
 
-    this.employeeCount = this.company.jobs.find(({job, number}) => {
-      console.log(this.job, job.id);
-      return job.id == this.job?.id;
+    const jobForCompany = this.store.selectSnapshot(DataQueries.getMany('JobForCompany', (this.company as Company).jobs))
+    this.employeeCount = jobForCompany.find(({job, number}) => {
+      return job == (this.job as Job).id;
     })?.number || 0;
-    
   }
 };

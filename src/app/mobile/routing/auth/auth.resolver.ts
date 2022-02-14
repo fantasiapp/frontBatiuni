@@ -2,11 +2,11 @@ import { Injectable } from "@angular/core";
 import { Resolve, Router } from "@angular/router";
 import { Store } from "@ngxs/store";
 import { throwError } from "rxjs";
-import { catchError, tap } from "rxjs/operators";
+import { catchError } from "rxjs/operators";
 import { Logout } from "src/models/auth/auth.actions";
 import { AuthState } from "src/models/auth/auth.state";
+import { DataState } from "src/models/new/data.state";
 import { GetUserData } from "src/models/user/user.actions";
-import { UserState } from "src/models/user/user.state";
 
 @Injectable()
 export class AuthResolver implements Resolve<any> {
@@ -14,9 +14,9 @@ export class AuthResolver implements Resolve<any> {
 
   resolve() {
     let token = this.store.selectSnapshot(AuthState.token),
-      user = this.store.selectSnapshot(UserState);
+      userId = this.store.selectSnapshot(DataState.currentUserId);
     
-    if ( user.profile ) return true;
+    if ( userId !== -1 ) return true;
     if ( !token ) return throwError('no token');
 
     return this.store.dispatch(new GetUserData(token!))

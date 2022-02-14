@@ -17,6 +17,19 @@ export function filterSplit<U>(array: U[], pred: (x: U) => boolean) {
   }); return [accepted, rejected];
 };
 
+export function splitByOutput<U, V>(array: U[], classify: (x: U) => V): Map<V, U[]> {
+  const mapping = new Map<V, U[]>();
+  array.forEach(x => {
+    const output = classify(x),
+      xs = mapping.get(output) || [];
+    
+    xs.push(x);
+    mapping.set(output, xs);
+  });
+
+  return mapping;
+};
+
 export function getByValue<K, V>(map: Map<K, V>, searchValue: V): K | null {
   for (let [key, value] of map.entries()) {
     if (value === searchValue)

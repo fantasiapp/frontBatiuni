@@ -10,3 +10,13 @@ export class CastPipe implements PipeTransform {
     return value instanceof Observable ? value : of(value) as Observable<T>;
   }
 };
+
+@Pipe({
+  name: 'snapshot',
+  pure: true
+})
+export class SnapshotPipe implements PipeTransform {
+  transform<T>(value: number | T | Observable<T>, ...args: any[]): T {
+    return value as T;
+  }
+};

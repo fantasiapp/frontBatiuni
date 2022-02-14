@@ -1,11 +1,14 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, HostListener, Injectable, Input, Sanitizer, SimpleChange, SimpleChanges, TemplateRef, ViewChild, ViewContainerRef } from "@angular/core";
 import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser";
+import { Store } from "@ngxs/store";
 import { Subject } from "rxjs";
-import { takeUntil } from "rxjs/operators";
+import { take, takeUntil } from "rxjs/operators";
 import { UIOpenMenu } from "src/app/shared/common/classes";
 import { FilesRow } from "src/models/data/data.model";
+import { DataQueries } from "src/models/new/data.state";
+import { DownloadFile } from "src/models/user/user.actions";
 import { b64toBlob } from "../../common/functions";
-import { Serialized, TemplateContext } from "../../common/types";
+import { TemplateContext } from "../../common/types";
 import { FileUIOutput } from "../filesUI/files.ui";
 
 const TRANSITION_DURATION = 200;
@@ -110,7 +113,7 @@ export type FileViewConfig = {
 export class PopupService {
   popups$ = new Subject<Partial<PopupConfig>>();
 
-  constructor(private sanitizer: DomSanitizer) {}
+  constructor(private sanitizer: DomSanitizer, private store: Store) {}
 
   update(context: PopupConfig['context']) {
     this.popups$.next({context});
@@ -122,9 +125,15 @@ export class PopupService {
   }
 
   openFile(file: FileUIOutput) {
-    if ( !file.content ) throw `Unloaded file ${file.nature} ${file.name}. Load before using popup.`;
+    if ( !file.content )
+      return this.store.dispatch(new DownloadFile(file.id!, true)).pipe(take(1)).subscribe(() => {
+        file = this.store.selectSnapshot(DataQueries.getById('File', file.id!))!;
+        file.ext = 'jpeg';
+        this.openFile(file);
+      });
+  
     const type = FilesRow.getFileType(file.ext),
-      blob = b64toBlob(file.content, type),
+      blob = b64toBlob(Array.isArray(file.content) ? file.content[0] : file.content, type),
       url = URL.createObjectURL(blob),
       context: FileViewConfig = { $implicit: {
         close() { this.url && URL.revokeObjectURL(this.url); },
@@ -134,6 +143,7 @@ export class PopupService {
       }};
     
     this.popups$.next({name: 'file', context});
+    return true;
   }
 
   hide() {

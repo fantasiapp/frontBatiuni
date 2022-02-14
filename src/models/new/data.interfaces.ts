@@ -4,7 +4,7 @@ export type Record<T = any> = {
 
 export type DataTypes = 'Job' | 'Label' | 'Role' | 'UserProfile' | 'Company' |
   'Post' | 'DetailedPost' | 'Supervision' | 'Disponibility' | 'File' |
-  'JobForCompany' | 'LabelForCompany' | 'JobApplication' | 'Mission'; //..
+  'JobForCompany' | 'LabelForCompany' | 'Candidate' | 'Mission'; //..
 
 //just to indicate
 export type Ref<T> = number;
@@ -52,7 +52,7 @@ export interface Company {
   jobs: Ref<JobForCompany>[];
   labels: Ref<LabelForCompany>[];
   files: Ref<File>[];
-  Post: Ref<Post>[];
+  posts: Ref<Post>[];
   availabilities: Ref<Availability>[];
 };
 
@@ -104,7 +104,7 @@ export interface Post {
   latitude: number;
   longitude: number;
   contactName: string;
-  draft: string;
+  draft: boolean;
   manPower: number;
   dueDate: string;
   startDate: string;
@@ -118,13 +118,13 @@ export interface Post {
   description: string;
   details: Ref<PostDetail>[];
   files: Ref<File>[];
-  applications: Ref<JobApplication>[];
+  candidates: Ref<Candidate>[];
 };
 
 
-export interface JobApplication {
-  id: Ref<JobApplication>;
-  company: Company;
+export interface Candidate {
+  id: Ref<Candidate>;
+  company: Ref<Company>;
 };
 
 export type Mission = Omit<Post, 'applications'>;
@@ -142,7 +142,7 @@ export type Interface<K extends DataTypes> =
   K extends 'File' ? File :
   K extends 'JobForCompany' ? JobForCompany :
   K extends 'LabelForCompany' ? LabelForCompany :
-  K extends 'JobApplication' ? JobApplication :
+  K extends 'Candidate' ? Candidate :
   K extends 'Mission' ? Mission :
   K;
 

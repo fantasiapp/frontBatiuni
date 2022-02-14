@@ -4,12 +4,11 @@ import { Observable, of, Subject } from "rxjs";
 import { concatMap, map, mergeMap, take, tap } from "rxjs/operators";
 import { HttpService } from "src/app/services/http.service";
 import { GetGeneralData } from "../data/data.actions";
-import { ChangeProfilePicture, ChangeProfileType, DownloadFile, GetUserData, ModifyUserProfile, UploadFile, UploadPost } from "../user/user.actions";
+import { ApplyPost, ChangeProfilePicture, ChangeProfileType, DeleteFile, DeletePost, DownloadFile, DuplicatePost, GetUserData, ModifyUserProfile, SwitchPostType, UploadFile, UploadPost } from "../user/user.actions";
 import { Company, Interface, User } from "./data.interfaces";
 import { DataReader, NameMapping } from "./data.mapper";
 import { Record, DataTypes } from "./data.interfaces";
-import { addValues, compose, deleteIds, pushChildIds, pushChildValues } from "./state.operators";
-import produce from "immer";
+import { addValues, compose, deleteIds, pushChildValues, transformField } from "./state.operators";
 import { Logout } from "../auth/auth.actions";
 import { InfoService } from "src/app/shared/components/info/info.component";
 
@@ -32,7 +31,7 @@ export class Clear {
   defaults: {
     fields: {},
     session: {
-      currentUser: 0,
+      currentUser: -1,
       view: 'ST'
     }
   }
@@ -77,7 +76,7 @@ export class DataState {
     else ctx.setState({
       fields: {},
       session: {
-        currentUser: 0,
+        currentUser: -1,
         view: 'ST'
       }
     });
@@ -147,19 +146,23 @@ export class DataState {
   getUserData(ctx: StateContext<DataModel>, action: GetUserData) {
     const req = this.http.get('data', { action: action.action });
     
+    console.log('get user data', ctx.getState());
     return req.pipe(
       tap((response: any) => {
         const loadOperations = this.reader.readInitialData(response),
           sessionOperation = this.reader.readCurrentSession(response);
 
         ctx.setState(compose(...loadOperations, sessionOperation));
+        console.log(ctx.getState());
       })
     );
   }
 
   @Action(Logout)
   logout(ctx: StateContext<DataModel>) {
-    ctx.setState({fields: {}, session: {view: 'ST', currentUser: 0}});
+    console.log('logging out');
+    ctx.setState({fields: {}, session: {view: 'ST', currentUser: -1}});
+    ctx.dispatch(new GetGeneralData()); // a sign to decouple this from DataModel
   }
 
   @Action(ModifyUserProfile)
@@ -224,8 +227,6 @@ export class DataState {
 
   @Action(UploadFile)
   uploadFile(ctx: StateContext<DataModel>, upload: UploadFile) {
-    console.log('>>   sending', upload);
-
     const req = this.http.post('data', upload);
     return req.pipe(
       tap((response: any) => {
@@ -243,11 +244,26 @@ export class DataState {
           //add it to company
           const company = this.store.selectSnapshot(DataQueries.currentCompany);
           ctx.setState(pushChildValues('Company', company.id, 'File', response, 'name'));
+        } else if ( upload.category == 'Post' ) {
+          ctx.setState(pushChildValues('Post', upload.target, 'File', response));
         }
-
       })
     )
   };
+
+  @Action(DeleteFile)
+  deleteFile(ctx: StateContext<DataModel>, deletion: DeleteFile) {
+    const req = this.http.get('data', deletion);
+    return req.pipe(
+      tap((response: any) => {
+        if ( response[deletion.action] !== 'OK' )
+          throw response['messages'];
+        
+        delete response[deletion.action];
+        ctx.setState(deleteIds('File', [deletion.id]));
+      })
+    );
+  }
 
   @Action(UploadPost)
   createPost(ctx: StateContext<DataModel>, post: UploadPost) {
@@ -276,16 +292,49 @@ export class DataState {
         uploads.forEach(upload => upload.target = postId);
         console.log('now uploads are', uploads);
         //return this to wait for file downloads first
-        ctx.dispatch(uploads)
-          .pipe(take(1)).subscribe(() => {
-            console.log('upload finished', uploads, uploads.map(upload => upload.assignedId));
-            ctx.setState(pushChildIds('Post', postId, 'File', uploads.map(upload => upload.assignedId!)))
-        });
-
-        return of(true);
+        return ctx.dispatch(uploads);
       }),
     )
-  }
+  };
+
+  @Action(SwitchPostType)
+  switchPostType(ctx: StateContext<DataModel>, switchType: SwitchPostType) {
+    return this.http.get('data', switchType).pipe(
+      tap((response: any) => {
+        if ( response[switchType.action] !== 'OK' )
+          throw response['messages'];
+        
+        delete response[switchType.action];
+        ctx.setState(transformField('Post', switchType.id, 'draft', (draft) => !draft));
+      })
+    );
+  };
+
+  @Action(DeletePost)
+  deletePost(ctx: StateContext<DataModel>, deletion: DeletePost) {
+    return this.http.get('data', deletion).pipe(
+      tap((response: any) => {
+        if ( response[deletion.action] !== 'OK' )
+          throw response['messages'];
+        
+        delete response[deletion.action];
+        ctx.setState(deleteIds('Post', [deletion.id]));
+      })
+    )
+  };
+
+  @Action(DuplicatePost)
+  duplicatePost(ctx: StateContext<DataModel>, duplicate: DuplicatePost) {
+    return this.http.get('data', duplicate).pipe(
+      tap((response: any) => {
+        if ( response[duplicate.action] !== 'OK' )
+          throw response[duplicate.action];
+        
+        delete response[duplicate.action];
+        ctx.setState(addValues('Post', response));
+      })
+    )
+  };
 
   @Action(DownloadFile)
   downloadFile(ctx: StateContext<DataModel>, download: DownloadFile) {
@@ -325,6 +374,19 @@ export class DataState {
         this.completePending(key);
       })
     );
+  }
+
+  @Action(ApplyPost)
+  applyPost(ctx: StateContext<User>, application: ApplyPost) {
+    return this.http.get('data', application).pipe(
+      tap((response: any) => {
+        if ( response[application.action] != 'OK' )
+          throw response['messages'];
+        
+        delete response[application.action];
+        ctx.setState(addValues('Candidate', response));
+      })
+    )
   }
 };
 
@@ -590,7 +652,7 @@ export function SnapshotArray<K extends DataTypes>(type: K) {
   }
 }
 
-export function QueryProfile(byUserId: boolean = false) {
+export function QueryProfile() {
   return function(target: any, key: string) {
     const hiddenKey = '#' + key;
 
@@ -607,9 +669,7 @@ export function QueryProfile(byUserId: boolean = false) {
         if ( typeof id == 'number' ) {
           this[hiddenKey] = {
             id,
-            value: byUserId ?
-              this.store.select(DataQueries.getProfileByUserId(id)) :
-              this.store.select(DataQueries.getProfileById(id))
+            value: this.store.select(DataQueries.getProfileById(id))
           }
         } else if ( id instanceof Observable ) {
           this[hiddenKey] = { id: undefined, value: id }

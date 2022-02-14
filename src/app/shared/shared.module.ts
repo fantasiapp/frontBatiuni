@@ -48,7 +48,7 @@ import { UISwipeupComponent } from "./components/swipeup/swipeup.component";
 import { UISlideMenuComponent } from "./components/slidemenu/slidemenu.component";
 import { UITooltipComponent } from "./components/tooltip/tooltip.component";
 import { ProfileCardComponent } from "./components/profile-card/profile.card";
-import { CastPipe } from "./pipes/cast.pipe";
+import { CastPipe, SnapshotPipe } from "./pipes/cast.pipe";
 import { SpreadPipe } from "./pipes/spread.pipe";
 
 @NgModule({
@@ -100,7 +100,8 @@ import { SpreadPipe } from "./pipes/spread.pipe";
     UITooltipComponent,
     ProfileCardComponent,
     CastPipe,
-    SpreadPipe
+    SpreadPipe,
+    SnapshotPipe
   ],
   imports: [
     CommonModule,
@@ -158,7 +159,8 @@ import { SpreadPipe } from "./pipes/spread.pipe";
     UITooltipComponent,
     ProfileCardComponent,
     CastPipe,
-    SpreadPipe
+    SpreadPipe,
+    SnapshotPipe
   ],
   providers: [ImageGenerator]
 })

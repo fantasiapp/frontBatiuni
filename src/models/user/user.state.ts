@@ -85,25 +85,25 @@ export class UserState {
   //   );
   // }
 
-  @Action(DeleteFile)
-  deleteFile(ctx: StateContext<User>, action: DeleteFile) {
-    const req = this.http.get('data', action),
-      user = ctx.getState();
+  // @Action(DeleteFile)
+  // deleteFile(ctx: StateContext<User>, action: DeleteFile) {
+  //   const req = this.http.get('data', action),
+  //     user = ctx.getState();
 
-    return req.pipe(
-      tap((response: any) => {
-        if ( response['deleteFile'] !== 'OK' ) throw response['messages'];
-        delete response['deleteFile'];
-        // add to cached files
+  //   return req.pipe(
+  //     tap((response: any) => {
+  //       if ( response['deleteFile'] !== 'OK' ) throw response['messages'];
+  //       delete response['deleteFile'];
+  //       // add to cached files
 
-        if ( action.companyFile )
-          CompanyRow.getById(user.profile!.company.id).spliceValue('Files', action.id);
+  //       if ( action.companyFile )
+  //         CompanyRow.getById(user.profile!.company.id).spliceValue('Files', action.id);
 
-        //find a way to make minimal updates with a tree-like-structure
-        ctx.patchState({profile: UserProfileRow.getById(user.profile!.id).serialize()});
-      })
-    );
-  };
+  //       //find a way to make minimal updates with a tree-like-structure
+  //       ctx.patchState({profile: UserProfileRow.getById(user.profile!.id).serialize()});
+  //     })
+  //   );
+  // };
 
   // @Action(DownloadFile)
   // downloadFile(ctx: StateContext<User>, action: DownloadFile) {
@@ -128,45 +128,45 @@ export class UserState {
   //   );
   // }
 
-  @Action(GetUserData)
-  getUserData(ctx: StateContext<User>, action: GetUserData) {
-    const req = this.http.get('data', { action: action.action })
+  // @Action(GetUserData)
+  // getUserData(ctx: StateContext<User>, action: GetUserData) {
+  //   const req = this.http.get('data', { action: action.action })
 
-    return req.pipe(
-      catchError((err: HttpErrorResponse) => {
-        this.store.dispatch(new Logout());
-        return throwError(err);
-      }),
-      tap((response: any) => {
-        let currentUserId: number = 0;
-        try {
-          currentUserId = response['currentUser'];
-          Mapper.mapRequest(response);
-          this.store.dispatch(new StoreData('posts', PostRow, {type: 'load', id: 0}));
-        } catch ( err ) {
-          console.warn(err);
-          this.store.dispatch(new Logout());
-          return;
-        };
+  //   return req.pipe(
+  //     catchError((err: HttpErrorResponse) => {
+  //       this.store.dispatch(new Logout());
+  //       return throwError(err);
+  //     }),
+  //     tap((response: any) => {
+  //       let currentUserId: number = 0;
+  //       try {
+  //         currentUserId = response['currentUser'];
+  //         Mapper.mapRequest(response);
+  //         this.store.dispatch(new StoreData('posts', PostRow, {type: 'load', id: 0}));
+  //       } catch ( err ) {
+  //         console.warn(err);
+  //         this.store.dispatch(new Logout());
+  //         return;
+  //       };
         
-        const currentUser = UserProfileRow.getById(currentUserId),
-          partial: any = { profile: currentUser.serialize() };
+  //       const currentUser = UserProfileRow.getById(currentUserId),
+  //         partial: any = { profile: currentUser.serialize() };
 
-        ctx.patchState(partial);
-        if ( !ctx.getState().imageUrl ) {
-          const reversed = currentUser.company.files.slice(); reversed.reverse();
-          const newestImage = reversed.find((file) => file.nature == 'userImage');
-          if ( newestImage ) this.store.dispatch(new DownloadFile(newestImage.id))
-            .pipe(take(1)).subscribe( () => {
-              const imageFile = FilesRow.getById(newestImage.id);
-              ctx.patchState({
-                imageUrl: `data:image/${imageFile.ext};base64,${imageFile.content}`
-              });
-            }, err => throwError(err));
-        }
-      })
-    )
-  }
+  //       ctx.patchState(partial);
+  //       if ( !ctx.getState().imageUrl ) {
+  //         const reversed = currentUser.company.files.slice(); reversed.reverse();
+  //         const newestImage = reversed.find((file) => file.nature == 'userImage');
+  //         if ( newestImage ) this.store.dispatch(new DownloadFile(newestImage.id))
+  //           .pipe(take(1)).subscribe( () => {
+  //             const imageFile = FilesRow.getById(newestImage.id);
+  //             ctx.patchState({
+  //               imageUrl: `data:image/${imageFile.ext};base64,${imageFile.content}`
+  //             });
+  //           }, err => throwError(err));
+  //       }
+  //     })
+  //   )
+  // }
 
   // @Action(Logout)
   // logout(ctx: StateContext<User>) {
@@ -199,127 +199,127 @@ export class UserState {
   //   );
   // }
 
-  @Action(UploadPost)
-  createPost(ctx: StateContext<User>, action: UploadPost) {
-    const {profile} = ctx.getState(),
-      {files, ...createPost} = action,
-      req = this.http.post('data', createPost),
-      uploads = Object.keys(files).map((key: any) => new UploadFile(files[key], 'post', key, 'Post'));
+  // @Action(UploadPost)
+  // createPost(ctx: StateContext<User>, action: UploadPost) {
+  //   const {profile} = ctx.getState(),
+  //     {files, ...createPost} = action,
+  //     req = this.http.post('data', createPost),
+  //     uploads = Object.keys(files).map((key: any) => new UploadFile(files[key], 'post', key, 'Post'));
     
-    return req.pipe(
-      map((response: any) => {
-        if ( response[action.action] && response[action.action] !== 'OK' )
-          throw response['messages'];
+  //   return req.pipe(
+  //     map((response: any) => {
+  //       if ( response[action.action] && response[action.action] !== 'OK' )
+  //         throw response['messages'];
 
-        delete response[action.action];
-        const id = +Object.keys(response)[0],
-          jobIndex = PostRow.fields.get('Job')!,
-          jobId = response[id][jobIndex],
-          detailsIndex = PostRow.fields.get('DetailedPost')!,
-          details = response[id][detailsIndex],
-          mappedDetails = Object.entries<any[]>(details).map(([id, details]) => {
-            return new DetailedPostRow(+id, details);
-          });
+  //       delete response[action.action];
+  //       const id = +Object.keys(response)[0],
+  //         jobIndex = PostRow.fields.get('Job')!,
+  //         jobId = response[id][jobIndex],
+  //         detailsIndex = PostRow.fields.get('DetailedPost')!,
+  //         details = response[id][detailsIndex],
+  //         mappedDetails = Object.entries<any[]>(details).map(([id, details]) => {
+  //           return new DetailedPostRow(+id, details);
+  //         });
           
-        response[id][jobIndex] = JobRow.getById(jobId);
-        response[id][detailsIndex] = mappedDetails;
-        let post = new PostRow(id, response[id]);
-        return post;
-      }),
-      concatMap((post: PostRow) => {
-        const userProfileData = UserProfileRow.getById(profile!.id),
-          userCompanyData = userProfileData.company;
+  //       response[id][jobIndex] = JobRow.getById(jobId);
+  //       response[id][detailsIndex] = mappedDetails;
+  //       let post = new PostRow(id, response[id]);
+  //       return post;
+  //     }),
+  //     concatMap((post: PostRow) => {
+  //       const userProfileData = UserProfileRow.getById(profile!.id),
+  //         userCompanyData = userProfileData.company;
         
-        if ( action.action == 'modifyPost' ) {
-          userCompanyData.spliceValue('Post', post.id);
-          this.store.dispatch(new StoreData('posts', PostRow, {type: 'modify', id: post.id}));
-        } else {
-          this.store.dispatch(new StoreData('posts', PostRow, {type: 'add', id: post.id}));
-        }; userCompanyData.pushValue('Post', post);
+  //       if ( action.action == 'modifyPost' ) {
+  //         userCompanyData.spliceValue('Post', post.id);
+  //         this.store.dispatch(new StoreData('posts', PostRow, {type: 'modify', id: post.id}));
+  //       } else {
+  //         this.store.dispatch(new StoreData('posts', PostRow, {type: 'add', id: post.id}));
+  //       }; userCompanyData.pushValue('Post', post);
 
-        console.log(uploads);
-        uploads.forEach(upload => {
-          upload.assignedId = post.id;
-        });
+  //       console.log(uploads);
+  //       uploads.forEach(upload => {
+  //         upload.assignedId = post.id;
+  //       });
 
-        return ctx.dispatch(uploads).pipe(map(() => post));
-      }),
-      concatMap((post: any) => {
-        post.setField('Files', uploads.map(({assignedId}) => FilesRow.getById(assignedId!)));
-        ctx.patchState({profile: UserProfileRow.getById(profile!.id).serialize()});
-        return of(true);
-      })
-    );
-  };
+  //       return ctx.dispatch(uploads).pipe(map(() => post));
+  //     }),
+  //     concatMap((post: any) => {
+  //       post.setField('Files', uploads.map(({assignedId}) => FilesRow.getById(assignedId!)));
+  //       ctx.patchState({profile: UserProfileRow.getById(profile!.id).serialize()});
+  //       return of(true);
+  //     })
+  //   );
+  // };
 
-  @Action(DuplicatePost)
-  duplicatePost(ctx: StateContext<User>, action: DuplicatePost) {
-    const {profile} = ctx.getState();
+  // @Action(DuplicatePost)
+  // duplicatePost(ctx: StateContext<User>, action: DuplicatePost) {
+  //   const {profile} = ctx.getState();
 
-    return this.http.get('data', action).pipe(
-      tap((response: any) => {
-        console.log(response);
-        if ( response['duplicatePost'] !== 'OK' )
-          throw response['messages'];
+  //   return this.http.get('data', action).pipe(
+  //     tap((response: any) => {
+  //       console.log(response);
+  //       if ( response['duplicatePost'] !== 'OK' )
+  //         throw response['messages'];
         
-        delete response['duplicatePost'];
-        const id = +Object.keys(response)[0],
-          post = new PostRow(id, response[id]);
+  //       delete response['duplicatePost'];
+  //       const id = +Object.keys(response)[0],
+  //         post = new PostRow(id, response[id]);
         
-        this.store.dispatch(new StoreData('posts', PostRow, {type: 'add', id}));
-        ctx.patchState({profile: UserProfileRow.getById(profile!.id).serialize()});
-      })
-    );
-  }
+  //       this.store.dispatch(new StoreData('posts', PostRow, {type: 'add', id}));
+  //       ctx.patchState({profile: UserProfileRow.getById(profile!.id).serialize()});
+  //     })
+  //   );
+  // }
 
-  @Action(SwitchPostType)
-  switchPostType(ctx: StateContext<User>, action: SwitchPostType) {
-    const {profile} = ctx.getState();
-    return this.http.get('data', action).pipe(
-      tap((response: any) => {
-        if ( response['switchDraft'] !== 'OK' )
-          throw response['messages'];
+  // @Action(SwitchPostType)
+  // switchPostType(ctx: StateContext<User>, action: SwitchPostType) {
+  //   const {profile} = ctx.getState();
+  //   return this.http.get('data', action).pipe(
+  //     tap((response: any) => {
+  //       if ( response['switchDraft'] !== 'OK' )
+  //         throw response['messages'];
         
-        delete response['switchDraft'];
-        const post = PostRow.getById(action.id);
-        post.setField('draft', !post.getField('draft'));
-        this.store.dispatch(new StoreData('posts', PostRow, {type: 'modify', id: post.id}));
+  //       delete response['switchDraft'];
+  //       const post = PostRow.getById(action.id);
+  //       post.setField('draft', !post.getField('draft'));
+  //       this.store.dispatch(new StoreData('posts', PostRow, {type: 'modify', id: post.id}));
                 
-        ctx.patchState({profile: UserProfileRow.getById(profile!.id).serialize()});
-      })
-    );
-  };
+  //       ctx.patchState({profile: UserProfileRow.getById(profile!.id).serialize()});
+  //     })
+  //   );
+  // };
 
-  @Action(DeletePost)
-  deletePost(ctx: StateContext<User>, action: DeletePost) {
-    const {profile} = ctx.getState();
+  // @Action(DeletePost)
+  // deletePost(ctx: StateContext<User>, action: DeletePost) {
+  //   const {profile} = ctx.getState();
 
-    return this.http.get('data', action).pipe(
-      catchError((err: HttpErrorResponse) => {
-        console.error(err);
-        return throwError(err);
-      }),
-      tap((response: any) => {
-        if ( response['deletePost'] !== 'OK' ) throw response['messages'];
-        delete response['deletePost'];
-        const id = +response['id'];
+  //   return this.http.get('data', action).pipe(
+  //     catchError((err: HttpErrorResponse) => {
+  //       console.error(err);
+  //       return throwError(err);
+  //     }),
+  //     tap((response: any) => {
+  //       if ( response['deletePost'] !== 'OK' ) throw response['messages'];
+  //       delete response['deletePost'];
+  //       const id = +response['id'];
 
-        const post = PostRow.getById(id),
-          details = post.details;
+  //       const post = PostRow.getById(id),
+  //         details = post.details;
 
-        details.forEach(detail => DetailedPostRow.destroy(detail.id));
-        PostRow.destroy(post.id);
-        this.store.dispatch(new StoreData('posts', PostRow, {type: 'delete', id: post.id}));
+  //       details.forEach(detail => DetailedPostRow.destroy(detail.id));
+  //       PostRow.destroy(post.id);
+  //       this.store.dispatch(new StoreData('posts', PostRow, {type: 'delete', id: post.id}));
 
-        const userProfileData = UserProfileRow.getById(profile!.id),
-          userCompanyData = userProfileData.company;
+  //       const userProfileData = UserProfileRow.getById(profile!.id),
+  //         userCompanyData = userProfileData.company;
 
-        userCompanyData.spliceValue('Post', post.id);
+  //       userCompanyData.spliceValue('Post', post.id);
 
-        ctx.patchState({profile: userProfileData.serialize()})
-      })
-    )
-  }
+  //       ctx.patchState({profile: userProfileData.serialize()})
+  //     })
+  //   )
+  // }
 
   //HERE !
   @Action(ModifyDisponibility)

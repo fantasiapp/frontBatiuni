@@ -8,7 +8,7 @@ import { FieldType } from "src/validators/verify";
 import { PopupService } from "../components/popup/popup.component";
 import { InfoService } from "../components/info/info.component";
 import { Store } from "@ngxs/store";
-import { SnapshotAll, SnapshotArray } from "src/models/new/data.state";
+import { DataQueries, SnapshotAll, SnapshotArray } from "src/models/new/data.state";
 import { Job, Label, File, Profile, User, Company, LabelForCompany, JobForCompany } from "src/models/new/data.interfaces";
 import { SpacingPipe } from "../pipes/spacing.pipe";
 
@@ -260,15 +260,12 @@ export class ModifyProfileForm {
   allJobs!: Job[];
 
   //params that depend on the profile
-  @SnapshotArray('LabelForCompany')
   companyLabels!: LabelForCompany[];
   selectedLabels!: Label[];
   
-  @SnapshotArray('JobForCompany')
   companyJobs!: JobForCompany[];
   selectedJobs!: Label[];
 
-  @SnapshotArray('File')
   companyFiles!: File[];
 
   @Input() profile!: Profile;
@@ -396,9 +393,9 @@ export class ModifyProfileForm {
 
   reload() {
     const { user, company} = this.profile as {user: User, company: Company};
-    this.companyFiles = this.profile.company.files as any;
-    this.companyLabels = this.profile.company.labels as any;
-    this.companyJobs = this.profile.company.jobs as any;
+    this.companyFiles = this.store.selectSnapshot(DataQueries.getMany('File', this.profile.company.files));
+    this.companyLabels = this.store.selectSnapshot(DataQueries.getMany('LabelForCompany', this.profile.company.labels));
+    this.companyJobs = this.store.selectSnapshot(DataQueries.getMany('JobForCompany', this.profile.company.jobs));
 
     const jobMapping = new Map(),
       labelMapping = new Map();

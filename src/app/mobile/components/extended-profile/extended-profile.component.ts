@@ -1,13 +1,11 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, SimpleChange, SimpleChanges } from "@angular/core";
-import { Select, Store } from "@ngxs/store";
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, SimpleChanges } from "@angular/core";
+import { Store } from "@ngxs/store";
 import * as UserActions from "src/models/user/user.actions";
-import { InfoService } from "src/app/shared/components/info/info.component";
-import { first, take, takeUntil } from "rxjs/operators";
+import { map, take, takeUntil } from "rxjs/operators";
 import { FilesRow, JobForCompany, UserProfileRow } from "src/models/data/data.model";
-import { Serialized } from "src/app/shared/common/types";
 import { PopupService } from "src/app/shared/components/popup/popup.component";
 import { DataQueries, DataState, Query, QueryProfile, SnapshotArray } from "src/models/new/data.state";
-import { Job, File, Profile } from "src/models/new/data.interfaces";
+import { Job, File, Profile, User } from "src/models/new/data.interfaces";
 import { Observable } from "rxjs";
 import { Destroy$ } from "src/app/shared/common/classes";
 import { CastPipe } from "src/app/shared/pipes/cast.pipe";
@@ -31,12 +29,21 @@ export class ExtendedProfileComponent extends Destroy$ {
   @SnapshotArray('File')
   files!: File[]; //only responsive to profile changes
 
-  @QueryProfile(true)
+  @QueryProfile()
   @Input()
   profile!: number | Profile | Observable<Profile>;
 
+  @Input()
+  user: User | null = null;
+
   ngOnChanges(changes: SimpleChanges) {
+    console.log(changes, this.profile);
     if ( changes['profile'] ) {
+      //since a profile <=> company, you might want to add user info if you want
+      this.profile = this.profile$.pipe(
+        map((profile: Profile) => profile.user ? profile : {user: this.user, company: profile.company})
+      );
+
       this.profile$.pipe(takeUntil(this.destroy$)).subscribe(profile => {
         this.files = profile.company.files as any;
         this.companyJobs = profile.company.jobs as any;

@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, HostBinding, HostListener, Input} from "@angular/core";
 import { Store } from "@ngxs/store";
-import { Company, PostRow } from "src/models/data/data.model";
+import { Post, Company } from "src/models/new/data.interfaces";
+import { DataQueries, Snapshot } from "src/models/new/data.state";
 import { DeletePost } from "src/models/user/user.actions";
-import { Serialized } from "../../common/types";
 
 @Component({
   selector: 'offer',
@@ -20,12 +20,13 @@ export class OfferComponent {
   @Input()
   deletable: boolean = false;
 
-  @Input() post!: Serialized<PostRow>;
-  company!: Serialized<Company>;
-
-  ngOnInit() {
-    if ( this.post )
-      this.company = PostRow.getCompany(this.post);
+  company: Company | null = null;
+  private _post!: Post | null;
+  get post() { return this._post; }
+  
+  @Input() set post(p: Post | null) {
+    this._post = p;
+    this.company = p ? this.store.selectSnapshot(DataQueries.getById('Company', p.company)) : null;
   }
 
   @HostBinding("class.delete")
@@ -50,7 +51,7 @@ export class OfferComponent {
 
   deletePost(e: Event) {
     e.stopPropagation();
-    this.store.dispatch(new DeletePost(this.post.id));
+    this.store.dispatch(new DeletePost(this.post!.id));
   }
 
   toLocateDate(date?: string) {

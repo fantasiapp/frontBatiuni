@@ -1,10 +1,10 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, HostBinding, Input, Output } from "@angular/core";
+import { ChangeDetectionStrategy, Component, EventEmitter, HostBinding, Input, Output } from "@angular/core";
 import { FormArray, FormControl, FormGroup, Validators } from "@angular/forms";
 import { Store } from "@ngxs/store";
 import { take } from "rxjs/operators";
-import { JobRow, Post } from "src/models/data/data.model";
-import { Option } from "src/models/option";
-import { SwitchPostType, UploadPost } from "src/models/user/user.actions";
+import { Post, Job } from "src/models/new/data.interfaces";
+import { DataQueries, SnapshotAll } from "src/models/new/data.state";
+import { DeleteFile, SwitchPostType, UploadPost } from "src/models/user/user.actions";
 import { Required } from "src/validators/verify";
 import { defaultFileUIOuput } from "../components/filesUI/files.ui";
 import { InfoService } from "../components/info/info.component";
@@ -115,7 +115,7 @@ import { InfoService } from "../components/info/info.component";
 
     <ng-container formArrayName="documents">
       <ng-container *ngFor="let document of documentsControls; index as i" [formGroupName]="i">
-        <fileinput [includeDate]="false" comment="" placeholder="" [filename]="document.get('name')!.value" formControlName="fileData"></fileinput>
+        <fileinput [includeDate]="false" [editName]="document.get('name')!" (kill)="removeDocument(i)" comment="" placeholder="" formControlName="fileData"></fileinput>
       </ng-container>
     </ng-container>
 
@@ -202,24 +202,32 @@ export class MakeAdForm {
   @Input() page: boolean = true;
   
   @Output() done = new EventEmitter();
+  
+  @SnapshotAll('Job')
+  allJobs!: Job[];
 
   private _post: Post | null = null;
   get post() { return this._post; }
   
   @Input()
   set post(p: Post | null) {
-    console.log('set post', p);
+    console.log(p);
     if ( !p || p == this._post ) {
       this.info.alignWith('header_search');
       return;
     };
 
     this._post = p;
+    //load values
+    console.log('post:', p);
+    const postDetails = this.store.selectSnapshot(DataQueries.getMany('DetailedPost', p.details));
+    const files = this.store.selectSnapshot(DataQueries.getMany('File', p.files));
+    //fill form
     this.makeAdForm.get('dueDate')?.setValue(p.dueDate);
     this.makeAdForm.get('startDate')?.setValue(p.startDate);
     this.makeAdForm.get('endDate')?.setValue(p.endDate);
     this.makeAdForm.get('manPower')?.setValue(p.manPower);
-    this.makeAdForm.get('job')?.setValue(p.job ? [p.job] : []);
+    this.makeAdForm.get('job')?.setValue(p.job ? [{id: p.job}] : []);
     this.makeAdForm.get('address')?.setValue(p.address);
     this.makeAdForm.get('numberOfPeople')?.setValue(p.numberOfPeople);
     this.makeAdForm.get('counterOffer')?.setValue(p.counterOffer);
@@ -228,16 +236,26 @@ export class MakeAdForm {
     this.makeAdForm.get('currency')?.setValue(this.currencies.filter(currency => currency.name == p.currency));
     this.makeAdForm.get('description')?.setValue(p.description);
     this.makeAdForm.get('amount')?.setValue(p.amount);
+    
+    //load details
     const detailsForm = this.makeAdForm.get('detailedPost')! as FormArray;
     detailsForm.clear();
-    for ( const detail of p.details )
+    for ( const detail of postDetails )
       detailsForm.push(new FormGroup({description: new FormControl(detail.content)}));
-    //download files
+    
+    //load files
+    const filesForm = this.makeAdForm.get('documents')! as FormArray;
+    filesForm.clear();
+    console.log(files);
+    for ( const file of files )
+      filesForm.push(new FormGroup({
+        name: new FormControl(file.name),
+        fileData: new FormControl(file)
+      }));
   };
 
   //get put checked allJobs
   currencies = ['$', '€', '£'].map((currency, id) => ({id, name: currency}));
-  allJobs = [...JobRow.instances.values()].map(job => ({id: job.id, name: job.name}));
   commonDocuments = ['Plan', 'Document Technique', 'Descriptif du chantier', 'Calendrier d\'éxecution'];
   
   constructor(private store: Store, private info: InfoService) {}
@@ -260,7 +278,7 @@ export class MakeAdForm {
     documents: new FormArray(
       this.commonDocuments.map(name => new FormGroup({
         name: new FormControl(name),
-        fileData: new FormControl(defaultFileUIOuput('postdoc'))
+        fileData: new FormControl(defaultFileUIOuput('post'))
       }))
     ),
     detailedPost: new FormArray([
@@ -281,13 +299,16 @@ export class MakeAdForm {
     const documents = this.makeAdForm.get('documents') as FormArray;
     documents.push(new FormGroup({
       name: new FormControl(''),
-      fileData: new FormControl(defaultFileUIOuput('postdoc'))
+      fileData: new FormControl(defaultFileUIOuput('post'))
     }));
   }
 
   removeDocument(index: number) {
-    const documents = this.makeAdForm.get('documents') as FormArray;
+    const documents = this.makeAdForm.get('documents') as FormArray,
+      item = documents.at(index).value.fileData;
     documents.removeAt(index);
+    console.log('remove ', item);
+    if ( item.id ) this.store.dispatch(new DeleteFile(item.id));
   }
   
 

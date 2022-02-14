@@ -1,12 +1,8 @@
 import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
-import { FormControl, FormGroup } from "@angular/forms";
 import { Store } from "@ngxs/store";
-import { of } from "rxjs";
-import { take } from "rxjs/operators";
-import { Serialized } from "src/app/shared/common/types";
 import { PopupService } from "src/app/shared/components/popup/popup.component";
-import { Company, FilesRow, Post, PostRow } from "src/models/data/data.model";
-import { DownloadFile } from "src/models/user/user.actions";
+import { Company, Post, File, PostDetail } from "src/models/new/data.interfaces";
+import { DataQueries } from "src/models/new/data.state";
 
 @Component({
   selector: 'annonce-resume',
@@ -38,8 +34,9 @@ import { DownloadFile } from "src/models/user/user.actions";
 
       <div class="description">
         <span class="title text-emphasis">Description des missions</span>
+        <p>{{post?.description || 'Description de la mission'}}</p>
         <ul>
-          <li *ngFor="let detail of (details || [])">{{detail.content}}</li>
+          <li *ngFor="let detail of details">{{detail.content}}</li>
         </ul>
       </div>
 
@@ -75,25 +72,21 @@ export class UIAnnonceResume {
   company: Company | null = null;
 
   private _post: Post | null = null;
-  
-  @Input()
-  set post(p: Post | null) {
+  get post(): any { return this._post; }
+  @Input() set post(p: Post | null) {
     this._post = p;
-    this.company = this.post ? PostRow.getCompany(this.post) : null;
-    console.log(p, this.company);
+    this.company = p ? this.store.selectSnapshot(DataQueries.getById('Company', p.company)) : null;
+    this.files = p ? this.store.selectSnapshot(DataQueries.getMany('File', p.files)) : [];
+    this.details = p ? this.store.selectSnapshot(DataQueries.getMany('DetailedPost', p.details)) : [];
   }
 
-  get post() { return this._post; }
-  get files() { return this._post?.files || []; }
-  get details() { return this._post?.details || []; }
+  files: File[] = [];
+  details: PostDetail[] = [];
 
   constructor(private store: Store, private popup: PopupService) {}
 
-  openFile(file: Serialized<FilesRow>) {
-    const content = file.content ? of(file.content) : this.store.dispatch(new DownloadFile(file.id));
-    content.pipe(take(1)).subscribe(() => {
-      this.popup.openFile(FilesRow.getById(file.id));
-    });
+  openFile(file: File) {
+    this.popup.openFile(file);
   }
 
   toLocateDate(date?: string) {

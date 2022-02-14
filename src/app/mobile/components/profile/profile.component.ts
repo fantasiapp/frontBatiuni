@@ -44,6 +44,7 @@ export class ProfileComponent extends Destroy$ {
   constructor(private store: Store, private cd: ChangeDetectorRef, private info: InfoService, private popup: PopupService) {
     super();
     this.profile$.subscribe(() => {
+
     });
   }
 
@@ -103,16 +104,13 @@ export class ProfileComponent extends Destroy$ {
     )
   }
 
-  async takePhoto() {    
-    let user = this.store.selectSnapshot(UserState)
-    let imageName = user.profile.firstName + '-'+ user.profile.lastName +'-'+ user.profile.id ;
-    
+  async takePhoto() {        
     const photo = await Camera.getPhoto({
       allowEditing: false,
       resultType: CameraResultType.Base64,
       source: CameraSource.Camera
     });
-    this.store.dispatch(new UserActions.ChangeProfilePicture(photo, imageName));
+    this.store.dispatch(new UserActions.ChangeProfilePicture(photo, 'image'));
   }
 
   async selectPhoto() {
@@ -121,9 +119,8 @@ export class ProfileComponent extends Destroy$ {
       resultType: CameraResultType.Base64,
       source: CameraSource.Photos,
     });
-    let user = this.store.selectSnapshot(UserState)
 
-    let imageName = user.profile.firstName + '_' + user.profile.lastName + '_' + user.profile.id ;
-    this.store.dispatch(new UserActions.ChangeProfilePicture(photo, imageName));
+
+    this.store.dispatch(new UserActions.ChangeProfilePicture(photo, 'image'));
   }
 };

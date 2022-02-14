@@ -1,5 +1,5 @@
 <ng-container *ngIf="(view$ | async) as view">
-  <ng-container *ngIf="(user$ | async) as user">
+  <ng-container *ngIf="(profile$ | async) as profile">
     <page-header [name]="view == 'PME' ? 'Mes Annonces' : 'Annonces qui peuvent vous intéresser'" [tabs]="view == 'PME' ? 3 : 2" [(activeView)]="activeView" (filterClicked)="openAdFilterMenu = true">
       <span tab_0>{{ view == 'PME' ? 'Brouillon' : 'Vue liste' }}</span>
       <span tab_1>{{ view == 'PME' ? 'En ligne' : 'Carte' }}</span>
@@ -63,7 +63,7 @@
       <span class="grow center-text text-light-emphasis" header>Modifier un brouillon</span>
       
       <div class="hosted-page flex column center-cross space-children-margin" content>
-        <ad-form [post]="editMenu.post" (done)="editMenu = {open: false, post: null}" [page]="false" content></ad-form>
+        <ad-form [post]="editMenu.post" (done)="editMenu = {open: false, post: null}" [page]="false" content></ad-form>     
       </div>
     </slidemenu>
   
@@ -111,8 +111,8 @@
     <!-- Maybe slide menu should hide their content when they are not open ?? -->
     <swipeup [(open)]="openReponseMenu">
       <li class="flex center-cross" (click)="showUserOffer()"><img  />Valider la candidature</li>
-      <li class="flex center-cross"><img  />Refuser la candidature</li>
-      <li class="flex center-cross"><img  />Bloquer le contact</li>
+      <li class="flex center-cross"><img/>Refuser la candidature</li>
+      <li class="flex center-cross"><img/>Bloquer le contact</li>
     </swipeup>
   </ng-container>
 </ng-container>
@@ -126,13 +126,13 @@
   <p>Vous pouvez toujours l'accéder à partir de vos brouillons.</p>
 </ng-template>
 
-<ng-template #acceptOffer let-user>
+<ng-template #acceptOffer let-profile>
   <div class="offres-logo"><img src="assets/validée.svg"/>
   
   </div>
   <p>Vous avez bien validé la candidature de 
     <br> 
-    <span class="text-emphasis">{{ (user.profile!.firstName + " " + user.profile!.lastName) | titlecase }} </span><br>Veuillez 
+    <span class="text-emphasis">{{ profile.company.name | titlecase }} </span><br>Veuillez 
     confirmer votre opération pour recevoir le contrat !
   </p>
   <div class="flex column space-children-margin full-width">
@@ -144,12 +144,12 @@
 <ng-template #candidates let-candidates let-job="job">
   <div class="hosted-page">
     <p class="font-Poppins">Vous avez: {{ candidates.length }} réponses</p>
-    <profile-card *ngFor="let candidate of candidates" (click)="showCompany(candidate)" [job]="job" [company]="candidate"></profile-card>
+    <profile-card *ngFor="let candidate of candidates" (click)="showCompany(candidate.company)" [job]="job" [company]="candidate.company"></profile-card>
   </div>
 </ng-template>
 
 <ng-template #candidature let-company>
-  <!-- <extended-profile class="content-with-header-and-footer" [showContact]="true" [company]="company"></extended-profile> -->
+  <extended-profile class="content-with-header-and-footer" [profile]="company"></extended-profile>
   <footer class="sticky-footer">
     <button class="button active full-width" (click)="handleApplication()">Traiter la candidature</button>
   </footer>

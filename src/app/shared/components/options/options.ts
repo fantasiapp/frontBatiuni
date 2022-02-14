@@ -65,10 +65,6 @@ export class OptionsModel extends UIDefaultAccessor<Option[]> {
     this.cd.detectChanges();
   }
 
-  ngOnChanges(changes: SimpleChanges) {
-    console.log(changes, this.value);
-  }
-
   private _options: Option[] = [];
   get options() { return this._options; }
 
