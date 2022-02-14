@@ -1,6 +1,9 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, HostBinding, Input, Output } from "@angular/core";
-import { Company } from "src/models/data/data.model";
-import { User } from "src/models/user/user.model";
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from "@angular/core";
+import { Select, Store } from "@ngxs/store";
+import { Observable } from "rxjs";
+import { Profile } from "src/models/new/data.interfaces";
+import { DataState, QueryProfile } from "src/models/new/data.state";
+import { ChangeProfileType } from "src/models/user/user.actions";
 
 @Component({
   selector: 'profile-resume',
@@ -10,16 +13,13 @@ import { User } from "src/models/user/user.model";
 })
 export class ProfileResume {
 
-  @Input('user')
-  set companyFromUser(user: User) {
-    this.company = user.profile!.company;
-    this.user = user;
-  }
-
-  user?: User;
+  constructor(private store: Store) {}
 
   @Input()
-  company!: Company;
+  profile!:Profile; 
+
+  @Select(DataState.view)
+  view$!: Observable<string>;
 
   @Input()
   switch: boolean = true;
@@ -29,9 +29,6 @@ export class ProfileResume {
 
   @Input()
   star: boolean = true;
-
-  @Input()
-  changeImage: boolean = false;
 
   @Input()
   canChangePicture: boolean = false;
@@ -44,4 +41,8 @@ export class ProfileResume {
 
   @Output()
   changePicture = new EventEmitter();
+
+  changeProfileType(type: boolean) {
+    this.store.dispatch(new ChangeProfileType(type));
+  }
 };

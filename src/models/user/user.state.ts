@@ -28,20 +28,20 @@ export class UserState {
   constructor(private store: Store, private http: HttpService) {}
 
   //Action handlers
-  @Action(ChangeProfileType)
-  changeProfileType(ctx: StateContext<User>, action: ChangeProfileType) {
-    return ctx.patchState({ viewType: action.type });
-  }
+  // @Action(ChangeProfileType)
+  // changeProfileType(ctx: StateContext<User>, action: ChangeProfileType) {
+  //   return ctx.patchState({ viewType: action.type });
+  // }
 
-  @Action(ChangeProfilePicture)
-  changeProfilePicture(ctx: StateContext<User>, action: ChangeProfilePicture) {
-    return  this.http.post('data', action).pipe(
-      tap((response) => {
-        console.log('>', response);
-        ctx.patchState({ imageUrl: 'data:image/' + action.ext + ';base64,' + action.imageBase64 });
-      })
-    );
-  }
+  // @Action(ChangeProfilePicture)
+  // changeProfilePicture(ctx: StateContext<User>, action: ChangeProfilePicture) {
+  //   return  this.http.post('data', action).pipe(
+  //     tap((response) => {
+  //       console.log('>', response);
+  //       ctx.patchState({ imageUrl: 'data:image/' + action.ext + ';base64,' + action.imageBase64 });
+  //     })
+  //   );
+  // }
 
   @Action(ChangePassword)
   modifyPassword(ctx: StateContext<User>, action: ChangePassword) {
@@ -54,36 +54,36 @@ export class UserState {
   }
 
 
-  @Action(UploadFile)
-  uploadFile(ctx: StateContext<User>, action: UploadFile) {
-    const req = this.http.post('data', action),
-      user = ctx.getState();
+  // @Action(UploadFile)
+  // uploadFile(ctx: StateContext<User>, action: UploadFile) {
+  //   const req = this.http.post('data', action),
+  //     user = ctx.getState();
 
-    return req.pipe(
-      tap((response: any) => {
-        if ( response['uploadFile'] !== 'OK' ) throw response['messages'];
-        delete response['uploadFile'];
-        // add to cached files
-        const id = +Object.keys(response)[0],
-          file = new FilesRow(id, [...response[id], action.fileBase64]);
+  //   return req.pipe(
+  //     tap((response: any) => {
+  //       if ( response['uploadFile'] !== 'OK' ) throw response['messages'];
+  //       delete response['uploadFile'];
+  //       // add to cached files
+  //       const id = +Object.keys(response)[0],
+  //         file = new FilesRow(id, [...response[id], action.fileBase64]);
           
-        //add to company
-        if ( action.companyFile ) {
-          const oldFile = user.profile!.company.files.find(companyFile => companyFile.name == file.name),
-            company = CompanyRow.getById(user.profile!.company.id);
+  //       //add to company
+  //       if ( action.companyFile ) {
+  //         const oldFile = user.profile!.company.files.find(companyFile => companyFile.name == file.name),
+  //           company = CompanyRow.getById(user.profile!.company.id);
           
-          if ( oldFile )
-            company.spliceValue('Files', oldFile.id, file);
-          else
-            company.pushValue('Files', file);
-        }
+  //         if ( oldFile )
+  //           company.spliceValue('Files', oldFile.id, file);
+  //         else
+  //           company.pushValue('Files', file);
+  //       }
         
-        action.id = id;
-        //find a way to make minimal updates with a tree-like-structure
-        ctx.patchState({profile: UserProfileRow.getById(user.profile!.id).serialize()});
-      })
-    );
-  }
+  //       action.id = id;
+  //       //find a way to make minimal updates with a tree-like-structure
+  //       ctx.patchState({profile: UserProfileRow.getById(user.profile!.id).serialize()});
+  //     })
+  //   );
+  // }
 
   @Action(DeleteFile)
   deleteFile(ctx: StateContext<User>, action: DeleteFile) {
@@ -105,28 +105,28 @@ export class UserState {
     );
   };
 
-  @Action(DownloadFile)
-  downloadFile(ctx: StateContext<User>, action: DownloadFile) {
-    const req = this.http.get('data', action),
-      user = ctx.getState();
+  // @Action(DownloadFile)
+  // downloadFile(ctx: StateContext<User>, action: DownloadFile) {
+  //   const req = this.http.get('data', action),
+  //     user = ctx.getState();
     
-    return req.pipe(
-      catchError((err: HttpErrorResponse) => {
-        return throwError(err);
-      }),
-      tap((response: any) => {
-        if ( response['downloadFile'] !== 'OK' ) throw response['messages'];
-        const oldFile = FilesRow.getById(action.id);
-        const file = new FilesRow(action.id, response[action.id]),
-          profile = UserProfileRow.getById(user.profile!.id);
+  //   return req.pipe(
+  //     catchError((err: HttpErrorResponse) => {
+  //       return throwError(err);
+  //     }),
+  //     tap((response: any) => {
+  //       if ( response['downloadFile'] !== 'OK' ) throw response['messages'];
+  //       const oldFile = FilesRow.getById(action.id);
+  //       const file = new FilesRow(action.id, response[action.id]),
+  //         profile = UserProfileRow.getById(user.profile!.id);
         
-        //add to company
-        if ( action.companyFile )
-          profile.company.spliceValue('Files', oldFile.id, file);
-        ctx.patchState({profile: profile.serialize()})
-      })
-    );
-  }
+  //       //add to company
+  //       if ( action.companyFile )
+  //         profile.company.spliceValue('Files', oldFile.id, file);
+  //       ctx.patchState({profile: profile.serialize()})
+  //     })
+  //   );
+  // }
 
   @Action(GetUserData)
   getUserData(ctx: StateContext<User>, action: GetUserData) {
@@ -168,46 +168,46 @@ export class UserState {
     )
   }
 
-  @Action(Logout)
-  logout(ctx: StateContext<User>) {
-    Mapper.reset();
-    this.store.dispatch(new DeleteData('posts', PostRow));
-    ctx.patchState({ imageUrl: null, profile: null });
-  }
+  // @Action(Logout)
+  // logout(ctx: StateContext<User>) {
+  //   Mapper.reset();
+  //   this.store.dispatch(new DeleteData('posts', PostRow));
+  //   ctx.patchState({ imageUrl: null, profile: null });
+  // }
 
-  @Action(ModifyUserProfile)
-  modifyUser(ctx: StateContext<User>, action: ModifyUserProfile) {
-    const {files, ...modifyAction} = action;
-    const req = this.http.post('data', modifyAction);
+  // @Action(ModifyUserProfile)
+  // modifyUser(ctx: StateContext<User>, action: ModifyUserProfile) {
+  //   console.log(action);
+  //   const {files, ...modifyAction} = action;
+  //   const req = this.http.post('data', modifyAction);
 
-    console.log(Object.keys(action.adminFiles));
+  //   console.log(Object.keys(action.adminFiles));
 
-    return req.pipe(
-      tap((response: any) => {
-        const newProfile = Mapper.updateFrom(UserProfileRow, ctx.getState().profile, response.valueModified);
-        ctx.patchState({profile: newProfile})
-      }),
+  //   return req.pipe(
+  //     tap((response: any) => {
+  //       //const newProfile = Mapper.updateFrom(UserProfileRow, ctx.getState().profile, response.valueModified);
+  //       //ctx.patchState({profile: newProfile})
+  //     }),
       
-      mergeMap(() => ctx.dispatch(
-        action.files.map(file => new UploadFile(file, 'labels'))
-      )),
+  //     mergeMap(() => ctx.dispatch(
+  //       action.files.map(file => new UploadFile(file, 'labels'))
+  //     )),
 
-      mergeMap(() => ctx.dispatch(
-        Object.keys(action.adminFiles).map(key => new UploadFile(action.adminFiles[key], 'admin', key))
-      ))
-    );
-  }
+  //     mergeMap(() => ctx.dispatch(
+  //       Object.keys(action.adminFiles).map(key => new UploadFile(action.adminFiles[key], 'admin', key))
+  //     ))
+  //   );
+  // }
 
   @Action(UploadPost)
   createPost(ctx: StateContext<User>, action: UploadPost) {
     const {profile} = ctx.getState(),
       {files, ...createPost} = action,
       req = this.http.post('data', createPost),
-      uploads = Object.keys(files).map((key: any) => new UploadFile(files[key], 'post', key));
+      uploads = Object.keys(files).map((key: any) => new UploadFile(files[key], 'post', key, 'Post'));
     
     return req.pipe(
       map((response: any) => {
-        console.log('>', response);
         if ( response[action.action] && response[action.action] !== 'OK' )
           throw response['messages'];
 
@@ -239,7 +239,7 @@ export class UserState {
 
         console.log(uploads);
         uploads.forEach(upload => {
-          upload.Post = post.id;
+          upload.id = post.id;
         });
 
         return ctx.dispatch(uploads).pipe(map(() => post));
@@ -321,6 +321,7 @@ export class UserState {
     )
   }
 
+  //HERE !
   @Action(ModifyDisponibility)
   modifyDisponibilities(ctx: StateContext<User>, action: ModifyDisponibility) {
     const {profile} = ctx.getState();

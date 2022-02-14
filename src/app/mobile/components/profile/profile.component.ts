@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, ViewChild } from "@angular/core";
 import { Select, Store } from "@ngxs/store";
-import { BehaviorSubject, of } from "rxjs";
-import { User } from "src/models/user/user.model";
+import { Observable } from "rxjs";
 import { UserState } from "src/models/user/user.state";
 import * as UserActions from "src/models/user/user.actions";
 import { Camera, CameraResultType, CameraSource } from "@capacitor/camera";
@@ -11,9 +10,10 @@ import { InfoService } from "src/app/shared/components/info/info.component";
 import { take } from "rxjs/operators";
 import { FormGroup } from "@angular/forms";
 import { ModifyProfileForm } from "src/app/shared/forms/ModifyProfile.form";
-import { FilesRow, UserProfileRow } from "src/models/data/data.model";
-import { Serialized } from "src/app/shared/common/types";
 import { PopupService } from "src/app/shared/components/popup/popup.component";
+import { DataQueries } from "src/models/new/data.state";
+import { Destroy$ } from "src/app/shared/common/classes";
+import { Profile } from "src/models/new/data.interfaces";
 
 
 @Component({
@@ -22,7 +22,7 @@ import { PopupService } from "src/app/shared/components/popup/popup.component";
   styleUrls: ['./profile.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ProfileComponent {
+export class ProfileComponent extends Destroy$ {
 
   @ViewChild(ModifyProfileForm)
   modifyForm?: ModifyProfileForm;
@@ -30,8 +30,6 @@ export class ProfileComponent {
   @ViewChild('modifyMenu', {static: false, read: UISlideMenuComponent})
   modifyMenu!: UISlideMenuComponent;
 
-  @Select(UserState)
-  user$!: BehaviorSubject<User>;
 
   //move to state
   openMenu: boolean = false;
@@ -40,8 +38,16 @@ export class ProfileComponent {
   modifyPassword: boolean = false;
   openModifyPicture: boolean = false;
   openNotifications : boolean = false;
+  
+  @Select(DataQueries.currentProfile)
+  profile$!: Observable<Profile>;
 
-  constructor(private store: Store, private cd: ChangeDetectorRef, private info: InfoService, private popup: PopupService) {}
+  constructor(private store: Store, private cd: ChangeDetectorRef, private info: InfoService, private popup: PopupService) {
+    super();
+    this.profile$.subscribe((profile) => {
+      console.log('profile emit', profile);
+    });
+  }
 
   slideModifyMenu(modifyPassword: boolean) {
     this.openMenu = false;
@@ -50,7 +56,7 @@ export class ProfileComponent {
 
     if ( !this.modifyPassword ) {
       this.fixScrollTop();
-      this.modifyForm?.reloadData();
+      this.modifyForm?.reload();
     }
   }
   
@@ -99,13 +105,8 @@ export class ProfileComponent {
     )
   }
 
-  changeProfileType(type: boolean) {
-    this.store.dispatch(new UserActions.ChangeProfileType(type));
-  };
-
-  async takePhoto() {
+  async takePhoto() {    
     let user = this.store.selectSnapshot(UserState)
-
     let imageName = user.profile.firstName + '-'+ user.profile.lastName +'-'+ user.profile.id ;
     
     const photo = await Camera.getPhoto({
@@ -126,37 +127,5 @@ export class ProfileComponent {
 
     let imageName = user.profile.firstName + '_' + user.profile.lastName + '_' + user.profile.id ;
     this.store.dispatch(new UserActions.ChangeProfilePicture(photo, imageName));
-  }
-
-  get attachedFiles(): any[] {
-    const user = this.store.selectSnapshot(UserState).profile as Serialized<UserProfileRow>;
-    return user.company.files.filter(file => file.nature == 'admin' || file.nature == 'labels');
-  }
-
-  getFileColor(filename: string) {
-    return FilesRow.getFileColor(filename);
-  }
-
-  //easier than requestFile, we can have direct access
-  openFile(file: Serialized<FilesRow>) {
-    const target = FilesRow.getById(file.id);
-  
-    if ( !target ) {
-      this.info.show('error', `Le fichier "${file.name}" n'existe pas.`, 2000);
-      return;
-    }
-
-    if ( target.content ) {
-      this.popup.openFile(target);
-    } else {
-      this.info.show('info', 'Téléchargement du fichier ...', Infinity);
-
-      this.store.dispatch(new UserActions.DownloadFile(target.id)).pipe(take(1))
-        .subscribe(() => {
-          const file = FilesRow.getById(target.id);
-          this.popup.openFile(file);
-          this.info.show('success', 'Fichier téléchargé', 1000);
-        })
-    }
   }
 };

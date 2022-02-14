@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostBinding, HostListener, Input, NgZone, Output, ViewChild } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostBinding, HostListener, Input, NgZone, Output, SimpleChanges, ViewChild } from "@angular/core";
 import { NG_VALUE_ACCESSOR } from "@angular/forms";
 import { UIDefaultAccessor } from "src/app/shared/common/classes";
 import { filterMap, focusOutside, getTopmostElement, makeid } from "src/app/shared/common/functions";
@@ -65,6 +65,10 @@ export class OptionsModel extends UIDefaultAccessor<Option[]> {
     this.cd.detectChanges();
   }
 
+  ngOnChanges(changes: SimpleChanges) {
+    console.log(changes, this.value);
+  }
+
   private _options: Option[] = [];
   get options() { return this._options; }
 
@@ -101,6 +105,7 @@ export class OptionsModel extends UIDefaultAccessor<Option[]> {
   }
 
   getInput(action: ['delete' | 'toggle', number]) {
+    console.log('got action', action);
     const isRadio = this._type[0] != 'checkbox';
 
     if ( action[0] == 'delete' ) {

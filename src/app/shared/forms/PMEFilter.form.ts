@@ -7,13 +7,13 @@ import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
       <form class="form-control full-width" *ngSwitchCase="0">
         <div class="form-input">
           <label style="margin-bottom:1rem;">Date de mission</label>
-          <input type="date"/>
+          <input type="date" class="form-element"/>
           <img src="assets/calendar.png"/>
         </div>
 
         <div class="form-input">
           <label>Adresse de chantier</label>
-          <input type="text"/>
+          <input type="text" class="form-element"/>
         </div>
 
         <div class="form-input" style="margin-bottom:3rem;">

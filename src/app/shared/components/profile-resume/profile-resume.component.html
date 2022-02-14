@@ -1,16 +1,24 @@
 <section class="section">
-  <profile-image [company]="company"></profile-image>
+  <profile-image [profile]="profile"></profile-image>
   <img *ngIf="canChangePicture" src="assets/icons/modify.svg" class="modify-icon image" (click)="changePicture.emit()"/>
 </section>
 
-<switch *ngIf="switch" off="Profile ST" on="Profil PME"  style="text-align: center;" [value]="user?.viewType || false"  (valueChange)="profileChanged.emit($event)" [disabled]="company.role.id !== 3 || null"></switch>
+<switch *ngIf="switch"
+  off="Profil ST" on="Profil PME"  style="text-align: center;"
+  [value]="(view$ | async) == 'PME'" 
+  (valueChange)="changeProfileType($event)"
+  [disabled]="profile.company.role !== 3 || null">
+</switch>
+
 <section class="quick-intro flex column center-cross small-space-children-margin">
-  <span class="text-emphasis">{{ (user ? (user.profile!.firstName + " " + user.profile!.lastName) : company.name) | titlecase }}</span>
-  <ng-container *ngIf="user && showMore">
-    <span>{{ user.profile!.user }}</span>
-    <span>{{ user.profile!.cellPhone | space: 2:1 }}</span>
+  <span class="text-emphasis">{{
+    (profile.user ? (profile.user.firstName + " " + profile.user.lastName) : profile.company.name) | titlecase
+  }}</span>
+  <ng-container *ngIf="profile.user && showMore">
+    <span>{{ profile.user!.username }}</span>
+    <span>{{ profile.user!.cellPhone | space: 2:1 }}</span>
   </ng-container>
-  <a *ngIf="changeImage" class="blue">Modifier l’image de profil</a>
+  <a *ngIf="canChangePicture" class="blue">Modifier l’image de profil</a>
   <stars *ngIf="star" (click)="ratingsClicked.emit()" value="3.9"></stars>
 </section>
 <ng-content></ng-content>
