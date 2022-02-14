@@ -1,7 +1,9 @@
 import { ChangeDetectionStrategy, Component } from "@angular/core";
 import { Select, Store } from "@ngxs/store";
-import { BehaviorSubject } from "rxjs";
+import { BehaviorSubject, Observable } from "rxjs";
 import { Logout } from "src/models/auth/auth.actions";
+import { Profile } from "src/models/new/data.interfaces";
+import { DataQueries } from "src/models/new/data.state";
 import { User } from "src/models/user/user.model";
 import { UserState } from "src/models/user/user.state";
 
@@ -27,4 +29,6 @@ export class ProfilePageComponent {
   logout() {
     this.store.dispatch(new Logout());
   }
+  @Select(DataQueries.currentProfile)
+  profile$!: Observable<Profile>;
 }
