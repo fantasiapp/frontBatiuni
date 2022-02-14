@@ -1,45 +1,62 @@
-<div class="hosted-page flex column center-cross space-children-margin page-content font-Poppins">
-  <profile-resume [canChangePicture]="false" class="flex column center-cross space-children-margin" (profileChanged)="profileChanged.emit($event)" (ratingsClicked)="ratingsClicked.emit($event)"  [showMore]="true" [company]="company"></profile-resume>
-
-  <section class="job-description full-width flex column space-children-margin">
-    <span>
-      <span class="text-light-emphasis">Nom de l'entreprise : </span> <span
-        class="value">{{company.name}}</span>
-    </span>
-    <span>
-      <span class="text-light-emphasis">N SIRET : </span> <span
-        class="value">{{company.siret}}</span>
-    </span>
-    <span>
-      <span class="text-light-emphasis">Métier : </span>
-      <span *ngFor="let job of company.jobs!" class="value">{{ job.number }} {{ job.job.name }}, </span>
-    </span>
-    <span>
-      <span class="text-light-emphasis">Chiffres d'affaires : </span>
-      <span class="value">{{company.revenue | currency: 'EUR':'symbol':'1.0-0' }}</span>
-    </span>
-    <span>
-      <span class="text-light-emphasis">Capital : </span>
-      <span class="value">{{company.capital | currency: 'EUR':'symbol':'1.0-0' }}</span>
-    </span>
-    <span>
-      <span class="text-light-emphasis">Numéro fixe : </span>
-      <span class="value">{{company.companyPhone | space: 2:1 }}</span>
-    </span>
-    <span>
-      <span class="text-light-emphasis">Site internet : </span>
-      <span class="value link"><a [href]="company.webSite">{{company.webSite}}</a></span>
-    </span>
-    <span>
-      <span class="text-light-emphasis">Montant Fixe : </span>
-      <span class="value">Non renseigné</span>
-    </span>
-  </section>
-
-  <section class="documents">
-    <h4>Documents importants</h4>
-    <div class="flex images">
-      <file-svg *ngFor="let file of attachedFiles" [name]="file.name" [color]="getFileColor(file.name)" (click)="openFile(file)"></file-svg>
-    </div>
-  </section>
-</div>
+<ng-container *ngIf="(profile | cast | async) as profile">
+  <div class="hosted-page flex column center-cross space-children-margin font-Poppins">
+    <profile-resume class="flex column center-cross space-children-margin"
+      [canChangePicture]="false"
+      (ratingsClicked)="ratingsClicked.emit($event)"
+      [showMore]="true"
+      [profile]="profile"
+    ></profile-resume>
+  
+    <section class="job-description full-width flex column space-children-margin">
+      <span>
+        <span class="text-light-emphasis">Nom de l'entreprise : </span> <span
+          class="value">{{profile.company.name}}</span>
+      </span>
+      <span>
+        <span class="text-light-emphasis">N SIRET : </span> <span
+          class="value">{{profile.company.siret}}</span>
+      </span>
+      <span>
+        <span class="text-light-emphasis">Métier : </span>
+        <span *ngFor="let job of companyJobs; let i = index" class="value">{{ job.number }} {{ jobs[i].name }}, </span>
+      </span>
+      <span>
+        <span class="text-light-emphasis">Chiffres d'affaires : </span>
+        <span class="value">{{profile.company.revenue | currency: 'EUR':'symbol':'1.0-0' }}</span>
+      </span>
+      <span>
+        <span class="text-light-emphasis">Capital : </span>
+        <span class="value">{{profile.company.capital | currency: 'EUR':'symbol':'1.0-0' }}</span>
+      </span>
+      <span>
+        <span class="text-light-emphasis">Numéro fixe : </span>
+        <span class="value">{{profile.company.companyPhone | space: 2:1 }}</span>
+      </span>
+      <span>
+        <span class="text-light-emphasis">Site internet : </span>
+        <span class="value link"><a [href]="profile.company.webSite">{{profile.company.webSite}}</a></span>
+      </span>
+      <span>
+        <span class="text-light-emphasis">Montant Fixe : </span>
+        <span class="value">Non renseigné</span>
+      </span>
+    </section>
+  
+    <section class="documents dashed">
+      <h4>Documents importants</h4>
+      <div class="flex images">
+        <file-svg *ngFor="let file of attachedFiles" [name]="file.name" [color]="getFileColor(file.name)" (click)="openFile(file)"></file-svg>
+      </div>
+    </section>
+  
+    <section *ngIf="showContact" class="dashed">
+      <h4>Contact</h4>
+      <br/>
+      <ul class="list flex space-around">
+        <li><img src="assets/missions/call.svg"/></li>
+        <li><img src="assets/missions/envoyer-un-message.svg"/></li>
+        <li><img src="assets/missions/envoyer-un-mail.svg"/></li>
+      </ul>
+    </section>
+  </div>
+</ng-container>

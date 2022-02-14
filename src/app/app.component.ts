@@ -1,19 +1,17 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { Store } from '@ngxs/store';
+import { Select, Store } from '@ngxs/store';
 import { Destroy$ } from './shared/common/classes';
 import { SplashScreen } from '@capacitor/splash-screen';
 import { Load } from './app.actions';
-import { NavigationStart, Router, RouterOutlet } from '@angular/router';
+import { RouterOutlet } from '@angular/router';
 import { transition, trigger } from '@angular/animations';
 import { SlideChildrenLeft, SlideChildrenRight } from 'src/animations/slide.animation';
-import { AsyncSubject } from 'rxjs';
+import { AsyncSubject, Observable } from 'rxjs';
 import { GetGeneralData } from 'src/models/data/data.actions';
 import { environment } from 'src/environments/environment';
-import { SlidemenuService } from './shared/components/slidemenu/slidemenu.component';
-import { AnnoncePage } from './desktop/components/annonce_page/annonce.page';
-import { UISwitchComponent } from './shared/components/switch/switch.component';
-import { UITooltipService } from './shared/components/tooltip/tooltip.component';
-import { takeUntil } from 'rxjs/operators';
+import { DataModel, DataState } from 'src/models/new/data.state';
+import { Company } from 'src/models/new/data.interfaces';
+import { map } from 'rxjs/operators';
 
 
 @Component({
@@ -29,13 +27,8 @@ import { takeUntil } from 'rxjs/operators';
   ]
 })
 export class AppComponent extends Destroy$ {
-  constructor(private store: Store, private router: Router) {
+  constructor(private store: Store) {
     super();
-    (window as any).app = this;
-    this.router.events.pipe(takeUntil(this.destroy$)).subscribe((event) => {
-      // if ( event instanceof NavigationStart )
-      // console.log(event)
-    })
   }
 
   ready$ = new AsyncSubject<true>();

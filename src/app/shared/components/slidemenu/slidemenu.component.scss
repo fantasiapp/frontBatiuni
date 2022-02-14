@@ -31,7 +31,7 @@
   &::ng-deep > * { flex-shrink: 0; }
 }
 
-.content-with-footer {
+.content-with-footer{
   @extend %content-with-header-and-footer;
   background: white;
 
@@ -45,4 +45,31 @@
   height: $sticky-footer-height;
   padding: 10px 20px;
   background: white;
+}
+
+.company-rate {
+  font-family: "Roboto";
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+  padding: 10px;
+  margin: 10px 0;
+}
+.company-name {
+  font-weight: 800;
+  color: #333333;
+}
+
+.criterion {
+  margin: 10px;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+  padding: 10px;
+  .criterion-stars {
+    font-size: 14px;
+  }
+  .stars {
+    transform: scale(0.7);
+  }
+  span {
+    color: #999999;
+    white-space: normal;
+  }
 }

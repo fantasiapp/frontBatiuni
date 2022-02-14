@@ -1,20 +1,20 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from "@angular/core";
-import { Store } from "@ngxs/store";
-import { take } from "rxjs/operators";
-import { CompanyRow, FilesRow, JobRow } from "src/models/data/data.model";
-import { DownloadFile } from "src/models/user/user.actions";
-import { ImageGenerator } from "../../services/image-generator.service";
+import { ChangeDetectionStrategy, Component, HostListener, Input } from "@angular/core";
+import { ExtendedProfileComponent } from "src/app/mobile/components/extended-profile/extended-profile.component";
+import { Company, CompanyRow, FilesRow, Job, JobRow } from "src/models/data/data.model";
+import { SlidemenuService } from "../slidemenu/slidemenu.component";
 
 @Component({
   selector: 'profile-card',
   template: `
-    <profile-image [src]="src"></profile-image>
+    <!-- <profile-image [company]="company!"></profile-image> -->
     <div class="flex column small-space-children-margin font-Poppins description">
       <span>{{ company?.name || "Nom de l'entreprise" }}</span>
       <span>Propose {{ employeeCount }} {{job?.name || 'Employées'}}</span>
       <span>Note générale (4.5 par 35 personnes)</span>
       <stars [value]="4.5"></stars>
     </div>
+    
+    
   `,
   styles: [`
     @use "sass:math";
@@ -46,21 +46,20 @@ import { ImageGenerator } from "../../services/image-generator.service";
 export class ProfileCardComponent {
   @Input('company')
   set companyId(id: number) {
-    this.company = CompanyRow.getById(id);
+    this.company = CompanyRow.getById(id).serialize();
   }
 
   @Input('job')
   set jobId(id: number) {
-    console.log('set job id', id);
-    this.job = JobRow.getById(id);
+    this.job = JobRow.getById(id)?.serialize();
   }
 
-  company?: CompanyRow;
-  job?: JobRow;
+  company?: Company;
+  job?: Job;
   employeeCount: number = 0;
   src: string = '';
 
-  constructor(private cd: ChangeDetectorRef, private store: Store, private imageGenerator: ImageGenerator) {}
+  constructor() {}
   
   ngOnInit() {
     console.log(this.company?.jobs);
@@ -71,20 +70,5 @@ export class ProfileCardComponent {
       return job.id == this.job?.id;
     })?.number || 0;
     
-  
-    const image = this.company.files.find(file => file.nature == 'userImage');
-    if ( image ) {
-      if ( image.content )
-        this.src = `data:image/${image.ext};base64,${image.content}`;
-      else
-        this.store.dispatch(new DownloadFile(image.id)).pipe(take(1))
-          .subscribe(() => {
-            let update = FilesRow.getById(image.id);
-            this.src = `data:image/${update.ext};base64,${update.content}`
-            this.cd.markForCheck();
-          })
-    } else {
-      this.src = this.imageGenerator.generate(this.company.name[0]);
-    }
   }
 };

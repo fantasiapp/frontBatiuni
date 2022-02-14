@@ -52,3 +52,9 @@
 .devis h5 {
   color: $secondaryBackground;
 }
+
+.content-with-header-and-footer {
+  @extend %overflow-y;
+  height: calc(100vh - #{$sticky-header-height + $sticky-footer-height} - env(safe-area-inset-bottom));
+  background: white;
+}

@@ -7,13 +7,13 @@ import { DistanceSliderConfig, SalarySliderConfig } from "src/app/shared/common/
   <form class="form-control full-width">
     <div class="form-input">
       <label>Date de mission</label>
-      <input type="date"/>
+      <input type="date" class="form-element"/>
       <img src="assets/calendar.png"/>
     </div>
 
     <div class="form-input">
       <label>Adresse de chantier</label>
-      <input type="text"/>
+      <input type="text" class="form-element"/>
     </div>
 
     <div class="form-input">

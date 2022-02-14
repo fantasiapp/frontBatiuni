@@ -18,8 +18,9 @@ import { DataState } from 'src/models/data/data.state';
 import { MiscState } from 'src/models/misc/misc.state';
 import { HttpService } from './services/http.service';
 import { SharedModule } from './shared/shared.module';
-import { InfoService } from './shared/components/info/info.component';
 
+import { DataReader } from 'src/models/new/data.mapper';
+import { DataState as NewDataState } from 'src/models/new/data.state';
 
 @Injectable()
 export class CustomConfig extends HammerGestureConfig {
@@ -37,7 +38,7 @@ export class CustomConfig extends HammerGestureConfig {
   imports: [
     //Ngxs imports
     NgxsModule.forRoot([
-      AppState, AuthState, UserState, DataState, MiscState
+      AppState, AuthState, UserState, DataState, MiscState, NewDataState
     ], {
       developmentMode: !environment.production
     }),
@@ -55,6 +56,7 @@ export class CustomConfig extends HammerGestureConfig {
     SharedModule
   ],
   providers: [
+    DataReader,
     HttpService, {
     provide: HAMMER_GESTURE_CONFIG,
     useClass: CustomConfig

@@ -1,13 +1,12 @@
 <!--Configure role accordingly-->
-<ng-container *ngIf="(user$ | async) as user">
+<ng-container *ngIf="(profile$ | async) as profile">
   <header class="clear-margin full-width sticky-header flex center-cross">
     <span class="grow text-light-emphasis">Mon Profil</span>
     <img src="assets/notification.svg" (click)="openNotifications = true" />
     <img src="assets/menu.svg" (click)="openMenu = true" />
   </header>
 
-  <extended-profile [user]="user" (ratingsClicked)="openRatings = true" (profileChanged)="changeProfileType($event)">
-
+  <extended-profile class="page-content" [profile]="profile" (ratingsClicked)="openRatings = true">
   </extended-profile>
 
   <swipeup [(open)]="openMenu">
@@ -32,11 +31,11 @@
         <li (click)="selectPhoto()">Télécharger une image</li>
       </swipeup>
 
-      <profile-resume [company]="user.profile!.company" [canChangePicture]="!modifyPassword" class="flex column center-cross space-children-margin" (changePicture)="swipeModifyPicture()"></profile-resume>
+      <profile-resume [profile]="profile" [canChangePicture]="!modifyPassword" class="flex column center-cross space-children-margin" (changePicture)="swipeModifyPicture()"></profile-resume>
   
       <div class="form-container full-width grow flex column position-relative">
-        <modify-password-form *ngIf="modifyPassword" class="grow" (submitted)="changePassword($event)"></modify-password-form>
-        <modify-profile-form [user]="user.profile!" *ngIf="!modifyPassword" class="grow" (submitted)="modifyProfile($event)" #modifyForm></modify-profile-form>
+        <modify-password-form *ngIf="modifyPassword" class="grow" (submit)="changePassword($event)"></modify-password-form>
+        <modify-profile-form [profile]="profile" *ngIf="!modifyPassword" class="grow" (submit)="modifyProfile($event)" #modifyForm></modify-profile-form>
       </div>
     </div>
   </slidemenu>
@@ -45,7 +44,7 @@
     <div class="full-width center-text text-emphasis" header>Mes notes</div>
     <div class="hosted-page flex column center-cross space-children-margin" content>
 
-      <profile-resume [company]="user.profile!.company" class="flex column center-cross space-children-margin"></profile-resume>
+      <!-- <profile-resume [company]="user.profile!.company" class="flex column center-cross space-children-margin"></profile-resume> -->
 
       <span class="full-width section " style="text-align: center;font-size: 12px; margin-bottom: 10px;">Demander une
         recommandation</span>

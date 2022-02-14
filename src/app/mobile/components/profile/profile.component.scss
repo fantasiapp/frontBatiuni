@@ -27,14 +27,20 @@ header {
   color: $secondaryBackground;
 }
 
-.documents {
+.dashed {
   width: calc(100% + 2 *#{$page-padding});
   padding: 10px 20px 0;
   border-top: 1px dashed #aaa;
+}
 
+.documents {
   .images {
     flex-wrap: wrap !important;
   }
+}
+
+ul {
+  list-style: none;
 }
 
 .documents object {

@@ -219,7 +219,7 @@ export class FilesRow extends createTable<FilesRow>() {
 export class CompanyRow extends createTable<CompanyRow>() {
 
   get name(): string { return this.getField('name') }
-  get role(): RoleRow { return this.getField('role') }
+  get role(): RoleRow { return this.getField('Role') }
   get siret() { return this.getField('siret') }
   get address() { return this.getField('address'); }
   get activity() { return this.getField('acitivity'); }
@@ -230,7 +230,7 @@ export class CompanyRow extends createTable<CompanyRow>() {
   get webSite() { return this.getField('webSite') }
   get stars(): number { return this.getField('stars') }
   get companyPhone() { return this.getField('companyPhone') }
-  get files(): FilesRow[] { return this.getField('Files'); }
+  get files(): FilesRow[] { return this.getField('File'); }
 
   get jobs(): JobForCompanyRow[] { return this.getField('JobForCompany'); }
   get labels():  LabelForCompanyRow[] { return this.getField('LabelForCompany'); }
@@ -245,8 +245,6 @@ export class CompanyRow extends createTable<CompanyRow>() {
 };
 
 export class UserProfileRow extends createTable<UserProfileRow>() {
-  static getName() { return 'Userprofile'; }
-
   get user(): string { return this.getField('userName') }
   get company(): CompanyRow { return this.getField('Company') }
   get firstName(): string { return this.getField('firstName') }
@@ -279,7 +277,7 @@ export class PostRow extends createTable<PostRow>() {
   get counterOffer(): boolean { return this.getField('counterOffer'); }
   get description(): string { return this.getField('description'); }
   get details(): DetailedPostRow[] { return this.getField('DetailedPost'); }
-  get files(): FilesRow[] { return this.getField('Files'); }
+  get files(): FilesRow[] { return this.getField('File'); }
   get latitude(): number | null { return this.getField('latitude'); }
   get longitude(): number | null { return this.getField('longitude'); }
   get candidates(): CandidateRow[] { return this.getField('Candidate'); }
@@ -355,11 +353,10 @@ export type Candidate = Serialized<CandidateRow>;
 //enforce the model and do operations
 
 import { filterMap, getByValue } from 'src/app/shared/common/functions';
-import { Observable } from "rxjs";
 
 type Dict<T> = {[key: string]: T};
 
-const definedTables = ['Company', 'Userprofile', 'JobForCompany', 'LabelForCompany', 'Files', 'Establishments', 'Post', 'DetailedPost', 'Disponibility', 'Candidate'] as const;
+const definedTables = ['Company', 'UserProfile', 'JobForCompany', 'LabelForCompany', 'File', 'Establishments', 'Post', 'DetailedPost', 'Disponibility', 'Candidate'] as const;
 const definedValues = ['Role', 'Label', 'Job'] as const;
 export type tableName = typeof definedTables[number];
 export type valueName = typeof definedValues[number];
@@ -369,6 +366,7 @@ export class Mapper {
   private static mapping: {[key: string]: Value | Table } = {
     'Company': CompanyRow,
     'Userprofile': UserProfileRow,
+    'UserProfile': UserProfileRow,
     'Role': RoleRow, 'role': RoleRow, /* fix here: Report this to JLW */
     'Label': LabelRow,
     'Job': JobRow,
@@ -376,10 +374,12 @@ export class Mapper {
     'JobForCompany': JobForCompanyRow,
     'LabelForCompany': LabelForCompanyRow,
     'Files': FilesRow,
+    'File': FilesRow,
     'Establishments': EstablishmentsRow,
     'Post': PostRow,
     'DetailedPost': DetailedPostRow,
-    'Candidate': CandidateRow
+    'Candidate': CandidateRow,
+    'Mission': class extends createTable<null>() {}
   };
 
   private static mapped: Dict<boolean> = Object.keys(Mapper.mapping).reduce(
@@ -603,7 +603,7 @@ export class Mapper {
   /*fix here: Ask JLW to move company inside Userprofil */
   static updateFrom(table: Table, context: any, data: any) {
     const row = table.getById(context.id),
-      newContext = row.update(data['Userprofile']);
+      newContext = row.update(data['UserProfile']);
 
     return newContext.serialize();
   }

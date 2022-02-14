@@ -1,12 +1,6 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Output } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { ComplexPassword, MatchField } from "src/validators/verify";
-import * as UserActions from "src/models/user/user.actions";
-import { Store } from "@ngxs/store";
-import { catchError } from "rxjs/operators";
-import { HttpErrorResponse } from "@angular/common/http";
-import { throwError } from "rxjs";
-
 
 @Component({
   selector: 'modify-password-form',
@@ -49,7 +43,7 @@ import { throwError } from "rxjs";
 export class ModifyPasswordForm {
   constructor() {}
 
-  @Output() submitted = new EventEmitter<FormGroup>();
+  @Output() submit = new EventEmitter<FormGroup>();
 
   // Modify password 
   modifyPwdForm = new FormGroup({
@@ -64,5 +58,5 @@ export class ModifyPasswordForm {
     ])
   }, {})
 
-  onSubmit() { console.log('send'); this.submitted.emit(this.modifyPwdForm); }
+  onSubmit() { this.submit.emit(this.modifyPwdForm); }
 };
