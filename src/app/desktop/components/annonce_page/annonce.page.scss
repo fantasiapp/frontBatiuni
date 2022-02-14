@@ -93,41 +93,41 @@ adform {
 }
 
 
-.companyinfo {
-  background-color: #f7f7f7;
-  position: absolute;  
-  left: 500px;
-  height: 150px;
-  width: 30%;
-  z-index: 999;
-  white-space: nowrap;
-  .weight {
-    font-weight: 600;
-  }
-  .twenty{
-    font-size: 20px;
-  }
-  .value {
-    font-weight: 200;
-  }
-}
-.company-data {
-  margin-top: 1rem;
-  display: flex;
-  justify-content: space-between;
+// .companyinfo {
+//   background-color: #f7f7f7;
+//   position: absolute;  
+//   left: 500px;
+//   height: 150px;
+//   width: 30%;
+//   z-index: 999;
+//   white-space: nowrap;
+//   .weight {
+//     font-weight: 600;
+//   }
+//   .twenty{
+//     font-size: 20px;
+//   }
+//   .value {
+//     font-weight: 200;
+//   }
+// }
+// .company-data {
+//   margin-top: 1rem;
+//   display: flex;
+//   justify-content: space-between;
 
-  & > *:not(:last-child) {
-    margin-right: 20px;
-  }
-}
+//   & > *:not(:last-child) {
+//     margin-right: 20px;
+//   }
+// }
 
-.info{
-  flex-direction: column;
-  width: 80%;
-  button{
-    height: 50px;
-  }
-}
+// .info{
+//   flex-direction: column;
+//   width: 80%;
+//   button{
+//     height: 50px;
+//   }
+// }
 .info-sec{ 
   min-width: 300px;
   justify-content: center;
@@ -165,3 +165,14 @@ ad-form::ng-deep{
     display: flex !important;
   }
 }
+// company-info::ng-deep {
+//   @include range($mobile, 1500px) {
+//     left: -20% !important;
+//     top: 220px;
+//     .company {
+//     display: flex;
+//     flex-direction: column;
+//     justify-content: start;
+//   }
+// }
+// }
