@@ -1,0 +1,95 @@
+<div class="stepper" *ngIf="type === 'V'; else vertical">
+    <svg
+      *ngFor="let pos of nodes; let index = index"
+      [attr.height]="margin * rayon"
+      [style.top]="pos.cx"
+      [attr.width]="margin * rayon * 2"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <line
+        *ngIf="index == 0"
+        [attr.x1]="(margin * rayon) / 2"
+        [attr.y1]="(margin * rayon) / 2"
+        [attr.x2]="(margin * rayon) / 2"
+        [attr.y2]="margin * rayon"
+        [attr.stroke]="fill"
+      />
+      <line
+        *ngIf="index == this.testList.length - 1"
+        [attr.x1]="(margin * rayon) / 2"
+        [attr.y1]="-(margin * rayon) / 2"
+        [attr.x2]="(margin * rayon) / 2"
+        [attr.y2]="(margin * rayon) / 2"
+        [attr.stroke]="fill"
+      />
+      <line
+        *ngIf="!notFirstOrLast(index)"
+        [attr.x1]="(margin * rayon) / 2"
+        [attr.y1]="-(margin * rayon) / 2"
+        [attr.x2]="(margin * rayon) / 2"
+        [attr.y2]="margin * rayon"
+        [attr.stroke]="fill"
+      />
+      <circle
+        (click)="nodeChangeStep(pos)"
+        id="circleV"
+        [attr.r]="rayon"
+        [attr.cx]="(margin * rayon) / 2"
+        [attr.cy]="(margin * rayon) / 2"
+        [attr.fill]="pos.current ? '#0D6191' : '#ffffff'"
+        stroke="#b3b3b3"
+        stroke-width="2"
+      />
+      <text  x="60%" y="50%" dominant-baseline="middle" text-anchor="middle">
+        {{ pos.text }}
+      </text>
+    </svg>
+  </div>
+  <ng-template #vertical>
+    <svg
+      *ngFor="let pos of nodes; let index = index"
+      [attr.height]="margin * rayon"
+      [style.top]="pos.cy"
+      [attr.width]="margin * rayon"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <line
+        *ngIf="index == 0"
+        [attr.x1]="(margin * rayon) / 2"
+        [attr.y1]="(margin * rayon) / 2"
+        [attr.x2]="margin * rayon"
+        [attr.y2]="(margin * rayon) / 2"
+        [attr.stroke]="fill"
+      />
+      <line
+        *ngIf="index == this.testList.length - 1"
+        [attr.x1]="0"
+        [attr.y1]="(margin * rayon) / 2"
+        [attr.x2]="(margin * rayon) / 2"
+        [attr.y2]="(margin * rayon) / 2"
+        [attr.stroke]="fill"
+      />
+      <line
+        *ngIf="!notFirstOrLast(index)"
+        x1="0"
+        [attr.y1]="(margin * rayon) / 2"
+        [attr.x2]="margin * rayon"
+        [attr.y2]="(margin * rayon) / 2"
+        [attr.stroke]="fill"
+      />
+      <circle
+        (click)="nodeChangeStep(pos)"
+        id="circleH"
+        [attr.r]="rayon"
+        [attr.cx]="(margin * rayon) / 2"
+        [attr.cy]="(margin * rayon) / 2"
+        [attr.fill]="pos.current ? '#0D6191' : '#ffffff'"
+        stroke="#b3b3b3"
+        stroke-width="2"
+      />
+      <text x="50%" y="20%" dominant-baseline="middle" text-anchor="middle">
+        {{ pos.text }}
+      </text>
+    </svg>
+  </ng-template>
+  

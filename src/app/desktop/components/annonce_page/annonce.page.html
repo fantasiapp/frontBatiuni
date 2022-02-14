@@ -1,17 +1,19 @@
 
-<div class="companyinfo">
+<!-- <div class="companyinfo">
   <div class="company-logo flex center">
     <img src="assets/enligne.svg" />
   </div>
   <div class="company-text">
-    <span class="weight">COMPANY NAME</span>
+    <span class="weight twenty">COMPANY NAME</span> 
+
     <div class="company-data">
       <span class="weight">N SIRET : <span class="value">000</span></span>
       <span class="weight">Métier : <span class="value">Maitre d'oeuvre</span></span>
       <span class="weight">Chiffres d'affaires: <span class="value">74100 $</span> </span>
     </div>
 </div>
-</div>
+</div> -->
+<company-info></company-info>
 <div class="web-page ">
   <section class="filters">
     <div class="header">
@@ -37,4 +39,9 @@
   <!-- <section class="info flex">
     <h1>hey</h1>
   </section> -->
+
+</div>
+<div class="hiden-action flex space-around center">
+  <button class="button active" (click)="addForm.submit(false)" [disabled]="!addForm.makeAdForm.valid">Valider</button>
+  <button class="button passive" (click)="addForm.submit(true)" [disabled]="!addForm.makeAdForm.valid">Brouillon</button>
 </div>

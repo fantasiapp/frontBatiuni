@@ -4,6 +4,7 @@ import { Select, Store } from "@ngxs/store";
 import { BehaviorSubject, Observable } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { Destroy$ } from "src/app/shared/common/classes";
+import { DataQueries, DataState } from "src/models/new/data.state";
 import { User } from "src/models/user/user.model";
 import { UserState } from "src/models/user/user.state";
 
@@ -87,12 +88,12 @@ export class NavigationMenu extends Destroy$ {
     }
   }
 
-  @Select(UserState)
-  user$!: Observable<User>;
+  @Select(DataState.view)
+  navigationType$!: Observable<"ST" | "PME">;
 
   ngOnInit() {
-    this.user$.pipe(takeUntil(this.destroy$)).subscribe((user: User) => {
-      const nextMenu = user.viewType ? PMEMenu : STMenu;
+    this.navigationType$.pipe(takeUntil(this.destroy$)).subscribe(type => {
+      const nextMenu = type == 'PME' ? PMEMenu : STMenu;
       this.menu.next(nextMenu);
       this.getIndexFromUrl(this.router.url);
     });

@@ -3,7 +3,7 @@
   <div class="web-page">
     <section class="filters">
       <div class="header">
-        <img src="assets/Filtrer par.svg" />
+        <img src="assets/Filter.svg" />
         Filtrer par
       </div>
       <online-filter-form></online-filter-form>
@@ -12,6 +12,11 @@
     <section class="main web-content font-Poppins">
       <!-- <searchbar placeholder="Mes missions ..."></searchbar> -->
       <calendar [value]="user.profile!.company.disponibilities" (dayClick)="onDayClicked($event)" #calendar></calendar>
+      <div class="flex full-width" style="justify-content: end;" >
+
+        <button class="button active" (click)="submit(calendar)">Enregistrer</button>
+      </div>
+
     </section>
     <section class="space-children-margin back">
       <div class="flex center full-width info-bar">&#9432;</div>

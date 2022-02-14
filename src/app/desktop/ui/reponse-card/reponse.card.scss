@@ -1,0 +1,16 @@
+@import "src/styles/mixins";
+@import "src/styles/variables";
+
+
+
+.reponse-card {
+    cursor: pointer;
+    background-color: white;
+    width: 100%;
+    height: fit-content;
+    padding: 1rem;
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;        border-radius: 12px;
+}
+.reponse-card:hover {
+    transform: scale(1.01);
+}

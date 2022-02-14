@@ -17,3 +17,12 @@ connexion-form {
   top: 50%;
   transform: translateY(-50%);
 }
+
+.logo {
+  position: absolute;
+  top:2rem;
+  left: 1%;
+  img {
+    width: 100px;
+  }
+}

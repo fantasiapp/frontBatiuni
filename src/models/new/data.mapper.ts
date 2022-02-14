@@ -33,6 +33,7 @@ export class DataReader {
   }
 
   getFieldIndex(data: any, type: DataTypes, child: DataTypes) {
+    //HACK
     return data[type + 'Fields'].indexOf(child);
   }
 

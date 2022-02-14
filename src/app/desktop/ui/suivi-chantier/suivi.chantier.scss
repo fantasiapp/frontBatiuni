@@ -1,0 +1,59 @@
+@import "src/styles/mixins";
+@import "src/styles/variables";
+$details-padding: 1em;
+
+details {
+    height: fit-content;
+    font-size: 1rem;
+    position: relative;
+    margin-bottom: 2rem;
+  
+    .summary-title {
+      user-select: none;
+      color: #0d6191;
+      font-weight: 500;
+    }
+  
+    &:hover {
+      cursor: pointer;
+    }
+  
+    .summary-content {
+      cursor: default;
+      font-weight: 300;
+      line-height: 1.5;
+      list-style-type: disc !important;
+    }
+  
+    summary {
+      background-color: white;
+  
+      list-style: none;
+      padding: $details-padding;
+  
+      &:focus {
+        outline: none;
+      }
+  
+      &:hover .summary-arrow-up svg {
+        opacity: 1;
+      }
+    }
+  
+    .summary-arrow-up,
+    .summary-arrow-down {
+      pointer-events: none;
+      position: absolute;
+      top: 0.75em;
+      left: 20%;
+      background: #ffffff;
+  
+      svg {
+        display: block;
+      }
+    }
+  
+    summary::-webkit-details-marker {
+      display: none;
+    }
+  }

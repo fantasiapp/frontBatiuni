@@ -6,23 +6,23 @@ import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
     <ng-container [ngSwitch]="activeView">
       <form class="form-control full-width" *ngSwitchCase="0">
         <div class="form-input">
-          <label>Date de mission</label>
-          <input type="date"/>
+          <label style="margin-bottom:1rem;">Date de mission</label>
+          <input type="date" class="form-element"/>
           <img src="assets/calendar.png"/>
         </div>
 
         <div class="form-input">
           <label>Adresse de chantier</label>
-          <input type="text"/>
+          <input type="text" class="form-element"/>
         </div>
 
-        <div class="form-input">
+        <div class="form-input" style="margin-bottom:3rem;">
           <label>Métier</label>
           <options></options>
         </div>
 
-        <div class="form-input">
-          <label>Type</label>
+        <div class="form-input" style="margin-bottom:3rem;">
+          <label style="margin-bottom:1rem;">Type</label>
           <div class="flex row radio-container">
             <div class="radio-item">
               <radiobox class="grow" name="job-type"></radiobox>
@@ -36,7 +36,7 @@ import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
         </div>
 
         <div class="form-input space-children-margin">
-          <label>Réorganiser la liste selon</label>
+          <label style="margin-bottom:2rem;">Réorganiser la liste selon</label>
           <div class="switch-container flex center-cross">
             <span class="criteria">Les brouillons les plus anciens</span> <switch class="default"></switch>
           </div>
@@ -69,4 +69,5 @@ import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
 export class PMEFilterForm {
   @Input()
   activeView: number = 0;
+  
 }
