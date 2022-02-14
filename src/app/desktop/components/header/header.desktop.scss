@@ -96,6 +96,7 @@ button {
 .notification:hover {
   .dropdown-notification {
     display: block;
+    z-index: 1500 ;
   }
 }
 .dropdown-content li{

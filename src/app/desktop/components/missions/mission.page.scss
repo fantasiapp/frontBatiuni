@@ -4,7 +4,16 @@
 :host {
   display: block;
 }
-
+.web-page {
+  @include range($mobile , 1500px){
+   .filters {
+     display: none;
+   }
+   .filterOnly{
+     display: block !important;
+   }
+  }
+}
 .web-content {
   searchbar {
     display: block;
@@ -35,4 +44,29 @@ calendar::ng-deep {
       justify-self: center !important;
     }
   }
+}
+.showFilters{
+  padding: 2rem;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+  width: 30vw;
+  height: calc(100vh - 210px);
+  left: 0;
+  top: 210px;
+  position: absolute;
+  z-index: 999;
+  background: white;
+  // @extend .animating;
+  overflow-y: auto;
+  // animation: $slide 50ms normal both slide-in-right;
+  cursor: pointer;
+  .close
+  {
+    width: 100%;
+    justify-content: end;
+  }
+}
+.filterOnly {
+  display: none !important;
+  height: 100%;
+  cursor: pointer;
 }

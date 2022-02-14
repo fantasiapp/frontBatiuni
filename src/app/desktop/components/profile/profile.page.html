@@ -1,3 +1,4 @@
+<ng-container *ngIf="(profile$ | async) as profile">
 <tabs [tabs]="2" [(activeView)]="tabView" *ngIf="activeView==4" bottom>
   <span tab_0>PME</span>
   <span tab_1>SOUS-TRAITANCE</span>
@@ -26,7 +27,7 @@
 
       <ng-container [ngSwitch]="activeView">
         <ng-container *ngSwitchCase="0">
-          <!-- <profile-resume class="flex row center-cross space-around" [user]="user" ></profile-resume> -->
+          <profile-resume class="flex row center-cross space-around" [profile]="profile" ></profile-resume>
           <section class="job-description full-width space-children-margin">
 
             <span class="text-light-emphasis">Nom de l'entreprise : </span>
@@ -42,7 +43,7 @@
             </span>
 
             <span class="text-light-emphasis">Chiffres d'affaires : </span>
-            <span class="value">{{ user.profile!.company.capital | currency: 'EUR':'symbol':'1.0-0' }}</span>
+            <span class="value">{{profile.company.revenue | currency: 'EUR':'symbol':'1.0-0' }}</span>
           </section>
 
           <section class="documents">
@@ -56,7 +57,8 @@
           </section>
         </ng-container>
         <ng-container *ngSwitchCase="1">
-          <!-- <profile-resume class="flex row center-cross space-around" [changeImage]="true" [star]="false" [user]="user" ></profile-resume> -->
+          <profile-resume class="flex row center-cross space-around" 
+          [canChangePicture]="true" [star]="false" [profile]="profile" ></profile-resume>
 
             <popup>
               <div class="popup-header flex center-cross ">
@@ -78,20 +80,25 @@
             {name: 'Certifications & labels'}
           ]" #stepper style="margin-bottom: 40px;"></step> -->
           <stepper-sys type="H" #stepper [margin]="15" [testList]="['Infos Personelles','Infos entreprise','Certifications & labels']" ></stepper-sys>
-          <modify-profile-form [user]="user.profile!" 
-           [animate]="false" [index]="stepper.currentIndex" #modifyProfile>
+          <modify-profile-form [profile]="profile!" 
+           [animate]="false" [index]="stepper.currentIndex" (submit)="actionBinding($event)" #modifyProfile>
+           <button [disabled]="(!modifyProfile.form.touched || modifyProfile.form.invalid) || null"
+           class="flex center button active " (click)="modifyProfileDesktop(modifyProfile.onSubmit())">Enregistrer</button>
           </modify-profile-form>
-          <button [disabled]="(!modifyProfile.form.touched || modifyProfile.form.invalid) || null"
-          class="flex center full-width button active" (click)="modifyProfile.onSubmit()">Enregistrer</button>
+          
         </ng-container>
         <ng-container *ngSwitchCase="2">
           <section class="full-width space-children-margin">
-            <modify-password-form></modify-password-form>
+            <modify-password-form (submit)="changePasswordDesktop($event)"></modify-password-form>
           </section>
         </ng-container>
         <ng-container *ngSwitchCase="3">
           <section class="full-width space-children-margin">
-            <searchbar class="full-width"></searchbar>
+            <div class="flex row center">
+              <searchbar class="full-width"></searchbar>
+
+              <img class="filterOnly" (click)="showResponsiveFilters = !showResponsiveFilters" src="assets/Filter.svg">
+            </div>
             <div class="report-search">
               Resultat <span class="no-result">10 annonces</span>
             </div>
@@ -99,7 +106,7 @@
             *ngFor="let mission of [1,2,3,4,5,6,7,8,9]"
             src="assets/brouillon.svg"
             [routerLink]="['', 'brouillon']"></offer>
-          </section>
+          </section> 
         </ng-container>
 
         <ng-container class="space-children-margin  " *ngSwitchCase="4">
@@ -118,9 +125,10 @@
         </ng-container>
 
         <ng-container class="space-children-margin  " *ngSwitchCase="5">
-          <h1>Mes Factures</h1>
-          <div class="space-children-margin facture">
-            <facture-ui *ngFor="let a of factures">
+          <div class="space-children-margin full-width facture">
+            <span class="text-emphasis">Mes Factures</span>
+
+            <facture-ui class="full-width" *ngFor="let a of factures">
             </facture-ui>
           </div>
         </ng-container>
@@ -139,4 +147,12 @@
       <online-filter-form></online-filter-form>
     </section>
   </div>
+  <div *ngIf="showResponsiveFilters" [@enterAnimation] class="showFilters flex column">
+    <div class="flex close" (click)="showResponsiveFilters = !showResponsiveFilters">
+      <img src="assets/X-ICON.svg">
+    </div>
+    <online-filter-form ></online-filter-form>
+  </div>
+</ng-container>
+
 </ng-container>

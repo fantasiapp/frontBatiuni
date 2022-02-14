@@ -49,8 +49,11 @@
         <ng-container [ngSwitch]="activeView">
           <ng-container *ngSwitchCase="0">
             <section class="main web-content font-Poppins ">
+              <div class="flex row center">
               <searchbar placeholder="Recheche liste...">
               </searchbar>
+              <img class="filterOnly" (click)="showFilters = !showFilters" src="assets/Filter.svg">
+            </div>
               <div class="report-search">
                 Resultat <span class="no-result">{{ allOnlinePosts.length }}</span>
               </div>
@@ -72,26 +75,10 @@
           <span class="lighter">{{view == 'PME' ? "Annonces validées" : "Liste"}}</span>
         </div>
       </desktop-stickyH>
-      <div class="companyinfo">
-        <div class="company-logo flex center">
-
-          <img src="assets/enligne.svg" />
-
-        </div>
-        <div class="company-text space-children-margin ">
-          <div class="flex column data-star ">
-            <span class="weight white">{{companyResumer?.name | uppercase}}</span>
-            <stars [value]="companyResumer?.stars || 5"></stars>
-          </div>
-
-          <div class="company-data">
-            <span class="weight">Métier : {{postResumer?.numberOfPeople || 1}} {{postResumer?.job?.name}} </span>
-            <span class="weight">{{ postResumer?.dueDate }} </span>
-            <span class="weight">Montant : {{this.postResumer?.amount || 0}} {{this.postResumer?.currency}} </span>
-          </div>
-        </div>
-      </div>
+      
+      <company-info ></company-info>
       <div class="web-page">
+
         <section class="filters">
           <stepper-sys></stepper-sys>
         </section>
@@ -160,7 +147,7 @@
               [company]="company"></reponse-card>
           </section>
         </ng-template>
-        <section class="transparent" *ngIf="resumerType == 'valider';else options">
+        <section class="transparent flex center" *ngIf="resumerType == 'valider';else options">
           <ul class=" flex column space-children-margin  options-list">
             <li class="flex row center-cross"><img src="assets/Modifier.svg" />Modifier les horaires de présence</li>
             <li class="flex row center-cross"><img src="assets/Numero.svg" />Afficher le numéro portable</li>
@@ -171,7 +158,7 @@
         </section>
 
         <ng-template #options>
-          <section *ngIf="view == 'PME'; else stview" class="transparent">
+          <section *ngIf="view == 'PME'; else stview" class="transparent flex center">
             <ul class="flex column space-children-margin options-list">
               <li class="flex row center-cross"><img src="assets/responses.svg" />Afficher les réponses</li>
               <li class="flex row center-cross"><img src="assets/booster.svg" />Booster l’annonce</li>
