@@ -18,6 +18,7 @@
             <li *ngFor="let tache of tacheList; index as i;" class="flex timeline-vertical" 
             (click)="changeTacheIndex(i)" [class.active]="tacheIndex == i">
             <span class="data"> {{tache.name}}</span>
+
             <div class="circle" >
 
             </div>

@@ -80,7 +80,7 @@
       <div class="web-page">
 
         <section class="filters">
-          <stepper-sys></stepper-sys>
+          <stepper-sys [rayon]="10" [margin]="15"></stepper-sys>
         </section>
 
         <!-- Validee -->
@@ -168,7 +168,7 @@
             </ul>
           </section>
           <ng-template #stview let-form="devisForm">
-            <section class="flex column space-children-margin transparent">
+            <section class="flex column center space-children-margin transparent">
               <ul class="options-list space-children-margin">
                 <li class="flex row center-cross">LE POSTE</li>
                 <li class="flex row center-cross"><img src="assets/Job.svg" />{{ postResumer?.job?.name }}</li>
