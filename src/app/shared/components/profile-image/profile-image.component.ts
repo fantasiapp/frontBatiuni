@@ -24,9 +24,11 @@ export class UIProfileImageComponent extends Destroy$ {
   set profile({user, company}: Profile) {
     this.company = company;
     this.image$ = this.store.select(DataQueries.getProfileImage(this.company.id));
+    console.log('new profile');
 
     this.image$.pipe(
       switchMap((file: File | null) => {
+        console.log('new image', file);
         if ( !file ) return of(null);
         if ( file.content ) return of(file);
         this.store.dispatch(new DownloadFile(file.id));

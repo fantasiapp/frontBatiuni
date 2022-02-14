@@ -119,13 +119,6 @@ import { InfoService } from "../components/info/info.component";
       </ng-container>
     </ng-container>
 
-    <!-- fix here, try to add name inside fileinput and fix the error thing -->
-    <ng-container formArrayName="addedDocuments">
-      <ng-container *ngFor="let document of addedDocumentsControls; index as i" [formGroupName]="i">
-        <fileinput [includeDate]="false" comment="" placeholder="" [editName]="document.get('name')!" formControlName="fileData" (kill)="removeDocument(i)"></fileinput>
-      </ng-container>
-    </ng-container>
-
     <div class="form-input">
       <div class="form-input center-text add-field" (click)="addDocument()">
         <img src="assets/icons/add.svg"/>
@@ -212,8 +205,10 @@ export class MakeAdForm {
 
   private _post: Post | null = null;
   get post() { return this._post; }
+  
   @Input()
   set post(p: Post | null) {
+    console.log('set post', p);
     if ( !p || p == this._post ) {
       this.info.alignWith('header_search');
       return;
@@ -239,12 +234,14 @@ export class MakeAdForm {
       detailsForm.push(new FormGroup({description: new FormControl(detail.content)}));
     //download files
 
+
   };
 
   //get put checked allJobs
   currencies = ['$', '€', '£'].map((currency, id) => ({id, name: currency}));
-  allJobs = [...JobRow.instances.values()].map(job => ({id: job.id, name: job.name}))
-
+  allJobs = [...JobRow.instances.values()].map(job => ({id: job.id, name: job.name}));
+  commonDocuments = ['Plan', 'Document Technique', 'Descriptif du chantier', 'Calendrier d\'éxecution'];
+  
   constructor(private store: Store, private info: InfoService) {}
 
 
@@ -262,27 +259,12 @@ export class MakeAdForm {
     currency: new FormControl(this.currencies.filter(currency => currency.name == '€')),
     description: new FormControl(''),
     amount: new FormControl(0),
-    documents: new FormArray([
-      new FormGroup({
-        name: new FormControl('Plan'),
+    documents: new FormArray(
+      this.commonDocuments.map(name => new FormGroup({
+        name: new FormControl(name),
         fileData: new FormControl(defaultFileUIOuput('postdoc'))
-      }),
-      new FormGroup({
-        name: new FormControl('Document Technique'),
-        fileData: new FormControl(defaultFileUIOuput('postdoc'))
-      }),
-      new FormGroup({
-        name: new FormControl('Descriptif du chantier'),
-        fileData: new FormControl(defaultFileUIOuput('postdoc'))
-      }),
-      new FormGroup({
-        name: new FormControl('Calendrier d\'éxecution'),
-        fileData: new FormControl(defaultFileUIOuput('postdoc'))
-      })
-    ]),
-    addedDocuments: new FormArray([
-
-    ]),
+      }))
+    ),
     detailedPost: new FormArray([
 
     ]),
@@ -293,25 +275,21 @@ export class MakeAdForm {
     return (this.makeAdForm.get('documents') as FormArray).controls;
   }
 
-  get addedDocumentsControls() {
-    return (this.makeAdForm.get('addedDocuments') as FormArray).controls;
-  }
-
   get detailedPostControls() {
     return (this.makeAdForm.get('detailedPost') as FormArray).controls;
   }
 
   addDocument() {
-    const addedDocuments = this.makeAdForm.get('addedDocuments') as FormArray;
-    addedDocuments.push(new FormGroup({
+    const documents = this.makeAdForm.get('documents') as FormArray;
+    documents.push(new FormGroup({
       name: new FormControl(''),
       fileData: new FormControl(defaultFileUIOuput('postdoc'))
     }));
   }
 
   removeDocument(index: number) {
-    const addedDocuments = this.makeAdForm.get('addedDocuments') as FormArray;
-    addedDocuments.removeAt(index);
+    const documents = this.makeAdForm.get('documents') as FormArray;
+    documents.removeAt(index);
   }
   
 
