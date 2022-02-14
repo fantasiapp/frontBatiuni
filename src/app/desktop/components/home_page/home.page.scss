@@ -59,7 +59,7 @@ offer:hover {
   width: 100vw;
   height: 100vw;
   background-color: #ffffff;
-  z-index: 998;
+  z-index: 997;
   position: absolute;
   top: 0;
 }
@@ -131,7 +131,7 @@ $square: 150px;
 .title-with-line {
   letter-spacing: 0px;
   color: #333333;
-  font-size: 22.6px;
+  font-size: 20px;
   position: relative;
   font-weight: 500;
   margin-bottom: 1rem !important;
@@ -184,6 +184,8 @@ $square: 150px;
 
 $options: 26px;
 .options-list {
+  font-size: 14px;
+  font-weight: 400;
   .notif {
     @extend %has-notifications;
   }

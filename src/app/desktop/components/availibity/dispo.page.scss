@@ -5,7 +5,17 @@
   display: block;
   list-style-type: none;
 }
-
+@include range($mobile , 1500px){
+  .filters {
+    display: none;
+  }
+  .info {
+    display: none;
+  }
+  .filterOnly{
+    display: block !important;
+  }
+ }
 .web-content {
   searchbar {
     display: block;

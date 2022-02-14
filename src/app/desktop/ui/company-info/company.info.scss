@@ -11,6 +11,7 @@ $textColor : #44444F;
     align-items: center;
     background: inherit;
     z-index: 999;
+    background-color: transparent !important;
     @include range($mobile, 1500px) {
         // .company {
         //     display: flex;
@@ -35,16 +36,38 @@ $textColor : #44444F;
 }
 
 .company {
-    backdrop-filter: revert;
-
-    background: inherit;
     display: flex;
     align-items: center;
     div:not(:last-child) {
         margin-right: 2rem;
     }
-}
+    ::before {
 
+        @include range($mobile , 1500px) {
+            background-color: #f7f7f7;
+            content: "";
+            margin: 0 auto;
+            position: absolute;
+            top: 40%;
+            right: 0;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            z-index: -1;
+        }
+        @include from(1500px) {
+            background-color: #f7f7f7;
+            content: "";
+            margin: 0 auto;
+            position: absolute;
+            top: 43%;
+            left: 400px;
+            width: 100%;
+            height: 100px;
+            z-index: -1;
+        }
+    }
+}
 .logo {
     box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
     width: 150px;
@@ -57,17 +80,23 @@ $textColor : #44444F;
         font-weight: 400;
         font-size: 2rem;
         color: #44444F;
-        span:not(:last-child) {
+        span {
             color: white;
-            margin-bottom: 1rem;
+            
         }
         display: flex;
         flex-direction: column;
     }
     & > *:not(:last-child) {
-        margin-bottom: 2rem;
+        margin-bottom: 1rem;
     }
     .seconde-info {
+        span {
+            color: #44444F;
+            font-family: "Poppins";
+            font-size: 14px;
+            font-weight: 500;
+        }
         span:not(:last-child) {
             margin-right: 1rem;
         }

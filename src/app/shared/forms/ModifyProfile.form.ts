@@ -156,8 +156,9 @@ import { SpacingPipe } from "../pipes/spacing.pipe";
             </span>
           </ng-container>
       </form>
-    </section>
-  </ng-template>
+      </section>
+      </ng-template>
+      <ng-content></ng-content>
 
   <div class="mid-sticky-footer" style="margin-top: auto;">
     <div class="form-step">
@@ -246,7 +247,7 @@ export class ModifyProfileForm {
   onSwipeRight() { this.slider.right(); }
 
   //outputs
-  onSubmit() { this.submit.emit(this.form); }
+  onSubmit() { this.submit.emit(this.form); console.log(this.form)}
   @Output() submit = new EventEmitter<FormGroup>();
 
   @Input() index: number = 0;

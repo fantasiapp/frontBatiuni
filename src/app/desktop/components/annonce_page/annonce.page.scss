@@ -19,6 +19,15 @@ $half-square : math.div($square,2);
   //   margin: 0 auto;
   // }
 }
+.web-page {
+  width: 100%;
+  @include range($mobile, 1500px) {
+    .main-content {
+      width: 60% !important;
+
+    }
+  }
+}
 
 
 .report-search {
@@ -75,9 +84,15 @@ $half-square : math.div($square,2);
   }
 }
 
-adform {
-  width: 100% !important;
-  height: unset;
+ad-form::ng-deep{
+  form {
+    max-width: unset !important;
+  }
+  @include range($mobile, 1500px) {
+    & > * {
+      width: 80% !important;
+    }
+  }
 }
 
 .info-bar {
@@ -155,14 +170,13 @@ ad-form::ng-deep{
   background-color: transparent !important;
 }
 .hiden-action {
-  width: 100vw;
-  position: sticky;
-  bottom: 0;
-  height: 100px;
   display: none !important;
-  background-color: white;
   @include range($mobile, 1500px){
     display: flex !important;
+    margin-bottom: 2rem;
+  }
+  button {
+    min-width: 300px;
   }
 }
 // company-info::ng-deep {

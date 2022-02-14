@@ -22,9 +22,18 @@
 
   </section>
   
-  <section class="main web-content flex font-Poppins space">
-    <!-- <ad-form class="adform" [page]="false" [post]="post" #addForm></ad-form> -->
-    <ad-form class="adform" [page]="false" #addForm></ad-form>
+  <section class="main web-content font-Poppins space">
+    <div class="full-width flex column">
+    <ad-form class="adform " [page]="false" #addForm></ad-form> 
+    <!-- <div class="info-bar space-children-margin">
+    <button class="button active">HEY</button>
+    <button class="button passive">HEY</button>
+    </div> -->
+    <div class="hiden-action flex  space-around center">
+      <button class="button active" (click)="addForm.submit(false)" [disabled]="!addForm.makeAdForm.valid">Valider</button>
+      <button class="button passive" (click)="addForm.submit(true)" [disabled]="!addForm.makeAdForm.valid">Brouillon</button>
+    </div>
+  </div>
   </section>
 
   <section class="info-sec flex">
@@ -37,8 +46,4 @@
     <h1>hey</h1>
   </section> -->
 
-</div>
-<div class="hiden-action flex space-around center">
-  <button class="button active" (click)="addForm.submit(false)" [disabled]="!addForm.makeAdForm.valid">Valider</button>
-  <button class="button passive" (click)="addForm.submit(true)" [disabled]="!addForm.makeAdForm.valid">Brouillon</button>
 </div>

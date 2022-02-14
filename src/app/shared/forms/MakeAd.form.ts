@@ -95,7 +95,7 @@ import { InfoService } from "../components/info/info.component";
       </div>
     </div>
 
-    <h2 class="form-section-title">Rémunération</h2>
+    <h2 class="form-section-title" id="anass">Rémunération</h2>
     <div class="form-input">
       <label>Montant</label>
       <div class="flex row remuneration">

@@ -1,5 +1,5 @@
-<div class="stepper" *ngIf="type === 'V'; else vertical">
-    <svg
+<div class="stepper " *ngIf="type === 'V'; else vertical">
+    <svg 
       *ngFor="let pos of nodes; let index = index"
       [attr.height]="margin * rayon"
       [style.top]="pos.cx"
@@ -8,25 +8,25 @@
     >
       <line
         *ngIf="index == 0"
-        [attr.x1]="(margin * rayon) / 2"
+        [attr.x1]="rayon*1.5"
         [attr.y1]="(margin * rayon) / 2"
-        [attr.x2]="(margin * rayon) / 2"
+        [attr.x2]="rayon*1.5"
         [attr.y2]="margin * rayon"
         [attr.stroke]="fill"
       />
       <line
         *ngIf="index == this.testList.length - 1"
-        [attr.x1]="(margin * rayon) / 2"
+        [attr.x1]="rayon*1.5"
         [attr.y1]="-(margin * rayon) / 2"
-        [attr.x2]="(margin * rayon) / 2"
+        [attr.x2]="rayon*1.5"
         [attr.y2]="(margin * rayon) / 2"
         [attr.stroke]="fill"
       />
       <line
         *ngIf="!notFirstOrLast(index)"
-        [attr.x1]="(margin * rayon) / 2"
+        [attr.x1]="rayon*1.5"
         [attr.y1]="-(margin * rayon) / 2"
-        [attr.x2]="(margin * rayon) / 2"
+        [attr.x2]="rayon*1.5"
         [attr.y2]="margin * rayon"
         [attr.stroke]="fill"
       />
@@ -34,7 +34,7 @@
         (click)="nodeChangeStep(pos)"
         id="circleV"
         [attr.r]="rayon"
-        [attr.cx]="(margin * rayon) / 2"
+        [attr.cx]="rayon*1.5"
         [attr.cy]="(margin * rayon) / 2"
         [attr.fill]="pos.current ? '#0D6191' : '#ffffff'"
         stroke="#b3b3b3"
@@ -46,7 +46,7 @@
     </svg>
   </div>
   <ng-template #vertical>
-    <svg
+    <svg class="test"
       *ngFor="let pos of nodes; let index = index"
       [attr.height]="margin * rayon"
       [style.top]="pos.cy"
