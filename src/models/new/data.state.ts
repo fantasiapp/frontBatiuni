@@ -191,8 +191,7 @@ export class DataState {
 
   @Action(ChangeProfilePicture)
   changeProfilePicture(ctx: StateContext<DataModel>, picture: ChangeProfilePicture) {
-    const state = ctx.getState(),
-      profile = this.store.selectSnapshot(DataQueries.currentProfile),
+    const profile = this.store.selectSnapshot(DataQueries.currentProfile),
       image = this.store.selectSnapshot(DataQueries.getProfileImage(profile.company.id)),
       req = this.http.post('data', picture);
         
@@ -201,9 +200,11 @@ export class DataState {
         if ( response[picture.action] !== 'OK' )
           throw response['messages'];
         
+        delete response[picture.action];
         ctx.setState(compose(
           deleteIds('File', image ? [image.id] : []),
-          addValues('File', response)
+          addValues('File', response),
+          pushChildValues('Company', profile.company.id, 'File', response)
         ));
       })
     )
@@ -413,7 +414,6 @@ export class DataQueries {
   static getProfileImage(id: number) {
     return createSelector( [DataState.fields, DataQueries.getDataById('Company', id), DataState.getType('File')],
       (fields: Record<string[]>, company: any[], files: any[]) => {
-        console.log('evaluate profile image');
         const filesIndex = fields['Company'].indexOf('File'),
           natureIndex = fields['File'].indexOf('nature'),
           fileIds = company?.[filesIndex] || [];

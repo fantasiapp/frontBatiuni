@@ -120,6 +120,6 @@ export function replace(target: DataTypes, values: any) {
   return produce(draft => mutable.replace(draft, target, values));
 };
 
-export function pushChildValues<K extends DataTypes>(parent: DataTypes, parentId: number, child: K, values: Record<any>, uniqueBy: keyof Interface<K>) {
+export function pushChildValues<K extends DataTypes>(parent: DataTypes, parentId: number, child: K, values: Record<any>, uniqueBy?: keyof Interface<K>) {
   return produce(draft => mutable.pushChildValues(draft, parent, parentId, child, values, uniqueBy));
 }  

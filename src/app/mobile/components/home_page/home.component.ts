@@ -16,6 +16,8 @@ import { DataState } from "src/models/data/data.state";
 import { ApplyPost, DeletePost, DuplicatePost, SwitchPostType } from "src/models/user/user.actions";
 import { User } from "src/models/user/user.model";
 import { UserState } from "src/models/user/user.state";
+import { DataState as NewDataState } from 'src/models/new/data.state';
+
 type PostMenu = { open: boolean; post: Post | null; };
 @Component({
   selector: 'home',
@@ -26,6 +28,9 @@ type PostMenu = { open: boolean; post: Post | null; };
 export class HomeComponent extends Destroy$ {
   @Select(UserState)
   user$!: Observable<User>;
+
+  @Select(NewDataState.view)
+  view$!: Observable<"PME" | "ST">;
 
   @Select(DataState.get('posts'))
   posts$!: Observable<Post[]>;

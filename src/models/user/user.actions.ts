@@ -4,7 +4,7 @@ import { PropertyTrap } from "src/app/shared/common/classes";
 import { getDirtyValues } from "src/app/shared/common/functions";
 import { DisponibilityRow, JobForCompanyRow, JobRow, LabelForCompanyRow, LabelRow, UserProfileRow } from "../data/data.model";
 import { Availability, CalendarUI } from "src/app/shared/components/calendar/calendar.ui";
-import { DataTypes, JobForCompany, LabelForCompany } from "../new/data.interfaces";
+import { DataTypes } from "../new/data.interfaces";
 
 export class ChangeProfileType {
   static readonly type = '[User] Change Profile Type';
