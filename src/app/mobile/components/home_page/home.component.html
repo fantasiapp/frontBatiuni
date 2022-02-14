@@ -1,119 +1,122 @@
-<ng-container *ngIf="(user$ | async) as user">
-  <page-header [name]="user.viewType ? 'Mes Annonces' : 'Annonces qui peuvent vous intéresser'" [tabs]="user.viewType ? 3 : 2" [(activeView)]="activeView" (filterClicked)="openAdFilterMenu = true">
-    <span tab_0>{{ user.viewType ? 'Brouillon' : 'Vue liste' }}</span>
-    <span tab_1>{{ user.viewType ? 'En ligne' : 'Carte' }}</span>
-    <span tab_2>Validées</span>
-  </page-header>
-  
-  <div class="hosted-page space-children-margin page-content-with-tabs">
-    <!-- Page pour PME -->
-    <ng-container *ngIf="user.viewType; else stview">
-      <ng-container *ngIf="(posts$ | async) as posts" [ngSwitch]="activeView">
-        <ng-container *ngSwitchCase="0">
-          <offer
-            *ngFor="let draft of userDrafts"
-            src="assets/brouillon.svg"
-            [deletable]="true"
-            [post]="draft"
-            (click)="openPost(draft)"
-            ></offer> 
-        </ng-container>
-        <ng-container *ngSwitchCase="1">
-          <offer
-            *ngFor="let onlinePost of userOnlinePosts"
-            src="assets/enligne.svg"
-            [deletable]="false"
-            [post]="onlinePost"
-            (click)="checkPost(onlinePost)"
-            ></offer>
-        </ng-container>
-        <ng-container *ngSwitchCase="2">
-          <offer
-            *ngFor="let mission of annonces"
-            src="assets/validée.svg"
-            [routerLink]="['', 'annonce-validee']"></offer>
-        </ng-container>
-      </ng-container>
-    </ng-container>
-
-    <!-- Page pour ST -->
-    <ng-template #stview>
-      <ng-container [ngSwitch]="activeView">
-        <ng-container *ngSwitchCase="0">
-          <offer
-            *ngFor="let onlinePost of allOnlinePosts"
-            [deletable]="false"
-            src="assets/enligne.svg"
-            [post]="onlinePost"
-            (click)="checkPost(onlinePost)"
-            ></offer>
-        </ng-container>
-        <mapbox-batiuni [posts]="allOnlinePosts" class="space-children-margin" *ngSwitchCase="1" (postClick)="checkPost($event)"></mapbox-batiuni>
-      </ng-container>
-    </ng-template>
-  </div>
-  
-  <swipeup [(open)]="openAdFilterMenu" type="view">
-    <pme-filter-form [activeView]="activeView" *ngIf="user.viewType; else stfilter" view></pme-filter-form>
-    <ng-template #stfilter><st-filter-form></st-filter-form></ng-template>
-  </swipeup>
-  
-  <slidemenu [(open)]="editMenu.open" [header]="true">
-    <span class="grow center-text text-light-emphasis" header>Modifier un brouillon</span>
+<ng-container *ngIf="(view$ | async) as view">
+  <ng-container *ngIf="(user$ | async) as user">
+    <page-header [name]="view == 'PME' ? 'Mes Annonces' : 'Annonces qui peuvent vous intéresser'" [tabs]="view == 'PME' ? 3 : 2" [(activeView)]="activeView" (filterClicked)="openAdFilterMenu = true">
+      <span tab_0>{{ view == 'PME' ? 'Brouillon' : 'Vue liste' }}</span>
+      <span tab_1>{{ view == 'PME' ? 'En ligne' : 'Carte' }}</span>
+      <span tab_2>Validées</span>
+    </page-header>
     
-    <div class="hosted-page flex column center-cross space-children-margin" content>
-      <ad-form [post]="editMenu.post" (done)="editMenu = {open: false, post: null}" [page]="false" content></ad-form>
-    </div>
-  </slidemenu>
-
-  <slidemenu [(open)]="checkMenu.open" [footer]="!user.viewType" [header]="false" #slideOnlinePost>
-    <header class="clear-margin full-width sticky-header flex center-cross annonce" customHeader>
-      <img (click)="slideOnlinePost.close()" src="assets/arrowlblack.svg" />
-      <span class="grow center-text text-light-emphasis">Annonce en Ligne</span>
-      <img *ngIf="user.viewType; else star" (click)="checkPostMenu()" src="assets/Option.svg"/>
-      <ng-template #star><star-systeme [nstars]="1"></star-systeme></ng-template>
-    </header>
-
-    <ng-container content>
-      <annonce-resume class="hosted-page" [collapsible]="false" [post]="checkMenu.post!" #resume></annonce-resume>
-
-      <div class="hosted-page" style="padding-top: 0;" *ngIf="!user.viewType">
-        <hr class="dashed"/>
-        <form class="devis form-control" [formGroup]="form">
-          <h5>Pour postuler veuillez proposer votre devis</h5>
+    <div class="hosted-page space-children-margin page-content-with-tabs">
+      <!-- Page pour PME -->
+      <ng-container *ngIf="view == 'PME'; else stview">
+        <ng-container *ngIf="(posts$ | async) as posts" [ngSwitch]="activeView">
+          <ng-container *ngSwitchCase="0">
+            <offer
+              *ngFor="let draft of userDrafts"
+              src="assets/brouillon.svg"
+              [deletable]="true"
+              [post]="draft"
+              (click)="openPost(draft)"
+              ></offer> 
+          </ng-container>
+          <ng-container *ngSwitchCase="1">
+            <offer
+              *ngFor="let onlinePost of userOnlinePosts"
+              src="assets/enligne.svg"
+              [deletable]="false"
+              [post]="onlinePost"
+              (click)="checkPost(onlinePost)"
+              ></offer>
+          </ng-container>
+          <ng-container *ngSwitchCase="2">
+            <offer
+              *ngFor="let mission of annonces"
+              src="assets/validée.svg"
+              [routerLink]="['', 'annonce-validee']"></offer>
+          </ng-container>
+        </ng-container>
+      </ng-container>
   
-          <div class="form-input">
-            <label>Montant</label>
-            <div class="flex row space-between remuneration">
-              <input type="number" min="0" style="max-height: 51px" class="grow form-element" placeholder="Montant" formControlName="amount">
-              <div class="option-container">
-                <options [searchable]="false" type="radio" [options]="devis" formControlName="devis"></options>
+      <!-- Page pour ST -->
+      <ng-template #stview>
+        <ng-container [ngSwitch]="activeView">
+          <ng-container *ngSwitchCase="0">
+            <offer
+              *ngFor="let onlinePost of allOnlinePosts"
+              [deletable]="false"
+              src="assets/enligne.svg"
+              [post]="onlinePost"
+              (click)="checkPost(onlinePost)"
+              ></offer>
+          </ng-container>
+          <mapbox-batiuni [posts]="allOnlinePosts" class="space-children-margin" *ngSwitchCase="1" (postClick)="checkPost($event)"></mapbox-batiuni>
+        </ng-container>
+      </ng-template>
+    </div>
+    
+    <swipeup [(open)]="openAdFilterMenu" type="view">
+      <pme-filter-form [activeView]="activeView" *ngIf="view == 'PME'; else stfilter" view></pme-filter-form>
+      <ng-template #stfilter><st-filter-form></st-filter-form></ng-template>
+    </swipeup>
+    
+    <slidemenu [(open)]="editMenu.open" [header]="true">
+      <span class="grow center-text text-light-emphasis" header>Modifier un brouillon</span>
+      
+      <div class="hosted-page flex column center-cross space-children-margin" content>
+        <ad-form [post]="editMenu.post" (done)="editMenu = {open: false, post: null}" [page]="false" content></ad-form>
+      </div>
+    </slidemenu>
+  
+    <slidemenu [(open)]="checkMenu.open" [footer]="view == 'ST'" [header]="false" #slideOnlinePost>
+      <header class="clear-margin full-width sticky-header flex center-cross annonce" customHeader>
+        <img (click)="slideOnlinePost.close()" src="assets/arrowlblack.svg" />
+        <span class="grow center-text text-light-emphasis">Annonce en Ligne</span>
+        <img *ngIf="view == 'PME'; else star" (click)="checkPostMenu()" src="assets/Option.svg"/>
+        <ng-template #star><star-systeme [nstars]="1"></star-systeme></ng-template>
+      </header>
+  
+      <ng-container content>
+        <annonce-resume class="hosted-page" [collapsible]="false" [post]="checkMenu.post!" #resume></annonce-resume>
+  
+        <div class="hosted-page" style="padding-top: 0;" *ngIf="view == 'ST'">
+          <hr class="dashed"/>
+          <form class="devis form-control" [formGroup]="form">
+            <h5>Pour postuler veuillez proposer votre devis</h5>
+    
+            <div class="form-input">
+              <label>Montant</label>
+              <div class="flex row space-between remuneration">
+                <input type="number" min="0" style="max-height: 51px" class="grow form-element" placeholder="Montant" formControlName="amount">
+                <div class="option-container">
+                  <options [searchable]="false" type="radio" [options]="devis" formControlName="devis"></options>
+                </div>
               </div>
             </div>
-          </div>
-        </form>
-      </div>
-
-      <swipeup [(open)]="checkMenu.swipeup">
-        <li [attr.data-notification-number]="(checkMenu.post?.candidates || []).length" class="notification" (click)="showCandidates()">Afficher les réponses</li>
-        <li [routerLink]="['','booster']">Booster Mon annonce</li>
-        <li (click)="deletePost(checkMenu.post!.id)">Supprimer l'annonce</li>
-        <li (click)="duplicatePost(checkMenu.post!.id)">Dupliquer l'annonce</li>
-        <li (click)="pausePost(checkMenu.post!.id)">Mettre en pause l'annonce</li>
-      </swipeup>
-    </ng-container>    
-
-    <button class="button full-width active" [disabled]="form.invalid" (click)="applyPost(checkMenu.post!)" footer>
-      Postuler
-    </button>
-  </slidemenu>
-  <!-- Maybe slide menu should hide their content when they are not open ?? -->
-  <swipeup [(open)]="openReponseMenu">
-    <li class="flex center-cross" (click)="showUserOffer()"><img  />Valider la candidature</li>
-    <li class="flex center-cross"><img  />Refuser la candidature</li>
-    <li class="flex center-cross"><img  />Bloquer le contact</li>
-  </swipeup>
+          </form>
+        </div>
+  
+        <swipeup [(open)]="checkMenu.swipeup">
+          <li [attr.data-notification-number]="(checkMenu.post?.candidates || []).length" class="notification" (click)="showCandidates()">Afficher les réponses</li>
+          <li [routerLink]="['','booster']">Booster Mon annonce</li>
+          <li (click)="deletePost(checkMenu.post!.id)">Supprimer l'annonce</li>
+          <li (click)="duplicatePost(checkMenu.post!.id)">Dupliquer l'annonce</li>
+          <li (click)="pausePost(checkMenu.post!.id)">Mettre en pause l'annonce</li>
+        </swipeup>
+      </ng-container>    
+  
+      <button class="button full-width active" [disabled]="form.invalid" (click)="applyPost(checkMenu.post!)" footer>
+        Postuler
+      </button>
+    </slidemenu>
+    <!-- Maybe slide menu should hide their content when they are not open ?? -->
+    <swipeup [(open)]="openReponseMenu">
+      <li class="flex center-cross" (click)="showUserOffer()"><img  />Valider la candidature</li>
+      <li class="flex center-cross"><img  />Refuser la candidature</li>
+      <li class="flex center-cross"><img  />Bloquer le contact</li>
+    </swipeup>
+  </ng-container>
 </ng-container>
+
 
 <!-- </ng-container> -->
 
