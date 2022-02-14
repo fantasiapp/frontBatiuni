@@ -413,6 +413,7 @@ export class DataQueries {
   static getProfileImage(id: number) {
     return createSelector( [DataState.fields, DataQueries.getDataById('Company', id), DataState.getType('File')],
       (fields: Record<string[]>, company: any[], files: any[]) => {
+        console.log('evaluate profile image');
         const filesIndex = fields['Company'].indexOf('File'),
           natureIndex = fields['File'].indexOf('nature'),
           fileIds = company?.[filesIndex] || [];
