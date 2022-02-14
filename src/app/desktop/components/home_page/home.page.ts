@@ -14,6 +14,8 @@ import { DataState } from "src/models/data/data.state";
 import { ApplyPost, DeletePost, SwitchPostType } from "src/models/user/user.actions";
 import { User } from "src/models/user/user.model";
 import { UserState } from "src/models/user/user.state";
+import { DataState as NewDataState } from 'src/models/new/data.state'
+
 type PostMenu = { open: boolean; post: Post | null; };
 
 type resumerType = 'enligne' | 'valider';
@@ -40,12 +42,14 @@ type resumerType = 'enligne' | 'valider';
 })
 export class HomePageComponent extends Destroy$ {
 
-
   @ViewChild('testTemplate', { read: TemplateRef, static: true })
   testTemplate!: TemplateRef<any>;
 
   @Select(UserState)
   user$!: Observable<User>;
+
+  @Select(NewDataState.view)
+  view$!: Observable<"ST" | "PME">;
 
   @Select(DataState.get('posts'))
   posts$!: Observable<Post[]>;

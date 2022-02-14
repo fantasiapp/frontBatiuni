@@ -1,7 +1,7 @@
 <ng-container *ngIf="user$ | async as user" >
-  <tabs [tabs]="user.viewType ? 3 : 2" [(activeView)]="activeView" bottom>
-    <span tab_0>{{ user.viewType ? 'Brouillon' : 'Vue liste' }}</span>
-    <span tab_1>{{ user.viewType ? 'En ligne' : 'Carte' }}</span>
+  <tabs *ngIf="(view$ | async) as view" [tabs]="view == 'PME' ? 3 : 2" [(activeView)]="activeView" bottom>
+    <span tab_0>{{ view == 'PME' ? 'Brouillon' : 'Vue liste' }}</span>
+    <span tab_1>{{ view == 'PME' ? 'En ligne' : 'Carte' }}</span>
     <span tab_2>Validées</span>
   </tabs>
 
