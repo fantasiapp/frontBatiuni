@@ -1,8 +1,8 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from "@angular/core";
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, SimpleChanges } from "@angular/core";
 import { Select, Store } from "@ngxs/store";
 import { Observable } from "rxjs";
 import { Profile } from "src/models/new/data.interfaces";
-import { DataState, QueryProfile } from "src/models/new/data.state";
+import { DataState } from "src/models/new/data.state";
 import { ChangeProfileType } from "src/models/user/user.actions";
 
 @Component({
@@ -16,7 +16,7 @@ export class ProfileResume {
   constructor(private store: Store) {}
 
   @Input()
-  profile!:Profile; 
+  profile!: Profile;
 
   @Select(DataState.view)
   view$!: Observable<string>;

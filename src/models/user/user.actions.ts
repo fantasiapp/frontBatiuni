@@ -98,7 +98,7 @@ export class UploadFile<K extends DataTypes = any> {
   fileBase64: string;
   companyFile: boolean = true;
   category?: K;
-  id?: number = 0;
+  assignedId?: number = -1;
 
   //tell JLW to unify formats
   constructor(src: FileUIOutput, nature: string, name?: string, category?: K) {
@@ -109,8 +109,12 @@ export class UploadFile<K extends DataTypes = any> {
     this.nature = nature;
     if ( category ) {
       this.category = category;
+      (this as any)[category] = -1;
     };
   }
+
+  get target() { return (this as any)[this.category]; }
+  set target(x: number) { (this as any)[this.category] = x; }
 };
 
 export class DeleteFile {
@@ -159,16 +163,13 @@ export class UploadPost {
   ) {
     if ( this.id ) this.action = 'modifyPost';
     else delete this['id'];
-    console.log('sending', this);
   };
 
   static fromPostForm(value: any, draft: boolean, id?: number) {
-    const documents = value.documents.filter((doc: any) => doc.fileData.content),
-      added = value.addedDocuments.filter((doc: any) => doc.fileData.content),
-      allDocs = [...documents, ...added];
+    const documents: {fileData: File, name: string}[] = value.documents.filter((doc: any) => doc.fileData.content);
 
     const files: any = {};
-    allDocs.forEach(doc => {
+    documents.forEach(doc => {
       files[doc.name] = doc.fileData;
     });
     

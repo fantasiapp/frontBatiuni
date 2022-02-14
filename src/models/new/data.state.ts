@@ -1,14 +1,14 @@
 import { Injectable } from "@angular/core";
 import { Action, createSelector, Selector, State, StateContext, StateOperator, Store } from "@ngxs/store";
 import { Observable, of, Subject } from "rxjs";
-import { concatMap, mergeMap, tap } from "rxjs/operators";
+import { concatMap, map, mergeMap, take, tap } from "rxjs/operators";
 import { HttpService } from "src/app/services/http.service";
 import { GetGeneralData } from "../data/data.actions";
-import { ChangeProfilePicture, ChangeProfileType, DownloadFile, GetUserData, ModifyUserProfile, UploadFile } from "../user/user.actions";
+import { ChangeProfilePicture, ChangeProfileType, DownloadFile, GetUserData, ModifyUserProfile, UploadFile, UploadPost } from "../user/user.actions";
 import { Company, Interface, User } from "./data.interfaces";
 import { DataReader, NameMapping } from "./data.mapper";
 import { Record, DataTypes } from "./data.interfaces";
-import { addValues, compose, deleteIds, pushChildValues } from "./state.operators";
+import { addValues, compose, deleteIds, pushChildIds, pushChildValues } from "./state.operators";
 import produce from "immer";
 import { Logout } from "../auth/auth.actions";
 import { InfoService } from "src/app/shared/components/info/info.component";
@@ -201,10 +201,11 @@ export class DataState {
           throw response['messages'];
         
         delete response[picture.action];
+        console.log('response', response);
         ctx.setState(compose(
           deleteIds('File', image ? [image.id] : []),
           addValues('File', response),
-          pushChildValues('Company', profile.company.id, 'File', response)
+          pushChildValues('Company', profile.company.id, 'File', response, 'nature'),
         ));
       })
     )
@@ -231,13 +232,12 @@ export class DataState {
         if ( response[upload.action] !== 'OK' )
           throw response['messages'];
         delete response[upload.action];
-
-        console.log('>>', response);
         
-        const assignedId = Object.keys(response)[0],
+        const assignedId = +Object.keys(response)[0],
           fields = ctx.getState()['fields'],
           contentIndex = fields['File'].indexOf('content');
         
+        upload.assignedId = assignedId;
         response[assignedId][contentIndex] = upload.fileBase64;
         if ( upload.category == 'Company' ) {
           //add it to company
@@ -248,6 +248,44 @@ export class DataState {
       })
     )
   };
+
+  @Action(UploadPost)
+  createPost(ctx: StateContext<DataModel>, post: UploadPost) {
+    const profile = this.store.selectSnapshot(DataQueries.currentProfile),
+      {files, ...form} = post,
+      uploads = Object.keys(files).map(
+        key => new UploadFile<"Post">(files[key], 'post', key, 'Post')
+      ),
+      req = this.http.post('data', form);
+    
+    return req.pipe(
+      map((response: any) => {
+        if ( response[post.action] !== 'OK' ) throw response['messages'];
+        delete response[post.action];
+        
+        //add post, return its id
+        const assignedId = +Object.keys(response)[0];
+        ctx.setState(
+          pushChildValues('Company', profile.company.id, 'File', response)
+        );
+        
+        console.log('post has assigned id', assignedId);
+        return assignedId;
+      }),
+      concatMap((postId: number) => {
+        uploads.forEach(upload => upload.target = postId);
+        console.log('now uploads are', uploads);
+        //return this to wait for file downloads first
+        ctx.dispatch(uploads)
+          .pipe(take(1)).subscribe(() => {
+            console.log('upload finished', uploads, uploads.map(upload => upload.assignedId));
+            ctx.setState(pushChildIds('Post', postId, 'File', uploads.map(upload => upload.assignedId!)))
+        });
+
+        return of(true);
+      }),
+    )
+  }
 
   @Action(DownloadFile)
   downloadFile(ctx: StateContext<DataModel>, download: DownloadFile) {
@@ -412,12 +450,12 @@ export class DataQueries {
   };
 
   static getProfileImage(id: number) {
-    return createSelector( [DataState.fields, DataQueries.getDataById('Company', id), DataState.getType('File')],
+    return createSelector( [DataState.fields, DataQueries.getDataById('Company', id), DataState.files],
       (fields: Record<string[]>, company: any[], files: any[]) => {
         const filesIndex = fields['Company'].indexOf('File'),
           natureIndex = fields['File'].indexOf('nature'),
           fileIds = company?.[filesIndex] || [];
-        
+                
         for ( let id of fileIds )
           if ( files[id][natureIndex] == 'userImage' )
             return DataQueries.toJson(fields, 'File', id, files[id]);

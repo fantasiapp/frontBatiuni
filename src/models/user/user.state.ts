@@ -239,13 +239,13 @@ export class UserState {
 
         console.log(uploads);
         uploads.forEach(upload => {
-          upload.id = post.id;
+          upload.assignedId = post.id;
         });
 
         return ctx.dispatch(uploads).pipe(map(() => post));
       }),
       concatMap((post: any) => {
-        post.setField('Files', uploads.map(({id}) => FilesRow.getById(id!)));
+        post.setField('Files', uploads.map(({assignedId}) => FilesRow.getById(assignedId!)));
         ctx.patchState({profile: UserProfileRow.getById(profile!.id).serialize()});
         return of(true);
       })
