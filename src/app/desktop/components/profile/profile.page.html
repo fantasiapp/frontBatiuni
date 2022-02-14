@@ -72,13 +72,14 @@
                 <button class="button passive">DELETE</button>
               </div>  
             </popup>
-          <step direction="vertical" [tacheList]="[
+          <!-- <step direction="vertical" [tacheList]="[
             {name: 'Infos Personelles'},
             {name: 'Infos entreprise'},
             {name: 'Certifications & labels'}
-          ]" #stepper style="margin-bottom: 40px;"></step>
-          <modify-profile-form [user]="user.profile!"
-           [animate]="false" [index]="stepper.tacheIndex" #modifyProfile>
+          ]" #stepper style="margin-bottom: 40px;"></step> -->
+          <stepper-sys type="H" #stepper [margin]="15" [testList]="['Infos Personelles','Infos entreprise','Certifications & labels']" ></stepper-sys>
+          <modify-profile-form [user]="user.profile!" 
+           [animate]="false" [index]="stepper.currentIndex" #modifyProfile>
           </modify-profile-form>
           <button [disabled]="(!modifyProfile.form.touched || modifyProfile.form.invalid) || null"
           class="flex center full-width button active" (click)="modifyProfile.onSubmit()">Enregistrer</button>
@@ -132,7 +133,7 @@
     </section>
     <section class="filters" *ngIf="activeView==3">
       <div class="header">
-        <img src="assets/Filtrer par.svg"/>
+        <img src="assets/Filter.svg"/>
          Filtrer par
       </div>
       <online-filter-form></online-filter-form>

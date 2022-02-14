@@ -4,12 +4,17 @@
   </tabs>
   
   <div class="web-page">
+
     <section class="filters">
       <sos-filter-form></sos-filter-form>
     </section>
     
     <section class="main web-content font-Poppins">
-      <searchbar></searchbar>
+      <div class="flex row center ">
+        <searchbar></searchbar> 
+        <img class="filterOnly" (click)="showFilters = !showFilters" src="assets/Filter.svg">
+      </div>
+
       <ng-container [ngSwitch]="activeView">
         <ng-container *ngSwitchCase="0">
       <div class="report-search">
@@ -31,4 +36,11 @@
     </ng-container>
     </ng-container>
     </section>
+    <div *ngIf="showFilters" class="showFilters flex center column" [@enterAnimation]>
+      <div class="flex close">
+        <img (click)="showFilters = !showFilters" src="assets/X-ICON.svg" >
+      </div>
+      <sos-filter-form></sos-filter-form>
+    </div>
   </div>
+

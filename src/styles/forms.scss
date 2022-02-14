@@ -155,6 +155,7 @@
   font-family: "Poppins";
   position: relative;
 
+
   &:focus-within {
     label { color: #2980b9; }
     & > .form-element { border-bottom-color: #2980b9 !important; }
@@ -192,6 +193,7 @@
     height: 30px;
     outline: none;
     border: none;
+    color: #4c4c4c;
   }
   
   select {
