@@ -8,7 +8,7 @@ import { ApplyPost, ChangePassword, ChangeProfilePicture, ChangeProfileType, Del
 import { Company, Interface, User } from "./data.interfaces";
 import { DataReader, NameMapping } from "./data.mapper";
 import { Record, DataTypes } from "./data.interfaces";
-import { addValues, compose, deleteIds, pushChildValues, transformField } from "./state.operators";
+import { addValues, compose, deleteIds, pushChildValues, replaceChildValues, transformField } from "./state.operators";
 import { Logout } from "../auth/auth.actions";
 import { InfoService } from "src/app/shared/components/info/info.component";
 import { GetCompanies } from "./search/search.actions";
@@ -294,7 +294,7 @@ export class DataState {
         //add post, return its id
         const assignedId = +Object.keys(response)[0];
         ctx.setState(
-          pushChildValues('Company', profile.company.id, 'Post', response)
+          replaceChildValues('Company', profile.company.id, 'Post', response)
         );
         
         console.log('post has assigned id', assignedId);
@@ -412,7 +412,7 @@ export class DataState {
           //i really hate doing this
           //but then why send french names while everything else is in english ?
           produce((draft: any) => {
-            draft.fields['Establishments'] = ['name', 'address', 'principalActivity', 'siret', 'NTVAI'];
+            draft.fields['Establishments'] = ['name', 'address', 'activity', 'siret', 'ntva'];
             return draft;
           })
         ));
@@ -440,7 +440,6 @@ export class DataQueries {
     } else {
       output.name = values;
     }
-    
 
     output.id = id;
 

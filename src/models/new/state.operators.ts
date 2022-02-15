@@ -89,6 +89,19 @@ namespace mutable {
     parentObject[childIndex].push(...ids);
   }
 
+  export function replaceChildValues<K extends DataTypes>(draft: any, parent: DataTypes, parentId: number, child: K, values: Record<any>) {
+    //Add children
+    const ids = Object.keys(values).map(id => +id);
+    mutable.replace(draft, child, values);
+
+    //add to parent
+    const parentObject = draft[parent]?.[parentId],
+      childIndex = draft.fields[parent].indexOf(child);
+    if ( !parentObject || childIndex <= -1 ) return;
+
+    parentObject[childIndex] = ids;
+  }
+
   export function pushChildIds<K extends DataTypes>(draft: any, parent: DataTypes, parentId: number, child: K, ids: number[]) {
     const parentObject = draft[parent]?.[parentId],
       childIndex = draft.fields[parent].indexOf(child);
@@ -142,8 +155,13 @@ export function replace(target: DataTypes, values: any) {
 export function pushChildIds<K extends DataTypes>(parent: DataTypes, parentId: number, child: K, ids: number[]) {
   return produce(draft => mutable.pushChildIds(draft, parent, parentId, child, ids));
 };
+
 export function pushChildValues<K extends DataTypes>(parent: DataTypes, parentId: number, child: K, values: Record<any>, uniqueBy?: keyof Interface<K>) {
   return produce(draft => mutable.pushChildValues(draft, parent, parentId, child, values, uniqueBy));
+};
+
+export function replaceChildValues<K extends DataTypes>(parent: DataTypes, parentId: number, child: K, values: Record<any>) {
+  return produce(draft => mutable.replaceChildValues(draft, parent, parentId, child, values));
 };
 
 export function transformField<K extends DataTypes, V extends keyof Interface<K>>(target: K, id: number, field: V, transform: (value: RepresentedType<K, V>, object: any[], fields: string[]) => RepresentedType<K, V>) {
