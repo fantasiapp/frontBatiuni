@@ -7,6 +7,7 @@
   right: 0;
   display: flex;
   transition: all 100ms ease-out 0s;
+  overflow-y: hidden;
 }
 
 :host(.delete) {
