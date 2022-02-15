@@ -80,7 +80,6 @@ namespace mutable {
     if ( !parentObject || childIndex <= -1 ) return;
 
     if ( uniqueBy ) {
-      console.log('will remove duplicates by', uniqueBy);
       const uniqueIndex = draft.fields[child].indexOf(uniqueBy);
       if ( uniqueIndex !== void 0 )
         parentObject[childIndex] = removeDuplicates(draft, child, parentObject[childIndex], ids, uniqueIndex);
@@ -89,7 +88,7 @@ namespace mutable {
     parentObject[childIndex].push(...ids);
   }
 
-  export function replaceChildValues<K extends DataTypes>(draft: any, parent: DataTypes, parentId: number, child: K, values: Record<any>) {
+  export function updateChildValues<K extends DataTypes>(draft: any, parent: DataTypes, parentId: number, child: K, values: Record<any>) {
     //Add children
     const ids = Object.keys(values).map(id => +id);
     mutable.replace(draft, child, values);
@@ -99,7 +98,9 @@ namespace mutable {
       childIndex = draft.fields[parent].indexOf(child);
     if ( !parentObject || childIndex <= -1 ) return;
 
-    parentObject[childIndex] = ids;
+    for ( const id of ids )
+      if ( !parentObject[childIndex].includes(id) )
+        parentObject[childIndex].push(id);
   }
 
   export function pushChildIds<K extends DataTypes>(draft: any, parent: DataTypes, parentId: number, child: K, ids: number[]) {
@@ -160,8 +161,8 @@ export function pushChildValues<K extends DataTypes>(parent: DataTypes, parentId
   return produce(draft => mutable.pushChildValues(draft, parent, parentId, child, values, uniqueBy));
 };
 
-export function replaceChildValues<K extends DataTypes>(parent: DataTypes, parentId: number, child: K, values: Record<any>) {
-  return produce(draft => mutable.replaceChildValues(draft, parent, parentId, child, values));
+export function updateChildValues<K extends DataTypes>(parent: DataTypes, parentId: number, child: K, values: Record<any>) {
+  return produce(draft => mutable.updateChildValues(draft, parent, parentId, child, values));
 };
 
 export function transformField<K extends DataTypes, V extends keyof Interface<K>>(target: K, id: number, field: V, transform: (value: RepresentedType<K, V>, object: any[], fields: string[]) => RepresentedType<K, V>) {

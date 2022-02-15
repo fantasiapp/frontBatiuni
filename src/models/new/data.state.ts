@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { Action, createSelector, Selector, State, StateContext, StateOperator, Store } from "@ngxs/store";
+import { Action, createSelector, Selector, State, StateContext, Store } from "@ngxs/store";
 import { Observable, of, Subject } from "rxjs";
 import { concatMap, map, tap } from "rxjs/operators";
 import { HttpService } from "src/app/services/http.service";
@@ -8,7 +8,7 @@ import { ApplyPost, ChangePassword, ChangeProfilePicture, ChangeProfileType, Del
 import { Company, Interface, User } from "./data.interfaces";
 import { DataReader, NameMapping } from "./data.mapper";
 import { Record, DataTypes } from "./data.interfaces";
-import { addValues, compose, deleteIds, pushChildValues, replaceChildValues, transformField } from "./state.operators";
+import { addValues, compose, deleteIds, pushChildValues, updateChildValues, transformField } from "./state.operators";
 import { Logout } from "../auth/auth.actions";
 import { InfoService } from "src/app/shared/components/info/info.component";
 import { GetCompanies } from "./search/search.actions";
@@ -294,7 +294,7 @@ export class DataState {
         //add post, return its id
         const assignedId = +Object.keys(response)[0];
         ctx.setState(
-          replaceChildValues('Company', profile.company.id, 'Post', response)
+          updateChildValues('Company', profile.company.id, 'Post', response)
         );
         
         console.log('post has assigned id', assignedId);
