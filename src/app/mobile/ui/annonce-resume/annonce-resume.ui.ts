@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
 import { Store } from "@ngxs/store";
 import { PopupService } from "src/app/shared/components/popup/popup.component";
-import { Company, Post, File, PostDetail } from "src/models/new/data.interfaces";
+import { Company, Post, File, PostDetail, Job } from "src/models/new/data.interfaces";
 import { DataQueries } from "src/models/new/data.state";
 
 @Component({
@@ -26,7 +26,7 @@ import { DataQueries } from "src/models/new/data.state";
       <div class="needs">
         <span class="title text-emphasis">Nous avons besoin de:</span>
         <ul>
-          <li>{{post?.numberOfPeople || 1}} {{post?.job?.name}} </li>
+          <li>{{post?.numberOfPeople || 1}} {{job?.name || 'Employé'}} </li>
           <li>Du {{ post?.hourlyStart }} Au {{ post?.hourlyEnd }}</li>
         </ul>
         <span><small>Date d’échéance Le {{ toLocateDate(post?.dueDate) }}</small></span>
@@ -70,6 +70,9 @@ export class UIAnnonceResume {
   }
 
   company: Company | null = null;
+  job: Job | null = null;
+  files: File[] = [];
+  details: PostDetail[] = [];
 
   private _post: Post | null = null;
   get post(): any { return this._post; }
@@ -78,10 +81,8 @@ export class UIAnnonceResume {
     this.company = p ? this.store.selectSnapshot(DataQueries.getById('Company', p.company)) : null;
     this.files = p ? this.store.selectSnapshot(DataQueries.getMany('File', p.files)) : [];
     this.details = p ? this.store.selectSnapshot(DataQueries.getMany('DetailedPost', p.details)) : [];
+    this.job = p ? this.store.selectSnapshot(DataQueries.getById('Job', p.job)) : null;
   }
-
-  files: File[] = [];
-  details: PostDetail[] = [];
 
   constructor(private store: Store, private popup: PopupService) {}
 

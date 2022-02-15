@@ -184,6 +184,7 @@ export class DataState {
         delete response[modify.action];
 
         ctx.setState(compose(...this.reader.readUpdates(response)));
+        console.log(ctx.getState());
       }),
       concatMap(() => {
         console.log('upload files');
