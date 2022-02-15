@@ -50,6 +50,7 @@ import { UITooltipComponent } from "./components/tooltip/tooltip.component";
 import { ProfileCardComponent } from "./components/profile-card/profile.card";
 import { CastPipe, SnapshotPipe } from "./pipes/cast.pipe";
 import { SpreadPipe } from "./pipes/spread.pipe";
+import { ExtendedProfileComponent } from "./components/extended-profile/extended-profile.component";
 
 @NgModule({
   declarations: [
@@ -101,7 +102,8 @@ import { SpreadPipe } from "./pipes/spread.pipe";
     ProfileCardComponent,
     CastPipe,
     SpreadPipe,
-    SnapshotPipe
+    SnapshotPipe,
+    ExtendedProfileComponent
   ],
   imports: [
     CommonModule,
@@ -160,7 +162,8 @@ import { SpreadPipe } from "./pipes/spread.pipe";
     ProfileCardComponent,
     CastPipe,
     SpreadPipe,
-    SnapshotPipe
+    SnapshotPipe,
+    ExtendedProfileComponent
   ],
   providers: [ImageGenerator]
 })

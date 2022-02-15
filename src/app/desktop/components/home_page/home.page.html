@@ -1,5 +1,5 @@
 <ng-container *ngIf="(view$ | async) as view">
-  <ng-container *ngIf="(user$ | async) as user">
+  <ng-container *ngIf="(profile$ | async) as profile">
     <tabs [tabs]="view == 'PME' ? 3 : 2" [(activeView)]="activeView" bottom>
       <span tab_0>{{ view == 'PME' ? 'Brouillon' : 'Vue liste' }}</span>
       <span tab_1>{{ view == 'PME' ? 'En ligne' : 'Carte' }}</span>
@@ -28,16 +28,16 @@
           <div class="results space-children-margin">
             <ng-container [ngSwitch]="activeView">
               <ng-container *ngSwitchCase="0">
-                <!-- <offer *ngFor="let draft of userDrafts" src="assets/brouillon.svg" [deletable]="true" [post]="draft"
-                  (click)="openPost(draft)" [routerLink]="['','home','make',draft.id]"></offer> -->
+                <offer *ngFor="let draft of userDrafts" src="assets/brouillon.svg" [deletable]="true" [post]="draft"
+                  [routerLink]="['','home','make',draft.id]"></offer>
               </ng-container>
               <ng-container *ngSwitchCase="1">
-                <!-- <offer *ngFor="let onlinePost of userOnlinePosts" [deletable]="false" [post]="onlinePost"
-                  (click)="showPostResumer(onlinePost,'enligne')" src="assets/enligne.svg"></offer> -->
+                <offer *ngFor="let onlinePost of userOnlinePosts" [deletable]="false" [post]="onlinePost"
+                  (click)="showPostResumer(onlinePost,'enligne')" src="assets/enligne.svg"></offer>
               </ng-container>
               <ng-container *ngSwitchCase="2">
-                <offer [deletable]="false" *ngFor="let mission of annonces" (click)="showPostResumer(mission,'valider')"
-                  src="assets/validée.svg"></offer>
+                <!-- <offer [deletable]="false" *ngFor="let mission of annonces" (click)="showPostResumer(mission, 'valider')"
+                  src="assets/validée.svg"></offer> -->
               </ng-container>
             </ng-container>
           </div>
@@ -48,16 +48,16 @@
       <ng-template #stview>
         <ng-container [ngSwitch]="activeView">
           <ng-container *ngSwitchCase="0">
-            <section class="main web-content font-Poppins ">
+            <section class="main web-content font-Poppins">
               <div class="flex row center">
-              <searchbar placeholder="Recheche liste...">
-              </searchbar>
-              <img class="filterOnly" (click)="showFilters = !showFilters" src="assets/Filter.svg">
-            </div>
+                <searchbar placeholder="Recheche liste...">
+                </searchbar>
+                <img class="filterOnly" (click)="showFilters = !showFilters" src="assets/Filter.svg">
+              </div>
               <div class="report-search">
                 Resultat <span class="no-result">{{ allOnlinePosts.length }}</span>
               </div>
-              <offer *ngFor="let onlinePost of allOnlinePosts" [deletable]="false"
+              <offer *ngFor="let onlinePost of allOnlinePosts" [deletable]="false" [post]="onlinePost"
                 (click)="showPostResumer(onlinePost,'enligne')" src="assets/enligne.svg"></offer>
             </section>
           </ng-container>
@@ -69,14 +69,14 @@
     </div>
 
     <div class="full-screen" *ngIf="showValidePost">
-      <desktop-stickyH [user]="user" [navigation]="false" class="nav-left">
+      <desktop-stickyH [profile]="profile" [navigation]="false" class="nav-left">
         <div class="nav-back flex row center-cross " (click)="showValidePost = false" style="cursor: pointer;">
           <img src="assets/arrow_left.svg" />
           <span class="lighter">{{view == 'PME' ? "Annonces validées" : "Liste"}}</span>
         </div>
       </desktop-stickyH>
-      
-      <company-info ></company-info>
+
+      <company-info [profile]="profile$"></company-info>
       <div class="web-page">
 
         <section class="filters">
@@ -85,18 +85,16 @@
 
         <!-- Validee -->
         <section class="main web-content font-Poppins space-children-margin  addMargin responsive"
-          *ngIf="resumerType == 'valider';else valider">
+          *ngIf="resumerType == 'valider';else enlgine">
           <h1 class="title-with-line">Résumé de la mission</h1>
           <div class="description">
             <ul>
-              <li>{{postResumer?.numberOfPeople || 1}} {{postResumer?.job?.name}} </li>
+              <!-- <li>{{postResumer?.numberOfPeople || 1}} {{postResumer?.job?.name}} </li> -->
               <li>Du {{ postResumer?.hourlyStart }} Au {{ postResumer?.hourlyEnd }}</li>
             </ul>
             <ul>
-              <!-- Nom du profile -->
-              <!-- Date echeance -->
 
-              <li *ngFor="let detail of (postResumer?.details || [])">{{detail.content}}</li>
+              <!-- <li *ngFor="let detail of (postResumer?.details || [])">{{detail.content}}</li> -->
             </ul>
           </div>
           <h1 class="title-with-line">Le contrat</h1>
@@ -113,12 +111,12 @@
 
         <!-- Enlgine -->
 
-        <ng-template #valider>
+        <ng-template #enlgine>
           <section class="main web-content font-Poppins space-children-margin addMargin responsive">
             <span class="title-with-line">Nous avons besoin de</span>
             <div class="description">
               <ul class="small-space-children-margin">
-                <li>{{postResumer?.numberOfPeople || 1}} {{postResumer?.job?.name}} </li>
+                <li>{{postResumer?.numberOfPeople || 1}} {{(postResumerJob | snapshot).name}} </li>
                 <li>Du {{ postResumer?.hourlyStart }} Au {{ postResumer?.hourlyEnd }}</li>
               </ul>
               <!-- Nom du profile -->
@@ -127,24 +125,31 @@
 
             <span class="title-with-line">Description des missions</span>
             <div class="description">
-              <!-- <span class="title text-emphasis"></span> -->
-              <!-- Desctiption des mission hors taches -->
+              <p>{{postResumer?.description || 'Description de la mission'}}</p>
+
               <ul class="small-space-children-margin">
-                <li *ngFor="let detail of (postResumer?.details || [])">{{detail.content}}</li>
+                <li *ngFor="let detail of (postResumerDetails | snapshot)">{{detail.content}}</li>
               </ul>
             </div>
             <span class="title-with-line">Documents</span>
             <div class="documents">
               <ul class="small-space-children-margin">
-                <li *ngFor="let file of postResumer?.files">
+                <li *ngFor="let file of (postResumerFiles | snapshot)">
                   <a>{{file.name}}</a>
                 </li>
               </ul>
             </div>
             <span class="title-with-line notif" *ngIf="view == 'PME'"
-              [attr.data-notification-number]="(candidateData || []).length">Réponses</span>
-            <reponse-card (click)="testPopup()" class="full-width" *ngFor="let company of candidateData"
-              [company]="company"></reponse-card>
+              [attr.data-notification-number]="postResumerCandidates.length">Réponses</span>
+
+            <div class="showcard">
+              hello
+              <div class="unshown">
+                <extended-profile [profile]="profile"></extended-profile>
+              </div>
+            </div>
+            <reponse-card (click)="testPopup()" class="full-width"
+              *ngFor="let candidate of (postResumerCandidates | snapshot)" [profile]="candidate.company"></reponse-card>
           </section>
         </ng-template>
         <section class="transparent flex center" *ngIf="resumerType == 'valider';else options">
@@ -171,7 +176,8 @@
             <section class="flex column center space-children-margin transparent">
               <ul class="options-list space-children-margin">
                 <li class="flex row center-cross">LE POSTE</li>
-                <li class="flex row center-cross"><img src="assets/Job.svg" />{{ postResumer?.job?.name }}</li>
+                <li class="flex row center-cross"><img src="assets/Job.svg" />{{ (postResumerJob | snapshot).name }}
+                </li>
                 <li class="flex row center-cross"><img src="assets/Dates.svg" />{{postResumer?.dueDate}}</li>
                 <li class="flex row center-cross"><img src="assets/Adresse.svg" />{{postResumer?.address}}</li>
 

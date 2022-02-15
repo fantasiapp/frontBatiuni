@@ -1,46 +1,32 @@
-
-<!-- <div class="companyinfo">
-  <div class="company-logo flex center">
-    <img src="assets/enligne.svg" />
-  </div>
-  <div class="company-text">
-    <span class="weight twenty">COMPANY NAME</span> 
-
-    <div class="company-data">
-      <span class="weight">N SIRET : <span class="value">000</span></span>
-      <span class="weight">Métier : <span class="value">Maitre d'oeuvre</span></span>
-      <span class="weight">Chiffres d'affaires: <span class="value">74100 $</span> </span>
-    </div>
-</div>
-</div> -->
-<company-info></company-info>
+<company-info [profile]="post?.company || profile$"></company-info>
 <div class="web-page ">
   <section class="filters">
     <div class="header">
-      <step ></step>
+      <step></step>
     </div>
 
   </section>
-  
+
   <section class="main web-content font-Poppins space">
     <div class="full-width flex column">
-    <ad-form class="adform " [page]="false" #addForm></ad-form> 
-    <!-- <div class="info-bar space-children-margin">
-    <button class="button active">HEY</button>
-    <button class="button passive">HEY</button>
-    </div> -->
-    <div class="hiden-action flex  space-around center">
-      <button class="button active" (click)="addForm.submit(false)" [disabled]="!addForm.makeAdForm.valid">Valider</button>
-      <button class="button passive" (click)="addForm.submit(true)" [disabled]="!addForm.makeAdForm.valid">Brouillon</button>
+      <ad-form class="adform " [page]="false" [post]="post" #addForm></ad-form>
+
+      <div class="hiden-action flex  space-around center">
+        <button class="button active" (click)="addForm.submit(false)"
+          [disabled]="!addForm.makeAdForm.valid">Valider</button>
+        <button class="button passive" (click)="addForm.submit(true)"
+          [disabled]="!addForm.makeAdForm.valid">Brouillon</button>
+      </div>
     </div>
-  </div>
   </section>
 
   <section class="info-sec flex">
     <div class="flex info space-children-margin">
-    <button class="button active" (click)="addForm.submit(false)" [disabled]="!addForm.makeAdForm.valid">Valider</button>
-    <button class="button passive" (click)="addForm.submit(true)" [disabled]="!addForm.makeAdForm.valid">Brouillon</button>
-  </div>
+      <button class="button active" (click)="addForm.submit(false)"
+        [disabled]="!addForm.makeAdForm.valid">Valider</button>
+      <button class="button passive" (click)="addForm.submit(true)"
+        [disabled]="!addForm.makeAdForm.valid">Brouillon</button>
+    </div>
   </section>
   <!-- <section class="info flex">
     <h1>hey</h1>

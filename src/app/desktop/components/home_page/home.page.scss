@@ -49,9 +49,7 @@ tabs {
     font-weight: 500;
   }
 }
-
-offer:hover {
-  transform: scale(1.02);
+offer::ng-deep {
   cursor: pointer;
 }
 
@@ -213,9 +211,6 @@ $options: 26px;
 .whiter-bg {
   background-color: #ffffff !important;
 }
-pme-filter-form::ng-deep {
-  // overflow-y: auto !important;
-}
 
 .lighter {
   font-weight: 300 !important;
@@ -226,7 +221,7 @@ pme-filter-form::ng-deep {
   padding: 2rem;
   box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
   width: 30vw;
-  height: calc(100vh - 210px);
+  height: calc(100vh - 210px) !important;
   left: 0;
   top: 210px;
   position: absolute;
@@ -252,4 +247,20 @@ mapbox-batiuni::ng-deep {
     width: 100vw !important;
     left : 0 !important;
   }
+}
+.showcard:hover{
+  .unshown {
+    display: block !important;
+  }
+}
+.unshown {
+  display: none;
+  position: absolute;
+  max-width: 701px;
+  width: 700px;
+  max-height: fit-content;
+  bottom: 0 ;
+  height: 800px;
+  background-color: white;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
 }

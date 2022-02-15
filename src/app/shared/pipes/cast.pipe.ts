@@ -16,7 +16,7 @@ export class CastPipe implements PipeTransform {
   pure: true
 })
 export class SnapshotPipe implements PipeTransform {
-  transform<T>(value: number | T | Observable<T>, ...args: any[]): T {
+  transform<T>(value: number | number[] | T, ...args: any[]): T {
     return value as T;
   }
 };

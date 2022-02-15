@@ -4,7 +4,7 @@ import { PropertyTrap } from "src/app/shared/common/classes";
 import { getDirtyValues } from "src/app/shared/common/functions";
 import { DisponibilityRow, JobForCompanyRow, JobRow, LabelForCompanyRow, LabelRow, UserProfileRow } from "../data/data.model";
 import { Availability, CalendarUI } from "src/app/shared/components/calendar/calendar.ui";
-import { DataTypes } from "../new/data.interfaces";
+import { DataTypes, Profile } from "../new/data.interfaces";
 
 export class ChangeProfileType {
   static readonly type = '[User] Change Profile Type';
@@ -44,7 +44,7 @@ export class ModifyUserProfile {
   adminFiles: any = {};
   
   //for now we mark job as dirty, but we should take it directly from the form
-  constructor({profile, form}: {profile: UserProfileRow, form: FormGroup}) {    
+  constructor({profile, form}: {profile: Profile, form: FormGroup}) {    
     const changes = getDirtyValues(form);
     if ( Object.keys(changes).length == 0 ) return;
 
@@ -82,7 +82,7 @@ export class ModifyUserProfile {
     
     const proxy = new Proxy(this, PropertyTrap);
     //write directly on this object
-    proxy['UserProfile.id'] = profile.id;
+    proxy['UserProfile.id'] = profile.user!.id;
     for ( const [field, value] of Object.entries<any>(changes) ) 
       proxy[field] = value;
   }

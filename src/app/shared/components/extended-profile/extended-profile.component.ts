@@ -14,7 +14,7 @@ import { CastPipe } from "src/app/shared/pipes/cast.pipe";
 @Component({
   selector: 'extended-profile',
   templateUrl: './extended-profile.component.html',
-  styleUrls: ['../profile/profile.component.scss'],
+  styleUrls: ['../../../mobile/components/profile/profile.component.scss','desktop.extended.scss'],
   styles: [':host { overflow-y: auto; }'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

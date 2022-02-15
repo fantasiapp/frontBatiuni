@@ -247,7 +247,7 @@ export class ModifyProfileForm {
   onSwipeRight() { this.slider.right(); }
 
   //outputs
-  onSubmit() { this.submit.emit(this.form); console.log(this.form)}
+  onSubmit() { this.submit.emit(this.form);}
   @Output() submit = new EventEmitter<FormGroup>();
 
   @Input() index: number = 0;
@@ -373,6 +373,7 @@ export class ModifyProfileForm {
   }
   
   async ngOnInit() {
+    console.log(this.profile)
     let permissions  = await Camera.checkPermissions();
     if ( permissions.camera != 'granted' || permissions.photos != 'granted' )
       try {

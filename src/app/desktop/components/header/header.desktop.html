@@ -1,9 +1,10 @@
-<header class="sticky-desktop-header" >
+<ng-container *ngIf="(profile$ | async) as profile">
+<header class="sticky-desktop-header">
   <div class="home-page flex row center-main">
     <a href="#"><img class="logo" src="assets/logo-approx.png"/></a>
   </div>
   <div class="profile-actions center-cross space-between flex">
-    <switch off="Profile ST" class=" white-spacing" on="Profil PME"  style="text-align: center;" [value]="user.viewType" (valueChange)="changeProfileType($event)"></switch>
+    <switch off="Profile ST" class=" white-spacing" on="Profil PME"  style="text-align: center;" [value]="(view$ | async) == 'PME'" (valueChange)="changeProfileType($event)"></switch>
     <!-- Notifications -->
     <div class="notification flex center-cross">
       <img class="invert" src="assets/notification.svg"/>
@@ -12,9 +13,10 @@
       </div>
     </div>
     <!-- Profile Image -->
-    <img class="offres-logo " [src]="src"/>
+    <profile-image [profile]="profile" style="display: none;" #profileImage></profile-image>
+    <img class="offres-logo " [src]="profileImage.src"/>
     <!-- User full name -->
-    <h5 class="username">{{ (user.profile!.firstName + " " + user.profile!.lastName) | titlecase }}</h5>
+    <h5 class="username">{{ (profile.user?.firstName + ' ' +  profile.user?.lastName) | titlecase }}</h5>
     <!-- Drop Down menu -->
     <div class="dropdown flex">
       <button  > <img class="dropdown-action" src="assets/arrowdown.svg" />
@@ -33,7 +35,7 @@
   </div>
   <ng-content></ng-content>
 </section>
-
+</ng-container>
 <!-- <section  class="flex" style="padding:5rem;">
   <step></step>
 </section> -->

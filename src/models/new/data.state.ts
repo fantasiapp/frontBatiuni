@@ -282,7 +282,7 @@ export class DataState {
         //add post, return its id
         const assignedId = +Object.keys(response)[0];
         ctx.setState(
-          pushChildValues('Company', profile.company.id, 'File', response)
+          pushChildValues('Company', profile.company.id, 'Post', response)
         );
         
         console.log('post has assigned id', assignedId);

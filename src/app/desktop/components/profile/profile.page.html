@@ -3,7 +3,7 @@
   <span tab_0>PME</span>
   <span tab_1>SOUS-TRAITANCE</span>
 </tabs>
-<ng-container *ngIf="(user$ | async) as user">
+<!-- <ng-container *ngIf="(user$ | async) as user"> -->
   <div class="web-page">
     <section class="action-menu">
       <ul>
@@ -27,18 +27,19 @@
 
       <ng-container [ngSwitch]="activeView">
         <ng-container *ngSwitchCase="0">
-          <profile-resume class="flex row center-cross space-around" [profile]="profile" ></profile-resume>
+          <extended-profile [profile]="profile"></extended-profile>
+          <!-- <profile-resume class="flex row center-cross space-around" [profile]="profile" ></profile-resume>
           <section class="job-description full-width space-children-margin">
 
             <span class="text-light-emphasis">Nom de l'entreprise : </span>
-            <span class="value">{{user.profile!.company.name}}</span>
+            <span class="value">{{profile.company?.name}}</span>
 
             <span class="text-light-emphasis">N SIRET : </span>
-            <span class="value">{{user.profile!.company.siret}}</span>
+            <span class="value">{{profile.company?.siret}}</span>
 
             <span class="text-light-emphasis">Métier : </span>
             <span>
-              <span *ngFor="let job of user.profile!.company.jobs!" class="value">{{ job.number }} {{ job.job.name }},
+              <span *ngFor="let job of profile.company.jobs!" class="value">{{ job.number }} {{ job.job.name }},
               </span>
             </span>
 
@@ -54,7 +55,7 @@
               <object type="image/svg+xml" data="assets/files/qualibat.svg"></object>
               <object type="image/svg+xml" data="assets/files/urssaf.svg"></object>
             </div>
-          </section>
+          </section> -->
         </ng-container>
         <ng-container *ngSwitchCase="1">
           <profile-resume class="flex row center-cross space-around" 
@@ -153,6 +154,6 @@
     </div>
     <online-filter-form ></online-filter-form>
   </div>
-</ng-container>
+<!-- </ng-container> -->
 
 </ng-container>

@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, HostListener, Input } from "@angular/core";
 import { Store } from "@ngxs/store";
 import { Observable } from "rxjs";
-import { ExtendedProfileComponent } from "src/app/mobile/components/extended-profile/extended-profile.component";
 import { Company, Job } from "src/models/new/data.interfaces";
 import { DataQueries, Snapshot } from "src/models/new/data.state";
 import { SlidemenuService } from "../slidemenu/slidemenu.component";

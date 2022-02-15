@@ -3,18 +3,17 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, TemplateRef, Vie
 import { FormControl, FormGroup } from "@angular/forms";
 import { Select, Store } from "@ngxs/store";
 import { BehaviorSubject, combineLatest, Observable } from "rxjs";
-import { take } from "rxjs/operators";
+import { take, takeUntil } from "rxjs/operators";
 import { Destroy$ } from "src/app/shared/common/classes";
-import { filterSplit } from "src/app/shared/common/functions";
-import { Serialized } from "src/app/shared/common/types";
+import { splitByOutput } from "src/app/shared/common/functions";
 import { InfoService } from "src/app/shared/components/info/info.component";
 import { PopupService } from "src/app/shared/components/popup/popup.component";
-import { Company, CompanyRow, Post, PostRow } from "src/models/data/data.model";
-import { DataState } from "src/models/data/data.state";
 import { ApplyPost, DeletePost, SwitchPostType } from "src/models/user/user.actions";
 import { User } from "src/models/user/user.model";
 import { UserState } from "src/models/user/user.state";
-import { DataState as NewDataState } from 'src/models/new/data.state'
+import { DataQueries, DataState, QueryAll, Snapshot, SnapshotArray } from 'src/models/new/data.state'
+import { Candidate, Company, File, Job, Post, Profile } from "src/models/new/data.interfaces";
+import { PostDetail } from "src/models/data/data.model";
 
 type PostMenu = { open: boolean; post: Post | null; };
 
@@ -45,31 +44,46 @@ export class HomePageComponent extends Destroy$ {
   @ViewChild('testTemplate', { read: TemplateRef, static: true })
   testTemplate!: TemplateRef<any>;
 
+  @Select(DataQueries.currentProfile)
+  profile$!: Observable<Profile>;
+
   @Select(UserState)
   user$!: Observable<User>;
 
-  @Select(NewDataState.view)
+  @Select(DataState.view)
   view$!: Observable<"ST" | "PME">;
 
-  @Select(DataState.get('posts'))
+  @QueryAll('Post')
   posts$!: Observable<Post[]>;
+
+  //split the set all of posts into these (what we need)
+  private symbols = {
+    userDraft: 0, userOnlinePost: 1,
+    otherOnlinePost: 2, discard: -1
+  };
 
   constructor(private cd: ChangeDetectorRef, private store: Store, private info: InfoService, private popup: PopupService) {
     super()
   }
-  // Resumer d'annonce ------->
-  candidate: any;
-  candidateData: CompanyRow[] | undefined;
+
+  @Snapshot('Job') postResumerJob!: number | Job;
+  @SnapshotArray('Candidate') postResumerCandidates!: number[] | Candidate[];
+  @SnapshotArray('DetailedPost') postResumerDetails!: number[] | PostDetail[];
+  @SnapshotArray('File') postResumerFiles!: number[] | File[];
+
   showPostResumer(post: Post, type: resumerType) {
     this.resumerType = type;
     this.showValidePost = true
-    this.postResumer = PostRow.getById(+post.id).serialize();
-    this.companyResumer = this.postResumer ? PostRow.getCompany(this.postResumer) : null;
-    const candidate = this.userOnlinePosts.filter(chosen => chosen.id === post.id)
-    this.candidate = candidate.map(user => user.candidates)
-    this.candidateData = (this.candidate[0] || []).map((user: any) => {
-      return CompanyRow.getById(user.company).serialize()
-    })
+    this.postResumer = post;
+    this.postResumerJob = post.job;
+    this.postResumerCandidates = post.candidates;
+    this.postResumerDetails = post.details;
+    this.postResumerFiles = post.files;
+    // const candidate = this.userOnlinePosts.filter(chosen => chosen.id === post.id)
+    // this.candidate = candidate.map(user => user.candidates)
+    // this.candidateData = (this.candidate[0] || []).map((user: any) => {
+    //   return CompanyRow.getById(user.company).serialize()
+    // })
   }
   resumerType!: resumerType;
   companyResumer: Company | null = null;
@@ -97,20 +111,20 @@ export class HomePageComponent extends Destroy$ {
 
   getDrafts(user: User) { return user.profile?.company.posts.filter(post => post.draft); }
 
-  openPost(post: Serialized<PostRow>) {
-    this.editMenu = { open: true, post };
-  }
-
   ngOnInit() {
-    combineLatest([this.user$, this.posts$]).subscribe(([user, posts]) => {
-      this.userPosts = user.profile?.company.posts || [];
-      [this.userOnlinePosts, this.userDrafts] = filterSplit(this.userPosts, post => !post.draft);
-      const userOnlinePostsIds = this.userOnlinePosts.map(onlinePost => onlinePost.id);
+    combineLatest([this.profile$, this.posts$]).pipe(takeUntil(this.destroy$)).subscribe(([profile, posts]) => {
+      console.log('Profile', profile, 'post', posts)
+      const mapping = splitByOutput(posts, (post) => {
+        //0 -> userOnlinePosts | 1 -> userDrafts
+        if ( profile.company.posts.includes(post.id) )
+          return post.draft ? this.symbols.userDraft : this.symbols.userOnlinePost; 
+        
+        return post.draft ? this.symbols.discard : this.symbols.otherOnlinePost;
+      });
 
-      this.allOnlinePosts = posts.filter(post => !post.draft).filter(post => !userOnlinePostsIds.includes(post.id));
-      console.log(this.allOnlinePosts)
-      this.userOnlinePosts.reverse();
-      this.userDrafts.reverse();
+      this.userDrafts = mapping.get(this.symbols.userDraft) || [];
+      this.userOnlinePosts = mapping.get(this.symbols.userOnlinePost) || [];
+      this.allOnlinePosts = mapping.get(this.symbols.otherOnlinePost) || [];
     });
   }
 

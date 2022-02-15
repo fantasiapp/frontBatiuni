@@ -1,6 +1,9 @@
 import { ChangeDetectionStrategy, Component } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { Post, PostRow } from "src/models/data/data.model";
+import { Select, Store } from "@ngxs/store";
+import { Observable } from "rxjs";
+import { Post, Profile } from "src/models/new/data.interfaces";
+import { DataQueries } from "src/models/new/data.state";
 
 
 @Component({
@@ -11,12 +14,18 @@ import { Post, PostRow } from "src/models/data/data.model";
 })
 export class AnnoncePage {
   activeView: number = 0;
-  constructor(private router:ActivatedRoute){
+  constructor(private store: Store, private router:ActivatedRoute){
 
   }
-  post!:Post
+  
+
+  post:Post | null = null;
+  
+  @Select(DataQueries.currentProfile)
+  profile$!: Observable<Profile>;
+
   ngOnInit() {
-    let id = this.router.snapshot.params.id
-    if(id) this.post = PostRow.getById(+id).serialize();
+    let id = this.router.snapshot.params.id;
+    if( id !== undefined ) this.post = this.store.selectSnapshot(DataQueries.getById('Post', id));
   }
 }
