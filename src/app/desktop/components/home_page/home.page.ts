@@ -11,6 +11,7 @@ import { PopupService } from "src/app/shared/components/popup/popup.component";
 import { ApplyPost, DeletePost, SwitchPostType } from "src/models/new/user/user.actions";
 import { DataQueries, DataState, QueryAll, Snapshot, SnapshotArray } from 'src/models/new/data.state'
 import { Candidate, Company, File, Job, Post, PostDetail, Profile } from "src/models/new/data.interfaces";
+import * as UserActions from "src/models/new/user/user.actions";
 
 type PostMenu = { open: boolean; post: Post | null; };
 
@@ -66,6 +67,7 @@ export class HomePageComponent extends Destroy$ {
   @SnapshotArray('File') postResumerFiles!: number[] | File[];
 
   showPostResumer(post: Post, type: resumerType) {
+    console.log('1234564789',post)
     this.resumerType = type;
     this.showValidePost = true
     this.postResumer = post;
@@ -162,5 +164,8 @@ export class HomePageComponent extends Destroy$ {
   }
   showFilters: boolean = false;
   
+  openFile(file: File) {
+    this.popup.openFile(file)
+  }
 };
 // function to add two numbers

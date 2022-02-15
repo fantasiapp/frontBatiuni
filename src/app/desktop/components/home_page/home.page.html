@@ -110,7 +110,6 @@
         </section>
 
         <!-- Enlgine -->
-
         <ng-template #enlgine>
           <section class="main web-content font-Poppins space-children-margin addMargin responsive">
             <span class="title-with-line">Nous avons besoin de</span>
@@ -119,8 +118,6 @@
                 <li>{{postResumer?.numberOfPeople || 1}} {{(postResumerJob | snapshot).name}} </li>
                 <li>Du {{ postResumer?.hourlyStart }} Au {{ postResumer?.hourlyEnd }}</li>
               </ul>
-              <!-- Nom du profile -->
-              <!-- Date echeance -->
             </div>
 
             <span class="title-with-line">Description des missions</span>
@@ -135,7 +132,7 @@
             <div class="documents">
               <ul class="small-space-children-margin">
                 <li *ngFor="let file of (postResumerFiles | snapshot)">
-                  <a>{{file.name}}</a>
+                  <a (click)="openFile(file)">{{file.name}}</a>
                 </li>
               </ul>
             </div>

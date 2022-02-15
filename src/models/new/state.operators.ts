@@ -80,13 +80,27 @@ namespace mutable {
     if ( !parentObject || childIndex <= -1 ) return;
 
     if ( uniqueBy ) {
-      console.log('will remove duplicates by', uniqueBy);
       const uniqueIndex = draft.fields[child].indexOf(uniqueBy);
       if ( uniqueIndex !== void 0 )
         parentObject[childIndex] = removeDuplicates(draft, child, parentObject[childIndex], ids, uniqueIndex);
     }
 
     parentObject[childIndex].push(...ids);
+  }
+
+  export function updateChildValues<K extends DataTypes>(draft: any, parent: DataTypes, parentId: number, child: K, values: Record<any>) {
+    //Add children
+    const ids = Object.keys(values).map(id => +id);
+    mutable.replace(draft, child, values);
+
+    //add to parent
+    const parentObject = draft[parent]?.[parentId],
+      childIndex = draft.fields[parent].indexOf(child);
+    if ( !parentObject || childIndex <= -1 ) return;
+
+    for ( const id of ids )
+      if ( !parentObject[childIndex].includes(id) )
+        parentObject[childIndex].push(id);
   }
 
   export function pushChildIds<K extends DataTypes>(draft: any, parent: DataTypes, parentId: number, child: K, ids: number[]) {
@@ -142,8 +156,13 @@ export function replace(target: DataTypes, values: any) {
 export function pushChildIds<K extends DataTypes>(parent: DataTypes, parentId: number, child: K, ids: number[]) {
   return produce(draft => mutable.pushChildIds(draft, parent, parentId, child, ids));
 };
+
 export function pushChildValues<K extends DataTypes>(parent: DataTypes, parentId: number, child: K, values: Record<any>, uniqueBy?: keyof Interface<K>) {
   return produce(draft => mutable.pushChildValues(draft, parent, parentId, child, values, uniqueBy));
+};
+
+export function updateChildValues<K extends DataTypes>(parent: DataTypes, parentId: number, child: K, values: Record<any>) {
+  return produce(draft => mutable.updateChildValues(draft, parent, parentId, child, values));
 };
 
 export function transformField<K extends DataTypes, V extends keyof Interface<K>>(target: K, id: number, field: V, transform: (value: RepresentedType<K, V>, object: any[], fields: string[]) => RepresentedType<K, V>) {
