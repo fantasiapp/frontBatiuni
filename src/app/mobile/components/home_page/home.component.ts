@@ -61,7 +61,6 @@ export class HomeComponent extends Destroy$ {
   
   ngOnInit() {
     combineLatest([this.profile$, this.posts$]).pipe(takeUntil(this.destroy$)).subscribe(([profile, posts]) => {
-      
       const mapping = splitByOutput(posts, (post) => {
         //0 -> userOnlinePosts | 1 -> userDrafts
         if ( profile.company.posts.includes(post.id) )

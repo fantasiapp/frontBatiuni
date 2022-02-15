@@ -7,6 +7,8 @@ import { Destroy$ } from "src/app/shared/common/classes";
 import { Availability, CalendarUI, DayState } from "src/app/shared/components/calendar/calendar.ui";
 import { SwipeupService } from "src/app/shared/components/swipeup/swipeup.component";
 import { TooltipDimension, UITooltipService } from "src/app/shared/components/tooltip/tooltip.component";
+import { Profile } from "src/models/new/data.interfaces";
+import { DataQueries } from "src/models/new/data.state";
 import { ModifyDisponibility } from "src/models/user/user.actions";
 import { User } from "src/models/user/user.model";
 import { UserState } from "src/models/user/user.state";
@@ -55,6 +57,9 @@ export class DispoPage extends Destroy$ {
     width: '300px', height: '150px' 
   };
 
+  @Select(DataQueries.currentProfile)
+  profile$!: Observable<Profile>;
+
   constructor(private store: Store, private tooltipService: UITooltipService) {
     super();
     
@@ -83,6 +88,12 @@ export class DispoPage extends Destroy$ {
       hideOnClick: true,
       class: 'availability-picker'
     });
+  }
+
+  ngOnInit() {
+    this.profile$.subscribe(data=> {
+      console.log(data.company.availabilities )
+    })
   }
 
   private setCalendarDayState(state: Availability) {

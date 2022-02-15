@@ -1,10 +1,12 @@
-<div class="company">
+<ng-container *ngIf="(profile$ | cast | async) as profile">
+  <div class="company">
     <div class="logo flex center">
-        <img src="assets/enligne.svg" />
+      <profile-image [profile]="profile" style="display: none;" #profileImage></profile-image>
+      <img [src]="profileImage.src" />
     </div>
     <div class="info">
       <div class="company-data">
-        <span class="">BatiUni</span>
+        <span class="">{{ profile.company.name | uppercase}}</span>
       </div>
       <stars [value]="4.5" disabled></stars>
       <div class="seconde-info">
@@ -14,4 +16,4 @@
       </div>
     </div>
   </div>
-  
+</ng-container>

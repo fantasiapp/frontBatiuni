@@ -49,7 +49,9 @@ export class ProfilePageComponent {
   user$!: BehaviorSubject<User>;
 
   constructor(private store: Store, private cd: ChangeDetectorRef, private info: InfoService,) {}
-
+  ngOnInit() {
+    this.profile$.subscribe(console.log)
+  }
   logout() {
     this.store.dispatch(new Logout());
   }
@@ -60,7 +62,7 @@ export class ProfilePageComponent {
   modifyProfileDesktop(binding:any) {
     const form = this.profileForm;
     const user = this.store.selectSnapshot(UserState);
-    const action = this.store.dispatch(new UserActions.ModifyUserProfile({profile: user.profile, form}));
+    const action = this.store.dispatch(new UserActions.ModifyUserProfile({profile: this.store.selectSnapshot(DataQueries.currentProfile), form}));
     this.info.show("info", "Mise à jour en cours...", Infinity);
     action.pipe(take(1))
       .subscribe(success => {

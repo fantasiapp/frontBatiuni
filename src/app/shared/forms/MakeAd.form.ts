@@ -240,6 +240,7 @@ export class MakeAdForm {
     //load details
     const detailsForm = this.makeAdForm.get('detailedPost')! as FormArray;
     detailsForm.clear();
+    console.log('anass',postDetails)
     for ( const detail of postDetails )
       detailsForm.push(new FormGroup({description: new FormControl(detail.content)}));
     
@@ -325,6 +326,7 @@ export class MakeAdForm {
   }
 
   submit(draft: boolean) {
+    console.log(this.post, 'draft', draft, this.makeAdForm.value)
     if ( this.post ) {
       if ( !draft ) {
         this.info.show("info", "Mise en ligne de l'annonce...", Infinity);

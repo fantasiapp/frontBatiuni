@@ -1,5 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
-import { CompanyRow } from "src/models/data/data.model";
+import { Observable } from "rxjs";
+import { Company, Profile } from "src/models/new/data.interfaces";
+import { QueryProfile, Snapshot } from "src/models/new/data.state";
 
 @Component({
     selector:'reponse-card',
@@ -8,8 +10,7 @@ import { CompanyRow } from "src/models/data/data.model";
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ReponseCard {
-
-    @Input('company')
-    company!:CompanyRow;
-    
+    @QueryProfile()
+    @Input('profile')
+    profile$!: number | Profile | Observable<Profile>;
 }

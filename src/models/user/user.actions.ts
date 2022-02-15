@@ -3,8 +3,8 @@ import { FileUIOutput } from "src/app/shared/components/filesUI/files.ui";
 import { PropertyTrap } from "src/app/shared/common/classes";
 import { getDirtyValues } from "src/app/shared/common/functions";
 import { DisponibilityRow } from "../data/data.model";
-import { CalendarUI } from "src/app/shared/components/calendar/calendar.ui";
 import { DataTypes, Profile } from "../new/data.interfaces";
+import { CalendarUI } from "src/app/shared/components/calendar/calendar.ui";
 
 export class ChangeProfileType {
   static readonly type = '[User] Change Profile Type';
