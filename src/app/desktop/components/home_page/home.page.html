@@ -141,8 +141,7 @@
             </div>
             <span class="title-with-line notif" *ngIf="view == 'PME'"
               [attr.data-notification-number]="postResumerCandidates.length">Réponses</span>
-
-            <reponse-card (click)="testPopup()" class="full-width"
+            <reponse-card  class="full-width"
               *ngFor="let candidate of (postResumerCandidates | snapshot)" [profile]="candidate.company"></reponse-card>
           </section>
         </ng-template>
