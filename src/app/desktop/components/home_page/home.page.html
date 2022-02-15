@@ -62,7 +62,7 @@
             </section>
           </ng-container>
           <ng-container *ngSwitchCase="1">
-            <mapbox-batiuni></mapbox-batiuni>
+            <mapbox-batiuni [posts]="allOnlinePosts" ></mapbox-batiuni>
           </ng-container>
         </ng-container>
       </ng-template>
@@ -76,7 +76,7 @@
         </div>
       </desktop-stickyH>
 
-      <company-info [profile]="profile$"></company-info>
+      <company-info [profile]="postResumer.company"></company-info>
       <div class="web-page">
 
         <section class="filters">
@@ -141,14 +141,7 @@
             </div>
             <span class="title-with-line notif" *ngIf="view == 'PME'"
               [attr.data-notification-number]="postResumerCandidates.length">Réponses</span>
-
-            <div class="showcard">
-              hello
-              <div class="unshown">
-                <extended-profile [profile]="profile"></extended-profile>
-              </div>
-            </div>
-            <reponse-card (click)="testPopup()" class="full-width"
+            <reponse-card  class="full-width"
               *ngFor="let candidate of (postResumerCandidates | snapshot)" [profile]="candidate.company"></reponse-card>
           </section>
         </ng-template>

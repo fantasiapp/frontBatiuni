@@ -10,9 +10,9 @@
       </div>
       <stars [value]="4.5" disabled></stars>
       <div class="seconde-info">
-        <span>{{ headerText[0] | uppercase }} : <span>value</span></span>
+        <span>{{ headerText[0] | uppercase }} : <span>{{profile.company.siret}}</span></span>
         <span>{{ headerText[1] }} : <span>value</span></span>
-        <span>{{ headerText[2] }} : <span>value</span></span>
+        <span>{{ headerText[2] }} : <span>{{ profile.company.capital || 0}} </span> €</span>
       </div>
     </div>
   </div>
