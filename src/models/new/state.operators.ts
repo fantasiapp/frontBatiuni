@@ -28,6 +28,7 @@ namespace mutable {
     const targetObjects = draft[target],
       fields = draft.fields[target];
 
+    console.log('calling replace on', target, values);
   
     //translate data
     Object.entries<any>(values).forEach(([id, item]) => {
@@ -39,9 +40,10 @@ namespace mutable {
           if ( current[i].length )
             mutable.deleteIds(draft, fields[i], current[i]);
           
+          mutable.replace(draft, fields[i], item[i]);
           const keys = Object.keys(item[i]);
-          if ( keys.length )
-            mutable.addValues(draft, fields[i], item[i]);
+          // if ( keys.length )
+          //   mutable.addValues(draft, fields[i], item[i]);
           
           //map back to ids
           item[i] = keys.map(id => +id);

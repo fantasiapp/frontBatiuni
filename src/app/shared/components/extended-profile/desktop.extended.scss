@@ -3,17 +3,18 @@
 
 
 @include from(701px) {
-    .hosted-page {
-        background: transparent;
-    }
-}
-profile-resume::ng-deep {
+  .hosted-page {
+    background: transparent;
+  }
+
+  profile-resume::ng-deep {
     width: 100%;
     display: flex !important;
     flex-direction: row !important;
     justify-content: space-around !important;
     padding: $item-padding 0;
     .section {
-        margin-bottom: 0px !important;
+      margin-bottom: 0px !important;
     }
+  }
 }

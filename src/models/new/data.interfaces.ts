@@ -54,6 +54,8 @@ export interface Company {
   files: Ref<File>[];
   posts: Ref<Post>[];
   availabilities: Ref<Disponibility>[];
+  unity: string;
+  amount: number;
 };
 
 export interface PostDetail {

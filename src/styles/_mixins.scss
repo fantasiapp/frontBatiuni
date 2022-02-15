@@ -285,6 +285,7 @@ $space-top-mid: 40px;
   }
 
   & > section:first-child, & > section:nth-child(3) {
+    overflow-x: hidden !important;
     height: calc(100vh - #{$web-header-height});
     background-color: white;
     // overflow-y: auto;

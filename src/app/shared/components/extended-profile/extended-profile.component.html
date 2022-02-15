@@ -38,7 +38,7 @@
       </span>
       <span>
         <span class="text-light-emphasis">Montant Fixe : </span>
-        <span class="value">Non renseigné</span>
+        <span class="value">{{ profile.company.amount ? (profile.company.amount + ' ' + (profile.company.unity || 'Par Jour')) : 'Non renseigné'}} </span>
       </span>
     </section>
   

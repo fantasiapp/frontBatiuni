@@ -21,7 +21,8 @@ export const NameMapping: any = {
   'Candidate': 'candidates',
   'DetailedPost': 'details',
   'Supervisions': 'supervisions',
-  'Disponibility': 'availabilities'
+  'Disponibility': 'availabilities',
+  'Mission': 'missions'
 };
 
 export function getOriginalName(name: string) {

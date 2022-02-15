@@ -1,11 +1,13 @@
 import { AbstractControl, ValidationErrors, ValidatorFn } from "@angular/forms";
 import { lowerCase, number, phone, upperCase, url } from "./regex";
 
-export const MatchField = (target: string, filed: string = 'email'): ValidatorFn => {
+export const MatchField = (target: string, filed: string = target, ignoreCase: boolean = false): ValidatorFn => {
   return (control: AbstractControl) => {
-    const original = control.parent?.get(target)
+    const original = control.parent?.get(target),
+      originalValue = original && (ignoreCase ? original.value.toLowerCase() : original.value),
+      controlValue = ignoreCase ? control.value.toLowerCase() : control.value;
 
-    return original && control.value == original.value ? null : {
+    return original && originalValue == controlValue ? null : {
       FIELD_MISMATCH: [filed]
     };
   };

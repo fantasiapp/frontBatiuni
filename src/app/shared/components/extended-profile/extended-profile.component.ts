@@ -37,7 +37,6 @@ export class ExtendedProfileComponent extends Destroy$ {
   user: User | null = null;
 
   ngOnChanges(changes: SimpleChanges) {
-    console.log(changes, this.profile);
     if ( changes['profile'] ) {
       //since a profile <=> company, you might want to add user info if you want
       this.profile = this.profile$.pipe(

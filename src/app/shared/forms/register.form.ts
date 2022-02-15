@@ -172,7 +172,7 @@ export class RegisterForm extends Destroy$ {
     ]),
     emailVerification: new FormControl('', [
       Validators.required,
-      MatchField('email')
+      MatchField('email', 'email', true)
     ]),
     password: new FormControl('', [
       ComplexPassword()
