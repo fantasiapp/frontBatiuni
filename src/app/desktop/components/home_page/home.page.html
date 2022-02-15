@@ -80,7 +80,7 @@
       <div class="web-page">
 
         <section class="filters">
-          <stepper-sys [rayon]="10" [margin]="15"></stepper-sys>
+          <stepper-sys [rayon]="10" [margin]="15" [testList]="['Nous avons besoin','Description des missions','Documents importants','Les réponses']"></stepper-sys>
         </section>
 
         <!-- Validee -->
@@ -140,7 +140,7 @@
               </ul>
             </div>
             <span class="title-with-line notif" *ngIf="view == 'PME'"
-              [attr.data-notification-number]="postResumerCandidates.length">Réponses</span>
+              [attr.data-notification-number]="(postResumerCandidates || []).length">Réponses</span>
             <reponse-card  class="full-width"
               *ngFor="let candidate of (postResumerCandidates | snapshot)" [profile]="candidate.company"></reponse-card>
           </section>

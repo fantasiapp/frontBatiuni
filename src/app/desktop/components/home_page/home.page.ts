@@ -70,9 +70,10 @@ export class HomePageComponent extends Destroy$ {
     this.showValidePost = true
     this.postResumer = post;
     this.postResumerJob = post.job;
-    this.postResumerCandidates = post.candidates;
-    this.postResumerDetails = post.details;
-    this.postResumerFiles = post.files;
+    this.postResumerCandidates = post.candidates || [];
+    this.postResumerDetails = post.details || [];
+    this.postResumerFiles = post.files ||  [];
+    console.log(this, post)
     // const candidate = this.userOnlinePosts.filter(chosen => chosen.id === post.id)
     // this.candidate = candidate.map(user => user.candidates)
     // this.candidateData = (this.candidate[0] || []).map((user: any) => {
