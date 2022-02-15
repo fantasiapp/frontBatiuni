@@ -8,7 +8,7 @@ import { ApplyPost, ChangePassword, ChangeProfilePicture, ChangeProfileType, Del
 import { Company, Interface, User } from "./data.interfaces";
 import { DataReader, NameMapping } from "./data.mapper";
 import { Record, DataTypes } from "./data.interfaces";
-import { addValues, compose, deleteIds, pushChildValues, updateChildValues, transformField } from "./state.operators";
+import { addValues, compose, deleteIds, pushChildValues, transformField, updateChildValues } from "./state.operators";
 import { Logout } from "../auth/auth.actions";
 import { InfoService } from "src/app/shared/components/info/info.component";
 import { GetCompanies } from "./search/search.actions";
@@ -148,9 +148,9 @@ export class DataState {
   getUserData(ctx: StateContext<DataModel>, action: GetUserData) {
     const req = this.http.get('data', { action: action.action });
     
-    console.log('get user data', ctx.getState());
     return req.pipe(
       tap((response: any) => {
+        console.log('$$', response);
         const loadOperations = this.reader.readInitialData(response),
           sessionOperation = this.reader.readCurrentSession(response);
 
@@ -257,7 +257,7 @@ export class DataState {
           const company = this.store.selectSnapshot(DataQueries.currentCompany);
           ctx.setState(pushChildValues('Company', company.id, 'File', response, 'name'));
         } else if ( upload.category == 'Post' ) {
-          ctx.setState(pushChildValues('Post', upload.target, 'File', response));
+          ctx.setState(pushChildValues('Post', upload.target, 'File', response, 'name'));
         }
       })
     )
@@ -330,7 +330,9 @@ export class DataState {
           throw response['messages'];
         
         delete response[deletion.action];
+        console.log('delete post', deletion);
         ctx.setState(deleteIds('Post', [deletion.id]));
+        console.log(ctx.getState()['Post']);
       })
     )
   };

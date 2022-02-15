@@ -18,15 +18,19 @@ namespace mutable {
   };
 
   export function deleteIds(draft: any, target: DataTypes, ids: number[]) {
-    const record = draft[target] || {};
-    for ( let id of Object.keys(record) )
-      if ( ids.includes(+id) )
-        delete draft[record];
+    const record = draft[target] || {},
+      currentIds = Object.keys(record).map(id => +id);
+    
+    console.log('currently having', currentIds, 'deleting', ids);
+    for ( let id of currentIds )
+      if ( ids.includes(id) )
+        delete record[id];
   };
 
   export function replace(draft: any, target: DataTypes, values: Record<any>) {
     const targetObjects = draft[target],
       fields = draft.fields[target];
+
   
     //translate data
     Object.entries<any>(values).forEach(([id, item]) => {
@@ -38,8 +42,12 @@ namespace mutable {
           if ( current[i].length )
             mutable.deleteIds(draft, fields[i], current[i]);
           
-          mutable.replace(draft, fields[i], item[i]);
-          item[i] = Object.keys(item[i]).map(id => +id);
+          const keys = Object.keys(item[i]);
+          if ( keys.length )
+            mutable.addValues(draft, fields[i], item[i]);
+          
+          //map back to ids
+          item[i] = keys.map(id => +id);
         }
       }
     });
@@ -48,23 +56,53 @@ namespace mutable {
     mutable.addValues(draft, target, values);
   };
 
+  export function update(draft: any, target: DataTypes, values: Record<any>) {
+    const targetObjects = draft[target],
+      fields = draft.fields[target];
+
+    console.log('update', target, 'with', values);
+    console.log('fields:', fields);
+    //translate data
+    Object.entries<any>(values).forEach(([id, item]) => {
+      const current = targetObjects[id];
+      //if not create
+      if ( !current ) {
+        for ( let i = 0; i < item.length; i++ ) {
+          if ( typeof item[i] == 'object' ) {
+            mutable.update(draft, fields[i], item[i]);
+           item[i] = Object.keys(item[i]).map(id => +id);
+          }
+        }
+      } else {
+        for ( let i = 0; i < current.length; i++ ) {
+          //special treatement for arrays
+          if ( Array.isArray(current[i]) ) {
+            if ( current[i].length )
+              mutable.deleteIds(draft, fields[i], current[i]);
+          
+            mutable.update(draft, fields[i], item[i]);
+            item[i] = Object.keys(item[i]).map(id => +id);
+          }
+        }
+      }
+    });
+    
+    mutable.addValues(draft, target, values);
+  }
+
   //assumes old and rep and unique whitin themselves
   function removeDuplicates(draft: any, target: DataTypes, old: number[], rep: number[], uniqueIndex: number) {
     const objects = draft[target],
       deletedIds: number[] = [];
-
-    console.log('old:', old.slice(), 'new:', rep);
   
     newList: for ( const newId of rep )
       for ( const oldId of old ) {
-        console.log('comparing ids', newId, 'vs', oldId, objects[newId][uniqueIndex], objects[oldId][uniqueIndex]);
         if ( objects[newId][uniqueIndex] == objects[oldId][uniqueIndex] ) {
           deletedIds.push(oldId);
           //continue newList;
         }
       }
     
-    console.log('deleted:', deletedIds);
     mutable.deleteIds(draft, target, deletedIds);
     return old.filter(id => !deletedIds.includes(id));
   }
@@ -80,6 +118,7 @@ namespace mutable {
     if ( !parentObject || childIndex <= -1 ) return;
 
     if ( uniqueBy ) {
+      console.log('will remove duplicates by', uniqueBy);
       const uniqueIndex = draft.fields[child].indexOf(uniqueBy);
       if ( uniqueIndex !== void 0 )
         parentObject[childIndex] = removeDuplicates(draft, child, parentObject[childIndex], ids, uniqueIndex);
@@ -88,27 +127,20 @@ namespace mutable {
     parentObject[childIndex].push(...ids);
   }
 
-  export function updateChildValues<K extends DataTypes>(draft: any, parent: DataTypes, parentId: number, child: K, values: Record<any>) {
+  export function updateChildValues<K extends DataTypes>(draft: any, parent: DataTypes, parentId: number, child: K, values: Record<any>, uniqueBy?: keyof Interface<K>) {
     //Add children
+    mutable.update(draft, child, values);
     const ids = Object.keys(values).map(id => +id);
-    mutable.replace(draft, child, values);
 
     //add to parent
     const parentObject = draft[parent]?.[parentId],
       childIndex = draft.fields[parent].indexOf(child);
+    
     if ( !parentObject || childIndex <= -1 ) return;
-
+    
     for ( const id of ids )
       if ( !parentObject[childIndex].includes(id) )
         parentObject[childIndex].push(id);
-  }
-
-  export function pushChildIds<K extends DataTypes>(draft: any, parent: DataTypes, parentId: number, child: K, ids: number[]) {
-    const parentObject = draft[parent]?.[parentId],
-      childIndex = draft.fields[parent].indexOf(child);
-    if ( !parentObject || childIndex <= -1 ) return;
-
-    parentObject[childIndex].push(...ids);
   }
 
   export function transformField<K extends DataTypes, V extends keyof Interface<K>>(draft: any, target: K, id: number, field: V, transform: (value: RepresentedType<K, V>, object: any[], fields: string[]) => RepresentedType<K, V>) {
@@ -152,9 +184,8 @@ export function replace(target: DataTypes, values: any) {
   return produce(draft => mutable.replace(draft, target, values));
 };
 
-//maybe add a uniqueBy or check first
-export function pushChildIds<K extends DataTypes>(parent: DataTypes, parentId: number, child: K, ids: number[]) {
-  return produce(draft => mutable.pushChildIds(draft, parent, parentId, child, ids));
+export function update(target: DataTypes, values: any) {
+  return produce(draft => mutable.update(draft, target, values));
 };
 
 export function pushChildValues<K extends DataTypes>(parent: DataTypes, parentId: number, child: K, values: Record<any>, uniqueBy?: keyof Interface<K>) {

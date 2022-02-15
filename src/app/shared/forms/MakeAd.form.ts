@@ -240,7 +240,9 @@ export class MakeAdForm {
     //load details
     const detailsForm = this.makeAdForm.get('detailedPost')! as FormArray;
     detailsForm.clear();
-    console.log('anass',postDetails)
+    
+    console.log('Anass', p);
+
     for ( const detail of postDetails )
       detailsForm.push(new FormGroup({description: new FormControl(detail.content)}));
     

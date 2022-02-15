@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Store } from "@ngxs/store";
 import { DataTypes } from "./data.interfaces";
-import { addValues, addRecord, replace } from "./state.operators";
+import { addValues, addRecord, replace, update } from "./state.operators";
 import { patch } from '@ngxs/store/operators';
 import { Availability } from "src/app/shared/components/calendar/calendar.ui";
 
@@ -110,6 +110,6 @@ export class DataReader {
   }
 
   readUpdates(data: any) {
-    return Object.keys(data).map(name => replace(name as DataTypes, data[name]));
+    return Object.keys(data).map(name => update(name as DataTypes, data[name]));
   }
 };

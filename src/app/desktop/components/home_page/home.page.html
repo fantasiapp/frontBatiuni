@@ -129,7 +129,7 @@
               </ul>
             </div>
             <span class="title-with-line">Documents</span>
-            <div class="documents">
+            <div class="documents" style="padding: 1rem 0;">
               <ul class="small-space-children-margin">
                 <li *ngFor="let file of (postResumerFiles | snapshot)">
                   <a (click)="openFile(file)">{{file.name}}</a>
