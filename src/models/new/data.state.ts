@@ -330,7 +330,9 @@ export class DataState {
           throw response['messages'];
         
         delete response[deletion.action];
+        console.log('delete post', deletion);
         ctx.setState(deleteIds('Post', [deletion.id]));
+        console.log(ctx.getState()['Post']);
       })
     )
   };

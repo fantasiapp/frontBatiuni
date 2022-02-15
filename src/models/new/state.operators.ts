@@ -21,7 +21,7 @@ namespace mutable {
     const record = draft[target] || {};
     for ( let id of Object.keys(record) )
       if ( ids.includes(+id) )
-        delete draft[record];
+        delete record[id];
   };
 
   export function replace(draft: any, target: DataTypes, values: Record<any>) {
