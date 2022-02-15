@@ -107,6 +107,11 @@ import { SpacingPipe } from "../pipes/spacing.pipe";
           <input class="form-element" type="text" formControlName="UserProfile.Company.revenue" />
         </div>
 
+        <div class="form-input">
+          <label>Taux horaire moyen</label>
+          <input class="form-element" type="text" formControlName="UserProfile.Company.amount" />
+        </div>
+
         <ng-container formGroupName="UserProfile.Company.admin">
           <fileinput [showtitle]="false" filename="Kbis" formControlName="Kbis">
             <file-svg name="Kbis" color="#156C9D" image></file-svg>
@@ -273,7 +278,7 @@ export class ModifyProfileForm {
   @Input() user: any;
 
 
-  constructor(private cd: ChangeDetectorRef, private store: Store, private popup: PopupService, private info: InfoService) {
+  constructor(private store: Store,) {
 
   }
 
@@ -304,6 +309,9 @@ export class ModifyProfileForm {
       FieldType('number')
     ]),
     'UserProfile.Company.revenue': new FormControl('', [
+      FieldType('number')
+    ]),
+    'UserProfile.Company.amount': new FormControl('', [
       FieldType('number')
     ]),
     'UserProfile.Company.webSite': new FormControl('', [
