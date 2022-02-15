@@ -72,6 +72,7 @@ export class HomeComponent extends Destroy$ {
       this.userDrafts = mapping.get(this.symbols.userDraft) || [];
       this.userOnlinePosts = mapping.get(this.symbols.userOnlinePost) || [];
       this.allOnlinePosts = mapping.get(this.symbols.otherOnlinePost) || [];
+      this.cd.markForCheck();
     });
   }
   activeView: number = 0;

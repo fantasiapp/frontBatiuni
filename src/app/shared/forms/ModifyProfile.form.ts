@@ -109,27 +109,27 @@ import { SpacingPipe } from "../pipes/spacing.pipe";
 
         <ng-container formGroupName="UserProfile.Company.admin">
           <fileinput [showtitle]="false" filename="Kbis" formControlName="Kbis">
-            <file-svg name="Kbis" color="#156C9D" (click)="requestFile('admin', 'Kbis')" image></file-svg>
+            <file-svg name="Kbis" color="#156C9D" image></file-svg>
           </fileinput>
 
           <fileinput [showtitle]="false" filename="Attestation travail dissimulé" formControlName="Trav. Dis">
-            <file-svg name="Trav. Dis" color="#054162" (click)="requestFile('admin', 'Trav. Dis')" image></file-svg>
+            <file-svg name="Trav. Dis" color="#054162" image></file-svg>
           </fileinput>
 
           <fileinput [showtitle]="false" filename="Attestation RC + DC" formControlName="RC + DC">
-            <file-svg name="RC + DC" color="#999999" (click)="requestFile('admin', 'RC + DC')" image></file-svg>
+            <file-svg name="RC + DC" color="#999999" image></file-svg>
           </fileinput>
 
           <fileinput [showtitle]="false" filename="URSSAF" formControlName="URSSAF">
-            <file-svg name="URSSAF" color="#F9C067" (click)="requestFile('admin', 'URSSAF')" image></file-svg>
+            <file-svg name="URSSAF" color="#F9C067" image></file-svg>
           </fileinput>
 
           <fileinput [showtitle]="false" filename="Impôts" formControlName="Impôts">
-            <file-svg name="Impôts" color="#52D1BD" (click)="requestFile('admin', 'Impôts')" image></file-svg>
+            <file-svg name="Impôts" color="#52D1BD" image></file-svg>
           </fileinput>
 
           <fileinput [showtitle]="false" filename="Congés payés" formControlName="Congés Payés">
-            <file-svg name="Congés Payés" color="#32A290" (click)="requestFile('admin', 'Congés payés')" image></file-svg>
+            <file-svg name="Congés Payés" color="#32A290" image></file-svg>
           </fileinput>
         </ng-container>
       </form>
@@ -150,7 +150,7 @@ import { SpacingPipe } from "../pipes/spacing.pipe";
             <span class="position-relative" *ngFor="let control of companyLabelControls; index as i">
               <ng-container [formGroupName]="i">
                 <fileinput [showtitle]="false" [filename]="control.get('label')!.value.name" formControlName="fileData">
-                  <file-svg [name]="control.get('label')!.value.name" (click)="requestFile('labels', control.get('label')!.value.name)" image></file-svg>
+                  <file-svg [name]="control.get('label')!.value.name" image></file-svg>
                 </fileinput>
               </ng-container>
             </span>
@@ -275,45 +275,6 @@ export class ModifyProfileForm {
 
   constructor(private cd: ChangeDetectorRef, private store: Store, private popup: PopupService, private info: InfoService) {
 
-  } 
-
-  requestFile(type: 'admin' | 'labels', filename: string) {
-  //   let target: Serialized<FilesRow> | undefined,
-  //     content: FileUIOutput | undefined;
-    
-  //   if ( type == 'admin' ) {
-  //     const field = this.form.controls['UserProfile.Company.admin'] as FormGroup,
-  //       input = field.controls[filename];
-      
-  //     if ( input && (input.value as FileUIOutput).content )
-  //       content = input.value;      
-  //   } else {
-  //     const field = this.form.controls['UserProfile.Company.LabelForCompany'] as FormArray,
-  //       group = (field.controls as FormGroup[]).find(group => group.controls['label']?.value.name == filename);
-      
-  //     if ( group && (group.controls['fileData'].value as FileUIOutput).content )
-  //       content = group.controls['fileData'].value;      
-  //   }
-
-  //   if ( !content )
-  //     target = this.user.company.files.find(file => file.name == filename);
-    
-  //   if ( !content && !target ) {
-  //     this.info.show('error', `Le fichier "${filename}" n'existe pas.`, 2000);
-  //     return;
-  //   }
-
-  //   if ( !content ) {
-  //     this.info.show('info', 'Téléchargement du fichier', Infinity);
-  //     const req = this.store.dispatch(new DownloadFile(target!.id));
-  //     req.pipe(take(1)).subscribe(() => {
-  //       const file = FilesRow.getById(target!.id);
-  //       this.popup.openFile(file);
-  //       this.info.show('success', 'Fichier téléchargé', 2000);
-  //     })
-  //   } else {
-  //     this.popup.openFile(content);
-  //   }
   }
 
   form: FormGroup = new FormGroup({

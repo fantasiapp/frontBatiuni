@@ -73,6 +73,7 @@ export class HomePageComponent extends Destroy$ {
     this.postResumerCandidates = post.candidates;
     this.postResumerDetails = post.details;
     this.postResumerFiles = post.files;
+    console.log(this.postResumer, this);
     // const candidate = this.userOnlinePosts.filter(chosen => chosen.id === post.id)
     // this.candidate = candidate.map(user => user.candidates)
     // this.candidateData = (this.candidate[0] || []).map((user: any) => {
@@ -105,7 +106,6 @@ export class HomePageComponent extends Destroy$ {
 
   ngOnInit() {
     combineLatest([this.profile$, this.posts$]).pipe(takeUntil(this.destroy$)).subscribe(([profile, posts]) => {
-      console.log('Profile', profile, 'post', posts)
       const mapping = splitByOutput(posts, (post) => {
         //0 -> userOnlinePosts | 1 -> userDrafts
         if ( profile.company.posts.includes(post.id) )
@@ -117,9 +117,8 @@ export class HomePageComponent extends Destroy$ {
       this.userDrafts = mapping.get(this.symbols.userDraft) || [];
       this.userOnlinePosts = mapping.get(this.symbols.userOnlinePost) || [];
       this.allOnlinePosts = mapping.get(this.symbols.otherOnlinePost) || [];
-      console.log(this.allOnlinePosts)
+      this.cd.markForCheck();
     });
-    console.log(this.postResumerCandidates)
   }
 
   switchDraft(id: number) {
