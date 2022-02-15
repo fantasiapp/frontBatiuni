@@ -1,25 +1,18 @@
-import { ChangeDetectionStrategy, Component, HostListener, Input } from "@angular/core";
+import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
 import { Store } from "@ngxs/store";
-import { Observable } from "rxjs";
-import { ExtendedProfileComponent } from "src/app/mobile/components/extended-profile/extended-profile.component";
 import { Company, Job } from "src/models/new/data.interfaces";
 import { DataQueries, Snapshot } from "src/models/new/data.state";
-import { SlidemenuService } from "../slidemenu/slidemenu.component";
 
 @Component({
   selector: 'profile-card',
   template: `
-    <ng-container *ngIf="(company | snapshot) as company">
-      <ng-container *ngIf="(job | snapshot) as job">
-        <profile-image [profile]="company.id"></profile-image>
-        <div class="flex column small-space-children-margin font-Poppins description">
-          <span>{{ company.name || "Nom de l'entreprise" }}</span>
-          <span>Propose {{ employeeCount }} {{job.name || 'Employées'}}</span>
-          <span>Note générale (4.5 par 35 personnes)</span>
-          <stars [value]="4.5"></stars>
-        </div>
-      </ng-container>
-    </ng-container>
+    <profile-image [profile]="company.id"></profile-image>
+    <div class="flex column small-space-children-margin font-Poppins description">
+      <span>{{ company.name || "Nom de l'entreprise" }}</span>
+      <span>Propose {{ employeeCount }} {{job.name || 'Employées'}}</span>
+      <span>Note générale (4.5 par 35 personnes)</span>
+      <stars [value]="4.5" disabled></stars>
+    </div>
   `,
   styles: [`
     @use "sass:math";
@@ -50,13 +43,16 @@ import { SlidemenuService } from "../slidemenu/slidemenu.component";
 })
 export class ProfileCardComponent {
   
-  @Snapshot('Company')
-  @Input()
-  company!: number | Company;
 
-  @Snapshot('Job')
+  //we can get away with using these because this component is used inside a template
+  //otherwise we will get type errors 
   @Input()
-  job!: number | Job;
+  @Snapshot('Company')
+  company!: Company;
+
+  @Input()
+  @Snapshot('Job')
+  job!: Job;
 
   employeeCount: number = 0;
   src: string = '';

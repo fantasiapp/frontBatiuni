@@ -16,7 +16,7 @@ import { DataQueries } from "src/models/new/data.state";
             </div>
         </div>
         <span class="company">{{ company?.name || "Nom de l'entreprise" }}</span>
-        <stars class="stars" [value]="company?.stars || 4"></stars>
+        <stars class="stars" [value]="company?.stars || 4" disabled></stars>
         <span>{{ (post?.manPower) ? "Main d'oeuvre" : "Fourniture et pose" }}</span>
         <span>Du {{ toLocateDate(post?.startDate) }} Au {{toLocateDate(post?.endDate)}}</span>
         <span>{{ this.post?.amount || 0 }} {{this.post?.currency}} </span>

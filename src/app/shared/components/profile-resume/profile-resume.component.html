@@ -19,6 +19,6 @@
     <span>{{ profile.user!.cellPhone | space: 2:1 }}</span>
   </ng-container>
   <a *ngIf="canChangePicture" class="blue">Modifier l’image de profil</a>
-  <stars *ngIf="star" (click)="ratingsClicked.emit()" value="3.9"></stars>
+  <stars *ngIf="star" (click)="ratingsClicked.emit()" value="3.9" disabled></stars>
 </section>
 <ng-content></ng-content>

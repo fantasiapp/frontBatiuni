@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, ViewChild } from "@angular/core";
 import { Select, Store } from "@ngxs/store";
 import { Observable } from "rxjs";
-import { UserState } from "src/models/user/user.state";
 import * as UserActions from "src/models/user/user.actions";
 import { Camera, CameraResultType, CameraSource } from "@capacitor/camera";
 import { UISlideMenuComponent } from "../../../shared/components/slidemenu/slidemenu.component";
@@ -78,20 +77,21 @@ export class ProfileComponent extends Destroy$ {
   }
   
   modifyProfile(form: any /*FormGroup*/) {
-    const user = this.store.selectSnapshot(UserState);
-    const action = this.store.dispatch(new UserActions.ModifyUserProfile({profile: user.profile, form}));
-    this.info.show("info", "Mise à jour en cours...", Infinity);
-    action.pipe(take(1))
-      .subscribe(success => {
-        this.openModifyMenu = false;
-        this.info.show("success", "Profil modifié avec succès", 2000);
-        (form as FormGroup).markAsPristine(); (form as FormGroup).markAsUntouched();
-        this.cd.markForCheck();
-      },
-      err => {
-        this.info.show("error", "Erreur lors du modification du profil", 10000);
-        this.cd.markForCheck();
-      });
+    this.profile$.pipe(take(1)).subscribe(profile => {
+      const action = this.store.dispatch(new UserActions.ModifyUserProfile({profile: profile, form}));
+      this.info.show("info", "Mise à jour en cours...", Infinity);
+      action.pipe(take(1))
+        .subscribe(success => {
+          this.openModifyMenu = false;
+          this.info.show("success", "Profil modifié avec succès", 2000);
+          (form as FormGroup).markAsPristine(); (form as FormGroup).markAsUntouched();
+          this.cd.markForCheck();
+        },
+        err => {
+          this.info.show("error", "Erreur lors du modification du profil", 5000);
+          this.cd.markForCheck();
+        });
+    });
   }
 
   changePassword(form: FormGroup) {

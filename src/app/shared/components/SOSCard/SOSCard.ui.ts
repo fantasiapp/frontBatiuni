@@ -7,7 +7,7 @@ import { UIProfileImageComponent } from "src/app/shared/components/profile-image
     <div class="container flex row center-cross space-around">
       <div class="presentation">
         <profile-image></profile-image>
-        <stars value="4"></stars>
+        <stars value="4" disabled></stars>
       </div>
       <div class="description flex column space-between">
         <span>Nom de l'entreprise</span>

@@ -29,8 +29,8 @@ export class ExtendedProfileComponent extends Destroy$ {
   @SnapshotArray('File')
   files!: File[]; //only responsive to profile changes
 
-  @QueryProfile()
   @Input()
+  @QueryProfile()
   profile!: number | Profile | Observable<Profile>;
 
   @Input()

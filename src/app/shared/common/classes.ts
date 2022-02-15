@@ -145,6 +145,7 @@ export abstract class UIDefaultAccessor<T> implements ControlValueAccessor {
   @Input()
   set disabled(disabled: any) {
     if ( disabled != null ) this.isDisabled = true;
+    else this.isDisabled = false;
   }
 
 
