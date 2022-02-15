@@ -125,7 +125,9 @@ export class HomePageComponent extends Destroy$ {
       this.userDrafts = mapping.get(this.symbols.userDraft) || [];
       this.userOnlinePosts = mapping.get(this.symbols.userOnlinePost) || [];
       this.allOnlinePosts = mapping.get(this.symbols.otherOnlinePost) || [];
+      console.log(this.allOnlinePosts)
     });
+    console.log(this.postResumerCandidates)
   }
 
   switchDraft(id: number) {
