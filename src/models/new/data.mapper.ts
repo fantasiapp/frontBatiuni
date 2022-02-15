@@ -3,6 +3,7 @@ import { Store } from "@ngxs/store";
 import { DataTypes } from "./data.interfaces";
 import { addValues, addRecord, replace } from "./state.operators";
 import { patch } from '@ngxs/store/operators';
+import { Availability } from "src/app/shared/components/calendar/calendar.ui";
 
 
 export const NameMapping: any = {
@@ -29,7 +30,11 @@ export function getOriginalName(name: string) {
       return transformed;
   }
   return name;
-}
+};
+
+export function getAvailabilityName(availability: Availability) {
+  return availability;
+};
 
 @Injectable({
   providedIn: 'root'
@@ -86,7 +91,7 @@ export class DataReader {
     const suffix = 'Values',
       keys = Object.keys(data).filter(key => key.endsWith('Values')),
       names = keys.map(key => key.slice(0, -suffix.length)) as DataTypes[],
-      operations = names.map((name, i) => addRecord(name, data[name+ 'Fields'], data[keys[i]]));
+      operations = names.map((name, i) => addRecord(name, data[name + 'Fields'], data[keys[i]]));
 
     return operations;
   }
@@ -103,11 +108,7 @@ export class DataReader {
     })
   }
 
-  readUpdate(data: any) {
-    //..
-  }
-
-  readManyUpdates(data: any) {
+  readUpdates(data: any) {
     return Object.keys(data).map(name => replace(name as DataTypes, data[name]));
   }
 };

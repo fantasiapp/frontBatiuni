@@ -1,4 +1,4 @@
-<ng-container *ngIf="(user$ | async) as user">
+<ng-container *ngIf="(profile$ | async) as profile">
 
   <div class="web-page">
     <section class="filters">
@@ -11,10 +11,10 @@
 
     <section class="main web-content font-Poppins">
       <!-- <searchbar placeholder="Mes missions ..."></searchbar> -->
-      <calendar [value]="user.profile!.company.disponibilities" (dayClick)="onDayClicked($event)" #calendar></calendar>
+      <calendar [value]="availabilities" (dayClick)="onDayClicked($event)" #calendar></calendar>
       <div class="flex full-width" style="justify-content: end;" >
 
-        <button class="button active" (click)="submit(calendar)">Enregistrer</button>
+        <button class="button active" (click)="submit()">Enregistrer</button>
       </div>
 
     </section>

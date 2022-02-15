@@ -1,12 +1,10 @@
-import { Component, Input, EventEmitter, ChangeDetectionStrategy, Output, ChangeDetectorRef } from "@angular/core";
-import { NavigationCancel, NavigationEnd, Router } from "@angular/router";
+import { Component, EventEmitter, ChangeDetectionStrategy, Output, ChangeDetectorRef } from "@angular/core";
+import { NavigationEnd, Router } from "@angular/router";
 import { Select, Store } from "@ngxs/store";
 import { BehaviorSubject, Observable } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { Destroy$ } from "src/app/shared/common/classes";
-import { DataQueries, DataState } from "src/models/new/data.state";
-import { User } from "src/models/user/user.model";
-import { UserState } from "src/models/user/user.state";
+import { DataState } from "src/models/new/data.state";
 
 const STMenu = [
   { name: "Home", src: "assets/navigation/st/home.svg", route: '', },
@@ -53,7 +51,7 @@ export class NavigationMenu extends Destroy$ {
 
   constructor(private router: Router, private store: Store) {
     super();
-    this.menu = new BehaviorSubject(this.store.selectSnapshot<User>(UserState).viewType ? PMEMenu : STMenu);
+    this.menu = new BehaviorSubject(this.store.selectSnapshot(DataState.view) == 'PME' ? PMEMenu : STMenu);
     this.router.events.pipe(takeUntil(this.destroy$)).subscribe((event) => {
       if (!(event instanceof NavigationEnd)) return;
       let menu = this.menu.getValue();

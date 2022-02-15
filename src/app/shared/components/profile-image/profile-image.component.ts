@@ -5,7 +5,7 @@ import { Observable } from "rxjs";
 import { take } from "rxjs/operators";
 import { File, Company, Profile } from "src/models/new/data.interfaces";
 import { DataQueries, QueryProfile } from "src/models/new/data.state";
-import { DownloadFile } from "src/models/user/user.actions";
+import { DownloadFile } from "src/models/new/user/user.actions";
 import { Destroy$ } from "../../common/classes";
 import { ImageGenerator } from "../../services/image-generator.service";
 

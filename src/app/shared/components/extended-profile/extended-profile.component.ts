@@ -1,14 +1,14 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, SimpleChanges } from "@angular/core";
 import { Store } from "@ngxs/store";
-import * as UserActions from "src/models/user/user.actions";
+import * as UserActions from "src/models/new/user/user.actions";
 import { map, take, takeUntil } from "rxjs/operators";
-import { FilesRow, JobForCompany, UserProfileRow } from "src/models/data/data.model";
 import { PopupService } from "src/app/shared/components/popup/popup.component";
-import { DataQueries, DataState, Query, QueryProfile, SnapshotArray } from "src/models/new/data.state";
-import { Job, File, Profile, User } from "src/models/new/data.interfaces";
+import { DataQueries, QueryProfile, SnapshotArray } from "src/models/new/data.state";
+import { Job, File, Profile, User, JobForCompany } from "src/models/new/data.interfaces";
 import { Observable } from "rxjs";
 import { Destroy$ } from "src/app/shared/common/classes";
 import { CastPipe } from "src/app/shared/pipes/cast.pipe";
+import { getFileColor } from "../../common/functions";
 
 
 @Component({
@@ -47,7 +47,7 @@ export class ExtendedProfileComponent extends Destroy$ {
       this.profile$.pipe(takeUntil(this.destroy$)).subscribe(profile => {
         this.files = profile.company.files as any;
         this.companyJobs = profile.company.jobs as any;
-        this.jobs = this.companyJobs.map(({job}) => job);
+        this.jobs = this.companyJobs.map(({job}) => job) as any;
       });
     }
   } 
@@ -66,7 +66,7 @@ export class ExtendedProfileComponent extends Destroy$ {
   }
 
   getFileColor(filename: string) {
-    return FilesRow.getFileColor(filename);
+    return getFileColor(filename);
   }
 
   //easier than requestFile, we can have direct access

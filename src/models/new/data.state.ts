@@ -1,16 +1,18 @@
 import { Injectable } from "@angular/core";
 import { Action, createSelector, Selector, State, StateContext, StateOperator, Store } from "@ngxs/store";
 import { Observable, of, Subject } from "rxjs";
-import { concatMap, map, mergeMap, take, tap } from "rxjs/operators";
+import { concatMap, map, tap } from "rxjs/operators";
 import { HttpService } from "src/app/services/http.service";
-import { GetGeneralData } from "../data/data.actions";
-import { ApplyPost, ChangeProfilePicture, ChangeProfileType, DeleteFile, DeletePost, DownloadFile, DuplicatePost, GetUserData, ModifyUserProfile, SwitchPostType, UploadFile, UploadPost } from "../user/user.actions";
+import { GetGeneralData } from "./user/user.actions";
+import { ApplyPost, ChangePassword, ChangeProfilePicture, ChangeProfileType, DeleteFile, DeletePost, DownloadFile, DuplicatePost, GetUserData, ModifyUserProfile, SwitchPostType, UploadFile, UploadPost } from "./user/user.actions";
 import { Company, Interface, User } from "./data.interfaces";
 import { DataReader, NameMapping } from "./data.mapper";
 import { Record, DataTypes } from "./data.interfaces";
 import { addValues, compose, deleteIds, pushChildValues, transformField } from "./state.operators";
 import { Logout } from "../auth/auth.actions";
 import { InfoService } from "src/app/shared/components/info/info.component";
+import { GetCompanies } from "./search/search.actions";
+import produce from "immer";
 
 export interface DataModel {
   fields: Record<string[]>;
@@ -34,7 +36,7 @@ export class Clear {
       currentUser: -1,
       view: 'ST'
     }
-  }
+  },
 })
 @Injectable()
 export class DataState {
@@ -181,7 +183,7 @@ export class DataState {
         
         delete response[modify.action];
 
-        ctx.setState(compose(...this.reader.readManyUpdates(response)));
+        ctx.setState(compose(...this.reader.readUpdates(response)));
       }),
       concatMap(() => {
         console.log('upload files');
@@ -212,6 +214,15 @@ export class DataState {
         ));
       })
     )
+  };
+
+  @Action(ChangePassword)
+  modifyPassword(ctx: StateContext<User>, action: ChangePassword) {
+    return this.http.post('data', action).pipe(
+      tap((response: any) => {
+        if ( response[action.action] != 'OK' ) throw response['messages'];
+      })
+    );
   };
 
   @Action(ChangeProfileType)
@@ -377,7 +388,7 @@ export class DataState {
   }
 
   @Action(ApplyPost)
-  applyPost(ctx: StateContext<User>, application: ApplyPost) {
+  applyPost(ctx: StateContext<DataModel>, application: ApplyPost) {
     return this.http.get('data', application).pipe(
       tap((response: any) => {
         if ( response[application.action] != 'OK' )
@@ -387,7 +398,26 @@ export class DataState {
         ctx.setState(addValues('Candidate', response));
       })
     )
-  }
+  };
+
+  @Action(GetCompanies)
+  getCompanies(ctx: StateContext<DataModel>, get: GetCompanies) {
+    console.log(get);
+    return this.http.get('initialize', get).pipe(
+      tap((response: any) => {
+        ctx.setState(compose(
+          this.reader.readInitialData(response)[0],
+          //very error prone
+          //i really hate doing this
+          //but then why send french names while everything else is in english ?
+          produce((draft: any) => {
+            draft.fields['Establishments'] = ['name', 'address', 'principalActivity', 'siret', 'NTVAI'];
+            return draft;
+          })
+        ));
+      })
+    )
+  };
 };
 
 //make a deep version of toJSON

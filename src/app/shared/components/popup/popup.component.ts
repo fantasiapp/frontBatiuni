@@ -4,10 +4,9 @@ import { Store } from "@ngxs/store";
 import { Subject } from "rxjs";
 import { take, takeUntil } from "rxjs/operators";
 import { UIOpenMenu } from "src/app/shared/common/classes";
-import { FilesRow } from "src/models/data/data.model";
 import { DataQueries } from "src/models/new/data.state";
-import { DownloadFile } from "src/models/user/user.actions";
-import { b64toBlob } from "../../common/functions";
+import { DownloadFile } from "src/models/new/user/user.actions";
+import { b64toBlob, getFileType } from "../../common/functions";
 import { TemplateContext } from "../../common/types";
 import { FileUIOutput } from "../filesUI/files.ui";
 
@@ -132,7 +131,7 @@ export class PopupService {
         this.openFile(file);
       });
   
-    const type = FilesRow.getFileType(file.ext),
+    const type = getFileType(file.ext),
       blob = b64toBlob(Array.isArray(file.content) ? file.content[0] : file.content, type),
       url = URL.createObjectURL(blob),
       context: FileViewConfig = { $implicit: {

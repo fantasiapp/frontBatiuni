@@ -1,10 +1,8 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, HostBinding, Input, Output } from "@angular/core";
 import { Select, Store } from "@ngxs/store";
 import { Observable } from "rxjs";
-import { Serialized } from "src/app/shared/common/types";
-import { EstablishmentsRow } from "src/models/data/data.model";
-import { MiscState } from "src/models/misc/misc.state";
-
+import { Establishement } from "src/models/new/data.interfaces";
+import { Clear, Query, QueryAll } from "src/models/new/data.state";
 @Component({
   selector: 'suggestion-box',
   template: `
@@ -51,17 +49,19 @@ export class UISuggestionBox {
   
   @HostBinding('attr.tabindex') get nonFocusable() { return -1; }
 
-  @Select(MiscState.get('register.company'))
-  suggestions$!: Observable<EstablishmentsRow[]>;
+  @QueryAll('Establishments')
+  suggestions$!: Observable<Establishement[]>;
 
-  constructor(private store: Store, private cd: ChangeDetectorRef) {}
+  constructor(private store: Store, private cd: ChangeDetectorRef) {
+    this.suggestions$.subscribe(console.log);
+  }
 
   @Input('query')
   set setQuery(query: string | null) {
     if ( !query ) return;
     this.picked = false;
     this.query = query;
-    this.store.dispatch(new this.action(query, 'register.company')).subscribe(() => {
+    this.store.dispatch(new this.action(query)).subscribe(() => {
       if ( !this.picked && !this.showSuggestions ) {
         this.showSuggestions = true;
         this.cd.markForCheck();
@@ -73,14 +73,15 @@ export class UISuggestionBox {
   action: any;
 
   @Output()
-  choice = new EventEmitter<EstablishmentsRow>();
+  choice = new EventEmitter<Establishement>();
 
   picked: boolean = false;
 
-  choose(suggestion: EstablishmentsRow) {
+  choose(suggestion: Establishement) {
     this.showSuggestions = false;
     this.picked = true;
     this.choice.emit(suggestion);
+    this.store.dispatch(new Clear('Establishments'));
   }
 
   hideSuggestions() {

@@ -2,9 +2,9 @@ import { FormGroup } from "@angular/forms";
 import { FileUIOutput } from "src/app/shared/components/filesUI/files.ui";
 import { PropertyTrap } from "src/app/shared/common/classes";
 import { getDirtyValues } from "src/app/shared/common/functions";
-import { DisponibilityRow } from "../data/data.model";
-import { DataTypes, Profile } from "../new/data.interfaces";
+import { DataTypes, Profile } from "../data.interfaces";
 import { CalendarUI } from "src/app/shared/components/calendar/calendar.ui";
+import { getAvailabilityName } from "../data.mapper";
 
 export class ChangeProfileType {
   static readonly type = '[User] Change Profile Type';
@@ -215,7 +215,7 @@ export class ModifyDisponibility {
 
   static fromCalendar(calendar: CalendarUI) {
     return new ModifyDisponibility(calendar.value!.map(
-      day => [day.date, DisponibilityRow.getAvailabilityName(day.availability)]
+      day => [day.date, getAvailabilityName(day.availability)]
     ));
   }
 };
@@ -225,3 +225,8 @@ export class ApplyPost {
   action = 'applyPost';
   constructor(public Post: number) { }
 }
+
+export class GetGeneralData {
+  static readonly type = '[Data] Get General data';
+  action = 'getGeneralData';
+};

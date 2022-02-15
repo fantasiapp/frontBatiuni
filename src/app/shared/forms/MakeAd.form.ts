@@ -4,7 +4,7 @@ import { Store } from "@ngxs/store";
 import { take } from "rxjs/operators";
 import { Post, Job } from "src/models/new/data.interfaces";
 import { DataQueries, SnapshotAll } from "src/models/new/data.state";
-import { DeleteFile, SwitchPostType, UploadPost } from "src/models/user/user.actions";
+import { DeleteFile, SwitchPostType, UploadPost } from "src/models/new/user/user.actions";
 import { Required } from "src/validators/verify";
 import { defaultFileUIOuput } from "../components/filesUI/files.ui";
 import { InfoService } from "../components/info/info.component";

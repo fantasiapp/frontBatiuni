@@ -6,7 +6,7 @@ import { catchError } from "rxjs/operators";
 import { Logout } from "src/models/auth/auth.actions";
 import { AuthState } from "src/models/auth/auth.state";
 import { DataState } from "src/models/new/data.state";
-import { GetUserData } from "src/models/user/user.actions";
+import { GetUserData } from "src/models/new/user/user.actions";
 
 @Injectable()
 export class AuthResolver implements Resolve<any> {

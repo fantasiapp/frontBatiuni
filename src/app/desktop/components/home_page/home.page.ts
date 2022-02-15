@@ -2,18 +2,15 @@ import { animate, style, transition, trigger } from "@angular/animations";
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, TemplateRef, ViewChild } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { Select, Store } from "@ngxs/store";
-import { BehaviorSubject, combineLatest, Observable } from "rxjs";
+import { combineLatest, Observable } from "rxjs";
 import { take, takeUntil } from "rxjs/operators";
 import { Destroy$ } from "src/app/shared/common/classes";
 import { splitByOutput } from "src/app/shared/common/functions";
 import { InfoService } from "src/app/shared/components/info/info.component";
 import { PopupService } from "src/app/shared/components/popup/popup.component";
-import { ApplyPost, DeletePost, SwitchPostType } from "src/models/user/user.actions";
-import { User } from "src/models/user/user.model";
-import { UserState } from "src/models/user/user.state";
+import { ApplyPost, DeletePost, SwitchPostType } from "src/models/new/user/user.actions";
 import { DataQueries, DataState, QueryAll, Snapshot, SnapshotArray } from 'src/models/new/data.state'
-import { Candidate, Company, File, Job, Post, Profile } from "src/models/new/data.interfaces";
-import { PostDetail } from "src/models/data/data.model";
+import { Candidate, Company, File, Job, Post, PostDetail, Profile } from "src/models/new/data.interfaces";
 
 type PostMenu = { open: boolean; post: Post | null; };
 
@@ -46,9 +43,6 @@ export class HomePageComponent extends Destroy$ {
 
   @Select(DataQueries.currentProfile)
   profile$!: Observable<Profile>;
-
-  @Select(UserState)
-  user$!: Observable<User>;
 
   @Select(DataState.view)
   view$!: Observable<"ST" | "PME">;
@@ -108,8 +102,6 @@ export class HomePageComponent extends Destroy$ {
   activeView: number = 0;
   annonces = new Array(10).fill(0);
   editMenu: PostMenu = { open: false, post: null };
-
-  getDrafts(user: User) { return user.profile?.company.posts.filter(post => post.draft); }
 
   ngOnInit() {
     combineLatest([this.profile$, this.posts$]).pipe(takeUntil(this.destroy$)).subscribe(([profile, posts]) => {

@@ -1,7 +1,7 @@
 import { StateOperator } from "@ngxs/store";
 import produce from "immer";
 import { Record, DataTypes, Interface } from "./data.interfaces";
-import { getOriginalName, NameMapping } from "./data.mapper";
+import { getOriginalName } from "./data.mapper";
 
 type RepresentedType<K extends DataTypes, V extends keyof Interface<K>> =
   Interface<K>[V];

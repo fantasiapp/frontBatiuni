@@ -1,11 +1,11 @@
 import { ChangeDetectionStrategy, Component, ViewChild } from "@angular/core";
 import { Select, Store } from "@ngxs/store";
 import { Observable } from "rxjs";
-import { Availability, CalendarUI } from "src/app/shared/components/calendar/calendar.ui";
+import { Availability, CalendarUI, DayState } from "src/app/shared/components/calendar/calendar.ui";
 import { SwipeupService } from "src/app/shared/components/swipeup/swipeup.component";
-import { ModifyDisponibility } from "src/models/user/user.actions";
-import { User } from "src/models/user/user.model";
-import { UserState } from "src/models/user/user.state";
+import { Profile } from "src/models/new/data.interfaces";
+import { DataQueries } from "src/models/new/data.state";
+import { ModifyDisponibility } from "src/models/new/user/user.actions";
 
 @Component({
   selector: 'availabilities',
@@ -14,12 +14,13 @@ import { UserState } from "src/models/user/user.state";
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AvailabilitiesComponent {
-
-  @Select(UserState)
-  user$!: Observable<User>;
-
   @ViewChild('calendar', {read: CalendarUI, static: false})
   calendar!: CalendarUI;
+
+  @Select(DataQueries.currentProfile)
+  profile$!: Observable<Profile>;
+
+  availabilities: DayState[] = [];
 
   private items = [{
     name: 'Disponible',
@@ -49,6 +50,14 @@ export class AvailabilitiesComponent {
 
   constructor(private store: Store, private swipeupService: SwipeupService) {
 
+  }
+
+  ngOnInit() {
+    this.profile$.subscribe(profile => {
+      this.availabilities =
+        this.store.selectSnapshot(DataQueries.getMany('Disponibility', profile.company.availabilities))
+          .map(availability => ({date: availability.date, availability: availability.nature as Availability}));
+    });
   }
 
   submit(calendar: CalendarUI) {

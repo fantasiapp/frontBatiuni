@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, ViewChild } from "@angular/core";
 import { Select, Store } from "@ngxs/store";
 import { Observable } from "rxjs";
-import * as UserActions from "src/models/user/user.actions";
+import * as UserActions from "src/models/new/user/user.actions";
 import { Camera, CameraResultType, CameraSource } from "@capacitor/camera";
 import { UISlideMenuComponent } from "../../../shared/components/slidemenu/slidemenu.component";
 import { Logout } from "src/models/auth/auth.actions";

@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component } from "@angular/core";
-import { GetUserData } from "src/models/user/user.actions";
+import { GetUserData } from "src/models/new/user/user.actions";
 
 @Component({
   selector: 'connexion',

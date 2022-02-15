@@ -1,14 +1,14 @@
 import { ChangeDetectionStrategy, Component } from "@angular/core";
 import { Select } from "@ngxs/store";
-import { BehaviorSubject } from "rxjs";
-import { User } from "src/models/user/user.model";
-import { UserState } from "src/models/user/user.state";
+import { Observable } from "rxjs";
+import { Profile } from "src/models/new/data.interfaces";
+import { DataQueries } from "src/models/new/data.state";
 
 @Component({
   selector: 'main-page',
   template: `
-    <ng-container *ngIf="(user$ | async) as user">
-      <desktop-stickyH [user]="user"></desktop-stickyH>
+    <ng-container *ngIf="(profile$ | async) as profile">
+      <desktop-stickyH [profile]="profile"></desktop-stickyH>
       <div class="router">
         <router-outlet #outlet="outlet"></router-outlet>
       </div>
@@ -29,8 +29,8 @@ import { UserState } from "src/models/user/user.state";
 })
 export class MainPageComponent {
 
-  @Select(UserState)
-  user$!: BehaviorSubject<User>;
+  @Select(DataQueries.currentProfile)
+  profile$!: Observable<Profile>;
 
   constructor() {
 

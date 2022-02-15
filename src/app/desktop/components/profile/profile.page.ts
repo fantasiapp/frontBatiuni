@@ -1,13 +1,11 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from "@angular/core";
 import { FormGroup } from "@angular/forms";
 import { Select, Store } from "@ngxs/store";
-import { BehaviorSubject, Observable } from "rxjs";
+import { Observable } from "rxjs";
 import { Logout } from "src/models/auth/auth.actions";
 import { Profile } from "src/models/new/data.interfaces";
 import { DataQueries } from "src/models/new/data.state";
-import { User } from "src/models/user/user.model";
-import { UserState } from "src/models/user/user.state";
-import * as UserActions from "src/models/user/user.actions";
+import * as UserActions from "src/models/new/user/user.actions";
 import { InfoService } from "src/app/shared/components/info/info.component";
 import { take } from "rxjs/operators";
 import { animate, style, transition, trigger } from "@angular/animations";
@@ -45,9 +43,6 @@ export class ProfilePageComponent {
   @Select(DataQueries.currentProfile)
   profile$!: Observable<Profile>;
 
-  @Select(UserState)
-  user$!: BehaviorSubject<User>;
-
   constructor(private store: Store, private cd: ChangeDetectorRef, private info: InfoService,) {}
   ngOnInit() {
     this.profile$.subscribe(console.log)
@@ -61,7 +56,6 @@ export class ProfilePageComponent {
   }
   modifyProfileDesktop(binding:any) {
     const form = this.profileForm;
-    const user = this.store.selectSnapshot(UserState);
     const action = this.store.dispatch(new UserActions.ModifyUserProfile({profile: this.store.selectSnapshot(DataQueries.currentProfile), form}));
     this.info.show("info", "Mise à jour en cours...", Infinity);
     action.pipe(take(1))

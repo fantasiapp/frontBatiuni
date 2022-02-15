@@ -3,7 +3,7 @@ import { Select, Store } from "@ngxs/store";
 import { Observable } from "rxjs";
 import { Profile } from "src/models/new/data.interfaces";
 import { DataState } from "src/models/new/data.state";
-import { ChangeProfileType } from "src/models/user/user.actions";
+import { ChangeProfileType } from "src/models/new/user/user.actions";
 
 @Component({
   selector: 'profile-resume',

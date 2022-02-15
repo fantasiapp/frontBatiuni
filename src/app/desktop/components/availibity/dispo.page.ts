@@ -1,17 +1,12 @@
 import { ChangeDetectionStrategy, Component, ViewChild } from "@angular/core";
-import { Router } from "@angular/router";
 import { Select, Store } from "@ngxs/store";
-import { BehaviorSubject, fromEvent, Observable } from "rxjs";
-import { takeUntil } from "rxjs/operators";
+import { Observable } from "rxjs";
 import { Destroy$ } from "src/app/shared/common/classes";
 import { Availability, CalendarUI, DayState } from "src/app/shared/components/calendar/calendar.ui";
-import { SwipeupService } from "src/app/shared/components/swipeup/swipeup.component";
 import { TooltipDimension, UITooltipService } from "src/app/shared/components/tooltip/tooltip.component";
-import { Profile } from "src/models/new/data.interfaces";
-import { DataQueries } from "src/models/new/data.state";
-import { ModifyDisponibility } from "src/models/user/user.actions";
-import { User } from "src/models/user/user.model";
-import { UserState } from "src/models/user/user.state";
+import { Disponibility, Profile } from "src/models/new/data.interfaces";
+import { DataQueries, SnapshotArray } from "src/models/new/data.state";
+import { ModifyDisponibility } from "src/models/new/user/user.actions";
 
 @Component({
   selector:"dispo-page",
@@ -20,8 +15,10 @@ import { UserState } from "src/models/user/user.state";
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DispoPage extends Destroy$ {
-  @Select(UserState)
-  user$!: Observable<User>;
+  @Select(DataQueries.currentProfile)
+  profile$!: Observable<Profile>;
+
+  availabilities: DayState[] = [];
 
   private items = [{
     name: 'Disponible',
@@ -57,12 +54,16 @@ export class DispoPage extends Destroy$ {
     width: '300px', height: '150px' 
   };
 
-  @Select(DataQueries.currentProfile)
-  profile$!: Observable<Profile>;
-
   constructor(private store: Store, private tooltipService: UITooltipService) {
-    super();
-    
+    super(); 
+  }
+
+  ngOnInit() {
+    this.profile$.subscribe(profile => {
+      this.availabilities =
+        this.store.selectSnapshot(DataQueries.getMany('Disponibility', profile.company.availabilities))
+          .map(availability => ({date: availability.date, availability: availability.nature as Availability}));
+    });
   }
 
   private getDimensionFromEvent(e: MouseEvent) {
@@ -76,8 +77,8 @@ export class DispoPage extends Destroy$ {
     };
   }
   
-  submit(calendar: CalendarUI) {
-    this.store.dispatch(ModifyDisponibility.fromCalendar(calendar));
+  submit() {
+    this.store.dispatch(ModifyDisponibility.fromCalendar(this.calendar));
   }
 
   onDayClicked([ev, _]: [MouseEvent, DayState]) {
@@ -88,12 +89,6 @@ export class DispoPage extends Destroy$ {
       hideOnClick: true,
       class: 'availability-picker'
     });
-  }
-
-  ngOnInit() {
-    this.profile$.subscribe(data=> {
-      console.log(data.company.availabilities )
-    })
   }
 
   private setCalendarDayState(state: Availability) {

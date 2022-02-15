@@ -11,16 +11,12 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AppState } from './app.state';
 import { CommonModule } from '@angular/common';
 
-import { UserState } from 'src/models/user/user.state';
-
 import { GlobalRoutingModule } from './app.routing-module';
-import { DataState } from 'src/models/data/data.state';
-import { MiscState } from 'src/models/misc/misc.state';
 import { HttpService } from './services/http.service';
 import { SharedModule } from './shared/shared.module';
 
 import { DataReader } from 'src/models/new/data.mapper';
-import { DataState as NewDataState } from 'src/models/new/data.state';
+import { DataState } from 'src/models/new/data.state';
 
 @Injectable()
 export class CustomConfig extends HammerGestureConfig {
@@ -38,7 +34,7 @@ export class CustomConfig extends HammerGestureConfig {
   imports: [
     //Ngxs imports
     NgxsModule.forRoot([
-      AppState, AuthState, UserState, DataState, MiscState, NewDataState
+      AppState, AuthState, DataState
     ], {
       developmentMode: !environment.production
     }),

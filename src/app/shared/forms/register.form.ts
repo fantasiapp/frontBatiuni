@@ -6,15 +6,13 @@ import { bufferCount, debounceTime, last, map, take, takeUntil } from "rxjs/oper
 import { Register } from "src/models/auth/auth.actions";
 import { ComplexPassword, MatchField, RequiredType, setErrors, TransferError } from "src/validators/verify";
 import { SlidesDirective } from "../directives/slides.directive";
-import { Option } from "src/models/option";
 import { Email } from "src/validators/persist";
-import { EstablishmentsRow, JobRow, RoleRow } from "src/models/data/data.model";
-import { merge, race, Subject } from "rxjs";
-import { GetCompanies } from "src/models/misc/misc.actions";
+import { merge, Subject } from "rxjs";
 import { UISuggestionBox } from "../components/suggestionbox/suggestionbox.component";
 import { Destroy$ } from "../common/classes";
-
-
+import { SnapshotAll } from "src/models/new/data.state";
+import { Establishement, Job, Role } from "src/models/new/data.interfaces";
+import { GetCompanies } from "src/models/new/search/search.actions";
 
 @Component({
   selector: 'register-form',
@@ -238,7 +236,7 @@ export class RegisterForm extends Destroy$ {
 
   actions = {GetCompanies};
 
-  onChoice(establishment: EstablishmentsRow) {
+  onChoice(establishment: Establishement) {
     this.registerForm.get('company')?.setValue(establishment);
     this.registerForm.get('companyName')?.setValue(establishment.name);
   }
@@ -250,6 +248,9 @@ export class RegisterForm extends Destroy$ {
     return true;
   }
 
-  jobs: Option[] = [...JobRow.instances.values()].map(job => ({...job, checked: false}));
-  roles = [...RoleRow.instances.values()].map(role => ({id: role.id, name: role.name, checked: false}));
+  @SnapshotAll('Job')
+  jobs!: Job[];
+
+  @SnapshotAll('Role')
+  roles!: Role[];
 };

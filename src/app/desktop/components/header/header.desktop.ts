@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
 import { Select, Store } from "@ngxs/store";
-import { User } from "src/models/user/user.model";
-import * as UserActions from "src/models/user/user.actions";
+import * as UserActions from "src/models/new/user/user.actions";
 import { Logout } from "src/models/auth/auth.actions";
 import { ImageGenerator } from "src/app/shared/services/image-generator.service";
 import { Profile } from "src/models/new/data.interfaces";
@@ -18,15 +17,11 @@ export class HeaderDesktop {
 
   }
 
-
   @Select(DataQueries.currentProfile)
   profile$!: Observable<Profile>;
 
   @Select(DataState.view)
   view$!: Observable<'ST' | 'PME'>;
-
-  @Input()
-  user!: User;
 
   @Input()
   profile!: Profile;

@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
 import { Select } from "@ngxs/store";
-import { BehaviorSubject, Observable } from "rxjs";
-import { User } from "src/models/user/user.model";
-import { UserState } from "src/models/user/user.state";
+import { Observable } from "rxjs";
+import { Profile } from "src/models/new/data.interfaces";
+import { DataQueries } from "src/models/new/data.state";
 
 @Component({
   selector: 'reponse-page',
@@ -11,10 +11,8 @@ import { UserState } from "src/models/user/user.state";
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ResponsePage {
-    activeView: number = 0;
-    @Select(UserState)
-    user$!: Observable<User>;
-    ngOnInit() {
-        this.user$.subscribe(console.log)
-    }
+  activeView: number = 0;
+
+  @Select(DataQueries.currentProfile)
+  profile$!: Observable<Profile>;
 };

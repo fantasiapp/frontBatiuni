@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, HostBinding, HostListener, Input} f
 import { Store } from "@ngxs/store";
 import { Post, Company } from "src/models/new/data.interfaces";
 import { DataQueries, Snapshot } from "src/models/new/data.state";
-import { DeletePost } from "src/models/user/user.actions";
+import { DeletePost } from "src/models/new/user/user.actions";
 
 @Component({
   selector: 'offer',

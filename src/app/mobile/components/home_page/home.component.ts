@@ -10,7 +10,7 @@ import { InfoService } from "src/app/shared/components/info/info.component";
 import { PopupService } from "src/app/shared/components/popup/popup.component";
 import { SlidemenuService } from "src/app/shared/components/slidemenu/slidemenu.component";
 import { SwipeupService } from "src/app/shared/components/swipeup/swipeup.component";
-import { ApplyPost, DeletePost, DuplicatePost, SwitchPostType } from "src/models/user/user.actions";
+import { ApplyPost, DeletePost, DuplicatePost, SwitchPostType } from "src/models/new/user/user.actions";
 import { DataQueries, DataState, QueryAll, SnapshotAll } from 'src/models/new/data.state';
 import { Profile, Post } from "src/models/new/data.interfaces";
 

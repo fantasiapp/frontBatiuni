@@ -7,11 +7,11 @@ import { RouterOutlet } from '@angular/router';
 import { transition, trigger } from '@angular/animations';
 import { SlideChildrenLeft, SlideChildrenRight } from 'src/animations/slide.animation';
 import { AsyncSubject, Observable } from 'rxjs';
-import { GetGeneralData } from 'src/models/data/data.actions';
 import { environment } from 'src/environments/environment';
 import { DataModel, DataState } from 'src/models/new/data.state';
 import { Company } from 'src/models/new/data.interfaces';
 import { map } from 'rxjs/operators';
+import { GetGeneralData } from 'src/models/new/user/user.actions';
 
 
 @Component({
