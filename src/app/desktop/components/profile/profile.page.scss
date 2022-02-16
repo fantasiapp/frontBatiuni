@@ -15,7 +15,6 @@
     }
   }
 }
-
 profile-resume {
   padding: $item-padding 0;
 }
@@ -95,18 +94,32 @@ tabs {
 }
 .abonnementCards {
   // width: calc(100vw - 400px) !important;
-  display: flex;
-  flex-flow:row wrap;
+  .child {
+    margin: 0 2rem;
+  }
+  align-items: center;
+  @include range($mobile, 1500px) {
+    flex-flow:column wrap;
+  }
+ 
+  @include from(1500px) {
+    display: flex;
+    flex-flow: row nowrap;
 
-  
+  }
+}
+abonnement-card::ng-deep {
+  flex: 0 0 auto;
+  @include range($mobile ,1500px) {
+    text-align: center !important;
+    width: 100% !important;
+    .card {
+      position: static !important;
+    }
+  }
 }
 
 
-.child {
-  min-width: 300px;
-  margin: 1rem 1rem;
-  max-width: 300px;
-}
 // .facture{
 //   width: calc(100vw - 1000px);
 //   min-width: 400px !important;

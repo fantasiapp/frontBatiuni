@@ -1,15 +1,15 @@
 <company-info [profile]="post?.company || profile$"></company-info>
 <div class="web-page ">
   <section class="filters">
-    <div class="header">
-      <step></step>
-    </div>
+    <!-- <div class="header"> -->
+      <stepper-sys (nodeId)="scrollTo($event)" [rayon]="10" [margin]="10" [testList]="['Besoins de l’entreprise','Infos chantiers','Rémunération','Document important à télécharger']"></stepper-sys>
+    <!-- </div> -->
 
   </section>
 
   <section class="main web-content font-Poppins space">
     <div class="full-width flex column">
-      <ad-form class="adform " [page]="false" [post]="post" #addForm></ad-form>
+      <ad-form class="adform " [page]="false" [post]="post" #addForm ></ad-form>
 
       <div class="hiden-action flex  space-around center">
         <button class="button active" (click)="addForm.submit(false)"

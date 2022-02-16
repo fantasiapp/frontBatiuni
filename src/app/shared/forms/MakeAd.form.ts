@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, HostBinding, Input, Output } from "@angular/core";
+import { ChangeDetectionStrategy, Component, ElementRef, EventEmitter, HostBinding, Input, Output, ViewChild } from "@angular/core";
 import { FormArray, FormControl, FormGroup, Validators } from "@angular/forms";
 import { Store } from "@ngxs/store";
 import { take } from "rxjs/operators";
@@ -13,7 +13,7 @@ import { InfoService } from "../components/info/info.component";
   selector: 'ad-form',
   template: `
   <form class="full-width form-control" [formGroup]="makeAdForm">
-    <h2 class="form-section-title">Besoins de l'entreprise</h2>
+    <h2 class="form-section-title" #0>Besoins de l'entreprise</h2>
 
     <div class="form-input">
       <label>Je cherche</label>
@@ -45,7 +45,7 @@ import { InfoService } from "../components/info/info.component";
       <img src="assets/calendar.png"/>
     </div>
 
-    <h2 class="form-section-title">Infos chantiers</h2>
+    <h2 class="form-section-title" #1>Infos chantiers</h2>
     <div class="form-input">
       <label>Adresse</label>
       <input type="text" class="form-element" formControlName="address"/>
@@ -95,7 +95,7 @@ import { InfoService } from "../components/info/info.component";
       </div>
     </div>
 
-    <h2 class="form-section-title" id="anass">Rémunération</h2>
+    <h2 class="form-section-title" #2>Rémunération</h2>
     <div class="form-input">
       <label>Montant</label>
       <div class="flex row remuneration">
@@ -111,7 +111,7 @@ import { InfoService } from "../components/info/info.component";
       <span>Autoriser une contre-offre</span>
     </div>
 
-    <h2 class="form-section-title">Documents à télécharger</h2>
+    <h2 class="form-section-title" #3>Documents à télécharger</h2>
 
     <ng-container formArrayName="documents">
       <ng-container *ngFor="let document of documentsControls; index as i" [formGroupName]="i">
@@ -200,6 +200,12 @@ import { InfoService } from "../components/info/info.component";
 export class MakeAdForm {
   @HostBinding('class.page')
   @Input() page: boolean = true;
+
+  @ViewChild('0') public first! : ElementRef;
+  @ViewChild('1') public second! : ElementRef;
+  @ViewChild('2') public third! : ElementRef;
+  @ViewChild('3') public last! : ElementRef;
+
   
   @Output() done = new EventEmitter();
   

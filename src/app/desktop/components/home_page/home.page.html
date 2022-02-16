@@ -28,8 +28,10 @@
           <div class="results space-children-margin">
             <ng-container [ngSwitch]="activeView">
               <ng-container *ngSwitchCase="0">
-                <offer *ngFor="let draft of userDrafts" src="assets/brouillon.svg" [deletable]="true" [post]="draft"
-                  [routerLink]="['','home','make',draft.id]"></offer>
+                <offer *ngFor="let draft of userDrafts" src="assets/brouillon.svg" 
+                  [deletable]="true" [post]="draft"
+                  [routerLink]="['','home','make',draft.id]"
+                  ></offer>
               </ng-container>
               <ng-container *ngSwitchCase="1">
                 <offer *ngFor="let onlinePost of userOnlinePosts" [deletable]="false" [post]="onlinePost"
@@ -84,9 +86,9 @@
         </section>
 
         <!-- Validee -->
-        <section class="main web-content font-Poppins space-children-margin  addMargin responsive"
+        <section #valide class="main web-content font-Poppins space-children-margin  addMargin responsive"
           *ngIf="resumerType == 'valider';else enlgine">
-          <h1 class="title-with-line">Résumé de la mission</h1>
+          <h1 class="title-with-line" #0>Résumé de la mission</h1>
           <div class="description">
             <ul>
               <!-- <li>{{postResumer?.numberOfPeople || 1}} {{postResumer?.job?.name}} </li> -->
@@ -97,22 +99,22 @@
               <!-- <li *ngFor="let detail of (postResumer?.details || [])">{{detail.content}}</li> -->
             </ul>
           </div>
-          <h1 class="title-with-line">Le contrat</h1>
+          <h1 class="title-with-line" #1>Le contrat</h1>
           <div class="flex row center-cross">
             <file-svg name="Contrat" color="red"></file-svg>
             <span class="signature">
               Signer le contrat
             </span>
           </div>
-          <h1 class="title-with-line">Suivi de chantier</h1>
+          <h1 class="title-with-line" #2>Suivi de chantier</h1>
           <suivi-chantier></suivi-chantier>
           <suivi-chantier></suivi-chantier>
         </section>
 
         <!-- Enlgine -->
-        <ng-template #enlgine>
+        <ng-template #enlgine >
           <section class="main web-content font-Poppins space-children-margin addMargin responsive">
-            <span class="title-with-line">Nous avons besoin de</span>
+            <span class="title-with-line" >Nous avons besoin de</span>
             <div class="description">
               <ul class="small-space-children-margin">
                 <li>{{postResumer?.numberOfPeople || 1}} {{(postResumerJob | snapshot).name}} </li>

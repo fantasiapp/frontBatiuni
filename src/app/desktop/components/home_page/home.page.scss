@@ -6,7 +6,7 @@
   display: block;
 }
 .web-page {
-  @include range($mobile , 1500px){
+  @include range(0px , 1500px){
    .filters {
      display: none;
    }
