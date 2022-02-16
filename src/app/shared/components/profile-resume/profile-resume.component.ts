@@ -16,7 +16,7 @@ export class ProfileResume {
   constructor(private store: Store) {}
 
   @Input()
-  profile!: Profile;
+  profile!: Profile;  
 
   @Select(DataState.view)
   view$!: Observable<string>;
@@ -35,9 +35,6 @@ export class ProfileResume {
 
   @Output()
   ratingsClicked = new EventEmitter();
-
-  @Output()
-  profileChanged = new EventEmitter<boolean>();
 
   @Output()
   changePicture = new EventEmitter();

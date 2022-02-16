@@ -11,7 +11,7 @@
 
     <section class="main web-content font-Poppins">
       <!-- <searchbar placeholder="Mes missions ..."></searchbar> -->
-      <calendar [value]="availabilities" (dayClick)="onDayClicked($event)" #calendar></calendar>
+      <calendar [value]="availabilities" (dayClick)="onDayClicked($event)"></calendar>
       <div class="flex full-width" style="justify-content: end;" >
 
         <button class="button active" (click)="submit()">Enregistrer</button>

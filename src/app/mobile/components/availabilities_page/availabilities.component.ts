@@ -64,7 +64,7 @@ export class AvailabilitiesComponent {
     this.store.dispatch(ModifyDisponibility.fromCalendar(calendar));
   }
 
-  onDayClicked() {
+  onDayClicked(_: [MouseEvent, DayState[]]) {
     this.swipeupService.show({
       type: 'menu',
       items: this.items,

@@ -172,8 +172,8 @@
     font-size: 1em;
   }
 
-  label {
-    margin-bottom: 5px;
+  & > label {
+    margin-bottom: 10px;
     font-weight: 400;
   }
 

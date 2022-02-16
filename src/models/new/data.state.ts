@@ -102,13 +102,11 @@ export class DataState {
 
   @Selector([DataState])
   static companies(state: DataModel) {
-    console.log('Company: state change')
     return state['Company'] || {};
   }
 
   @Selector([DataState])
   static users(state: DataModel) {
-    console.log('UserProfile: state change');
     return state['UserProfile'] || {};
   }
 
@@ -137,7 +135,7 @@ export class DataState {
 
     return req.pipe(
       tap((response: any) => {
-        localStorage.setItem('general-data', JSON.stringify(response));
+        //localStorage.setItem('general-data', JSON.stringify(response));
         const operations = this.reader.readStaticData(response);
         ctx.setState(compose(...operations));
       }) 
@@ -285,6 +283,7 @@ export class DataState {
       ),
       req = this.http.post('data', form);
     
+    console.log('sending', form);
     return req.pipe(
       map((response: any) => {
         if ( response[post.action] !== 'OK' ) throw response['messages'];

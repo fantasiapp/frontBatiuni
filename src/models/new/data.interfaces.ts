@@ -67,7 +67,10 @@ export interface PostDetail {
 
 export interface Supervision {
   id: Ref<Supervision>;
-  //???
+  author: string;
+  date: string;
+  comment: string;
+  files: Ref<File>[];
 }
 
 export interface Disponibility {

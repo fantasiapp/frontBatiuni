@@ -10,6 +10,8 @@ export interface DayState {
   availability: Availability;
 };
 
+export type CalendarMode = 'range' | 'single';
+
 @Component({
   selector: 'calendar',
   templateUrl: './calendar.ui.html',
@@ -29,6 +31,11 @@ export class CalendarUI extends UIDefaultAccessor<DayState[]> {
   @Input()
   embedded: boolean = true;
 
+  @Input()
+  mode: CalendarMode = 'single';
+
+  private rangeStart: number | null = null;
+
   @Output()
   dayClick = new EventEmitter();
 
@@ -42,12 +49,18 @@ export class CalendarUI extends UIDefaultAccessor<DayState[]> {
     "Dimanche"
   ];
 
-  monthSelect: any[] = [];
+  monthSelect: {
+    name: string;
+    value: any;
+    date: any;
+    indexWeek: number;
+    availability: Availability;
+  }[] = [];
+
   dateSelect: any;
-  currentDay: any;
+  selection: string[] = [];
   currentMonth: number = 0;
   currentYear: number = 0;
-  dayClicked: boolean = false;
 
   constructor(cd: ChangeDetectorRef) {
     super(cd);
@@ -60,6 +73,13 @@ export class CalendarUI extends UIDefaultAccessor<DayState[]> {
     if (month < 10) return '0' + month;
     return month;
   };
+
+  viewCurrentDate() {
+    let now = new Date(Date.now());
+    this.currentMonth = (now.getMonth()) + 1;
+    this.currentYear = now.getFullYear();
+    this.getDaysFromDate(this.fillZero(this.currentMonth), this.currentYear);
+  }
 
   getDaysFromDate(month: any, year: any) {
     const startDate = moment.utc(`${year}/${month}/01`, "YYYY-MM-DD")
@@ -93,70 +113,92 @@ export class CalendarUI extends UIDefaultAccessor<DayState[]> {
     const nextDate = flag < 0 ? this.dateSelect.clone().subtract(1, "month") : this.dateSelect.clone().add(1, "month");
     this.currentMonth = nextDate.get('M') + 1; this.currentYear = nextDate.get('Y');
     this.getDaysFromDate(this.fillZero(this.currentMonth), this.currentYear);
+    this.rangeStart = null; //cancel selection
   }
 
-  lastClick: any;
-  onDayClicked(day: string, e: Event) {
-    this.dayClicked = true;
-    this.choseDay(day, e);
-    this.dayClick.emit([e, this.currentDay]);
+  onDayClicked(index: number, day: string, e: Event) {
+    //e shouldnt be passed, it should be the host responsibility
+    //set click listener on the host and when the emitted event occurs
+    //read the value and show what needs to be shown
+
+    console.log(this.rangeStart)
+    if ( this.rangeStart !== null) {
+      const min = Math.min(this.rangeStart, index),
+        max = Math.max(this.rangeStart, index);
+      
+      const selection: string[] = [];
+      for ( let i = min; i <= max; i++ )
+        selection.push(this.monthSelect[i].date);
+      
+      this.setSelection(selection);
+      this.rangeStart = null;
+    } else {
+      //first click
+      if ( this.mode == 'range' )
+        this.rangeStart = index;
+      else {
+        this.setSelection([day]);
+        this.dayClick.emit([e, this.selection]);
+      }
+    }
   }
 
-  choseDay(day: any, e: Event) {
-    this.lastClick = e;
-    this.currentDay = day;
+  setSelection(days: string[]) {
+    this.selection = days;
 
-    if (!this.embedded)
-      this.toggleDayState(this.currentDay, 'selected');
-  }
-
-  private setDOMState(state: Availability | null) {
-    const target = this.lastClick.target as HTMLInputElement;
-    let others = ['available', 'availablelimits', 'unavailable', 'selected'];
-    if (state) others = others.filter(item => item != state)
-    for (let i = 0; i < others.length; i++)
-      target.classList.remove(`${others[i]}`);
-
-    if (state) target.classList.add(`${state}`);
-    this.cd.markForCheck();
+    if ( !this.embedded )
+      this.mode == 'single' ? this.toggleDayState(this.selection[0], 'selected') : this.addValues(this.selection, 'selected');
   }
 
   setCurrentDayState(state: Availability) {
-    const remaining = this.value!.filter(item => item.date !== this.currentDay.date);
+    const remaining = this.value!.filter(item => item.date !== this.selection[0]);
     let next;
     if (state != 'nothing') {
       next = [...remaining, {
-        date: this.currentDay.date,
+        date: this.selection[0],
         availability: state
       }];
-      this.setDOMState(state);
     }
     else {
       next = remaining;
-      this.setDOMState(null);
     }
 
     this.onChange(next);
-    this.dayClicked = false;
-    console.log(this.value, this._value);
+    this.cd.markForCheck();
   }
 
-  toggleDayState(day: DayState, targetState: Availability) {
-    const [[current], remaining] = filterSplit(this.value!, (item) => item.date == day.date);
+  toggleDayState(day: string, targetState: Availability) {
+    const [[current], remaining] = filterSplit(this.value!, (item) => item.date == day);
     let next;
     if (current) {
       next = remaining;
-      this.setDOMState(null);
     } else {
       next = [...remaining, {
-        date: this.currentDay.date,
+        date: day,
         availability: targetState
       }];
-      this.setDOMState(targetState);
     }
 
     this.onChange(next);
+    this.cd.markForCheck();
   };
 
+  addValues(days: string[], targetState: Availability) {
+    //delete the overlap, it should take the new value
+    const currentDates = this.value!.map(day => day.date),
+      remaining1 = currentDates.filter(knownDate => !days.includes(knownDate)),
+      remaining2 = days.filter(day => !currentDates.includes(day));
+    
+    this.onChange([...remaining1, ...remaining2].map(date => ({date, availability: targetState})));
+    this.cd.markForCheck();
+  }
+
   //write value
+  writeValue(value: DayState[] | string[]): void {
+    if ( value.length ) {
+      if ( typeof value[0] == 'string' ) {
+        super.writeValue((value as string[]).map(date => ({date, availability: 'selected'})));
+      } else super.writeValue(value as DayState[]);
+    } else super.writeValue(value as DayState[]);
+  }
 }

@@ -7,7 +7,7 @@
   off="Profil ST" on="Profil PME"  style="text-align: center;"
   [value]="(view$ | async) == 'PME'" 
   (valueChange)="changeProfileType($event)"
-  [disabled]="profile.company.role !== 3 || null">
+  [disabled]="!profile.user || (profile.company.role !== 3 || null)">
 </switch>
 
 <section class="quick-intro flex column center-cross small-space-children-margin">

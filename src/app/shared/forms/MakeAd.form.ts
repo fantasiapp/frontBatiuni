@@ -1,11 +1,12 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, HostBinding, Input, Output } from "@angular/core";
+import { ChangeDetectionStrategy, Component, EventEmitter, HostBinding, Input, Output, ViewChild } from "@angular/core";
 import { FormArray, FormControl, FormGroup, Validators } from "@angular/forms";
 import { Store } from "@ngxs/store";
 import { take } from "rxjs/operators";
-import { Post, Job } from "src/models/new/data.interfaces";
+import { Post, Job, PostDate } from "src/models/new/data.interfaces";
 import { DataQueries, SnapshotAll } from "src/models/new/data.state";
 import { DeleteFile, SwitchPostType, UploadPost } from "src/models/new/user/user.actions";
 import { Required } from "src/validators/verify";
+import { CalendarUI } from "../components/calendar/calendar.ui";
 import { defaultFileUIOuput } from "../components/filesUI/files.ui";
 import { InfoService } from "../components/info/info.component";
 
@@ -67,20 +68,11 @@ import { InfoService } from "../components/info/info.component";
     </div>
 
     <div class="form-input">
-      <label>Date du début du chantier</label>
-      <input type="date" class="form-element" formControlName="startDate"/>
-      <img src="assets/calendar.png"/>
-    </div>
-
-    <div class="form-input">
-      <label>Date de la fin du chantier</label>
-      <input type="date" class="form-element" formControlName="endDate"/>
-      <img src="assets/calendar.png"/>
-    </div>
-
-    <div class="form-input">
-      <label>Dates du chantier (N'est pas branché) 🧪</label>
-      <calendar [embedded]="false" formControlName="calendar"></calendar>
+      <label>Dates du chantier 🧪</label>
+      <div class="center-text">
+        <switch on="Intervalle" off="Jour" #switch [value]="false"></switch>
+      </div>
+      <calendar [embedded]="false" [mode]="switch.value ? 'range' : 'single'" formControlName="calendar"></calendar>
     </div>
 
     <div class="form-input">
@@ -202,6 +194,8 @@ export class MakeAdForm {
   @Input() page: boolean = true;
   
   @Output() done = new EventEmitter();
+
+  @ViewChild(CalendarUI, {static: false}) calendar!: CalendarUI;
   
   @SnapshotAll('Job')
   allJobs!: Job[];
@@ -224,8 +218,6 @@ export class MakeAdForm {
     const files = this.store.selectSnapshot(DataQueries.getMany('File', p.files));
     //fill form
     this.makeAdForm.get('dueDate')?.setValue(p.dueDate);
-    this.makeAdForm.get('startDate')?.setValue(p.startDate);
-    this.makeAdForm.get('endDate')?.setValue(p.endDate);
     this.makeAdForm.get('manPower')?.setValue(p.manPower);
     this.makeAdForm.get('job')?.setValue(p.job ? [{id: p.job}] : []);
     this.makeAdForm.get('address')?.setValue(p.address);
@@ -237,14 +229,18 @@ export class MakeAdForm {
     this.makeAdForm.get('description')?.setValue(p.description);
     this.makeAdForm.get('amount')?.setValue(p.amount);
     
+
     //load details
     const detailsForm = this.makeAdForm.get('detailedPost')! as FormArray;
     detailsForm.clear();
     
-    console.log('Anass', p);
-
     for ( const detail of postDetails )
       detailsForm.push(new FormGroup({description: new FormControl(detail.content)}));
+    
+    //load dates
+    const dates = p.dates.map(date => ({date, availability: 'selected'}));
+    this.makeAdForm.get('calendar')?.setValue(dates);
+    this.calendar.viewCurrentDate();
     
     //load files
     const filesForm = this.makeAdForm.get('documents')! as FormArray;
@@ -266,8 +262,6 @@ export class MakeAdForm {
 
   makeAdForm = new FormGroup({
     dueDate: new FormControl('2022-01-24'),
-    startDate: new FormControl('2022-01-24'),
-    endDate: new FormControl('2022-03-24'),
     manPower: new FormControl(0),
     job: new FormControl([], [Validators.required]),
     address: new FormControl('1 Rue Joliot Curie, 91190 Gif-sur-Yvette', [Validators.required]),
@@ -328,7 +322,6 @@ export class MakeAdForm {
   }
 
   submit(draft: boolean) {
-    console.log(this.post, 'draft', draft, this.makeAdForm.value)
     if ( this.post ) {
       if ( !draft ) {
         this.info.show("info", "Mise en ligne de l'annonce...", Infinity);

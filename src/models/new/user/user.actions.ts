@@ -3,7 +3,7 @@ import { FileUIOutput } from "src/app/shared/components/filesUI/files.ui";
 import { PropertyTrap } from "src/app/shared/common/classes";
 import { getDirtyValues } from "src/app/shared/common/functions";
 import { DataTypes, Profile } from "../data.interfaces";
-import { CalendarUI } from "src/app/shared/components/calendar/calendar.ui";
+import { CalendarUI, DayState } from "src/app/shared/components/calendar/calendar.ui";
 import { getAvailabilityName } from "../data.mapper";
 
 export class ChangeProfileType {
@@ -147,8 +147,7 @@ export class UploadPost {
     public Job: number,
     public numberOfPeople: number,
     public dueDate: string,
-    public startDate: string,
-    public endDate: string,
+    public DatePost: string[],
     public manPower: boolean,
     public counterOffer: boolean,
     public hourlyStart: string,
@@ -178,8 +177,7 @@ export class UploadPost {
       value.job?.[0]?.id || 0,
       value.numberOfPeople,
       value.dueDate,
-      value.startDate,
-      value.endDate,
+      value.calendar.map((day: DayState) => day.date),
       typeof value.manPower == 'boolean' ? value.manPower : (value.manPower == "true"),
       value.counterOffer,
       value.hourlyStart,

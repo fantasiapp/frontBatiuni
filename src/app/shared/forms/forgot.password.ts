@@ -60,7 +60,7 @@ export class ForgotPasswordForm {
     this.token = this.route.snapshot.params.token;
   }
   async onSubmit(e: any) {
-    let { password, confirmedPassword } = this.forgotPassword.value;
+    let { password } = this.forgotPassword.value;
     this.store.dispatch(new ForgotPassword(this.token, password))
     .pipe(take(1)).subscribe(
       async (success) => {

@@ -1,18 +1,21 @@
 import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
 import { Store } from "@ngxs/store";
-import { Company, Job } from "src/models/new/data.interfaces";
-import { DataQueries, Snapshot } from "src/models/new/data.state";
+import { Observable } from "rxjs";
+import { Company, Job, Profile } from "src/models/new/data.interfaces";
+import { DataQueries, QueryProfile, Snapshot } from "src/models/new/data.state";
 
 @Component({
   selector: 'profile-card',
   template: `
-    <profile-image [profile]="company.id"></profile-image>
-    <div class="flex column small-space-children-margin font-Poppins description">
-      <span>{{ company.name || "Nom de l'entreprise" }}</span>
-      <span>Propose {{ employeeCount }} {{job.name || 'Employées'}}</span>
-      <span>Note générale (4.5 par 35 personnes)</span>
-      <stars [value]="4.5" disabled></stars>
-    </div>
+    <ng-container *ngIf="(profile | cast | async) as profile">
+      <profile-image [profile]="profile"></profile-image>
+      <div class="flex column small-space-children-margin font-Poppins description">
+        <span>{{ profile.company.name || "Nom de l'entreprise" }}</span>
+        <span>Propose {{ employeeCount }} {{job.name || 'Employées'}}</span>
+        <span>Note générale (4.5 par 35 personnes)</span>
+        <stars [value]="4.5" disabled></stars>
+      </div>
+    </ng-container>
   `,
   styles: [`
     @use "sass:math";
@@ -47,8 +50,8 @@ export class ProfileCardComponent {
   //we can get away with using these because this component is used inside a template
   //otherwise we will get type errors 
   @Input()
-  @Snapshot('Company')
-  company!: Company;
+  @QueryProfile()
+  profile!: number | Profile | Observable<Profile>;
 
   @Input()
   @Snapshot('Job')
@@ -60,11 +63,13 @@ export class ProfileCardComponent {
   constructor(private store: Store) {}
   
   ngOnInit() {
-    if ( this.company !== void 0 ) return;
+    if ( this.profile == void 0 ) return;
 
-    const jobForCompany = this.store.selectSnapshot(DataQueries.getMany('JobForCompany', (this.company as Company).jobs))
-    this.employeeCount = jobForCompany.find(({job, number}) => {
-      return job == (this.job as Job).id;
-    })?.number || 0;
+    (this.profile as Observable<Profile>).subscribe(profile => {
+      const jobForCompany = this.store.selectSnapshot(DataQueries.getMany('JobForCompany', (profile.company as Company).jobs))
+      this.employeeCount = jobForCompany.find(({job, number}) => {
+        return job == (this.job as Job).id;
+      })?.number || 0;
+    });
   }
 };
