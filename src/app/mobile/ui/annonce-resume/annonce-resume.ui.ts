@@ -71,7 +71,7 @@ import { DataQueries, DataState } from "src/models/new/data.state";
         </div>
       </form>
       <footer class="sticky-footer">
-        <button class="button full-width active" [disabled]="form.invalid">
+        <button class="button full-width active" (click)="apply.emit()" [disabled]="form.invalid">
           Postuler
         </button>
       </footer>
