@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
+import { Store } from "@ngxs/store";
 import { Observable } from "rxjs";
 import { Company, Profile } from "src/models/new/data.interfaces";
 import { QueryProfile, Snapshot } from "src/models/new/data.state";
@@ -13,4 +14,6 @@ export class ReponseCard {
     @QueryProfile()
     @Input('profile')
     profile$!: number | Profile | Observable<Profile>;
+    
+    constructor(private store: Store) {}
 }

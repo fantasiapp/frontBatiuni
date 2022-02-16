@@ -84,7 +84,7 @@ export class HomePageComponent extends Destroy$ {
     this.amount = post.amount;
     this.date[0] = post.dueDate;
     this.date[1] = post.endDate;
-    console.log('HELLO WORLD',this.date)
+    console.log(this.postResumerCandidates)
     // const candidate = this.userOnlinePosts.filter(chosen => chosen.id === post.id)
     // this.candidate = candidate.map(user => user.candidates)
     // this.candidateData = (this.candidate[0] || []).map((user: any) => {
