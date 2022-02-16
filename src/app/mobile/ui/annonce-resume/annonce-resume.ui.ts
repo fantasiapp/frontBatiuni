@@ -1,8 +1,10 @@
-import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
-import { Store } from "@ngxs/store";
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from "@angular/core";
+import { FormControl, FormGroup } from "@angular/forms";
+import { Select, Store } from "@ngxs/store";
+import { Observable } from "rxjs";
 import { PopupService } from "src/app/shared/components/popup/popup.component";
 import { Company, Post, File, PostDetail, Job } from "src/models/new/data.interfaces";
-import { DataQueries } from "src/models/new/data.state";
+import { DataQueries, DataState } from "src/models/new/data.state";
 
 @Component({
   selector: 'annonce-resume',
@@ -52,6 +54,28 @@ import { DataQueries } from "src/models/new/data.state";
     <div *ngIf="collapsible" (click)="collapsed = !collapsed" class="collapse-controller full-width center-text">
       <span>{{collapsed ? 'Lire la suite' : 'Lire moins'}}</span>  <img src="assets/arrowdown.svg" [style.transform]="'rotate(' + (180 * +!collapsed) + 'deg)'"/>
     </div>
+
+    <ng-container *ngIf="view == 'ST'">
+      <hr class="dashed"/>
+      <form class="devis form-control" [formGroup]="form">
+        <h5>Pour postuler veuillez proposer votre devis</h5>
+
+        <div class="form-input">
+          <label>Montant</label>
+          <div class="flex row space-between remuneration">
+            <input type="number" min="0" style="max-height: 51px" class="grow form-element" placeholder="Montant" formControlName="amount">
+            <div class="option-container">
+              <options [searchable]="false" type="radio" [options]="devis" formControlName="devis"></options>
+            </div>
+          </div>
+        </div>
+      </form>
+      <footer class="sticky-footer">
+        <button class="button full-width active" [disabled]="form.invalid">
+          Postuler
+        </button>
+      </footer>
+    </ng-container>
   </div>
 
   `,
@@ -62,6 +86,9 @@ export class UIAnnonceResume {
   @Input()
   collapsed: boolean = false;
   collapsible: boolean = true;
+
+  @Output()
+  apply = new EventEmitter();
 
   @Input('collapsible')
   set collapsibleSet(value: boolean) {
@@ -86,6 +113,11 @@ export class UIAnnonceResume {
 
   constructor(private store: Store, private popup: PopupService) {}
 
+  view: 'ST' | 'PME' = 'ST';
+  ngOnInit() {
+    this.view = this.store.selectSnapshot(DataState.view);
+  }
+
   openFile(file: File) {
     this.popup.openFile(file);
   }
@@ -93,4 +125,10 @@ export class UIAnnonceResume {
   toLocateDate(date?: string) {
     return date ? new Date(date).toLocaleDateString('fr') : "(Non renseigné)";
   }
+
+  devis = ['Par Heure', 'Par Jour', 'Par Semaine'].map((name, id) => ({id, name}));
+  form = new FormGroup({
+    amount: new FormControl(0),
+    devis: new FormControl([{id: 0}])
+  });
 };

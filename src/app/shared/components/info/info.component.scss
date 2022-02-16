@@ -8,10 +8,9 @@
   overflow: hidden;
   position: fixed;
   @include with-set-safe-area(top, top, $sticky-header-height);
-  z-index: 99;
+  z-index: 10000;
   width: 100vw;
   height: $info-height;
-  z-index: 199999999;
   //animation
   background-color: transparent;
   will-change: background-color;

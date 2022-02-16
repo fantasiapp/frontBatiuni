@@ -24,13 +24,6 @@
 }
 // .hosted-page {margin-top: 0 !important;}
 
-.dashed {
-  margin-left: -30px !important;
-  margin: 1rem 0;
-  display: block;
-  width: 100vw;
-  border-top: 1px dashed rgb(145, 145, 145);
-}
 .reponse-footer {
   box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 }
@@ -43,18 +36,21 @@
   li {
     list-style-type: none;
   }
-  
-}
-.candidature {
-  margin-top: 0px;
 }
 
-.devis h5 {
-  color: $secondaryBackground;
+.candidature {
+  margin-top: 0px;
 }
 
 .content-with-header-and-footer {
   @extend %overflow-y;
   height: calc(100vh - #{$sticky-header-height + $sticky-footer-height} - env(safe-area-inset-bottom));
   background: white;
+}
+
+.sticky-footer.application {
+  box-shadow: 0 -3px 3px #ccc;
+  button {
+    height: 80%;
+  }
 }

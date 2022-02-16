@@ -6,7 +6,7 @@
   top: 0;
   width: 100%;
   min-height: 100vh;
-  z-index: 20;
+  z-index: 50;
   transition: transform 250ms ease-out 0s;
   transform: translateX(100%);
 }
@@ -26,13 +26,6 @@
 
 .content {
   @extend %content-with-header;
-  background: white;
-
-  &::ng-deep > * { flex-shrink: 0; }
-}
-
-.content-with-footer{
-  @extend %content-with-header-and-footer;
   background: white;
 
   &::ng-deep > * { flex-shrink: 0; }

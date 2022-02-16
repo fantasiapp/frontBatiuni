@@ -59,61 +59,36 @@
       <ng-template #stfilter><st-filter-form></st-filter-form></ng-template>
     </swipeup>
     
+    <!-- Component one -->
     <slidemenu [(open)]="editMenu.open" [header]="true">
       <span class="grow center-text text-light-emphasis" header>Modifier un brouillon</span>
       
       <div class="hosted-page flex column center-cross space-children-margin" content>
-        <ad-form [post]="editMenu.post" (done)="editMenu = {open: false, post: null}" [page]="false" content></ad-form>     
+        <ad-form [post]="editMenu.post" (done)="openPost(null)" [page]="false" content></ad-form>     
       </div>
     </slidemenu>
-  
-    <slidemenu [(open)]="checkMenu.open" [footer]="view == 'ST'" [header]="false" #slideOnlinePost>
+    
+    <!-- Component two -->
+    <slidemenu [(open)]="checkMenu.open" [header]="false" #slideOnlinePost>
       <header class="clear-margin full-width sticky-header flex center-cross annonce" customHeader>
         <img (click)="slideOnlinePost.close()" src="assets/arrowlblack.svg" />
         <span class="grow center-text text-light-emphasis">Annonce en Ligne</span>
         <img *ngIf="view == 'PME'; else star" (click)="checkPostMenu()" src="assets/Option.svg"/>
-        <ng-template #star><star-systeme [nstars]="1"></star-systeme></ng-template>
+        <ng-template #star><stars [toggle]="true"></stars></ng-template>
       </header>
   
       <ng-container content>
-        <annonce-resume class="hosted-page" [collapsible]="false" [post]="checkMenu.post!" #resume></annonce-resume>
-  
-        <div class="hosted-page" style="padding-top: 0;" *ngIf="view == 'ST'">
-          <hr class="dashed"/>
-          <form class="devis form-control" [formGroup]="form">
-            <h5>Pour postuler veuillez proposer votre devis</h5>
-    
-            <div class="form-input">
-              <label>Montant</label>
-              <div class="flex row space-between remuneration">
-                <input type="number" min="0" style="max-height: 51px" class="grow form-element" placeholder="Montant" formControlName="amount">
-                <div class="option-container">
-                  <options [searchable]="false" type="radio" [options]="devis" formControlName="devis"></options>
-                </div>
-              </div>
-            </div>
-          </form>
-        </div>
+        <annonce-resume class="hosted-page content-with-footer" [collapsible]="false" [post]="checkMenu.post!" (apply)="applyPost(checkMenu.post!)" #resume></annonce-resume>
   
         <swipeup [(open)]="checkMenu.swipeup">
-          <li [attr.data-notification-number]="(checkMenu.post?.candidates || []).length" class="notification" (click)="showCandidates()">Afficher les réponses</li>
+          <li [attr.data-notification-number]="checkMenu.candidates.length" [class.notification]="checkMenu.candidates.length" (click)="showCandidates()">Afficher les réponses</li>
           <li [routerLink]="['','booster']">Booster Mon annonce</li>
           <li (click)="deletePost(checkMenu.post!.id)">Supprimer l'annonce</li>
           <li (click)="duplicatePost(checkMenu.post!.id)">Dupliquer l'annonce</li>
           <li (click)="pausePost(checkMenu.post!.id)">Mettre en pause l'annonce</li>
         </swipeup>
       </ng-container>    
-  
-      <button class="button full-width active" [disabled]="form.invalid" (click)="applyPost(checkMenu.post!)" footer>
-        Postuler
-      </button>
     </slidemenu>
-    <!-- Maybe slide menu should hide their content when they are not open ?? -->
-    <swipeup [(open)]="openReponseMenu">
-      <li class="flex center-cross" (click)="showUserOffer()"><img  />Valider la candidature</li>
-      <li class="flex center-cross"><img/>Refuser la candidature</li>
-      <li class="flex center-cross"><img/>Bloquer le contact</li>
-    </swipeup>
   </ng-container>
 </ng-container>
 
@@ -144,13 +119,13 @@
 <ng-template #candidates let-candidates let-job="job">
   <div class="hosted-page">
     <p class="font-Poppins">Vous avez: {{ candidates.length }} réponses</p>
-    <profile-card *ngFor="let candidate of candidates" (click)="showCompany(candidate.company)" [job]="job" [company]="candidate.company"></profile-card>
+    <profile-card *ngFor="let candidate of candidates" (click)="showCompany(candidate.company, candidate.id)" [job]="job" [company]="candidate.company"></profile-card>
   </div>
 </ng-template>
 
-<ng-template #candidature let-company>
+<ng-template #candidature let-company let-application="application">
   <extended-profile class="content-with-header-and-footer" [profile]="company"></extended-profile>
-  <footer class="sticky-footer">
-    <button class="button active full-width" (click)="handleApplication()">Traiter la candidature</button>
+  <footer class="sticky-footer flex center-cross application">
+    <button class="button active full-width" (click)="handleApplication(application)">Traiter la candidature</button>
   </footer>
 </ng-template>

@@ -58,3 +58,13 @@
 .remuneration > * {
   width: 45%;
 }
+
+.devis {
+  h5 {
+    margin-bottom: $item-padding;
+    color: $secondaryBackground;
+  }
+
+  //make space for the footer
+  margin-bottom: $sticky-footer-height;
+}

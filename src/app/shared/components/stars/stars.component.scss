@@ -11,7 +11,7 @@
 :host {
   display: inline-block;
   @extend %prepare-span;
-  width: 5 * $rating-star-width;
+  overflow: hidden;
 }
 
 span {

@@ -172,7 +172,7 @@ import { SpacingPipe } from "../pipes/spacing.pipe";
       <div (click)="slider.index = 2" [class.active]="slider && slider.index == 2"></div>
     </div>
     <button class="button gradient full-width" (click)="onSubmit()"
-      [disabled]="(!form.touched || form.invalid) || null">
+      [disabled]="form.invalid || null">
       Enregistrer
     </button>
   </div>
@@ -425,8 +425,6 @@ export class ModifyProfileForm {
         fileData: new FormControl(defaultFileUIOuput(labelObject.name, labelForCompany.date, `Fichier "${labelObject.name}" pris en compte`))
       }));
     }
-
-    // this.cd.markForCheck();
   }
 
 
@@ -458,6 +456,7 @@ export class ModifyProfileForm {
     }
 
     this.selectedJobs = jobOptions;
+    jobControl.markAsDirty();
   };
 
   updateLabels(labelOptions: Option[]) {
@@ -474,6 +473,7 @@ export class ModifyProfileForm {
     }
 
     this.selectedLabels = labelOptions;
+    labelControl.markAsDirty();
   }
 
   addingField: boolean = false;
