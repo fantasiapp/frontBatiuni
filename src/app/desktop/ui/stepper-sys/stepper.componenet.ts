@@ -51,6 +51,8 @@ export class StepperSys implements OnInit {
         ? this.horizantaleStepper()
         : this.verticalStepper();
     console.log(this.nodes);
+
+    
   }
   verticalStepper() {
     const cy = 0;

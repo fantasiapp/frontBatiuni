@@ -100,19 +100,19 @@
               <img class="filterOnly" (click)="showResponsiveFilters = !showResponsiveFilters" src="assets/Filter.svg">
             </div>
             <div class="report-search">
-              Resultat <span class="no-result">10 annonces</span>
+              Resultat <span class="no-result">0 annonces</span>
             </div>
             <offer
             *ngFor="let mission of [1,2,3,4,5,6,7,8,9]"
             src="assets/brouillon.svg"
-            [routerLink]="['', 'brouillon']"></offer>
+            ></offer>
           </section> 
         </ng-container>
 
         <ng-container class="space-children-margin  " *ngSwitchCase="4">
           <ng-container [ngSwitch]="tabView">
             <ng-container *ngSwitchCase="0"  >
-              <div class="abonnementCards">
+              <div class="abonnementCards space-children-margin">
               <abonnement-card class="child"></abonnement-card>
               <abonnement-card class="child"></abonnement-card>
               <abonnement-card class="child"></abonnement-card>
@@ -128,8 +128,8 @@
           <div class="space-children-margin full-width facture">
             <span class="text-emphasis">Mes Factures</span>
 
-            <facture-ui class="full-width" *ngFor="let a of factures">
-            </facture-ui>
+            <!-- <facture-ui class="full-width" *ngFor="let a of factures">
+            </facture-ui> -->
           </div>
         </ng-container>
         <ng-container *ngSwitchDefault>

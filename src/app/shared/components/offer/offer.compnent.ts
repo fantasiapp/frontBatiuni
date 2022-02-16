@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, HostBinding, HostListener, Input} from "@angular/core";
+import { ChangeDetectionStrategy, Component, HostBinding, HostListener, Input, Output} from "@angular/core";
 import { Store } from "@ngxs/store";
 import { Post, Company } from "src/models/new/data.interfaces";
 import { DataQueries, Snapshot } from "src/models/new/data.state";
@@ -16,6 +16,12 @@ export class OfferComponent {
 
   @Input()
   src: string = "assets/confirmation.svg"
+
+ 
+  
+
+  
+
 
   @Input()
   deletable: boolean = false;

@@ -146,7 +146,7 @@ export type Mission = Omit<Post, 'applications'>;
 
 export type PostDate = {
   id: Ref<PostDate>;
-  content: string;
+  name: string;
 }
 
 export type Interface<K extends DataTypes> =

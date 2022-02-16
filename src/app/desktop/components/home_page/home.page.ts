@@ -1,5 +1,5 @@
 import { animate, style, transition, trigger } from "@angular/animations";
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, TemplateRef, ViewChild } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, QueryList, TemplateRef, ViewChild, ViewChildren } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { Select, Store } from "@ngxs/store";
 import { combineLatest, Observable } from "rxjs";
@@ -12,6 +12,7 @@ import { ApplyPost, DeletePost, SwitchPostType } from "src/models/new/user/user.
 import { DataQueries, DataState, QueryAll, Snapshot, SnapshotArray } from 'src/models/new/data.state'
 import { Candidate, Company, File, Job, Post, PostDetail, Profile } from "src/models/new/data.interfaces";
 import * as UserActions from "src/models/new/user/user.actions";
+import { OfferComponent } from "src/app/shared/components/offer/offer.compnent";
 
 type PostMenu = { open: boolean; post: Post | null; };
 
@@ -83,7 +84,7 @@ export class HomePageComponent extends Destroy$ {
     this.amount = post.amount;
     this.date[0] = post.dueDate;
     this.date[1] = post.endDate;
-    console.log('HELLO WORLD',this.date)
+    console.log(this.postResumerCandidates)
     // const candidate = this.userOnlinePosts.filter(chosen => chosen.id === post.id)
     // this.candidate = candidate.map(user => user.candidates)
     // this.candidateData = (this.candidate[0] || []).map((user: any) => {

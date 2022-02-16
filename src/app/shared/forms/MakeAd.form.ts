@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, HostBinding, Input, Output, ViewChild } from "@angular/core";
+import { ChangeDetectionStrategy, Component, ElementRef, EventEmitter, HostBinding, Input, Output, ViewChild } from "@angular/core";
 import { FormArray, FormControl, FormGroup, Validators } from "@angular/forms";
 import { Store } from "@ngxs/store";
 import { take } from "rxjs/operators";
@@ -6,7 +6,7 @@ import { Post, Job, PostDate } from "src/models/new/data.interfaces";
 import { DataQueries, SnapshotAll } from "src/models/new/data.state";
 import { DeleteFile, SwitchPostType, UploadPost } from "src/models/new/user/user.actions";
 import { Required } from "src/validators/verify";
-import { CalendarUI } from "../components/calendar/calendar.ui";
+import { CalendarUI, DayState } from "../components/calendar/calendar.ui";
 import { defaultFileUIOuput } from "../components/filesUI/files.ui";
 import { InfoService } from "../components/info/info.component";
 
@@ -14,7 +14,7 @@ import { InfoService } from "../components/info/info.component";
   selector: 'ad-form',
   template: `
   <form class="full-width form-control" [formGroup]="makeAdForm">
-    <h2 class="form-section-title">Besoins de l'entreprise</h2>
+    <h2 class="form-section-title" #0>Besoins de l'entreprise</h2>
 
     <div class="form-input">
       <label>Je cherche</label>
@@ -46,7 +46,7 @@ import { InfoService } from "../components/info/info.component";
       <img src="assets/calendar.png"/>
     </div>
 
-    <h2 class="form-section-title">Infos chantiers</h2>
+    <h2 class="form-section-title" #1>Infos chantiers</h2>
     <div class="form-input">
       <label>Adresse</label>
       <input type="text" class="form-element" formControlName="address"/>
@@ -87,7 +87,7 @@ import { InfoService } from "../components/info/info.component";
       </div>
     </div>
 
-    <h2 class="form-section-title" id="anass">Rémunération</h2>
+    <h2 class="form-section-title" #2>Rémunération</h2>
     <div class="form-input">
       <label>Montant</label>
       <div class="flex row remuneration">
@@ -103,7 +103,7 @@ import { InfoService } from "../components/info/info.component";
       <span>Autoriser une contre-offre</span>
     </div>
 
-    <h2 class="form-section-title">Documents à télécharger</h2>
+    <h2 class="form-section-title" #3>Documents à télécharger</h2>
 
     <ng-container formArrayName="documents">
       <ng-container *ngFor="let document of documentsControls; index as i" [formGroupName]="i">
@@ -192,6 +192,12 @@ import { InfoService } from "../components/info/info.component";
 export class MakeAdForm {
   @HostBinding('class.page')
   @Input() page: boolean = true;
+
+  @ViewChild('0') public first! : ElementRef;
+  @ViewChild('1') public second! : ElementRef;
+  @ViewChild('2') public third! : ElementRef;
+  @ViewChild('3') public last! : ElementRef;
+
   
   @Output() done = new EventEmitter();
 
@@ -238,8 +244,18 @@ export class MakeAdForm {
       detailsForm.push(new FormGroup({description: new FormControl(detail.content)}));
     
     //load dates
-    const dates = p.dates.map(date => ({date, availability: 'selected'}));
-    this.makeAdForm.get('calendar')?.setValue(dates);
+    //heavens forgive me for this atrocy
+    const dates = p.dates;
+    let daystates: DayState[] = [];
+    if ( p.dates.length )
+      if ( typeof p.dates[0] == 'string' )
+        daystates =  p.dates.map(date => ({date: date as unknown as string, availability: 'selected'}))
+      else
+        daystates = this.store.selectSnapshot(DataQueries.getMany('DatePost', p.dates))
+          .map(({name}) => ({date: name, availability: 'selected'}))
+    
+    console.log('>>', daystates);
+    this.makeAdForm.get('calendar')?.setValue(daystates);
     this.calendar.viewCurrentDate();
     
     //load files

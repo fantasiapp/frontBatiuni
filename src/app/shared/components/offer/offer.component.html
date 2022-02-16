@@ -9,9 +9,14 @@
     <div class="offres-logo flex center">
       <img [src]="src"/>
     </div>
+    <!-- <div *ngIf="desktopOption" class="showDesktopOption">
+      <ul>
+        <li>Modifier</li>
+        <li>Supprimer</li>
+      </ul>
+    </div> -->
   </div>
-  
-  <div class="flex center showDelete" [ngClass]="{'delete':delete}" (click)="deletePost($event)">
+    <div class="flex center showDelete" [ngClass]="{'delete':delete}" (click)="deletePost($event)">
     <div>Supprimer</div>
   </div>
 </ng-container>
