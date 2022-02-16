@@ -200,6 +200,12 @@ $options: 26px;
   li:hover {
     transform: scale(1.02);
   }
+  
+}
+.nothover {
+  li:hover{
+    transform: none !important;
+  }
 }
 .description {
   color: #999999 !important;
@@ -229,6 +235,9 @@ $options: 26px;
   background: white;
   // @extend .animating;
   overflow-y: auto;
+  @include range(700px , 1100px) {
+    width: 50vw;
+  }
   // animation: $slide 50ms normal both slide-in-right;
   cursor: pointer;
   .close

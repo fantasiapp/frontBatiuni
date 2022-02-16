@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { Profile } from 'src/models/new/data.interfaces';
@@ -10,6 +10,7 @@ type annonceType = 'makead' | 'viewad';
   selector: 'company-info',
   templateUrl: 'company.info.html',
   styleUrls: ['company.info.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CompanyInfo implements OnInit {
   constructor(private store: Store) { }
@@ -17,15 +18,22 @@ export class CompanyInfo implements OnInit {
   @Input()
   type: annonceType = 'makead';
 
-  headerText = this.type == 'makead' ? makead : viewad;
+  headerText!:string [];
   
+
+  @Input()
+  amount:number = 0;
+
+  @Input()
+  date: string[]=[];
+
   @QueryProfile()
   @Input('profile')
   profile$!: number | Profile | Observable<Profile>;
 
 
-  ngOnInit() { (this.profile$ as Observable<Profile>).subscribe(console.log) }
+  ngOnInit() { this.headerText  = this.type == 'makead' ? makead : viewad; }
 }
 
 export const makead = ['N SIRET', 'Métier', "Chiffres d'affaires"];
-export const viewad = ['Métier', 'Date', 'Montant'];
+export const viewad = ['Date', 'Date', 'Montant'];

@@ -76,7 +76,7 @@
         </div>
       </desktop-stickyH>
 
-      <company-info [profile]="postResumer.company"></company-info>
+      <company-info [profile]="postResumer.company" type="viewad" [amount]="amount" [date]="date" ></company-info>
       <div class="web-page">
 
         <section class="filters">
@@ -164,7 +164,7 @@
           </section>
           <ng-template #stview let-form="devisForm">
             <section class="flex column center space-children-margin transparent">
-              <ul class="options-list space-children-margin">
+              <ul class="options-list nothover space-children-margin">
                 <li class="flex row center-cross">LE POSTE</li>
                 <li class="flex row center-cross"><img src="assets/Job.svg" />{{ (postResumerJob | snapshot).name }}
                 </li>
