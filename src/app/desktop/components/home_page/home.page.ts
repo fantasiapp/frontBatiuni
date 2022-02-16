@@ -61,13 +61,18 @@ export class HomePageComponent extends Destroy$ {
     super()
   }
 
+  amount!: number;
+  
+  date: string[] = [];
+
   @Snapshot('Job') postResumerJob!: number | Job;
   @SnapshotArray('Candidate') postResumerCandidates!: number[] | Candidate[];
   @SnapshotArray('DetailedPost') postResumerDetails!: number[] | PostDetail[];
   @SnapshotArray('File') postResumerFiles!: number[] | File[];
 
   showPostResumer(post: Post, type: resumerType) {
-    console.log('1234564789',post)
+    
+
     this.resumerType = type;
     this.showValidePost = true
     this.postResumer = post;
@@ -75,6 +80,10 @@ export class HomePageComponent extends Destroy$ {
     this.postResumerCandidates = post.candidates;
     this.postResumerDetails = post.details;
     this.postResumerFiles = post.files;
+    this.amount = post.amount;
+    this.date[0] = post.dueDate;
+    this.date[1] = post.endDate;
+    console.log('HELLO WORLD',this.date)
     // const candidate = this.userOnlinePosts.filter(chosen => chosen.id === post.id)
     // this.candidate = candidate.map(user => user.candidates)
     // this.candidateData = (this.candidate[0] || []).map((user: any) => {
@@ -120,6 +129,7 @@ export class HomePageComponent extends Destroy$ {
       this.allOnlinePosts = mapping.get(this.symbols.otherOnlinePost) || [];
       this.cd.markForCheck();
     });
+    console.log(this.allOnlinePosts)
   }
 
   switchDraft(id: number) {

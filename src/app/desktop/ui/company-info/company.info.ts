@@ -20,11 +20,17 @@ export class CompanyInfo implements OnInit {
 
   headerText!:string [];
   
+
+  @Input()
+  amount:number = 0;
+
+  @Input()
+  date: string[]=[];
+
   @QueryProfile()
   @Input('profile')
   profile$!: number | Profile | Observable<Profile>;
 
-  date =  Date.now()
 
   ngOnInit() { this.headerText  = this.type == 'makead' ? makead : viewad; }
 }
