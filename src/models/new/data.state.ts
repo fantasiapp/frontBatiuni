@@ -132,8 +132,8 @@ export class DataState {
   @Action(GetGeneralData)
   getGeneralData(ctx: StateContext<DataModel>) {    
     //eventually make a local storage service
-    let data = localStorage.getItem('general-data'), req;
-    req = data ? of(JSON.parse(data)) : this.http.get('initialize', {action: 'getGeneralData'});
+    //const data = localStorage.getItem('general-data');
+    const req = /*data ? of(JSON.parse(data)) : */ this.http.get('initialize', {action: 'getGeneralData'});
 
     return req.pipe(
       tap((response: any) => {
@@ -162,7 +162,6 @@ export class DataState {
 
   @Action(Logout)
   logout(ctx: StateContext<DataModel>) {
-    console.log('logging out');
     ctx.setState({fields: {}, session: {view: 'ST', currentUser: -1}});
     ctx.dispatch(new GetGeneralData()); // a sign to decouple this from DataModel
   }

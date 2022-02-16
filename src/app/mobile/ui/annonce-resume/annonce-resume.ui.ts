@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
-import { Select, Store } from "@ngxs/store";
-import { Observable } from "rxjs";
+import { Store } from "@ngxs/store";
 import { PopupService } from "src/app/shared/components/popup/popup.component";
 import { Company, Post, File, PostDetail, Job } from "src/models/new/data.interfaces";
 import { DataQueries, DataState } from "src/models/new/data.state";
