@@ -1,6 +1,6 @@
 
 <span class="title" *ngIf="withtitle">{{title}}</span>
-<star-systeme *ngIf="withstars" title="{{startitle}}"></star-systeme>
+<stars [toggle]="true" *ngIf="withstars"></stars>
 <div class="commentaire grid">
   <div class="comment">
     <textarea class="form-input" type="text"  placeholder="Ajouter une commentaire"></textarea>

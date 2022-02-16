@@ -22,7 +22,8 @@ export const NameMapping: any = {
   'DetailedPost': 'details',
   'Supervisions': 'supervisions',
   'Disponibility': 'availabilities',
-  'Mission': 'missions'
+  'Mission': 'missions',
+  'DatePost': 'dates'
 };
 
 export function getOriginalName(name: string) {

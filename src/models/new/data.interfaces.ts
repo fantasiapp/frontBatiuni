@@ -4,7 +4,8 @@ export type Record<T = any> = {
 
 export type DataTypes = 'Job' | 'Label' | 'Role' | 'UserProfile' | 'Company' |
   'Post' | 'DetailedPost' | 'Supervision' | 'Disponibility' | 'File' |
-  'JobForCompany' | 'LabelForCompany' | 'Candidate' | 'Mission' | 'Establishments'; //..
+  'JobForCompany' | 'LabelForCompany' | 'Candidate' | 'Mission' |
+  'Establishments'| 'DatePost' ; //..
 
 //just to indicate
 export type Ref<T> = number;
@@ -121,8 +122,8 @@ export interface Post {
   details: Ref<PostDetail>[];
   files: Ref<File>[];
   candidates: Ref<Candidate>[];
+  dates: Ref<PostDate>[];
 };
-
 
 export interface Candidate {
   id: Ref<Candidate>;
@@ -136,9 +137,14 @@ export interface Establishement {
   principalActivity: string;
   siret: string;
   NTVAI: string;
-}
+};
 
 export type Mission = Omit<Post, 'applications'>;
+
+export type PostDate = {
+  id: Ref<PostDate>;
+  content: string;
+}
 
 export type Interface<K extends DataTypes> =
   K extends 'Job' ? Job :
@@ -155,6 +161,7 @@ export type Interface<K extends DataTypes> =
   K extends 'LabelForCompany' ? LabelForCompany :
   K extends 'Candidate' ? Candidate :
   K extends 'Mission' ? Mission :
+  K extends 'DatePost' ? PostDate :
   K extends 'Establishments' ? Establishement :
   K;
 

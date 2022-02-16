@@ -406,3 +406,44 @@ input[type=number] {
   height: 100%;
   overflow: auto;
 }
+
+.hosted-page {
+  .dashed {
+    margin-left: -30px !important;
+    margin: 1rem 0;
+    display: block;
+    width: 100vw;
+    border-top: 1px dashed rgb(145, 145, 145);
+  }
+}
+
+.application-response {
+  position: relative;
+  left: 20px;
+  &:before {
+    @extend %absolute-center-y;
+    left: -40px;
+    width: 30px;
+    height: calc(100% + 10px);
+    content: '';
+    background-repeat: no-repeat;
+    background-size: contain;
+  }
+
+  &.validate:before {
+    background-image: url('/assets/valider-candidature.svg');
+  }
+
+  &.reject:before {
+    background-image: url('/assets/refuser-candidature.svg');
+  }
+  
+  &.block:before {
+    background-image: url('/assets/bloquer-candidature.svg');
+  }
+}
+
+.validate-application {
+  position: relative;
+  
+}

@@ -5,6 +5,7 @@ import { BehaviorSubject, Observable } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { Destroy$ } from "src/app/shared/common/classes";
 import { DataState } from "src/models/new/data.state";
+import { InfoService } from "../info/info.component";
 
 const STMenu = [
   { name: "Home", src: "assets/navigation/st/home.svg", route: '', },
@@ -49,11 +50,12 @@ export class NavigationMenu extends Destroy$ {
     this.changeRouteOnMenu(menu, index);
   }
 
-  constructor(private router: Router, private store: Store) {
+  constructor(private router: Router, private store: Store, info: InfoService) {
     super();
     this.menu = new BehaviorSubject(this.store.selectSnapshot(DataState.view) == 'PME' ? PMEMenu : STMenu);
     this.router.events.pipe(takeUntil(this.destroy$)).subscribe((event) => {
       if (!(event instanceof NavigationEnd)) return;
+      info.hide();
       let menu = this.menu.getValue();
       let segments = event.urlAfterRedirects.split('/');
       this.segments = segments.slice(3);

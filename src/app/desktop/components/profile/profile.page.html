@@ -83,8 +83,7 @@
           <stepper-sys type="H" #stepper [margin]="15" [testList]="['Infos Personelles','Infos entreprise','Certifications & labels']" ></stepper-sys>
           <modify-profile-form [profile]="profile!" 
            [animate]="false" [index]="stepper.currentIndex" (submit)="actionBinding($event)" #modifyProfile>
-           <button [disabled]="(!modifyProfile.form.touched || modifyProfile.form.invalid) || null"
-           class="flex center button active " (click)="modifyProfileDesktop(modifyProfile.onSubmit())">Enregistrer</button>
+           <button [disabled]="modifyProfile.form.invalid || null" class="flex center button active " (click)="modifyProfileDesktop(modifyProfile.onSubmit())">Enregistrer</button>
           </modify-profile-form>
           
         </ng-container>

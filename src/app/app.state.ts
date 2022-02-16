@@ -28,11 +28,7 @@ export class AppState {
     return state.device;
   }
 
-  @Selector([DataState])
-  static generalData(state: object) {
-    return state;
-  }
-
+  //move to app initializer
   @Action(Load)
   onLoad(ctx: StateContext<AppModel>, action: Load) {
     return from(Device.getInfo()).pipe(
@@ -41,5 +37,4 @@ export class AppState {
       })
     );
   }
-  
 };

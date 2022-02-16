@@ -36,7 +36,14 @@ export function getByValue<K, V>(map: Map<K, V>, searchValue: V): K | null {
       return key;
   }
   return null;
-}
+};
+
+export function assignCopy<T>(original: T, values: {[K in keyof T]?: T[K]}) {
+  const prototype = Object.getPrototypeOf(original),
+    copy = Object.create(prototype);
+  
+  return Object.assign(copy, original, values);
+};
 
 
 export function getDirtyValues(form: any) {

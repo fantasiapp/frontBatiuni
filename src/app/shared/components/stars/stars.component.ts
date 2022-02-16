@@ -24,6 +24,15 @@ export class UIStarsComponent extends UIDefaultAccessor<string | number> {
     return `url(assets/starEmpty.svg)`;
   }
 
+  private _number: number = 5;
+  get number() { return this._number; }
+
+  @Input('number')
+  set number(x: number) { this._number = Math.max(1, Math.floor(x)); }
+
+  @HostBinding('style.width')
+  get width() { return (this.number * ratingStarWidth) + 'px'; }
+  
   get spanWidth() {
     return (+(this._value!) * ratingStarWidth) + 'px';
   } 
@@ -39,8 +48,39 @@ export class UIStarsComponent extends UIDefaultAccessor<string | number> {
   @HostListener('click', ['$event'])
   private onClick(e: MouseEvent) { this.onChange(e); }
 
+  @Input()
+  step: number = 0.5;
+
+  //between 0 - 1, how much of a step to push
+  @Input() threshold: number = 0.5;
+  
+  _toggleMode: boolean = false;
+  @Input('toggle')
+  set toggleOption(toggle: boolean) {
+    if ( toggle ) {
+      this.number = 1;
+      this.step = 1;
+      this.threshold = 0;
+      this._toggleMode = true;
+    }
+  }
+
+
   protected getInput(e: MouseEvent): string | number {
-    const rect = this.ref.nativeElement.getBoundingClientRect() as DOMRect;
-    return Math.round((e.clientX - rect.x)/rect.width * 10) / 2;
+    if ( this._toggleMode ) {
+      //works with undefined so cool
+      return +!+this.value!;
+    }
+
+    const rect = this.ref.nativeElement.getBoundingClientRect() as DOMRect,
+      q = 1 / this.step;
+    
+    //const value = Math.round((e.clientX - rect.x)/rect.width * (this.number * q)) / q;
+    const ratio = (e.clientX - rect.x)/rect.width * (this.number * q),
+      floor = Math.floor(ratio),
+      frac = ratio - floor,
+      value = frac >= this.threshold ? (floor + 1) / q : floor / q;
+
+    return value;
   }
 }

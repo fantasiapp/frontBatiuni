@@ -1,20 +1,26 @@
 import { Component, ChangeDetectionStrategy, SimpleChange, SimpleChanges, ViewChild, TemplateRef, ChangeDetectorRef } from "@angular/core";
-import { FormControl, FormGroup } from "@angular/forms";
 import { Select, Store } from "@ngxs/store";
 import { combineLatest, Observable } from "rxjs";
 import { take, takeUntil } from "rxjs/operators";
 import { Destroy$ } from "src/app/shared/common/classes";
 import { DistanceSliderConfig, SalarySliderConfig } from "src/app/shared/common/config";
-import { filterSplit, splitByOutput } from "src/app/shared/common/functions";
+import { assignCopy, splitByOutput } from "src/app/shared/common/functions";
 import { InfoService } from "src/app/shared/components/info/info.component";
 import { PopupService } from "src/app/shared/components/popup/popup.component";
 import { SlidemenuService } from "src/app/shared/components/slidemenu/slidemenu.component";
 import { SwipeupService } from "src/app/shared/components/swipeup/swipeup.component";
-import { ApplyPost, DeletePost, DuplicatePost, SwitchPostType } from "src/models/new/user/user.actions";
+import { ApplyPost, DeletePost, DuplicatePost, HandleApplication, SwitchPostType } from "src/models/new/user/user.actions";
 import { DataQueries, DataState, QueryAll, SnapshotAll } from 'src/models/new/data.state';
 import { Profile, Post } from "src/models/new/data.interfaces";
 
-type PostMenu = { open: boolean; post: Post | null; };
+class PostMenu {
+  open: boolean = false;
+  post: Post | null = null;
+  swipeup: boolean = false;
+
+  get candidates() { return this.post?.candidates || []; }
+};
+
 @Component({
   selector: 'home',
   templateUrl: './home.component.html',
@@ -77,22 +83,21 @@ export class HomeComponent extends Destroy$ {
   }
   activeView: number = 0;
   validerCandidature: boolean = false;
-  openReponseMenu : boolean = false;
   annonces = new Array(10);
   openAdFilterMenu: boolean = false;
   imports = { DistanceSliderConfig, SalarySliderConfig };
-  editMenu: PostMenu = { open: false, post: null };
-  checkMenu: PostMenu & { swipeup: boolean; } = { open: false, post: null, swipeup: false }
+  editMenu = new PostMenu;
+  checkMenu = new PostMenu;
   
-  openPost(post: Post) {
+  //factor two menu into objects
+  openPost(post: Post | null) {
     this.info.hide();
-    this.editMenu = { open: true, post };
+    this.editMenu = assignCopy(this.editMenu, {post, open: !!post});
   }
   
-  checkPost(post: Post) {
+  checkPost(post: Post | null) {
     this.info.hide();
-    this.checkMenu = { open: true, post, swipeup: false };
-    console.log(post, post.candidates);
+    this.checkMenu = assignCopy(this.checkMenu, {post, open: !!post, swipeup: false});
   }
 
   checkPostMenu() {
@@ -103,8 +108,7 @@ export class HomeComponent extends Destroy$ {
   duplicatePost(id: number) {
     this.info.show("info", "Duplication en cours...", Infinity);
     this.store.dispatch(new DuplicatePost(id)).pipe(take(1)).subscribe(() => {
-      this.checkMenu = {open: false, post: null, swipeup: false};
-      this.info.hide();
+      this.checkPost(null);
       this.cd.markForCheck();
     }, () => {
       this.info.show("error", "Erreur lors de la duplication de l'annonce");
@@ -114,9 +118,8 @@ export class HomeComponent extends Destroy$ {
   pausePost(id: number) {
     this.info.show("info", "En cours...", Infinity);
     this.store.dispatch(new SwitchPostType(id)).pipe(take(1)).subscribe(() => {
-      this.checkMenu = {open: false, post: null, swipeup: false};
+      this.checkPost(null);
       this.popup.show(this.pausePostTemplate);
-      this.info.hide();
       this.cd.markForCheck();
     }, () => {
       this.info.show("error", "Echec");
@@ -125,7 +128,7 @@ export class HomeComponent extends Destroy$ {
   
   deletePost(id: number) {
     this.store.dispatch(new DeletePost(id)).pipe(take(1)).subscribe(() => {
-      this.checkMenu = {open: false, post: null, swipeup: false};
+      this.checkPost(null);
       this.cd.markForCheck();
     }, () => {
       this.info.show("error", 'Echec de suppression..');
@@ -156,33 +159,47 @@ export class HomeComponent extends Destroy$ {
   }
 
   applyPost(post: Post) {
+    console.log('applying for post');
     this.info.show("info", "Candidature en cours...", Infinity);
     this.store.dispatch(new ApplyPost(post.id)).pipe(take(1))
       .subscribe(
         success => this.info.show("success", "Candidature envoyée", 2000),
         error => this.info.show("error", "Echec de l'envoi de la candidature", 5000)
       ); 
+    }
+
+  handleApplication(application: number) {
+    console.log('handling application')
+    this.swipeupService.show({
+      type: 'menu',
+      hideOnClick: true,
+      items: [{
+        name: 'Valider la candidature',
+        class: 'validate application-response',
+        click: () => this.store.dispatch(new HandleApplication(application, true))
+      }, {
+        name: 'Refuser la candidature',
+        class: 'reject application-response',
+        click: () => this.store.dispatch(new HandleApplication(application, false))
+      }, {
+        name: 'Bloquer le contact',
+        class: 'block application-response',
+        click: () => this.info.show('info', 'En developpement', 2000)
+      }]
+    })
   }
 
-  devis = ['Par Heure', 'Par Jour', 'Par Semaine'].map((name, id) => ({id, name}));
-  form = new FormGroup({
-    amount: new FormControl(0),
-    devis: new FormControl([{id: 0}])
-  });
-
-  handleApplication() {
-
-  }
-
-  showCompany(id: number) {
+  showCompany(company: number, application: number) {
     //QueryProfile(true) is problematic here
-    //const company = CompanyRow.getById(id)!.serialize();
     this.slideService.show('Candidature', {
       type: 'template',
       template: this.candidature,
       context: {
-        $implicit: id
+        $implicit: company,
+        application
       }
-    })
+    });
+
+    this.swipeupService.hide();
   }
 };

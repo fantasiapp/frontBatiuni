@@ -21,7 +21,6 @@ namespace mutable {
     const record = draft[target] || {},
       currentIds = Object.keys(record).map(id => +id);
     
-    console.log('currently having', currentIds, 'deleting', ids);
     for ( let id of currentIds )
       if ( ids.includes(id) )
         delete record[id];
@@ -59,9 +58,7 @@ namespace mutable {
   export function update(draft: any, target: DataTypes, values: Record<any>) {
     const targetObjects = draft[target],
       fields = draft.fields[target];
-
-    console.log('update', target, 'with', values);
-    console.log('fields:', fields);
+    
     //translate data
     Object.entries<any>(values).forEach(([id, item]) => {
       const current = targetObjects[id];
@@ -118,7 +115,7 @@ namespace mutable {
     if ( !parentObject || childIndex <= -1 ) return;
 
     if ( uniqueBy ) {
-      console.log('will remove duplicates by', uniqueBy);
+      console.log('will remove duplicates in', child, 'by uniqueBy');
       const uniqueIndex = draft.fields[child].indexOf(uniqueBy);
       if ( uniqueIndex !== void 0 )
         parentObject[childIndex] = removeDuplicates(draft, child, parentObject[childIndex], ids, uniqueIndex);

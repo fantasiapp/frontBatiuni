@@ -17,16 +17,18 @@ export class CommentaireUI extends UIDefaultAccessor<FileList>{
   imagepath: any;
   imgSrc : any;
   url : any;
+  
   @Input()
   withstars : boolean = true;
+
   @Input()
   withtitle : boolean = true;
+
   @Input()
   withcomment : boolean = false;
+
   @Input()
   title: string = 'Qualité du travail fourni';
-  @Input()
-  startitle: string = 'backstar';
 
 
   constructor(cd: ChangeDetectorRef) {

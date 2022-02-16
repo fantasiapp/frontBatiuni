@@ -230,3 +230,10 @@ export class GetGeneralData {
   static readonly type = '[Data] Get General data';
   action = 'getGeneralData';
 };
+
+export class HandleApplication {
+  static readonly type = '[Data] Handle Application';
+  action = 'handleCandidateForPost';
+  
+  constructor(public Candidate: number, public response: boolean) {}
+};

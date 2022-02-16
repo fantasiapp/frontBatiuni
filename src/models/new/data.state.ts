@@ -3,7 +3,7 @@ import { Action, createSelector, Selector, State, StateContext, Store } from "@n
 import { Observable, of, Subject } from "rxjs";
 import { concatMap, map, tap } from "rxjs/operators";
 import { HttpService } from "src/app/services/http.service";
-import { GetGeneralData } from "./user/user.actions";
+import { GetGeneralData, HandleApplication } from "./user/user.actions";
 import { ApplyPost, ChangePassword, ChangeProfilePicture, ChangeProfileType, DeleteFile, DeletePost, DownloadFile, DuplicatePost, GetUserData, ModifyUserProfile, SwitchPostType, UploadFile, UploadPost } from "./user/user.actions";
 import { Company, Interface, User } from "./data.interfaces";
 import { DataReader, NameMapping } from "./data.mapper";
@@ -132,8 +132,8 @@ export class DataState {
   @Action(GetGeneralData)
   getGeneralData(ctx: StateContext<DataModel>) {    
     //eventually make a local storage service
-    let data = localStorage.getItem('general-data'), req;
-    req = data ? of(JSON.parse(data)) : this.http.get('initialize', {action: 'getGeneralData'});
+    //const data = localStorage.getItem('general-data');
+    const req = /*data ? of(JSON.parse(data)) : */ this.http.get('initialize', {action: 'getGeneralData'});
 
     return req.pipe(
       tap((response: any) => {
@@ -162,19 +162,20 @@ export class DataState {
 
   @Action(Logout)
   logout(ctx: StateContext<DataModel>) {
-    console.log('logging out');
     ctx.setState({fields: {}, session: {view: 'ST', currentUser: -1}});
     ctx.dispatch(new GetGeneralData()); // a sign to decouple this from DataModel
   }
 
   @Action(ModifyUserProfile)
   modifyUser(ctx: StateContext<DataModel>, modify: ModifyUserProfile) {
-    const {labelFiles, adminFiles, ...modifyAction} = modify;
+    const {labelFiles, adminFiles, onlyFiles, ...modifyAction} = modify;
     let req;
-    if ( modifyAction.onlyFiles )
+    if ( onlyFiles )
       req = of({[modify.action]: 'OK'});
     else 
       req = this.http.post('data', modifyAction);
+
+    console.log(modifyAction);
 
     return req.pipe(
       tap((response: any) => {
@@ -184,10 +185,8 @@ export class DataState {
         delete response[modify.action];
 
         ctx.setState(compose(...this.reader.readUpdates(response)));
-        console.log(ctx.getState());
       }),
       concatMap(() => {
-        console.log('upload files');
         labelFiles.forEach(file => ctx.dispatch(new UploadFile(file, 'labels', file.nature, 'Company')));
         Object.keys(adminFiles).forEach(name => ctx.dispatch(new UploadFile(adminFiles[name], 'admin', name, 'Company')))
         return of(true);
@@ -403,6 +402,19 @@ export class DataState {
     )
   };
 
+  @Action(HandleApplication)
+  handleApplication(ctx: StateContext<DataModel>, handle: HandleApplication) {
+    return this.http.get('data', handle).pipe(
+      tap((response: any) => {
+        console.log(response);
+        if ( response[handle.action] !== 'OK' )
+          throw response['messages'];
+        
+      })
+    )
+  }
+
+  // For temporary actions
   @Action(GetCompanies)
   getCompanies(ctx: StateContext<DataModel>, get: GetCompanies) {
     console.log(get);
@@ -412,7 +424,6 @@ export class DataState {
           this.reader.readInitialData(response)[0],
           //very error prone
           //i really hate doing this
-          //but then why send french names while everything else is in english ?
           produce((draft: any) => {
             draft.fields['Establishments'] = ['name', 'address', 'activity', 'siret', 'ntva'];
             return draft;

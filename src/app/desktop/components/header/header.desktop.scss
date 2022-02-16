@@ -137,7 +137,7 @@ button {
   width: 0;
   height: 0;
   @include triangle('up',30px, white)
-  }
+}
 
 notifications::ng-deep {
   height: auto !important;
