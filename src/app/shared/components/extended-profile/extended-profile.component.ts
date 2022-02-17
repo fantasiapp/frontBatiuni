@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, SimpleChanges } from "@angular/core";
 import { Store } from "@ngxs/store";
 import * as UserActions from "src/models/new/user/user.actions";
-import { map, take, takeUntil } from "rxjs/operators";
+import { take, takeUntil } from "rxjs/operators";
 import { PopupService } from "src/app/shared/components/popup/popup.component";
 import { DataQueries, QueryProfile, SnapshotArray } from "src/models/new/data.state";
 import { Job, File, Profile, User, JobForCompany } from "src/models/new/data.interfaces";
@@ -29,29 +29,23 @@ export class ExtendedProfileComponent extends Destroy$ {
   @SnapshotArray('File')
   files!: File[]; //only responsive to profile changes
 
-  @Input()
   @QueryProfile()
-  profile!: number | Profile | Observable<Profile>;
+  @Input('profile')
+  profile$!: number | Profile | Observable<Profile>;
 
   @Input()
   user: User | null = null;
 
   ngOnChanges(changes: SimpleChanges) {
-    if ( changes['profile'] ) {
-      //since a profile <=> company, you might want to add user info if you want
-      this.profile = this.profile$.pipe(
-        map((profile: Profile) => profile.user ? profile : {user: this.user, company: profile.company})
-      );
-
-      this.profile$.pipe(takeUntil(this.destroy$)).subscribe(profile => {
+    if ( changes['profile$'] ) {
+      (this.profile$ as Observable<Profile>).pipe(take(1)).subscribe(profile => {
+        console.log(profile);
         this.files = profile.company.files as any;
         this.companyJobs = profile.company.jobs as any;
         this.jobs = this.companyJobs.map(({job}) => job) as any;
       });
     }
   } 
-
-  get profile$() { return CastPipe.prototype.transform(this.profile); }
   
   @Input()
   showContact: boolean = false;

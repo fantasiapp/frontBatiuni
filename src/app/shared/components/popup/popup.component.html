@@ -1,6 +1,6 @@
-<div class="position-absolute cover-parent cover" (click)="close()" [class.open]="open && !willClose"></div>
+<div class="cover" [class.open]="open && !willClose"></div>
 
-<div class="menu hosted-page flex column center space-children-margin center-text" [class.open]="open && !willClose">
+<div class="menu cover-parent hosted-page flex column center space-children-margin center-text" [class.open]="open && !willClose">
   <img src="assets/X.svg" (click)="close()" class="position-absolute close-button"/>
   <ng-container #view>
     <ng-content></ng-content>
@@ -20,4 +20,13 @@
       </div>
     </object>
   </ng-template>
+</ng-template>
+
+<ng-template #delete>
+  Voudriez-vous supprimer l'annonce ?
+  <hr class="dashed" style="margin-left: 0 !important"/>
+  <div class="controls full-width flex space-around">
+    <button class="button active" (click)="output && output.next(true)">Confirmer</button>
+    <button class="button passive" (click)="output && output.next(false)">Annuler</button>
+  </div>
 </ng-template>

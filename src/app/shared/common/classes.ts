@@ -106,6 +106,35 @@ export abstract class UIOpenMenu {
   abstract close(): void;
 };
 
+export type Dimension = {
+  left: string;
+  top: string;
+  width?: string;
+  height?: string;
+};
+
+@Directive()
+export abstract class DimensionMenu extends UIOpenMenu {
+  constructor() {
+    super();
+  }
+
+  @Input()
+  dimension: Dimension = {left: '0', top: '0'};
+
+  @HostBinding('style.left')
+  get dimensionX() { return this.dimension.left; }
+
+  @HostBinding('style.top')
+  get dimensionY() { return this.dimension.top; }
+
+  @HostBinding('style.width')
+  get width() { return this.dimension.width || '100%'; }
+
+  @HostBinding('style.height')
+  get height() { return this.dimension.height || '100%'; }
+};
+
 @Directive()
 export abstract class UIDefaultAccessor<T> implements ControlValueAccessor {
   protected _value: T | undefined;

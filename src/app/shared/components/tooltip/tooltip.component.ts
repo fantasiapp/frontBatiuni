@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ComponentFactory
 import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { ContextUpdate, ViewComponent, ViewMenu, ViewMenuItem, ViewTemplate } from "src/app/shared/common/types";
-import { UIOpenMenu } from "../../common/classes";
+import { DimensionMenu, UIOpenMenu } from "../../common/classes";
 
 const TRANSITION_DURATION = 250;
 
@@ -13,14 +13,11 @@ const TRANSITION_DURATION = 250;
   styleUrls: ['./tooltip.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class UITooltipComponent extends UIOpenMenu {
+export class UITooltipComponent extends DimensionMenu {
   constructor(private cd: ChangeDetectorRef, private componentFactoryResolver: ComponentFactoryResolver, private service: UITooltipService) {
     super();
     this.block = false;
   }
-  
-  @Input()
-  dimension: TooltipDimension = {left: '0', top: '0'};
 
   @Input()
   content?: ViewTemplate | ViewComponent | ViewMenu;
@@ -36,18 +33,6 @@ export class UITooltipComponent extends UIOpenMenu {
 
   @Input()
   keepAlive: boolean = true;
-
-  @HostBinding('style.left')
-  get dimensionX() { return this.dimension.left; }
-
-  @HostBinding('style.top')
-  get dimensionY() { return this.dimension.top; }
-
-  @HostBinding('style.width')
-  get width() { return this.dimension.width || '400px'; }
-
-  @HostBinding('style.height')
-  get height() { return this.dimension.height || '300px'; }
 
   ngOnInit() {
     if ( !this.fromService ) return;

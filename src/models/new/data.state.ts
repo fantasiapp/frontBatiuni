@@ -6,13 +6,15 @@ import { HttpService } from "src/app/services/http.service";
 import { GetGeneralData, HandleApplication } from "./user/user.actions";
 import { ApplyPost, ChangePassword, ChangeProfilePicture, ChangeProfileType, DeleteFile, DeletePost, DownloadFile, DuplicatePost, GetUserData, ModifyUserProfile, SwitchPostType, UploadFile, UploadPost } from "./user/user.actions";
 import { Company, Interface, User } from "./data.interfaces";
-import { DataReader, NameMapping } from "./data.mapper";
+import { DataReader, NameMapping, TranslatedName } from "./data.mapper";
 import { Record, DataTypes } from "./data.interfaces";
 import { addValues, compose, deleteIds, pushChildValues, transformField, updateChildValues } from "./state.operators";
 import { Logout } from "../auth/auth.actions";
 import { InfoService } from "src/app/shared/components/info/info.component";
 import { GetCompanies } from "./search/search.actions";
 import produce from "immer";
+import { SlidemenuService } from "src/app/shared/components/slidemenu/slidemenu.component";
+import { SwipeupService } from "src/app/shared/components/swipeup/swipeup.component";
 
 export interface DataModel {
   fields: Record<string[]>;
@@ -43,7 +45,8 @@ export class DataState {
 
   constructor(
     private store: Store, private reader: DataReader,
-    private http: HttpService, private info: InfoService
+    private http: HttpService, private info: InfoService,
+    private slide: SlidemenuService, private swipeup: SwipeupService
   ) {}
 
   private pending$: Record<Subject<any>> = {};
@@ -403,12 +406,23 @@ export class DataState {
 
   @Action(HandleApplication)
   handleApplication(ctx: StateContext<DataModel>, handle: HandleApplication) {
-    return this.http.get('data', handle).pipe(
+    const {post, ...data} = handle;
+    return this.http.get('data', data).pipe(
       tap((response: any) => {
-        console.log(response);
-        if ( response[handle.action] !== 'OK' )
-          throw response['messages'];
+        if ( response[handle.action] !== 'OK' ) {
+          this.info.show("error", response.messages, 3000);
+          throw response.messages;
+        }
         
+        delete response[handle.action];
+        console.log('$', response);
+        const company = this.store.selectSnapshot(DataQueries.currentCompany);
+        this.info.show("success", "Réponse envoyée.", 3000);
+        this.slide.hide();
+        ctx.setState(compose(
+          deleteIds('Post', [handle.post.id]),
+          pushChildValues('Company', company.id, 'Mission', response)
+        ))
       })
     )
   }
@@ -443,10 +457,11 @@ export class DataQueries {
     if ( Array.isArray(values) ) {
       if ( fields.length != values.length )
       throw `Value is probably not of type ${target}`;
-    
+      
       for ( let i = 0; i < values.length; i++ ) {
         const name = fields[i],
-          jsonName = NameMapping[name] || name;
+          jsonName = NameMapping[name as TranslatedName] || name;
+        
         output[jsonName] = values[i];
       }
     } else {
@@ -567,9 +582,10 @@ export class DataQueries {
       }
     )
   };
-
-  
 };
+
+//type ChildOf<K extends DataTypes> = keyof Interface<K>;
+//type ChildSequence<A extends DataTypes, B extends ChildOf<A>> = ChildOf<B>;
 
 //Decorator
 //Assumes object has store

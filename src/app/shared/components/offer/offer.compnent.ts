@@ -1,8 +1,11 @@
 import { ChangeDetectionStrategy, Component, HostBinding, HostListener, Input, Output} from "@angular/core";
 import { Store } from "@ngxs/store";
+import { Subject } from "rxjs";
+import { take } from "rxjs/operators";
 import { Post, Company } from "src/models/new/data.interfaces";
-import { DataQueries, Snapshot } from "src/models/new/data.state";
+import { DataQueries } from "src/models/new/data.state";
 import { DeletePost } from "src/models/new/user/user.actions";
+import { PopupService } from "../popup/popup.component";
 
 @Component({
   selector: 'offer',
@@ -12,16 +15,22 @@ import { DeletePost } from "src/models/new/user/user.actions";
 })
 export class OfferComponent { 
 
-  constructor(private store: Store) {}
+  constructor(private store: Store, private popup: PopupService) {}
 
   @Input()
   src: string = "assets/confirmation.svg"
 
- 
-  
-
-  
-
+  @HostListener('press')
+  onPress(e: any) {
+    if ( this.deletable ) {
+      const subject = new Subject<boolean>();
+      subject.pipe(take(1)).subscribe((result) => {
+        if ( result ) this.deletePost()
+        this.popup.hide();
+      });
+      this.popup.openDeletePostDialog(subject);
+    } 
+  }
 
   @Input()
   deletable: boolean = false;
@@ -35,28 +44,7 @@ export class OfferComponent {
     this.company = p ? this.store.selectSnapshot(DataQueries.getById('Company', p.company)) : null;
   }
 
-  @HostBinding("class.delete")
-  delete: boolean = false;
-
-  @HostBinding("style.overflow")
-  overflow = "hidden";
-
-  @HostListener("transitionend")
-  onTransitionEnd() {
-    if (!this.delete) this.overflow = "hidden";
-  }
-
-  showDeleteButton() {
-    this.delete = this.deletable && !this.delete
-    if ( this.delete ) this.overflow = 'visible';
-  }
-
-  hideDeleteButton() {
-    this.delete = false;
-  }
-
-  deletePost(e: Event) {
-    e.stopPropagation();
+  deletePost() {
     this.store.dispatch(new DeletePost(this.post!.id));
   }
 

@@ -153,11 +153,12 @@
 
 %sticky-footer {
   position: fixed;
-  bottom : 0;
   left: 0;
-  height: calc(#{$sticky-footer-height} + env(safe-area-inset-bottom));
-  padding: 0 30px;
+  bottom: 0;
+  padding: 10px $page-padding;
   width: 100vw;
+  height: calc(#{$sticky-footer-height} + env(safe-area-inset-bottom));
+  @include with-set-safe-area(padding, bottom, 10px);
 }
 
 %page {

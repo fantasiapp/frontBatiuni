@@ -59,6 +59,14 @@
   list-style-type: none;
   padding: 20px 60px;
   @include with-set-safe-area(padding, bottom, 20px);
+
+  ::ng-deep img {
+    width: $icon-size;
+    height: $icon-size;
+    vertical-align: middle;
+    position: relative;
+    left: -20px;
+  }
 }
 
 .list::ng-deep li:not(:last-of-type) {

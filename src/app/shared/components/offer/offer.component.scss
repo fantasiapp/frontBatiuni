@@ -6,12 +6,6 @@
   position: relative;
   right: 0;
   display: flex;
-  transition: all 100ms ease-out 0s;
-  overflow-y: hidden;
-}
-
-:host(.delete) {
-  right: 100px;
 }
 
 .address {
@@ -44,25 +38,11 @@ p {
   margin: 0.6em;
 }
 
-.entreprise , .adresse {
-  // font-size: 13px;
-}
-
 .metier, .date {
   color: #333333;
 }
 
 .adresse { overflow: hidden; text-overflow: ellipsis; font-weight: 300; }
-
-.showDelete {
-  width: 100px;
-  background-color: red;
-  color: white;
-  position: absolute;
-  right: -100px;
-  top: 0;
-  bottom: 1rem;
-}
 
 .showDesktopOption {
   ul {

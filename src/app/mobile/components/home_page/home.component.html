@@ -29,8 +29,10 @@
               ></offer>
           </ng-container>
           <ng-container *ngSwitchCase="2">
+            {{ 'number of missions:' +  missions.length}}
             <offer
-              *ngFor="let mission of annonces"
+              *ngFor="let mission of missions"
+              [post]="mission"
               src="assets/validée.svg"
               [routerLink]="['', 'annonce-validee']"></offer>
           </ng-container>
@@ -81,11 +83,11 @@
         <annonce-resume class="hosted-page content-with-footer" [collapsible]="false" [post]="checkMenu.post!" (apply)="applyPost(checkMenu.post!)" #resume></annonce-resume>
   
         <swipeup [(open)]="checkMenu.swipeup">
-          <li [attr.data-notification-number]="checkMenu.candidates.length" [class.notification]="checkMenu.candidates.length" (click)="showCandidates()">Afficher les réponses</li>
-          <li [routerLink]="['','booster']">Booster Mon annonce</li>
-          <li (click)="deletePost(checkMenu.post!.id)">Supprimer l'annonce</li>
-          <li (click)="duplicatePost(checkMenu.post!.id)">Dupliquer l'annonce</li>
-          <li (click)="pausePost(checkMenu.post!.id)">Mettre en pause l'annonce</li>
+          <li [attr.data-notification-number]="checkMenu.candidates.length" [class.notification]="checkMenu.candidates.length" (click)="showCandidates()"><img src="assets/responses.svg"/> Afficher les réponses</li>
+          <li [routerLink]="['','booster']"><img src="assets/booster.svg"/>Booster Mon annonce</li>
+          <li (click)="deletePost(checkMenu.post!.id)"><img src="assets/cloturer.svg"/>Supprimer l'annonce</li>
+          <li (click)="duplicatePost(checkMenu.post!.id)"><img src="assets/Dupliquer.svg"/>Dupliquer l'annonce</li>
+          <li (click)="pausePost(checkMenu.post!.id)"><img src="assets/pauseicon.svg"/>Mettre en pause l'annonce</li>
         </swipeup>
       </ng-container>    
     </slidemenu>
@@ -123,9 +125,9 @@
   </div>
 </ng-template>
 
-<ng-template #candidature let-company let-application="application">
+<ng-template #candidature let-company let-post="post" let-application="application">
   <extended-profile class="content-with-header-and-footer" [profile]="company"></extended-profile>
   <footer class="sticky-footer flex center-cross application">
-    <button class="button active full-width" (click)="handleApplication(application)">Traiter la candidature</button>
+    <button class="button active full-width" (click)="handleApplication(post, application)">Traiter la candidature</button>
   </footer>
 </ng-template>

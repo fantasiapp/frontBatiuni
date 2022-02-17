@@ -68,3 +68,8 @@
   //make space for the footer
   margin-bottom: $sticky-footer-height;
 }
+
+.sticky-footer {
+  background: white;
+  box-shadow: 0 -3px 3px 0 #eee;
+}

@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component } from "@angular/core";
+import { Store } from "@ngxs/store";
 
 @Component({
   selector: 'sos-page',
@@ -11,4 +12,5 @@ export class SOSPageComponent {
   openSOSFilterMenu: boolean = false;
 
   availableAgents = new Array(10).fill(0);
+  constructor(private store: Store) {}
 };

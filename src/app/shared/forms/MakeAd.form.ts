@@ -68,7 +68,7 @@ import { InfoService } from "../components/info/info.component";
     </div>
 
     <div class="form-input">
-      <label>Dates du chantier 🧪</label>
+      <label>Dates du chantier</label>
       <div class="center-text">
         <switch on="Intervalle" off="Jour" #switch [value]="false"></switch>
       </div>
@@ -157,7 +157,8 @@ import { InfoService } from "../components/info/info.component";
 
     .submit-container {
       height: $sticky-footer-height;
-      padding: 10px;
+      padding-left: 10px; padding-right: 10px;
+      padding-top: 10px;
       button { max-width: 45%;}
     }
 
@@ -211,7 +212,6 @@ export class MakeAdForm {
   
   @Input()
   set post(p: Post | null) {
-    console.log(p);
     if ( !p || p == this._post ) {
       this.info.alignWith('header_search');
       return;
@@ -245,7 +245,6 @@ export class MakeAdForm {
     
     //load dates
     //heavens forgive me for this atrocy
-    const dates = p.dates;
     let daystates: DayState[] = [];
     if ( p.dates.length )
       if ( typeof p.dates[0] == 'string' )
@@ -254,9 +253,8 @@ export class MakeAdForm {
         daystates = this.store.selectSnapshot(DataQueries.getMany('DatePost', p.dates))
           .map(({name}) => ({date: name, availability: 'selected'}))
     
-    console.log('>>', daystates);
     this.makeAdForm.get('calendar')?.setValue(daystates);
-    this.calendar.viewCurrentDate();
+    this.calendar?.viewCurrentDate();
     
     //load files
     const filesForm = this.makeAdForm.get('documents')! as FormArray;

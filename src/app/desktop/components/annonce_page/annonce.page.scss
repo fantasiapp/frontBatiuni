@@ -156,10 +156,11 @@ ad-form::ng-deep{
 
 ad-form::ng-deep{
   width: 100% !important;
-  label {
-    margin-bottom: 1.5rem !important;
-  }
   .form-input {
+    & > label {
+      margin-bottom: 1.5rem !important;
+    }
+
     margin-bottom: 3rem !important;
   }
   footer {

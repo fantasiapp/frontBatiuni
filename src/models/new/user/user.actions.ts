@@ -2,7 +2,7 @@ import { FormGroup } from "@angular/forms";
 import { FileUIOutput } from "src/app/shared/components/filesUI/files.ui";
 import { PropertyTrap } from "src/app/shared/common/classes";
 import { getDirtyValues } from "src/app/shared/common/functions";
-import { DataTypes, Profile } from "../data.interfaces";
+import { DataTypes, Post, Profile } from "../data.interfaces";
 import { CalendarUI, DayState } from "src/app/shared/components/calendar/calendar.ui";
 import { getAvailabilityName } from "../data.mapper";
 
@@ -233,5 +233,5 @@ export class HandleApplication {
   static readonly type = '[Data] Handle Application';
   action = 'handleCandidateForPost';
   
-  constructor(public Candidate: number, public response: boolean) {}
+  constructor(public Candidate: number, public post: Post, public response: boolean) {}
 };

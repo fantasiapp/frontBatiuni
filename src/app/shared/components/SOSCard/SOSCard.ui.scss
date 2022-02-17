@@ -30,7 +30,16 @@
 
 .description {
   color: #aaa;
+  height: 80%;
+  
   & > span:not(:last-child) { margin-bottom: 1em; }
 }
 
-.job { color: black; }
+.job {
+  color: black;
+  overflow: hidden;
+  display: -webkit-box;
+  text-overflow: ellipsis;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}

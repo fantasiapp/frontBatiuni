@@ -1,5 +1,5 @@
 <ng-container *ngIf="post">
-  <div class="container grow flex center-cross space-between" (swipeleft)="showDeleteButton()" (swiperight)="hideDeleteButton()" [ngClass]="{'moveLeft':delete}" >
+  <div class="container grow flex center-cross space-between">
     <div class="offres-infos">
       <p class="entreprise">{{company?.name || 'Entreprise'}}</p>
       <p class="metier">{{post?.manPower ? 'Man d\'oeuvre' : 'Fourniture et Pose'}}</p>
@@ -9,14 +9,5 @@
     <div class="offres-logo flex center">
       <img [src]="src"/>
     </div>
-    <!-- <div *ngIf="desktopOption" class="showDesktopOption">
-      <ul>
-        <li>Modifier</li>
-        <li>Supprimer</li>
-      </ul>
-    </div> -->
-  </div>
-    <div class="flex center showDelete" [ngClass]="{'delete':delete}" (click)="deletePost($event)">
-    <div>Supprimer</div>
   </div>
 </ng-container>

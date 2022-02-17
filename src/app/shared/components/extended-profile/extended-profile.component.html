@@ -1,4 +1,4 @@
-<ng-container *ngIf="(profile | cast | async) as profile">
+<ng-container *ngIf="(profile$ | cast | async) as profile">
   <div class="hosted-page flex column center-cross space-children-margin font-Poppins">
     <profile-resume class="flex column center-cross space-children-margin"
       [canChangePicture]="false"

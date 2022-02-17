@@ -4,10 +4,11 @@ import { Observable } from "rxjs";
 import { Company, Job, Profile } from "src/models/new/data.interfaces";
 import { DataQueries, QueryProfile, Snapshot } from "src/models/new/data.state";
 
+//maybe merge with sos ?
 @Component({
   selector: 'profile-card',
   template: `
-    <ng-container *ngIf="(profile | cast | async) as profile">
+    <ng-container *ngIf="(profile$ | cast | async) as profile">
       <profile-image [profile]="profile"></profile-image>
       <div class="flex column small-space-children-margin font-Poppins description">
         <span>{{ profile.company.name || "Nom de l'entreprise" }}</span>
@@ -49,9 +50,9 @@ export class ProfileCardComponent {
 
   //we can get away with using these because this component is used inside a template
   //otherwise we will get type errors 
-  @Input()
   @QueryProfile()
-  profile!: number | Profile | Observable<Profile>;
+  @Input('profile')
+  profile$!: number | Profile | Observable<Profile>;
 
   @Input()
   @Snapshot('Job')
@@ -63,9 +64,9 @@ export class ProfileCardComponent {
   constructor(private store: Store) {}
   
   ngOnInit() {
-    if ( this.profile == void 0 ) return;
+    if ( this.profile$ == void 0 ) return;
 
-    (this.profile as Observable<Profile>).subscribe(profile => {
+    (this.profile$ as Observable<Profile>).subscribe(profile => {
       const jobForCompany = this.store.selectSnapshot(DataQueries.getMany('JobForCompany', (profile.company as Company).jobs))
       this.employeeCount = jobForCompany.find(({job, number}) => {
         return job == (this.job as Job).id;

@@ -1,9 +1,9 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, HostListener, Injectable, Input, Sanitizer, SimpleChange, SimpleChanges, TemplateRef, ViewChild, ViewContainerRef } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Injectable, Input, Sanitizer, SimpleChange, SimpleChanges, TemplateRef, ViewChild, ViewContainerRef } from "@angular/core";
 import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser";
 import { Store } from "@ngxs/store";
 import { Subject } from "rxjs";
 import { take, takeUntil } from "rxjs/operators";
-import { UIOpenMenu } from "src/app/shared/common/classes";
+import { Dimension, DimensionMenu, UIOpenMenu } from "src/app/shared/common/classes";
 import { DataQueries } from "src/models/new/data.state";
 import { DownloadFile } from "src/models/new/user/user.actions";
 import { b64toBlob, getFileType } from "../../common/functions";
@@ -17,7 +17,7 @@ const TRANSITION_DURATION = 200;
   styleUrls: ['./popup.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class UIPopup extends UIOpenMenu {
+export class UIPopup extends DimensionMenu {
   constructor(private cd: ChangeDetectorRef, private popupService: PopupService) {
     super();
   }
@@ -27,6 +27,9 @@ export class UIPopup extends UIOpenMenu {
 
   @ViewChild('file', {read: TemplateRef, static: true})
   file!: TemplateRef<any>;
+
+  @ViewChild('delete', {read: TemplateRef, static: true})
+  deletePost!: TemplateRef<any>;
 
   @Input()
   content?: TemplateRef<any>;
@@ -54,15 +57,24 @@ export class UIPopup extends UIOpenMenu {
       this.open = false;
   }
 
+  output: Subject<any> | null = null;
+
   ngOnInit() {
     if ( !this.fromService ) return;
   
     this.popupService.popups$.pipe(takeUntil(this.destroy$)).subscribe((params: Partial<PopupConfig>) => {
       this.params = params.context;
-      console.log(params.context);
       this.content = params.template;
-      if ( params.name && !this.content) this.content = this[params.name];
+      if ( params.name && !this.content) {
+        this.content = this[params.name];
+        if ( params.output ) this.output = params.output;
+      }
       this.show();
+      this.cd.markForCheck();
+    });
+
+    this.popupService.dimension$.pipe(takeUntil(this.destroy$)).subscribe(dimension => {
+      this.dimension = dimension;
       this.cd.markForCheck();
     });
   }
@@ -74,6 +86,7 @@ export class UIPopup extends UIOpenMenu {
       if ( !this.keepAlive ) this.view.clear();
       this.willClose = false;
       this.openChange.emit(this._open = false);
+      this.output = null;
       if ( this.params?.close ) this.params.close();
       this.cd.markForCheck();
     }, TRANSITION_DURATION);
@@ -91,10 +104,11 @@ export class UIPopup extends UIOpenMenu {
   }
 };
 
-export type PopupConfig = {
-  name: 'file';
+export type PopupConfig<T = any> = {
+  name: 'file' | 'deletePost';
   template: TemplateRef<any>;
   context: TemplateContext;
+  output: Subject<T> | null;
 };
 
 export type FileViewConfig = {
@@ -104,13 +118,15 @@ export type FileViewConfig = {
     safeUrl: SafeResourceUrl | null,
     type: string,
   }
-}
+};
 
 @Injectable({
   providedIn: 'root'
 })
 export class PopupService {
   popups$ = new Subject<Partial<PopupConfig>>();
+  dimension$ = new Subject<Dimension>();
+  defaultDimension: Dimension = {left: '20px', top: '30px', width: 'calc(100% - 40px)', height: 'calc(100% - 60px)'}
 
   constructor(private sanitizer: DomSanitizer, private store: Store) {}
 
@@ -118,9 +134,9 @@ export class PopupService {
     this.popups$.next({context});
   }
 
-
-  show(template: TemplateRef<any>, context?: TemplateContext) {
+  show(template: TemplateRef<any>, context?: TemplateContext, dimension?: Dimension) {
     this.popups$.next({template, context});
+    this.dimension$.next({...this.defaultDimension, ...(dimension || {})});
   }
 
   openFile(file: FileUIOutput) {
@@ -143,6 +159,12 @@ export class PopupService {
     
     this.popups$.next({name: 'file', context});
     return true;
+  }
+
+  openDeletePostDialog(source?: Subject<boolean>) {
+    this.popups$.next({name: 'deletePost', output: source});
+    this.dimension$.next({width: '100%', height: '200px', top: 'calc(50% - 100px)', left: '0'})
+    return new EventEmitter;
   }
 
   hide() {

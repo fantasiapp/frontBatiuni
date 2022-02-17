@@ -11,7 +11,7 @@ import { SlidemenuService } from "src/app/shared/components/slidemenu/slidemenu.
 import { SwipeupService } from "src/app/shared/components/swipeup/swipeup.component";
 import { ApplyPost, DeletePost, DuplicatePost, HandleApplication, SwitchPostType } from "src/models/new/user/user.actions";
 import { DataQueries, DataState, QueryAll, SnapshotAll } from 'src/models/new/data.state';
-import { Profile, Post } from "src/models/new/data.interfaces";
+import { Profile, Post, Mission } from "src/models/new/data.interfaces";
 
 class PostMenu {
   open: boolean = false;
@@ -47,6 +47,7 @@ export class HomeComponent extends Destroy$ {
   userDrafts: Post[] = [];
   userOnlinePosts: Post[] = [];
   allOnlinePosts: Post[] = [];
+  missions: Mission[] = [];
 
 
   @ViewChild('pausePostTemplate', {read: TemplateRef, static: true})
@@ -78,12 +79,12 @@ export class HomeComponent extends Destroy$ {
       this.userDrafts = mapping.get(this.symbols.userDraft) || [];
       this.userOnlinePosts = mapping.get(this.symbols.userOnlinePost) || [];
       this.allOnlinePosts = mapping.get(this.symbols.otherOnlinePost) || [];
+      this.missions = this.store.selectSnapshot(DataQueries.getMany('Mission', profile.company.missions));
+      console.log('updates', profile.company.missions, this.missions);
       this.cd.markForCheck();
     });
   }
   activeView: number = 0;
-  validerCandidature: boolean = false;
-  annonces = new Array(10);
   openAdFilterMenu: boolean = false;
   imports = { DistanceSliderConfig, SalarySliderConfig };
   editMenu = new PostMenu;
@@ -116,7 +117,6 @@ export class HomeComponent extends Destroy$ {
   }
 
   pausePost(id: number) {
-    this.info.show("info", "En cours...", Infinity);
     this.store.dispatch(new SwitchPostType(id)).pipe(take(1)).subscribe(() => {
       this.checkPost(null);
       this.popup.show(this.pausePostTemplate);
@@ -144,22 +144,21 @@ export class HomeComponent extends Destroy$ {
   }
 
   showCandidates() {
+    this.checkMenu.swipeup = false;
     const candidatesIds = this.checkMenu.post?.candidates || [],
       candidates = this.store.selectSnapshot(DataQueries.getMany('Candidate', candidatesIds));
 
-    this.checkMenu.swipeup = false;
     this.swipeupService.show({
       type: 'template',
       template: this.candidatesTemplate,
       context: {
         $implicit: candidates,
-        job: this.checkMenu.post!.job
+        job: this.checkMenu.post!.job,
       }
     })
   }
 
   applyPost(post: Post) {
-    console.log('applying for post');
     this.info.show("info", "Candidature en cours...", Infinity);
     this.store.dispatch(new ApplyPost(post.id)).pipe(take(1))
       .subscribe(
@@ -168,19 +167,29 @@ export class HomeComponent extends Destroy$ {
       ); 
     }
 
-  handleApplication(application: number) {
-    console.log('handling application')
+  handleApplication(post: Post, application: number) {
     this.swipeupService.show({
       type: 'menu',
       hideOnClick: true,
       items: [{
         name: 'Valider la candidature',
         class: 'validate application-response',
-        click: () => this.store.dispatch(new HandleApplication(application, true))
+        click: () => {
+          this.store.dispatch(new HandleApplication(application, post, true)).pipe(take(1)).subscribe(() => {
+            //if successful, quit the slidemenu
+            this.checkPost(null);
+            this.cd.markForCheck();
+          });
+        }
       }, {
         name: 'Refuser la candidature',
         class: 'reject application-response',
-        click: () => this.store.dispatch(new HandleApplication(application, false))
+        click: () => {
+          this.store.dispatch(new HandleApplication(application, post, false)).pipe(take(1)).subscribe(() => {
+            this.checkPost(null);
+            this.cd.markForCheck();  
+          });
+        }
       }, {
         name: 'Bloquer le contact',
         class: 'block application-response',
@@ -190,13 +199,14 @@ export class HomeComponent extends Destroy$ {
   }
 
   showCompany(company: number, application: number) {
-    //QueryProfile(true) is problematic here
+    //checkMenu is still open
     this.slideService.show('Candidature', {
       type: 'template',
       template: this.candidature,
       context: {
         $implicit: company,
-        application
+        application,
+        post: this.checkMenu.post
       }
     });
 

@@ -1,37 +1,58 @@
 import { Injectable } from "@angular/core";
 import { Store } from "@ngxs/store";
-import { DataTypes } from "./data.interfaces";
+import { DataTypes, Interface } from "./data.interfaces";
 import { addValues, addRecord, replace, update } from "./state.operators";
 import { patch } from '@ngxs/store/operators';
 import { Availability } from "src/app/shared/components/calendar/calendar.ui";
 
 
-export const NameMapping: any = {
+export type TranslatedName = DataTypes | 'userName';
+
+export const NameMapping: {[key in TranslatedName]?: string} = {
   'JobForCompany': 'jobs',
   'LabelForCompany': 'labels',
   'Role': 'role',
   'Job': 'job',
   'Label': 'label',
-  'Userprofile': 'User',
+  'UserProfile': 'user',
   'Company': 'company',
-  'Files': 'files',
   'File': 'files',
   'Post': 'posts',
   'userName': 'username',
   'Candidate': 'candidates',
   'DetailedPost': 'details',
-  'Supervisions': 'supervisions',
+  'Supervision': 'supervisions',
   'Disponibility': 'availabilities',
   'Mission': 'missions',
-  'DatePost': 'dates'
-};
+  'DatePost': 'dates',
+} as const;
+
+const ReverseMapping = {
+  'jobs': 'JobForCompany',
+  'labels': 'LabelForCompany',
+  'role': 'Role',
+  'job': 'Job',
+  'label': 'Label',
+  'user': 'UserProfile',
+  'company': 'Company',
+  'files': 'File',
+  'file': 'File',
+  'posts': 'Post',
+  'username': 'userName',
+  'candidates': 'Candidate',
+  'details': 'DetailedPost',
+  'supervisions': 'Supervision',
+  'availabilities': 'Disponibility',
+  'missions': 'Mission',
+  'dates': 'DatePost'
+} as const;
+
+type PropertyMapping = typeof ReverseMapping;
+export type OriginalName<T> = T extends keyof PropertyMapping ? PropertyMapping[T] : T;
+
 
 export function getOriginalName(name: string) {
-  for ( const transformed in NameMapping ) {
-    if ( NameMapping[transformed] == name )
-      return transformed;
-  }
-  return name;
+  return ReverseMapping[name as keyof PropertyMapping] || name;
 };
 
 export function getAvailabilityName(availability: Availability) {

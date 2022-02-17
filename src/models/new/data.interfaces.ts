@@ -54,6 +54,7 @@ export interface Company {
   labels: Ref<LabelForCompany>[];
   files: Ref<File>[];
   posts: Ref<Post>[];
+  missions: Ref<Mission>[];
   availabilities: Ref<Disponibility>[];
   unity: string;
   amount: number;
@@ -147,7 +148,7 @@ export type Mission = Omit<Post, 'applications'>;
 export type PostDate = {
   id: Ref<PostDate>;
   name: string;
-}
+};
 
 export type Interface<K extends DataTypes> =
   K extends 'Job' ? Job :
@@ -167,6 +168,8 @@ export type Interface<K extends DataTypes> =
   K extends 'DatePost' ? PostDate :
   K extends 'Establishments' ? Establishement :
   K;
+
+
 
 export type Profile = {
   user: User | null;
