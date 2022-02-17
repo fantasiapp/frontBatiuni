@@ -20,6 +20,7 @@
 }
 
 .cover {
+  z-index: -1;
   position: fixed;
   width: 100vw; left: 0;
   height: 100vh; top: 0;
