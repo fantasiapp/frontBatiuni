@@ -16,7 +16,7 @@
               src="assets/brouillon.svg"
               [deletable]="true"
               [post]="draft"
-              (click)="openPost(draft)"
+              (click)="openDraft(draft)"
               ></offer> 
           </ng-container>
           <ng-container *ngSwitchCase="1">
@@ -25,16 +25,16 @@
               src="assets/enligne.svg"
               [deletable]="false"
               [post]="onlinePost"
-              (click)="checkPost(onlinePost)"
+              (click)="openPost(onlinePost)"
               ></offer>
           </ng-container>
           <ng-container *ngSwitchCase="2">
-            {{ 'number of missions:' +  missions.length}}
             <offer
               *ngFor="let mission of missions"
               [post]="mission"
               src="assets/validée.svg"
-              [routerLink]="['', 'annonce-validee']"></offer>
+              (click)="openMission(mission)"
+            ></offer>
           </ng-container>
         </ng-container>
       </ng-container>
@@ -48,10 +48,10 @@
               [deletable]="false"
               src="assets/enligne.svg"
               [post]="onlinePost"
-              (click)="checkPost(onlinePost)"
+              (click)="openPost(onlinePost)"
               ></offer>
           </ng-container>
-          <mapbox-batiuni [posts]="allOnlinePosts" class="space-children-margin" *ngSwitchCase="1" (postClick)="checkPost($event)"></mapbox-batiuni>
+          <mapbox-batiuni [posts]="allOnlinePosts" class="space-children-margin" *ngSwitchCase="1" (postClick)="openPost($event)"></mapbox-batiuni>
         </ng-container>
       </ng-template>
     </div>
@@ -62,34 +62,45 @@
     </swipeup>
     
     <!-- Component one -->
-    <slidemenu [(open)]="editMenu.open" [header]="true">
+    <slidemenu [(open)]="draftMenu.open" [header]="true">
       <span class="grow center-text text-light-emphasis" header>Modifier un brouillon</span>
       
       <div class="hosted-page flex column center-cross space-children-margin" content>
-        <ad-form [post]="editMenu.post" (done)="openPost(null)" [page]="false" content></ad-form>     
+        <ad-form [post]="draftMenu.post" (done)="openDraft(null)" [page]="false" content></ad-form>     
       </div>
     </slidemenu>
     
     <!-- Component two -->
-    <slidemenu [(open)]="checkMenu.open" [header]="false" #slideOnlinePost>
+    <slidemenu [(open)]="postMenu.open" [header]="false" #slideOnlinePost>
       <header class="clear-margin full-width sticky-header flex center-cross annonce" customHeader>
         <img (click)="slideOnlinePost.close()" src="assets/arrowlblack.svg" />
         <span class="grow center-text text-light-emphasis">Annonce en Ligne</span>
-        <img *ngIf="view == 'PME'; else star" (click)="checkPostMenu()" src="assets/Option.svg"/>
+        <img *ngIf="view == 'PME'; else star" (click)="postMenu.swipeup = true" src="assets/Option.svg"/>
         <ng-template #star><stars [toggle]="true"></stars></ng-template>
       </header>
   
       <ng-container content>
-        <annonce-resume class="hosted-page content-with-footer" [collapsible]="false" [post]="checkMenu.post!" (apply)="applyPost(checkMenu.post!)" #resume></annonce-resume>
+        <annonce-resume class="hosted-page content-with-footer" [collapsible]="false" [post]="postMenu.post!" (apply)="applyPost(postMenu.post!)" #resume></annonce-resume>
   
-        <swipeup [(open)]="checkMenu.swipeup">
-          <li [attr.data-notification-number]="checkMenu.candidates.length" [class.notification]="checkMenu.candidates.length" (click)="showCandidates()"><img src="assets/responses.svg"/> Afficher les réponses</li>
+        <swipeup [(open)]="postMenu.swipeup">
+          <li [attr.data-notification-number]="postMenu.candidates.length" [class.notification]="postMenu.candidates.length" (click)="showCandidates()"><img src="assets/responses.svg"/> Afficher les réponses</li>
           <li [routerLink]="['','booster']"><img src="assets/booster.svg"/>Booster Mon annonce</li>
-          <li (click)="deletePost(checkMenu.post!.id)"><img src="assets/cloturer.svg"/>Supprimer l'annonce</li>
-          <li (click)="duplicatePost(checkMenu.post!.id)"><img src="assets/Dupliquer.svg"/>Dupliquer l'annonce</li>
-          <li (click)="pausePost(checkMenu.post!.id)"><img src="assets/pauseicon.svg"/>Mettre en pause l'annonce</li>
+          <li (click)="deletePost(postMenu.post!.id)"><img src="assets/cloturer.svg"/>Supprimer l'annonce</li>
+          <li (click)="duplicatePost(postMenu.post!.id)"><img src="assets/Dupliquer.svg"/>Dupliquer l'annonce</li>
+          <li (click)="pausePost(postMenu.post!.id)"><img src="assets/pauseicon.svg"/>Mettre en pause l'annonce</li>
         </swipeup>
       </ng-container>    
+    </slidemenu>
+
+    <!-- Component Three -->
+    <slidemenu [(open)]="missionMenu.open" [header]="false" #slideMission>
+      <header class="clear-margin full-width sticky-header flex center-cross annonce" customHeader>
+        <img (click)="slideMission.close()" src="assets/arrowlblack.svg" />
+        <span class="grow center-text text-light-emphasis">Annonce validée</span>
+        <img (click)="missionMenu.swipeup = true" [src]="view == 'PME' ? 'assets/Option.svg' : 'assets/phone.png'"/>
+      </header>
+      
+      <suivi-pme [mission]="missionMenu.post" content></suivi-pme>
     </slidemenu>
   </ng-container>
 </ng-container>

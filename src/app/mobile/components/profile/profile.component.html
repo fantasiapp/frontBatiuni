@@ -23,7 +23,7 @@
     <li (click)="logout()">Se déconnecter</li>
   </swipeup>
 
-  <slidemenu [(open)]="openModifyMenu" #modifyMenu>    
+  <slidemenu [footer]="modifyPassword ? 'small' : 'medium'" [(open)]="openModifyMenu" #modifyMenu>    
     <span header>Modifier mon Profil</span>
     <div class="modify-page hosted-page flex column center-cross space-children-margin" content>
       <swipeup [(open)]="openModifyPicture" #modifyPicture>
@@ -33,10 +33,8 @@
 
       <profile-resume [profile]="profile" [canChangePicture]="!modifyPassword" class="flex column center-cross space-children-margin" (changePicture)="swipeModifyPicture()"></profile-resume>
   
-      <div class="form-container full-width grow flex column position-relative">
-        <modify-password-form *ngIf="modifyPassword" class="grow" (submit)="changePassword($event)"></modify-password-form>
-        <modify-profile-form [profile]="profile" *ngIf="!modifyPassword" class="grow" (submit)="modifyProfile($event)" #modifyForm></modify-profile-form>
-      </div>
+      <modify-password-form *ngIf="modifyPassword" class="grow" (submit)="changePassword($event)"></modify-password-form>
+      <modify-profile-form *ngIf="!modifyPassword" class="grow" [profile]="profile" (submit)="modifyProfile($event)" #modifyForm></modify-profile-form>
     </div>
   </slidemenu>
 

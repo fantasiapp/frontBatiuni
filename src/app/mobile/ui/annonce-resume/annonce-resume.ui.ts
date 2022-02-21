@@ -8,19 +8,15 @@ import { DataQueries, DataState } from "src/models/new/data.state";
 @Component({
   selector: 'annonce-resume',
   template: `
-  <div class="collapse-container" [class.is-collapsed]="collapsed">
+  <div *ngIf="post" class="collapse-container" [class.is-collapsed]="collapsed">
     <div class="collapse-content space-children-margin">
       <div class="company-intro flex column center-cross space-children-margin">
-          <div class="company flex center">
-            <div class="offres-logo  flex center">
-              <img src="assets/confirmation.svg" />
-            </div>
-        </div>
-        <span class="company">{{ company?.name || "Nom de l'entreprise" }}</span>
-        <stars class="stars" [value]="company?.stars || 4" disabled></stars>
-        <span>{{ (post?.manPower) ? "Main d'oeuvre" : "Fourniture et pose" }}</span>
-        <span>Du {{ toLocateDate(post?.startDate) }} Au {{toLocateDate(post?.endDate)}}</span>
-        <span>{{ this.post?.amount || 0 }} {{this.post?.currency}} </span>
+        <profile-image [profile]="{company: company!}" [borders]="false"></profile-image>      
+        <span class="company">{{ company!.name }}</span>
+        <stars class="stars" [value]="company!.stars || 4" disabled></stars>
+        <span>{{ (post.manPower) ? "Main d'oeuvre" : "Fourniture et pose" }}</span>
+        <span>Du {{ toLocateDate(post.startDate) }} Au {{toLocateDate(post.endDate)}}</span>
+        <span>{{ this.post.amount || 0 }} {{this.post.currency}} </span>
       </div>
       
 
@@ -28,14 +24,14 @@ import { DataQueries, DataState } from "src/models/new/data.state";
         <span class="title text-emphasis">Nous avons besoin de:</span>
         <ul>
           <li>{{post?.numberOfPeople || 1}} {{job?.name || 'Employé'}} </li>
-          <li>Du {{ post?.hourlyStart }} Au {{ post?.hourlyEnd }}</li>
+          <li>Du {{ post.hourlyStart }} Au {{ post.hourlyEnd }}</li>
         </ul>
         <span><small>Date d’échéance Le {{ toLocateDate(post?.dueDate) }}</small></span>
       </div>
 
       <div class="description">
         <span class="title text-emphasis">Description des missions</span>
-        <p>{{post?.description || 'Description de la mission'}}</p>
+        <p>{{post.description}}</p>
         <ul>
           <li *ngFor="let detail of details">{{detail.content}}</li>
         </ul>

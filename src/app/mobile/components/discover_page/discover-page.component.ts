@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, ViewChild } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { SlideTemplate } from "../../directives/slideTemplate.directive";
+import { SlideTemplate } from "../../../shared/directives/slideTemplate.directive";
 
 export type DiscoveryContext = {
   $implicit: {

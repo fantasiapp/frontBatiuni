@@ -1,5 +1,11 @@
 @import 'src/styles/variables';
 
+//started off with borders, but later realized they aren't shown in all cases
+//keep calc the same and just hide them for now
+:host(.borders) {
+  border-color: #aaa;
+}
+
 :host {
   display: block;
   position: relative; 
@@ -8,8 +14,10 @@
   height: $profile-image-size;
   
   border-radius: 50%;
-  border: $profile-level-thickness solid #aaa;
   transform: rotate(45deg);
+
+  border: $profile-level-thickness solid transparent;
+
 
   &, .image-container, img {
     border-radius: 50%;

@@ -8,7 +8,9 @@ import { DataQueries } from "src/models/new/data.state";
 import { DownloadFile } from "src/models/new/user/user.actions";
 import { b64toBlob, getFileType } from "../../common/functions";
 import { TemplateContext } from "../../common/types";
-import { FileUIOutput } from "../filesUI/files.ui";
+import { FileDownloader } from "../../services/file-downloader.service";
+import { BasicFile, FileUIOutput } from "../filesUI/files.ui";
+import { File } from "src/models/new/data.interfaces";
 
 const TRANSITION_DURATION = 200;
 @Component({
@@ -128,7 +130,8 @@ export class PopupService {
   dimension$ = new Subject<Dimension>();
   defaultDimension: Dimension = {left: '20px', top: '30px', width: 'calc(100% - 40px)', height: 'calc(100% - 60px)'}
 
-  constructor(private sanitizer: DomSanitizer, private store: Store) {}
+  constructor(private downloader: FileDownloader) {
+  }
 
   update(context: PopupConfig['context']) {
     this.popups$.next({context});
@@ -139,25 +142,14 @@ export class PopupService {
     this.dimension$.next({...this.defaultDimension, ...(dimension || {})});
   }
 
-  openFile(file: FileUIOutput) {
-    if ( !file.content )
-      return this.store.dispatch(new DownloadFile(file.id!, true)).pipe(take(1)).subscribe(() => {
-        file = this.store.selectSnapshot(DataQueries.getById('File', file.id!))!;
-        file.ext = 'jpeg';
-        this.openFile(file);
-      });
-  
-    const type = getFileType(file.ext),
-      blob = b64toBlob(Array.isArray(file.content) ? file.content[0] : file.content, type),
-      url = URL.createObjectURL(blob),
-      context: FileViewConfig = { $implicit: {
-        close() { this.url && URL.revokeObjectURL(this.url); },
-        url,
-        type,
-        safeUrl: this.sanitizer.bypassSecurityTrustResourceUrl(url),
-      }};
+  openFile(file: BasicFile | File) {
+    if ( !file.content ) {
+      this.downloader.downloadFile((file as File).id!).subscribe(file => this.openFile(file));
+      return;
+    }
     
-    this.popups$.next({name: 'file', context});
+    this.popups$.next({name: 'file', context: this.downloader.createFileContext(file)});
+    this.dimension$.next(this.defaultDimension);
     return true;
   }
 

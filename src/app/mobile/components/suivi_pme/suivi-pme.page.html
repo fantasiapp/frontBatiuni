@@ -1,21 +1,16 @@
-<header class="clear-margin full-width sticky-header flex center-cross annonce">
-  <img [routerLink]="['','home']"  src="assets/arrowlblack.svg" />
-  <span class="grow center-text text-light-emphasis">Annonce Validée</span>
-  <img  (click)="swipemenu = true" src="assets/Option.svg" />
-</header>
-<div class="container hosted-page page-content-without-nav space-children-margin">
-  <annonce-resume [collapsed]="true"></annonce-resume>
+<div class="container hosted-page space-children-margin">
+  <annonce-resume [collapsed]="true" [post]="mission"></annonce-resume>
 
   <!-- CONTRAT DOCUSIGN URL -->
   <div class="contrat">
     <h6 class="title font-Poppins">
       Le contrat
     </h6> 
-    <div class="flex center-cross space-around ">
+    <div class="flex center-cross space-around">
       <file-svg name="Contrat" color="red"></file-svg>
-    <h6 class="contrat-title font-Poppins">
-      Signer le contrat
-    </h6> 
+      <h6 class="contrat-title font-Poppins">
+        Signer le contrat
+      </h6> 
    </div>
   </div>
   <!-- ENDBLOCK CONTRAT -->
@@ -24,18 +19,11 @@
       Suivi du chantier
     </h6>
   </div>
-  <div class="full-width flex column space-children-margin comments">
-    <ng-container *ngFor="let date of dates">
-
-    <!-- <details> -->
-      <!-- <summary> {{ date.date }} </summary>
-      <comment-suivi ></comment-suivi>
-       -->
-      
-    <!-- </details> -->
+  <div class="full-width flex column">
+    <ng-container *ngFor="let supervision of track | keyvalue">
     <details>
       <summary>
-        <span class="summary-title">{{ date.date }}</span>
+        <span class="summary-title">{{ supervision.key }}</span>
         <div class="summary-arrow-up">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" 
           viewBox="0 0 24 24" fill="none" stroke="#0D6191" 
@@ -45,15 +33,15 @@
       </summary>
     
       <div class="summary-content">
-        <comment-suivi ></comment-suivi>
+        <comment-suivi></comment-suivi>
       </div>
       <div class="summary-arrow-down">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-         viewBox="0 0 24 24" fill="none" stroke="#0D6191" 
-         stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
-          class="feather feather-arrow-up"><polyline points="18 15 12 9 6 15">
-
-          </polyline></svg>
+          fill="none" stroke="#0D6191" 
+          stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
+          class="feather feather-arrow-up">
+          <polyline points="18 15 12 9 6 15"></polyline>
+        </svg>
       </div>
         
     </details>

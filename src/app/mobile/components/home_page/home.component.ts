@@ -13,9 +13,9 @@ import { ApplyPost, DeletePost, DuplicatePost, HandleApplication, SwitchPostType
 import { DataQueries, DataState, QueryAll, SnapshotAll } from 'src/models/new/data.state';
 import { Profile, Post, Mission } from "src/models/new/data.interfaces";
 
-class PostMenu {
+class PostMenu<T extends Post | Mission = Post> {
   open: boolean = false;
-  post: Post | null = null;
+  post: T | null = null;
   swipeup: boolean = false;
 
   get candidates() { return this.post?.candidates || []; }
@@ -80,36 +80,36 @@ export class HomeComponent extends Destroy$ {
       this.userOnlinePosts = mapping.get(this.symbols.userOnlinePost) || [];
       this.allOnlinePosts = mapping.get(this.symbols.otherOnlinePost) || [];
       this.missions = this.store.selectSnapshot(DataQueries.getMany('Mission', profile.company.missions));
-      console.log('updates', profile.company.missions, this.missions);
       this.cd.markForCheck();
     });
   }
   activeView: number = 0;
   openAdFilterMenu: boolean = false;
   imports = { DistanceSliderConfig, SalarySliderConfig };
-  editMenu = new PostMenu;
-  checkMenu = new PostMenu;
+  draftMenu = new PostMenu;
+  postMenu = new PostMenu;
+  missionMenu = new PostMenu<Mission>();
   
   //factor two menu into objects
-  openPost(post: Post | null) {
+  openDraft(post: Post | null) {
     this.info.hide();
-    this.editMenu = assignCopy(this.editMenu, {post, open: !!post});
+    this.draftMenu = assignCopy(this.draftMenu, {post, open: !!post});
   }
   
-  checkPost(post: Post | null) {
+  openPost(post: Post | null) {
     this.info.hide();
-    this.checkMenu = assignCopy(this.checkMenu, {post, open: !!post, swipeup: false});
+    this.postMenu = assignCopy(this.postMenu, {post, open: !!post, swipeup: false});
   }
 
-  checkPostMenu() {
+  openMission(mission: Mission | null) {
     this.info.hide();
-    this.checkMenu.swipeup = true;
+    this.missionMenu = assignCopy(this.missionMenu, {post: mission, open: !!mission, swipeup: false});
   }
 
   duplicatePost(id: number) {
     this.info.show("info", "Duplication en cours...", Infinity);
     this.store.dispatch(new DuplicatePost(id)).pipe(take(1)).subscribe(() => {
-      this.checkPost(null);
+      this.openPost(null);
       this.cd.markForCheck();
     }, () => {
       this.info.show("error", "Erreur lors de la duplication de l'annonce");
@@ -118,7 +118,7 @@ export class HomeComponent extends Destroy$ {
 
   pausePost(id: number) {
     this.store.dispatch(new SwitchPostType(id)).pipe(take(1)).subscribe(() => {
-      this.checkPost(null);
+      this.openPost(null);
       this.popup.show(this.pausePostTemplate);
       this.cd.markForCheck();
     }, () => {
@@ -128,7 +128,7 @@ export class HomeComponent extends Destroy$ {
   
   deletePost(id: number) {
     this.store.dispatch(new DeletePost(id)).pipe(take(1)).subscribe(() => {
-      this.checkPost(null);
+      this.openPost(null);
       this.cd.markForCheck();
     }, () => {
       this.info.show("error", 'Echec de suppression..');
@@ -144,8 +144,8 @@ export class HomeComponent extends Destroy$ {
   }
 
   showCandidates() {
-    this.checkMenu.swipeup = false;
-    const candidatesIds = this.checkMenu.post?.candidates || [],
+    this.postMenu.swipeup = false;
+    const candidatesIds = this.postMenu.post?.candidates || [],
       candidates = this.store.selectSnapshot(DataQueries.getMany('Candidate', candidatesIds));
 
     this.swipeupService.show({
@@ -153,7 +153,7 @@ export class HomeComponent extends Destroy$ {
       template: this.candidatesTemplate,
       context: {
         $implicit: candidates,
-        job: this.checkMenu.post!.job,
+        job: this.postMenu.post!.job,
       }
     })
   }
@@ -177,7 +177,7 @@ export class HomeComponent extends Destroy$ {
         click: () => {
           this.store.dispatch(new HandleApplication(application, post, true)).pipe(take(1)).subscribe(() => {
             //if successful, quit the slidemenu
-            this.checkPost(null);
+            this.openPost(null);
             this.cd.markForCheck();
           });
         }
@@ -186,7 +186,7 @@ export class HomeComponent extends Destroy$ {
         class: 'reject application-response',
         click: () => {
           this.store.dispatch(new HandleApplication(application, post, false)).pipe(take(1)).subscribe(() => {
-            this.checkPost(null);
+            this.openPost(null);
             this.cd.markForCheck();  
           });
         }
@@ -199,14 +199,14 @@ export class HomeComponent extends Destroy$ {
   }
 
   showCompany(company: number, application: number) {
-    //checkMenu is still open
+    //postMenu is still open
     this.slideService.show('Candidature', {
       type: 'template',
       template: this.candidature,
       context: {
         $implicit: company,
         application,
-        post: this.checkMenu.post
+        post: this.postMenu.post
       }
     });
 

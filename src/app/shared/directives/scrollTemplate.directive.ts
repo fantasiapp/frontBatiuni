@@ -20,6 +20,7 @@ export class ScrollTemplate<T> extends AnimateCSS {
   direction: 'vertical' | 'horizontal' = 'horizontal';
 
   get length() { return this.contexts.length; }
+  get last() { return this._index == this.length - 1; }
 
   @Input('scroll-template')
   template: TemplateRef<T> | null = null;

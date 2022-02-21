@@ -53,4 +53,6 @@ export class FadeTemplate<T> extends AnimateCSS {
     this.view.insert(ref.view);
     this.fadeIn(ref);
   }
+
+  get last() { return this._index == this.contexts.length - 1; }
 };

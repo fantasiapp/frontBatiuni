@@ -26,6 +26,18 @@ export class UISlideMenuComponent extends UIOpenMenu {
   header: boolean = true;
 
   @Input()
+  set footer(f: 'none' | 'small' | 'medium' | 'big') {
+    this.ngClass = {
+      'header-only': f == 'none',
+      'content-with-small-footer': f == 'small',
+      'content-with-mid-footer': f == 'medium',
+      'content-with-big-footer': f == 'big'
+    }
+  };
+
+  ngClass: any = {'header-only': true};
+
+  @Input()
   fromService: boolean = false;
 
   @Input()

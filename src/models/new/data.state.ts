@@ -209,8 +209,6 @@ export class DataState {
         delete response[picture.action];
         console.log('response', response);
         ctx.setState(compose(
-          deleteIds('File', image ? [image.id] : []),
-          addValues('File', response),
           pushChildValues('Company', profile.company.id, 'File', response, 'nature'),
         ));
       })

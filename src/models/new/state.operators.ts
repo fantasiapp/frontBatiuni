@@ -91,15 +91,18 @@ namespace mutable {
   function removeDuplicates(draft: any, target: DataTypes, old: number[], rep: number[], uniqueIndex: number) {
     const objects = draft[target],
       deletedIds: number[] = [];
-  
-    newList: for ( const newId of rep )
+
+    
+    newList: for ( const newId of rep ) {
       for ( const oldId of old ) {
         if ( objects[newId][uniqueIndex] == objects[oldId][uniqueIndex] ) {
           deletedIds.push(oldId);
           //continue newList;
         }
       }
+    }
     
+    console.log('deleted ids', deletedIds);
     mutable.deleteIds(draft, target, deletedIds);
     return old.filter(id => !deletedIds.includes(id));
   }
@@ -107,20 +110,21 @@ namespace mutable {
   export function pushChildValues<K extends DataTypes>(draft: any, parent: DataTypes, parentId: number, child: K, values: Record<any>, uniqueBy?: keyof Interface<K>) {
     //Add children
     const ids = Object.keys(values).map(id => +id);
-    mutable.addValues(draft, child, values);
 
     //add to parent
     const parentObject = draft[parent]?.[parentId],
       childIndex = draft.fields[parent].indexOf(child);
     if ( !parentObject || childIndex <= -1 ) return;
 
+    const oldIds = parentObject[childIndex];
+
     if ( uniqueBy ) {
-      console.log('will remove duplicates in', child, 'by', uniqueBy);
       const uniqueIndex = draft.fields[child].indexOf(uniqueBy);
       if ( uniqueIndex !== void 0 )
-        parentObject[childIndex] = removeDuplicates(draft, child, parentObject[childIndex], ids, uniqueIndex);
+        parentObject[childIndex] = removeDuplicates(draft, child, oldIds, ids, uniqueIndex);
     }
-
+    
+    mutable.addValues(draft, child, values);
     parentObject[childIndex].push(...ids);
   }
 

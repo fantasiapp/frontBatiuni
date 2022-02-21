@@ -21,7 +21,6 @@ import { DispoPage } from "./components/availibity/dispo.page";
 import { ForgotPasswordComponent } from "./components/forgot_password/forgot.password";
 import { MailSender } from "./components/only_mail/only.mail";
 import { AnnonceValidePage } from "./components/annonce_valider/annonce.valide";
-import { SuiviComments } from "./ui/suivi/comment.suivi";
 import { ReactiveFormsModule } from "@angular/forms";
 import { ReponseCard } from "./ui/reponse-card/reponse-card";
 import { SuiviChantier } from "./ui/suivi-chantier/suivi.chantier";
@@ -48,7 +47,6 @@ import { CompanyInfo } from "./ui/company-info/company.info";
     ForgotPasswordComponent,
     MailSender,
     AnnonceValidePage,
-    SuiviComments,
     ReponseCard,
     SuiviChantier,
     StepperSys,

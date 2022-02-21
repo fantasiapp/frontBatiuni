@@ -2,8 +2,8 @@
 @import 'src/styles/mixins';
 
 :host {
-  @extend %page;
-  @extend %no-navigation;
+  display: block;
+  width: 100%;
 }
 
 .annonce {
@@ -19,9 +19,6 @@
   border-top: 1px dashed black;
 }
 
-.comments {
-  margin-top: $page-padding;
-}
 .contrat-title {
   color: #0D6191;
   font-size: 1rem;

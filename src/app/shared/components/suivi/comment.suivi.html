@@ -1,0 +1,33 @@
+<div class="comment-provider flex center-cross">
+  <profile-image class="user-image"></profile-image>
+
+  <div class="user-info">
+    <span class="user-name">{{supervision.author}}</span><br/>
+    <span class="post-date">Le {{supervision.date}} à 18h36m</span>
+  </div>
+</div>
+
+<div class="comment-image position-relative">
+  <div class="cover-parent" [slide-template]="image" [contexts]="supervision.files"></div>
+  
+  <ng-container *ngIf="true">
+    <img (click)="slides.slide('left')" class="position-absolute left" [class.hidden]="slides.first" src="assets/arrowleft.svg"/>
+    <img (click)="slides.slide('right')" class="position-absolute right" [class.hidden]="slides.last" src="assets/arrowright.svg"/>  
+  </ng-container>
+</div>
+<div class="suivi-comment">
+  {{supervision.comment}}
+</div>
+
+<div class="parent-comment" *ngIf="parentComment">
+  <ng-content select="comment-suivi"></ng-content>
+</div>
+
+<div class="response flex center">
+  <input type="text" placeholder="Ajouter une commentaire">
+  <img src="assets/camera.png"/>
+</div>
+
+<ng-template #image let-src>
+  <img class="main" [src]="getImage(src) || 'assets/unavailable.jpg'"/>
+</ng-template>

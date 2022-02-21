@@ -31,6 +31,9 @@ export abstract class IndexBased {
   indexChange = new EventEmitter<number>();
 
   abstract indexChanged(k: number): void;
+
+  get first() { return this._index == 0; };
+  abstract get last(): boolean;
 };
 
 @Directive()

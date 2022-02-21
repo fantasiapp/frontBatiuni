@@ -4,8 +4,8 @@
 $buttonHeight: 60px;
 
 :host {
-  position: absolute;
-  @extend .full-page;
+  display: block;
+  @extend %absolute-cover;
 }
 
 

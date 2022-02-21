@@ -5,39 +5,41 @@ import { ComplexPassword, MatchField } from "src/validators/verify";
 @Component({
   selector: 'modify-password-form',
   template: `
-  <form class="form-control" style="height: 100%;" [formGroup]="modifyPwdForm" >
+  <form class="form-control" style="height: 100%;" [formGroup]="form" >
     <div class="form-input">
       <label>Ancien mot de passe</label>
       <input class="form-element" type="password" formControlName="oldPwd"/>
-      <div class="server-error" *ngIf="modifyPwdForm.get('oldPwd')!.errors">
-        {{ modifyPwdForm.get('oldPwd')!.errors?.server }}
-      </div>
     </div>
     <div class="form-input">
       <label>Nouveau mot de passe</label>
       <input class="form-element" type="password" formControlName="newPwd"/>
-      <div *ngIf="modifyPwdForm.get('newPwd')!.touched  && modifyPwdForm.get('newPwd')!.errors?.minlength" class="error">
-        Le mot de passe doit contenir au moins 8 caractères.
-      </div>
-      <div *ngIf="modifyPwdForm.get('newPwd')!.touched  && modifyPwdForm.get('newPwd')!.errors?.lowercase" class="error">
-        Le mot de passe doit contenir une lettre en miniscule.
-      </div>
-      <div *ngIf="modifyPwdForm.get('newPwd')!.touched && modifyPwdForm.get('newPwd')!.errors?.uppercase" class="error">
-        Le mot de passe doit contenir une lettre en majuscule.
-      </div>
     </div>
     <div class="form-input">
       <label>Confirmation nouveau mot de passe</label>
       <input class="form-element" type="password" formControlName="newPwdConfirmation"/>
-      <div *ngIf="modifyPwdForm.get('newPwdConfirmation')!.touched && modifyPwdForm.get('newPwdConfirmation')!.errors" class="error">
-        Les mots de passes ne sont pas identiques.
-      </div>
     </div>
-    <button class="button gradient full-width" style="margin-top: auto;margin-bottom:10px;" [attr.disabled]="(!modifyPwdForm.touched || modifyPwdForm.invalid) || null" (click)="onSubmit()">
+  </form>
+
+  <div class="sticky-footer">
+    <button class="button gradient full-width" (click)="onSubmit()"
+      [disabled]="form.invalid || null">
       Enregistrer
     </button>
-  </form>
+  </div>
   `,
+  styles: [`
+    @import 'src/styles/variables';
+    @import 'src/styles/mixins';
+
+    :host { width: 100%; }
+
+    .sticky-footer {
+      box-shadow: 0 -3px 3px 0 #ddd;
+      background-color: white;
+      @extend %sticky-footer;
+    }
+
+  `],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ModifyPasswordForm {
@@ -46,7 +48,7 @@ export class ModifyPasswordForm {
   @Output() submit = new EventEmitter<FormGroup>();
 
   // Modify password 
-  modifyPwdForm = new FormGroup({
+  form = new FormGroup({
     oldPwd: new FormControl('', [
       ComplexPassword()
     ]),
@@ -58,5 +60,5 @@ export class ModifyPasswordForm {
     ])
   }, {})
 
-  onSubmit() { this.submit.emit(this.modifyPwdForm); }
+  onSubmit() { this.submit.emit(this.form); }
 };

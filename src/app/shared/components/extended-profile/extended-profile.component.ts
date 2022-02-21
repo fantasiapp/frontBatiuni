@@ -1,20 +1,19 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, Output, SimpleChanges } from "@angular/core";
 import { Store } from "@ngxs/store";
 import * as UserActions from "src/models/new/user/user.actions";
-import { switchMap, take, takeUntil, tap } from "rxjs/operators";
+import { take } from "rxjs/operators";
 import { PopupService } from "src/app/shared/components/popup/popup.component";
 import { DataQueries, QueryProfile, SnapshotArray } from "src/models/new/data.state";
-import { Job, File, Profile, User, JobForCompany } from "src/models/new/data.interfaces";
-import { Observable, of } from "rxjs";
+import { Job, File, Profile, JobForCompany } from "src/models/new/data.interfaces";
+import { Observable } from "rxjs";
 import { Destroy$ } from "src/app/shared/common/classes";
-import { CastPipe } from "src/app/shared/pipes/cast.pipe";
 import { getFileColor } from "../../common/functions";
 
 
 @Component({
   selector: 'extended-profile',
   templateUrl: './extended-profile.component.html',
-  styleUrls: ['../../../mobile/components/profile/profile.component.scss','desktop.extended.scss'],
+  styleUrls: ['./extended-profile.component.scss', './desktop.extended.scss'],
   styles: [':host { overflow-y: auto; }'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -71,15 +70,7 @@ export class ExtendedProfileComponent extends Destroy$ {
 
   //easier than requestFile, we can have direct access
   openFile(file: File) {
-    if ( file.content ) {
-      this.popup.openFile(file);
-    } else {
-      this.store.dispatch(new UserActions.DownloadFile(file.id, true))
-        .pipe(take(1)).subscribe(() => {
-          
-          this.popup.openFile(this.store.selectSnapshot(DataQueries.getById('File', file.id))!);
-        });
-    }
+    this.popup.openFile(file);
   }
 
   @Output()

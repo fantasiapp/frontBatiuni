@@ -17,7 +17,7 @@ import { MakeAdComponent } from '../components/make_ad/make_ad.component';
 import { SOSPageComponent } from '../components/SOS_page/sos-page.component';
 import { BoosterPage } from '../components/booster/booster.page';
 import { SuiviPage } from '../components/suivi_page/suivi.page';
-import { SuiviPME } from '../components/suivi_pme/suivi_pme.page';
+import { SuiviPME } from '../components/suivi_pme/suivi-pme.page';
 import { AuthGuard } from './auth/auth.guard';
 
 import { EmailConfirmation } from 'src/app/shared/validators/email_confirmation/emailconfirmation.component';
@@ -76,9 +76,6 @@ const routes: Routes = [{
   } , {
     path: 'booster',
     component: BoosterPage
-  }, {
-    path: 'annonce-validee',
-    component: SuiviPME
   },{
     path: 'suivi',
     component: SuiviPage

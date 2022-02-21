@@ -103,4 +103,7 @@ export class SlidesDirective extends IndexBased {
       done && done();
     }
   }
+
+  get first() { return this.index == 0; }
+  get last() { return this.index == this.components.length - 1; }
 };

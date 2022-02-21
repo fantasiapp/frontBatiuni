@@ -52,4 +52,7 @@ export class SlideTemplate<T> extends AnimateCSS {
     this.view.insert(ref.view);
     this.slideIn(ref, direction);
   }
+
+  get first() { return this.index == 0; }
+  get last() { return this.index == this.contexts.length - 1;}
 };

@@ -15,8 +15,8 @@ import { SpacingPipe } from "../pipes/spacing.pipe";
 @Component({
   selector: 'modify-profile-form',
   template: `
-  <div [slides]="[modifyPage1, modifyPage2, modifyPage3]" [(index)]="index" type="template"
-    [animate]="animate"></div>
+  <ng-container [slides]="[modifyPage1, modifyPage2, modifyPage3]" [(index)]="index" type="template"
+    [animate]="animate"></ng-container>
 
   <ng-template #modifyPage1>
     <section class="full-width section">
@@ -161,11 +161,10 @@ import { SpacingPipe } from "../pipes/spacing.pipe";
             </span>
           </ng-container>
       </form>
-      </section>
-      </ng-template>
-      <ng-content></ng-content>
-
-  <div class="mid-sticky-footer" style="margin-top: auto;">
+    </section>
+  </ng-template>
+  
+  <div class="mid-sticky-footer">
     <div class="form-step">
       <div (click)="slider.index = 0" [class.active]="slider ? slider.index == 0 : true"></div>
       <div (click)="slider.index = 1" [class.active]="slider && slider.index == 1"></div>
@@ -184,11 +183,11 @@ import { SpacingPipe } from "../pipes/spacing.pipe";
 
 
     :host {
+      position: relative;
       width: 100%;
       display: flex;
       flex-flow: column nowrap;
       flex-shrink: 0;
-      padding-bottom: $mid-sticky-footer-height;
     }
 
     .form-title, .form-input label {
@@ -214,6 +213,7 @@ import { SpacingPipe } from "../pipes/spacing.pipe";
     }
 
     .section {
+      flex: 1;
       background-color: white;
       @extend %overflow-y;
 
@@ -227,6 +227,7 @@ import { SpacingPipe } from "../pipes/spacing.pipe";
       height: calc(#{$mid-sticky-footer-height} + env(safe-area-inset-bottom));
       padding: 10px 30px;
       @include with-set-safe-area(padding, bottom, 10px);
+
     }
 
     .metiers {

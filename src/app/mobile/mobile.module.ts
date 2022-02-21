@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { Injectable, NgModule } from "@angular/core";
+import { NgModule } from "@angular/core";
 import { AbonnementPage } from "./components/abonnement/abonnement.page";
 import { EngagementPage } from "./components/abonnement/engagement/engagement";
 import { AvailabilitiesComponent } from "./components/availabilities_page/availabilities.component";
@@ -17,10 +17,7 @@ import { ProfileComponent } from "./components/profile/profile.component";
 import { RegisterComponent } from "./components/register/register.component";
 import { SOSPageComponent } from "./components/SOS_page/sos-page.component";
 import { SuiviPage } from "./components/suivi_page/suivi.page";
-import { SuiviPME } from "./components/suivi_pme/suivi_pme.page";
-import { FadeTemplate } from "./directives/fadeTemplate.directive";
-import { SlideTemplate } from "./directives/slideTemplate.directive";
-import { ScrollTemplate } from "./directives/scrollTemplate.directive";
+import { SuiviPME } from "./components/suivi_pme/suivi-pme.page";
 import { UIModule } from "./ui/ui.module";
 import { SharedModule } from "../shared/shared.module";
 import { ReactiveFormsModule } from "@angular/forms";
@@ -37,9 +34,6 @@ import { ResponsePage } from "./components/response/reponse.page";
     RegisterComponent,
     DiscoverComponent,
     PagingComponent,
-    SlideTemplate,
-    FadeTemplate,
-    ScrollTemplate,
     MainPage,
     ProfileComponent,
     MissionsComponent,

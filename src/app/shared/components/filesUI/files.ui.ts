@@ -8,7 +8,14 @@ import { InfoService } from "../info/info.component";
 import { PopupService } from "../popup/popup.component";
 import { SwipeupService } from "../swipeup/swipeup.component";
 
-export type FileUIOutput = Omit<Omit<File, 'timestamp'>, 'id'> & {id?: number};
+export type BasicFile = {
+  nature: string;
+  name: string;
+  ext: string;
+  content: string;
+}
+
+export type FileUIOutput = BasicFile & {expirationDate: string; id?: number};
 export function defaultFileUIOuput(nature: string = '', date?: string, name?: string): FileUIOutput {
 
   return {

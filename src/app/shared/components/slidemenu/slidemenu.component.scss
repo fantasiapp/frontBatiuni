@@ -24,20 +24,25 @@
   padding-top: 0;
 }
 
-.content {
-  @extend %content-with-header;
+.content {  
   background: white;
-
-  &::ng-deep > * { flex-shrink: 0; }
+  &::ng-deep > * { flex-shrink: 0;}
 }
 
-.footer {
-  position: fixed;
-  @include set-safe-area(bottom);
-  left: 0;
-  height: $sticky-footer-height;
-  padding: 10px 20px;
-  background: white;
+.header-only {
+  @extend %content-with-header;
+}
+
+.content-with-small-footer {
+  @extend %content-with-header-and-footer;
+}
+
+.content-with-mid-footer {
+  @extend %content-with-header-and-mid-footer;
+}
+
+.content-with-big-footer {
+  @extend %content-with-header-and-big-footer;
 }
 
 .company-rate {

@@ -5,7 +5,7 @@
   <ng-content select='[customHeader]'></ng-content>
 </ng-template>
 
-<div class="flex column" class="content" #content>
+<div class="flex column content" [ngClass]="ngClass" #content>
   <ng-content select='[content]'></ng-content>
   <ng-container *ngIf="fromService" #view></ng-container>
 </div>

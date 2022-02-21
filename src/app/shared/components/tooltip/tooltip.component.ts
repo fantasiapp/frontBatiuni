@@ -72,7 +72,7 @@ export class UITooltipComponent extends DimensionMenu {
     this.service.dimension$.pipe(takeUntil(this.destroy$)).subscribe(dimension => {
       this.dimension = dimension;
       this.cd.markForCheck();
-    })
+    });
   }
 
   willClose = false;
