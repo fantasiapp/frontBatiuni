@@ -8,7 +8,7 @@ import { ApplyPost, ChangePassword, ChangeProfilePicture, ChangeProfileType, Del
 import { Company, Interface, User } from "./data.interfaces";
 import { DataReader, NameMapping, TranslatedName } from "./data.mapper";
 import { Record, DataTypes } from "./data.interfaces";
-import { addValues, compose, deleteIds, pushChildValues, replace, transformField, updateChildValues } from "./state.operators";
+import { addValues, compose, deleteIds, addSimpleChildren, transformField, addComplexChildren, replaceChildren } from "./state.operators";
 import { Logout } from "../auth/auth.actions";
 import { InfoService } from "src/app/shared/components/info/info.component";
 import { GetCompanies } from "./search/search.actions";
@@ -176,8 +176,6 @@ export class DataState {
     else 
       req = this.http.post('data', modifyAction);
 
-    console.log(modifyAction);
-
     return req.pipe(
       tap((response: any) => {
         if ( response[modify.action] !== 'OK' )
@@ -207,9 +205,8 @@ export class DataState {
           throw response['messages'];
         
         delete response[picture.action];
-        console.log('response', response);
         ctx.setState(compose(
-          pushChildValues('Company', profile.company.id, 'File', response, 'nature'),
+          addSimpleChildren('Company', profile.company.id, 'File', response, 'nature'),
         ));
       })
     )
@@ -253,9 +250,9 @@ export class DataState {
         if ( upload.category == 'Company' ) {
           //add it to company
           const company = this.store.selectSnapshot(DataQueries.currentCompany);
-          ctx.setState(pushChildValues('Company', company.id, 'File', response, 'name'));
+          ctx.setState(addSimpleChildren('Company', company.id, 'File', response, 'name'));
         } else if ( upload.category == 'Post' ) {
-          ctx.setState(pushChildValues('Post', upload.target, 'File', response, 'name'));
+          ctx.setState(addSimpleChildren('Post', upload.target, 'File', response, 'name'));
         }
       })
     )
@@ -284,7 +281,6 @@ export class DataState {
       ),
       req = this.http.post('data', form);
     
-    console.log('sending', form);
     return req.pipe(
       map((response: any) => {
         if ( response[post.action] !== 'OK' ) throw response['messages'];
@@ -293,10 +289,9 @@ export class DataState {
         //add post, return its id
         const assignedId = +Object.keys(response)[0];
         ctx.setState(
-          updateChildValues('Company', profile.company.id, 'Post', response)
+          addComplexChildren('Company', profile.company.id, 'Post', response)
         );
         
-        console.log('post has assigned id', assignedId);
         return assignedId;
       }),
       concatMap((postId: number) => {
@@ -412,7 +407,11 @@ export class DataState {
         delete response[availability.action];
         const company = this.store.selectSnapshot(DataQueries.currentCompany);
 
-        ctx.setState(pushChildValues('Company', company.id, 'Disponibility', response, 'date'));
+        ctx.setState(
+          //doest work because it leaves old values
+          //pushChildValues('Company', company.id, 'Disponibility', response, 'date')
+          compose(replaceChildren('Company', company.id, 'Disponibility', response))
+        );
       })
     )
   }
@@ -434,7 +433,7 @@ export class DataState {
         this.slide.hide();
         ctx.setState(compose(
           deleteIds('Post', [handle.post.id]),
-          pushChildValues('Company', company.id, 'Mission', response)
+          addComplexChildren('Company', company.id, 'Mission', response)
         ))
       })
     )
@@ -728,7 +727,7 @@ export function SnapshotArray<K extends DataTypes>(type: K) {
   }
 }
 
-export function QueryProfile() {
+export function QueryProfile(config = {byUserId: false}) {
   return function(target: any, key: string) {
     const hiddenKey = '#' + key;
 
@@ -745,7 +744,7 @@ export function QueryProfile() {
         if ( typeof id == 'number' ) {
           this[hiddenKey] = {
             id,
-            value: this.store.select(DataQueries.getProfileById(id))
+            value: this.store.select(config.byUserId ? DataQueries.getProfileByUserId(id) : DataQueries.getProfileById(id))
           }
         } else if ( id instanceof Observable ) {
           this[hiddenKey] = { id: undefined, value: id }

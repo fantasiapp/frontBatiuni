@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
-import { Store } from "@ngxs/store";
-import { Company, Mission, PostDetail, Supervision } from "src/models/new/data.interfaces";
+import { Select, Store } from "@ngxs/store";
+import { Observable } from "rxjs";
+import { Company, Mission, PostDetail, Profile, Supervision } from "src/models/new/data.interfaces";
 import { DataQueries } from "src/models/new/data.state";
 
 @Component({
@@ -12,7 +13,10 @@ import { DataQueries } from "src/models/new/data.state";
 export class SuiviPME {
 
   company: Company | null = null;
-  track: {[key: string]: Supervision[]} = {};
+  track: {[key: string]: Map<PostDetail, Supervision[]>} = {};
+
+  //track[data][detail]
+
 
   _mission: Mission | null = null;
   get mission() { return this._mission; }
@@ -22,20 +26,33 @@ export class SuiviPME {
     this.company = mission ? this.store.selectSnapshot(DataQueries.getById('Company', mission.company)) : null;
     //load all supervisions, group by days
     if ( mission ) {
-      const details = this.store.selectSnapshot(DataQueries.getMany('DetailedPost', mission.details)),
-        supervisions = details.reduce((res: Supervision[], detail: PostDetail) => {
-          const objects = this.store.selectSnapshot(DataQueries.getMany('Supervision', detail.supervisions));
-          return [...res, ...objects];
-        }, []);
-      
-      for ( const item of supervisions ) {
-        if ( !this.track[item.date] ) this.track[item.date] = [item];
-        else this.track[item.date].push(item);
-      }
+      const details = this.store.selectSnapshot(DataQueries.getMany('DetailedPost', mission.details));
+      details.forEach(detail => {
+        const supervisions = this.store.selectSnapshot(DataQueries.getMany('Supervision', detail.supervisions));
+        for ( const supervision of supervisions ) {
+          const existing = this.track[supervision.date];
+          if ( existing ) {
+            if ( existing.has(detail) )
+              existing.get(detail)!.push(supervision);
+            else
+              existing.set(detail, [supervision]);
+          } else {
+            this.track[supervision.date] = new Map;
+            this.track[supervision.date].set(detail, [supervision]);
+          }
+        }
+      });
     }
   }
 
   constructor(private store: Store) {}
   
   swipemenu: boolean = false;
+
+  @Select(DataQueries.currentProfile)
+  currentProfile$!: Observable<Profile>;
+
+  validate(key: any) {
+    console.log(key)
+  }
 }

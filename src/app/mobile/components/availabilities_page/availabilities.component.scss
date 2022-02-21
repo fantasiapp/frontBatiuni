@@ -5,14 +5,8 @@
   @extend %page;
 }
 
-.euro {
-  &::after {
-    content: "€";
-    display: block;
-    width: 30px;
-    height: 30px;
-    position: absolute;
-    right: 0;
-    bottom: 0;
-  }
+.current-availability {
+  display: inline-block;
+  width: $icon-size;
+  height: $icon-size;
 }

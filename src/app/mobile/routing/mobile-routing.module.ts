@@ -26,7 +26,7 @@ import { AuthResolver } from './auth/auth.resolver';
 import { DocusignPage } from 'src/app/shared/components/docusign_page/docusign.page';
 import { ForgotPassword } from '../components/forgot_password/forgot.password';
 import { MailSender } from '../components/only_mail/only.mail';
-import { ResponsePage } from '../components/response/reponse.page';
+import { UIAccordion } from 'src/app/shared/components/accordion/accordion.ui';
 
 const routes: Routes = [{
     path: 'landing',
@@ -82,9 +82,9 @@ const routes: Routes = [{
   }, {
     path: 'factures',
     component: FacturePage,
-  },{
-    path: 'reponse',
-    component: ResponsePage,
+  }, {
+    path: 'accordion',
+    component: UIAccordion
   }, {
     path: 'home',
     component: MainPage,

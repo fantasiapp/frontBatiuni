@@ -31,7 +31,6 @@ export class ExtendedProfileComponent extends Destroy$ {
   @QueryProfile()
   @Input('profile')
   profile$!: number | Profile | Observable<Profile>;
-
   
   @Input()
   showContact: boolean = false;

@@ -1,0 +1,30 @@
+@use "sass:math";
+@import 'src/styles/variables';
+@import 'src/styles/mixins';
+
+:host {
+  display: block;
+}
+
+$target-size: 50px;
+$factor: math.div($target-size, $profile-image-size);
+
+.image-container {
+  width: $target-size;
+  height: $target-size;
+  transform: rotate(45deg);
+
+  profile-image {
+    transform-origin: 0 0;
+    transform: scale($factor);  
+  }
+}
+
+.content {
+  background-color: #F7F7F7;
+  border-radius: 12px;
+  padding: 12px;
+}
+
+.author { font-size: 1em; }
+.body { font-size: 0.95em; }

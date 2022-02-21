@@ -80,21 +80,28 @@ h2 {
   border-radius: 50%;
 }
 
-.available {
-  background-color: $available;
-  @extend %bgcolor;
-}
-.availablelimits {
-  background-color: $availableWithLimits;
-  @extend %bgcolor;
-}
-
-.unavailable {
-  background-color: $unavailable;
-  @extend %bgcolor;
-}
-
-.selected {
-  background-color: #1e2843;
-  @extend %bgcolor;
+::ng-deep {
+  .available {
+    background-color: $available;
+    @extend %bgcolor;
+  }
+  .availablelimits {
+    background-color: $availableWithLimits;
+    @extend %bgcolor;
+  }
+  
+  .unavailable {
+    background-color: $unavailable;
+    @extend %bgcolor;
+  }
+  
+  .selected {
+    background-color: #1e2843;
+    @extend %bgcolor;
+  }
+  
+  .nothing {
+    background-color: white;
+    @extend %bgcolor;
+  }
 }

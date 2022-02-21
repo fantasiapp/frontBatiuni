@@ -1,0 +1,39 @@
+@use "sass:math";
+@import "src/styles/variables";
+@import "src/styles/mixins";
+
+:host {
+  display: block;
+  font: inherit;
+  font-family: "Poppins";
+}
+
+img {
+  vertical-align: middle;
+}
+
+.name {
+  color: $secondaryBackground;
+  margin: $highlight-margin  0;
+
+  img {
+    transform-origin: center center;
+    transition: transform 150ms ease-out 50ms;
+    transform: scale(1.2);
+    @extend .blue;
+  }
+
+  img.open {
+    transform: scale(1.2) rotate(-90deg);
+  }
+}
+
+.blue {
+  filter: invert(12%) sepia(96%) saturate(7052%) hue-rotate(180deg) brightness(78%) contrast(111%);
+}
+
+.content {
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 200ms ease-out 0s
+}

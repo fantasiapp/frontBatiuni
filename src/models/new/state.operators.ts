@@ -1,5 +1,5 @@
-import { StateOperator } from "@ngxs/store";
 import produce from "immer";
+import { StateOperator } from "@ngxs/store";
 import { Record, DataTypes, Interface } from "./data.interfaces";
 import { getOriginalName } from "./data.mapper";
 
@@ -26,35 +26,7 @@ namespace mutable {
         delete record[id];
   };
 
-  export function replace(draft: any, target: DataTypes, values: Record<any>) {
-    const targetObjects = draft[target],
-      fields = draft.fields[target];
-
-  
-    //translate data
-    Object.entries<any>(values).forEach(([id, item]) => {
-      const current = targetObjects[id];
-      if ( !current ) return; //nothing to be done
-      for ( let i = 0; i < current.length; i++ ) {
-        //special treatement for arrays
-        if ( Array.isArray(current[i]) ) {
-          if ( current[i].length )
-            mutable.deleteIds(draft, fields[i], current[i]);
-          
-          const keys = Object.keys(item[i]);
-          if ( keys.length )
-            mutable.addValues(draft, fields[i], item[i]);
-          
-          //map back to ids
-          item[i] = keys.map(id => +id);
-        }
-      }
-    });
-
-    //add actual values
-    mutable.addValues(draft, target, values);
-  };
-
+  //configure type so this can only be called on complex types
   export function update(draft: any, target: DataTypes, values: Record<any>) {
     const targetObjects = draft[target],
       fields = draft.fields[target];
@@ -67,7 +39,7 @@ namespace mutable {
         for ( let i = 0; i < item.length; i++ ) {
           if ( typeof item[i] == 'object' ) {
             mutable.update(draft, fields[i], item[i]);
-           item[i] = Object.keys(item[i]).map(id => +id);
+            item[i] = Object.keys(item[i]).map(id => +id);
           }
         }
       } else {
@@ -102,12 +74,13 @@ namespace mutable {
       }
     }
     
-    console.log('deleted ids', deletedIds);
     mutable.deleteIds(draft, target, deletedIds);
     return old.filter(id => !deletedIds.includes(id));
   }
 
-  export function pushChildValues<K extends DataTypes>(draft: any, parent: DataTypes, parentId: number, child: K, values: Record<any>, uniqueBy?: keyof Interface<K>) {
+  //configure to only accept simple types
+  //can create new items and add them to parent
+  export function addSimpleChildren<K extends DataTypes>(draft: any, parent: DataTypes, parentId: number, child: K, values: Record<any>, uniqueBy?: keyof Interface<K>) {
     //Add children
     const ids = Object.keys(values).map(id => +id);
 
@@ -116,19 +89,26 @@ namespace mutable {
       childIndex = draft.fields[parent].indexOf(child);
     if ( !parentObject || childIndex <= -1 ) return;
 
-    const oldIds = parentObject[childIndex];
+    mutable.addValues(draft, child, values);
+    //don't count overwritten ids
+    const oldIds = parentObject[childIndex].filter((id: number) => !ids.includes(id));
 
     if ( uniqueBy ) {
       const uniqueIndex = draft.fields[child].indexOf(uniqueBy);
       if ( uniqueIndex !== void 0 )
         parentObject[childIndex] = removeDuplicates(draft, child, oldIds, ids, uniqueIndex);
     }
-    
-    mutable.addValues(draft, child, values);
-    parentObject[childIndex].push(...ids);
+
+    for ( const id of ids )
+      if ( !parentObject[childIndex].includes(id) )
+        parentObject[childIndex].push(id);
   }
 
-  export function updateChildValues<K extends DataTypes>(draft: any, parent: DataTypes, parentId: number, child: K, values: Record<any>, uniqueBy?: keyof Interface<K>) {
+  //configure to only accept complex data types
+  //does an update on child and supplies parent with the ids
+  //can create new items
+  //deep alternative to pushChildValues
+  export function addComplexChildren<K extends DataTypes>(draft: any, parent: DataTypes, parentId: number, child: K, values: Record<any>, uniqueBy?: keyof Interface<K>) {
     //Add children
     mutable.update(draft, child, values);
     const ids = Object.keys(values).map(id => +id);
@@ -142,6 +122,16 @@ namespace mutable {
     for ( const id of ids )
       if ( !parentObject[childIndex].includes(id) )
         parentObject[childIndex].push(id);
+  }
+
+  export function replaceChildren<K extends DataTypes>(draft: any, parent: DataTypes, parentId: number, child: K, values: Record<any>) {
+    const parentObject = draft[parent]?.[parentId],
+      childIndex = draft.fields[parent].indexOf(child);
+    
+    if ( !parentObject || childIndex <= -1 ) return;
+    mutable.deleteIds(draft, child, parentObject[childIndex]);
+    mutable.addValues(draft, child, values);
+    parentObject[childIndex] = Object.keys(values).map(id => +id);
   }
 
   export function transformField<K extends DataTypes, V extends keyof Interface<K>>(draft: any, target: K, id: number, field: V, transform: (value: RepresentedType<K, V>, object: any[], fields: string[]) => RepresentedType<K, V>) {
@@ -181,22 +171,22 @@ export function addRecord(target: DataTypes, fields: string[], values: Record<an
   return compose(addDataField(target, fields), addValues(target, values));
 };
 
-export function replace(target: DataTypes, values: any) {
-  return produce(draft => mutable.replace(draft, target, values));
-};
-
 export function update(target: DataTypes, values: any) {
   return produce(draft => mutable.update(draft, target, values));
 };
 
-export function pushChildValues<K extends DataTypes>(parent: DataTypes, parentId: number, child: K, values: Record<any>, uniqueBy?: keyof Interface<K>) {
-  return produce(draft => mutable.pushChildValues(draft, parent, parentId, child, values, uniqueBy));
+export function addSimpleChildren<K extends DataTypes>(parent: DataTypes, parentId: number, child: K, values: Record<any>, uniqueBy?: keyof Interface<K>) {
+  return produce(draft => mutable.addSimpleChildren(draft, parent, parentId, child, values, uniqueBy));
 };
 
-export function updateChildValues<K extends DataTypes>(parent: DataTypes, parentId: number, child: K, values: Record<any>) {
-  return produce(draft => mutable.updateChildValues(draft, parent, parentId, child, values));
+export function addComplexChildren<K extends DataTypes>(parent: DataTypes, parentId: number, child: K, values: Record<any>) {
+  return produce(draft => mutable.addComplexChildren(draft, parent, parentId, child, values));
 };
 
 export function transformField<K extends DataTypes, V extends keyof Interface<K>>(target: K, id: number, field: V, transform: (value: RepresentedType<K, V>, object: any[], fields: string[]) => RepresentedType<K, V>) {
   return produce(draft => mutable.transformField(draft, target, id, field, transform));
+};
+
+export function replaceChildren<K extends DataTypes>(parent: DataTypes, parentId: number, child: K, values: Record<any>) {
+  return produce(draft => mutable.replaceChildren(draft, parent, parentId, child, values));
 };

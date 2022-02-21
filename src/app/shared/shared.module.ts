@@ -51,12 +51,13 @@ import { ProfileCardComponent } from "./components/profile-card/profile.card";
 import { CastPipe, SnapshotPipe } from "./pipes/cast.pipe";
 import { SpreadPipe } from "./pipes/spread.pipe";
 import { ExtendedProfileComponent } from "./components/extended-profile/extended-profile.component";
-import { CommentaireUI } from "./components/commentaire/commentaire.ui";
 import { SuiviComments } from "./components/suivi/comment.suivi";
 import { SlideTemplate } from "./directives/slideTemplate.directive";
 import { FadeTemplate } from "./directives/fadeTemplate.directive";
 import { ScrollTemplate } from "./directives/scrollTemplate.directive";
 import { FileDownloader } from "./services/file-downloader.service";
+import { UIAccordion } from "./components/accordion/accordion.ui";
+import { UIComment } from "./components/comment/comment.ui";
 
 @NgModule({
   declarations: [
@@ -110,11 +111,12 @@ import { FileDownloader } from "./services/file-downloader.service";
     SpreadPipe,
     SnapshotPipe,
     ExtendedProfileComponent,
-    CommentaireUI,
     SuiviComments,
     SlideTemplate,
     //FadeTemplate,
     //ScrollTemplate,
+    UIAccordion,
+    UIComment
   ],
   imports: [
     CommonModule,
@@ -175,11 +177,12 @@ import { FileDownloader } from "./services/file-downloader.service";
     SpreadPipe,
     SnapshotPipe,
     ExtendedProfileComponent,
-    CommentaireUI,
     SuiviComments,
     SlideTemplate,
     //FadeTemplate,
     //ScrollTemplate,
+    UIAccordion,
+    UIComment
   ],
   providers: [ImageGenerator, FileDownloader]
 })

@@ -137,7 +137,7 @@
 </ng-template>
 
 <ng-template #candidature let-company let-post="post" let-application="application">
-  <extended-profile class="content-with-header-and-footer" [profile]="company"></extended-profile>
+  <extended-profile class="content-with-header-and-footer" [showContact]="true" [profile]="company"></extended-profile>
   <footer class="sticky-footer flex center-cross application">
     <button class="button active full-width" (click)="handleApplication(post, application)">Traiter la candidature</button>
   </footer>

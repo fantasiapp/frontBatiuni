@@ -1,0 +1,8 @@
+<h3 class="name" (click)="toggle()">
+  {{title}}
+  <img [class.open]="open" src="assets/arrowdown.svg"/>
+</h3>
+
+<div class="content" #panel>
+  <ng-content></ng-content>
+</div>

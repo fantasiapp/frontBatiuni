@@ -57,6 +57,7 @@ export class SOSPageComponent {
       component: ExtendedProfileComponent,
       init: (component: ExtendedProfileComponent) => {
         component.profile$ = {company};
+        component.showContact = true;
       }
     })
   }

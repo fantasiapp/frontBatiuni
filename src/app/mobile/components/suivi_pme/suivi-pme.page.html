@@ -3,7 +3,7 @@
 
   <!-- CONTRAT DOCUSIGN URL -->
   <div class="contrat">
-    <h6 class="title font-Poppins">
+    <h6 class="title font-Poppins" style="margin-bottom: 20px;">
       Le contrat
     </h6> 
     <div class="flex center-cross space-around">
@@ -15,40 +15,32 @@
   </div>
   <!-- ENDBLOCK CONTRAT -->
   <div class="suivi-notification flex center-cross">
-    <h6 class="font-Poppins" data-notification-number="99">
+    <h6 class="font-Poppins">
       Suivi du chantier
     </h6>
   </div>
   <div class="full-width flex column">
+    <!-- Use track by and refactor code to optimize performance -->
     <ng-container *ngFor="let supervision of track | keyvalue">
-    <details>
-      <summary>
-        <span class="summary-title">{{ supervision.key }}</span>
-        <div class="summary-arrow-up">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" 
-          viewBox="0 0 24 24" fill="none" stroke="#0D6191" 
-          stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
-           class="feather feather-arrow-down"><polyline points="6 9 12 15 18 9"></polyline></svg>
-        </div>
-      </summary>
-    
-      <div class="summary-content">
-        <comment-suivi></comment-suivi>
-      </div>
-      <div class="summary-arrow-down">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-          fill="none" stroke="#0D6191" 
-          stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
-          class="feather feather-arrow-up">
-          <polyline points="18 15 12 9 6 15"></polyline>
-        </svg>
-      </div>
-        
-    </details>
-    <hr class="dashed">
-
+      <accordion [title]="'Le ' + supervision.key">
+        <h4 class="subtitle">Liste des tâches pour ce jour</h4>
+        <ul class="list space-children-margin">
+          <li *ngFor="let detail of (supervision.value | keyvalue)" class="item">
+            <div class="details flex center-cross space-between">
+              <span class="detail-name">Lorem ipsum dolor sit amet</span>
+              <span class="controls">
+                <img (click)="validate(detail.key)" src="assets/suivi-valider.svg"/>
+                <img src="assets/suivi-refuser.svg"/>
+              </span>
+            </div>
+            
+            <!-- show some comments in write mode -->
+            <comment [edit]="false" [profile]="currentProfile$"></comment>
+          </li>
+        </ul>
+      </accordion>
+      <hr class="dashed">
     </ng-container>
-
   </div>
 </div>
 
@@ -58,3 +50,7 @@
   <li>Clôturer la mission</li>
   <li>Dupliquer l'annonce</li>
 </swipeup>
+
+<ng-template #comment>
+  <comment [edit]="true"></comment>
+</ng-template>
