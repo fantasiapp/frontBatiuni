@@ -4,8 +4,9 @@ import { Observable } from "rxjs";
 import { Availability, CalendarUI, DayState } from "src/app/shared/components/calendar/calendar.ui";
 import { SwipeupService } from "src/app/shared/components/swipeup/swipeup.component";
 import { Profile } from "src/models/new/data.interfaces";
+import { nameToAvailability } from "src/models/new/data.mapper";
 import { DataQueries } from "src/models/new/data.state";
-import { ModifyDisponibility } from "src/models/new/user/user.actions";
+import { ModifyAvailability } from "src/models/new/user/user.actions";
 
 @Component({
   selector: 'availabilities',
@@ -56,12 +57,12 @@ export class AvailabilitiesComponent {
     this.profile$.subscribe(profile => {
       this.availabilities =
         this.store.selectSnapshot(DataQueries.getMany('Disponibility', profile.company.availabilities))
-          .map(availability => ({date: availability.date, availability: availability.nature as Availability}));
+          .map(availability => ({date: availability.date, availability: nameToAvailability(availability.nature as any)}));
     });
   }
 
   submit(calendar: CalendarUI) {
-    this.store.dispatch(ModifyDisponibility.fromCalendar(calendar));
+    this.store.dispatch(ModifyAvailability.fromCalendar(calendar));
   }
 
   onDayClicked(_: [MouseEvent, DayState[]]) {

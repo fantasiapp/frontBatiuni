@@ -55,9 +55,25 @@ export function getOriginalName(name: string) {
   return ReverseMapping[name as keyof PropertyMapping] || name;
 };
 
-export function getAvailabilityName(availability: Availability) {
+export function availabilityToName(availability: Availability) {
+  if ( availability == 'available' )
+    return 'Disponible';
+  else if ( availability == 'availablelimits' )
+    return 'Disponible Sous Conditions';
+  else if ( availability == 'unavailable' )
+    return 'Non Disponible';
+  
   return availability;
 };
+
+export function nameToAvailability(name: 'Disponible' | 'Disponible Sous Conditions' | 'Non Disponible'): Exclude<Availability, 'selected' | 'nothing'> {
+  if ( name == 'Disponible' )
+    return 'available'; 
+  else if ( name == 'Disponible Sous Conditions' )
+    return 'availablelimits';
+  else
+    return 'unavailable';
+}
 
 @Injectable({
   providedIn: 'root'

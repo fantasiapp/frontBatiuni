@@ -5,8 +5,9 @@ import { Destroy$ } from "src/app/shared/common/classes";
 import { Availability, CalendarUI, DayState } from "src/app/shared/components/calendar/calendar.ui";
 import { TooltipDimension, UITooltipService } from "src/app/shared/components/tooltip/tooltip.component";
 import { Disponibility, Profile } from "src/models/new/data.interfaces";
+import { nameToAvailability } from "src/models/new/data.mapper";
 import { DataQueries, SnapshotArray } from "src/models/new/data.state";
-import { ModifyDisponibility } from "src/models/new/user/user.actions";
+import { ModifyAvailability } from "src/models/new/user/user.actions";
 
 @Component({
   selector:"dispo-page",
@@ -62,7 +63,7 @@ export class DispoPage extends Destroy$ {
     this.profile$.subscribe(profile => {
       this.availabilities =
         this.store.selectSnapshot(DataQueries.getMany('Disponibility', profile.company.availabilities))
-          .map(availability => ({date: availability.date, availability: availability.nature as Availability}));
+          .map(availability => ({date: availability.date, availability: nameToAvailability(availability.nature as any)}));
     });
   }
 
@@ -78,10 +79,10 @@ export class DispoPage extends Destroy$ {
   }
   
   submit() {
-    this.store.dispatch(ModifyDisponibility.fromCalendar(this.calendar));
+    this.store.dispatch(ModifyAvailability.fromCalendar(this.calendar));
   }
 
-  onDayClicked([ev, _]: [MouseEvent, DayState]) {
+  onDayClicked([ev, _]: [MouseEvent, DayState[]]) {
     this.tooltipService.reshape(this.dimension = this.getDimensionFromEvent(ev));
     this.tooltipService.show({
       type: 'menu',
@@ -94,4 +95,4 @@ export class DispoPage extends Destroy$ {
   private setCalendarDayState(state: Availability) {
     this.calendar.setCurrentDayState(state);
   }
-}
+};

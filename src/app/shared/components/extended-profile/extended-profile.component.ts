@@ -1,11 +1,11 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, SimpleChanges } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, Output, SimpleChanges } from "@angular/core";
 import { Store } from "@ngxs/store";
 import * as UserActions from "src/models/new/user/user.actions";
-import { take, takeUntil } from "rxjs/operators";
+import { switchMap, take, takeUntil, tap } from "rxjs/operators";
 import { PopupService } from "src/app/shared/components/popup/popup.component";
 import { DataQueries, QueryProfile, SnapshotArray } from "src/models/new/data.state";
 import { Job, File, Profile, User, JobForCompany } from "src/models/new/data.interfaces";
-import { Observable } from "rxjs";
+import { Observable, of } from "rxjs";
 import { Destroy$ } from "src/app/shared/common/classes";
 import { CastPipe } from "src/app/shared/pipes/cast.pipe";
 import { getFileColor } from "../../common/functions";
@@ -33,25 +33,32 @@ export class ExtendedProfileComponent extends Destroy$ {
   @Input('profile')
   profile$!: number | Profile | Observable<Profile>;
 
+  
   @Input()
-  user: User | null = null;
+  showContact: boolean = false;
+
+  constructor(private store: Store, private popup: PopupService, private cd: ChangeDetectorRef) {
+    super();
+  }
 
   ngOnChanges(changes: SimpleChanges) {
-    if ( changes['profile$'] ) {
+    if ( changes['profile$'] && !changes['profile$'].isFirstChange() ) {
       (this.profile$ as Observable<Profile>).pipe(take(1)).subscribe(profile => {
-        console.log(profile);
         this.files = profile.company.files as any;
         this.companyJobs = profile.company.jobs as any;
         this.jobs = this.companyJobs.map(({job}) => job) as any;
       });
     }
-  } 
-  
-  @Input()
-  showContact: boolean = false;
+  }
 
-  constructor(private store: Store, private popup: PopupService) {
-    super();
+  ngOnInit() {
+
+    console.log('init');
+    (this.profile$ as Observable<Profile>).pipe(take(1)).subscribe(profile => {
+      this.files = profile.company.files as any;
+      this.companyJobs = profile.company.jobs as any;
+      this.jobs = this.companyJobs.map(({job}) => job) as any;
+    });
   }
 
   get attachedFiles(): any[] {

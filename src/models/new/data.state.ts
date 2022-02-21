@@ -3,12 +3,12 @@ import { Action, createSelector, Selector, State, StateContext, Store } from "@n
 import { Observable, of, Subject } from "rxjs";
 import { concatMap, map, tap } from "rxjs/operators";
 import { HttpService } from "src/app/services/http.service";
-import { GetGeneralData, HandleApplication } from "./user/user.actions";
+import { GetGeneralData, HandleApplication, ModifyAvailability } from "./user/user.actions";
 import { ApplyPost, ChangePassword, ChangeProfilePicture, ChangeProfileType, DeleteFile, DeletePost, DownloadFile, DuplicatePost, GetUserData, ModifyUserProfile, SwitchPostType, UploadFile, UploadPost } from "./user/user.actions";
 import { Company, Interface, User } from "./data.interfaces";
 import { DataReader, NameMapping, TranslatedName } from "./data.mapper";
 import { Record, DataTypes } from "./data.interfaces";
-import { addValues, compose, deleteIds, pushChildValues, transformField, updateChildValues } from "./state.operators";
+import { addValues, compose, deleteIds, pushChildValues, replace, transformField, updateChildValues } from "./state.operators";
 import { Logout } from "../auth/auth.actions";
 import { InfoService } from "src/app/shared/components/info/info.component";
 import { GetCompanies } from "./search/search.actions";
@@ -404,6 +404,21 @@ export class DataState {
     )
   };
 
+  @Action(ModifyAvailability)
+  modifyAvailability(ctx: StateContext<DataModel>, availability: ModifyAvailability) {
+    return this.http.post('data', availability).pipe(
+      tap((response: any) => {
+        if ( response[availability.action] != 'OK' )
+          throw response['messages'];
+        
+        delete response[availability.action];
+        const company = this.store.selectSnapshot(DataQueries.currentCompany);
+
+        ctx.setState(pushChildValues('Company', company.id, 'Disponibility', response, 'date'));
+      })
+    )
+  }
+
   @Action(HandleApplication)
   handleApplication(ctx: StateContext<DataModel>, handle: HandleApplication) {
     const {post, ...data} = handle;
@@ -427,6 +442,7 @@ export class DataState {
     )
   }
 
+  //------------------------------------------------------------------
   // For temporary actions
   @Action(GetCompanies)
   getCompanies(ctx: StateContext<DataModel>, get: GetCompanies) {
@@ -590,6 +606,10 @@ export class DataQueries {
 //Decorator
 //Assumes object has store
 //if an object or an observable is given, it won't query
+//One thing that can be improved is how we deal with observable
+//If component depend on the observable to retrieve the value, they kinda
+//have to manage subscripton on their own
+//a better way would be to memoize the value and use switchMap inside the setter
 export function Query<K extends DataTypes>(type: K) {
   return function(target: any, key: string) {
     const hiddenKey = '#' + key;
@@ -699,7 +719,7 @@ export function SnapshotArray<K extends DataTypes>(type: K) {
 
     Object.defineProperty(target, key, {
       get(this: any) {
-        return this[hiddenKey] ? this[hiddenKey] : null;
+        return this[hiddenKey] ? this[hiddenKey] : [];
       },
       set(this: any, ids: number[]) {
         this[hiddenKey] = this.store.selectSnapshot(DataQueries.getMany(type, ids));

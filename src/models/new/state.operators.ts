@@ -115,7 +115,7 @@ namespace mutable {
     if ( !parentObject || childIndex <= -1 ) return;
 
     if ( uniqueBy ) {
-      console.log('will remove duplicates in', child, 'by uniqueBy');
+      console.log('will remove duplicates in', child, 'by', uniqueBy);
       const uniqueIndex = draft.fields[child].indexOf(uniqueBy);
       if ( uniqueIndex !== void 0 )
         parentObject[childIndex] = removeDuplicates(draft, child, parentObject[childIndex], ids, uniqueIndex);

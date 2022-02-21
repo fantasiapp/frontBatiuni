@@ -48,6 +48,8 @@ export interface Company {
   revenue: number;
   logo: any;
   stars: string;
+  latitude: number;
+  longitude: number;
   companyPhone: string;
   webSite: string;
   jobs: Ref<JobForCompany>[];
@@ -172,6 +174,6 @@ export type Interface<K extends DataTypes> =
 
 
 export type Profile = {
-  user: User | null;
+  user?: User | null;
   company: Company;
 }

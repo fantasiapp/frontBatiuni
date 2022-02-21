@@ -6,7 +6,7 @@
     <img src="assets/menu.svg" (click)="openMenu = true" />
   </header>
 
-  <extended-profile class="page-content" [profile]="profile" [user]="profile.user" (ratingsClicked)="openRatings = true">
+  <extended-profile class="page-content" [profile]="profile" (ratingsClicked)="openRatings = true">
   </extended-profile>
 
   <swipeup [(open)]="openMenu">

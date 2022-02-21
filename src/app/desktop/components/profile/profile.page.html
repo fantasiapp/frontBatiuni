@@ -28,34 +28,6 @@
       <ng-container [ngSwitch]="activeView">
         <ng-container *ngSwitchCase="0">
           <extended-profile [profile]="profile"></extended-profile>
-          <!-- <profile-resume class="flex row center-cross space-around" [profile]="profile" ></profile-resume>
-          <section class="job-description full-width space-children-margin">
-
-            <span class="text-light-emphasis">Nom de l'entreprise : </span>
-            <span class="value">{{profile.company?.name}}</span>
-
-            <span class="text-light-emphasis">N SIRET : </span>
-            <span class="value">{{profile.company?.siret}}</span>
-
-            <span class="text-light-emphasis">Métier : </span>
-            <span>
-              <span *ngFor="let job of profile.company.jobs!" class="value">{{ job.number }} {{ job.job.name }},
-              </span>
-            </span>
-
-            <span class="text-light-emphasis">Chiffres d'affaires : </span>
-            <span class="value">{{profile.company.revenue | currency: 'EUR':'symbol':'1.0-0' }}</span>
-          </section>
-
-          <section class="documents">
-            <h4>Documents importants</h4>
-            <div class="flex images">
-              <object type="image/svg+xml" data="assets/files/Impot.svg"></object>
-              <object type="image/svg+xml" data="assets/files/KBIS.svg"></object>
-              <object type="image/svg+xml" data="assets/files/qualibat.svg"></object>
-              <object type="image/svg+xml" data="assets/files/urssaf.svg"></object>
-            </div>
-          </section> -->
         </ng-container>
         <ng-container *ngSwitchCase="1">
           <profile-resume class="flex row center-cross space-around" 

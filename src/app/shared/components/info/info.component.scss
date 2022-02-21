@@ -38,18 +38,18 @@ img {
   filter: invert(1);
 }
 
-:host(.error, .success, .info) {
+.error, .success, .info {
   opacity: 1;
 }
 
-:host(.error) {
+.error {
   background-color: #c0392b;
 }
 
-:host(.success) {
+.success {
   background-color: #27ae60;
 }
 
-:host(.info) {
+.info {
   background-color: #2980b9;
 }

@@ -55,13 +55,4 @@ export class UIProfileImageComponent extends Destroy$ {
   constructor(private cd: ChangeDetectorRef, private sanitizer: DomSanitizer, private store: Store, private imageGenerator: ImageGenerator) {
     super();
   }
-
-  static getAvailabilityColor(availability: number) {
-    switch(availability) {
-      case 0: return '#B9EDAF';
-      case 1: return '#FFC425';
-      case 2: return '#E80000';
-      default: return '#aaaaaa';
-    }
-  }
 };

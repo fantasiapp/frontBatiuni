@@ -35,7 +35,6 @@ export class InfoHandler extends Destroy$ {
   content: string = '';
   time: number = 5000;
 
-  @HostBinding('class')
   type: string = '';
 
   @Input()
@@ -92,6 +91,8 @@ export class InfoHandler extends Destroy$ {
     if ( this.time != Infinity ) {
       this.createTimer(() => {
         this.hide();
+        //only works with detectChanges
+        this.cd.detectChanges();
       }, this.time + TRANSITION_TIME);
     }
 

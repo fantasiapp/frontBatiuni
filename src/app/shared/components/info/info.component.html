@@ -1,2 +1,4 @@
-<img *ngIf="type" [src]="'assets/icons/' + type + '.png'"/>
-{{content}}
+<div class="cover-parent" [class]="type">
+  <img *ngIf="type" [src]="'assets/icons/' + type + '.png'"/>
+  {{content}}
+</div>

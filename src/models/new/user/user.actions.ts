@@ -4,7 +4,7 @@ import { PropertyTrap } from "src/app/shared/common/classes";
 import { getDirtyValues } from "src/app/shared/common/functions";
 import { DataTypes, Post, Profile } from "../data.interfaces";
 import { CalendarUI, DayState } from "src/app/shared/components/calendar/calendar.ui";
-import { getAvailabilityName } from "../data.mapper";
+import { availabilityToName } from "../data.mapper";
 
 export class ChangeProfileType {
   static readonly type = '[User] Change Profile Type';
@@ -205,15 +205,16 @@ export class DuplicatePost {
   constructor(public id: number) {}
 };
 
-export class ModifyDisponibility {
+export class ModifyAvailability {
   static readonly type = '[User.ST] Modify Disponibility';
   action = 'modifyDisponibility';
 
-  constructor(public disponibility: [string, string][]) {}
+  constructor(public disponibility: [string, string][]) {
+  }
 
   static fromCalendar(calendar: CalendarUI) {
-    return new ModifyDisponibility(calendar.value!.map(
-      day => [day.date, getAvailabilityName(day.availability)]
+    return new ModifyAvailability(calendar.value!.map(
+      day => [day.date, availabilityToName(day.availability)]
     ));
   }
 };
