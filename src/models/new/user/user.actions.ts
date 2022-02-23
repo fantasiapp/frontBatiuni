@@ -236,3 +236,17 @@ export class HandleApplication {
   
   constructor(public Candidate: number, public post: Post, public response: boolean) {}
 };
+
+export class SetFavorite {
+  static readonly type = '[User.ST] Set Favorite';
+  action = 'setFavorite';
+
+  constructor(public value: boolean, public Post: number) {}
+}
+
+export class MarkViewed {
+  static readonly type = '[User.ST] View Post';
+  action = 'isViewed';
+
+  constructor(public Post: number) {}
+}

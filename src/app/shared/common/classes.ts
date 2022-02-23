@@ -138,8 +138,12 @@ export abstract class DimensionMenu extends UIOpenMenu {
   get height() { return this.dimension.height || '100%'; }
 };
 
-//Very important class, should be fine
-//but if anything, try to fix it in a way that doesnt break old behaviour
+//Very important class, should be fine for now
+//valueChange is trigged whenever the value changes
+//there should be another event for stuff that come from the DOM
+//because now we have to rely on other events like (click) etc to get user action
+//this won't cause issue but it will feel like dodging bullets once to start doing
+//something unorthodox
 @Directive()
 export abstract class UIDefaultAccessor<T> implements ControlValueAccessor {
   protected _value: T | undefined;

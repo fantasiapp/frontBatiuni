@@ -34,6 +34,8 @@ export interface User {
   lastName: string;
   proposer: string;
   cellPhone: string;
+  favoritePosts: Ref<Post>[];
+  viewedPosts: Ref<Post>[];
 };
 
 export interface Company {

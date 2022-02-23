@@ -3,7 +3,7 @@ import { Action, createSelector, Selector, State, StateContext, Store } from "@n
 import { Observable, of, Subject } from "rxjs";
 import { concatMap, map, tap } from "rxjs/operators";
 import { HttpService } from "src/app/services/http.service";
-import { GetGeneralData, HandleApplication, ModifyAvailability } from "./user/user.actions";
+import { GetGeneralData, HandleApplication, MarkViewed, ModifyAvailability, SetFavorite } from "./user/user.actions";
 import { ApplyPost, ChangePassword, ChangeProfilePicture, ChangeProfileType, DeleteFile, DeletePost, DownloadFile, DuplicatePost, GetUserData, ModifyUserProfile, SwitchPostType, UploadFile, UploadPost } from "./user/user.actions";
 import { Company, Interface, User } from "./data.interfaces";
 import { DataReader, NameMapping, TranslatedName } from "./data.mapper";
@@ -443,7 +443,6 @@ export class DataState {
   // For temporary actions
   @Action(GetCompanies)
   getCompanies(ctx: StateContext<DataModel>, get: GetCompanies) {
-    console.log(get);
     return this.http.get('initialize', get).pipe(
       tap((response: any) => {
         ctx.setState(compose(
@@ -458,6 +457,37 @@ export class DataState {
       })
     )
   };
+
+  @Action(SetFavorite)
+  setFavorite(ctx: StateContext<DataModel>, favorite: SetFavorite) {
+    const id = this.store.selectSnapshot(DataState.currentUserId);
+    return this.http.get('data', favorite).pipe(
+      tap((response: any) => {
+        console.log('response', response);
+        if ( response[favorite.action] !== 'OK' ) throw response.messages;
+        ctx.setState(transformField('UserProfile', id, 'favoritePosts', (favorites) => {
+          if ( favorite.value )
+            return [...favorites, favorite.Post];
+          else
+            return favorites.filter(id => favorite.Post !== id)
+        }))
+      })
+    )
+  }
+
+  @Action(MarkViewed)
+  markViewed(ctx: StateContext<DataModel>, view: MarkViewed) {
+    const user = this.store.selectSnapshot(DataQueries.currentUser);
+    if ( user.viewedPosts.includes(view.Post) ) return;
+
+    return this.http.get('data', view).pipe(
+      tap((response: any) => {
+        ctx.setState(transformField('UserProfile', user.id, 'viewedPosts', (viewed) =>
+          [...viewed, view.Post]
+        ))
+      })
+    )
+  }
 };
 
 //make a deep version of toJSON

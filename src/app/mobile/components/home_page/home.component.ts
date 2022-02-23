@@ -9,7 +9,7 @@ import { InfoService } from "src/app/shared/components/info/info.component";
 import { PopupService } from "src/app/shared/components/popup/popup.component";
 import { SlidemenuService } from "src/app/shared/components/slidemenu/slidemenu.component";
 import { SwipeupService } from "src/app/shared/components/swipeup/swipeup.component";
-import { ApplyPost, DeletePost, DuplicatePost, HandleApplication, SwitchPostType } from "src/models/new/user/user.actions";
+import { ApplyPost, DeletePost, DuplicatePost, HandleApplication, MarkViewed, SetFavorite, SwitchPostType } from "src/models/new/user/user.actions";
 import { DataQueries, DataState, QueryAll, SnapshotAll } from 'src/models/new/data.state';
 import { Profile, Post, Mission } from "src/models/new/data.interfaces";
 import { FilterService } from "src/app/shared/services/filter.service";
@@ -18,6 +18,7 @@ class PostMenu<T extends Post | Mission = Post> {
   open: boolean = false;
   post: T | null = null;
   swipeup: boolean = false;
+  favorite: boolean = false;
 
   get candidates() { return this.post?.candidates || []; }
 };
@@ -73,6 +74,7 @@ export class HomeComponent extends Destroy$ {
   
   ngOnInit() {
     combineLatest([this.profile$, this.posts$]).pipe(takeUntil(this.destroy$)).subscribe(([profile, posts]) => {
+      console.log('my profile', profile);
       const mapping = splitByOutput(posts, (post) => {
         //0 -> userOnlinePosts | 1 -> userDrafts
         if ( profile.company.posts.includes(post.id) )
@@ -108,8 +110,15 @@ export class HomeComponent extends Destroy$ {
   }
   
   openPost(post: Post | null) {
+    //mark as viewed
     this.info.hide();
     this.postMenu = assignCopy(this.postMenu, {post, open: !!post, swipeup: false});
+    if ( post )
+      this.store.dispatch(new MarkViewed(post.id));
+  }
+
+  setFavorite(fav: any) {
+    this.store.dispatch(new SetFavorite(!!fav, this.postMenu.post!.id));
   }
 
   openMission(mission: Mission | null) {

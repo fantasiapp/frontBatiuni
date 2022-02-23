@@ -1,12 +1,12 @@
 import { Injectable } from "@angular/core";
 import { Store } from "@ngxs/store";
-import { DataTypes, Interface } from "./data.interfaces";
+import { DataTypes } from "./data.interfaces";
 import { addValues, addRecord, update } from "./state.operators";
 import { patch } from '@ngxs/store/operators';
 import { Availability } from "src/app/shared/components/calendar/calendar.ui";
 
-
-export type TranslatedName = DataTypes | 'userName';
+export type Alias = 'FavoritePost' | 'ViewPost';
+export type TranslatedName = DataTypes | Alias | 'userName';
 
 export const NameMapping: {[key in TranslatedName]?: string} = {
   'JobForCompany': 'jobs',
@@ -25,6 +25,8 @@ export const NameMapping: {[key in TranslatedName]?: string} = {
   'Disponibility': 'availabilities',
   'Mission': 'missions',
   'DatePost': 'dates',
+  'FavoritePost': 'favoritePosts',
+  'ViewPost': 'viewedPosts'
 } as const;
 
 const ReverseMapping = {
@@ -44,12 +46,15 @@ const ReverseMapping = {
   'supervisions': 'Supervision',
   'availabilities': 'Disponibility',
   'missions': 'Mission',
-  'dates': 'DatePost'
+  'dates': 'DatePost',
+  'favoritePosts': 'FavoritePost',
+  'viewedPosts': 'ViewPost'
 } as const;
 
+//build type system for the field array
+//force types on the functions that manipulates them
 type PropertyMapping = typeof ReverseMapping;
 export type OriginalName<T> = T extends keyof PropertyMapping ? PropertyMapping[T] : T;
-
 
 export function getOriginalName(name: string) {
   return ReverseMapping[name as keyof PropertyMapping] || name;

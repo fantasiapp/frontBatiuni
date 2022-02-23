@@ -75,8 +75,13 @@
       <header class="clear-margin full-width sticky-header flex center-cross annonce" customHeader>
         <img (click)="slideOnlinePost.close()" src="assets/arrowlblack.svg" />
         <span class="grow center-text text-light-emphasis">Annonce en Ligne</span>
-        <img *ngIf="view == 'PME'; else star" (click)="postMenu.swipeup = true" src="assets/Option.svg"/>
-        <ng-template #star><stars [toggle]="true"></stars></ng-template>
+        <img *ngIf="view == 'PME'; else starTemplate" (click)="postMenu.swipeup = true" src="assets/Option.svg"/>
+        <ng-template #starTemplate>
+          <stars [toggle]="true"
+            [value]="+(postMenu.post! && profile.user!.favoritePosts.includes(postMenu.post!.id))"
+            (click)="setFavorite(star.value)" #star>
+          </stars>
+        </ng-template>
       </header>
   
       <ng-container content>

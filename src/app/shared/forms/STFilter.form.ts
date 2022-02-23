@@ -112,8 +112,8 @@ export class STFilterForm extends Filter<Post> {
   @ViewChildren(UISwitchComponent)
   switches!: QueryList<UISwitchComponent>;
 
+  //cancel other filters
   onSwitchClick(value: boolean, cancelIfTrue: UISwitchComponent[]) {
-    console.log('switch click', value);
     if ( !value ) return;
     this.switches.forEach(item => {
       if ( cancelIfTrue.includes(item) ) {
@@ -139,6 +139,14 @@ export class STFilterForm extends Filter<Post> {
         const company = this.store.selectSnapshot(DataQueries.getById('Company', post.company))!,
           jobsForCompany = this.store.selectSnapshot(DataQueries.getMany('JobForCompany', company.jobs));
         return jobsForCompany.reduce((acc, {number}) => acc + number, 0);
+      }),
+      this.defineComputedProperty('$favorite', (post) => {
+        const user = this.store.selectSnapshot(DataQueries.currentUser);
+        return user.favoritePosts.includes(post.id);
+      }),
+      this.defineComputedProperty('$viewed', (post) => {
+        const user = this.store.selectSnapshot(DataQueries.currentUser);
+        return user.viewedPosts.includes(post.id);
       }),
       this.match('dueDate'),
       this.match('address'),
