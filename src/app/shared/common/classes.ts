@@ -74,7 +74,7 @@ export abstract class AnimateCSS extends IndexBased {
 
 @Directive()
 export abstract class UIOpenMenu {
-  private initialized: boolean = false;
+  protected initialized: boolean = false;
 
   @HostBinding('class.open')
   protected _open: boolean = false;

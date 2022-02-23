@@ -3,6 +3,7 @@ import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { UIOpenMenu } from "src/app/shared/common/classes";
 import { ContextUpdate, ViewComponent, ViewTemplate } from "src/app/shared/common/types";
+import { InfoService } from "../info/info.component";
 
 const TRANSITION_DURATION = 250;
 
@@ -46,8 +47,21 @@ export class UISlideMenuComponent extends UIOpenMenu {
   @Input()
   title: string = '';
 
-  constructor(private cd: ChangeDetectorRef, private componentFactoryResolver: ComponentFactoryResolver, private slideService: SlidemenuService) {
+  constructor(
+    private cd: ChangeDetectorRef, private componentFactoryResolver: ComponentFactoryResolver,
+    private slideService: SlidemenuService, private info: InfoService) {
     super();
+  }
+
+  set open(value: boolean) {
+    if ( this.initialized ) {
+      if ( value )
+        this.info.alignWith('header');
+      else
+        this.info.alignWith('last');
+    }
+    
+    super.open = value;    
   }
 
   ngOnInit() {

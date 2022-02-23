@@ -10,7 +10,7 @@ export type Info = {
   alignWith?: InfoAlignType;
 };
 
-export type InfoAlignType = 'header' | 'paging' | 'header_search';
+export type InfoAlignType = 'header' | 'paging' | 'header_search' | 'last';
 
 const TRANSITION_TIME = 150;
 const HEADER_HEIGHT = 60;
@@ -46,6 +46,8 @@ export class InfoHandler extends Destroy$ {
     return `calc(env(safe-area-inset-top) + ${this.top}px)`;
   }
 
+  private alignStack: InfoAlignType[] = ['header']; //default
+
   constructor(private cd: ChangeDetectorRef, private service: InfoService) {
     super();
   }
@@ -54,15 +56,20 @@ export class InfoHandler extends Destroy$ {
     if ( ! this.fromService ) return;
   
     this.service.infos$.pipe(takeUntil(this.destroy$)).subscribe((info) => {
-      if ( info ) {
-        this.top = getHeight(info.alignWith || 'header');
+      if ( info )      
         this.show(info);
-      } else {
+      else
         this.hide();
-      }
     });
 
     this.service.alignWith$.pipe(takeUntil(this.destroy$)).subscribe((alignWith) => {
+      if ( alignWith == 'last' ) {
+        this.alignStack.pop();
+        alignWith = this.alignStack[this.alignStack.length - 1];
+      }
+      else 
+        this.alignStack.push(alignWith);
+      
       this.top = getHeight(alignWith);
       this.cd.markForCheck();
     });
@@ -87,12 +94,13 @@ export class InfoHandler extends Destroy$ {
     this.content = info.content;
     this.type = info.type;
     this.time = info.time || 2500;
+    this.cd.markForCheck();
     
     if ( this.time != Infinity ) {
       this.createTimer(() => {
         this.hide();
-        //only works with detectChanges
-        this.cd.detectChanges();
+        //only works with markForCheck
+        this.cd.markForCheck();
       }, this.time + TRANSITION_TIME);
     }
 
@@ -115,10 +123,12 @@ export class InfoService {
   infos$ = new Subject<Info | null>();
   alignWith$ = new Subject<InfoAlignType>();
 
-  show(type: 'error' | 'success' | 'info', content: string, time: number = Infinity, alignWith:  InfoAlignType = 'header') {
+  show(type: 'error' | 'success' | 'info', content: string, time: number = Infinity, alignWith?: InfoAlignType) {
     this.infos$.next({
-      type, content, time, alignWith
+      type, content, time
     });
+
+    if ( alignWith ) this.alignWith$.next(alignWith);
   }
 
   alignWith(alignWith: InfoAlignType) {

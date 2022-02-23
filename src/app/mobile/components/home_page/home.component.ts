@@ -73,8 +73,8 @@ export class HomeComponent extends Destroy$ {
   }
   
   ngOnInit() {
+    this.info.alignWith('header_search');
     combineLatest([this.profile$, this.posts$]).pipe(takeUntil(this.destroy$)).subscribe(([profile, posts]) => {
-      console.log('my profile', profile);
       const mapping = splitByOutput(posts, (post) => {
         //0 -> userOnlinePosts | 1 -> userDrafts
         if ( profile.company.posts.includes(post.id) )
@@ -92,6 +92,11 @@ export class HomeComponent extends Destroy$ {
     });
   }
 
+  ngOnDestroy(): void {
+    this.info.alignWith('last');
+    super.ngOnDestroy();
+  }
+
   ngAfterViewInit() {
     this.filters.filter('ST', this.allOnlinePosts);
   }
@@ -105,13 +110,11 @@ export class HomeComponent extends Destroy$ {
 
   //factor two menu into objects
   openDraft(post: Post | null) {
-    this.info.hide();
     this.draftMenu = assignCopy(this.draftMenu, {post, open: !!post});
   }
   
   openPost(post: Post | null) {
     //mark as viewed
-    this.info.hide();
     this.postMenu = assignCopy(this.postMenu, {post, open: !!post, swipeup: false});
     if ( post )
       this.store.dispatch(new MarkViewed(post.id));
@@ -122,7 +125,6 @@ export class HomeComponent extends Destroy$ {
   }
 
   openMission(mission: Mission | null) {
-    this.info.hide();
     this.missionMenu = assignCopy(this.missionMenu, {post: mission, open: !!mission, swipeup: false});
   }
 

@@ -128,6 +128,10 @@ export class STFilterForm extends Filter<Post> {
 
   ngOnInit(): void {
     super.ngOnInit();
+
+    //either precompute with defineComputedProperty
+    //or evaluate during the function call
+
     this.create<{
       $favorite: boolean;
       $viewed: boolean;
@@ -142,10 +146,12 @@ export class STFilterForm extends Filter<Post> {
       }),
       this.defineComputedProperty('$favorite', (post) => {
         const user = this.store.selectSnapshot(DataQueries.currentUser);
+        console.log('computing favorite on', post, '=>', user.favoritePosts.includes(post.id))
         return user.favoritePosts.includes(post.id);
       }),
       this.defineComputedProperty('$viewed', (post) => {
         const user = this.store.selectSnapshot(DataQueries.currentUser);
+        console.log('computing viewed on', post, '=>', user.viewedPosts.includes(post.id))
         return user.viewedPosts.includes(post.id);
       }),
       this.match('dueDate'),
@@ -158,8 +164,14 @@ export class STFilterForm extends Filter<Post> {
         this.onlyIf('$employeeCount', count => count > 50 && count <= 100, [], true),
         this.onlyIf('$employeeCount', count => count > 100, [], true),
       ),
-      this.onlyIf('$viewed', viewed => viewed),
-      this.onlyIf('$favorite', favorite => favorite),
+      this.onlyIf('$viewed', viewed => {
+        console.log('filtering viewed');
+        return viewed;
+      }),
+      this.onlyIf('$favorite', favorite => {
+        console.log('filtering favorite');
+        return favorite;
+      }),
       this.onlyIf('$candidate', candidate => candidate),
       this.onlyIf('counterOffer', counterOffer => counterOffer),
       this.onlyIf('$radius', radius => true),

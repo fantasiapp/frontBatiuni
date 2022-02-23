@@ -214,7 +214,6 @@ export class MakeAdForm {
   @Input()
   set post(p: Post | null) {
     if ( !p || p == this._post ) {
-      this.info.alignWith('header_search');
       return;
     };
 
@@ -286,7 +285,7 @@ export class MakeAdForm {
     hourlyEnd: new FormControl('17:30:00'),
     currency: new FormControl(this.currencies.filter(currency => currency.name == '€')),
     description: new FormControl(''),
-    amount: new FormControl(0),
+    amount: new FormControl(1),
     documents: new FormArray(
       this.commonDocuments.map(name => new FormGroup({
         name: new FormControl(name),

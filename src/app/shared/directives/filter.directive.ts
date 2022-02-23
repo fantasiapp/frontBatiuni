@@ -26,7 +26,7 @@ interface If<T, ComputedProperties, Key extends KeyOf<T, ComputedProperties> = K
   name: Key;
   //force types inside functions that create those
   condition: (t: any, ...args: any[]) => boolean;
-  otherwise: T[];
+  otherwise?: T[];
   initialValue: boolean; //false by default
 };
 
@@ -111,7 +111,7 @@ export abstract class Filter<T extends {id: number}> extends Destroy$ {
     return { type: 'match', name }
   }
 
-  protected onlyIf<ComputedProperties, K extends KeyOf<T, ComputedProperties>>(name: K, condition: (t: ValueOf<T, ComputedProperties, K>, ...args: any[]) => boolean, otherwise: T[] = [], initialValue: boolean = false): If<T, ComputedProperties> {
+  protected onlyIf<ComputedProperties, K extends KeyOf<T, ComputedProperties>>(name: K, condition: (t: ValueOf<T, ComputedProperties, K>, ...args: any[]) => boolean, otherwise?: T[], initialValue: boolean = false): If<T, ComputedProperties> {
     return { type: 'if', name, condition, otherwise, initialValue }
   }
 
@@ -229,10 +229,13 @@ export abstract class Filter<T extends {id: number}> extends Destroy$ {
     if ( !input.length ) return [];
     
     for ( const step of this.pipeline ) {
+      console.log('step', step.name);
+      console.log('input', input);
       const name = step.type + '_' + (step.name as string);
       if ( controls[name].touched ) {
         input = this.evaluateStep(input, controls[name], step);
       }
+      console.log('result', input);
     }
 
     this.updateEvent.emit(input);

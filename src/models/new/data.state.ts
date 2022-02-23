@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { Injectable, NgZone } from "@angular/core";
 import { Action, createSelector, Selector, State, StateContext, Store } from "@ngxs/store";
 import { Observable, of, Subject } from "rxjs";
 import { concatMap, map, tap } from "rxjs/operators";
@@ -46,7 +46,8 @@ export class DataState {
   constructor(
     private store: Store, private reader: DataReader,
     private http: HttpService, private info: InfoService,
-    private slide: SlidemenuService, private swipeup: SwipeupService
+    private slide: SlidemenuService, private swipeup: SwipeupService,
+    private zone: NgZone
   ) {}
 
   private pending$: Record<Subject<any>> = {};
@@ -67,6 +68,10 @@ export class DataState {
       delete this.pending$[key];
     }
   };
+
+  private inZone(f: Function) {
+    this.zone.run(() => f());
+  }
 
 
   @Action(Clear)
@@ -365,16 +370,19 @@ export class DataState {
     pending = new Subject<string>();
     this.registerPending(key, pending);
 
-    if ( download.notify ) this.info.show("info", `Téléchargement du fichier ${file[nameIndex] || ''}...`)
+    if ( download.notify )
+      this.inZone(() => {
+        this.info.show("info", `Téléchargement du fichier ${file[nameIndex] || ''}...`)
+      })
     
     return req.pipe(
       tap((response: any) => {
         if ( response[download.action] !== 'OK' ) {
-          if ( download.notify ) this.info.show('error', response['messages'], 5000);
+          if ( download.notify ) this.inZone(() => this.info.show('error', response['messages'], 5000));
           throw response['messages'];
         }
         delete response[download.action];
-        if ( download.notify ) this.info.show('success', `Fichier ${file[nameIndex]} téléchargé.`, 1000);
+        if ( download.notify ) this.inZone(() => this.info.show('success', `Fichier ${file[nameIndex]} téléchargé.`, 1000));
         //overwrite
         ctx.setState(addValues('File', response));
         //file is now downloaded
@@ -422,14 +430,14 @@ export class DataState {
     return this.http.get('data', data).pipe(
       tap((response: any) => {
         if ( response[handle.action] !== 'OK' ) {
-          this.info.show("error", response.messages, 3000);
+          this.inZone(() => this.info.show("error", response.messages, 3000));
           throw response.messages;
         }
         
         delete response[handle.action];
         console.log('$', response);
         const company = this.store.selectSnapshot(DataQueries.currentCompany);
-        this.info.show("success", "Réponse envoyée.", 3000);
+        this.inZone(() => this.info.show("success", "Réponse envoyée.", 3000))
         this.slide.hide();
         ctx.setState(compose(
           deleteIds('Post', [handle.post.id]),
@@ -464,13 +472,17 @@ export class DataState {
     return this.http.get('data', favorite).pipe(
       tap((response: any) => {
         console.log('response', response);
-        if ( response[favorite.action] !== 'OK' ) throw response.messages;
+        if ( response[favorite.action] !== 'OK' )
+          this.inZone(() => this.info.show("error", response.messages, 3000));
+        
         ctx.setState(transformField('UserProfile', id, 'favoritePosts', (favorites) => {
           if ( favorite.value )
             return [...favorites, favorite.Post];
           else
             return favorites.filter(id => favorite.Post !== id)
-        }))
+        }));
+
+        this.inZone(() => this.info.show("success", favorite.value ? 'Annonce ajoutée au favoris.' : 'Annonce retirée des favoris', 1000));
       })
     )
   }
