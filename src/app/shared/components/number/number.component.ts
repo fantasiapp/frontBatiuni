@@ -20,7 +20,7 @@ export class UINumberComponent extends UIDefaultAccessor<number> {
   
   constructor(cd: ChangeDetectorRef) {
     super(cd);
-    this.value = this.min + (this.max + this.min) / 2;
+    this._value = this.min + (this.max + this.min) / 2;
   }
   
   @Input()

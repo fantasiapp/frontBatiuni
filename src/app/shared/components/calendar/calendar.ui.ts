@@ -67,6 +67,7 @@ export class CalendarUI extends UIDefaultAccessor<DayState[]> {
     let now = new Date(Date.now());
     this.currentMonth = (now.getMonth()) + 1;
     this.currentYear = now.getFullYear();
+    this.value = [];
   }
 
   private fillZero(month: number) {

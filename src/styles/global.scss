@@ -331,7 +331,8 @@ input {
 .switch-container {
   span { flex: 1; font-size: 0.9em; }
   switch {
-    margin-left: 10px;
+    flex-shrink: 0;
+    margin-left: 20px;
     position: relative;
  }
 }

@@ -40,7 +40,7 @@ import { SpacingPipe } from "./pipes/spacing.pipe";
 import { UIPopup } from "./components/popup/popup.component";
 import { UIHSteps } from "./components/horizontal-steps/hsteps.ui";
 import { Notifications } from "./components/notifications/notifications";
-import { UIRadioAccessor, UIRadioboxComponent } from "./components/box/radiobox.component";
+import { UIRadioboxAccessor, UIRadioboxComponent } from "./components/box/radiobox.component";
 import { DocusignPage } from "./components/docusign_page/docusign.page";
 import { ForgotPasswordForm } from "./forms/forgot.password";
 import { MailForm } from "./forms/only.mail";
@@ -62,7 +62,7 @@ import { FilterService } from "./services/filter.service";
   declarations: [
     UICheckboxComponent,
     UIRadioboxComponent,
-    UIRadioAccessor,
+    UIRadioboxAccessor,
     UIMapComponent,
     UINumberComponent,
     OptionsModel,
@@ -132,7 +132,7 @@ import { FilterService } from "./services/filter.service";
     OnlineFilterForm,
     UICheckboxComponent,
     UIRadioboxComponent,
-    UIRadioAccessor,
+    UIRadioboxAccessor,
     UIMapComponent,
     UINumberComponent,
     OptionsModel,

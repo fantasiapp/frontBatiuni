@@ -19,7 +19,7 @@ import { UIDefaultAccessor } from "src/app/shared/common/classes";
 export class UICheckboxComponent extends UIDefaultAccessor<boolean> {
   constructor(cd: ChangeDetectorRef) {
     super(cd);
-    this.value = false;
+    this._value = false;
   }
 
   getInput(e: Event) {

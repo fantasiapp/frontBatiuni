@@ -1,5 +1,5 @@
 import { HttpClient } from "@angular/common/http";
-import { Attribute, ChangeDetectorRef, ComponentFactoryResolver, Directive, EventEmitter, HostBinding, Injector, Input, Optional, Output, ViewContainerRef } from "@angular/core";
+import { Attribute, ChangeDetectorRef, ComponentFactoryResolver, Directive, EventEmitter, HostBinding, HostListener, Injector, Input, Optional, Output, ViewContainerRef } from "@angular/core";
 import { ControlValueAccessor } from "@angular/forms";
 import { Subject } from "rxjs";
 import { environment } from "src/environments/environment";
@@ -138,6 +138,8 @@ export abstract class DimensionMenu extends UIOpenMenu {
   get height() { return this.dimension.height || '100%'; }
 };
 
+//Very important class, should be fine
+//but if anything, try to fix it in a way that doesnt break old behaviour
 @Directive()
 export abstract class UIDefaultAccessor<T> implements ControlValueAccessor {
   protected _value: T | undefined;
@@ -148,7 +150,7 @@ export abstract class UIDefaultAccessor<T> implements ControlValueAccessor {
 
   @Input()
   set value(value: T | undefined) {
-    this._value = value;
+    this.set(value!);
   }
   
   @Output()
@@ -159,15 +161,22 @@ export abstract class UIDefaultAccessor<T> implements ControlValueAccessor {
   @HostBinding('attr.tabindex')
   get tabIndex() { return 0; }
 
+  @HostListener('blur')
+  private $onTouched() { this.onTouched(); }
+
+  set(next: T, notifyForm: boolean = true) {
+    if ( next !== this.value ) {
+      this.valueChange.emit(this._value = next);
+      if ( notifyForm ) this.onChanged(this.value);
+      this.cd.markForCheck();
+    }
+    //apparently skipping this call breaks everything
+    this.$onTouched();
+  }
 
   onChange(e: any): any {
     if ( this.isDisabled ) { e.preventDefault?.(); return; }
-    let next = this.getInput(e) as T;
-    if ( next !== this.value ) {
-      this.valueChange.emit(this.value = next);
-      this.onChanged(this.value);
-    }
-    this.onTouched();
+    this.set(this.getInput(e) as T);
     return this.value;
   };
 
@@ -190,8 +199,8 @@ export abstract class UIDefaultAccessor<T> implements ControlValueAccessor {
   }
 
   writeValue(value: T) {
-    this.valueChange.emit(this.value = value);
-    this.cd.markForCheck();
+    if ( value === void 0 ) return;
+    this.set(value, false);
   }
 
   onChanged: Function = (value: boolean) => {};
@@ -211,14 +220,10 @@ export class UIAsyncAccessor<T> extends UIDefaultAccessor<T> {
   async onChange(e: any) {
     if ( this.isDisabled ) { e.preventDefault?.(); return; }
     let next = await this.getInput(e);
-    if ( next != this.value ) {
-      this.valueChange.emit(this.value = next);
-      this.onChanged(this.value);
-    }
-    this.onTouched();
-    this.cd.markForCheck();
+    this.set(next);
   };
 };
+
 
 //make it compatible with references ??
 export const PropertyTrap: ProxyHandler<any> = {

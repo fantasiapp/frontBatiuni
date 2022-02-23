@@ -45,10 +45,6 @@ export class OptionsModel extends UIDefaultAccessor<Option[]> {
 
   private static listening: boolean = false;
 
-  ngAfterViewInit() {
-
-  }
-
   ngOnInit() {
     OptionsModel.instances.push(this);
     if ( !OptionsModel.listening )
@@ -57,7 +53,7 @@ export class OptionsModel extends UIDefaultAccessor<Option[]> {
 
   constructor(public ref: ElementRef, protected cd: ChangeDetectorRef, private zone: NgZone) {
     super(cd);
-    this.value = [];
+    this._value = [];
   }
 
   forceClose() {
@@ -101,7 +97,6 @@ export class OptionsModel extends UIDefaultAccessor<Option[]> {
   }
 
   getInput(action: ['delete' | 'toggle', number]) {
-    console.log('got action', action);
     const isRadio = this._type[0] != 'checkbox';
 
     if ( action[0] == 'delete' ) {
@@ -137,7 +132,6 @@ export class OptionsModel extends UIDefaultAccessor<Option[]> {
     this.value = filterMap(this.options, (option) => {
       return ids.includes(option.id) ? option : null;
     });
-    this.valueChange.emit(this.value);
     this.cd.markForCheck();
   }
 };

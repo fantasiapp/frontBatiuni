@@ -268,6 +268,7 @@ export class ModifyProfileForm {
 
   //params that depend on the profile
   companyLabels!: LabelForCompany[];
+
   selectedLabels!: Label[];
   
   companyJobs!: JobForCompany[];
@@ -389,7 +390,8 @@ export class ModifyProfileForm {
         this.selectedLabels.push(label);
       }
     });
-
+    
+    console.log('> selected', this.selectedLabels);
     const filesInput = this.form.controls['UserProfile.Company.admin'];
     this.companyFiles.forEach(({name}) => {
       filesInput.get(name)?.patchValue({name});
@@ -460,16 +462,20 @@ export class ModifyProfileForm {
     jobControl.markAsDirty();
   };
 
+  //bad function
+  //put the actual file if target is found
+  //and mark this field as untouched
   updateLabels(labelOptions: Option[]) {
     this.addingField = false;
     const newLabels = labelOptions;
     
     let labelControl = this.form.controls['UserProfile.Company.LabelForCompany'] as FormArray;
+    labelControl.clear();
     for ( const item of newLabels ) {
       const target = this.companyLabels.find(labelForCompany => labelForCompany.label == item.id);
       labelControl.push(new FormGroup({
         label: new FormControl(item),
-        fileData: new FormControl(defaultFileUIOuput(item.name, target?.date || '', `Fichier "${item.name}" pris en charge.`))
+        fileData: new FormControl(defaultFileUIOuput(item.name, target?.date || '', `Veillez télécharger un document.`))
       }))
     }
 

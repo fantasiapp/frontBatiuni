@@ -2,15 +2,17 @@ import { ChangeDetectionStrategy, Component, Directive, Input, Output, EventEmit
 import { NG_VALUE_ACCESSOR } from "@angular/forms";
 import { Subscription } from "rxjs";
 import { UIDefaultAccessor } from "src/app/shared/common/classes";
+import { makeid } from "../../common/functions";
 
+//try to make all components have radio like functionality
 @Directive({
   selector: 'radiobox[formControlName]'
 })
-export class UIRadioAccessor extends UIDefaultAccessor<string | boolean | number> {
-  static map = new Map<string, UIRadioAccessor[]>();
+export class UIRadioboxAccessor extends UIDefaultAccessor<string | boolean | number> {
+  static map = new Map<string, UIRadioboxAccessor[]>();
 
   @Input('formControlName')
-  controlName: string = '';
+  controlName: string = '';  
 
   subscription?: Subscription;
   constructor(cd: ChangeDetectorRef, private host: UIRadioboxComponent) {
@@ -18,21 +20,20 @@ export class UIRadioAccessor extends UIDefaultAccessor<string | boolean | number
   }
 
   ngOnInit() {
-    this.host.name = this.controlName;
-    let items = UIRadioAccessor.map.get(this.host.name);
-    if ( ! items ) UIRadioAccessor.map.set(this.host.name, items = []);
+    this.host.name = this.host.name || this.controlName;
+    let items = UIRadioboxAccessor.map.get(this.host.name);
+    if ( ! items ) UIRadioboxAccessor.map.set(this.host.name, items = []);
     items.push(this);
     
     this.subscription = this.host.selection.subscribe((next) => {
       const value = this.onChange(next);
-      for ( const radioAccessor of UIRadioAccessor.map.get(this.controlName)! )
-        radioAccessor.value = value;
+      this.writeValue(value);
     });
   }
 
   ngOnDestroy() {
     this.subscription?.unsubscribe();
-    let items = UIRadioAccessor.map.get(this.host.name), index;
+    let items = UIRadioboxAccessor.map.get(this.host.name), index;
     if ( !items ) return;
 
     index = items.indexOf(this);
@@ -40,12 +41,12 @@ export class UIRadioAccessor extends UIDefaultAccessor<string | boolean | number
       items.splice(index, 1);
     
     if ( items.length == 0 ) {
-      UIRadioAccessor.map.delete(this.host.name);
+      UIRadioboxAccessor.map.delete(this.host.name);
     }
   }
 
   writeValue(value: string | number | boolean): void {
-    let items = UIRadioAccessor.map.get(this.host.name);
+    let items = UIRadioboxAccessor.map.get(this.host.name);
     items?.forEach(item => {
       item.host.valueChange.emit(item.host.value = (item.host.onselect == value));
       item.host.forceUpdate();
@@ -64,12 +65,12 @@ export class UIRadioAccessor extends UIDefaultAccessor<string | boolean | number
   providers: [{
     provide: NG_VALUE_ACCESSOR,
     multi: true,
-    useExisting: UIRadioAccessor
+    useExisting: UIRadioboxAccessor
   }]
 })
 export class UIRadioboxComponent {
   @Input() name: string = '';
-  @Input() onselect: string | boolean | number = "";
+  @Input() onselect: string | boolean | number = makeid(5);
 
   //compatibility
   @Input() value: boolean = false;

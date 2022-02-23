@@ -1,9 +1,10 @@
-import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, QueryList, ViewChildren } from "@angular/core";
 import { FormArray, FormGroup } from "@angular/forms";
 import { Store } from "@ngxs/store";
 import { DistanceSliderConfig, SalarySliderConfig } from "src/app/shared/common/config";
 import { Post } from "src/models/new/data.interfaces";
 import { DataQueries } from "src/models/new/data.state";
+import { UISwitchComponent } from "../components/switch/switch.component";
 import { Filter } from "../directives/filter.directive";
 import { FilterService } from "../services/filter.service";
 
@@ -79,11 +80,11 @@ import { FilterService } from "../services/filter.service";
       </div>
       <div class="switch-container flex center-cross">
         <span class="criteria">Date d'échéance de l'annonce de la plus proche à la plus lointaine</span>
-        <switch class="default" formControlName="sort_dueDate"></switch>
+        <switch class="default" (valueChange)="onSwitchClick($event, [switch2])" formControlName="sort_dueDate" #switch1></switch>
       </div>
       <div class="switch-container flex center-cross">
         <span class="criteria">Date de publication la plus récente à la plus anciennce</span>
-        <switch class="default" formControlName="sort_startDate" radio></switch>
+        <switch class="default" (valueChange)="onSwitchClick($event, [switch1])" formControlName="sort_startDate" #switch2></switch>
       </div>
       
     </div>
@@ -107,6 +108,19 @@ export class STFilterForm extends Filter<Post> {
   imports = { DistanceSliderConfig, SalarySliderConfig };
 
   @Input('filter') name: string = 'ST';
+
+  @ViewChildren(UISwitchComponent)
+  switches!: QueryList<UISwitchComponent>;
+
+  onSwitchClick(value: boolean, cancelIfTrue: UISwitchComponent[]) {
+    console.log('switch click', value);
+    if ( !value ) return;
+    this.switches.forEach(item => {
+      if ( cancelIfTrue.includes(item) ) {
+        item.value = false;
+      }
+    })
+  }
 
   constructor(service: FilterService, private store: Store) {
     super(service);
@@ -145,6 +159,7 @@ export class STFilterForm extends Filter<Post> {
         return amount >= range[0] && amount <= range[1];
       }),
       this.sortBy('dueDate', (d1, d2) => {
+        console.log('sorting');
         return new Date(d1).getTime() - new Date(d2).getTime();
       }),
       this.sortBy('startDate', () => 1)

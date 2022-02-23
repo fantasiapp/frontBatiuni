@@ -138,11 +138,6 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
       ext: photo.format,
       content: photo.base64String as string    
     };
-
-    this.valueChange.emit(this.value);
-    this.onChanged(this.value);
-    this.onTouched();
-    this.cd.markForCheck();
   }
 
   onFileInputClicked(e: Event) {
