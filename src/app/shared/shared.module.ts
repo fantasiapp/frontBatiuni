@@ -53,11 +53,10 @@ import { SpreadPipe } from "./pipes/spread.pipe";
 import { ExtendedProfileComponent } from "./components/extended-profile/extended-profile.component";
 import { SuiviComments } from "./components/suivi/comment.suivi";
 import { SlideTemplate } from "./directives/slideTemplate.directive";
-import { FadeTemplate } from "./directives/fadeTemplate.directive";
-import { ScrollTemplate } from "./directives/scrollTemplate.directive";
 import { FileDownloader } from "./services/file-downloader.service";
 import { UIAccordion } from "./components/accordion/accordion.ui";
 import { UIComment } from "./components/comment/comment.ui";
+import { FilterService } from "./services/filter.service";
 
 @NgModule({
   declarations: [
@@ -184,6 +183,6 @@ import { UIComment } from "./components/comment/comment.ui";
     UIAccordion,
     UIComment
   ],
-  providers: [ImageGenerator, FileDownloader]
+  providers: [ImageGenerator, FileDownloader, FilterService]
 })
 export class SharedModule {}

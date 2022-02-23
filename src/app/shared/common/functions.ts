@@ -46,7 +46,7 @@ export function assignCopy<T>(original: T, values: {[K in keyof T]?: T[K]}) {
 };
 
 
-export function getDirtyValues(form: any) {
+export function getDirtyValues(form: any, deep: boolean = false) {
   let dirtyValues: any = {};
 
   Object.keys(form.controls)
@@ -55,7 +55,7 @@ export function getDirtyValues(form: any) {
 
     if ( currentControl.dirty ) {
       if ( currentControl.controls )
-        dirtyValues[key] = currentControl.value; //getDirtyValues(currentControl);
+        dirtyValues[key] = deep ? getDirtyValues(currentControl, deep) : currentControl.value;
       else
         dirtyValues[key] = currentControl.value;
     }

@@ -58,7 +58,7 @@
     
     <swipeup [(open)]="openAdFilterMenu" type="view">
       <pme-filter-form [activeView]="activeView" *ngIf="view == 'PME'; else stfilter" view></pme-filter-form>
-      <ng-template #stfilter><st-filter-form></st-filter-form></ng-template>
+      <ng-template #stfilter><st-filter-form (update)="allOnlinePosts = $event"></st-filter-form></ng-template>
     </swipeup>
     
     <!-- Component one -->

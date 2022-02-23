@@ -12,12 +12,18 @@ import { QueryProfile } from "src/models/new/data.state";
           <profile-image [profile]="profile" [borders]="false"></profile-image>
         </div>
         <div class="content grow">
+          <div class="body">
             <h5 class="author">{{profile.user!.firstName}} {{profile.user!.lastName}}</h5>
-            <div class="body">{{ supervision.comment }}</div>
+            <div class="comment">{{ supervision.comment }}</div>
+          </div>
+          <div class="replies flex center-cross position-relative" style="left: 30px">
+            <!-- Get most recent-->
+            <div class="reply-container">
+              <profile-image [profile]="profile" [borders]="false"></profile-image>
+            </div>
+            <span class="replies-number">Il y a 5 réponses</span>
+          </div>
         </div>
-      </div>
-      <div class="replies">
-        ....
       </div>
     </ng-container>
   `,

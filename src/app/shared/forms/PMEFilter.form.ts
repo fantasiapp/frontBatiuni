@@ -67,6 +67,7 @@ import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PMEFilterForm {
+  //determine which filter is open
   @Input()
   activeView: number = 0;
   

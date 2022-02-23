@@ -7,7 +7,7 @@
 }
 
 $target-size: 50px;
-$factor: math.div($target-size, $profile-image-size);
+$comment-factor: math.div($target-size, $profile-image-size);
 
 .image-container {
   width: $target-size;
@@ -16,15 +16,36 @@ $factor: math.div($target-size, $profile-image-size);
 
   profile-image {
     transform-origin: 0 0;
-    transform: scale($factor);  
+    transform: scale($comment-factor);  
   }
+
+  align-self: flex-start;
 }
 
-.content {
+.body {
   background-color: #F7F7F7;
   border-radius: 12px;
   padding: 12px;
+  margin-left: 12px;
 }
 
 .author { font-size: 1em; }
 .body { font-size: 0.95em; }
+
+$icon-size: 25px;
+$icon-factor: math.div($icon-size, $profile-image-size);
+.reply-container {
+  width: $icon-size;
+  height: $icon-size;
+  transform: rotate(45deg);
+
+  profile-image {
+    transform-origin: 0 0;
+    transform: scale($icon-factor);  
+  }
+}
+
+.replies-number {
+  display: inline-block;
+  margin-left: 10px;
+}

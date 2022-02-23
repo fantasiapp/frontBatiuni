@@ -194,6 +194,7 @@ export class MakeAdForm {
   @HostBinding('class.page')
   @Input() page: boolean = true;
 
+  //T_T
   @ViewChild('0') public first! : ElementRef;
   @ViewChild('1') public second! : ElementRef;
   @ViewChild('2') public third! : ElementRef;
@@ -339,7 +340,8 @@ export class MakeAdForm {
     if ( this.post ) {
       if ( !draft ) {
         this.info.show("info", "Mise en ligne de l'annonce...", Infinity);
-        this.store.dispatch(new SwitchPostType(this.post.id)).pipe(take(1)).subscribe(() => {
+        const action = this.makeAdForm.touched ? UploadPost.fromPostForm(this.makeAdForm.value, draft, this.post.id) : new SwitchPostType(this.post.id);
+        this.store.dispatch(action).pipe(take(1)).subscribe(() => {
           this.info.show("success", "Annonce mise en ligne", 2000);
           this.done.emit();
         }, () => {

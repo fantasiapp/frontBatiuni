@@ -123,7 +123,7 @@ export interface Post {
   amount: number;
   currency: string;
   unitOfTime: string;
-  counterOffer: number;
+  counterOffer: boolean;
   description: string;
   details: Ref<PostDetail>[];
   files: Ref<File>[];

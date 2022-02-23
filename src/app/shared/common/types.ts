@@ -7,13 +7,12 @@ export type Ref = {
 
 export type Optional<T> = T | null;
 
-export type NonFunctionPropNames<T> = {
-  [K in keyof T]: T[K] extends Function ? never : K
-}[keyof T];
+export type CompareFunction<T> = (a: T, b: T) => number;
+export type KeysOfType<T, Target> = Exclude<keyof T, {
+  [K in keyof T]: T[K] extends Target ? never : K
+}[keyof T]>;
 
-export type Serialized<T> ={
-  [P in NonFunctionPropNames<T>]: T[P] extends (string | number | null) ? T[P] : (T[P] extends (infer U)[] ? Serialized<U>[] : Serialized<T[P]>);
-};
+export type Slice<T, Key = any, Value = Key extends keyof T ? T[Key] : any> = (item: T) => Value;
 
 export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 

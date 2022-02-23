@@ -12,6 +12,7 @@ import { SwipeupService } from "src/app/shared/components/swipeup/swipeup.compon
 import { ApplyPost, DeletePost, DuplicatePost, HandleApplication, SwitchPostType } from "src/models/new/user/user.actions";
 import { DataQueries, DataState, QueryAll, SnapshotAll } from 'src/models/new/data.state';
 import { Profile, Post, Mission } from "src/models/new/data.interfaces";
+import { FilterService } from "src/app/shared/services/filter.service";
 
 class PostMenu<T extends Post | Mission = Post> {
   open: boolean = false;
@@ -62,7 +63,11 @@ export class HomeComponent extends Destroy$ {
   @ViewChild('candidature', {read: TemplateRef, static: true})
   candidature!: TemplateRef<any>;
 
-  constructor(private cd: ChangeDetectorRef, private store: Store, private info: InfoService, private popup: PopupService, private swipeupService: SwipeupService, private slideService: SlidemenuService) {
+  constructor(
+    private cd: ChangeDetectorRef, private store: Store,
+    private info: InfoService, private popup: PopupService, private swipeupService: SwipeupService, private slideService: SlidemenuService,
+    private filters: FilterService
+  ) {
     super();
   }
   
@@ -78,18 +83,24 @@ export class HomeComponent extends Destroy$ {
 
       this.userDrafts = mapping.get(this.symbols.userDraft) || [];
       this.userOnlinePosts = mapping.get(this.symbols.userOnlinePost) || [];
-      this.allOnlinePosts = mapping.get(this.symbols.otherOnlinePost) || [];
+      const otherOnlinePost = (mapping.get(this.symbols.otherOnlinePost) || []);
+      this.allOnlinePosts = [...otherOnlinePost, ...this.userOnlinePosts];
       this.missions = this.store.selectSnapshot(DataQueries.getMany('Mission', profile.company.missions));
       this.cd.markForCheck();
     });
   }
+
+  ngAfterViewInit() {
+    this.filters.filter('ST', this.allOnlinePosts);
+  }
+
   activeView: number = 0;
   openAdFilterMenu: boolean = false;
   imports = { DistanceSliderConfig, SalarySliderConfig };
   draftMenu = new PostMenu;
   postMenu = new PostMenu;
   missionMenu = new PostMenu<Mission>();
-  
+
   //factor two menu into objects
   openDraft(post: Post | null) {
     this.info.hide();
