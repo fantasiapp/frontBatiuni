@@ -165,11 +165,11 @@ export class STFilterForm extends Filter<Post> {
         this.onlyIf('$employeeCount', count => count > 100, [], true),
       ),
       this.onlyIf('$viewed', viewed => {
-        console.log('filtering viewed');
+
         return viewed;
       }),
       this.onlyIf('$favorite', favorite => {
-        console.log('filtering favorite');
+        
         return favorite;
       }),
       this.onlyIf('$candidate', candidate => candidate),
