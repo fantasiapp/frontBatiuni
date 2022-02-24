@@ -13,6 +13,7 @@ import { ApplyPost, DeletePost, DuplicatePost, HandleApplication, MarkViewed, Se
 import { DataQueries, DataState, QueryAll, SnapshotAll } from 'src/models/new/data.state';
 import { Profile, Post, Mission } from "src/models/new/data.interfaces";
 import { FilterService } from "src/app/shared/services/filter.service";
+import { ApplyForm } from "../../ui/annonce-resume/annonce-resume.ui";
 
 class PostMenu<T extends Post | Mission = Post> {
   open: boolean = false;
@@ -180,14 +181,14 @@ export class HomeComponent extends Destroy$ {
     })
   }
 
-  applyPost(post: Post) {
+  applyPost(post: Post, form: ApplyForm) {
     this.info.show("info", "Candidature en cours...", Infinity);
-    this.store.dispatch(new ApplyPost(post.id)).pipe(take(1))
+    this.store.dispatch(new ApplyPost(post.id, form)).pipe(take(1))
       .subscribe(
         success => this.info.show("success", "Candidature envoyée", 2000),
         error => this.info.show("error", "Echec de l'envoi de la candidature", 5000)
       ); 
-    }
+  }
 
   handleApplication(post: Post, application: number) {
     this.swipeupService.show({

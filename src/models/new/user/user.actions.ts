@@ -5,6 +5,7 @@ import { getDirtyValues } from "src/app/shared/common/functions";
 import { DataTypes, Post, Profile } from "../data.interfaces";
 import { CalendarUI, DayState } from "src/app/shared/components/calendar/calendar.ui";
 import { availabilityToName } from "../data.mapper";
+import { ApplyForm } from "src/app/mobile/ui/annonce-resume/annonce-resume.ui";
 
 export class ChangeProfileType {
   static readonly type = '[User] Change Profile Type';
@@ -222,7 +223,12 @@ export class ModifyAvailability {
 export class ApplyPost {
   static readonly type = '[User.ST] Apply Post';
   action = 'applyPost';
-  constructor(public Post: number) { }
+  amount: number;
+  devis: string;
+  constructor(public Post: number, form: ApplyForm) {
+    this.amount = form.amount;
+    this.devis = form.devis;
+  }
 }
 
 export class GetGeneralData {

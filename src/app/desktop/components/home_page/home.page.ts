@@ -13,6 +13,7 @@ import { DataQueries, DataState, QueryAll, Snapshot, SnapshotArray } from 'src/m
 import { Candidate, Company, File, Job, Post, PostDetail, Profile } from "src/models/new/data.interfaces";
 import * as UserActions from "src/models/new/user/user.actions";
 import { OfferComponent } from "src/app/shared/components/offer/offer.compnent";
+import { ApplyForm } from "src/app/mobile/ui/annonce-resume/annonce-resume.ui";
 
 type PostMenu = { open: boolean; post: Post | null; };
 
@@ -72,8 +73,6 @@ export class HomePageComponent extends Destroy$ {
   @SnapshotArray('File') postResumerFiles!: number[] | File[];
 
   showPostResumer(post: Post, type: resumerType) {
-    
-
     this.resumerType = type;
     this.showValidePost = true
     this.postResumer = post;
@@ -150,8 +149,14 @@ export class HomePageComponent extends Destroy$ {
   }
 
   applyPost(post: Post) {
+    const formValue = this.devisForm.value,
+      form: ApplyForm = {
+      amount: formValue.amount,
+      devis: formValue.devis[0].name
+    };
+
     this.info.show("info", "Candidature en cours...", Infinity);
-    this.store.dispatch(new ApplyPost(post.id)).pipe(take(1))
+    this.store.dispatch(new ApplyPost(post.id, form)).pipe(take(1))
       .subscribe(
         success => this.info.show("success", "Candidature envoyée", 2000),
         error => {
@@ -159,10 +164,11 @@ export class HomePageComponent extends Destroy$ {
         }
       );
   }
+
   devis = ['Par Heure', 'Par Jour', 'Par Semaine'].map((name, id) => ({ id, name }));
   devisForm = new FormGroup({
     amount: new FormControl(0),
-    devis: new FormControl([{ id: 0 }])
+    devis: new FormControl([this.devis[0]])
   });
 
   testPopup() {

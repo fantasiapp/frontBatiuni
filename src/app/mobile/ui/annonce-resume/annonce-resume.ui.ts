@@ -5,6 +5,11 @@ import { PopupService } from "src/app/shared/components/popup/popup.component";
 import { Company, Post, File, PostDetail, Job } from "src/models/new/data.interfaces";
 import { DataQueries, DataState } from "src/models/new/data.state";
 
+export type ApplyForm = {
+  amount: number;
+  devis: string;
+};
+
 @Component({
   selector: 'annonce-resume',
   template: `
@@ -66,7 +71,7 @@ import { DataQueries, DataState } from "src/models/new/data.state";
         </div>
       </form>
       <footer class="sticky-footer">
-        <button class="button full-width active" (click)="apply.emit()" [disabled]="form.invalid">
+        <button class="button full-width active" (click)="onApply()" [disabled]="form.invalid">
           Postuler
         </button>
       </footer>
@@ -81,9 +86,6 @@ export class UIAnnonceResume {
   @Input()
   collapsed: boolean = false;
   collapsible: boolean = true;
-
-  @Output()
-  apply = new EventEmitter();
 
   @Input('collapsible')
   set collapsibleSet(value: boolean) {
@@ -121,9 +123,20 @@ export class UIAnnonceResume {
     return date ? new Date(date).toLocaleDateString('fr') : "(Non renseigné)";
   }
 
+  @Output()
+  apply = new EventEmitter<ApplyForm>();
+
   devis = ['Par Heure', 'Par Jour', 'Par Semaine'].map((name, id) => ({id, name}));
   form = new FormGroup({
     amount: new FormControl(0),
-    devis: new FormControl([{id: 0}])
+    devis: new FormControl([this.devis[0]])
   });
+
+  onApply() {
+    const formValue = this.form.value;
+    this.apply.emit({
+      amount: formValue.amount,
+      devis: formValue.devis[0].name
+    });
+  }
 };

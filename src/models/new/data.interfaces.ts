@@ -136,6 +136,8 @@ export interface Post {
 export interface Candidate {
   id: Ref<Candidate>;
   company: Ref<Company>;
+  amount: number;
+  devis: string;
 };
 
 export interface Establishement {

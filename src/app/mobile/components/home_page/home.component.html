@@ -85,7 +85,7 @@
       </header>
   
       <ng-container content>
-        <annonce-resume class="hosted-page content-with-footer" [collapsible]="false" [post]="postMenu.post!" (apply)="applyPost(postMenu.post!)" #resume></annonce-resume>
+        <annonce-resume class="hosted-page content-with-footer" [collapsible]="false" [post]="postMenu.post!" (apply)="applyPost(postMenu.post!, $event)" #resume></annonce-resume>
   
         <swipeup [(open)]="postMenu.swipeup">
           <li [attr.data-notification-number]="postMenu.candidates.length" [class.notification]="postMenu.candidates.length" (click)="showCandidates()"><img src="assets/responses.svg"/> Afficher les réponses</li>

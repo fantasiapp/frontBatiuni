@@ -394,6 +394,7 @@ export class DataState {
 
   @Action(ApplyPost)
   applyPost(ctx: StateContext<DataModel>, application: ApplyPost) {
+    //{Post: 1, amount: 500, devis: 'Par heure', action: 'applyPost'}
     return this.http.get('data', application).pipe(
       tap((response: any) => {
         if ( response[application.action] != 'OK' )
@@ -435,7 +436,6 @@ export class DataState {
         }
         
         delete response[handle.action];
-        console.log('$', response);
         const company = this.store.selectSnapshot(DataQueries.currentCompany);
         this.inZone(() => this.info.show("success", "Réponse envoyée.", 3000))
         this.slide.hide();
