@@ -1,5 +1,6 @@
 export const environment = {
   production: true,
-  backUrl: 'https://batiuni.fantasiapp.tech:5002',
-  version: 'work'
+  // backUrl: 'https://batiuni.fantasiapp.tech:5003',
+  backUrl: 'http://localhost:8000'
+  version: 'distrib'
 };

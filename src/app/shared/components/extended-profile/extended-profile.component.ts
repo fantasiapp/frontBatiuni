@@ -4,7 +4,7 @@ import * as UserActions from "src/models/new/user/user.actions";
 import { take } from "rxjs/operators";
 import { PopupService } from "src/app/shared/components/popup/popup.component";
 import { DataQueries, QueryProfile, SnapshotArray } from "src/models/new/data.state";
-import { Job, File, Profile, JobForCompany } from "src/models/new/data.interfaces";
+import { Job, File, Profile, JobForCompany} from "src/models/new/data.interfaces";
 import { Observable } from "rxjs";
 import { Destroy$ } from "src/app/shared/common/classes";
 import { getFileColor } from "../../common/functions";
