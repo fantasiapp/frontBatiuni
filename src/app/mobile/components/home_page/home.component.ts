@@ -11,18 +11,9 @@ import { SlidemenuService } from "src/app/shared/components/slidemenu/slidemenu.
 import { SwipeupService } from "src/app/shared/components/swipeup/swipeup.component";
 import { ApplyPost, DeletePost, DuplicatePost, HandleApplication, MarkViewed, SetFavorite, SwitchPostType } from "src/models/new/user/user.actions";
 import { DataQueries, DataState, QueryAll, SnapshotAll } from 'src/models/new/data.state';
-import { Profile, Post, Mission } from "src/models/new/data.interfaces";
+import { Profile, Post, Mission, PostMenu } from "src/models/new/data.interfaces";
 import { FilterService } from "src/app/shared/services/filter.service";
 import { ApplyForm } from "../../ui/annonce-resume/annonce-resume.ui";
-
-class PostMenu<T extends Post | Mission = Post> {
-  open: boolean = false;
-  post: T | null = null;
-  swipeup: boolean = false;
-  favorite: boolean = false;
-
-  get candidates() { return this.post?.candidates || []; }
-};
 
 @Component({
   selector: 'home',
