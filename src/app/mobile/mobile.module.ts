@@ -16,7 +16,6 @@ import { PagingComponent } from "./components/paging/paging.component";
 import { ProfileComponent } from "./components/profile/profile.component";
 import { RegisterComponent } from "./components/register/register.component";
 import { SOSPageComponent } from "./components/SOS_page/sos-page.component";
-import { SuiviPage } from "./components/suivi_page/suivi.page";
 import { SuiviPME } from "./components/suivi_pme/suivi-pme.page";
 import { UIModule } from "./ui/ui.module";
 import { SharedModule } from "../shared/shared.module";
@@ -44,7 +43,6 @@ import { MailSender } from "./components/only_mail/only.mail";
     SOSPageComponent,
     EngagementPage,
     BoosterPage,
-    SuiviPage,
     SuiviPME,
     ForgotPassword,
     MailSender,

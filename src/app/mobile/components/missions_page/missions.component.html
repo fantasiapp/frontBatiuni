@@ -6,62 +6,16 @@
 <div class="hosted-page space-children-margin page-content-with-tabs">
   <ng-container [ngSwitch]="activeView">
     <ng-container *ngSwitchCase="0">
-      <offer *ngFor="let mission of missions" [routerLink]="['', 'suivi']"></offer>
+      <offer *ngFor="let mission of myMissions" [post]="mission" src="assets/validée.svg" (click)="openMission(mission)"></offer>
     </ng-container>
     <horizantale-calendar class="space-children-margin" *ngSwitchCase="1"></horizantale-calendar>
   </ng-container>
 </div>
 
+<slidemenu [(open)]="missionMenu.open" title="Mission">
+  <suivi-pme [mission]="missionMenu.post" content></suivi-pme>
+</slidemenu>
+
 <swipeup [(open)]="openFilterMenu" type="view">
-  <form class="form-control full-width" view>
-    <div class="form-input">
-      <label>Date de validation</label>
-      <input type="date"/>
-      <img src="assets/calendar.png"/>
-    </div>
-
-    <div class="form-input">
-      <label>Date de mission</label>
-      <input type="date"/>
-      <img src="assets/calendar.png"/>
-    </div>
-
-    <div class="form-input">
-      <label>Adresse de chantier</label>
-      <input type="text"/>
-    </div>
-
-    <div class="form-input">
-      <label>Métier</label>
-      <options></options>
-    </div>
-
-    <div class="form-input">
-      <label>Type</label>
-      <div class="flex row radio-container">
-        <div class="radio-item">
-          <radiobox class="grow" name="job-type"></radiobox>
-          Main d'oeuvre
-        </div>
-        <div class="radio-item">
-          <radiobox class="grow" name="job-type"></radiobox>
-          Fourniture et pose
-        </div>
-      </div>
-    </div>
-
-    <div class="form-input space-children-margin">
-      <label>Réorganiser la liste selon</label>
-      <div class="switch-container flex center-cross">
-        <span class="criteria">Mission clôturer</span> <switch class="default"></switch>
-      </div>
-      <div class="switch-container flex center-cross">
-        <span class="criteria">Date de mission la plus proche à la plus lointaine</span>
-        <switch class="default"></switch>
-      </div>
-      <div class="switch-container flex center-cross">
-        <span class="criteria">Norifications suivi de chantier non lu</span> <switch class="default"></switch>
-      </div>
-    </div>
-  </form>
+  <mission-filter-form view></mission-filter-form>
 </swipeup>

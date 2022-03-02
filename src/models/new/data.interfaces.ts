@@ -175,9 +175,16 @@ export type Interface<K extends DataTypes> =
   K extends 'Establishments' ? Establishement :
   K;
 
-
-
 export type Profile = {
   user?: User | null;
   company: Company;
 }
+
+export class PostMenu<T extends Post | Mission = Post> {
+  open: boolean = false;
+  post: T | null = null;
+  swipeup: boolean = false;
+  favorite: boolean = false;
+
+  get candidates() { return this.post?.candidates || []; }
+};

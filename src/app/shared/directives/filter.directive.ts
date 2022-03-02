@@ -229,13 +229,10 @@ export abstract class Filter<T extends {id: number}> extends Destroy$ {
     if ( !input.length ) return [];
     
     for ( const step of this.pipeline ) {
-      console.log('step', step.name);
-      console.log('input', input);
       const name = step.type + '_' + (step.name as string);
       if ( controls[name].touched ) {
         input = this.evaluateStep(input, controls[name], step);
       }
-      console.log('result', input);
     }
 
     this.updateEvent.emit(input);

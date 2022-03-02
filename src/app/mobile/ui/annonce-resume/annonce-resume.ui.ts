@@ -55,7 +55,7 @@ export type ApplyForm = {
       <span>{{collapsed ? 'Lire la suite' : 'Lire moins'}}</span>  <img src="assets/arrowdown.svg" [style.transform]="'rotate(' + (180 * +!collapsed) + 'deg)'"/>
     </div>
 
-    <ng-container *ngIf="view == 'ST'">
+    <ng-container *ngIf="application && view == 'ST'">
       <hr class="dashed"/>
       <form class="devis form-control" [formGroup]="form">
         <h5>Pour postuler veuillez proposer votre devis</h5>
@@ -93,14 +93,19 @@ export class UIAnnonceResume {
     if ( !value ) this.collapsed = false;
   }
 
+  @Input()
+  application: boolean = true;
+
   company: Company | null = null;
   job: Job | null = null;
   files: File[] = [];
   details: PostDetail[] = [];
 
+  //rename this to item of type compatible with both Post and Mission
   private _post: Post | null = null;
   get post(): any { return this._post; }
-  @Input() set post(p: Post | null) {
+  
+  @Input('post') set post(p: Post | null) {
     this._post = p;
     this.company = p ? this.store.selectSnapshot(DataQueries.getById('Company', p.company)) : null;
     this.files = p ? this.store.selectSnapshot(DataQueries.getMany('File', p.files)) : [];

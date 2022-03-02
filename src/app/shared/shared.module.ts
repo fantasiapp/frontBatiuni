@@ -57,6 +57,7 @@ import { FileDownloader } from "./services/file-downloader.service";
 import { UIAccordion } from "./components/accordion/accordion.ui";
 import { UIComment } from "./components/comment/comment.ui";
 import { FilterService } from "./services/filter.service";
+import { MissionFilterForm } from "./forms/missions.form";
 
 @NgModule({
   declarations: [
@@ -115,7 +116,8 @@ import { FilterService } from "./services/filter.service";
     //FadeTemplate,
     //ScrollTemplate,
     UIAccordion,
-    UIComment
+    UIComment,
+    MissionFilterForm
   ],
   imports: [
     CommonModule,
@@ -181,7 +183,8 @@ import { FilterService } from "./services/filter.service";
     //FadeTemplate,
     //ScrollTemplate,
     UIAccordion,
-    UIComment
+    UIComment,
+    MissionFilterForm
   ],
   providers: [ImageGenerator, FileDownloader, FilterService]
 })

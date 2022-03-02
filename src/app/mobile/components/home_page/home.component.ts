@@ -84,9 +84,9 @@ export class HomeComponent extends Destroy$ {
         return post.draft ? this.symbols.discard : this.symbols.otherOnlinePost;
       });
 
+      const otherOnlinePost = (mapping.get(this.symbols.otherOnlinePost) || []);
       this.userDrafts = mapping.get(this.symbols.userDraft) || [];
       this.userOnlinePosts = mapping.get(this.symbols.userOnlinePost) || [];
-      const otherOnlinePost = (mapping.get(this.symbols.otherOnlinePost) || []);
       this.allOnlinePosts = [...otherOnlinePost, ...this.userOnlinePosts];
       this.missions = this.store.selectSnapshot(DataQueries.getMany('Mission', profile.company.missions));
       this.cd.markForCheck();

@@ -128,6 +128,11 @@ export class DataState {
     return state['Post'] || {};
   }
 
+  @Selector([DataState])
+  static missions(state: DataModel) {
+    return state['Mission'] || {};
+  }
+
   static getType<K extends DataTypes>(type: K) {
     return createSelector([DataState], (state: DataModel) => {
       return state[type] || {};
