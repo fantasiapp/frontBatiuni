@@ -77,10 +77,10 @@
         <span class="grow center-text text-light-emphasis">Annonce en Ligne</span>
         <img *ngIf="view == 'PME'; else starTemplate" (click)="postMenu.swipeup = true" src="assets/Option.svg"/>
         <ng-template #starTemplate>
-          <stars [toggle]="true"
+          <!-- <stars [toggle]="true"
             [value]="+(postMenu.post! && profile.user!.favoritePosts.includes(postMenu.post!.id))"
             (click)="setFavorite(star.value)" #star>
-          </stars>
+          </stars> -->
         </ng-template>
       </header>
   
