@@ -152,9 +152,11 @@ export abstract class UIDefaultAccessor<T> implements ControlValueAccessor {
     return this._value;
   }
 
+  //trigger change detection
+  //doesnt emit valueChange
   @Input()
   set value(value: T | undefined) {
-    this.set(value!);
+    this._value = value;
   }
   
   @Output()
@@ -170,7 +172,7 @@ export abstract class UIDefaultAccessor<T> implements ControlValueAccessor {
 
   set(next: T, notifyForm: boolean = true) {
     if ( next !== this.value ) {
-      this.valueChange.emit(this._value = next);
+      this.valueChange.emit(this.value = next);
       if ( notifyForm ) this.onChanged(this.value);
       this.cd.markForCheck();
     }

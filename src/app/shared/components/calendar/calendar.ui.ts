@@ -108,8 +108,17 @@ export class CalendarUI extends UIDefaultAccessor<DayState[]> {
   get value() { return this._value; }
   set value(v: DayState[] | undefined) {
     this._value = v || [];
-    console.log('set value', v);
     this.getDaysFromDate(this.fillZero(this.currentMonth), this.currentYear);
+  }
+
+  set(next: DayState[], notifyForm: boolean = true) {
+    if ( next !== this.value ) {
+      this.valueChange.emit(this.value = next);
+      if ( notifyForm ) this.onChanged(this.value);
+      this.cd.markForCheck();
+    }
+    //apparently skipping this call breaks everything
+    super.set(next, notifyForm);
   }
 
   changeMonth(flag: any) {
@@ -167,7 +176,7 @@ export class CalendarUI extends UIDefaultAccessor<DayState[]> {
     }
 
     this.onChange(next);
-    this.getDaysFromDate(this.fillZero(this.currentMonth), this.currentYear);
+    // this.getDaysFromDate(this.fillZero(this.currentMonth), this.currentYear);
     this.cd.markForCheck();
   }
 
@@ -184,7 +193,7 @@ export class CalendarUI extends UIDefaultAccessor<DayState[]> {
     }
 
     this.onChange(next);
-    this.getDaysFromDate(this.fillZero(this.currentMonth), this.currentYear);
+    // this.getDaysFromDate(this.fillZero(this.currentMonth), this.currentYear);
     this.cd.markForCheck();
   };
 
@@ -195,7 +204,7 @@ export class CalendarUI extends UIDefaultAccessor<DayState[]> {
       remaining2 = days.filter(day => !currentDates.includes(day));
     
     this.onChange([...remaining1, ...remaining2].map(date => ({date, availability: targetState})));
-    this.getDaysFromDate(this.fillZero(this.currentMonth), this.currentYear);
+    // this.getDaysFromDate(this.fillZero(this.currentMonth), this.currentYear);
     this.cd.markForCheck();
   }
 
