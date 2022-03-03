@@ -72,7 +72,7 @@ import { InfoService } from "../components/info/info.component";
       <div class="center-text">
         <switch on="Intervalle" off="Jour" #switch [value]="false"></switch>
       </div>
-      <calendar [embedded]="false" [mode]="switch.value ? 'range' : 'single'" formControlName="calendar"></calendar>
+      <calendar [useEvents]="false" formControlName="calendar" [mode]="switch.value ? 'range' : 'single'"></calendar>
     </div>
 
     <div class="form-input">

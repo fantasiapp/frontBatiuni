@@ -28,8 +28,9 @@ export type CalendarMode = 'range' | 'single';
 })
 export class CalendarUI extends UIDefaultAccessor<DayState[]> {
 
+  //à renommer ou à mettre à jour automatique une fois qu'on est une partie d'un form
   @Input()
-  embedded: boolean = true;
+  useEvents: boolean = true;
 
   @Input()
   mode: CalendarMode = 'single';
@@ -107,6 +108,7 @@ export class CalendarUI extends UIDefaultAccessor<DayState[]> {
   get value() { return this._value; }
   set value(v: DayState[] | undefined) {
     this._value = v || [];
+    console.log('set value', v);
     this.getDaysFromDate(this.fillZero(this.currentMonth), this.currentYear);
   }
 
@@ -147,7 +149,7 @@ export class CalendarUI extends UIDefaultAccessor<DayState[]> {
   setSelection(days: string[]) {
     this.selection = days;
 
-    if ( !this.embedded )
+    if ( !this.useEvents )
       this.mode == 'single' ? this.toggleDayState(this.selection[0], 'selected') : this.addValues(this.selection, 'selected');
   }
 
@@ -165,6 +167,7 @@ export class CalendarUI extends UIDefaultAccessor<DayState[]> {
     }
 
     this.onChange(next);
+    this.getDaysFromDate(this.fillZero(this.currentMonth), this.currentYear);
     this.cd.markForCheck();
   }
 
@@ -181,6 +184,7 @@ export class CalendarUI extends UIDefaultAccessor<DayState[]> {
     }
 
     this.onChange(next);
+    this.getDaysFromDate(this.fillZero(this.currentMonth), this.currentYear);
     this.cd.markForCheck();
   };
 
@@ -191,6 +195,7 @@ export class CalendarUI extends UIDefaultAccessor<DayState[]> {
       remaining2 = days.filter(day => !currentDates.includes(day));
     
     this.onChange([...remaining1, ...remaining2].map(date => ({date, availability: targetState})));
+    this.getDaysFromDate(this.fillZero(this.currentMonth), this.currentYear);
     this.cd.markForCheck();
   }
 
