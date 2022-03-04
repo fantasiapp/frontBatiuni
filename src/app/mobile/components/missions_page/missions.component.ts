@@ -4,10 +4,13 @@ import { combineLatest, Observable } from "rxjs";
 import { map, takeUntil } from "rxjs/operators";
 import { Destroy$ } from "src/app/shared/common/classes";
 import { assignCopy } from "src/app/shared/common/functions";
-import { HorizantaleCalendar } from "src/app/shared/components/horizantalecalendar/horizantale.component";
+import { MissionDetailedDay } from "src/app/shared/components/horizantalecalendar/horizantale.component";
 import { InfoService } from "src/app/shared/components/info/info.component";
 import { Mission, PostMenu, Profile } from "src/models/new/data.interfaces";
 import { DataQueries, QueryAll } from "src/models/new/data.state";
+
+import * as moment from 'moment';
+
 
 
 @Component({
@@ -22,6 +25,8 @@ export class MissionsComponent extends Destroy$ {
   openFilterMenu: boolean = false;
   myMissions: Mission[] = [];
   missionMenu = new PostMenu<Mission>();
+
+  detailedDays: MissionDetailedDay[] = [];
 
 
   @Select(DataQueries.currentProfile)
@@ -40,9 +45,29 @@ export class MissionsComponent extends Destroy$ {
     combineLatest([this.profile$, this.missions$]).pipe(takeUntil(this.destroy$)).subscribe(([profile, missions]) => {
       //filter own missions
       //for now accept all misisons
-      this.myMissions = missions;   
+      this.myMissions = missions.filter(mission => mission.subContractor == profile.company.id);
+      //compute work days
 
+      this.detailedDays.length = 0;
+      for ( const mission of this.myMissions ) {
+        const start = moment(mission.startDate),
+          end = moment(mission.endDate),
+          contractor = this.store.selectSnapshot(DataQueries.getById('Company', mission.company))!;
+        
+        const diffDays = end.diff(start, 'days', true);
 
+        let day = start.clone();
+        for ( let i = 0; i < diffDays; i++ ) {
+          this.detailedDays.push({
+            date: day.locale('fr').format('YYYY-MM-DD'),
+            start: mission.hourlyStart,
+            end: mission.hourlyEnd,
+            text: 'Chantier de ' + contractor.name 
+          });
+
+          day = day.add(1, 'day');
+        }
+      }
     });
   }
 

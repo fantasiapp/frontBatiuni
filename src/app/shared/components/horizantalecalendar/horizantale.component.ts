@@ -1,5 +1,13 @@
-import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnInit, ViewChild } from '@angular/core';
 import * as moment from 'moment';
+import { Availability, CalendarUI, DayState } from '../calendar/calendar.ui';
+
+export type MissionDetailedDay = {
+  date: string;
+  start: string;
+  end: string;
+  text: string;
+};
 
 @Component({
     selector: 'horizantale-calendar',
@@ -8,6 +16,9 @@ import * as moment from 'moment';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HorizantaleCalendar implements OnInit {
+
+    @ViewChild(CalendarUI, {static: true})
+    calendar!: CalendarUI;
 
     week = [
         "Lundi",
@@ -18,6 +29,11 @@ export class HorizantaleCalendar implements OnInit {
         "Samedi",
         "Dimanche"
     ];
+
+    onDayClicked([_, selection]: [MouseEvent, DayState[]]) {
+        this.showAgenda(selection[0]);
+    }
+
     @Input()
     hideForDesktop: boolean = true;
 
@@ -34,14 +50,23 @@ export class HorizantaleCalendar implements OnInit {
     bilan : string = '' 
 
     ngOnInit(): void {
+        console.log(this.calendar);
+
         let now = new Date(Date.now())
         this.getDaysFromDate(now.getMonth() + 1, now.getFullYear())
         this.getWeek();
         this.someFunction()
         this.spanShowToday = moment(now).locale('fr').format("dddd D - MMMM - YYYY")
-        this.showAgenda(moment(now).format("YYYY/MM/DD"))
+        this.showAgenda(moment(now).format("YYYY-MM-DD"))
         this.showColors()
+
+        console.log(this.weekend);
     }
+
+    toCalendarDays(workDays: MissionDetailedDay[]): DayState[] {
+        return workDays.map(workDay => ({date: workDay.date, availability: 'selected'}));
+    }
+
     getWeek() {
         let currentDate = moment();
 
@@ -52,21 +77,20 @@ export class HorizantaleCalendar implements OnInit {
             if(i==1) {
                 console.log(weekStart)
                 days.push({
-                    day : moment(weekStart).locale("fr").add(i, 'days').format("D,dddd,YYYY/MM/DD").split(','),
+                    day : moment(weekStart).locale("fr").add(i, 'days').format("D,dddd,YYYY-MM-DD").split(','),
                     status : '',
                     selected : true
                 })
             }
             else{
                 days.push({
-                    day : moment(weekStart).locale("fr").add(i, 'days').format("D,dddd,YYYY/MM/DD").split(','),
+                    day : moment(weekStart).locale("fr").add(i, 'days').format("D,dddd,YYYY-MM-DD").split(','),
                     status : '',
                     selected : false
                 })
             }
         }
         this.weekend = days
-
     }
     
     getDaysFromDate(month: any, year: any) {
@@ -81,7 +105,7 @@ export class HorizantaleCalendar implements OnInit {
             a = parseInt(a) + 1;
             const dayObject = moment(`${year}/${month}/${a}`);
             let flow :any = dayObject
-            let item = this.working.filter(item => item.date == flow._i)
+            let item = this.detailedDays.filter(item => item.date == flow._i)
             if(item.length){
                 return {
                     name: dayObject.format("dddd"),
@@ -115,9 +139,11 @@ export class HorizantaleCalendar implements OnInit {
 
         }
     }
+
     changeVue() {
         this.hori = !this.hori;
     }
+
     someFunction() {
         const items: any = [];
         // From 08:00 tp 19:00
@@ -127,33 +153,34 @@ export class HorizantaleCalendar implements OnInit {
         this.hoursperday = items
     }
 
-    working = [
+    @Input()
+    detailedDays: MissionDetailedDay[] = [
         {
-            date : "2021/12/21",
+            date : "2022-03-01",
             start : "8:30",
             end : "16:00",
             text : "Some text with the company name and adress"
         },
         {
-            date : "2021/12/22",
+            date : "2022-03-02",
             start : "8:00",
             end : "14:00",
             text : "Some text with the company name and adress"
         },
         {
-            date : "2021/12/23",
+            date : "2022-03-03",
             start : "8:30",
             end : "19:00",
             text : "Some text with the az name and adress"
         },
         {
-            date : "2021/12/26",
+            date : "2022-03-04",
             start : "8:30",
             end : "11:00",
             text : "Some text with the company name and adress"
         },
         {
-            date : "2022/01/26",
+            date : "2022-03-05",
             start : "8:30",
             end : "11:00",
             text : "Some text with the company name and adress"
@@ -175,8 +202,9 @@ export class HorizantaleCalendar implements OnInit {
     }
 
     showAgenda(date:any) {
-        this.spanShowToday = moment(date,"YYYY/MM/DD").locale('fr').format("dddd D - MMMM - YYYY")
-        let today = this.working.filter(item => item?.date == date)
+        console.log(date);
+        this.spanShowToday = moment(date,"YYYY-MM-DD").locale('fr').format("dddd D - MMMM - YYYY")
+        let today = this.detailedDays.filter(item => item?.date == date)
         if(today.length)
         {
             this.calculator(today[0].start, today[0].end)
@@ -186,14 +214,16 @@ export class HorizantaleCalendar implements OnInit {
             this.greenCardHeight = 0
         }   
     }
+    
     showgrey(selectedday:any) {
         this.weekend.forEach((item:any) => item.selected=false)
         selectedday.selected = true
         return [...this.weekend, selectedday ]
     }
+    
     showColors() {
         this.weekend.forEach((item:any) => {
-            let compare = this.working;
+            let compare = this.detailedDays;
             compare = compare.filter(element=>element.date == item.day[2])
             if(compare.length){
                 item.status = "occupe"
@@ -204,5 +234,4 @@ export class HorizantaleCalendar implements OnInit {
         })
         
     }
-
 }

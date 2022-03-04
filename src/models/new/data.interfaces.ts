@@ -149,7 +149,9 @@ export interface Establishement {
   NTVAI: string;
 };
 
-export type Mission = Omit<Post, 'applications'>;
+export type Mission = Post & {
+  subContractor: Ref<Company>;
+};
 
 export type PostDate = {
   id: Ref<PostDate>;

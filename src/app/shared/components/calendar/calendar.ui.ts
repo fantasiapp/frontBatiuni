@@ -21,10 +21,7 @@ export type CalendarMode = 'range' | 'single';
     provide: NG_VALUE_ACCESSOR,
     multi: true,
     useExisting: CalendarUI
-  }],
-  host: {
-    class: 'flex center'
-  }
+  }]
 })
 export class CalendarUI extends UIDefaultAccessor<DayState[]> {
 
