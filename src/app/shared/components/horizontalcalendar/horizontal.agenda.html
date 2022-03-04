@@ -1,6 +1,6 @@
 <calendar (dayClick)="onDayClicked($event)" [value]="toCalendarDays(detailedDays)" [style.display]="hori ? 'block' : 'none'" disabled></calendar>
 
-<div class="horizantal-calendar" *ngIf='!hori'>
+<div class="horizontal-calendar" *ngIf='!hori'>
     <ul>
         <li *ngFor="let i of weekend">
             <div class="flex center-cross center-main" 
@@ -16,7 +16,7 @@
     </ul>
 </div>
 <div class="changevue center-text " *ngIf="hideForDesktop">
-<span (click)="changeVue()" >{{hori ? "Affichage horizontale" : "Affichage complète du mois"}}</span>
+<span (click)="changeVue()" >{{hori ? "Affichage horizontal" : "Affichage complet du mois"}}</span>
 </div>
 <div class="day-availibility space-children-margin">
     <div class="selected-day">{{spanShowToday}}</div>

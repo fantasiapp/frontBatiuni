@@ -10,9 +10,9 @@ export type MissionDetailedDay = {
 };
 
 @Component({
-    selector: 'horizantale-calendar',
-    templateUrl: './horizantal.agenda.html',
-    styleUrls: ['./horizantal.agenda.scss'],
+    selector: 'horizontal-calendar',
+    templateUrl: './horizontal.agenda.html',
+    styleUrls: ['./horizontal.agenda.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HorizantaleCalendar implements OnInit {
@@ -47,7 +47,8 @@ export class HorizantaleCalendar implements OnInit {
     hoursperday: any;
     greenCardFromTop: number = 0;
     greenCardHeight : number = 0;
-    bilan : string = '' 
+    bilan : string = ''
+    // detailedDays: MissionDetailedDay[] = [] 
 
     ngOnInit(): void {
         console.log(this.calendar);
@@ -60,10 +61,12 @@ export class HorizantaleCalendar implements OnInit {
         this.showAgenda(moment(now).format("YYYY-MM-DD"))
         this.showColors()
 
-        console.log(this.weekend);
+        console.log("weekend", this.weekend);
     }
 
     toCalendarDays(workDays: MissionDetailedDay[]): DayState[] {
+        console.log(workDays)
+        this.detailedDays = workDays
         return workDays.map(workDay => ({date: workDay.date, availability: 'selected'}));
     }
 
@@ -154,38 +157,7 @@ export class HorizantaleCalendar implements OnInit {
     }
 
     @Input()
-    detailedDays: MissionDetailedDay[] = [
-        {
-            date : "2022-03-01",
-            start : "8:30",
-            end : "16:00",
-            text : "Some text with the company name and adress"
-        },
-        {
-            date : "2022-03-02",
-            start : "8:00",
-            end : "14:00",
-            text : "Some text with the company name and adress"
-        },
-        {
-            date : "2022-03-03",
-            start : "8:30",
-            end : "19:00",
-            text : "Some text with the az name and adress"
-        },
-        {
-            date : "2022-03-04",
-            start : "8:30",
-            end : "11:00",
-            text : "Some text with the company name and adress"
-        },
-        {
-            date : "2022-03-05",
-            start : "8:30",
-            end : "11:00",
-            text : "Some text with the company name and adress"
-        },
-    ]
+    detailedDays: MissionDetailedDay[] = []
 
     calculator(workstart:string, workend:string) {
         let start = this.hoursTodecimal(workstart)
@@ -202,7 +174,6 @@ export class HorizantaleCalendar implements OnInit {
     }
 
     showAgenda(date:any) {
-        console.log(date);
         this.spanShowToday = moment(date,"YYYY-MM-DD").locale('fr').format("dddd D - MMMM - YYYY")
         let today = this.detailedDays.filter(item => item?.date == date)
         if(today.length)

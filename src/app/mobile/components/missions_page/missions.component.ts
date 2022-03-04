@@ -4,7 +4,7 @@ import { combineLatest, Observable } from "rxjs";
 import { map, takeUntil } from "rxjs/operators";
 import { Destroy$ } from "src/app/shared/common/classes";
 import { assignCopy } from "src/app/shared/common/functions";
-import { MissionDetailedDay } from "src/app/shared/components/horizantalecalendar/horizantale.component";
+import { MissionDetailedDay } from "src/app/shared/components/horizontalcalendar/horizontal.component";
 import { InfoService } from "src/app/shared/components/info/info.component";
 import { Mission, PostMenu, Profile } from "src/models/new/data.interfaces";
 import { DataQueries, QueryAll } from "src/models/new/data.state";
