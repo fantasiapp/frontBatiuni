@@ -42,7 +42,7 @@ export class HorizantaleCalendar implements OnInit {
     current: any;
     openModal: boolean = false;
     spanShowToday : any;
-    weekend: any;
+    selectedDay: any;
     hori: boolean = false;
     hoursperday: any;
     greenCardFromTop: number = 0;
@@ -51,34 +51,27 @@ export class HorizantaleCalendar implements OnInit {
     // detailedDays: MissionDetailedDay[] = [] 
 
     ngOnInit(): void {
-        console.log(this.calendar);
-
         let now = new Date(Date.now())
         this.getDaysFromDate(now.getMonth() + 1, now.getFullYear())
-        this.getWeek();
+        this.setSelectedDays();
         this.someFunction()
         this.spanShowToday = moment(now).locale('fr').format("dddd D - MMMM - YYYY")
         this.showAgenda(moment(now).format("YYYY-MM-DD"))
         this.showColors()
-
-        console.log("weekend", this.weekend);
     }
 
     toCalendarDays(workDays: MissionDetailedDay[]): DayState[] {
-        console.log(workDays)
         this.detailedDays = workDays
         return workDays.map(workDay => ({date: workDay.date, availability: 'selected'}));
     }
 
-    getWeek() {
+    setSelectedDays() {
         let currentDate = moment();
-
+        let daysInMonth = currentDate.daysInMonth()
         let weekStart = currentDate.clone().startOf('isoWeek');
-
         let days = [];
-        for (var i = 1; i <= 14; i++) {
+        for (var i = 1; i <= daysInMonth; i++) {
             if(i==1) {
-                console.log(weekStart)
                 days.push({
                     day : moment(weekStart).locale("fr").add(i, 'days').format("D,dddd,YYYY-MM-DD").split(','),
                     status : '',
@@ -93,7 +86,7 @@ export class HorizantaleCalendar implements OnInit {
                 })
             }
         }
-        this.weekend = days
+        this.selectedDay = days
     }
     
     getDaysFromDate(month: any, year: any) {
@@ -187,13 +180,13 @@ export class HorizantaleCalendar implements OnInit {
     }
     
     showgrey(selectedday:any) {
-        this.weekend.forEach((item:any) => item.selected=false)
+        this.selectedDay.forEach((item:any) => item.selected=false)
         selectedday.selected = true
-        return [...this.weekend, selectedday ]
+        return [...this.selectedDay, selectedday ]
     }
     
     showColors() {
-        this.weekend.forEach((item:any) => {
+        this.selectedDay.forEach((item:any) => {
             let compare = this.detailedDays;
             compare = compare.filter(element=>element.date == item.day[2])
             if(compare.length){

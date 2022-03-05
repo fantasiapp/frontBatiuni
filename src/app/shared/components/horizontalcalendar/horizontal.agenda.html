@@ -2,7 +2,7 @@
 
 <div class="horizontal-calendar" *ngIf='!hori'>
     <ul>
-        <li *ngFor="let i of weekend">
+        <li *ngFor="let i of selectedDay">
             <div class="flex center-cross center-main" 
             (click)="showAgenda(i.day[2])" 
             (click)="showgrey(i)"
