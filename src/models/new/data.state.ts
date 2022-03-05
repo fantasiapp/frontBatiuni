@@ -505,6 +505,18 @@ export class DataState {
       })
     )
   }
+
+  // @Action(ContractSignature)
+  // contractSignature(ctx: StateContext<DataModel>, contract: ContractSignature) {
+  //   //const mission = this.store.selectSnapshot(DataQueries.getById('Mission', contract.Mission));
+  //   //verify signature on missions
+
+  //   return this.http.get('data', contract).pipe(
+  //     tap((response: any) => {
+        
+  //     })
+  //   );
+  // }
 };
 
 //make a deep version of toJSON

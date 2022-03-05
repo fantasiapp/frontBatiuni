@@ -151,6 +151,9 @@ export interface Establishement {
 
 export type Mission = Post & {
   subContractor: Ref<Company>;
+  signedByCompany: boolean;
+  signedBySubContractor: boolean;
+  contract: Ref<File>;
 };
 
 export type PostDate = {

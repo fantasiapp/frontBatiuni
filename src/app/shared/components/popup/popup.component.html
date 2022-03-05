@@ -30,3 +30,8 @@
     <button class="button passive" (click)="output && output.next(false)">Annuler</button>
   </div>
 </ng-template>
+
+<ng-template #sign let-signature>
+  <ng-container *ngTemplateOutlet="file; context: signature.fileContext"></ng-container>
+  <button *ngIf="!signature.signedByProfile" class="button active" (click)="signContract()">Signer</button>
+</ng-template>

@@ -4,13 +4,11 @@ import { Store } from "@ngxs/store";
 import { Subject } from "rxjs";
 import { take, takeUntil } from "rxjs/operators";
 import { Dimension, DimensionMenu, UIOpenMenu } from "src/app/shared/common/classes";
-import { DataQueries } from "src/models/new/data.state";
-import { DownloadFile } from "src/models/new/user/user.actions";
-import { b64toBlob, getFileType } from "../../common/functions";
 import { TemplateContext } from "../../common/types";
 import { FileDownloader } from "../../services/file-downloader.service";
 import { BasicFile, FileUIOutput } from "../filesUI/files.ui";
-import { File } from "src/models/new/data.interfaces";
+import { File, Mission } from "src/models/new/data.interfaces";
+import { DataState } from "src/models/new/data.state";
 
 const TRANSITION_DURATION = 200;
 @Component({
@@ -32,6 +30,9 @@ export class UIPopup extends DimensionMenu {
 
   @ViewChild('delete', {read: TemplateRef, static: true})
   deletePost!: TemplateRef<any>;
+  
+  @ViewChild('sign', {read: TemplateRef, static: true})
+  sign!: TemplateRef<any>;
 
   @Input()
   content?: TemplateRef<any>;
@@ -101,13 +102,18 @@ export class UIPopup extends DimensionMenu {
     this.destroy$.complete();
   }
 
+  signContract() {
+    //signe le contrat ici
+    console.log('signing contract');
+  }
+
   openWindow(url: string) {
     window.open(url);
   }
 };
 
 export type PopupConfig<T = any> = {
-  name: 'file' | 'deletePost';
+  name: 'file' | 'deletePost' | 'sign';
   template: TemplateRef<any>;
   context: TemplateContext;
   output: Subject<T> | null;
@@ -130,7 +136,7 @@ export class PopupService {
   dimension$ = new Subject<Dimension>();
   defaultDimension: Dimension = {left: '20px', top: '30px', width: 'calc(100% - 40px)', height: 'calc(100% - 60px)'}
 
-  constructor(private downloader: FileDownloader) {
+  constructor(private store: Store, private downloader: FileDownloader) {
   }
 
   update(context: PopupConfig['context']) {
@@ -157,6 +163,23 @@ export class PopupService {
     this.popups$.next({name: 'deletePost', output: source});
     this.dimension$.next({width: '100%', height: '200px', top: 'calc(50% - 100px)', left: '0'})
     return new EventEmitter;
+  }
+
+  openSignContractDialog(mission: Mission) {
+    //envoyer la requete
+    const file = this.downloader.downloadFile(mission.contract || 1),
+      view = this.store.selectSnapshot(DataState.view);
+    
+    file.pipe(take(1)).subscribe(file => {
+      this.popups$.next({name: 'sign', context: {$implicit: {
+        fileContext: this.downloader.createFileContext(file),
+        signedByProfile: (mission.signedByCompany && view == 'PME') || (mission.signedBySubContractor && view == 'ST')
+      }}});
+
+      this.dimension$.next(this.defaultDimension);
+    });
+
+    return file;
   }
 
   hide() {

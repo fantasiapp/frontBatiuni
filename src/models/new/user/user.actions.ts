@@ -255,4 +255,11 @@ export class MarkViewed {
   action = 'isViewed';
 
   constructor(public Post: number) {}
-}
+};
+
+// export class ContractSignature {
+//   static readonly type = '[User] Contract Signature';
+//   action = 'downloadContract';
+
+//   constructor(public Mission: number) {}
+// };

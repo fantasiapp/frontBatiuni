@@ -49,14 +49,17 @@
         <file-svg *ngFor="let file of attachedFiles" [name]="file.name" [color]="getFileColor(file.name)" (click)="openFile(file)"></file-svg>
       </div>
     </section>
-  
-    <section *ngIf="showContact" class="dashed">
-      <h4>Contact</h4>
-      <ul class="list flex space-around">
-        <li><a [href]="'tel:+33' + profile.company.companyPhone"><img src="assets/missions/call.svg"/></a></li>
-        <li><a href="'sms:+33' + profile.company.companyPhone"><img src="assets/missions/envoyer-un-message.svg"/></a></li>
-        <li><a href=""><img src="assets/missions/envoyer-un-mail.svg"/></a></li>
-      </ul>
-    </section>
+
+    <ng-container *ngIf="showContact">
+      <hr class="dashed"/>
+      <section class="full-width">
+        <h4>Contact</h4>
+        <ul class="contact list flex space-around">
+          <li><a [href]="'tel:+33' + profile.company.companyPhone"><img src="assets/missions/call.svg"/></a></li>
+          <li><a [href]="'sms:+33' + profile.company.companyPhone"><img src="assets/missions/envoyer-un-message.svg"/></a></li>
+          <li><a [href]="'mailto:' + profile.company" disabled><img src="assets/missions/envoyer-un-mail.svg"/></a></li>
+        </ul>
+      </section>
+    </ng-container>
   </div>
 </ng-container>

@@ -31,7 +31,7 @@ export class FileDownloader {
         type,
         url,
         safeUrl: this.sanitizer.bypassSecurityTrustResourceUrl(url),
-        close() { this.url && URL.revokeObjectURL(this.url) }
+        close() { this.url && URL.revokeObjectURL(this.url); }
       }};
     
     return context;

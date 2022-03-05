@@ -1,11 +1,12 @@
 import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
 import { Select, Store } from "@ngxs/store";
 import { Observable } from "rxjs";
+import { PopupService } from "src/app/shared/components/popup/popup.component";
 import { Company, Mission, PostDetail, Profile, Supervision } from "src/models/new/data.interfaces";
 import { DataQueries } from "src/models/new/data.state";
 
 @Component({
-  selector: 'suivi-pme',
+  selector: 'suivi-chantier',
   templateUrl:"suivi-pme.page.html",
   styleUrls:['suivi-pme.page.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -45,7 +46,7 @@ export class SuiviPME {
     }
   }
 
-  constructor(private store: Store) {}
+  constructor(private store: Store, private popup: PopupService) {}
   
   swipemenu: boolean = false;
 
@@ -54,5 +55,9 @@ export class SuiviPME {
 
   validate(key: any) {
     console.log(key)
+  }
+
+  signContract() {
+    this.popup.openSignContractDialog(this.mission!);
   }
 }
