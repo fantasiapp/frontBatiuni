@@ -20,7 +20,7 @@ export class UITooltipComponent extends DimensionMenu {
   }
 
   @Input()
-  content?: ViewTemplate | ViewComponent | ViewMenu;
+  content?: Exclude<TooltipView, ContextUpdate>;
 
   @Input()
   fromService: boolean = false;
@@ -81,8 +81,8 @@ export class UITooltipComponent extends DimensionMenu {
     setTimeout(() => {
       if ( !this.keepAlive ) this.view?.clear();
       this.willClose = false;
-      this._open = false;
-      this.openChange.emit(this._open = false); //this saves cd.markForCheck() ??
+      this.openChange.emit(this._open = false);
+      if ( this.content?.close ) this.content.close();
       this.cd.markForCheck();
     }, TRANSITION_DURATION);
   }
@@ -106,14 +106,20 @@ export type TooltipDimension = {
   height?: string;
 };
 
+
+export type TooltipView = (ViewTemplate | ViewComponent | ViewMenu | ContextUpdate) & {
+  close?: Function;
+};
+
+
 @Injectable({
   providedIn: 'root'
 })
 export class UITooltipService {
   dimension$ = new Subject<TooltipDimension>();
-  views$ = new Subject<(ViewTemplate | ViewComponent | ViewMenu | ContextUpdate) | undefined>(); 
+  views$ = new Subject<TooltipView>(); 
 
-  show(view: ViewTemplate | ViewComponent | ViewMenu, dimension?: TooltipDimension) {
+  show(view: TooltipView, dimension?: TooltipDimension) {
     this.views$.next(view);
     if ( dimension )
       this.dimension$.next(dimension);

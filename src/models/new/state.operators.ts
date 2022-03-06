@@ -140,7 +140,6 @@ namespace mutable {
       targetObject = draft[target][id];
     
     let fieldIndex = fields[target].indexOf(getOriginalName(field as string));
-    
     if ( !targetObject ) return;
     targetObject[fieldIndex] = transform(targetObject[fieldIndex], targetObject, fields);
   }

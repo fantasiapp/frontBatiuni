@@ -58,6 +58,7 @@ import { UIAccordion } from "./components/accordion/accordion.ui";
 import { UIComment } from "./components/comment/comment.ui";
 import { FilterService } from "./services/filter.service";
 import { MissionFilterForm } from "./forms/missions.form";
+import { FileViewer } from "./components/file-viewer/file-viewer.component";
 
 @NgModule({
   declarations: [
@@ -117,7 +118,8 @@ import { MissionFilterForm } from "./forms/missions.form";
     //ScrollTemplate,
     UIAccordion,
     UIComment,
-    MissionFilterForm
+    MissionFilterForm,
+    FileViewer
   ],
   imports: [
     CommonModule,
@@ -184,7 +186,8 @@ import { MissionFilterForm } from "./forms/missions.form";
     //ScrollTemplate,
     UIAccordion,
     UIComment,
-    MissionFilterForm
+    MissionFilterForm,
+    FileViewer
   ],
   providers: [ImageGenerator, FileDownloader, FilterService]
 })

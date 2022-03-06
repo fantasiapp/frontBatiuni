@@ -7,21 +7,6 @@
   </ng-container>
 </div>
 
-<ng-template #file let-fileView>
-  <img class="embedded-image" *ngIf="fileView.type.startsWith('image'); else object" [src]="fileView.safeUrl"/>
-  <ng-template #object>
-    <object class="embedded-object cover-parent flex center" [type]="fileView.type" [attr.data]="fileView.safeUrl">
-      <embed>
-      <div>
-        Ne peut pas afficher le PDF dans l'application
-        <div class="external-links" (click)="openWindow(fileView.url)">
-          Ouvrir le PDF localement.
-        </div>
-      </div>
-    </object>
-  </ng-template>
-</ng-template>
-
 <ng-template #delete>
   Voudriez-vous supprimer l'annonce ?
   <hr class="dashed" style="margin-left: 0 !important"/>
@@ -32,6 +17,6 @@
 </ng-template>
 
 <ng-template #sign let-signature>
-  <ng-container *ngTemplateOutlet="file; context: signature.fileContext"></ng-container>
+  <file-viewer [fileContext]="signature.fileContext"></file-viewer>
   <button *ngIf="!signature.signedByProfile" class="button active" (click)="signContract()">Signer</button>
 </ng-template>

@@ -8,7 +8,7 @@ import { DataQueries } from "src/models/new/data.state";
 import { DownloadFile } from "src/models/new/user/user.actions";
 import { b64toBlob, getFileType } from "../common/functions";
 import { BasicFile } from "../components/filesUI/files.ui";
-import { FileViewConfig } from "../components/popup/popup.component";
+import { FileContext } from "../components/file-viewer/file-viewer.component";
 
 @Injectable()
 export class FileDownloader {
@@ -27,17 +27,16 @@ export class FileDownloader {
     const type = getFileType(file.ext),
       blob = b64toBlob(Array.isArray(file.content) ? file.content[0] : file.content, type),
       url = URL.createObjectURL(blob),
-      context: FileViewConfig = {$implicit: {
+      context: FileContext = {
         type,
         url,
-        safeUrl: this.sanitizer.bypassSecurityTrustResourceUrl(url),
-        close() { this.url && URL.revokeObjectURL(this.url); }
-      }};
+        safeUrl: this.sanitizer.bypassSecurityTrustResourceUrl(url)
+      };
     
     return context;
   }
 
-  downloadFile(file: File | number): Observable<File> {
+  downloadFile(file: File | number, notify: boolean = false): Observable<File> {
     let id: number;
     if ( typeof file == 'number' )
       id = file;
@@ -45,7 +44,7 @@ export class FileDownloader {
       if ( file.content ) return of(file);
       else id = file.id
     
-    return this.store.dispatch(new DownloadFile(id)).pipe(
+    return this.store.dispatch(new DownloadFile(id, notify)).pipe(
       take(1), //will unsubscribe
       map(_ => {
         return this.store.selectSnapshot(DataQueries.getById('File', id))!

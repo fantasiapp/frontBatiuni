@@ -1,16 +1,20 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Injectable, Input, Sanitizer, SimpleChange, SimpleChanges, TemplateRef, ViewChild, ViewContainerRef } from "@angular/core";
-import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, EventEmitter, HostListener, Injectable, Input, Sanitizer, SimpleChange, SimpleChanges, TemplateRef, ViewChild, ViewContainerRef } from "@angular/core";
+import { SafeResourceUrl } from "@angular/platform-browser";
 import { Store } from "@ngxs/store";
 import { Subject } from "rxjs";
-import { take, takeUntil } from "rxjs/operators";
-import { Dimension, DimensionMenu, UIOpenMenu } from "src/app/shared/common/classes";
-import { TemplateContext } from "../../common/types";
+import { takeUntil } from "rxjs/operators";
+import { Dimension, DimensionMenu } from "src/app/shared/common/classes";
+import { ContextUpdate, TemplateContext, ViewComponent, ViewTemplate } from "../../common/types";
 import { FileDownloader } from "../../services/file-downloader.service";
-import { BasicFile, FileUIOutput } from "../filesUI/files.ui";
+import { BasicFile } from "../filesUI/files.ui";
 import { File, Mission } from "src/models/new/data.interfaces";
 import { DataState } from "src/models/new/data.state";
+import { FileViewer } from "../file-viewer/file-viewer.component";
 
 const TRANSITION_DURATION = 200;
+
+//extend to support components
+
 @Component({
   selector: 'popup',
   templateUrl: './popup.component.html',
@@ -18,15 +22,13 @@ const TRANSITION_DURATION = 200;
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UIPopup extends DimensionMenu {
-  constructor(private cd: ChangeDetectorRef, private popupService: PopupService) {
+  constructor(private cd: ChangeDetectorRef, private componentFactoryResolver: ComponentFactoryResolver,
+    private popupService: PopupService) {
     super();
   }
 
   @ViewChild('view', {read: ViewContainerRef, static: true})
   view!: ViewContainerRef;
-
-  @ViewChild('file', {read: TemplateRef, static: true})
-  file!: TemplateRef<any>;
 
   @ViewChild('delete', {read: TemplateRef, static: true})
   deletePost!: TemplateRef<any>;
@@ -35,44 +37,47 @@ export class UIPopup extends DimensionMenu {
   sign!: TemplateRef<any>;
 
   @Input()
-  content?: TemplateRef<any>;
+  content?: Exclude<PopupView, ContextUpdate>;
   
-  @Input()
-  params?: any;
-
   @Input()
   fromService: boolean = false;
 
   @Input()
   keepAlive: boolean = true;
 
-  ngOnChanges(changes: SimpleChanges) {
-    if ( changes['content'] || changes['params'] )
-      this.show();
-  }
-
-  private show() {
-    this.view.clear();
-    if ( this.content ) {
-      this.view.createEmbeddedView(this.content, this.params);
-      this.open = true;
-    } else
-      this.open = false;
-  }
-
   output: Subject<any> | null = null;
 
   ngOnInit() {
     if ( !this.fromService ) return;
   
-    this.popupService.popups$.pipe(takeUntil(this.destroy$)).subscribe((params: Partial<PopupConfig>) => {
-      this.params = params.context;
-      this.content = params.template;
-      if ( params.name && !this.content) {
-        this.content = this[params.name];
-        if ( params.output ) this.output = params.output;
+    this.popupService.popups$.pipe(takeUntil(this.destroy$)).subscribe(view => {
+      if ( !view )
+        return this.close();
+      
+      if ( !this.view ) return; //ignore
+      this.view.clear();
+
+      if ( view.type == 'predefined' || view.type == 'template' ) {
+        this.content = view;
+        const template = view.type == 'predefined' ? this[view.name] : view.template,
+          context = view.context;
+
+        this.view.createEmbeddedView(template, context);
+      } else if ( view.type == 'component' ) {
+        this.content = view;
+        const factory = this.componentFactoryResolver.resolveComponentFactory(this.content.component),
+          componentRef = this.view.createComponent(factory);
+        
+        if ( this.content.init )
+          this.content.init(componentRef.instance);
+      } else if ( view.type == 'context' ) {
+        if ( this.content?.type == 'template' || this.content?.type == 'predefined' ) {
+          const template = this.content.type == 'predefined' ? this[this.content.name] : this.content.template;
+          this.content.context = view.context;
+          this.view.createEmbeddedView(template, this.content.context);
+        }
       }
-      this.show();
+      this.open = true;
       this.cd.markForCheck();
     });
 
@@ -90,7 +95,9 @@ export class UIPopup extends DimensionMenu {
       this.willClose = false;
       this.openChange.emit(this._open = false);
       this.output = null;
-      if ( this.params?.close ) this.params.close();
+      if ( this.content?.close ){
+        this.content.close();
+      }
       this.cd.markForCheck();
     }, TRANSITION_DURATION);
   }
@@ -112,55 +119,61 @@ export class UIPopup extends DimensionMenu {
   }
 };
 
-export type PopupConfig<T = any> = {
-  name: 'file' | 'deletePost' | 'sign';
-  template: TemplateRef<any>;
-  context: TemplateContext;
-  output: Subject<T> | null;
+export type PredefinedPopups<T = any> = {
+  readonly type: 'predefined';
+  name: 'deletePost' | 'sign';
+  context?: TemplateContext;
+  output?: Subject<T> | null;
 };
 
-export type FileViewConfig = {
-  $implicit: {
-    close: Function;
-    url: string | null;
-    safeUrl: SafeResourceUrl | null,
-    type: string,
-  }
+export type PopupView = (ViewTemplate | ViewComponent | ContextUpdate | PredefinedPopups) & {
+  close?: Function;
 };
 
 @Injectable({
   providedIn: 'root'
 })
 export class PopupService {
-  popups$ = new Subject<Partial<PopupConfig>>();
+  popups$ = new Subject<PopupView>();
   dimension$ = new Subject<Dimension>();
   defaultDimension: Dimension = {left: '20px', top: '30px', width: 'calc(100% - 40px)', height: 'calc(100% - 60px)'}
 
   constructor(private store: Store, private downloader: FileDownloader) {
   }
 
-  update(context: PopupConfig['context']) {
-    this.popups$.next({context});
-  }
-
-  show(template: TemplateRef<any>, context?: TemplateContext, dimension?: Dimension) {
-    this.popups$.next({template, context});
+  show(view: PopupView, dimension?: Dimension) {
+    this.popups$.next(view);
     this.dimension$.next({...this.defaultDimension, ...(dimension || {})});
   }
 
   openFile(file: BasicFile | File) {
     if ( !file.content ) {
-      this.downloader.downloadFile((file as File).id!).subscribe(file => this.openFile(file));
+      this.downloader.downloadFile((file as File).id!, true).subscribe(file => this.openFile(file));
       return;
     }
     
-    this.popups$.next({name: 'file', context: this.downloader.createFileContext(file)});
+    let context = this.downloader.createFileContext(file);
+    this.popups$.next({
+      type: 'component',
+      component: FileViewer,
+      init: (viewer: FileViewer) => {
+        viewer.fileContext = context;
+      },
+      close: () => {
+        context.url && URL.revokeObjectURL(context.url);
+      }
+    });
+
     this.dimension$.next(this.defaultDimension);
     return true;
   }
 
   openDeletePostDialog(source?: Subject<boolean>) {
-    this.popups$.next({name: 'deletePost', output: source});
+    this.popups$.next({
+      type: 'predefined',
+      name: 'deletePost',
+      output: source
+    });
     this.dimension$.next({width: '100%', height: '200px', top: 'calc(50% - 100px)', left: '0'})
     return new EventEmitter;
   }
@@ -170,8 +183,11 @@ export class PopupService {
     const file = this.downloader.downloadFile(mission.contract || 1),
       view = this.store.selectSnapshot(DataState.view);
     
-    file.pipe(take(1)).subscribe(file => {
-      this.popups$.next({name: 'sign', context: {$implicit: {
+    file.subscribe(file => {
+      this.popups$.next({
+        type: 'predefined',
+        name: 'sign',
+        context: {$implicit: {
         fileContext: this.downloader.createFileContext(file),
         signedByProfile: (mission.signedByCompany && view == 'PME') || (mission.signedBySubContractor && view == 'ST')
       }}});
@@ -183,6 +199,10 @@ export class PopupService {
   }
 
   hide() {
-    this.popups$.next({template: undefined});
+    this.popups$.next(undefined);
+  }
+
+  updateTemplate(context: ViewTemplate['context']) {
+    this.popups$.next({type: 'context', context})
   }
 };

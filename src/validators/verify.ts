@@ -19,7 +19,6 @@ export const Required = (fieldname: string = '') => {
       errors: ValidationErrors = {};
                 
     if ( !content ) errors['REQUIRED_FIELD'] = fieldname ? [fieldname] : [];
-    console.log('errors:', errors);
     return Object.keys(errors).length ? errors : null;
   }
 }

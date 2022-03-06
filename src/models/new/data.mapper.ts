@@ -24,9 +24,7 @@ export const NameMapping: {[key in TranslatedName]?: string} = {
   'Supervision': 'supervisions',
   'Disponibility': 'availabilities',
   'Mission': 'missions',
-  'DatePost': 'dates',
-  'FavoritePost': 'favoritePosts',
-  'ViewPost': 'viewedPosts'
+  'DatePost': 'dates'
 } as const;
 
 const ReverseMapping = {
@@ -46,9 +44,7 @@ const ReverseMapping = {
   'supervisions': 'Supervision',
   'availabilities': 'Disponibility',
   'missions': 'Mission',
-  'dates': 'DatePost',
-  'favoritePosts': 'FavoritePost',
-  'viewedPosts': 'ViewPost'
+  'dates': 'DatePost'
 } as const;
 
 //build type system for the field array

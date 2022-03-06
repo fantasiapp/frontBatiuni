@@ -52,9 +52,7 @@ export class UISuggestionBox {
   @QueryAll('Establishments')
   suggestions$!: Observable<Establishement[]>;
 
-  constructor(private store: Store, private cd: ChangeDetectorRef) {
-    this.suggestions$.subscribe(console.log);
-  }
+  constructor(private store: Store, private cd: ChangeDetectorRef) {}
 
   @Input('query')
   set setQuery(query: string | null) {

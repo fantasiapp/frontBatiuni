@@ -18,7 +18,7 @@ export class UISlideMenuComponent extends UIOpenMenu {
   contentRef!: ElementRef;
 
   @Input()
-  content?: ViewTemplate | ViewComponent;
+  content?: Exclude<SlidemenuView, ContextUpdate>;
 
   @ViewChild('view', {read: ViewContainerRef, static: false})
   view!: ViewContainerRef;
@@ -107,6 +107,7 @@ export class UISlideMenuComponent extends UIOpenMenu {
     this.openChange.emit(this._open = false);
     setTimeout(() => {
       if ( !this.keepAlive ) this.view?.clear();
+      if( this.content?.close ) this.content.close();
     }, TRANSITION_DURATION);
   }
 
@@ -117,14 +118,18 @@ export class UISlideMenuComponent extends UIOpenMenu {
   }
 };
 
+export type SlidemenuView = (ViewTemplate | ViewComponent | ContextUpdate) & {
+  close?: Function;
+}; 
+
 @Injectable({
   providedIn: 'root'
 })
 export class SlidemenuService {
-  views$ = new Subject<(ViewTemplate | ViewComponent | ContextUpdate) | undefined>(); 
+  views$ = new Subject<SlidemenuView>(); 
   title$ = new Subject<string>();
   
-  show(title: string, view: (ViewTemplate | ViewComponent)) {
+  show(title: string, view: SlidemenuView) {
     this.title$.next(title);
     this.views$.next(view);
   }

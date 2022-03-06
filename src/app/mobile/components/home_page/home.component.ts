@@ -133,7 +133,10 @@ export class HomeComponent extends Destroy$ {
   pausePost(id: number) {
     this.store.dispatch(new SwitchPostType(id)).pipe(take(1)).subscribe(() => {
       this.openPost(null);
-      this.popup.show(this.pausePostTemplate);
+      this.popup.show({
+        type: 'template',
+        template: this.pausePostTemplate
+      });
       this.cd.markForCheck();
     }, () => {
       this.info.show("error", "Echec");
@@ -151,8 +154,10 @@ export class HomeComponent extends Destroy$ {
 
   showUserOffer() {
     this.profile$.pipe(take(1)).subscribe(profile => {
-      this.popup.show(this.acceptOfferTemplate, {
-        $implicit: profile
+      this.popup.show({
+        type: 'template',
+        template: this.acceptOfferTemplate,
+        context: {$implicit: profile}
       })
     });
   }

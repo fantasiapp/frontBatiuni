@@ -1,0 +1,24 @@
+<p *ngIf="!fileContext; else imageOrObject"> Aucun fichier à afficher. </p>
+
+<ng-template #imageOrObject>
+  <ng-container *ngIf="fileContext.type.startsWith('image'); then image; else object"></ng-container>
+</ng-template>
+
+<ng-template #image>
+  <img class="embedded-image" [src]="fileContext!.safeUrl"/>
+</ng-template>
+
+<ng-template #object>
+  <object class="embedded-object cover-parent flex center" [type]="fileContext.type" [attr.data]="fileContext.safeUrl">
+    <ng-container [ngTemplateOutlet]="fallback"></ng-container>
+  </object>
+</ng-template>
+
+<ng-template #fallback>
+  <div>
+    Ne peut pas afficher le PDF dans l'application
+    <div class="external-links" (click)="openWindow(fileContext.url)">
+      Ouvrir le PDF localement.
+    </div>
+  </div>
+</ng-template>

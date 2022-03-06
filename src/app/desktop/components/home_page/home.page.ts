@@ -172,8 +172,10 @@ export class HomePageComponent extends Destroy$ {
   });
 
   testPopup() {
-    this.popup.show(this.testTemplate);
-    console.log(this.testTemplate)
+    this.popup.show({
+      type: 'template',
+      template: this.testTemplate,
+    });
     this.cd.markForCheck();
   }
   showFilters: boolean = false;

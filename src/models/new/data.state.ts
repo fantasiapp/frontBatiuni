@@ -499,9 +499,9 @@ export class DataState {
 
     return this.http.get('data', view).pipe(
       tap((response: any) => {
-        ctx.setState(transformField('UserProfile', user.id, 'viewedPosts', (viewed) =>
-          [...viewed, view.Post]
-        ))
+        ctx.setState(transformField('UserProfile', user.id, 'viewedPosts', (viewed: any) => {
+          return [...viewed, view.Post]
+        }))
       })
     )
   }

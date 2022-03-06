@@ -16,7 +16,7 @@ export type Slice<T, Key = any, Value = Key extends keyof T ? T[Key] : any> = (i
 
 export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 
-export type TemplateContext<T = any> = { $implicit: any} & {[key: string]: any};
+export type TemplateContext<T = any> = { $implicit: any } & {[key: string]: any};
 
 export type ViewMenuItem = {
   name: string;
@@ -34,7 +34,7 @@ export type ViewMenu = {
 export type ViewTemplate = {
   readonly type: 'template';
   template: TemplateRef<any>;
-  context: TemplateContext;
+  context?: TemplateContext;
 };
 
 export type ViewComponent = {
@@ -45,5 +45,5 @@ export type ViewComponent = {
 
 export type ContextUpdate = {
   readonly type: 'context';
-  context: TemplateContext;
+  context?: TemplateContext;
 };

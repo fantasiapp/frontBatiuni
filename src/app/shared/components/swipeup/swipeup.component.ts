@@ -18,7 +18,7 @@ export class UISwipeupComponent extends UIOpenMenu {
   }
 
   @Input()
-  content?: ViewMenu | ViewTemplate | ViewComponent;
+  content?: Exclude<SwipeupView, ContextUpdate>;
 
   @ViewChild('view', {read: ViewContainerRef, static: false})
   view?: ViewContainerRef;
@@ -97,17 +97,19 @@ export class UISwipeupComponent extends UIOpenMenu {
   }
 };
 
-
+export type SwipeupView = ViewMenu | ViewTemplate | ViewComponent | ContextUpdate & {
+  close?: Function;
+};
 
 @Injectable({
   providedIn: 'root'
 })
 export class SwipeupService {
-  views$ = new Subject<ViewMenu | ViewTemplate | ViewComponent | ContextUpdate | undefined>();
+  views$ = new Subject<SwipeupView>();
 
   constructor() {}
 
-  show(view: ViewMenu | ViewTemplate | ViewComponent) {
+  show(view: SwipeupView) {
     this.views$.next(view);
   }
 
