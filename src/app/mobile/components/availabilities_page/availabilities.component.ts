@@ -80,8 +80,13 @@ export class AvailabilitiesComponent extends Destroy$ {
     });
   }
   
+  //all changes are sent to the server only after the component is destroyed
   private setCalendarDayState(state: Availability) {
     this.calendar.setCurrentDayState(state);
+    const now = (new Date).toISOString().slice(0, 10),
+      updatedDate = this.calendar.selection[0];
+    if ( now == updatedDate )
+      this.currentAvailability = state;
   }
 
   ngOnDestroy() {
