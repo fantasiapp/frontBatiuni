@@ -45,8 +45,6 @@ export class UIPopup extends DimensionMenu {
   @Input()
   keepAlive: boolean = true;
 
-  output: Subject<any> | null = null;
-
   ngOnInit() {
     if ( !this.fromService ) return;
   
@@ -94,7 +92,6 @@ export class UIPopup extends DimensionMenu {
       if ( !this.keepAlive ) this.view.clear();
       this.willClose = false;
       this.openChange.emit(this._open = false);
-      this.output = null;
       if ( this.content?.close ){
         this.content.close();
       }
@@ -123,7 +120,6 @@ export type PredefinedPopups<T = any> = {
   readonly type: 'predefined';
   name: 'deletePost' | 'sign';
   context?: TemplateContext;
-  output?: Subject<T> | null;
 };
 
 export type PopupView = (ViewTemplate | ViewComponent | ContextUpdate | PredefinedPopups) & {
@@ -172,8 +168,9 @@ export class PopupService {
     this.popups$.next({
       type: 'predefined',
       name: 'deletePost',
-      output: source
+      context: { $implicit: source }
     });
+    source?.subscribe(console.log);
     this.dimension$.next({width: '100%', height: '200px', top: 'calc(50% - 100px)', left: '0'})
     return new EventEmitter;
   }
