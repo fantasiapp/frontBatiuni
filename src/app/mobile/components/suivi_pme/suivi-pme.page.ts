@@ -21,6 +21,7 @@ export class SuiviPME {
 
   _mission: Mission | null = null;
   get mission() { return this._mission; }
+  
   @Input()
   set mission(mission: Mission | null) {
     this._mission = mission;
