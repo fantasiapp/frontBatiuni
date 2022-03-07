@@ -18,5 +18,5 @@
 
 <ng-template #sign let-signature>
   <file-viewer [fileContext]="signature.fileContext"></file-viewer>
-  <button *ngIf="!signature.signedByProfile" class="button active" (click)="signContract()">Signer</button>
+  <button *ngIf="!signature.signedByProfile" class="button active" (click)="actionSign(signature.missionId, signature.view)">Signer</button>
 </ng-template>

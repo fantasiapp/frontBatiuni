@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ComponentFactory
 import { SafeResourceUrl } from "@angular/platform-browser";
 import { Store } from "@ngxs/store";
 import { Subject } from "rxjs";
-import { takeUntil } from "rxjs/operators";
+import { take, takeUntil } from "rxjs/operators";
 import { Dimension, DimensionMenu } from "src/app/shared/common/classes";
 import { ContextUpdate, TemplateContext, ViewComponent, ViewTemplate } from "../../common/types";
 import { FileDownloader } from "../../services/file-downloader.service";
@@ -10,6 +10,7 @@ import { BasicFile } from "../filesUI/files.ui";
 import { File, Mission } from "src/models/new/data.interfaces";
 import { DataState } from "src/models/new/data.state";
 import { FileViewer } from "../file-viewer/file-viewer.component";
+import { SignContract } from "src/models/new/user/user.actions";
 
 const TRANSITION_DURATION = 200;
 
@@ -23,7 +24,7 @@ const TRANSITION_DURATION = 200;
 })
 export class UIPopup extends DimensionMenu {
   constructor(private cd: ChangeDetectorRef, private componentFactoryResolver: ComponentFactoryResolver,
-    private popupService: PopupService) {
+    private popupService: PopupService, private store: Store, ) {
     super();
   }
 
@@ -106,9 +107,12 @@ export class UIPopup extends DimensionMenu {
     this.destroy$.complete();
   }
 
-  signContract() {
+  actionSign(missionId:number, view:string) {
     //signe le contrat ici
-    console.log('signing contract');
+    console.log('signing contract', missionId, view);
+    this.store.dispatch(new SignContract(missionId, view)).pipe(take(1)).subscribe(() => {
+    });
+    this.close()
   }
 
   openWindow(url: string) {
@@ -176,7 +180,6 @@ export class PopupService {
   }
 
   openSignContractDialog(mission: Mission) {
-    //envoyer la requete
     const file = this.downloader.downloadFile(mission.contract || 1),
       view = this.store.selectSnapshot(DataState.view);
     
@@ -186,7 +189,9 @@ export class PopupService {
         name: 'sign',
         context: {$implicit: {
         fileContext: this.downloader.createFileContext(file),
-        signedByProfile: (mission.signedByCompany && view == 'PME') || (mission.signedBySubContractor && view == 'ST')
+        signedByProfile: (mission.signedByCompany && view == 'PME') || (mission.signedBySubContractor && view == 'ST'),
+        missionId: mission.id,
+        view: view
       }}});
 
       this.dimension$.next(this.defaultDimension);

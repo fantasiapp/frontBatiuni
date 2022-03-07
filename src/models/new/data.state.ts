@@ -3,7 +3,7 @@ import { Action, createSelector, Selector, State, StateContext, Store } from "@n
 import { Observable, of, Subject } from "rxjs";
 import { concatMap, map, tap } from "rxjs/operators";
 import { HttpService } from "src/app/services/http.service";
-import { GetGeneralData, HandleApplication, MarkViewed, ModifyAvailability, SetFavorite } from "./user/user.actions";
+import { GetGeneralData, HandleApplication, SignContract, MarkViewed, ModifyAvailability, SetFavorite } from "./user/user.actions";
 import { ApplyPost, ChangePassword, ChangeProfilePicture, ChangeProfileType, DeleteFile, DeletePost, DownloadFile, DuplicatePost, GetUserData, ModifyUserProfile, SwitchPostType, UploadFile, UploadPost } from "./user/user.actions";
 import { Company, Interface, User } from "./data.interfaces";
 import { DataReader, NameMapping, TranslatedName } from "./data.mapper";
@@ -244,6 +244,7 @@ export class DataState {
 
   @Action(UploadFile)
   uploadFile(ctx: StateContext<DataModel>, upload: UploadFile) {
+    console.log("uploadFile", upload)
     const req = this.http.post('data', upload);
     return req.pipe(
       tap((response: any) => {
@@ -448,6 +449,18 @@ export class DataState {
           deleteIds('Post', [handle.post.id]),
           addComplexChildren('Company', company.id, 'Mission', response)
         ))
+      })
+    )
+  }
+
+  @Action(SignContract)
+  signContract(ctx:StateContext<DataModel>, application:SignContract) {
+    console.log("Sign Contract data.state", application, application.missionId)
+    return this.http.get('data', application).pipe(
+      tap((response:any) => {
+        delete response[application.action];
+        console.log("action SignContract", response)
+
       })
     )
   }

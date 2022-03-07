@@ -243,6 +243,15 @@ export class HandleApplication {
   constructor(public Candidate: number, public post: Post, public response: boolean) {}
 };
 
+export class SignContract {
+  static readonly type = '[Data] Sign Contract';
+  action = 'signContract';
+  constructor(public missionId: number, public view: String) {
+    this.missionId = missionId
+    this.view = view
+  }
+};
+
 export class SetFavorite {
   static readonly type = '[User.ST] Set Favorite';
   action = 'setFavorite';
