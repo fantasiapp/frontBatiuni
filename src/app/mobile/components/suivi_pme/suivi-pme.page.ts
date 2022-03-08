@@ -18,10 +18,10 @@ export class SuiviPME {
 
   //track[data][detail]
 
-
   _mission: Mission | null = null;
   get mission() { return this._mission; }
   
+  //fais ça aujourdhui
   @Input()
   set mission(mission: Mission | null) {
     this._mission = mission;

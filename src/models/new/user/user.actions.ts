@@ -246,10 +246,7 @@ export class HandleApplication {
 export class SignContract {
   static readonly type = '[Data] Sign Contract';
   action = 'signContract';
-  constructor(public missionId: number, public view: String) {
-    this.missionId = missionId
-    this.view = view
-  }
+  constructor(public missionId: number, public view: 'ST' | 'PME') {}
 };
 
 export class SetFavorite {

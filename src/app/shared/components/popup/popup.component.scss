@@ -38,6 +38,7 @@
   opacity: 0;
   transition: opacity 200ms ease-out 0s;
   border-radius: 5px;
+  height: 100%;
 
   &.open {
     opacity: 1;

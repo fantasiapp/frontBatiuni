@@ -18,12 +18,13 @@ export class FileDownloader {
 
   toSecureBase64(file: BasicFile) {
     //assume downloaded
+    console.log('to secure 64', file);
     if ( !file.content )
       throw `Download file before using base64`;
     return this.sanitizer.bypassSecurityTrustResourceUrl(`data:${getFileType(file.ext)};base64,${file.content}`)
   }
 
-  createFileContext(file: BasicFile) {
+  createFileContext(file: BasicFile): FileContext {
     const type = getFileType(file.ext),
       blob = b64toBlob(Array.isArray(file.content) ? file.content[0] : file.content, type),
       url = URL.createObjectURL(blob),
@@ -34,6 +35,10 @@ export class FileDownloader {
       };
     
     return context;
+  }
+
+  clearContext(fileContext: FileContext) {
+    fileContext.url && URL.revokeObjectURL(fileContext.url);
   }
 
   downloadFile(file: File | number, notify: boolean = false): Observable<File> {

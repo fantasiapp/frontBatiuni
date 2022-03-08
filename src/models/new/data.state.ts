@@ -454,13 +454,21 @@ export class DataState {
   }
 
   @Action(SignContract)
-  signContract(ctx:StateContext<DataModel>, application:SignContract) {
-    console.log("Sign Contract data.state", application, application.missionId)
+  signContract(ctx:StateContext<DataModel>, application: SignContract) {
+    console.log("Sign Contract data.state", application, application.missionId);
+    const profile = this.store.selectSnapshot(DataQueries.currentProfile)!;
+
     return this.http.get('data', application).pipe(
       tap((response:any) => {
+        if ( response[application.action] !== 'OK' ) {
+          this.inZone(() => this.info.show("error", response.messages, 3000));
+          throw response.messages;
+        }
         delete response[application.action];
-        console.log("action SignContract", response)
-
+        console.log('add company');
+        ctx.setState(
+          addComplexChildren('Company', profile.company.id, 'Mission', response)
+        );
       })
     )
   }
@@ -518,18 +526,6 @@ export class DataState {
       })
     )
   }
-
-  // @Action(ContractSignature)
-  // contractSignature(ctx: StateContext<DataModel>, contract: ContractSignature) {
-  //   //const mission = this.store.selectSnapshot(DataQueries.getById('Mission', contract.Mission));
-  //   //verify signature on missions
-
-  //   return this.http.get('data', contract).pipe(
-  //     tap((response: any) => {
-        
-  //     })
-  //   );
-  // }
 };
 
 //make a deep version of toJSON
@@ -581,6 +577,7 @@ export class DataQueries {
 
   private static getDataById<K extends DataTypes>(type: K, id: number) {
     return createSelector([DataState.getType(type)], (record: Record<any[]>) => {
+      console.log('getDataById', type, 'selector');
       return record[id];
     });
   }
@@ -617,6 +614,7 @@ export class DataQueries {
   static getById<K extends DataTypes>(type: K, id: number) {
     //no id => get All
     return createSelector([DataState.fields, DataQueries.getDataById(type, id)], (fields: Record<string[]>, values: any[]) => {
+      console.log('getById', type, 'selector');
       return values ? DataQueries.toJson(fields, type, id, values) : null
     });
   }

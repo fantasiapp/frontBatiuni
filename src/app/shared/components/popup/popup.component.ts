@@ -1,15 +1,15 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, EventEmitter, HostListener, Injectable, Input, Sanitizer, SimpleChange, SimpleChanges, TemplateRef, ViewChild, ViewContainerRef } from "@angular/core";
 import { SafeResourceUrl } from "@angular/platform-browser";
 import { Store } from "@ngxs/store";
-import { Subject } from "rxjs";
-import { take, takeUntil } from "rxjs/operators";
+import { combineLatest, Subject } from "rxjs";
+import { distinct, map, switchMap, take, takeUntil } from "rxjs/operators";
 import { Dimension, DimensionMenu } from "src/app/shared/common/classes";
 import { ContextUpdate, TemplateContext, ViewComponent, ViewTemplate } from "../../common/types";
 import { FileDownloader } from "../../services/file-downloader.service";
 import { BasicFile } from "../filesUI/files.ui";
 import { File, Mission } from "src/models/new/data.interfaces";
-import { DataState } from "src/models/new/data.state";
-import { FileViewer } from "../file-viewer/file-viewer.component";
+import { DataQueries, DataState } from "src/models/new/data.state";
+import { FileContext, FileViewer } from "../file-viewer/file-viewer.component";
 import { SignContract } from "src/models/new/user/user.actions";
 
 const TRANSITION_DURATION = 200;
@@ -107,12 +107,12 @@ export class UIPopup extends DimensionMenu {
     this.destroy$.complete();
   }
 
-  actionSign(missionId:number, view:string) {
+  actionSign(missionId:number, view: 'ST' | 'PME') {
     //signe le contrat ici
     console.log('signing contract', missionId, view);
     this.store.dispatch(new SignContract(missionId, view)).pipe(take(1)).subscribe(() => {
+      // this.close();
     });
-    this.close()
   }
 
   openWindow(url: string) {
@@ -160,7 +160,7 @@ export class PopupService {
         viewer.fileContext = context;
       },
       close: () => {
-        context.url && URL.revokeObjectURL(context.url);
+        this.downloader.clearContext(context);
       }
     });
 
@@ -180,24 +180,50 @@ export class PopupService {
   }
 
   openSignContractDialog(mission: Mission) {
-    const file = this.downloader.downloadFile(mission.contract || 1),
-      view = this.store.selectSnapshot(DataState.view);
+    const view = this.store.selectSnapshot(DataState.view),
+      closed$ = new Subject<void>();
     
-    file.subscribe(file => {
-      this.popups$.next({
-        type: 'predefined',
-        name: 'sign',
-        context: {$implicit: {
-        fileContext: this.downloader.createFileContext(file),
-        signedByProfile: (mission.signedByCompany && view == 'PME') || (mission.signedBySubContractor && view == 'ST'),
-        missionId: mission.id,
-        view: view
-      }}});
+    let fileContext: FileContext, previousFileContext: FileContext;
+    let first: boolean = true;
 
-      this.dimension$.next(this.defaultDimension);
+    this.store.select(DataQueries.getById('Mission', mission.id)).pipe(
+      switchMap(mission => {
+        return this.downloader.downloadFile(mission!.contract).pipe(map((file) => ({
+          mission, file
+        })))
+      }),
+      takeUntil(closed$),
+    ).subscribe(({mission, file}) => {
+      fileContext = this.downloader.createFileContext(file);
+      const context = {
+        $implicit: {
+          fileContext: fileContext,
+          signedByProfile: (mission!.signedByCompany && view == 'PME') || (mission!.signedBySubContractor && view == 'ST'),
+          missionId: mission!.id,
+          view: view
+        }
+      };
+
+      if ( first ) {
+        this.dimension$.next(this.defaultDimension);  
+        this.popups$.next({
+          type:  'predefined',
+          name: 'sign',
+          context,
+          close: () => {
+            this.downloader.clearContext(fileContext);
+            closed$.next();
+          }
+        });
+        first = false;
+      } else {
+        if ( previousFileContext )
+          this.downloader.clearContext(previousFileContext);
+        this.updateTemplate(context);
+      }
+      
+      previousFileContext = fileContext;
     });
-
-    return file;
   }
 
   hide() {
