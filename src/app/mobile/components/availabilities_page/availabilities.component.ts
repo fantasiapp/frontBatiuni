@@ -29,12 +29,14 @@ export class AvailabilitiesComponent extends Destroy$ {
     name: 'Disponible',
     class: 'disponible',
     click: () => {
+      console.log("available")
       this.setCalendarDayState('available');
     }
   }, {
     name: 'Disponible sous-conditions',
     class: 'sous-conditions',
     click: () => {
+      console.log("availablelimits")
       this.setCalendarDayState('availablelimits');
     }
   }, {
