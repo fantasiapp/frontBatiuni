@@ -88,6 +88,7 @@ export class UIPopup extends DimensionMenu {
 
   willClose = false;
   close() {
+    console.log("willClose")
     this.willClose = true;
     setTimeout(() => {
       if ( !this.keepAlive ) this.view.clear();
@@ -109,9 +110,7 @@ export class UIPopup extends DimensionMenu {
 
   actionSign(missionId:number, view: 'ST' | 'PME') {
     //signe le contrat ici
-    console.log('signing contract', missionId, view);
     this.store.dispatch(new SignContract(missionId, view)).pipe(take(1)).subscribe(() => {
-      // this.close();
     });
   }
 
@@ -174,7 +173,6 @@ export class PopupService {
       name: 'deletePost',
       context: { $implicit: source }
     });
-    source?.subscribe(console.log);
     this.dimension$.next({width: '100%', height: '200px', top: 'calc(50% - 100px)', left: '0'})
     return new EventEmitter;
   }

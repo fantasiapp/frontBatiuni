@@ -2,7 +2,7 @@ import { FormGroup } from "@angular/forms";
 import { FileUIOutput } from "src/app/shared/components/filesUI/files.ui";
 import { PropertyTrap } from "src/app/shared/common/classes";
 import { getDirtyValues } from "src/app/shared/common/functions";
-import { DataTypes, Post, Profile } from "../data.interfaces";
+import { DataTypes, Post, PostDetail, Profile } from "../data.interfaces";
 import { CalendarUI, DayState } from "src/app/shared/components/calendar/calendar.ui";
 import { availabilityToName } from "../data.mapper";
 import { ApplyForm } from "src/app/mobile/ui/annonce-resume/annonce-resume.ui";
@@ -248,6 +248,13 @@ export class SignContract {
   action = 'signContract';
   constructor(public missionId: number, public view: 'ST' | 'PME') {}
 };
+
+export class ModifyDetailedPost {
+  static readonly type = '[Data] Modify DetailedPost';
+  action = 'modifyDetailedPost';
+  constructor(public detailedPost: PostDetail | null) {
+  }
+}
 
 export class SetFavorite {
   static readonly type = '[User.ST] Set Favorite';

@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, ElementRef, EventEmitter, HostBindi
 import { FormArray, FormControl, FormGroup, Validators } from "@angular/forms";
 import { Store } from "@ngxs/store";
 import { take } from "rxjs/operators";
-import { Post, Job, PostDate } from "src/models/new/data.interfaces";
+import { Post, Job } from "src/models/new/data.interfaces";
 import { DataQueries, SnapshotAll } from "src/models/new/data.state";
 import { DeleteFile, SwitchPostType, UploadPost } from "src/models/new/user/user.actions";
 import { Required } from "src/validators/verify";

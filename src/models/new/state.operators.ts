@@ -28,30 +28,40 @@ namespace mutable {
 
   //configure type so this can only be called on complex types
   export function update(draft: any, target: DataTypes, values: Record<any>) {
-    console.log("update", target, values)
     const targetObjects = draft[target],
       fields = draft.fields[target];
+      if (target === "DatePost") {
+        console.log("update", values, target, fields)
+      }
     
     //translate data
     Object.entries<any>(values).forEach(([id, item]) => {
       const current = targetObjects[id];
-      //if not create
+      //if not created create
       if ( !current ) {
-        for ( let i = 0; i < item.length; i++ ) {
-          if ( typeof item[i] == 'object' ) {
-            mutable.update(draft, fields[i], item[i]);
-            item[i] = Object.keys(item[i]).map(id => +id);
+        
+        if (typeof(item) != 'string') {
+          for ( let i = 0; i < item.length; i++ ) {
+            if ( typeof item[i] == 'object' ) {
+              mutable.update(draft, fields[i], item[i]);
+              item[i] = Object.keys(item[i]).map(id => +id);
+            }
           }
         }
+      // else update
       } else {
-        for ( let i = 0; i < current.length; i++ ) {
-          //special treatement for arrays
-          if ( Array.isArray(current[i]) ) {
-            if ( current[i].length )
-              mutable.deleteIds(draft, fields[i], current[i]);
-          
-            mutable.update(draft, fields[i], item[i]);
-            item[i] = Object.keys(item[i]).map(id => +id);
+        if (typeof(item) != 'string') {
+          for ( let i = 0; i < current.length; i++ ) {
+            //special treatement for arrays
+            if ( Array.isArray(current[i]) ) {
+              if ( current[i].length ) {
+                mutable.deleteIds(draft, fields[i], current[i]);
+              }
+              mutable.update(draft, fields[i], item[i]);
+              if (fields[i] != "DatePost") {
+                item[i] = Object.keys(item[i]).map(id => +id);
+              }
+            }
           }
         }
       }

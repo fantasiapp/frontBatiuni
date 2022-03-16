@@ -64,3 +64,19 @@ details summary::-webkit-details-marker {
     margin-right: 15px;
   }
 }
+
+.divComment {
+  display:flex;
+  flex-direction:row;
+  border:1px solid #0D6191 ;
+  ;
+  border-radius: 20px;
+  height:40px;
+  margin:15px;
+  width:96%;
+  padding: 10px;
+}
+
+.inputComment {
+  width:90%
+}

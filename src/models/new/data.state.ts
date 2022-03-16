@@ -4,7 +4,7 @@ import { Observable, of, Subject } from "rxjs";
 import { concatMap, map, tap } from "rxjs/operators";
 import { HttpService } from "src/app/services/http.service";
 import { GetGeneralData, HandleApplication, SignContract, MarkViewed, ModifyAvailability, SetFavorite } from "./user/user.actions";
-import { ApplyPost, ChangePassword, ChangeProfilePicture, ChangeProfileType, DeleteFile, DeletePost, DownloadFile, DuplicatePost, GetUserData, ModifyUserProfile, SwitchPostType, UploadFile, UploadPost } from "./user/user.actions";
+import { ApplyPost, ChangePassword, ChangeProfilePicture, ChangeProfileType, DeleteFile, DeletePost, DownloadFile, DuplicatePost, GetUserData, ModifyUserProfile, ModifyDetailedPost, SwitchPostType, UploadFile, UploadPost } from "./user/user.actions";
 import { Company, Interface, User } from "./data.interfaces";
 import { DataReader, NameMapping, TranslatedName } from "./data.mapper";
 import { Record, DataTypes } from "./data.interfaces";
@@ -335,9 +335,7 @@ export class DataState {
           throw response['messages'];
         
         delete response[deletion.action];
-        console.log('delete post', deletion);
         ctx.setState(deleteIds('Post', [deletion.id]));
-        console.log(ctx.getState()['Post']);
       })
     )
   };
@@ -455,7 +453,6 @@ export class DataState {
 
   @Action(SignContract)
   signContract(ctx:StateContext<DataModel>, application: SignContract) {
-    console.log("Sign Contract data.state", application, application.missionId);
     const profile = this.store.selectSnapshot(DataQueries.currentProfile)!;
 
     return this.http.get('data', application).pipe(
@@ -465,7 +462,23 @@ export class DataState {
           throw response.messages;
         }
         delete response[application.action];
-        console.log('add company');
+        ctx.setState(
+          addComplexChildren('Company', profile.company.id, 'Mission', response)
+        );
+      })
+    )
+  }
+
+  @Action(ModifyDetailedPost)
+  modifyDetailedPost(ctx:StateContext<DataModel>, application: ModifyDetailedPost) {
+    const profile = this.store.selectSnapshot(DataQueries.currentProfile)!;
+    return this.http.post('data', application).pipe(
+      tap((response:any) => {
+        if ( response[application.action] !== 'OK' ) {
+          this.inZone(() => this.info.show("error", response.messages, 3000));
+          throw response.messages;
+        }
+        delete response[application.action];
         ctx.setState(
           addComplexChildren('Company', profile.company.id, 'Mission', response)
         );
@@ -497,7 +510,6 @@ export class DataState {
     const id = this.store.selectSnapshot(DataState.currentUserId);
     return this.http.get('data', favorite).pipe(
       tap((response: any) => {
-        console.log('response', response);
         if ( response[favorite.action] !== 'OK' )
           this.inZone(() => this.info.show("error", response.messages, 3000));
         

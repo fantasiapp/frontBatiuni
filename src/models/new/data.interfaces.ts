@@ -66,7 +66,10 @@ export interface Company {
 
 export interface PostDetail {
   id: Ref<PostDetail>;
+  date: number;
   content: string;
+  validated : boolean;
+  refused : boolean;
   supervisions: Ref<Supervision>[];
 };
 
@@ -151,9 +154,11 @@ export interface Establishement {
 
 export type Mission = Post & {
   subContractor: Ref<Company>;
+  subContractorName: string;
   signedByCompany: boolean;
   signedBySubContractor: boolean;
   contract: Ref<File>;
+  supervision: Ref<Supervision>
 };
 
 export type PostDate = {
