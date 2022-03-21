@@ -38,7 +38,9 @@ export class UIComment {
   @Input()
   supervision: Supervision = {
     id: -1, author: "Gabriel Dubois",
-    comment: "Lorem ipsum dolor sit amet", date: '11/11/2022',
+    Supervisions: [],
+    comment: "Lorem ipsum dolor sit amet",
+    date: 11-11-2022,
     files: []
   };
 

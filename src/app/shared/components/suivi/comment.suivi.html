@@ -3,14 +3,14 @@
 
   <div class="user-info">
     <span class="user-name">{{supervision.author}}</span><br/>
-    <span class="post-date">Le {{supervision.date}} à 18h36m</span>
+    <span class="post-date">Le {{supervision.date}}</span>
   </div>
 </div>
 
-<div class="comment-image position-relative">
+<div class="comment-image position-relative" *ngIf="supervision.files.length > 0">
   <div class="cover-parent" [slide-template]="image" [contexts]="supervision.files"></div>
   
-  <ng-container *ngIf="true">
+  <ng-container *ngIf="supervision.files.length > 1">
     <img (click)="slides.slide('left')" class="position-absolute left" [class.hidden]="slides.first" src="assets/arrowleft.svg"/>
     <img (click)="slides.slide('right')" class="position-absolute right" [class.hidden]="slides.last" src="assets/arrowright.svg"/>  
   </ng-container>
@@ -21,11 +21,6 @@
 
 <div class="parent-comment" *ngIf="parentComment">
   <ng-content select="comment-suivi"></ng-content>
-</div>
-
-<div class="response flex center">
-  <input type="text" placeholder="Ajouter une commentaire">
-  <img src="assets/camera.png"/>
 </div>
 
 <ng-template #image let-src>

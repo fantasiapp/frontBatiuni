@@ -50,3 +50,51 @@
 }
 
 .date::ng-deep { color: $secondaryBackground; }
+
+.mainDate {
+  display:flex;
+  flex-direction:column;
+  width:100%;
+  height:100%;
+}
+
+.titleDate {
+  width:80%;
+  height:50px;
+  width:90%;
+  color: #0D6191;
+  margin: 20px;
+  text-align: left;
+}
+
+.subtitleDate{
+  text-align: left;
+  margin: 20px;
+}
+
+#listDate {
+  width:95%;
+  padding-left:2.5%;
+  box-shadow: 0px 3px 6px #00000029;
+  max-height: 80%;
+  overflow-y: scroll;
+}
+.liDate {
+  display:flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding-left:5%;
+  width:90%;
+  padding-bottom:5%
+}
+
+#addTask {
+  width: 90%;
+  margin-left:5%;
+  margin-top:20px;
+}
+
+.setDateTask {
+  text-align: left;
+  width:90%
+}

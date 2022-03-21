@@ -17,6 +17,7 @@ import { ProfileComponent } from "./components/profile/profile.component";
 import { RegisterComponent } from "./components/register/register.component";
 import { SOSPageComponent } from "./components/SOS_page/sos-page.component";
 import { SuiviPME } from "./components/suivi_pme/suivi-pme.page";
+import { SuiviChantierDate } from "./components/suivi_chantier_date/suivi_chantier_date.page";
 import { UIModule } from "./ui/ui.module";
 import { SharedModule } from "../shared/shared.module";
 import { ReactiveFormsModule } from "@angular/forms";
@@ -44,6 +45,7 @@ import { MailSender } from "./components/only_mail/only.mail";
     EngagementPage,
     BoosterPage,
     SuiviPME,
+    SuiviChantierDate,
     ForgotPassword,
     MailSender,
   ],

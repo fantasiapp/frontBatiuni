@@ -29,15 +29,20 @@ export class SuiviComments {
   ngOnInit() {
     console.log(this.slides);
   }
-
-  @Input()
-  supervision: Supervision = {
+  _supervision: Supervision = {
     id: -1,
+    Supervisions: [],
     author: 'Gabriel Dubois', //maybe this should be a UserProfile ?
-    date: '13/11/2021',
+    date: 13-11-2021,
     comment: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
     files: []
   };
+  get supervision() { return this._supervision; }
+
+  @Input()
+  set supervision(supervision: Supervision) {
+    this._supervision = supervision;
+  }
 
   get manyFiles() { return this.supervision.files.length > 1; }
 

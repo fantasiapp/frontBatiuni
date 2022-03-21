@@ -16,7 +16,8 @@ import { EngagementPage } from '../components/abonnement/engagement/engagement';
 import { MakeAdComponent } from '../components/make_ad/make_ad.component';
 import { SOSPageComponent } from '../components/SOS_page/sos-page.component';
 import { BoosterPage } from '../components/booster/booster.page';
-import { SuiviPME } from '../components/suivi_pme/suivi-pme.page';
+// import { SuiviPME } from '../components/suivi_pme/suivi-pme.page';
+// import { SuiviChantierDate } from "../components/suivi_chantier_select_date/suivi_chantier_select_date.page";
 import { AuthGuard } from './auth/auth.guard';
 
 import { EmailConfirmation } from 'src/app/shared/validators/email_confirmation/emailconfirmation.component';

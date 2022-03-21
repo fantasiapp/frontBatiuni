@@ -21,59 +21,15 @@
 </div>
 <div class="suivi-notification flex column" style="margin-left:0">
   <h6 class="font-Poppins" style="margin:5px">Suivi du chantier</h6>
-  <h6 class="font-Poppins" style="margin:5px">Avec {{subContractorName}} entreprise {{ companyName }} </h6>
+  <h6 class="font-Poppins" style="margin:5px">Avec {{contactName}} entreprise {{ companyName }} </h6>
 </div>
-<div *ngIf="update" class="full-width flex column">
-  <ng-container *ngFor="let date of dates">
-    <accordion [title]="'Le ' + date.value">
-      <div class="form-input">
-        <div class="clear-margin full-width flex center-cross space-arround">
-          <label style="color:#0C5E8D; padding-left:3%">Choisir les tâches pour ce jour</label>
-          <div style="width:45%"></div>
-          <img (click)="swipemenuModifyAction(date.id)" src="assets/Option.svg"/>
-        </div>
-        <div style="height:20px"></div>
-
-        <div *ngFor="let task of date.selectedTasks" style="width:97%">
-          <div class="details flex center-cross space-between">
-            <span class="detail-name" style="padding-left:3%"> {{ task.content }}</span>
-            <span class="controls">
-              <img (click)="validate(task)" id="control_validate_{{task.id}}" [src]= "task.validationImage"/>
-              <img (click)="refuse(task)" id="control_refuse_{{task.id}}" [src]= "task.invalidationImage"/>
-            </span>
-          </div>
-
-          <div *ngIf="task.refused" class="divComment">
-            <input id="input_{{task.id}}" class="inputComment" type="text" placeholder="Ajouter un commentaire" (focusout)="mainComment(task)">
-            <img src="assets/camera.png"/>
-          </div>
-        
-          <div class="form-input">
-            <label style="color:#0C5E8D; padding-left:3%">Communiquer avec votre partenaire de chantier</label>
-            <!-- <textarea class="form-element" formControlName="description" placeholder="..."></textarea> -->
-            <div class="divComment">
-              <input id="input_general}" class="inputComment" type="text" placeholder="Ajouter un commentaire" (focusout)="mainComment(null)">
-              <img src="assets/camera.png"/>
-            </div>
-          </div>
-
-          <div *ngIf = "date.isSelected">
-            <ul id="suiviListTasks" style="width:90%; margin-left:5%">
-              <li class="suiviListElement" *ngFor="let task of date.tasks" class="flex center-cross space-between" style="padding-bottom:10px">
-                {{ task.content }}
-                <checkbox (click)="modifyDetailedPostDate(task, date)" [value]="task.date == date.value"></checkbox>
-              </li>
-            </ul> 
-          </div>
-        </div>
-      </div>
-
-    </accordion>
-    <hr class="dashed">
-  </ng-container>
+<div class="full-width flex column">
+  <suivi-chantier_date *ngFor="let date of dates" [date]="date" [mission]="mission" [reloadMission]="reloadMission"></suivi-chantier_date>
   <div class="newDate">
+    <img src="assets/plusBlue.svg">
     <p>Ajouter une nouvelle date</p>
   </div>
+  <div style="height:30px"></div>
 </div>
 
 <swipeup [(open)]="swipemenu">
@@ -81,10 +37,6 @@
   <li>Appeler le 06 21 94 03 86</li>
   <li>Clôturer la mission</li>
   <li>Dupliquer l'annonce</li>
-</swipeup>
-
-<swipeup [(open)]="swipemenuModify">
-  <li (click)="addDateToPost()"> Modifier les tâche</li>
 </swipeup>
 
 <ng-template #comment>

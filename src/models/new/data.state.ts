@@ -3,8 +3,8 @@ import { Action, createSelector, Selector, State, StateContext, Store } from "@n
 import { Observable, of, Subject } from "rxjs";
 import { concatMap, map, tap } from "rxjs/operators";
 import { HttpService } from "src/app/services/http.service";
-import { GetGeneralData, HandleApplication, SignContract, MarkViewed, ModifyAvailability, SetFavorite } from "./user/user.actions";
-import { ApplyPost, ChangePassword, ChangeProfilePicture, ChangeProfileType, DeleteFile, DeletePost, DownloadFile, DuplicatePost, GetUserData, ModifyUserProfile, ModifyDetailedPost, SwitchPostType, UploadFile, UploadPost } from "./user/user.actions";
+import { GetGeneralData, HandleApplication, SignContract, MarkViewed, ModifyAvailability, SetFavorite, TakePicture } from "./user/user.actions";
+import { ApplyPost, ChangePassword, ChangeProfilePicture, ChangeProfileType, DeleteFile, DeletePost, DownloadFile, DuplicatePost, GetUserData, ModifyUserProfile, CreateDetailedPost, ModifyDetailedPost, CreateSupervision, SwitchPostType, UploadFile, UploadPost, UploadImageSupervision } from "./user/user.actions";
 import { Company, Interface, User } from "./data.interfaces";
 import { DataReader, NameMapping, TranslatedName } from "./data.mapper";
 import { Record, DataTypes } from "./data.interfaces";
@@ -222,6 +222,26 @@ export class DataState {
     )
   };
 
+  @Action(UploadImageSupervision)
+  uploadImageSupervision(ctx: StateContext<DataModel>, picture: UploadImageSupervision) {
+    const profile = this.store.selectSnapshot(DataQueries.currentProfile),
+      req = this.http.post('data', picture);
+     
+    console.log("UploadImageSupervision", picture)
+    return req.pipe(
+      tap((response: any) => {
+        if ( response[picture.action] !== 'OK' )
+          throw response['messages'];
+        
+        delete response[picture.action];
+        console.log("UploadImageSupervision", response)
+        // ctx.setState(compose(
+        //   addSimpleChildren('Company', profile.company.id, 'File', response, 'nature'),
+        // ));
+      })
+    )
+  };
+
   @Action(ChangePassword)
   modifyPassword(ctx: StateContext<User>, action: ChangePassword) {
     return this.http.post('data', action).pipe(
@@ -268,6 +288,24 @@ export class DataState {
       })
     )
   };
+
+  @Action(TakePicture)
+  takePicture(ctx: StateContext<DataModel>, picture: TakePicture) {
+    // console.log("uploadFile", picture)
+    // return this.http.post('data', picture).pipe(
+    //   tap((response: any) => {
+    //     if ( response[picture.action] !== 'OK' )
+    //       throw response['messages']
+    //     delete response[picture.action]
+
+    //     const assignedId = +Object.keys(response)[0],
+    //       fields = ctx.getState()['fields'],
+    //       contentIndex = fields['File'].indexOf('content');
+    //     picture.assignedId = assignedId;
+    //     response[assignedId][contentIndex] = upload.fileBase64;
+
+
+  }
 
   @Action(DeleteFile)
   deleteFile(ctx: StateContext<DataModel>, deletion: DeleteFile) {
@@ -469,6 +507,23 @@ export class DataState {
     )
   }
 
+  @Action(CreateDetailedPost)
+  createDetailedPost(ctx:StateContext<DataModel>, application: CreateDetailedPost) {
+    const profile = this.store.selectSnapshot(DataQueries.currentProfile)!;
+    return this.http.post('data', application).pipe(
+      tap((response:any) => {
+        if ( response[application.action] !== 'OK' ) {
+          this.inZone(() => this.info.show("error", response.messages, 3000));
+          throw response.messages;
+        }
+        delete response[application.action];
+        ctx.setState(
+          addComplexChildren('Company', profile.company.id, 'Mission', response)
+        );
+      })
+    )
+  }
+
   @Action(ModifyDetailedPost)
   modifyDetailedPost(ctx:StateContext<DataModel>, application: ModifyDetailedPost) {
     const profile = this.store.selectSnapshot(DataQueries.currentProfile)!;
@@ -479,6 +534,25 @@ export class DataState {
           throw response.messages;
         }
         delete response[application.action];
+        ctx.setState(
+          addComplexChildren('Company', profile.company.id, 'Mission', response)
+        );
+      })
+    )
+  }
+
+  @Action(CreateSupervision)
+  createSupervision(ctx:StateContext<DataModel>, application: CreateSupervision) {
+    console.log("ici")
+    const profile = this.store.selectSnapshot(DataQueries.currentProfile)!;
+    return this.http.post('data', application).pipe(
+      tap((response:any) => {
+        if ( response[application.action] !== 'OK' ) {
+          this.inZone(() => this.info.show("error", response.messages, 3000));
+          throw response.messages;
+        }
+        delete response[application.action];
+        console.log("action Supervision", response)
         ctx.setState(
           addComplexChildren('Company', profile.company.id, 'Mission', response)
         );
@@ -589,7 +663,6 @@ export class DataQueries {
 
   private static getDataById<K extends DataTypes>(type: K, id: number) {
     return createSelector([DataState.getType(type)], (record: Record<any[]>) => {
-      console.log('getDataById', type, 'selector');
       return record[id];
     });
   }
@@ -626,7 +699,6 @@ export class DataQueries {
   static getById<K extends DataTypes>(type: K, id: number) {
     //no id => get All
     return createSelector([DataState.fields, DataQueries.getDataById(type, id)], (fields: Record<string[]>, values: any[]) => {
-      console.log('getById', type, 'selector');
       return values ? DataQueries.toJson(fields, type, id, values) : null
     });
   }

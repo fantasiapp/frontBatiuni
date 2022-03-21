@@ -18,6 +18,22 @@
 
 <ng-template #sign let-signature>
   <file-viewer [fileContext]="signature.fileContext" class="grow"></file-viewer>
-  <!-- <button *ngIf="!signature.signedByProfile" class="button active" (click)="actionSign(signature.missionId, signature.view)">Signer</button> -->
   <button *ngIf="!signature.signedByProfile" class="button active" (click)="actionSign(signature.missionId, signature.view)">Signer</button>
+</ng-template>
+
+<ng-template #setDate let-assignDate>
+  <div class="mainDate form-input">
+    <div style="height:5%;"></div>
+    <h3 class="titleDate">Le {{assignDate.date.value}}</h3>
+    <div style="height:5%;"></div>
+    <label class="subtitleDate">Choisissez les tâches du jour</label>
+    <ul id="listDate">
+      <li class="liDate" *ngFor="let task of assignDate.date.taskWithoutDouble">
+        <span class="setDateTask">{{ task.content }}</span>
+        <checkbox (click)="modifyDetailedPostDate(task, assignDate.date)" [value]="task.date == assignDate.date.value"></checkbox>
+      </li>
+    </ul>
+    <input id="addTask" type="text" placeholder="Ajouter une nouvelle tâche"  (focusout)="addNewTask(assignDate.missionId, assignDate.date.value)">
+  </div>
+  <!-- <label class="subtitleDate">Créer une nouvelle tâche</label> -->
 </ng-template>

@@ -1,22 +1,11 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewChild, ElementRef } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from "@angular/core";
 import { Select, Store } from "@ngxs/store";
 import { Observable } from "rxjs";
-import { take, takeLast } from "rxjs/operators";
 import { PopupService } from "src/app/shared/components/popup/popup.component";
-import { Company, Mission, PostDetail, Profile, Supervision } from "src/models/new/data.interfaces";
+import { Company, Mission, PostDetail, Profile, Supervision, DateG, Task } from "src/models/new/data.interfaces";
 import { DataQueries, DataState } from "src/models/new/data.state";
-import { ModifyDetailedPost } from "src/models/new/user/user.actions";
 
-
-export type DateG = {
-  id: number
-  value: number
-  isSelected: boolean
-  tasks: Task[] | null
-  selectedTasks: Task[]
-}
-
-export type Task = PostDetail & {validationImage:string, invalidationImage:string}
+// export type Task = PostDetail & {validationImage:string, invalidationImage:string}
 
 // , validationImage:"assets/suivi-valider.svg", invalidationImage:"assets/suivi-refuser.svg"
 @Component({
@@ -36,10 +25,8 @@ export class SuiviPME {
   currentDateId : number | null = null
   tasks: Task[] | null = null
   companyName : string = ""
-  subContractorName : string = ""
-  update: boolean = true
+  contactName : string = ""
   view: 'ST' | 'PME' = "PME";
-
 
   _mission: Mission | null = null;
   get mission() { return this._mission; }
@@ -54,22 +41,67 @@ export class SuiviPME {
       this.isNotSigned = !(mission.signedByCompany && mission.signedBySubContractor)
       this.isNotSignedByUser = (!mission.signedByCompany && this.view == 'PME') || (!mission.signedBySubContractor && this.view == 'ST')
       this.computeDates (mission)
-      this.companyName  = this.subContractor!.name
-      this.subContractorName = this.mission!.subContractorName
+      this.companyName  = this.view == 'ST' ? this.subContractor!.name : this.company!.name
+      this.contactName = this.view == 'ST' ? this.mission!.subContractorName : ""
       
     }
   }
 
   computeDates (mission:Mission) {
-    this.tasks = this.store.selectSnapshot(DataQueries.getMany('DetailedPost', mission.details)).map(detail => ({id:detail.id, date:detail.date, content:detail.content, validated:detail.validated, refused:detail.refused, supervisions:detail.supervisions, validationImage:this.computeTaskImage(detail, "validated"), invalidationImage:this.computeTaskImage(detail, "refused")}))
-    console.log("tasks", this.tasks)
-    // console.log("mission for date", mission)
-    this.dates = mission.dates.map((value, id) => ({id:id, value: value, isSelected:true, tasks:this.tasks, selectedTasks:this.computeSelectedTask(value)}))
-    // console.log("computeDates", this.dates, this.tasks)
+    let supervisionsTaks: number[] = []
+    this.tasks = this.store.selectSnapshot(DataQueries.getMany('DetailedPost', mission.details)).map(detail => (
+      { id:detail.id,
+        date:detail.date,
+        content:detail.content,
+        validated:detail.validated,
+        refused:detail.refused,
+        supervisions:detail.supervisions,
+        supervisionsObject:this.computeSupervisionsforTask(detail.supervisions, supervisionsTaks),
+        validationImage:SuiviPME.computeTaskImage(detail, "validated"),
+        invalidationImage:SuiviPME.computeTaskImage(detail, "refused")}))
+    console.log("computeDates, tasks", this.tasks)
+    console.log("computeDates, id", supervisionsTaks)
+    this.dates = mission.dates.map((value, id) => (
+      { id:id,
+        value: value,
+        tasks:this.tasks,
+        selectedTasks:this.computeSelectedTask(value),
+        taskWithoutDouble:this.dateWithoutDouble(),
+        view:this.view,
+        supervisions: this.computeSupervisionsForMission(value, supervisionsTaks)}))
   }
 
-  computeTaskImage(task:PostDetail, type:String) {
-    console.log("task image", task.content, task.validated, task.refused)
+  computeSupervisionsforTask(supervisionsId: number[], supervisionsTask:number[]) {
+    let supervisions: Supervision[] = []
+    supervisionsId.forEach(id => {
+      let supervision = this.store.selectSnapshot(DataQueries.getById('Supervision', id))
+      if (supervision) {
+        supervisions.push(supervision!)
+        supervisionsTask.push(supervision.id)
+      }
+    })
+    return supervisions
+  }
+
+  computeSupervisionsForMission(date:number, supervisionsTask:number[]):Supervision[] {
+    let supervisions: Supervision[] = []
+    let allSupervisions: (Supervision|null)[] = this.mission!.supervisions.map(id => {
+      let supervision = this.store.selectSnapshot(DataQueries.getById('Supervision', id))
+      if (supervision && supervision.date == date && !supervisionsTask.includes(supervision.id )) {
+        return supervision
+      }
+      return null
+    })
+    for (let index in allSupervisions) {
+      if (allSupervisions[index]) {
+        supervisions.push(allSupervisions[index]!)
+      }
+    }
+    console.log("supervision", supervisions)
+    return supervisions
+  }
+
+  static computeTaskImage(task:PostDetail, type:String) {
     if (type === "validated") {
       if (task.validated && !task.refused) {
         return "assets/suivi-valider-OK.svg"
@@ -83,6 +115,19 @@ export class SuiviPME {
         return "assets/suivi-refuser.svg"
       }
     }
+  }
+
+  dateWithoutDouble(): Task[] {
+    let listWithOutDouble: Task[] = []
+    let listWithOutDoubleStr: string[] = []
+    let dictionary = Object.assign({}, ...this.tasks!.map((task) => ({[task.content]: task})))
+    Object.keys(dictionary).forEach( key => {
+      if (!listWithOutDoubleStr.includes(dictionary[key])) {
+        listWithOutDouble.push(dictionary[key])
+        listWithOutDoubleStr.push(key)
+      }
+    })
+    return listWithOutDouble
   }
 
   computeSelectedTask(date:number) {
@@ -101,71 +146,21 @@ export class SuiviPME {
   
   swipemenu: boolean = false;
 
-
-  swipemenuModify: boolean = false;
-
   @Select(DataQueries.currentProfile)
   currentProfile$!: Observable<Profile>;
-
-  validate(task: Task) {
-    if (this.view == 'ST' && !task.refused) {
-      task.validated = !task.validated
-      this.store.dispatch(new ModifyDetailedPost(task)).pipe(take(1)).subscribe(() => {
-        this.mission = this.store.selectSnapshot(DataQueries.getById('Mission', this.mission!.id))
-        let control = document.getElementById("control_validate_"+task.id) as HTMLImageElement;
-        control.src = this.computeTaskImage(task, "validated")
-      })
-    }
-  }
-
-  refuse(task: Task) {
-    console.log("refuse start", this.view, task.validated)
-    if (this.view == 'ST' && !task.validated) {
-      task.refused = !task.refused
-      console.log("refuse", task)
-      this.store.dispatch(new ModifyDetailedPost(task)).pipe(take(1)).subscribe(() => {
-        this.mission = this.store.selectSnapshot(DataQueries.getById('Mission', this.mission!.id))
-        this.store.dispatch(new ModifyDetailedPost(task)).pipe(take(1)).subscribe(() => {
-          this.mission = this.store.selectSnapshot(DataQueries.getById('Mission', this.mission!.id))
-          let control = document.getElementById("control_refuse_"+task.id) as HTMLImageElement;
-          control.src = this.computeTaskImage(task, "refused")
-        })
-      })
-    }
-  }
-
-  mainComment(task:Task | null) {
-    if (task) {
-      let input = document.getElementById("input_"+task!.id) as HTMLInputElement;
-      console.log("mainComment", input.value)
-    }
-  }
 
   signContract() {
     this.popup.openSignContractDialog(this.mission!);
   }
 
-  addDateToPost() {
-    let date = this.dates[this.currentDateId!]
-    date.isSelected = !date.isSelected
-    this.swipemenuModify = false
-  }
-
-  swipemenuModifyAction(dateId:any) {
-    this.swipemenuModify = true
-    this.currentDateId = dateId
-    console.log("swipemenuModifyAction", dateId)
-
-  }
-
-  modifyDetailedPostDate(task:PostDetail, date:any) {
-    task!.date = date.value
-    this.store.dispatch(new ModifyDetailedPost(task)).pipe(take(1)).subscribe(() => {
-      this.mission = this.store.selectSnapshot(DataQueries.getById('Mission', this.mission!.id))
-      this.update=false
-      this.cd.markForCheck();
-      this.update=true
-      this.cd.markForCheck();
-    });
+  reloadMission = (dateOld:DateG): (DateG|Mission)[] =>  {
+    let dateResult = dateOld
+    this.mission = this.store.selectSnapshot(DataQueries.getById('Mission', this.mission!.id))
+    this.dates.forEach(dateNew => {
+      if (dateNew.value == dateOld.value) {
+        dateResult = dateNew
+      }
+    })
+    return [dateResult, this.mission!]
   }
 }

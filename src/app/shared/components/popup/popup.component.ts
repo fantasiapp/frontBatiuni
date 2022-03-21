@@ -2,15 +2,16 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ComponentFactory
 import { SafeResourceUrl } from "@angular/platform-browser";
 import { Store } from "@ngxs/store";
 import { combineLatest, Subject } from "rxjs";
-import { distinct, map, switchMap, take, takeUntil } from "rxjs/operators";
+import { distinct, map, switchMap, take, takeLast, takeUntil } from "rxjs/operators";
 import { Dimension, DimensionMenu } from "src/app/shared/common/classes";
 import { ContextUpdate, TemplateContext, ViewComponent, ViewTemplate } from "../../common/types";
 import { FileDownloader } from "../../services/file-downloader.service";
 import { BasicFile } from "../filesUI/files.ui";
-import { File, Mission } from "src/models/new/data.interfaces";
+import { File, Mission, DateG, Task } from "src/models/new/data.interfaces";
 import { DataQueries, DataState } from "src/models/new/data.state";
 import { FileContext, FileViewer } from "../file-viewer/file-viewer.component";
-import { SignContract } from "src/models/new/user/user.actions";
+import { SignContract, ModifyDetailedPost, CreateDetailedPost } from "src/models/new/user/user.actions";
+import { SuiviChantierDate } from "src/app/mobile/components/suivi_chantier_date/suivi_chantier_date.page";
 
 const TRANSITION_DURATION = 200;
 
@@ -36,6 +37,9 @@ export class UIPopup extends DimensionMenu {
   
   @ViewChild('sign', {read: TemplateRef, static: true})
   sign!: TemplateRef<any>;
+
+  @ViewChild('setDate', {read: TemplateRef, static: true})
+  setDate!: TemplateRef<any>;
 
   @Input()
   content?: Exclude<PopupView, ContextUpdate>;
@@ -88,7 +92,6 @@ export class UIPopup extends DimensionMenu {
 
   willClose = false;
   close() {
-    console.log("willClose")
     this.willClose = true;
     setTimeout(() => {
       if ( !this.keepAlive ) this.view.clear();
@@ -114,6 +117,15 @@ export class UIPopup extends DimensionMenu {
     });
   }
 
+  addNewTask(missionId:number, date:number) {
+  }
+
+  modifyDetailedPostDate(task:Task, date:DateG) {
+    console.log("modifyDetailedPostDate")
+    task.date = date.value
+    this.store.dispatch(new ModifyDetailedPost(task)).pipe(take(1)).subscribe(() => {});
+  }
+
   openWindow(url: string) {
     window.open(url);
   }
@@ -121,7 +133,7 @@ export class UIPopup extends DimensionMenu {
 
 export type PredefinedPopups<T = any> = {
   readonly type: 'predefined';
-  name: 'deletePost' | 'sign';
+  name: 'deletePost' | 'sign' | 'setDate';
   context?: TemplateContext;
 };
 
@@ -198,6 +210,7 @@ export class PopupService {
           fileContext: fileContext,
           signedByProfile: (mission!.signedByCompany && view == 'PME') || (mission!.signedBySubContractor && view == 'ST'),
           missionId: mission!.id,
+          newTask: "",
           view: view
         }
       };
@@ -222,6 +235,36 @@ export class PopupService {
       
       previousFileContext = fileContext;
     });
+  }
+
+  openDateDialog(mission: Mission, date:DateG, objectSuivi:SuiviChantierDate) {
+    const view = this.store.selectSnapshot(DataState.view),
+      closed$ = new Subject<void>();
+    let first: boolean = true;
+
+      const context = {
+        $implicit: {
+          missionId: mission!.id,
+          date:date,
+          view: view
+        }
+      }
+
+      if ( first ) {
+        this.dimension$.next(this.defaultDimension);  
+        this.popups$.next({
+          type:  'predefined',
+          name: 'setDate',
+          context,
+          close: () => {
+            closed$.next();
+            let content = document.getElementById("addTask") as HTMLInputElement;
+            let contentValue = content.value ? content.value : null
+            objectSuivi.updatePage(contentValue, mission!.id)
+          }
+        });
+        first = false;
+      }
   }
 
   hide() {

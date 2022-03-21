@@ -76,9 +76,10 @@ export interface PostDetail {
 export interface Supervision {
   id: Ref<Supervision>;
   author: string;
-  date: string;
+  date: number;
   comment: string;
   files: Ref<File>[];
+  Supervisions: Ref<Supervision>[];
 }
 
 export interface Disponibility {
@@ -158,13 +159,29 @@ export type Mission = Post & {
   signedByCompany: boolean;
   signedBySubContractor: boolean;
   contract: Ref<File>;
-  supervision: Ref<Supervision>
+  supervisions: Ref<Supervision>[]
 };
 
 export type PostDate = {
   id: Ref<PostDate>;
   name: string;
 };
+
+export type Task = PostDetail & {
+  validationImage:string,
+  invalidationImage:string
+  supervisionsObject: Supervision[]
+}
+
+export type DateG = {
+  id: number
+  value: number
+  tasks: Task[] | null
+  selectedTasks: Task[]
+  taskWithoutDouble: Task[]
+  view: 'ST' | 'PME';
+  supervisions: Supervision[]
+}
 
 export type Interface<K extends DataTypes> =
   K extends 'Job' ? Job :

@@ -25,6 +25,17 @@ export class ChangeProfilePicture {
   action = 'changeUserImage';
 };
 
+export class UploadImageSupervision {
+  static readonly type = '[User] Upload Supervision Picture';
+  ext: string = '';
+  imageBase64: string = '';
+  constructor(src: any, public missionId:number | null, public taskId:number | null) {
+    this.ext = src.format;
+    this.imageBase64 = src.base64String;
+  }
+  action = 'uploadImageSupervision';
+};
+
 export class ChangePassword {
   static readonly type = '[User] Change Password';
   readonly action = 'modifyPwd';
@@ -116,6 +127,23 @@ export class UploadFile<K extends DataTypes = any> {
 
   get target() { return (this as any)[this.category]; }
   set target(x: number) { (this as any)[this.category] = x; }
+};
+
+export class TakePicture<K extends DataTypes = any> {
+  static readonly type = '[File] take Picture';
+  ext: string = '';
+  fileBase64: string = '';
+  expirationDate: string = '2025-12-31';
+  assignedId?: number = -1;
+  constructor(src: any, public name: string, public nature: string) {
+    this.fileBase64 = src.base64String;
+    this.expirationDate = ''
+    this.ext = src.format;
+    this.name = name
+    this.nature = nature
+  }
+
+  action = 'takePicture';
 };
 
 export class DeleteFile {
@@ -249,11 +277,24 @@ export class SignContract {
   constructor(public missionId: number, public view: 'ST' | 'PME') {}
 };
 
+export class CreateDetailedPost {
+  static readonly type = '[Data] Create DetailedPost';
+  action = 'createDetailedPost';
+  constructor(public missionId: number, public content: string, public date: number) {
+  }
+}
+
 export class ModifyDetailedPost {
   static readonly type = '[Data] Modify DetailedPost';
   action = 'modifyDetailedPost';
   constructor(public detailedPost: PostDetail | null) {
   }
+}
+
+export class CreateSupervision {
+  static readonly type = '[Data] Create Supervision';
+  action = 'createSupervision'
+  constructor(public missionId: number, public detailedPostId: number | null, public parentId: number | null, public comment: string, public date:number) {}
 }
 
 export class SetFavorite {
