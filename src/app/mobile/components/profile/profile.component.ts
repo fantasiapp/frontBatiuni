@@ -43,7 +43,6 @@ export class ProfileComponent extends Destroy$ {
   constructor(private store: Store, private cd: ChangeDetectorRef, private info: InfoService, private popup: PopupService) {
     super();
     this.profile$.subscribe((profile) => {
-      console.log(profile);
     });
   }
 
@@ -95,7 +94,6 @@ export class ProfileComponent extends Destroy$ {
   }
 
   changePassword(form: FormGroup) {
-    console.log(form, form.value);
     let { oldPwd, newPwd } = form.value;
     let req = this.store.dispatch(new UserActions.ChangePassword(oldPwd, newPwd));
     req.subscribe(

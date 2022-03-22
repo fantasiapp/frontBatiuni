@@ -230,11 +230,12 @@ export class DataState {
     console.log("UploadImageSupervision", picture)
     return req.pipe(
       tap((response: any) => {
+        console.log("UploadImageSupervision response", response)
         if ( response[picture.action] !== 'OK' )
           throw response['messages'];
         
         delete response[picture.action];
-        console.log("UploadImageSupervision", response)
+        
         // ctx.setState(compose(
         //   addSimpleChildren('Company', profile.company.id, 'File', response, 'nature'),
         // ));
@@ -400,8 +401,9 @@ export class DataState {
       file = ctx.getState()['File'][download.id];
     
     //check if the file is already downloaded
-    if ( file && file[contentIndex] )
+    if ( file && file[contentIndex] ) {
       return file.content;
+    }
     
     //check if we are currently downloading the file
     let pending = this.getPending(key);
@@ -413,6 +415,7 @@ export class DataState {
     this.registerPending(key, pending);
 
     if ( download.notify )
+      console.log(`Téléchargement du fichier ${file[nameIndex] || ''}...`)
       this.inZone(() => {
         this.info.show("info", `Téléchargement du fichier ${file[nameIndex] || ''}...`)
       })
@@ -543,7 +546,6 @@ export class DataState {
 
   @Action(CreateSupervision)
   createSupervision(ctx:StateContext<DataModel>, application: CreateSupervision) {
-    console.log("ici")
     const profile = this.store.selectSnapshot(DataQueries.currentProfile)!;
     return this.http.post('data', application).pipe(
       tap((response:any) => {
@@ -552,7 +554,6 @@ export class DataState {
           throw response.messages;
         }
         delete response[application.action];
-        console.log("action Supervision", response)
         ctx.setState(
           addComplexChildren('Company', profile.company.id, 'Mission', response)
         );

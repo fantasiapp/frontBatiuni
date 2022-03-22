@@ -71,13 +71,11 @@ export class SuiviChantierDate extends Destroy${
   }
 
   async selectPhoto() {
-    console.log("selectPhoto")
     const photo = await Camera.getPhoto({
       allowEditing: false,
       resultType: CameraResultType.Base64,
       source: CameraSource.Photos,
     });
-    console.log("selectPhoto", photo, typeof(photo))
     this.store.dispatch(new UploadImageSupervision(photo, this.mission!.id, this.currentTaskId));
   }
 
@@ -117,7 +115,6 @@ export class SuiviChantierDate extends Destroy${
   refuse(task: Task) {
     if (this.view == 'ST' && !task.validated) {
       task.refused = !task.refused
-      console.log("refuse", task)
       this.store.dispatch(new ModifyDetailedPost(task)).pipe(take(1)).subscribe(() => {
         this.mission = this.store.selectSnapshot(DataQueries.getById('Mission', this.mission!.id))
         let control = document.getElementById("control_refuse_"+task.id) as HTMLImageElement;

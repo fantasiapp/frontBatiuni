@@ -50,8 +50,6 @@ export class ExtendedProfileComponent extends Destroy$ {
   }
 
   ngOnInit() {
-
-    console.log('init');
     (this.profile$ as Observable<Profile>).pipe(take(1)).subscribe(profile => {
       this.files = profile.company.files as any;
       this.companyJobs = profile.company.jobs as any;

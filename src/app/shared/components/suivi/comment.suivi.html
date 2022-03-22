@@ -10,7 +10,7 @@
 <div class="comment-image position-relative" *ngIf="supervision.files.length > 0">
   <div class="cover-parent" [slide-template]="image" [contexts]="supervision.files"></div>
   
-  <ng-container *ngIf="supervision.files.length > 1">
+  <ng-container *ngIf="manyFiles">
     <img (click)="slides.slide('left')" class="position-absolute left" [class.hidden]="slides.first" src="assets/arrowleft.svg"/>
     <img (click)="slides.slide('right')" class="position-absolute right" [class.hidden]="slides.last" src="assets/arrowright.svg"/>  
   </ng-container>
@@ -23,6 +23,6 @@
   <ng-content select="comment-suivi"></ng-content>
 </div>
 
-<ng-template #image let-src>
-  <img class="main" [src]="getImage(src) || 'assets/unavailable.jpg'"/>
+<ng-template #image let-src="supervision">
+  <img class="main" [src]="getImage(supervision.files) || 'assets/unavailable.jpg'"/>
 </ng-template>

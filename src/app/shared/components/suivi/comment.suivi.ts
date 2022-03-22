@@ -6,6 +6,7 @@ import { Supervision, File } from "src/models/new/data.interfaces";
 import { DownloadFile } from "src/models/new/user/user.actions";
 import { SlideTemplate } from "../../directives/slideTemplate.directive";
 import { FileDownloader } from "../../services/file-downloader.service";
+import { DataQueries } from "src/models/new/data.state";
 
 @Component({
   selector: 'comment-suivi',
@@ -22,13 +23,10 @@ export class SuiviComments {
   @ContentChild(SuiviComments, {read: SuiviComments})
   parentComment: SuiviComments | null = null;
 
-  constructor(private downloader: FileDownloader, private sanitizer: DomSanitizer) {
+  constructor(private downloader: FileDownloader, private sanitizer: DomSanitizer, private store: Store) {
     
   }
 
-  ngOnInit() {
-    console.log(this.slides);
-  }
   _supervision: Supervision = {
     id: -1,
     Supervisions: [],
@@ -37,7 +35,8 @@ export class SuiviComments {
     comment: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
     files: []
   };
-  get supervision() { return this._supervision; }
+  get supervision() {
+    return this._supervision; }
 
   @Input()
   set supervision(supervision: Supervision) {
@@ -50,10 +49,19 @@ export class SuiviComments {
     //download fields on the go
   }
 
-  getImage(file?: File) {
-    if ( !file ) return null;
-    if ( file.content ) return this.downloader.toSecureBase64(file);
+  // getImage(file?: File) {
+  //   if ( !file ) return null;
+  //   if ( file.content ) return this.downloader.toSecureBase64(file);
 
-    return this.downloader.downloadFile(file).pipe(map(file => this.downloader.toSecureBase64(file)));
+  //   return this.downloader.downloadFile(file).pipe(map(file => this.downloader.toSecureBase64(file)));
+  // }
+
+  getImage(file:number[]) {
+    // let fileObject = this.store.selectSnapshot(DataQueries.getById('File', file[0]));
+    let test = this.downloader.downloadFile(file[0])    // return this.downloader.downloadFile(file[0]).pipe(map(file => 
+    //   {
+    //     this.downloader.toSecureBase64(file)}));
+    //   }
+    return null
   }
 }

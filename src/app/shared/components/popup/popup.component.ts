@@ -25,7 +25,7 @@ const TRANSITION_DURATION = 200;
 })
 export class UIPopup extends DimensionMenu {
   constructor(private cd: ChangeDetectorRef, private componentFactoryResolver: ComponentFactoryResolver,
-    private popupService: PopupService, private store: Store, ) {
+    private popupService: PopupService, private store: Store ) {
     super();
   }
 
@@ -158,6 +158,7 @@ export class PopupService {
   }
 
   openFile(file: BasicFile | File) {
+    console.log("openFile", file)
     if ( !file.content ) {
       this.downloader.downloadFile((file as File).id!, true).subscribe(file => this.openFile(file));
       return;

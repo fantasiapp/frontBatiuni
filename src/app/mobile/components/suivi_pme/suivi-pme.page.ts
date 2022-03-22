@@ -59,8 +59,6 @@ export class SuiviPME {
         supervisionsObject:this.computeSupervisionsforTask(detail.supervisions, supervisionsTaks),
         validationImage:SuiviPME.computeTaskImage(detail, "validated"),
         invalidationImage:SuiviPME.computeTaskImage(detail, "refused")}))
-    console.log("computeDates, tasks", this.tasks)
-    console.log("computeDates, id", supervisionsTaks)
     this.dates = mission.dates.map((value, id) => (
       { id:id,
         value: value,
@@ -97,7 +95,6 @@ export class SuiviPME {
         supervisions.push(allSupervisions[index]!)
       }
     }
-    console.log("supervision", supervisions)
     return supervisions
   }
 

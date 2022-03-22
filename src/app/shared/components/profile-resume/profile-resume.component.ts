@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, SimpleChanges } from "@angular/core";
 import { Select, Store } from "@ngxs/store";
 import { Observable } from "rxjs";
-import { Profile } from "src/models/new/data.interfaces";
-import { DataState } from "src/models/new/data.state";
+import { Profile, File } from "src/models/new/data.interfaces";
+import { DataQueries, DataState } from "src/models/new/data.state";
 import { ChangeProfileType } from "src/models/new/user/user.actions";
 
 @Component({
@@ -42,4 +42,66 @@ export class ProfileResume {
   changeProfileType(type: boolean) {
     this.store.dispatch(new ChangeProfileType(type));
   }
+  color1 = "#C95555"
+  color2 = "#FFD375"
+  color3 = "#D2FFCB"
+  color4 = "#BBEFB1"
+
+  ngOnChanges() {
+    const colorList:{ [key: string]: string } = {"red":"#C95555", "orange":"#FFD375", "lightGreen":"#D2FFCB", "green":"#BBEFB1", "grey":"#aaa"}
+    console.log("profile", this.profile)
+    const user = this.profile.user!
+    const company = this.profile.company
+    const files: (File | null)[] = company.files.map(fileId => this.store.selectSnapshot(DataQueries.getById('File', fileId)))
+    const filesName = files.map(file => {
+      if (file) {
+        return file.name
+      }
+      return null
+    })
+    const checkFile = ["URSSAF", "Kbis", "Trav. Dis", "Impôts", "Congés Payés"].map(name => filesName.includes(name))
+    const filesNature = files.map(file => {
+      if (file) {
+        return file.nature
+      }
+      return null
+    })
+    let step = "start"
+    if (user.firstName && user.lastName && company.amount && company.address && company.companyPhone && company.siret && company.jobs) {
+      step = "beginner"
+    }
+    if (filesNature.includes("labels")) {
+      step = "label"
+    }
+    if (!checkFile.includes(false)) {
+      step = "medium"
+    }
+    if (!checkFile.includes(false) && filesNature.includes("labels")) {
+      step = "medium"
+    }
+    console.log("Files", files)
+    if (step == "start") {
+      this.color1 = colorList.grey
+      this.color2 = colorList.grey
+      this.color3 = colorList.red
+      this.color4 = colorList.grey
+    } else if (step == "beginner") {
+      this.color1 = colorList.grey
+      this.color2 = colorList.grey
+      this.color3 = colorList.orange
+      this.color4 = colorList.orange
+    } else if (step == "medium") {
+      this.color1 = colorList.green
+      this.color2 = colorList.grey
+      this.color3 = colorList.green
+      this.color4 = colorList.green
+    } else if (step == "advanced") {
+      this.color1 = colorList.green
+      this.color2 = colorList.lightGreen
+      this.color3 = colorList.green
+      this.color4 = colorList.green
+    }
+    console.log("color", this.color1, this.color2, this.color3, this.color4)
+  }
+
 };

@@ -2,9 +2,9 @@
 
 //started off with borders, but later realized they aren't shown in all cases
 //keep calc the same and just hide them for now
-:host(.borders) {
-  border-color: #aaa;
-}
+// :host(.background) {
+//   background: conic-gradient(#C95555 0% 11.50%, white 11.50% 13.50%, #FFD375 13.5% 36.5%, white 36.50% 38.50%, #BBEFB1 38.50% 61.5%,white 61.50% 63.5%, #D2FFCB 63.5% 86.5%, white 86.5% 88.5%, #C95555 88.5%);
+// }
 
 :host {
   display: block;
@@ -12,21 +12,26 @@
   flex-shrink: 0;
   width: $profile-image-size;
   height: $profile-image-size;
+  // background-color: #aaa;
   
   border-radius: 50%;
   transform: rotate(45deg);
-
-  border: $profile-level-thickness solid transparent;
-
+  --color1: #C95555;
+  --color2: #FFD375;
+  --color3: #D2FFCB;
+  --color4: #BBEFB1;
+  
+  background: conic-gradient(var(--color1) 11.50%, white 11.50% 13.50%, var(--color2) 13.5% 36.5%, white 36.50% 38.50%, var(--color3) 38.50% 61.5%,white 61.50% 63.5%, var(--color4) 63.5% 86.5%, white 86.5% 88.5%, var(--color1) 88.5%);
 
   &, .image-container, img {
     border-radius: 50%;
   }
 
   .image-container {
+    // display: none;
     overflow: hidden;
-    top: 0;
-    left: 0;
+    top: $profile-level-thickness;
+    left: $profile-level-thickness;
     position: absolute;
 
     &, img {

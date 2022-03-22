@@ -27,6 +27,7 @@ export class SlideTemplate<T> extends AnimateCSS {
   ngOnInit() {
     if ( !this.template ) return;
     this.ref = this.createTemplate(this.template, this.contexts[0]);
+    console.log("slideTemplate", this.ref.view)
     this.view.insert(this.ref.view);
   }
 
