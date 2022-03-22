@@ -66,36 +66,55 @@ export class ProfileResume {
       }
       return null
     })
+    const levelStart = user.firstName && user.lastName && company.amount && company.address && company.companyPhone && company.siret && company.jobs
     let step = "start"
-    if (user.firstName && user.lastName && company.amount && company.address && company.companyPhone && company.siret && company.jobs) {
+    if (levelStart) {
       step = "beginner"
     }
     if (filesNature.includes("labels")) {
       step = "label"
     }
-    if (!checkFile.includes(false)) {
+    if (levelStart && filesNature.includes("labels")) {
       step = "medium"
     }
-    if (!checkFile.includes(false) && filesNature.includes("labels")) {
-      step = "medium"
+    if (levelStart && !checkFile.includes(false)) {
+      step = "advanced"
     }
-    console.log("Files", files)
+    if (levelStart && !checkFile.includes(false) && filesNature.includes("labels")) {
+      step = "completed"
+    }
+
     if (step == "start") {
       this.color1 = colorList.grey
       this.color2 = colorList.grey
       this.color3 = colorList.red
       this.color4 = colorList.grey
+      
     } else if (step == "beginner") {
       this.color1 = colorList.grey
       this.color2 = colorList.grey
       this.color3 = colorList.orange
       this.color4 = colorList.orange
+    
+    } else if (step == "label") {
+      this.color1 = colorList.grey
+      this.color2 = colorList.lightGreen
+      this.color3 = colorList.red
+      this.color4 = colorList.grey
+
     } else if (step == "medium") {
+      this.color1 = colorList.grey
+      this.color2 = colorList.lightGreen
+      this.color3 = colorList.orange
+      this.color4 = colorList.orange
+
+    } else if (step == "advanced") {
       this.color1 = colorList.green
       this.color2 = colorList.grey
       this.color3 = colorList.green
       this.color4 = colorList.green
-    } else if (step == "advanced") {
+
+    } else if (step == "completed") {
       this.color1 = colorList.green
       this.color2 = colorList.lightGreen
       this.color3 = colorList.green
