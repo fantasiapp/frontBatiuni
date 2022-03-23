@@ -3,22 +3,20 @@
   <img *ngIf="canChangePicture" src="assets/icons/modify.svg" class="modify-icon image" (click)="changePicture.emit()"/>
 </section>
 
-<switch *ngIf="switch"
-  off="Profil ST" on="Profil PME"  style="text-align: center;"
-  [value]="(view$ | async) == 'PME'" 
-  (valueChange)="changeProfileType($event)"
-  [disabled]="!profile.user || (profile.company.role !== 3 || null)">
-</switch>
-
 <section class="quick-intro flex column center-cross small-space-children-margin">
-  <span class="text-emphasis">{{
-    (profile.user ? (profile.user.firstName + " " + profile.user.lastName) : profile.company.name) | titlecase
-  }}</span>
   <ng-container *ngIf="profile.user && showMore">
+    <switch *ngIf="switch"
+      off="Profil ST" on="Profil PME"  style="text-align: center;"
+      [value]="(view$ | async) == 'PME'" 
+      (valueChange)="changeProfileType($event)"
+      [disabled]="!profile.user || (profile.company.role !== 3 || null)">
+    </switch>
+    <span class="text-emphasis">{{
+      (profile.user ? (profile.user.firstName + " " + profile.user.lastName) : profile.company.name) | titlecase
+    }}</span>
     <span>{{ profile.user!.username }}</span>
     <span>{{ profile.user!.cellPhone | space: 2:1 }}</span>
+    <stars *ngIf="star" (click)="ratingsClicked.emit()" value="3.9" disabled></stars>
   </ng-container>
-  <a *ngIf="canChangePicture" class="blue">Modifier l’image de profil</a>
-  <stars *ngIf="star" (click)="ratingsClicked.emit()" value="3.9" disabled></stars>
 </section>
 <ng-content></ng-content>

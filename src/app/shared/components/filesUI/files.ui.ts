@@ -55,7 +55,7 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
   editName: false | any = false;
 
   @Input()
-  comment : string = "(Moins que 3 mois)"
+  comment : string = "(Moins de 3 mois)"
 
   @Input()
   imgsrc : string = "";

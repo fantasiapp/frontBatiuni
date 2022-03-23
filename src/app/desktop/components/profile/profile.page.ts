@@ -66,6 +66,7 @@ export class ProfilePageComponent {
         this.cd.markForCheck();
       },
       err => {
+        console.log("error", err)
         this.info.show("error", "Erreur lors du modification du profil", 5000);
         this.cd.markForCheck();
       });

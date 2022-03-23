@@ -17,7 +17,8 @@
           class="value">{{profile.company.siret}}</span>
       </span>
       <span>
-        <span class="text-light-emphasis">Métier : </span>
+        <span class="text-light-emphasis" *ngIf = "profile.company.allQualifications">Métier : TCE<br/></span>
+        <span class="text-light-emphasis" *ngIf = "!profile.company.allQualifications">Métier :</span>
         <span *ngFor="let job of companyJobs; let i = index" class="value">{{ job.number }} {{ jobs[i].name }}, </span>
       </span>
       <span>
@@ -28,23 +29,24 @@
         <span class="text-light-emphasis">Capital : </span>
         <span class="value">{{profile.company.capital | currency: 'EUR':'symbol':'1.0-0' }}</span>
       </span>
-      <span>
+      <!-- <span>
         <span class="text-light-emphasis">Numéro fixe : </span>
         <span class="value">{{profile.company.companyPhone | space: 2:1 }}</span>
-      </span>
-      <span>
+      </span> -->
+      <!-- <span>
         <span class="text-light-emphasis">Site internet : </span>
         <span class="value link"><a [href]="profile.company.webSite">{{profile.company.webSite}}</a></span>
-      </span>
+      </span> -->
       <span>
         <span class="text-light-emphasis">Montant Horaire moyen : </span>
         <span class="value">{{ profile.company.amount ? profile.company.amount + ' €' : 'Non renseigné'}} </span>
       </span>
+      <span class="text-light-emphasis" *ngIf="profile.company.saturdayDisponibility">Disponible pour des missions les samedis</span>
     </section>
     
     <hr class="dashed"/>
     <section class="full-width documents">
-      <h4>Documents importants</h4>
+      <!-- <h4>Documents importants</h4> -->
       <div class="flex images">
         <file-svg *ngFor="let file of attachedFiles" [name]="file.name" [color]="getFileColor(file.name)" (click)="openFile(file)"></file-svg>
       </div>

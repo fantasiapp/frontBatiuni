@@ -39,7 +39,7 @@ import { FilterService } from "../services/filter.service";
       <ng-container formArrayName="some_employee">
         <div class="radio-item">
           <checkbox class="grow" name="job-type" [formControlName]="0"></checkbox>
-          <span>Moins que 10 salariés</span>
+          <span>Moins de 10 salariés</span>
         </div>
         <div class="radio-item">
           <checkbox class="grow" name="job-type" [formControlName]="1"></checkbox>

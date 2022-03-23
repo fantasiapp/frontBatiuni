@@ -151,6 +151,7 @@ export class SuiviPME {
   }
 
   reloadMission = (dateOld:DateG): (DateG|Mission)[] =>  {
+    console.log("reloadMission")
     let dateResult = dateOld
     this.mission = this.store.selectSnapshot(DataQueries.getById('Mission', this.mission!.id))
     this.dates.forEach(dateNew => {
@@ -158,6 +159,7 @@ export class SuiviPME {
         dateResult = dateNew
       }
     })
+    this.cd.markForCheck()
     return [dateResult, this.mission!]
   }
 }

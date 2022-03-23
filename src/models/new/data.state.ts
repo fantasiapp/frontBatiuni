@@ -189,7 +189,8 @@ export class DataState {
     return req.pipe(
       tap((response: any) => {
         if ( response[modify.action] !== 'OK' )
-          throw response['messages'];
+          // this.inZone(() => this.info.show("error", response.messages, 3000));
+          throw response.messages;
         
         delete response[modify.action];
 

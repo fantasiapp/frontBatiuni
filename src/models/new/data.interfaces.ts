@@ -34,6 +34,7 @@ export interface User {
   lastName: string;
   proposer: string;
   cellPhone: string;
+  function: string;
   favoritePosts: Ref<Post>[];
   viewedPosts: Ref<Post>[];
 };
@@ -62,6 +63,9 @@ export interface Company {
   availabilities: Ref<Disponibility>[];
   unity: string;
   amount: number;
+  saturdayDisponibility: boolean
+  allQualifications : boolean
+
 };
 
 export interface PostDetail {

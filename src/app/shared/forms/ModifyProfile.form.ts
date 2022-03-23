@@ -44,6 +44,10 @@ import { SpacingPipe } from "../pipes/spacing.pipe";
           <label>Téléphone portable</label>
           <input class="form-element" type="tel" formControlName="UserProfile.cellPhone" />
         </div>
+        <div class="form-input">
+          <label>Fonction dans l'entreprise</label>
+          <input class="form-element" type="text" formControlName="UserProfile.function" />
+        </div>
       </form>
     </section>
   </ng-template>
@@ -90,7 +94,35 @@ import { SpacingPipe } from "../pipes/spacing.pipe";
               <button (click)="updateJobs(jobOptions.value!)" style="display:inline; width: 80%; padding: 5px;" class="button gradient"> Terminer </button>
             </div>
           </ng-template>
-        </div>            
+        </div>
+        
+        <div class="form-input">
+          <label>Êtes vous une entreprise TCE</label>
+          <div class="flex row radio-container">
+            <div class="radio-item">
+              <radiobox class="grow" [onselect]="false" formControlName="UserProfile.Company.allQualifications"></radiobox>
+              <span>Non</span>
+            </div>
+            <div class="radio-item">
+              <radiobox class="grow" [onselect]="true" formControlName="UserProfile.Company.allQualifications"></radiobox>
+              <span>Oui</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-input">
+          <label>Êtes-vous disponible pour des missions les samedis</label>
+          <div class="flex row radio-container">
+            <div class="radio-item">
+              <radiobox class="grow" [onselect]="false" formControlName="UserProfile.Company.saturdayDisponibility"></radiobox>
+              <span>Non</span>
+            </div>
+            <div class="radio-item">
+              <radiobox class="grow" [onselect]="true" formControlName="UserProfile.Company.saturdayDisponibility"></radiobox>
+              <span>Oui</span>
+            </div>
+          </div>
+        </div>
 
         <div class="form-input">
           <label>Site internet</label>
@@ -298,6 +330,9 @@ export class ModifyProfileForm {
     'UserProfile.cellPhone': new FormControl('', [
       FieldType('phone')
     ]),
+    'UserProfile.function': new FormControl('', [
+
+    ]),
     'UserProfile.Company.JobForCompany': new FormArray([
 
     ]),
@@ -315,6 +350,12 @@ export class ModifyProfileForm {
     ]),
     'UserProfile.Company.amount': new FormControl('', [
       FieldType('number')
+    ]),
+    'UserProfile.Company.allQualifications': new FormControl('', [
+      
+    ]),
+    'UserProfile.Company.saturdayDisponibility': new FormControl('', [
+      
     ]),
     'UserProfile.Company.webSite': new FormControl('', [
       FieldType('url')
@@ -344,7 +385,6 @@ export class ModifyProfileForm {
   }
   
   async ngOnInit() {
-    console.log(this.profile)
     let permissions  = await Camera.checkPermissions();
     if ( permissions.camera != 'granted' || permissions.photos != 'granted' )
       try {
@@ -366,6 +406,7 @@ export class ModifyProfileForm {
 
   reload() {
     const { user, company} = this.profile as {user: User, company: Company};
+    console.log("reload", company.saturdayDisponibility)
     this.companyFiles = this.store.selectSnapshot(DataQueries.getMany('File', this.profile.company.files));
     this.companyLabels = this.store.selectSnapshot(DataQueries.getMany('LabelForCompany', this.profile.company.labels));
     this.companyJobs = this.store.selectSnapshot(DataQueries.getMany('JobForCompany', this.profile.company.jobs));
@@ -401,10 +442,14 @@ export class ModifyProfileForm {
     this.form.controls['UserProfile.firstName']?.setValue(user.firstName);
     this.form.controls['UserProfile.userName']?.setValue(user.username);
     this.form.controls['UserProfile.cellPhone']?.setValue(this.space(user.cellPhone));
+    this.form.controls['UserProfile.function']?.setValue(user.function);
     this.form.controls['UserProfile.Company.name']?.setValue(company.name);
     this.form.controls['UserProfile.Company.siret']?.setValue(company.siret);
     this.form.controls['UserProfile.Company.revenue']?.setValue(company.revenue);
     this.form.controls['UserProfile.Company.capital']?.setValue(company.capital);
+    this.form.controls['UserProfile.Company.amount']?.setValue(company.amount);
+    this.form.controls['UserProfile.Company.allQualifications']?.setValue(company.allQualifications);
+    this.form.controls['UserProfile.Company.saturdayDisponibility']?.setValue(company.saturdayDisponibility);
     this.form.controls['UserProfile.Company.webSite']?.setValue(company.webSite);
     this.form.controls['UserProfile.Company.companyPhone']?.setValue(this.space(company.companyPhone));
     
