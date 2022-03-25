@@ -70,7 +70,7 @@ import { InfoService } from "../components/info/info.component";
     <div class="form-input">
       <label>Dates du chantier</label>
       <div class="center-text">
-        <switch on="Intervalle" off="Jour" #switch [value]="false"></switch>
+        <switch (click)=eraseDateIfNecessary() on="Intervalle" off="Jour" #switch [value]="false"></switch>
       </div>
       <calendar [useEvents]="false" formControlName="calendar" [mode]="switch.value ? 'range' : 'single'"></calendar>
     </div>
@@ -336,6 +336,10 @@ export class MakeAdForm {
     details.removeAt(index);
   }
 
+  eraseDateIfNecessary() {
+    console.log("eraseDateIfNecessary")
+  }
+
   submit(draft: boolean) {
     if ( this.post ) {
       if ( !draft ) {
@@ -366,7 +370,7 @@ export class MakeAdForm {
         this.info.show("success", "Annonce Envoyée", 2000);
         this.done.emit();
       }, () => {
-        console.log("failure")
+        console.log("success")
         this.info.show("error", "Echec de l'envoi", 5000);
       });
     }

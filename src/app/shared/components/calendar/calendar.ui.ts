@@ -153,6 +153,7 @@ export class CalendarUI extends UIDefaultAccessor<DayState[]> {
   }
 
   setSelection(days: string[]) {
+    console.log("setSelection")
     this.selection = days;
 
     if ( !this.useEvents )
