@@ -120,10 +120,10 @@ import { InfoService } from "../components/info/info.component";
   </form>
 
   <footer class="flex row space-between sticky-footer full-width submit-container" style="background-color: white;">
-    <button class="button passive font-Poppins full-width" (click)="submit(true)" [disabled]="!makeAdForm.valid">
+    <button class="button passive font-Poppins full-width" (click)="submit(true)" [disabled]="invalid">
       {{this.post ? 'Enregistrer' : 'Brouillon'}}
     </button>
-    <button class="button gradient font-Poppins full-width" (click)="submit(false)" [disabled]="!makeAdForm.valid">
+    <button class="button gradient font-Poppins full-width" (click)="submit(false)" [disabled]="invalid">
       Passer en ligne
     </button>
   </footer>
@@ -219,7 +219,6 @@ export class MakeAdForm {
 
     this._post = p;
     //load values
-    console.log('post:', p);
     const postDetails = this.store.selectSnapshot(DataQueries.getMany('DetailedPost', p.details));
     const files = this.store.selectSnapshot(DataQueries.getMany('File', p.files));
     //fill form
@@ -259,7 +258,6 @@ export class MakeAdForm {
     //load files
     const filesForm = this.makeAdForm.get('documents')! as FormArray;
     filesForm.clear();
-    console.log(files);
     for ( const file of files )
       filesForm.push(new FormGroup({
         name: new FormControl(file.name),
@@ -297,6 +295,10 @@ export class MakeAdForm {
     ]),
     calendar: new FormControl([])
   });
+  get invalid () {
+    const calendar = this.makeAdForm.get('calendar')
+    return !this.makeAdForm.valid || calendar?.value.length == 0
+  }
 
   get documentsControls() {
     return (this.makeAdForm.get('documents') as FormArray).controls;
@@ -318,7 +320,6 @@ export class MakeAdForm {
     const documents = this.makeAdForm.get('documents') as FormArray,
       item = documents.at(index).value.fileData;
     documents.removeAt(index);
-    console.log('remove ', item);
     if ( item.id ) this.store.dispatch(new DeleteFile(item.id));
   }
   
@@ -359,10 +360,13 @@ export class MakeAdForm {
       //switch type
     } else {
       this.info.show("info", "Envoi de l'annonce...", Infinity);
+      const calendar:any[] = this.makeAdForm.get('calendar')!.value
       this.store.dispatch(UploadPost.fromPostForm(this.makeAdForm.value, draft)).pipe(take(1)).subscribe(() => {
+        console.log("success")
         this.info.show("success", "Annonce Envoyée", 2000);
         this.done.emit();
       }, () => {
+        console.log("failure")
         this.info.show("error", "Echec de l'envoi", 5000);
       });
     }

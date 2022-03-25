@@ -7,10 +7,10 @@ import { Dimension, DimensionMenu } from "src/app/shared/common/classes";
 import { ContextUpdate, TemplateContext, ViewComponent, ViewTemplate } from "../../common/types";
 import { FileDownloader } from "../../services/file-downloader.service";
 import { BasicFile } from "../filesUI/files.ui";
-import { File, Mission, DateG, Task } from "src/models/new/data.interfaces";
+import { File, Company, Mission, DateG, Task } from "src/models/new/data.interfaces";
 import { DataQueries, DataState } from "src/models/new/data.state";
 import { FileContext, FileViewer } from "../file-viewer/file-viewer.component";
-import { SignContract, ModifyDetailedPost, CreateDetailedPost } from "src/models/new/user/user.actions";
+import { SignContract, ModifyDetailedPost } from "src/models/new/user/user.actions";
 import { SuiviChantierDate } from "src/app/mobile/components/suivi_chantier_date/suivi_chantier_date.page";
 
 const TRANSITION_DURATION = 200;
@@ -40,6 +40,9 @@ export class UIPopup extends DimensionMenu {
 
   @ViewChild('setDate', {read: TemplateRef, static: true})
   setDate!: TemplateRef<any>;
+
+  @ViewChild('closeMission', {read: TemplateRef, static: true})
+  closeMission!: TemplateRef<any>;
 
   @Input()
   content?: Exclude<PopupView, ContextUpdate>;
@@ -133,7 +136,7 @@ export class UIPopup extends DimensionMenu {
 
 export type PredefinedPopups<T = any> = {
   readonly type: 'predefined';
-  name: 'deletePost' | 'sign' | 'setDate';
+  name: 'deletePost' | 'sign' | 'setDate' | 'closeMission'; // | 'closeMission'
   context?: TemplateContext;
 };
 
@@ -268,6 +271,17 @@ export class PopupService {
       }
   }
 
+  openCloseMission(company: Company) {
+    console.log("openCloseMission", company)
+    this.popups$.next({
+      type: 'predefined',
+      name: 'closeMission',
+      context: { $implicit: company }
+    });
+    this.dimension$.next(this.defaultDimension)
+    return new EventEmitter;
+  }
+
   hide() {
     this.popups$.next(undefined);
   }
@@ -275,4 +289,4 @@ export class PopupService {
   updateTemplate(context: ViewTemplate['context']) {
     this.popups$.next({type: 'context', context})
   }
-};
+}

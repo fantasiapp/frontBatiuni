@@ -1,7 +1,7 @@
 import { Select, Store } from "@ngxs/store";
 import { ChangeDetectionStrategy, Component, ChangeDetectorRef, Input} from "@angular/core";
 import { Destroy$ } from "src/app/shared/common/classes";
-import { Mission, DateG, Task, PostDetail } from "src/models/new/data.interfaces";
+import { Mission, DateG, Task } from "src/models/new/data.interfaces";
 import { PopupService } from "src/app/shared/components/popup/popup.component";
 import { DataQueries, DataState } from "src/models/new/data.state";
 import { take } from "rxjs/operators";
@@ -30,7 +30,7 @@ export class SuiviChantierDate extends Destroy${
     super()
   }
 
-  _date: DateG = {id:0, value: 0, tasks:[], selectedTasks:[], taskWithoutDouble:[], view:"ST", supervisions: []};
+  _date: DateG = {id:0, value: 0, tasks:[], selectedTasks:[], taskWithoutDouble:[], view:this.view, supervisions: []};
   get date() { return this._date; }
 
   @Input()
@@ -53,13 +53,6 @@ export class SuiviChantierDate extends Destroy${
       this._reloadMission = callBack
     }
 
-  swipeMenuModifyAction() {
-    this.swipeMenu = true
-  }
-
-  swipeMenuPhoto() {
-    this.swipeMenuImage = true
-  }
   async takePhoto() {        
     const photo = await Camera.getPhoto({
       allowEditing: false,

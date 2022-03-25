@@ -49,7 +49,6 @@ export class ProfileResume {
 
   ngOnChanges() {
     const colorList:{ [key: string]: string } = {"red":"#C95555", "orange":"#FFD375", "lightGreen":"#D2FFCB", "green":"#BBEFB1", "grey":"#aaa"}
-    console.log("profile", this.profile)
     const user = this.profile.user!
     const company = this.profile.company
     const files: (File | null)[] = company.files.map(fileId => this.store.selectSnapshot(DataQueries.getById('File', fileId)))
@@ -120,7 +119,6 @@ export class ProfileResume {
       this.color3 = colorList.green
       this.color4 = colorList.green
     }
-    console.log("color", this.color1, this.color2, this.color3, this.color4)
   }
 
 };

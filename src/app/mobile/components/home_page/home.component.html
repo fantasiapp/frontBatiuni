@@ -74,7 +74,7 @@
     <slidemenu [(open)]="postMenu.open" [header]="false" #slideOnlinePost>
       <header class="clear-margin full-width sticky-header flex center-cross annonce" customHeader>
         <img (click)="slideOnlinePost.close()" src="assets/arrowlblack.svg" />
-        <span class="grow center-text text-light-emphasis">Annonce en Ligne</span>
+        <span class="grow center-text text-light-emphasis">Annonce(s) en Ligne</span>
         <img *ngIf="view == 'PME'; else starTemplate" (click)="postMenu.swipeup = true" src="assets/Option.svg"/>
         <ng-template #starTemplate>
           <!-- <stars [toggle]="true"
@@ -97,7 +97,7 @@
       </ng-container>    
     </slidemenu>
 
-    <!-- Component Three -->
+    <!-- Component Mission -->
     <slidemenu [(open)]="missionMenu.open" [header]="false" #slideMission>
       <header class="clear-margin full-width sticky-header flex center-cross annonce" customHeader>
         <img (click)="slideMission.close()" src="assets/arrowlblack.svg" />
@@ -147,3 +147,10 @@
     <button class="button active full-width" (click)="handleApplication(post, application)">Traiter la candidature</button>
   </footer>
 </ng-template>
+
+<swipeup [(open)]="missionMenu.swipeup">
+  <li >Modifier les horaires / les dates de présence</li>
+  <li>Appeler le 06 34 09 06 94</li>
+  <li (click)="closeMission()">Clôturer la mission</li>
+  <li>Dupliquer l'annonce</li>
+</swipeup>

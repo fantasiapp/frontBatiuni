@@ -55,7 +55,7 @@ export type ApplyForm = {
       <span>{{collapsed ? 'Lire la suite' : 'Lire moins'}}</span>  <img src="assets/arrowdown.svg" [style.transform]="'rotate(' + (180 * +!collapsed) + 'deg)'"/>
     </div>
 
-    <ng-container *ngIf="application && view == 'ST'">
+    <ng-container *ngIf="application && view == 'ST' && post.counterOffer">
       <hr class="dashed"/>
       <form class="devis form-control" [formGroup]="form">
         <h5>Pour postuler veuillez proposer votre devis</h5>

@@ -187,7 +187,7 @@ export class UploadPost {
     public DetailedPost: string[],
     public files: any,
     public draft: boolean,
-    public id?:number
+    public id?:number,
   ) {
     if ( this.id ) this.action = 'modifyPost';
     else delete this['id'];
@@ -200,6 +200,7 @@ export class UploadPost {
     documents.forEach(doc => {
       files[doc.name] = doc.fileData;
     });
+    console.log("fromPostForm", value.calendar)
     
     return new UploadPost(
       value.address,

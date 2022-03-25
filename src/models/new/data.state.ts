@@ -347,7 +347,6 @@ export class DataState {
       }),
       concatMap((postId: number) => {
         uploads.forEach(upload => upload.target = postId);
-        console.log('now uploads are', uploads);
         //return this to wait for file downloads first
         return ctx.dispatch(uploads);
       }),

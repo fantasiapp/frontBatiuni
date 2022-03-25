@@ -3,7 +3,7 @@
         <div *ngIf="date.view=='PME'" class="clear-margin full-width flex center-cross space-arround">
             <label style="color:#0C5E8D; padding-left:3%">Choisir les tâches pour ce jour</label>
             <div style="width:45%"></div>
-            <img (click)="swipeMenuModifyAction()" src="assets/Option.svg"/>
+            <img (click)="swipeMenu = true" src="assets/Option.svg"/>
         </div>
         <div style="height:20px"></div>
     </div>
@@ -20,7 +20,7 @@
         </div>
         <div *ngIf="task.refused" class="divComment">
           <input id="input_{{task.id}}" class="inputComment" type="text" placeholder="Ajouter un commentaire" (focusout)="mainComment(task)">
-          <img (click)="swipeMenuPhoto()" src="assets/camera.png"/>
+          <img (click)="swipeMenuImage = true" src="assets/camera.png"/>
         </div>
     <div style="height:30px"></div>
     </div>
@@ -31,7 +31,7 @@
         <label style="color:#0C5E8D; padding-left:3%">Communiquer avec votre partenaire de chantier</label>
         <div class="divComment">
           <input id="input_general" class="inputComment" type="text" placeholder="Ajouter un commentaire" (focusout)="mainComment(null)">
-          <img (click)="swipeMenuPhoto()" src="assets/camera.png"/>
+          <img (click)="swipeMenuImage == true" src="assets/camera.png"/>
         </div>
     </div>
     <div style="height:30px"></div>
@@ -39,10 +39,10 @@
 <hr class="dashed" style="margin-left: 0 !important;">
 
 <swipeup [(open)]="swipeMenu">
-    <li (click)="addDateToPost()"> Modifier les tâches</li>
+  <li (click)="addDateToPost()"> Modifier les tâches</li>
 </swipeup>
 
 <swipeup [(open)]="swipeMenuImage" #modifyPicture>
-    <li (click)="takePhoto()">Accédez à l'appareil photo</li>
-    <li (click)="selectPhoto()">Télécharger une image</li>
-  </swipeup>
+  <li (click)="takePhoto()">Accédez à l'appareil photo</li>
+  <li (click)="selectPhoto()">Télécharger une image</li>
+</swipeup>

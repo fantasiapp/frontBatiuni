@@ -11,7 +11,7 @@ import { SlidemenuService } from "src/app/shared/components/slidemenu/slidemenu.
 import { SwipeupService } from "src/app/shared/components/swipeup/swipeup.component";
 import { ApplyPost, DeletePost, DuplicatePost, HandleApplication, MarkViewed, SetFavorite, SwitchPostType } from "src/models/new/user/user.actions";
 import { DataQueries, DataState, QueryAll, SnapshotAll } from 'src/models/new/data.state';
-import { Profile, Post, Mission, PostMenu } from "src/models/new/data.interfaces";
+import { Profile, Post, Mission, PostMenu, Company } from "src/models/new/data.interfaces";
 import { FilterService } from "src/app/shared/services/filter.service";
 import { ApplyForm } from "../../ui/annonce-resume/annonce-resume.ui";
 
@@ -230,5 +230,16 @@ export class HomeComponent extends Destroy$ {
     });
 
     this.swipeupService.hide();
+  }
+
+  // Mission swipeUp
+  closeMission() {
+    const subContractorId = this.missionMenu.post?.subContractor
+    if (subContractorId) {
+      // const company = this.store.selectSnapshot(DataQueries.getById('Company', subContractorId))
+      // this.popup.openCloseMission(company!);
+    }
+    console.log("closeMission", this.missionMenu)
+    this.missionMenu.swipeup = false
   }
 };

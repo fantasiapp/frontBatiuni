@@ -143,7 +143,7 @@ export class DataReader {
     return patch({
       session: {
         currentUser: data['currentUser'],
-        view: roles == 2 ? 'PME' : 'ST'
+        view: roles == 1 ? 'PME' : 'ST'
       }
     })
   }

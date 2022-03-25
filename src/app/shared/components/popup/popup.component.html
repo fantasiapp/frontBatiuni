@@ -35,5 +35,15 @@
     </ul>
     <input id="addTask" type="text" placeholder="Ajouter une nouvelle tâche"  (focusout)="addNewTask(assignDate.missionId, assignDate.date.value)">
   </div>
-  <!-- <label class="subtitleDate">Créer une nouvelle tâche</label> -->
+</ng-template>
+
+<ng-template #closeMission let-company>
+  <label>Noter l'entreprise</label>
+  <label> {{ company.name }}</label>
+  <label>Confirmer-vous la clôture de cette mission ?</label>
+  <div style="height:5%;"></div>
+  <div class="controls full-width flex space-around">
+    <button class="button active" >Confirmer</button>
+    <button class="button passive" >Annuler</button>
+  </div>
 </ng-template>

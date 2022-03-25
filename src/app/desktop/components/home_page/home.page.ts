@@ -83,7 +83,6 @@ export class HomePageComponent extends Destroy$ {
     this.amount = post.amount;
     this.date[0] = post.dueDate;
     this.date[1] = post.endDate;
-    console.log(this.postResumerCandidates)
     // const candidate = this.userOnlinePosts.filter(chosen => chosen.id === post.id)
     // this.candidate = candidate.map(user => user.candidates)
     // this.candidateData = (this.candidate[0] || []).map((user: any) => {
@@ -129,7 +128,7 @@ export class HomePageComponent extends Destroy$ {
       this.allOnlinePosts = mapping.get(this.symbols.otherOnlinePost) || [];
       this.cd.markForCheck();
     });
-    console.log(this.allOnlinePosts)
+    console.log("profile resume", this.postResumer.counterOffer)
   }
 
   switchDraft(id: number) {
