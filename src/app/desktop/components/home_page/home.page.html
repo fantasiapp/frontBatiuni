@@ -87,7 +87,7 @@
 
         <!-- Validee -->
         <section #valide class="main web-content font-Poppins space-children-margin  addMargin responsive"
-          *ngIf="resumerType == 'valider';else enlgine">
+          *ngIf="resumerType == 'valider';else enligne">
           <h1 class="title-with-line" #0>Résumé de la mission</h1>
           <div class="description">
             <ul>
@@ -107,12 +107,12 @@
             </span>
           </div>
           <h1 class="title-with-line" #2>Suivi de chantier</h1>
-          <suivi-chantier></suivi-chantier>
+          <!-- <suivi-chantier></suivi-chantier> -->
           <suivi-chantier></suivi-chantier>
         </section>
 
         <!-- Enligne -->
-        <ng-template #enlgine >
+        <ng-template #enligne >
           <section class="main web-content font-Poppins space-children-margin addMargin responsive">
             <span class="title-with-line" >Nous avons besoin de</span>
             <div class="description">

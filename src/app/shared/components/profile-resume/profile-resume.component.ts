@@ -42,10 +42,6 @@ export class ProfileResume {
   changeProfileType(type: boolean) {
     this.store.dispatch(new ChangeProfileType(type));
   }
-  color1 = "#C95555"
-  color2 = "#FFD375"
-  color3 = "#D2FFCB"
-  color4 = "#BBEFB1"
 
   ngOnChanges() {
     const colorList:{ [key: string]: string } = {"red":"#C95555", "orange":"#FFD375", "lightGreen":"#D2FFCB", "green":"#BBEFB1", "grey":"#aaa"}
@@ -58,67 +54,6 @@ export class ProfileResume {
       }
       return null
     })
-    const checkFile = ["URSSAF", "Kbis", "Trav. Dis", "Impôts", "Congés Payés"].map(name => filesName.includes(name))
-    const filesNature = files.map(file => {
-      if (file) {
-        return file.nature
-      }
-      return null
-    })
-    const levelStart = user.firstName && user.lastName && company.amount && company.address && company.companyPhone && company.siret && company.jobs
-    let step = "start"
-    if (levelStart) {
-      step = "beginner"
-    }
-    if (filesNature.includes("labels")) {
-      step = "label"
-    }
-    if (levelStart && filesNature.includes("labels")) {
-      step = "medium"
-    }
-    if (levelStart && !checkFile.includes(false)) {
-      step = "advanced"
-    }
-    if (levelStart && !checkFile.includes(false) && filesNature.includes("labels")) {
-      step = "completed"
-    }
-
-    if (step == "start") {
-      this.color1 = colorList.grey
-      this.color2 = colorList.grey
-      this.color3 = colorList.red
-      this.color4 = colorList.grey
-      
-    } else if (step == "beginner") {
-      this.color1 = colorList.grey
-      this.color2 = colorList.grey
-      this.color3 = colorList.orange
-      this.color4 = colorList.orange
-    
-    } else if (step == "label") {
-      this.color1 = colorList.grey
-      this.color2 = colorList.lightGreen
-      this.color3 = colorList.red
-      this.color4 = colorList.grey
-
-    } else if (step == "medium") {
-      this.color1 = colorList.grey
-      this.color2 = colorList.lightGreen
-      this.color3 = colorList.orange
-      this.color4 = colorList.orange
-
-    } else if (step == "advanced") {
-      this.color1 = colorList.green
-      this.color2 = colorList.grey
-      this.color3 = colorList.green
-      this.color4 = colorList.green
-
-    } else if (step == "completed") {
-      this.color1 = colorList.green
-      this.color2 = colorList.lightGreen
-      this.color3 = colorList.green
-      this.color4 = colorList.green
-    }
   }
 
 };

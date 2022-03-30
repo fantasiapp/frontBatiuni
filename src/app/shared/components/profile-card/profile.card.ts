@@ -36,7 +36,7 @@ import { DataQueries, QueryProfile, Snapshot } from "src/models/new/data.state";
 
     profile-image {
       position: absolute; left: 0; top: 0;
-      transform: scale(0.5) translate(-10px, -30px) rotate(45deg);
+      transform: scale(0.5) translate(-10px, -30px);
     }
 
     .description {

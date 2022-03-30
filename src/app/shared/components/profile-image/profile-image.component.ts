@@ -3,7 +3,7 @@ import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser";
 import { Store } from "@ngxs/store";
 import { Observable } from "rxjs";
 import { take } from "rxjs/operators";
-import { File, Company, Profile } from "src/models/new/data.interfaces";
+import { File, Company, Profile, User } from "src/models/new/data.interfaces";
 import { DataQueries, QueryProfile } from "src/models/new/data.state";
 import { DownloadFile } from "src/models/new/user/user.actions";
 import { Destroy$ } from "../../common/classes";
@@ -20,8 +20,10 @@ export class UIProfileImageComponent extends Destroy$ {
 
   image: File | null = null;
   src: SafeResourceUrl | string = '';
-  
-  colorProfile: string = "conic-gradient(#C95555 11.50%, white 11.50% 13.50%, #FFD375 13.5% 36.5%, white 36.50% 38.50%, #D2FFCB 38.50% 61.5%,white 61.50% 63.5%, #BBEFB1 63.5% 86.5%, white 86.5% 88.5%, #C95555 88.5%);"
+  color1 = "#C95555"
+  color2 = "#FFD375"
+  color3 = "#D2FFCB"
+  color4 = "#BBEFB1"
 
   @QueryProfile()
   @Input()
@@ -34,7 +36,9 @@ export class UIProfileImageComponent extends Destroy$ {
     
     if ( changes['profile'] ) {
       (this.profile as Observable<Profile>).pipe(take(1)).subscribe(profile => {
+        this.setColor(profile.company)
         this.image = this.store.selectSnapshot(DataQueries.getProfileImage(profile.company.id));
+        console.log("image", this.image, profile.company.id)
         if ( !this.image ) {
           const fullname = profile.company.name[0].toUpperCase();
           this.src = this.imageGenerator.generate(fullname);
@@ -46,6 +50,78 @@ export class UIProfileImageComponent extends Destroy$ {
           });
         }
       });
+    }
+  }
+
+  setColor(company:Company) {
+    const colorList:{ [key: string]: string } = {"red":"#C95555", "orange":"#FFD375", "lightGreen":"#D2FFCB", "green":"#BBEFB1", "grey":"#aaa"}
+    const files: (File | null)[] = company.files.map(fileId => this.store.selectSnapshot(DataQueries.getById('File', fileId)))
+    const filesName = files.map(file => {
+      if (file) {
+        return file.name
+      }
+      return null
+    })
+    const checkFile = ["URSSAF", "Kbis", "Trav. Dis", "Impôts", "Congés Payés"].map(name => filesName.includes(name))
+    const filesNature = files.map(file => {
+      if (file) {
+        return file.nature
+      }
+      return null
+    })
+    const levelStart = company.amount && company.address && company.companyPhone && company.siret && company.jobs
+    let step = "start"
+    if (levelStart) {
+      step = "beginner"
+    }
+    if (filesNature.includes("labels")) {
+      step = "label"
+    }
+    if (levelStart && filesNature.includes("labels")) {
+      step = "medium"
+    }
+    if (levelStart && !checkFile.includes(false)) {
+      step = "advanced"
+    }
+    if (levelStart && !checkFile.includes(false) && filesNature.includes("labels")) {
+      step = "completed"
+    }
+
+    if (step == "start") {
+      this.color1 = colorList.grey
+      this.color2 = colorList.grey
+      this.color3 = colorList.red
+      this.color4 = colorList.grey
+      
+    } else if (step == "beginner") {
+      this.color1 = colorList.grey
+      this.color2 = colorList.grey
+      this.color3 = colorList.orange
+      this.color4 = colorList.orange
+    
+    } else if (step == "label") {
+      this.color1 = colorList.grey
+      this.color2 = colorList.lightGreen
+      this.color3 = colorList.red
+      this.color4 = colorList.grey
+
+    } else if (step == "medium") {
+      this.color1 = colorList.grey
+      this.color2 = colorList.lightGreen
+      this.color3 = colorList.orange
+      this.color4 = colorList.orange
+
+    } else if (step == "advanced") {
+      this.color1 = colorList.green
+      this.color2 = colorList.grey
+      this.color3 = colorList.green
+      this.color4 = colorList.green
+
+    } else if (step == "completed") {
+      this.color1 = colorList.green
+      this.color2 = colorList.lightGreen
+      this.color3 = colorList.green
+      this.color4 = colorList.green
     }
   }
   

@@ -1,9 +1,5 @@
-<div class="image-container">
-  <img [src]="src || 'assets/profile.png'"/>
-</div>
-<div *ngIf="borders" class="ticks position-absolute">
-  <!-- <div class="position-absolute absolute-center-x top"></div>
-  <div class="position-absolute absolute-center-y left"></div>
-  <div class="position-absolute absolute-center-y right"></div>
-  <div class="position-absolute absolute-center-x bottom"></div> -->
+<div class="host-container" [style.--color1]="color1" [style.--color2]="color2" [style.--color3]="color3" [style.--color4]="color4">
+  <div class="image-container">
+    <img [src]="src || 'assets/profile.png'"/>
+  </div>
 </div>

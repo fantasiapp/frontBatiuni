@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from 
 import { FormControl, FormGroup } from "@angular/forms";
 import { Store } from "@ngxs/store";
 import { PopupService } from "src/app/shared/components/popup/popup.component";
-import { Company, Post, File, PostDetail, Job } from "src/models/new/data.interfaces";
+import { Company, User, Post, File, PostDetail, Job } from "src/models/new/data.interfaces";
 import { DataQueries, DataState } from "src/models/new/data.state";
 
 export type ApplyForm = {
@@ -16,7 +16,7 @@ export type ApplyForm = {
   <div *ngIf="post" class="collapse-container" [class.is-collapsed]="collapsed">
     <div class="collapse-content space-children-margin">
       <div class="company-intro flex column center-cross space-children-margin">
-        <profile-image [profile]="{company: company!}" [borders]="false"></profile-image>      
+        <profile-image [profile]="{company: company!, user: user}"></profile-image>
         <span class="company">{{ company!.name }}</span>
         <stars class="stars" [value]="company!.stars || 4" disabled></stars>
         <span>{{ (post.manPower) ? "Main d'oeuvre" : "Fourniture et pose" }}</span>
@@ -55,9 +55,9 @@ export type ApplyForm = {
       <span>{{collapsed ? 'Lire la suite' : 'Lire moins'}}</span>  <img src="assets/arrowdown.svg" [style.transform]="'rotate(' + (180 * +!collapsed) + 'deg)'"/>
     </div>
 
-    <ng-container *ngIf="application && view == 'ST' && post.counterOffer">
+    <ng-container *ngIf="application && view == 'ST'">
       <hr class="dashed"/>
-      <form class="devis form-control" [formGroup]="form">
+      <form  *ngIf="post.counterOffer" class="devis form-control" [formGroup]="form">
         <h5>Pour postuler veuillez proposer votre devis</h5>
 
         <div class="form-input">
@@ -97,6 +97,7 @@ export class UIAnnonceResume {
   application: boolean = true;
 
   company: Company | null = null;
+  user: User | null = null
   job: Job | null = null;
   files: File[] = [];
   details: PostDetail[] = [];

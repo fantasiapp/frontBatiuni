@@ -603,6 +603,7 @@ export class DataState {
   @Action(MarkViewed)
   markViewed(ctx: StateContext<DataModel>, view: MarkViewed) {
     const user = this.store.selectSnapshot(DataQueries.currentUser);
+    console.log("viewedPosts", user.viewedPosts)
     if ( user.viewedPosts.includes(view.Post) ) return;
 
     return this.http.get('data', view).pipe(
@@ -737,12 +738,13 @@ export class DataQueries {
   };
 
   static getProfileImage(id: number) {
+    console.log("getProfileImage", id)
     return createSelector( [DataState.fields, DataQueries.getDataById('Company', id), DataState.files],
       (fields: Record<string[]>, company: any[], files: any[]) => {
         const filesIndex = fields['Company'].indexOf('File'),
           natureIndex = fields['File'].indexOf('nature'),
           fileIds = company?.[filesIndex] || [];
-                
+        console.log("getProfileImage", fileIds)
         for ( let id of fileIds )
           if ( files[id][natureIndex] == 'userImage' )
             return DataQueries.toJson(fields, 'File', id, files[id]);
