@@ -14,14 +14,13 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-
 }
 
 :root {
-  --main-landing-color: #{$mainColor}; 
-  --main-app-color: #{$landingColor};
-  --main-button-color: #{$buttonColor};
-  --main-button-gradient: #{$primary};
+  --main-landing-color: $mainColor; 
+  --main-app-color: $landingColor;
+  --main-button-color: $buttonColor;
+  --main-button-gradient: $primary;
 }
 
 .clear-margin {
