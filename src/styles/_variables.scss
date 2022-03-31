@@ -43,8 +43,8 @@ $switch-gradient-start: #009BE0;
 $switch-gradient-end: #69F0AE;
 
 // UI checkbox
-$box-size: 25px;
-$box-padding: 8px;
+$box-size: lt.$spacer-3;
+$box-padding: lt.$spacer-0;
 
 //Profile page
 $tick-size-x: 3px;
