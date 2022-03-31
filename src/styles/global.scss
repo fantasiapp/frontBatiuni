@@ -1,6 +1,10 @@
 @use "sass:math";
-@import 'mixins';
-@import 'variables';
+
+@use 'variables' as *;
+@use 'mixins' as *;
+
+// @import 'variables';
+// @import 'mixins';
 @import 'responsive';
 @import 'animations.scss';
 @import 'forms.scss';
