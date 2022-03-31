@@ -21,21 +21,21 @@ $paging-decoration-height: 12px;
 $navigation-height: 70px;
 
 // spacing
-$item-padding: lt.$spacer-1;
-$page-padding: lt.$spacer-4;
-$title-padding: lt.$spacer-4;
-$section-margin: lt.$spacer-4;
-$highlight-margin: lt.$spacer-3;
-$spacing-margin: lt.$spacer-2;
-$small-spacing-margin: lt.$spacer-1;
-$big-spacing-margin: lt.$spacer-3;
+$item-padding: lt.$spacer-75;
+$page-padding: lt.$spacer-200;
+$title-padding: lt.$spacer-200;
+$section-margin: lt.$spacer-200;
+$highlight-margin: lt.$spacer-150;
+$spacing-margin: lt.$spacer-100;
+$small-spacing-margin: lt.$spacer-75;
+$big-spacing-margin: lt.$spacer-150;
 
-$form-item-spacing: lt.$spacer-4;
+$form-item-spacing: lt.$spacer-200;
 $form-border-bottom: 2px solid #cdcfd0; 
 
 
 // Switch box
-$switch-size-x: lt.$spacer-4;
+$switch-size-x: lt.$spacer-200;
 $switch-size-y: 1.25rem;
 $switch-padding: 0.125rem;
 $switch-button-size: min($switch-size-x, $switch-size-y) - 2 * $switch-padding;
@@ -43,8 +43,8 @@ $switch-gradient-start: #009BE0;
 $switch-gradient-end: #69F0AE;
 
 // UI checkbox
-$box-size: lt.$spacer-3;
-$box-padding: lt.$spacer-0;
+$box-size: lt.$spacer-150;
+$box-padding: lt.$spacer-75;
 
 //Profile page
 $tick-size-x: 3px;
