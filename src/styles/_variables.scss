@@ -1,12 +1,13 @@
-@use "lt_variables" as lt;
+@forward  "lt_variables";
+@use "lt_variables" as *;
 
 
 $mainColor: #000000;
 $landingColor: #ffffff;
 // $buttonColor: #0C5E8D;
-$buttonColor: lt.$primary;
+$buttonColor: $primary;
 // $secondaryBackground: #0D6191;
-$secondaryBackground: lt.$primary;
+$secondaryBackground: $primary;
 $buttonGradient: $secondaryBackground;
 $formulaireMainColor : #080F18;
 $externelLinks : #0F557C;
@@ -21,21 +22,21 @@ $paging-decoration-height: 12px;
 $navigation-height: 70px;
 
 // spacing
-$item-padding: lt.$spacer-75;
-$page-padding: lt.$spacer-200;
-$title-padding: lt.$spacer-200;
-$section-margin: lt.$spacer-200;
-$highlight-margin: lt.$spacer-150;
-$spacing-margin: lt.$spacer-100;
-$small-spacing-margin: lt.$spacer-75;
-$big-spacing-margin: lt.$spacer-150;
+$item-padding: $spacer-75;
+$page-padding: $spacer-200;
+$title-padding: $spacer-200;
+$section-margin: $spacer-200;
+$highlight-margin: $spacer-150;
+$spacing-margin: $spacer-100;
+$small-spacing-margin: $spacer-75;
+$big-spacing-margin: $spacer-150;
 
-$form-item-spacing: lt.$spacer-200;
+$form-item-spacing: $spacer-200;
 $form-border-bottom: 2px solid #cdcfd0; 
 
 
 // Switch box
-$switch-size-x: lt.$spacer-200;
+$switch-size-x: $spacer-200;
 $switch-size-y: 1.25rem;
 $switch-padding: 0.125rem;
 $switch-button-size: min($switch-size-x, $switch-size-y) - 2 * $switch-padding;
@@ -43,8 +44,8 @@ $switch-gradient-start: #009BE0;
 $switch-gradient-end: #69F0AE;
 
 // UI checkbox
-$box-size: lt.$spacer-150;
-$box-padding: lt.$spacer-75;
+$box-size: $spacer-150;
+$box-padding: $spacer-75;
 
 //Profile page
 $tick-size-x: 3px;
