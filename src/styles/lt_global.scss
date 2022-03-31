@@ -1,24 +1,39 @@
 @use "lt_variables" as *;
 
 *{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
 }
 
 html, body {
-    font-size: 16px;
-    font-family: 'Roboto', sans-serif;
-    background: white;
-    height: 100vh;
-    overflow-x: hidden;
+	font-size: 16px;
+	font-family: 'Roboto', sans-serif;
+	background: white;
+	height: 100vh;
+	overflow-x: hidden;
 }
 
-.text-size-small    {   font-size: .875rem;}    // 14px
-.text-size-normal   {   font-size: 16px;}       // 16px
-.text-size-large    {   font-size: 1.125rem;}   // 18px   
-.text-size-xlarge   {   font-size: 1.25rem;}    // 20px
 
+// Font
+.text-Roboto    {	font-family: "Roboto";}
+.text-Poppins   {	font-family: "Poppins";}
+
+.text-small     {	font-size: .875rem;}    // 14px
+.text-normal    {	font-size: 16px;}       // 16px
+.text-large     {	font-size: 1.125rem;}   // 18px   
+.text-xlarge    {	font-size: 1.25rem;}    // 20px
+//Text states
+.text-emphasis  {	font-weight: bold;}
+.text-normal    {	font-weight: normal;}
+.text-light			{	font-weight: lighter;}
+
+.text-ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+// Margin horizontal
 .mx-auto{   margin: 0 auto;}
 .mx-1   {   margin-left: 1rem; margin-right: 1rem;}
 .mx-2   {   margin-left: 2rem; margin-right: 2rem;}
@@ -26,65 +41,34 @@ html, body {
 .mx-4   {   margin-left: 4rem; margin-right: 4rem;}
 .mx-5   {   margin-left: 5rem; margin-right: 5rem;}
 
-.flex {
-    display: flex;
-}
 
-.f-row {
-    flex-direction: row;
-}
 
-.f-collumn {
-    flex-direction: column;
-}
-
-.justify-center {
-    justify-content: center;
-}
-
-.align-center {
-    align-items: center;
-}
-
-.space-between {
-    justify-content: space-between;
-}
-
-.nowrap {
-    flex-wrap: nowrap;
-}
-
-.f-center {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
 
 .btn {
-    color: white;
-    padding: 1rem 2rem;
-    border: 2px solid;
-    width: 100%;
+	color: white;
+	padding: 1rem 2rem;
+	border: 2px solid;
+	width: 100%;
 }
 
 .btn-primary {
-    background-color: $primary;
-    border-color: $primary;
+	background-color: $primary;
+	border-color: $primary;
 }
 
 .btn-passiv{
-    background-color: $passiv;
-    border-color: $passiv;
+	background-color: $passiv;
+	border-color: $passiv;
 }
 
 .btn-outline-primary {
-    color: $primary;
-    background-color: #fff;
-    border-color: $primary;
+	color: $primary;
+	background-color: #fff;
+	border-color: $primary;
 }
 
 .btn-outline-passiv {
-    color: $passiv;
-    background-color: #fff;
-    border-color: $passiv;
+	color: $passiv;
+	background-color: #fff;
+	border-color: $passiv;
 }
