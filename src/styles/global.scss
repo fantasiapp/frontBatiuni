@@ -1,4 +1,5 @@
 @use "sass:math";
+@use "lt_variables" as *;
 @import 'mixins';
 @import 'variables';
 @import 'responsive';
@@ -7,6 +8,7 @@
 @import 'mapbox-gl.scss';
 @import 'ngx-slider.scss';
 @import 'web.scss';
+
 
 * {
   margin: 0;
@@ -19,7 +21,7 @@
   --main-landing-color: #{$mainColor}; 
   --main-app-color: #{$landingColor};
   --main-button-color: #{$buttonColor};
-  --main-button-gradient: #{$buttonGradient};
+  --main-button-gradient: #{$primary};
 }
 
 .clear-margin {
@@ -93,7 +95,7 @@ button {
     }
 
     &.gradient {
-      background: linear-gradient($secondaryBackground, #{lighten($secondaryBackground, 5%)});
+      background: $primary;
     }
 
     &.passive {
