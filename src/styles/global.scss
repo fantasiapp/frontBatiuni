@@ -261,7 +261,7 @@ a {
   
   &.image {
     position: absolute;
-    bottom: $icon-size; left: $profile-image-size - $highlight-margin - $icon-size;
+    bottom: $icon-size; left: calc($profile-image-size - $highlight-margin - $icon-size);
   }
   
   &.text {
@@ -378,7 +378,7 @@ input[type=number] {
 .offres {
   justify-content: space-between;
   box-shadow: 0 5px 3px 0 rgba(149, 157, 165, 0.2); // x y spread outline color
-  padding: $item-padding 2 * $item-padding;
+  padding: $item-padding calc(2 * $item-padding);
   color: #999999;
   font-size: 15px;
   border-radius: 5px;
