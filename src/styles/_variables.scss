@@ -30,14 +30,14 @@ $spacing-margin: lt.$spacer-2;
 $small-spacing-margin: lt.$spacer-1;
 $big-spacing-margin: lt.$spacer-3;
 
-$form-item-spacing: 40px;
+$form-item-spacing: lt.$spacer-4;
 $form-border-bottom: 2px solid #cdcfd0; 
 
 
 // Switch box
-$switch-size-x: 40px;
-$switch-size-y: 20px;
-$switch-padding: 2px;
+$switch-size-x: lt.$spacer-4;
+$switch-size-y: 1.25rem;
+$switch-padding: 0.125rem;
 $switch-button-size: min($switch-size-x, $switch-size-y) - 2 * $switch-padding;
 $switch-gradient-start: #009BE0;
 $switch-gradient-end: #69F0AE;
