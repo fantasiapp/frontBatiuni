@@ -14,10 +14,10 @@ html, body {
     overflow-x: hidden;
 }
 
-.text-size-small    {   font-size: 14px;}
-.text-size-normal   {   font-size: 16px;}
-.text-size-large    {   font-size: 18px;}
-.text-size-xlarge   {   font-size: 20px;}
+.text-size-small    {   font-size: .875rem;}    // 14px
+.text-size-normal   {   font-size: 16px;}       // 16px
+.text-size-large    {   font-size: 1.125rem;}   // 18px   
+.text-size-xlarge   {   font-size: 1.25rem;}    // 20px
 
 .mx-auto{   margin: 0 auto;}
 .mx-1   {   margin-left: 1rem; margin-right: 1rem;}
