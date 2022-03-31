@@ -14,41 +14,17 @@ html, body {
     overflow-x: hidden;
 }
 
-.text-size-small{
-    font-size: 14px;
-}
+.text-size-small    {   font-size: 14px;}
+.text-size-normal   {   font-size: 16px;}
+.text-size-large    {   font-size: 18px;}
+.text-size-xlarge   {   font-size: 20px;}
 
-.text-size-normal{
-    font-size: 16px;
-}
-
-.text-size-large {
-    font-size: 18px;
-}
-
-.text-size-xlarge{
-    font-size: 20px;
-}
-
-.mx-auto{
-    margin: 0 auto;
-}
-
-.mx-1 {
-    margin-left: 1rem;
-}
-.mx-2 {
-    margin-left: 2rem;
-}
-.mx-3 {
-    margin-left: 3rem;
-}
-.mx-4 {
-    margin-left: 4rem;
-}
-.mx-5 {
-    margin-left: 5rem;
-}
+.mx-auto{   margin: 0 auto;}
+.mx-1   {   margin-left: 1rem; margin-right: 1rem;}
+.mx-2   {   margin-left: 2rem; margin-right: 2rem;}
+.mx-3   {   margin-left: 3rem; margin-right: 3rem;}
+.mx-4   {   margin-left: 4rem; margin-right: 4rem;}
+.mx-5   {   margin-left: 5rem; margin-right: 5rem;}
 
 .flex {
     display: flex;
@@ -78,7 +54,7 @@ html, body {
     flex-wrap: nowrap;
 }
 
-f-center {
+.f-center {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -111,8 +87,4 @@ f-center {
     color: $passiv;
     background-color: #fff;
     border-color: $passiv;
-}
-
-.btn-gradient {
-    
 }
