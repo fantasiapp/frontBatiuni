@@ -1,8 +1,12 @@
+@use "lt_variables" as lt;
+
 
 $mainColor: #000000;
 $landingColor: #ffffff;
-$buttonColor: #0C5E8D;
-$secondaryBackground: #0D6191;
+// $buttonColor: #0C5E8D;
+$buttonColor: lt.$primary;
+// $secondaryBackground: #0D6191;
+$secondaryBackground: lt.$primary;
 $buttonGradient: $secondaryBackground;
 $formulaireMainColor : #080F18;
 $externelLinks : #0F557C;
