@@ -12,10 +12,6 @@
 @use 'mixins' as *;
 @use 'responsive' as *;
 
-
-
-
-
 * {
   margin: 0;
   padding: 0;
@@ -42,7 +38,11 @@ h1 {  font-family: "Roboto"; font-weight: 700}
 h2 {  font-family: "Poppins"; font-weight: 500}
 h3 {  font-family: "Poppins"; font-weight: 400}
 
-
+header {
+  > img:first-child{
+    position: absolute;
+  }
+}
 
 .page-content {
   @extend %overflow-y;
