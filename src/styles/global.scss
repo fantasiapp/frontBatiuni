@@ -57,6 +57,7 @@
   height: calc(100vh - #{$sticky-header-height} - env(safe-area-inset-bottom));
 }
 
+// Never used ???
 .full-page {
   @extend %overflow-y;
   @include set-safe-area(top);
@@ -77,12 +78,14 @@ body {
   @include desktop-only { overflow: hidden; }
 }
 
+// padding intern : x 2x
 button {
   font-size: inherit;
   display: inline-block;
   outline: none;
   border: none;
-  padding: 10px 15px;
+  // padding: 10px 15px;
+  padding: $spacer-100 $spacer-200;
   border-radius: 8px;
   font-family: inherit;
   font-weight: 200;
@@ -144,43 +147,6 @@ a {
   transform: rotate(180deg);
 }
 
-// .flex {
-//   display: flex !important;
-
-//   &.row {
-//     flex-flow: row nowrap;
-//   }
-
-//   &.column {
-//     flex-flow: column nowrap;
-//   }
-
-//   &.center-main {
-//     justify-content: center;
-//   }
-
-//   &.space-between {
-//     justify-content: space-between;
-//   }
-
-//   &.space-around {
-//     justify-content: space-around;
-//   }
-
-//   &.center-cross {
-//     align-items: center;
-//   }
-
-//   &.strech-children {
-//     align-items: stretch;
-//   }
-
-//   &.center {
-//     @extend .center-main;
-//     @extend .center-cross;
-//   }
-// }
-
 .grow { flex-grow: 1; }
 
 .auto-margin-x {
@@ -190,11 +156,6 @@ a {
 .auto-margin-y {
   margin: auto 0;
 }
-//-----------------------------------------------
-//Colors
-// .background-white {
-//   background-color: $landingColor;
-// }
 
 //------------------------------------------------
 // POSITIONING
@@ -232,10 +193,13 @@ a {
 }
 //--------------------------------------------------
 //fonts
+
+// used only in ModifyProfile.form
 .font-Roboto {
   font-family: "Roboto";
 }
 
+// used a lot
 .font-Poppins {
   font-family: "Poppins";
 }
@@ -255,6 +219,8 @@ a {
   text-overflow: ellipsis;
 }
 
+
+// used only in profile-resume.component
 .modify-icon {
   width: $icon-size + 2 * $icon-padding;
   height: $icon-size + 2 * $icon-padding;
@@ -310,6 +276,7 @@ input {
   list-style-type: none;
   margin-top: auto;
   white-space: nowrap;
+  gap: $tab-spacing;
   li {
     height: $tab-height;
     padding: $tab-padding;
@@ -319,7 +286,7 @@ input {
     line-height: $tab-height - 2*$tab-padding;
 
     &.active { background: $tab-active-background; color: $tab-active-color; font-weight: 500; }
-    &:not(:last-child) { margin-right: $tab-spacing; }
+    // &:not(:last-child) { margin-right: $tab-spacing; }
   }
 }
 .radio-item {
@@ -339,13 +306,7 @@ input {
  }
 }
 
-textarea {
-  width: 100%;
-  min-height: 80px;
-  border: 2px solid #aaa;
-  outline: none;
-  border-radius: 3px;
-}
+
 
 //----------------------------------------------------
 //clear fixes

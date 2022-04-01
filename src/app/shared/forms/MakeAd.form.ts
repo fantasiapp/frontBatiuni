@@ -144,6 +144,11 @@ import { InfoService } from "../components/info/info.component";
     textarea {
       border: 1px dashed #ccc;
       outline: none;
+      width: 100%;
+      min-height: 80px;
+      border: 2px solid #aaa;
+      outline: none;
+      border-radius: 3px;
     }
 
     .option-container {
@@ -159,7 +164,10 @@ import { InfoService } from "../components/info/info.component";
       height: $sticky-footer-height;
       padding-left: 10px; padding-right: 10px;
       padding-top: 10px;
-      button { max-width: 45%;}
+      button {
+        max-width: 45%;
+        padding: unset;
+      }
     }
 
     .add-detail {

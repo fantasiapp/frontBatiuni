@@ -16,6 +16,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from 
     ul { margin: 0 auto; max-width: 450px + 20px; }
     li { flex: 0 0 150px; height: $tab-height; cursor: pointer; }
     li.active { font-weight: 700; color: $buttonGradient; }
+
   `],
   changeDetection: ChangeDetectionStrategy.OnPush
 })

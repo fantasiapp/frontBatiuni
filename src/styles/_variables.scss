@@ -43,9 +43,10 @@ $switch-button-size: min($switch-size-x, $switch-size-y) - 2 * $switch-padding;
 $switch-gradient-start: #009BE0;
 $switch-gradient-end: #69F0AE;
 
+// Utiliser que une fois dans box.component 
 // UI checkbox
 $box-size: $spacer-150;
-$box-padding: $spacer-75;
+$box-padding: $spacer-50;
 
 //Profile page
 $tick-size-x: 3px;
