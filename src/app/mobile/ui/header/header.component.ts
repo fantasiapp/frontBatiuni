@@ -4,7 +4,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from 
   selector: 'page-header',
   template: `
   <header class="clear-margin flex column full-width small-space-children-margin">
-    <div *ngIf="!customHeader" class="text-light-emphasis">{{name}}</div>
+    <h1 *ngIf="!customHeader">{{name}}</h1>
     <div *ngIf="!customHeader; else headerBar" class="pick flex row">
       <searchbar class="grow"></searchbar>
       <img src="assets/Filtrer par.svg" (click)="filterClicked.emit()"/>

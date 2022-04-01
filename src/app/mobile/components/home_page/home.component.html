@@ -63,7 +63,7 @@
     
     <!-- Component one -->
     <slidemenu [(open)]="draftMenu.open" [header]="true">
-      <span class="grow center-text text-light-emphasis" header>Modifier un brouillon</span>
+      <h1 class="grow center-text" header>Modifier un brouillon</h1>
       
       <div class="hosted-page flex column center-cross space-children-margin" content>
         <ad-form [post]="draftMenu.post" (done)="openDraft(null)" [page]="false" content></ad-form>     
@@ -74,7 +74,7 @@
     <slidemenu [(open)]="postMenu.open" [header]="false" #slideOnlinePost>
       <header class="clear-margin full-width sticky-header flex center-cross annonce" customHeader>
         <img (click)="slideOnlinePost.close()" src="assets/arrowlblack.svg" />
-        <span class="grow center-text text-light-emphasis">Annonce(s) en Ligne</span>
+        <h1 class="grow center-text">Annonce(s) en Ligne</h1>
         <img *ngIf="view == 'PME'" (click)="postMenu.swipeup = true" src="assets/Option.svg"/>
         <!-- <ng-template #starTemplate>
           <stars [toggle]="true"
@@ -101,7 +101,7 @@
     <slidemenu [(open)]="missionMenu.open" [header]="false" #slideMission>
       <header class="clear-margin full-width sticky-header flex center-cross annonce" customHeader>
         <img (click)="slideMission.close()" src="assets/arrowlblack.svg" />
-        <span class="grow center-text text-light-emphasis">Annonce validée</span>
+        <h1 class="grow center-text">Annonce validée</h1>
         <img (click)="missionMenu.swipeup = true" [src]="view == 'PME' ? 'assets/Option.svg' : 'assets/phone.png'"/>
       </header>
       
