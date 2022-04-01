@@ -1,4 +1,4 @@
-@use "lt_variables" as *;
+@use "variables_new" as *;
 
 *{
 	margin: 0;
@@ -26,7 +26,7 @@ html, body {
 //Text states
 .text-emphasis  {	font-weight: bold;}
 .text-normal    {	font-weight: normal;}
-.text-light			{	font-weight: lighter;}
+.text-light		{	font-weight: lighter;}
 
 .text-ellipsis {
   white-space: nowrap;
