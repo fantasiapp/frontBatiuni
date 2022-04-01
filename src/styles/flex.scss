@@ -1,0 +1,37 @@
+.flex {
+    display: flex !important;
+  
+    &.row {
+      flex-flow: row nowrap;
+    }
+  
+    &.column {
+      flex-flow: column nowrap;
+    }
+  
+    &.center-main {
+      justify-content: center;
+    }
+  
+    &.space-between {
+      justify-content: space-between;
+    }
+  
+    &.space-around {
+      justify-content: space-around;
+    }
+  
+    &.center-cross {
+      align-items: center;
+    }
+  
+    &.strech-children {
+      align-items: stretch;
+    }
+  
+    &.center {
+      @extend .center-main;
+      @extend .center-cross;
+    }
+  }
+  

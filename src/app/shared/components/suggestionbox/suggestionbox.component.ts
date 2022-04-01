@@ -15,7 +15,7 @@ import { Clear, Query, QueryAll } from "src/models/new/data.state";
     </ng-container>
   `,
   styles: [`
-    @import 'src/styles/variables';
+    @use 'src/styles/variables' as *;
 
     :host {
       width: 100%;

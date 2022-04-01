@@ -1,5 +1,5 @@
 // @use "src/styles/variables" as *;
-@import 'src/styles/variables';
+@use 'src/styles/variables' as *;
 
 :host {
   display: inline-block;

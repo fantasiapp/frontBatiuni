@@ -129,8 +129,8 @@ import { InfoService } from "../components/info/info.component";
   </footer>
   `,
   styles: [`
-    @import 'src/styles/variables';
-    @import 'src/styles/mixins';
+    @use 'src/styles/variables' as *;
+    @use 'src/styles/mixins' as *;
 
     :host {
       display: block;

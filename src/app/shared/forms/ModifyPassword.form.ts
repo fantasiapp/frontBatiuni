@@ -28,8 +28,8 @@ import { ComplexPassword, MatchField } from "src/validators/verify";
   </div>
   `,
   styles: [`
-    @import 'src/styles/variables';
-    @import 'src/styles/mixins';
+    @use 'src/styles/variables' as *;
+    @use 'src/styles/mixins' as *;
 
     :host { width: 100%; }
 

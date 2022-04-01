@@ -1,5 +1,6 @@
-@import 'src/styles/variables';
-@import 'src/styles/mixins';
+@use 'src/styles/variables' as *;
+@use 'src/styles/mixins' as *;
+@use 'src/styles/responsive' as *;
 
 :host {
   display: flex;

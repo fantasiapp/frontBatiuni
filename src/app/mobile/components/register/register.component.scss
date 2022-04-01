@@ -1,4 +1,5 @@
-@import 'src/styles/mixins';
+@use 'src/styles/mixins' as *;
+@use 'src/styles/variables' as *;
 
 :host {
   display: block;

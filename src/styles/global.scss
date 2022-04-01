@@ -1,16 +1,24 @@
+@forward  'forms.scss';
+@forward  'mapbox-gl.scss';
+@forward  'ngx-slider.scss';
+@forward  'web.scss';
+@forward  'animations';
+
+
+@use 'animations.scss' as *;
 @use "sass:math";
 
 @use 'variables' as *;
 @use 'mixins' as *;
+@use 'responsive' as *;
+// @use 'forms' as *;
+// @use 'web' as *;
+
 
 // @import 'variables';
 // @import 'mixins';
-@import 'responsive';
-@import 'animations.scss';
-@import 'forms.scss';
-@import 'mapbox-gl.scss';
-@import 'ngx-slider.scss';
-@import 'web.scss';
+
+
 
 
 * {
@@ -40,12 +48,7 @@
   box-sizing: border-box;
 }
 
-.full-width { width: 100%; }
-.full-height { height: 100% }
-.cover-parent {
-  @extend .full-width;
-  @extend .full-height;
-}
+
 
 .page-content {
   @extend %overflow-y;
@@ -146,42 +149,42 @@ a {
   transform: rotate(180deg);
 }
 
-.flex {
-  display: flex !important;
+// .flex {
+//   display: flex !important;
 
-  &.row {
-    flex-flow: row nowrap;
-  }
+//   &.row {
+//     flex-flow: row nowrap;
+//   }
 
-  &.column {
-    flex-flow: column nowrap;
-  }
+//   &.column {
+//     flex-flow: column nowrap;
+//   }
 
-  &.center-main {
-    justify-content: center;
-  }
+//   &.center-main {
+//     justify-content: center;
+//   }
 
-  &.space-between {
-    justify-content: space-between;
-  }
+//   &.space-between {
+//     justify-content: space-between;
+//   }
 
-  &.space-around {
-    justify-content: space-around;
-  }
+//   &.space-around {
+//     justify-content: space-around;
+//   }
 
-  &.center-cross {
-    align-items: center;
-  }
+//   &.center-cross {
+//     align-items: center;
+//   }
 
-  &.strech-children {
-    align-items: stretch;
-  }
+//   &.strech-children {
+//     align-items: stretch;
+//   }
 
-  &.center {
-    @extend .center-main;
-    @extend .center-cross;
-  }
-}
+//   &.center {
+//     @extend .center-main;
+//     @extend .center-cross;
+//   }
+// }
 
 .grow { flex-grow: 1; }
 
@@ -194,9 +197,9 @@ a {
 }
 //-----------------------------------------------
 //Colors
-.background-white {
-  background-color: $landingColor;
-}
+// .background-white {
+//   background-color: $landingColor;
+// }
 
 //------------------------------------------------
 // POSITIONING

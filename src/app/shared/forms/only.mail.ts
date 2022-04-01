@@ -34,7 +34,7 @@ import { Email } from "src/validators/persist";
     </form>
     `,
   styles: [`
-    @import 'src/styles/mixins';
+    @use 'src/styles/mixins' as *;
   `],
   changeDetection: ChangeDetectionStrategy.OnPush
 

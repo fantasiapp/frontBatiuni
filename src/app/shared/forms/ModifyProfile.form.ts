@@ -209,8 +209,8 @@ import { SpacingPipe } from "../pipes/spacing.pipe";
   </div>
   `,
   styles: [`
-    @import 'src/styles/variables';
-    @import 'src/styles/mixins';
+    @use 'src/styles/variables' as *;
+    @use 'src/styles/mixins' as *;
     @import 'src/styles/responsive';
 
 

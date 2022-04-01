@@ -1,4 +1,4 @@
-@import 'src/styles/variables';
+@use 'variables' as *;
 
 $slide: 200ms ease-out;
 $fade: 200ms ease-out;
