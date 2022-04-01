@@ -187,6 +187,12 @@ import { InfoService } from "../components/info/info.component";
       transform-origin: center;
       transform: scale(0.7);
     }
+
+    footer {
+      bottom: 70px;
+      bottom: calc(constant(safe-area-inset-bottom) + 70px);
+      bottom: calc(env(safe-area-inset-bottom) + 70px);
+    }
   `],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
