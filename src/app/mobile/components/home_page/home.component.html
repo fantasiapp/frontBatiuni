@@ -101,13 +101,8 @@
     <slidemenu [(open)]="missionMenu.open" [header]="false" #slideMission>
       <header class="clear-margin full-width sticky-header flex center-cross annonce" customHeader>
         <img (click)="slideMission.close()" src="assets/arrowlblack.svg" />
-<<<<<<< HEAD
-        <h1 class="grow center-text">Annonce validée</h1>
-        <img (click)="missionMenu.swipeup = true" [src]="view == 'PME' ? 'assets/Option.svg' : 'assets/phone.png'"/>
-=======
         <h1 class="grow center-text">Annonce validée</h1>
         <img (click)="swipeupMenu()" [src]="view == 'PME' ? 'assets/Option.svg' : 'assets/phone.png'"/> 
->>>>>>> 0283b16e46ce1d5eeb2dd0e9270a61a1c29e79ce
       </header>
       
       <suivi-chantier [missionMenu]="missionMenu" [callBackParent]="callBackSwipeup" [toogle]="toogle" content></suivi-chantier>

@@ -35,8 +35,9 @@
 
 h1, h2, h3 { font-size: 1rem}
 h1 {  font-family: "Roboto"; font-weight: 700}
-// h2 {  font-family: "Poppins"; font-weight: 500}
-// h3 {  font-family: "Poppins"; font-weight: 400}
+h2 {  font-family: "Poppins"; font-weight: 500; color: $primary;}
+h3 {  font-family: "Roboto"; font-weight: 600;}
+h4 {  font-family: "Poppins"; font-weight: 400}
 
 header {
   > img:first-child{

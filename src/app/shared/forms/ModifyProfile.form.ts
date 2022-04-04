@@ -21,7 +21,7 @@ import { SpacingPipe } from "../pipes/spacing.pipe";
   <ng-template #modifyPage1>
     <section class="full-width section">
       <form class="form-control" [formGroup]="form">
-        <h3 class="form-title font-Roboto">
+        <h3 class="form-title">
           Infos personelles:
         </h3>
         <div class="form-input">
@@ -55,7 +55,7 @@ import { SpacingPipe } from "../pipes/spacing.pipe";
   <ng-template #modifyPage2>
     <section class="full-width section">
       <form class="full-width form-control" [formGroup]="form">
-        <h3 class="form-title font-Roboto">
+        <h3 class="form-title">
           Infos entreprise:
         </h3>
         <div class="form-input">
@@ -176,7 +176,7 @@ import { SpacingPipe } from "../pipes/spacing.pipe";
   <ng-template #modifyPage3>
     <section class="full-width section">
       <form class="full-width form-control" [formGroup]="form">
-        <h3 class="form-title font-Roboto">
+        <h3 class="form-title">
           Certifications & labels:
         </h3>
         <div class="form-input">
