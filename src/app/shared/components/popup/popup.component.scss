@@ -16,7 +16,7 @@
 
 :host(.open) {
   visibility: visible;
-  z-index: 1000;
+  z-index: 200000;
 }
 
 .cover {
@@ -97,4 +97,11 @@
 .setDateTask {
   text-align: left;
   width:90%
+}
+
+.cloture {
+  display: flex;
+  flex-direction: column;
+  row-gap: $spacer-150;
+  width: 12rem;
 }
