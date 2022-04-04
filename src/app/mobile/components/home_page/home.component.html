@@ -102,10 +102,10 @@
       <header class="clear-margin full-width sticky-header flex center-cross annonce" customHeader>
         <img (click)="slideMission.close()" src="assets/arrowlblack.svg" />
         <span class="grow center-text text-light-emphasis">Annonce validée</span>
-        <img (click)="missionMenu.swipeup = true" [src]="view == 'PME' ? 'assets/Option.svg' : 'assets/phone.png'"/>
+        <img (click)="swipeupMenu()" [src]="view == 'PME' ? 'assets/Option.svg' : 'assets/phone.png'"/> 
       </header>
       
-      <suivi-chantier [mission]="missionMenu.post" content></suivi-chantier>
+      <suivi-chantier [missionMenu]="missionMenu" [callBackParent]="callBackSwipeup" [toogle]="toogle" content></suivi-chantier>
     </slidemenu>
   </ng-container>
 </ng-container>
@@ -148,9 +148,9 @@
   </footer>
 </ng-template>
 
-<swipeup [(open)]="missionMenu.swipeup">
+<!-- <swipeup [(open)]="missionMenu.swipeup">
   <li >Modifier les horaires / les dates de présence</li>
   <li>Appeler le 06 34 09 06 94</li>
   <li (click)="closeMission()">Clôturer la mission</li>
   <li>Dupliquer l'annonce</li>
-</swipeup>
+</swipeup> -->

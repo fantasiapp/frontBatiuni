@@ -23,8 +23,8 @@ export class MissionsComponent extends Destroy$ {
   activeView: number = 0;
 
   openFilterMenu: boolean = false;
-  myMissions: Mission[] = [];
-  missionMenu = new PostMenu<Mission>();
+  myMissions: Mission[] = []
+  missionMenu = new PostMenu<Mission>()
 
   detailedDays: MissionDetailedDay[] = [];
 
