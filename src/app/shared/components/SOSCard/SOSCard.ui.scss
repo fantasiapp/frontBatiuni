@@ -30,14 +30,14 @@
 }
 
 .description {
-  color: #aaa;
+  color: $light;
   height: 80%;
   
   & > span:not(:last-child) { margin-bottom: 1em; }
 }
 
 .job {
-  color: black;
+  color: $dark;
   overflow: hidden;
   display: -webkit-box;
   text-overflow: ellipsis;

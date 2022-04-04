@@ -23,7 +23,7 @@ $comment-factor: math.div($target-size, $profile-image-size);
 }
 
 .body {
-  background-color: #F7F7F7;
+  background-color: $bg-white;
   border-radius: 12px;
   padding: 12px;
   margin-left: 12px;

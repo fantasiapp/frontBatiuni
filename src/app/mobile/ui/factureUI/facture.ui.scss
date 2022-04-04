@@ -18,14 +18,14 @@ p {
 }
 
 .date {
-    color: #070A28;
+    color: $dark;
     font-weight: 500;
 }
 
 .price{
     span{
         font-weight: 500;
-        color: #070A28;
+        color: $dark;
         font-size: 18px ;
     }
 }

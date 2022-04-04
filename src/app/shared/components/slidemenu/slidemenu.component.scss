@@ -54,7 +54,7 @@
 }
 .company-name {
   font-weight: 800;
-  color: #333333;
+  color: $text-color-grey;
 }
 
 .criterion {
@@ -68,7 +68,7 @@
     transform: scale(0.7);
   }
   span {
-    color: #999999;
+    color: $light;
     white-space: normal;
   }
 }

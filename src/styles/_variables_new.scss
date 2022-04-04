@@ -1,13 +1,16 @@
 // Color palette
 $primary: #0D6191;
-$passiv: #aaa;
-$passiv-light: #C7C7C7;
+$light: #aaa;
+$light-light: #C7C7C7;
 $danger: #E80000;
 $warning: #FFD375;
 $success: #BBEFB1;
-$success-extrem: #D2FFCB;
+$success-plus: #D2FFCB;
+$dark: #080F18;
+$bg-white: white;
+$info: #2980b9;
 
-$text-color: #080F18;
+$text-color: $dark;
 $text-color-grey: #4C4C4C;
 $text-color-blue: #05476C;
 

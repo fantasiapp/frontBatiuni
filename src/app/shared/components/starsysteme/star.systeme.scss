@@ -2,7 +2,7 @@
 @use 'src/styles/variables' as *;
 
 :host {
-    color: #333333;
+    color: $text-color-grey;
     font-weight: 300;
     -webkit-tap-highlight-color: transparent;
 }

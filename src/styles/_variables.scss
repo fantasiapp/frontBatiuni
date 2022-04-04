@@ -2,16 +2,16 @@
 @use "variables_new" as *;
 
 
-$mainColor: #080F18;
-$landingColor: #ffffff;
+$mainColor: $dark;
+$landingColor: #fff;
 // $buttonColor: #0C5E8D;
 $buttonColor: $primary;
 // $secondaryBackground: #0D6191;
 $secondaryBackground: $primary;
 $buttonGradient: $secondaryBackground;
-$formulaireMainColor : #080F18;
-$externelLinks : #0F557C;
-$succesCircleShadow : #CDCFD0;
+$formulaireMainColor : $dark;
+$externelLinks : $primary;
+$succesCircleShadow : $light;
 $infosColor : #52D1BD;
 $input-image-offset-x: 20px;
 $input-image-offset-y: 5px;
@@ -69,9 +69,9 @@ $icon-size: 25px;
 
 
 // Availibilty Colors =====>
-$available : #B9EDAF;
-$availableWithLimits : #FFC425;
-$unavailable : #E80000;
+$available : $success;
+$availableWithLimits : $warning;
+$unavailable : $danger;
 $icon-padding: 2px;
 
 //search-bar
@@ -84,8 +84,8 @@ $searchbar-padding: 16px;
 $tab-height: 40px;
 $tab-padding: 10px;
 $tab-default-background: #E5E5E5;
-$tab-default-color: #9A9A9A;
-$tab-active-background: white;
+$tab-default-color: $light;
+$tab-active-background: $bg-white;
 $tab-active-color: $secondaryBackground;
 $tab-spacing: 8px;
 

@@ -86,7 +86,7 @@ calendar::ng-deep {
     border-radius: 12px;
     padding: 20px;
     li:hover {
-      background-color: rgb(252, 252, 252);
+      background-color: $bg-white;
       color: $secondaryBackground !important;
       transform: scale(1.01) !important;
     }

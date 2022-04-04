@@ -43,13 +43,13 @@ img {
 }
 
 .error {
-  background-color: #c0392b;
+  background-color: $danger;
 }
 
 .success {
-  background-color: #27ae60;
+  background-color: $success;
 }
 
 .info {
-  background-color: #2980b9;
+  background-color: $info;
 }
