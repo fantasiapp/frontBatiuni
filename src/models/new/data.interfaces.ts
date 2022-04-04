@@ -159,9 +159,16 @@ export interface Establishement {
 
 export type Mission = Post & {
   subContractor: Ref<Company>;
+  subContractorContact: string;
   subContractorName: string;
   signedByCompany: boolean;
   signedBySubContractor: boolean;
+  quality: number;
+  qualityComment: string;
+  security: number;
+  securityComment: string;
+  organisation: number;
+  organisationComment: string;
   contract: Ref<File>;
   supervisions: Ref<Supervision>[]
 };
@@ -215,6 +222,7 @@ export class PostMenu<T extends Post | Mission = Post> {
   open: boolean = false;
   post: T | null = null;
   swipeup: boolean = false;
+  swipeupCloseMission: boolean = false;
   favorite: boolean = false;
 
   get candidates() { return this.post?.candidates || []; }

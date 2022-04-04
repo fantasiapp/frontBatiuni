@@ -1,8 +1,9 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, SimpleChanges } from "@angular/core";
 import { Select, Store } from "@ngxs/store";
 import { Observable } from "rxjs";
 import { PopupService } from "src/app/shared/components/popup/popup.component";
-import { Company, Mission, PostDetail, Profile, Supervision, DateG, Task } from "src/models/new/data.interfaces";
+import { MissionFilterForm } from "src/app/shared/forms/missions.form";
+import { Company, Mission, PostMenu, PostDetail, Profile, Supervision, DateG, Task } from "src/models/new/data.interfaces";
 import { DataQueries, DataState } from "src/models/new/data.state";
 
 // export type Task = PostDetail & {validationImage:string, invalidationImage:string}
@@ -27,14 +28,20 @@ export class SuiviPME {
   companyName : string = ""
   contactName : string = ""
   view: 'ST' | 'PME' = "PME";
+  mission: Mission | null = null
 
-  _mission: Mission | null = null;
-  get mission() { return this._mission; }
-  
+  // _mission: Mission | null = null
+  // get mission() { return this._mission }
+
+  _missionMenu: PostMenu<Mission> = new PostMenu<Mission>()
+  get missionMenu() { return this._missionMenu }
+
   @Input()
-  set mission(mission: Mission | null) {
+  set missionMenu(mM: PostMenu<Mission>) {
+    this._missionMenu = mM
+    const mission = mM.post
     this.view = this.store.selectSnapshot(DataState.view)
-    this._mission = mission;
+    this.mission = mission;
     this.company = mission ? this.store.selectSnapshot(DataQueries.getById('Company', mission.company)) : null;
     this.subContractor = mission ? this.store.selectSnapshot(DataQueries.getById('Company', mission.subContractor)) : null;
     if ( mission ) {
@@ -42,9 +49,17 @@ export class SuiviPME {
       this.isNotSignedByUser = (!mission.signedByCompany && this.view == 'PME') || (!mission.signedBySubContractor && this.view == 'ST')
       this.computeDates (mission)
       this.companyName  = this.view == 'ST' ? this.subContractor!.name : this.company!.name
-      this.contactName = this.view == 'ST' ? this.mission!.subContractorName : ""
+      this.contactName = this.view == 'ST' ? this.mission!.subContractorContact : ""
       
     }
+
+  }
+
+  @Input() callBackParent: (b:boolean, type:string) => void = (b:boolean, type:string): void => {}
+  @Input() toogle: boolean = false
+
+  ngOnChanges() {
+    console.log("ngOnChanges", this.missionMenu)
   }
 
   computeDates (mission:Mission) {
@@ -140,8 +155,48 @@ export class SuiviPME {
   }
 
   constructor(private store: Store, private popup: PopupService, private cd: ChangeDetectorRef) {}
-  
-  swipemenu: boolean = false;
+
+
+  closeMission() {
+    if (this.mission?.subContractor) {
+      const company = this.store.selectSnapshot(DataQueries.getById('Company', this.mission!.subContractor))
+      this.popup.openCloseMission(company!, this)
+    }
+    this.callBackParent(false, "menu")
+    this.cd.markForCheck()
+  }
+
+  openCloseMission () {
+    this.callBackParent(true, "closeMission")
+    this.getArrayStar("quality")
+    this.cd.markForCheck()
+  }
+
+  starAction(index:number, nature:string) {
+    console.log("starAction", index, nature)
+    this.mission!.quality = index + 1
+    this.cd.markForCheck()
+  }
+
+  textStarAction(nature:string) {
+    let content = document.getElementById("starTextQuality") as HTMLTextAreaElement;
+    console.log("textStarAction", nature, content!.value)
+  }
+
+  getArrayStar (nature:string){
+    let array = new Array<boolean>(5)
+    if (this.mission) {
+      let lastStar = this.mission!.quality
+      for (let index=0; index < 5; index++) {
+        array[index] = (index < lastStar) ? true : false
+      }
+    }
+      return array
+  }
+
+  validerStar() {
+    console.log("validerStar")
+  }
 
   @Select(DataQueries.currentProfile)
   currentProfile$!: Observable<Profile>;

@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, SimpleChange, SimpleChanges, ViewChild, TemplateRef, ChangeDetectorRef } from "@angular/core";
+import { Component, ChangeDetectionStrategy, SimpleChange, SimpleChanges, ViewChild, TemplateRef, ChangeDetectorRef, Input } from "@angular/core";
 import { Select, Store } from "@ngxs/store";
 import { combineLatest, Observable } from "rxjs";
 import { take, takeUntil } from "rxjs/operators";
@@ -10,8 +10,8 @@ import { PopupService } from "src/app/shared/components/popup/popup.component";
 import { SlidemenuService } from "src/app/shared/components/slidemenu/slidemenu.component";
 import { SwipeupService } from "src/app/shared/components/swipeup/swipeup.component";
 import { ApplyPost, DeletePost, DuplicatePost, HandleApplication, MarkViewed, SetFavorite, SwitchPostType } from "src/models/new/user/user.actions";
-import { DataQueries, DataState, QueryAll, SnapshotAll } from 'src/models/new/data.state';
-import { Profile, Post, Mission, PostMenu, Company } from "src/models/new/data.interfaces";
+import { DataQueries, DataState, QueryAll } from 'src/models/new/data.state';
+import { Profile, Post, Mission, PostMenu } from "src/models/new/data.interfaces";
 import { FilterService } from "src/app/shared/services/filter.service";
 import { ApplyForm } from "../../ui/annonce-resume/annonce-resume.ui";
 
@@ -56,6 +56,9 @@ export class HomeComponent extends Destroy$ {
   @ViewChild('candidature', {read: TemplateRef, static: true})
   candidature!: TemplateRef<any>;
 
+  @ViewChild('suiviPME', {read: TemplateRef, static: true})
+  suiviChantier!: TemplateRef<any>;
+
   constructor(
     private cd: ChangeDetectorRef, private store: Store,
     private info: InfoService, private popup: PopupService, private swipeupService: SwipeupService, private slideService: SlidemenuService,
@@ -93,12 +96,29 @@ export class HomeComponent extends Destroy$ {
     this.filters.filter('ST', this.allOnlinePosts);
   }
 
+  ngOnChanges() {
+    console.log("change home component")
+  }
+
+
   activeView: number = 0;
-  openAdFilterMenu: boolean = false;
-  imports = { DistanceSliderConfig, SalarySliderConfig };
-  draftMenu = new PostMenu;
-  postMenu = new PostMenu;
-  missionMenu = new PostMenu<Mission>();
+  openAdFilterMenu: boolean = false
+  imports = { DistanceSliderConfig, SalarySliderConfig }
+  draftMenu = new PostMenu
+  postMenu = new PostMenu
+  missionMenu = new PostMenu<Mission>()
+  toogle:boolean = false
+
+  swipeupMenu() {
+    this.missionMenu.swipeup = !this.missionMenu.swipeup
+    // toogle activate update
+    this.toogle = !this.toogle
+  }
+
+  callBackSwipeup = (b:boolean, type:string): void => {
+    if (type == "menu") { this.missionMenu.swipeup = b }
+    else {this.missionMenu.swipeupCloseMission = b}
+  }
 
   //factor two menu into objects
   openDraft(post: Post | null) {
@@ -117,7 +137,8 @@ export class HomeComponent extends Destroy$ {
   }
 
   openMission(mission: Mission | null) {
-    this.missionMenu = assignCopy(this.missionMenu, {post: mission, open: !!mission, swipeup: false});
+    this.missionMenu = assignCopy(this.missionMenu, {post: mission, open: !!mission, swipeup: false, swipeupCloseMission: false});
+    console.log("openMission", mission)
   }
 
   duplicatePost(id: number) {
@@ -230,16 +251,5 @@ export class HomeComponent extends Destroy$ {
     });
 
     this.swipeupService.hide();
-  }
-
-  // Mission swipeUp
-  closeMission() {
-    const subContractorId = this.missionMenu.post?.subContractor
-    if (subContractorId) {
-      // const company = this.store.selectSnapshot(DataQueries.getById('Company', subContractorId))
-      // this.popup.openCloseMission(company!);
-    }
-    console.log("closeMission", this.missionMenu)
-    this.missionMenu.swipeup = false
   }
 };

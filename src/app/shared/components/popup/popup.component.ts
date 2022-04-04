@@ -12,6 +12,7 @@ import { DataQueries, DataState } from "src/models/new/data.state";
 import { FileContext, FileViewer } from "../file-viewer/file-viewer.component";
 import { SignContract, ModifyDetailedPost } from "src/models/new/user/user.actions";
 import { SuiviChantierDate } from "src/app/mobile/components/suivi_chantier_date/suivi_chantier_date.page";
+import { SuiviPME } from "src/app/mobile/components/suivi_pme/suivi-pme.page";
 
 const TRANSITION_DURATION = 200;
 
@@ -106,7 +107,6 @@ export class UIPopup extends DimensionMenu {
       this.cd.markForCheck();
     }, TRANSITION_DURATION);
   }
-
   //extends destroy, no multiple inheritance :(
   protected destroy$ = new Subject<void>();
   ngOnDestroy() {
@@ -124,13 +124,18 @@ export class UIPopup extends DimensionMenu {
   }
 
   modifyDetailedPostDate(task:Task, date:DateG) {
-    console.log("modifyDetailedPostDate")
     task.date = date.value
     this.store.dispatch(new ModifyDetailedPost(task)).pipe(take(1)).subscribe(() => {});
   }
 
   openWindow(url: string) {
     window.open(url);
+  }
+
+  openActionClose(context: any) {
+    context.isActive = true
+    console.log("openActionClose context", context)
+    this.close()
   }
 };
 
@@ -147,6 +152,7 @@ export type PopupView = (ViewTemplate | ViewComponent | ContextUpdate | Predefin
 @Injectable({
   providedIn: 'root'
 })
+
 export class PopupService {
   popups$ = new Subject<PopupView>();
   dimension$ = new Subject<Dimension>();
@@ -255,12 +261,12 @@ export class PopupService {
       }
 
       if ( first ) {
-        this.dimension$.next(this.defaultDimension);  
+        this.dimension$.next(this.defaultDimension)
         this.popups$.next({
           type:  'predefined',
           name: 'setDate',
           context,
-          close: () => {
+          close: (test:boolean) => {
             closed$.next();
             let content = document.getElementById("addTask") as HTMLInputElement;
             let contentValue = content.value ? content.value : null
@@ -271,15 +277,34 @@ export class PopupService {
       }
   }
 
-  openCloseMission(company: Company) {
-    console.log("openCloseMission", company)
-    this.popups$.next({
-      type: 'predefined',
-      name: 'closeMission',
-      context: { $implicit: company }
-    });
-    this.dimension$.next(this.defaultDimension)
-    return new EventEmitter;
+  openCloseMission(company: Company, object: SuiviPME) {
+    let first: boolean = true;
+    const closed$ = new Subject<void>();
+
+    const context = {
+      $implicit: {
+        name: company.name,
+        isActive: false
+      }
+    }
+
+    if ( first ) {
+      this.dimension$.next(this.defaultDimension)
+      this.popups$.next({
+        type: 'predefined',
+        name: 'closeMission',
+        context,
+          close: () => {
+            if (context.$implicit.isActive) {
+              object.openCloseMission()
+            }
+            closed$.next();
+          }
+      });
+
+      first = false
+    }
+
   }
 
   hide() {
