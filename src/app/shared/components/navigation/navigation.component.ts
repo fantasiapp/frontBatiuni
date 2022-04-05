@@ -92,11 +92,15 @@ export class NavigationMenu extends Destroy$ {
   navigationType$!: Observable<"ST" | "PME">;
 
   ngOnInit() {
-    this.navigationType$.pipe(takeUntil(this.destroy$)).subscribe(type => {
+    this.navigationType$.pipe(takeUntil(this.destroy$ && this.menu)).subscribe(type => {
       const nextMenu = type == 'PME' ? PMEMenu : STMenu;
+      
       this.menu.next(nextMenu);
+
       this.getIndexFromUrl(this.router.url);
+      
     });
+
   }
 
   redirectHome() {
