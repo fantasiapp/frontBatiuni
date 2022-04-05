@@ -174,7 +174,14 @@ export class SuiviPME {
 
   starAction(index:number, nature:string) {
     console.log("starAction", index, nature)
-    this.mission!.quality = index + 1
+    if (nature == "quality")
+      this.mission!.quality = index + 1
+    if (nature == "security")
+      this.mission!.security = index + 1
+    if (nature == "organisation")
+      this.mission!.organisation = index + 1
+    else
+      this.mission!.security
     this.cd.markForCheck()
   }
 
@@ -186,7 +193,21 @@ export class SuiviPME {
   getArrayStar (nature:string){
     let array = new Array<boolean>(5)
     if (this.mission) {
-      let lastStar = this.mission!.quality
+      let lastStar = 0
+      if (nature == "quality") {
+        lastStar = this.mission!.quality
+      }
+      else if (nature == "security") {
+        lastStar = this.mission!.security
+      }
+      else if (nature == "organisation") {
+        lastStar = this.mission!.organisation
+      }
+      else if (nature == "general") {
+        if (this.mission!.quality && this.mission!.security && this.mission!.organisation) {
+          lastStar = Math.round((this.mission!.quality + this.mission!.security + this.mission!.organisation) / 3)
+        }
+      }
       for (let index=0; index < 5; index++) {
         array[index] = (index < lastStar) ? true : false
       }

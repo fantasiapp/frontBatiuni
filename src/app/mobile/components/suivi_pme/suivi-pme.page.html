@@ -51,7 +51,7 @@
     <div style="height:30px; width:30px"></div>
     <p>Qualité du travail fourni</p>
     <div style="display:flex; flex-direction:horizontal">
-      <img *ngFor="let flag of getArrayStar('quality')" [src]="flag ? 'assets/starFull.svg' : 'assets/starEmpty.svg'">
+      <img *ngFor="let flag of getArrayStar('quality'); let index=index;" (click)="starAction(index, 'quality')" [src]="flag ? 'assets/starFull.svg' : 'assets/starEmpty.svg'">
     </div>
     <textarea (click)="textStarAction('quality')" placeholder="Ajouter un commentaire" rows="5" cols="30" id="starTextQuality"></textarea>
   </div>
@@ -60,7 +60,7 @@
     <div style="height:30px; width:30px"></div>
     <p>Respect de la sécurité et de la propreté du chantier</p>
     <div style="display:flex; flex-direction:horizontal">
-      <img *ngFor="let flag of getArrayStar('security')" [src]="flag ? 'assets/starFull.svg' : 'assets/starEmpty.svg'">
+      <img *ngFor="let flag of getArrayStar('security'); let index=index;" (click)="starAction(index, 'security')" [src]="flag ? 'assets/starFull.svg' : 'assets/starEmpty.svg'">
     </div>
     <textarea (click)="textStarAction('security')" placeholder="Ajouter un commentaire" rows="5" cols="30" id="starTextQuality"></textarea>
   </div>
@@ -69,7 +69,7 @@
     <div style="height:30px; width:30px"></div>
     <p>Organisation</p>
     <div style="display:flex; flex-direction:horizontal">
-      <img *ngFor="let flag of getArrayStar('organisation')" [src]="flag ? 'assets/starFull.svg' : 'assets/starEmpty.svg'">
+      <img *ngFor="let flag of getArrayStar('organisation'); let index=index;" (click)="starAction(index, 'organisation')" [src]="flag ? 'assets/starFull.svg' : 'assets/starEmpty.svg'">
     </div>
     <textarea (click)="textStarAction('organisation')" placeholder="Ajouter un commentaire" rows="5" cols="30" id="starTextQuality"></textarea>
   </div>
