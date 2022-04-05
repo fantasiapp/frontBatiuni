@@ -227,7 +227,7 @@ a {
   
   &.image {
     position: absolute;
-    bottom: $icon-size; left: calc($profile-image-size - $highlight-margin - $icon-size);
+    bottom: 0.5rem; right: $highlight-margin - $icon-size;
   }
   
   &.text {

@@ -58,7 +58,7 @@ export type ApplyForm = {
     <ng-container *ngIf="application && view == 'ST'">
       <hr class="dashed"/>
       <form  *ngIf="post.counterOffer" class="devis form-control" [formGroup]="form">
-        <h5>Pour postuler veuillez proposer votre devis</h5>
+        <h2>Pour postuler veuillez proposer votre devis</h2>
 
         <div class="form-input">
           <label>Montant</label>

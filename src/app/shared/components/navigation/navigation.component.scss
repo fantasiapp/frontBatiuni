@@ -1,6 +1,6 @@
 @use 'src/styles/variables' as *;
 @use 'src/styles/mixins' as *;
-@import 'src/styles/responsive';
+@use 'src/styles/responsive' as *;
 
 @media (max-width: $mobile) {
   //mobile layout

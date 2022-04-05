@@ -20,33 +20,35 @@ import { SpacingPipe } from "../pipes/spacing.pipe";
 
   <ng-template #modifyPage1>
     <section class="full-width section">
-      <form class="form-control" [formGroup]="form">
-        <h3 class="form-title">
-          Infos personelles:
-        </h3>
-        <div class="form-input">
-          <label>Nom du contact</label>
-          <input class="form-element" type="text" formControlName="UserProfile.lastName" />
-        </div>
-        <div class="form-input">
-          <label>Prénom du contact</label>
-          <input class="form-element" type="text" formControlName="UserProfile.firstName" />
-        </div>
-        <div class="form-input">
-          <label>Adresse e-mail contact</label>
-          <input class="form-element" type="email" formControlName="UserProfile.userName" />
-        </div>
-        <div class="form-input">
-          <label>Téléphone de l'entreprise</label>
-          <input class="form-element" type="tel" formControlName="UserProfile.Company.companyPhone" />
-        </div>
-        <div class="form-input">
-          <label>Téléphone portable</label>
-          <input class="form-element" type="tel" formControlName="UserProfile.cellPhone" />
-        </div>
-        <div class="form-input">
-          <label>Fonction dans l'entreprise</label>
-          <input class="form-element" type="text" formControlName="UserProfile.function" />
+      <form class="form-control section-host" [formGroup]="form">
+        <div class="form-section">
+          <h3 class="form-title">
+            Infos personelles:
+          </h3>
+          <div class="form-input">
+            <label>Nom du contact</label>
+            <input class="form-element" type="text" formControlName="UserProfile.lastName" />
+          </div>
+          <div class="form-input">
+            <label>Prénom du contact</label>
+            <input class="form-element" type="text" formControlName="UserProfile.firstName" />
+          </div>
+          <div class="form-input">
+            <label>Adresse e-mail contact</label>
+            <input class="form-element" type="email" formControlName="UserProfile.userName" />
+          </div>
+          <div class="form-input">
+            <label>Téléphone de l'entreprise</label>
+            <input class="form-element" type="tel" formControlName="UserProfile.Company.companyPhone" />
+          </div>
+          <div class="form-input">
+            <label>Téléphone portable</label>
+            <input class="form-element" type="tel" formControlName="UserProfile.cellPhone" />
+          </div>
+          <div class="form-input">
+            <label>Fonction dans l'entreprise</label>
+            <input class="form-element" type="text" formControlName="UserProfile.function" />
+          </div>
         </div>
       </form>
     </section>
@@ -54,136 +56,139 @@ import { SpacingPipe } from "../pipes/spacing.pipe";
 
   <ng-template #modifyPage2>
     <section class="full-width section">
-      <form class="full-width form-control" [formGroup]="form">
-        <h3 class="form-title">
-          Infos entreprise:
-        </h3>
-        <div class="form-input">
-          <label>Nom de l'entreprise</label>
-          <input class="form-element" type="text" formControlName="UserProfile.Company.name" />
-        </div>
-        <div class="form-input">
-          <label>N SIRET</label>
-          <input class="form-element" type="text" formControlName="UserProfile.Company.siret" />
-        </div>
-        <!-- change the structure -->
-        <!-- all elements are selected -->
-        <div class="form-input metiers">
-          <ng-container *ngIf="!addingField; else addfield_tpl">
-            <label>Métiers</label>
-            <ng-container formArrayName="UserProfile.Company.JobForCompany">
-              <span class="position-relative number form-element" *ngFor="let control of companyJobsControls; index as i">
-                <ng-container [formGroupName]="i">
-                  <span class="number-name">{{control.get('job')!.value.name}}</span>
-                  <div class="position-absolute number-container">
-                    <number formControlName="number"></number>
-                  </div>
-                </ng-container>
-              </span>
+      <form class="full-width form-control section-host" [formGroup]="form">
+        <div class="form-section">
+          <h3 class="form-title">
+            Infos entreprise:
+          </h3>
+          <div class="form-input">
+            <label>Nom de l'entreprise</label>
+            <input class="form-element" type="text" formControlName="UserProfile.Company.name" />
+          </div>
+          <div class="form-input">
+            <label>N SIRET</label>
+            <input class="form-element" type="text" formControlName="UserProfile.Company.siret" />
+          </div>
+          <!-- change the structure -->
+          <!-- all elements are selected -->
+          <div class="form-input metiers">
+            <ng-container *ngIf="!addingField; else addfield_tpl">
+              <label>Métiers</label>
+              <ng-container formArrayName="UserProfile.Company.JobForCompany">
+                <span class="position-relative number form-element" *ngFor="let control of companyJobsControls; index as i">
+                  <ng-container [formGroupName]="i">
+                    <span class="number-name">{{control.get('job')!.value.name}}</span>
+                    <div class="position-absolute number-container">
+                      <number formControlName="number"></number>
+                    </div>
+                  </ng-container>
+                </span>
+              </ng-container>
+              <div (click)="addingField = true" class="center-text add-field">
+                <img src="assets/icons/add.svg"/>
+                <span>Ajouter un métier</span>
+              </div>
             </ng-container>
-            <div (click)="addingField = true" class="center-text add-field">
-              <img src="assets/icons/add.svg"/>
-              <span>Ajouter un métier</span>
+          
+            <ng-template #addfield_tpl>
+                <label>Ajoutez des métiers</label>
+                <options [options]="allJobs" [value]="selectedJobs" #jobOptions></options>
+              <div class="form-input center-text">
+                <button (click)="updateJobs(jobOptions.value!)" style="display:inline; width: 80%; padding: 5px;" class="button gradient"> Terminer </button>
+              </div>
+            </ng-template>
+          </div>
+          
+          <div class="form-input">
+            <label>Êtes vous une entreprise TCE</label>
+            <div class="flex row radio-container">
+              <div class="radio-item">
+                <radiobox class="grow" [onselect]="false" formControlName="UserProfile.Company.allQualifications"></radiobox>
+                <span>Non</span>
+              </div>
+              <div class="radio-item">
+                <radiobox class="grow" [onselect]="true" formControlName="UserProfile.Company.allQualifications"></radiobox>
+                <span>Oui</span>
+              </div>
             </div>
+          </div>
+
+          <div class="form-input">
+            <label>Êtes-vous disponible pour des missions les samedis</label>
+            <div class="flex row radio-container">
+              <div class="radio-item">
+                <radiobox class="grow" [onselect]="false" formControlName="UserProfile.Company.saturdayDisponibility"></radiobox>
+                <span>Non</span>
+              </div>
+              <div class="radio-item">
+                <radiobox class="grow" [onselect]="true" formControlName="UserProfile.Company.saturdayDisponibility"></radiobox>
+                <span>Oui</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-input">
+            <label>Site internet</label>
+            <input class="form-element" type="text" formControlName="UserProfile.Company.webSite" />
+          </div>
+
+          <div class="form-input">
+            <label>Chiffres d'affaires</label>
+            <input class="form-element" type="text" formControlName="UserProfile.Company.capital" />
+          </div>
+
+          <div class="form-input">
+            <label>Capital</label>
+            <input class="form-element" type="text" formControlName="UserProfile.Company.revenue" />
+          </div>
+
+          <div class="form-input">
+            <label>Taux horaire moyen</label>
+            <input class="form-element" type="text" formControlName="UserProfile.Company.amount" />
+          </div>
+
+          <ng-container formGroupName="UserProfile.Company.admin">
+            <fileinput [showtitle]="false" filename="Kbis" formControlName="Kbis">
+              <file-svg name="Kbis" color="#156C9D" image></file-svg>
+            </fileinput>
+
+            <fileinput [showtitle]="false" filename="Attestation travail dissimulé" formControlName="Trav. Dis">
+              <file-svg name="Trav. Dis" color="#054162" image></file-svg>
+            </fileinput>
+
+            <fileinput [showtitle]="false" filename="Attestation RC + DC" formControlName="RC + DC">
+              <file-svg name="RC + DC" color="#999999" image></file-svg>
+            </fileinput>
+
+            <fileinput [showtitle]="false" filename="URSSAF" formControlName="URSSAF">
+              <file-svg name="URSSAF" color="#F9C067" image></file-svg>
+            </fileinput>
+
+            <fileinput [showtitle]="false" filename="Impôts" formControlName="Impôts">
+              <file-svg name="Impôts" color="#52D1BD" image></file-svg>
+            </fileinput>
+
+            <fileinput [showtitle]="false" filename="Congés payés" formControlName="Congés Payés">
+              <file-svg name="Congés Payés" color="#32A290" image></file-svg>
+            </fileinput>
           </ng-container>
-        
-          <ng-template #addfield_tpl>
-              <label>Ajoutez des métiers</label>
-              <options [options]="allJobs" [value]="selectedJobs" #jobOptions></options>
-            <div class="form-input center-text">
-              <button (click)="updateJobs(jobOptions.value!)" style="display:inline; width: 80%; padding: 5px;" class="button gradient"> Terminer </button>
-            </div>
-          </ng-template>
         </div>
-        
-        <div class="form-input">
-          <label>Êtes vous une entreprise TCE</label>
-          <div class="flex row radio-container">
-            <div class="radio-item">
-              <radiobox class="grow" [onselect]="false" formControlName="UserProfile.Company.allQualifications"></radiobox>
-              <span>Non</span>
-            </div>
-            <div class="radio-item">
-              <radiobox class="grow" [onselect]="true" formControlName="UserProfile.Company.allQualifications"></radiobox>
-              <span>Oui</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="form-input">
-          <label>Êtes-vous disponible pour des missions les samedis</label>
-          <div class="flex row radio-container">
-            <div class="radio-item">
-              <radiobox class="grow" [onselect]="false" formControlName="UserProfile.Company.saturdayDisponibility"></radiobox>
-              <span>Non</span>
-            </div>
-            <div class="radio-item">
-              <radiobox class="grow" [onselect]="true" formControlName="UserProfile.Company.saturdayDisponibility"></radiobox>
-              <span>Oui</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="form-input">
-          <label>Site internet</label>
-          <input class="form-element" type="text" formControlName="UserProfile.Company.webSite" />
-        </div>
-
-        <div class="form-input">
-          <label>Chiffres d'affaires</label>
-          <input class="form-element" type="text" formControlName="UserProfile.Company.capital" />
-        </div>
-
-        <div class="form-input">
-          <label>Capital</label>
-          <input class="form-element" type="text" formControlName="UserProfile.Company.revenue" />
-        </div>
-
-        <div class="form-input">
-          <label>Taux horaire moyen</label>
-          <input class="form-element" type="text" formControlName="UserProfile.Company.amount" />
-        </div>
-
-        <ng-container formGroupName="UserProfile.Company.admin">
-          <fileinput [showtitle]="false" filename="Kbis" formControlName="Kbis">
-            <file-svg name="Kbis" color="#156C9D" image></file-svg>
-          </fileinput>
-
-          <fileinput [showtitle]="false" filename="Attestation travail dissimulé" formControlName="Trav. Dis">
-            <file-svg name="Trav. Dis" color="#054162" image></file-svg>
-          </fileinput>
-
-          <fileinput [showtitle]="false" filename="Attestation RC + DC" formControlName="RC + DC">
-            <file-svg name="RC + DC" color="#999999" image></file-svg>
-          </fileinput>
-
-          <fileinput [showtitle]="false" filename="URSSAF" formControlName="URSSAF">
-            <file-svg name="URSSAF" color="#F9C067" image></file-svg>
-          </fileinput>
-
-          <fileinput [showtitle]="false" filename="Impôts" formControlName="Impôts">
-            <file-svg name="Impôts" color="#52D1BD" image></file-svg>
-          </fileinput>
-
-          <fileinput [showtitle]="false" filename="Congés payés" formControlName="Congés Payés">
-            <file-svg name="Congés Payés" color="#32A290" image></file-svg>
-          </fileinput>
-        </ng-container>
       </form>
     </section>
   </ng-template>
 
   <ng-template #modifyPage3>
     <section class="full-width section">
-      <form class="full-width form-control" [formGroup]="form">
-        <h3 class="form-title">
-          Certifications & labels:
-        </h3>
-        <div class="form-input">
-          <label>Vos labels</label>
-          <options [options]="allLabels" [value]="selectedLabels" (valueChange)="updateLabels($event)" #labelOptions></options>
-        </div>
-        <ng-container formArrayName="UserProfile.Company.LabelForCompany">
+      <form class="full-width form-control section-host" [formGroup]="form">
+        <div class="form-section">
+          <h3 class="form-title">
+            Certifications & labels:
+          </h3>
+          <div class="form-input">
+            <label>Vos labels</label>
+            <options [options]="allLabels" [value]="selectedLabels" (valueChange)="updateLabels($event)" #labelOptions></options>
+          </div>
+          <ng-container formArrayName="UserProfile.Company.LabelForCompany">
             <span class="position-relative" *ngFor="let control of companyLabelControls; index as i">
               <ng-container [formGroupName]="i">
                 <fileinput [showtitle]="false" [filename]="control.get('label')!.value.name" formControlName="fileData">
@@ -192,6 +197,7 @@ import { SpacingPipe } from "../pipes/spacing.pipe";
               </ng-container>
             </span>
           </ng-container>
+        </div>
       </form>
     </section>
   </ng-template>
@@ -211,7 +217,8 @@ import { SpacingPipe } from "../pipes/spacing.pipe";
   styles: [`
     @use 'src/styles/variables' as *;
     @use 'src/styles/mixins' as *;
-    @import 'src/styles/responsive';
+    @use 'src/styles/responsive' as *;
+    @use 'src/styles/forms' as *;
 
 
     :host {
@@ -223,7 +230,7 @@ import { SpacingPipe } from "../pipes/spacing.pipe";
     }
 
     .form-title, .form-input label {
-      font-size: 1em;
+      /* font-size: 1em; */
     }
 
     .metiers options {
