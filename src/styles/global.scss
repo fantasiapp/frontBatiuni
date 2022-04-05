@@ -39,6 +39,17 @@ h2 {  font-family: "Poppins"; font-weight: 500; color: $primary;}
 h3 {  font-family: "Roboto"; font-weight: 600;}
 h4 {  font-family: "Poppins"; font-weight: 400}
 
+// Margin horizontal
+.mx-auto{   margin: 0 auto;}
+.mx-1   {   margin-left: 1rem; margin-right: 1rem;}
+.mx-2   {   margin-left: 2rem; margin-right: 2rem;}
+.mx-3   {   margin-left: 3rem; margin-right: 3rem;}
+.mx-4   {   margin-left: 4rem; margin-right: 4rem;}
+.mx-5   {   margin-left: 5rem; margin-right: 5rem;}
+
+
+// -----------------------------
+
 header {
   > img:first-child{
     position: absolute;
@@ -106,7 +117,7 @@ button {
       border: 2px solid #0C5E8D;
       font-weight: 500;
 
-      &:disabled { background-color: white !important; color: #aaa; border-color: #aaa; }
+      &:disabled { background-color: white !important; color: $light; border-color: $light; }
     }
 
     &.active {
@@ -181,18 +192,14 @@ a {
 //ANGULAR FORMS
 //SERVER ERRORS
 .server-error {
-  color: red;
+  color: $danger;
   font-size: 0.75em;;
 }
 //--------------------------------------------------
 //fonts
-
-// used only in ModifyProfile.form
 .font-Roboto {
   font-family: "Roboto";
 }
-
-// used a lot
 .font-Poppins {
   font-family: "Poppins";
 }
@@ -363,11 +370,11 @@ input[type=number] {
 // White sticky header 
 .white-header{
   background: white !important;
-  color: #333333;
+  color: $text-color-grey;
 }
 .footer-button {
   width: 100%;
-  background-color: #0C5E8D;
+  background-color: $primary;
   color : #FFFFFF;
 }
 
