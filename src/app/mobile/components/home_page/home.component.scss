@@ -1,4 +1,5 @@
-@import 'src/styles/mixins';
+@use 'src/styles/mixins' as *;
+@use 'src/styles/variables' as *;
 
 :host {
   @extend %page
@@ -10,15 +11,15 @@
 
 .annonce {
   background: #FFFFFF !important;
-  color: black;
+  color: $dark;
 }
 
 .notification {
   @extend %has-notifications
 }
 .reponse {
-  background-color: #ffffff !important;
-  color: black !important;
+  background-color: $bg-white !important;
+  color: $dark !important;
   box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 
 }

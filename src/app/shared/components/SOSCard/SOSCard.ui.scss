@@ -1,5 +1,6 @@
-@import 'src/styles/variables';
-@import 'src/styles/mixins';
+@use 'src/styles/variables' as *;
+@use 'src/styles/mixins' as *;
+@use 'src/styles/responsive' as *;
 
 :host {
   display: flex;
@@ -29,14 +30,14 @@
 }
 
 .description {
-  color: #aaa;
+  color: $light;
   height: 80%;
   
   & > span:not(:last-child) { margin-bottom: 1em; }
 }
 
 .job {
-  color: black;
+  color: $dark;
   overflow: hidden;
   display: -webkit-box;
   text-overflow: ellipsis;

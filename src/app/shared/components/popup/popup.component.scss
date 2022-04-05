@@ -1,5 +1,5 @@
-@import 'src/styles/variables';
-@import 'src/styles/mixins';
+@use 'src/styles/variables' as *;
+@use 'src/styles/mixins' as *;
 
 
 :host {
@@ -8,7 +8,7 @@
   width: 100%;
   height: 100%;
   display: flex; align-items: center; justify-content: center;
-  color: black;
+  color: $dark;
   font-family: "Poppins";
   overflow: hidden auto;
   visibility: hidden;
@@ -16,7 +16,7 @@
 
 :host(.open) {
   visibility: visible;
-  z-index: 1000;
+  z-index: 200000;
 }
 
 .cover {
@@ -24,7 +24,7 @@
   position: fixed;
   width: 100vw; left: 0;
   height: 100vh; top: 0;
-  background-color: #ccc;
+  background-color: $light-light;
   opacity: 0;
   transition: opacity 200ms ease-out 0s;
 
@@ -34,7 +34,7 @@
 }
 
 .menu {
-  box-shadow: 0 3px 6px 0 #aaa;
+  box-shadow: 0 3px 6px 0 $light;
   opacity: 0;
   transition: opacity 200ms ease-out 0s;
   border-radius: 5px;
@@ -62,7 +62,7 @@
   width:80%;
   height:50px;
   width:90%;
-  color: #0D6191;
+  color: $primary;
   margin: 20px;
   text-align: left;
 }
@@ -97,4 +97,11 @@
 .setDateTask {
   text-align: left;
   width:90%
+}
+
+.cloture {
+  display: flex;
+  flex-direction: column;
+  row-gap: $spacer-150;
+  width: 12rem;
 }

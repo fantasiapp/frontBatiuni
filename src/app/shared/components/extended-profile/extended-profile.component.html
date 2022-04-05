@@ -8,39 +8,24 @@
     ></profile-resume>
   
     <section class="job-description full-width flex column space-children-margin">
-      <span>
-        <span class="text-light-emphasis">Nom de l'entreprise : </span> <span
-          class="value">{{profile.company.name}}</span>
-      </span>
-      <span>
-        <span class="text-light-emphasis">N SIRET : </span> <span
-          class="value">{{profile.company.siret}}</span>
-      </span>
-      <span>
-        <span class="text-light-emphasis" *ngIf = "profile.company.allQualifications">Métier : TCE<br/></span>
-        <span class="text-light-emphasis" *ngIf = "!profile.company.allQualifications">Métier :</span>
-        <span *ngFor="let job of companyJobs; let i = index" class="value">{{ job.number }} {{ jobs[i].name }}, </span>
-      </span>
-      <span>
-        <span class="text-light-emphasis">Chiffres d'affaires : </span>
-        <span class="value">{{profile.company.revenue | currency: 'EUR':'symbol':'1.0-0' }}</span>
-      </span>
-      <span>
-        <span class="text-light-emphasis">Capital : </span>
-        <span class="value">{{profile.company.capital | currency: 'EUR':'symbol':'1.0-0' }}</span>
-      </span>
-      <!-- <span>
-        <span class="text-light-emphasis">Numéro fixe : </span>
-        <span class="value">{{profile.company.companyPhone | space: 2:1 }}</span>
+      <h4 class="text-light-emphasis">Nom de l'entreprise : <span class="value">{{profile.company.name}}</span></h4>
+      <h4 class="text-light-emphasis">N SIRET : <span class="value">{{profile.company.siret}}</span></h4>
+      <h4 class="text-light-emphasis" *ngIf = "profile.company.allQualifications">Métier : <span class="value">TCE</span></h4>
+
+      <h4 class="text-light-emphasis" *ngIf = "!profile.company.allQualifications">Métier : 
+      <span *ngFor="let job of companyJobs; let i = index" class="value">{{ job.number }} {{ jobs[i].name }}, </span></h4>
+    
+      <h4 class="text-light-emphasis">Chiffres d'affaires : <span class="value">{{profile.company.revenue | currency: 'EUR':'symbol':'1.0-0' }}</span></h4>
+    
+      <h4 class="text-light-emphasis">Capital : <span class="value">{{profile.company.capital | currency: 'EUR':'symbol':'1.0-0' }}</span></h4>
+      <!-- 
+        <h4 class="text-light-emphasis">Numéro fixe : <span class="value">{{profile.company.companyPhone | space: 2:1 }}</span></h4>
+      -->
+      <!-- 
+        <h4 class="text-light-emphasis">Site internet : <span class="value link"><a [href]="profile.company.webSite">{{profile.company.webSite}}</a></span></h4>
       </span> -->
-      <!-- <span>
-        <span class="text-light-emphasis">Site internet : </span>
-        <span class="value link"><a [href]="profile.company.webSite">{{profile.company.webSite}}</a></span>
-      </span> -->
-      <span>
-        <span class="text-light-emphasis">Montant Horaire moyen : </span>
-        <span class="value">{{ profile.company.amount ? profile.company.amount + ' €' : 'Non renseigné'}} </span>
-      </span>
+      
+      <h4 class="text-light-emphasis">Montant Horaire moyen : <span class="value">{{ profile.company.amount ? profile.company.amount + ' €' : 'Non renseigné'}} </span></h4>
       <span class="text-light-emphasis" *ngIf="profile.company.saturdayDisponibility">Disponible pour des missions les samedis</span>
     </section>
     
@@ -55,7 +40,7 @@
     <ng-container *ngIf="showContact">
       <hr class="dashed"/>
       <section class="full-width">
-        <h4>Contact</h4>
+        <h3>Contact</h3>
         <ul class="contact list flex space-around">
           <li><a [href]="'tel:+33' + profile.company.companyPhone"><img src="assets/missions/call.svg"/></a></li>
           <li><a [href]="'sms:+33' + profile.company.companyPhone"><img src="assets/missions/envoyer-un-message.svg"/></a></li>

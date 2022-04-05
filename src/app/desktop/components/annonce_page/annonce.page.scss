@@ -1,7 +1,7 @@
 @use 'sass:math';
 
-@import 'src/styles/mixins';
-@import 'src/styles/variables';
+@use 'src/styles/mixins' as *;
+@use 'src/styles/variables' as *;
 @import 'src/styles/responsive';
 %padding {
   padding: 0 40px;
@@ -11,7 +11,7 @@ $half-square : math.div($square,2);
 .page {
   @extend %three-section-layout;
   height: 100vh;
-  background-color: #f7f7f7;
+  background-color: $bg-white;
   width: 100vw;
   @extend %web-space-top;
 
@@ -36,7 +36,7 @@ $half-square : math.div($square,2);
 
 //1366+ follow specs
 .filters {
-  background-color: white;
+  background-color: $bg-white;
   overflow-y: auto;
   width: 400px;
   @extend %padding;
@@ -56,7 +56,7 @@ $half-square : math.div($square,2);
 .company-logo{
     position: fixed;
     top: calc(220px - 60px);
-    background-color: white;
+    background-color: $bg-white;
     width: $square;
     height: $square;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
@@ -68,7 +68,7 @@ $half-square : math.div($square,2);
     left : $square + 50px;
     height: 150px;
     padding: 1rem;
-    background-color: #f7f7f7;
+    background-color: $bg-white;
     z-index: 999;
 }
 
@@ -109,7 +109,7 @@ ad-form::ng-deep{
 
 
 // .companyinfo {
-//   background-color: #f7f7f7;
+//   background-color: $bg-white;
 //   position: absolute;  
 //   left: 500px;
 //   height: 150px;

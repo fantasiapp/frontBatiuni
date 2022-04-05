@@ -1,4 +1,5 @@
-@import 'src/styles/variables';
+// @use "src/styles/variables" as *;
+@use 'src/styles/variables' as *;
 
 :host {
   display: inline-block;
@@ -52,11 +53,11 @@ input {
 }
 
 .slider {
-  background: linear-gradient(to right, #{$switch-gradient-start}, #{$switch-gradient-end});
+  background: linear-gradient(to right, $switch-gradient-start, $switch-gradient-end);
 }
 
 input:checked + .slider:before {
-  transform: translateX(#{$switch-size-x - 2 * $switch-padding - $switch-button-size});
+  transform: translateX($switch-size-x - (2 * $switch-padding) - $switch-button-size);
 }
 
 .slider.round {

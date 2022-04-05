@@ -1,16 +1,14 @@
-
-
 <page-header name="Annonces qui peuvent vous intéresser " class=""
 [customHeader]='true'
 [(activeView)]="activeView"
 >
-<div *ngIf="engagmentClicked" class="clear-margin full-width  flex center-cross abonnement" headerBar>
-    <img [routerLink]="['','home','profile']" src="assets/arrowlblack.svg" />
-    <span class="grow center-text text-light-emphasis">Gérer mes abonnement</span>
-</div>
-    <span tab_0>PME</span>
-    <span tab_1>Sous-traitance</span>
-  </page-header>
+  <div *ngIf="engagmentClicked" class="clear-margin full-width sticky-header flex center-cross abonnement" headerBar>
+      <img [routerLink]="['','home','profile']" src="assets/arrowlblack.svg" class="position-absolute"/>
+      <h1 class="grow center-text">Gérer mes abonnement</h1>
+  </div>
+  <span tab_0>PME</span>
+  <span tab_1>Sous-traitance</span>
+</page-header>
 
   <div *ngIf="engagmentClicked" class=" space-children-margin page-content-with-tabs flex center ">
     <ng-container [ngSwitch]="activeView">

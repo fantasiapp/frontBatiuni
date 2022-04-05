@@ -1,5 +1,5 @@
-@import "src/styles/mixins";
-@import "src/styles/variables";
+@use 'src/styles/mixins' as *;
+@use 'src/styles/variables' as *;
 $details-padding: 1em;
 
 details {
@@ -10,7 +10,7 @@ details {
   
     .summary-title {
       user-select: none;
-      color: #0d6191;
+      color: $primary;
       font-weight: 500;
     }
   

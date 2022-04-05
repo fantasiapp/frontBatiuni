@@ -1,5 +1,5 @@
-@import "src/styles/mixins";
-@import "src/styles/variables";
+@use 'src/styles/mixins' as *;
+@use 'src/styles/variables' as *;
 
 :host {
   font-family: "Roboto";
@@ -23,7 +23,7 @@
   margin: 0.25rem;
   border-radius: 15px;
   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
-  background-color: #fafafa;
+  background-color: $bg-white;
   padding: 10px;
   li {
     height: 25px;
@@ -32,7 +32,7 @@
     cursor: pointer;
     text-align: center;
     line-height: 25px;
-    color: #1e2843;    
+    color: $dark;    
   }
 }
 
@@ -43,11 +43,6 @@ ol {
   margin-bottom: 5px;
   grid-template-columns: repeat(7, 1fr);
   margin: 0;
-  padding: 0;
-}
-
-h2 {
-  margin-bottom: 4px;
   padding: 0;
 }
 
@@ -76,7 +71,7 @@ h2 {
 }
 
 %bgcolor {
-  color: #ffffff !important;
+  color: $bg-white !important;
   border-radius: 50%;
 }
 
@@ -96,12 +91,12 @@ h2 {
   }
   
   .selected {
-    background-color: #1e2843;
+    background-color: $primary;
     @extend %bgcolor;
   }
   
   .nothing {
-    background-color: white;
+    background-color: $bg-white;
     @extend %bgcolor;
   }
 }

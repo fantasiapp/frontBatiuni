@@ -15,8 +15,8 @@ import { DataQueries } from "src/models/new/data.state";
     </ng-container>
   `,
   styles: [`
-    @import 'src/styles/variables';
-    @import 'src/styles/mixins';
+    @use 'src/styles/variables' as *;
+    @use 'src/styles/mixins' as *;
     
     :host {
       display: block;

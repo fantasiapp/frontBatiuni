@@ -26,7 +26,7 @@ export type ApplyForm = {
       
 
       <div class="needs">
-        <span class="title text-emphasis">Nous avons besoin de:</span>
+        <span class="title  ">Nous avons besoin de:</span>
         <ul>
           <li>{{post?.numberOfPeople || 1}} {{job?.name || 'Employé'}} </li>
           <li>Du {{ post.hourlyStart }} Au {{ post.hourlyEnd }}</li>
@@ -35,7 +35,7 @@ export type ApplyForm = {
       </div>
 
       <div class="description">
-        <span class="title text-emphasis">Description des missions</span>
+        <span class="title  ">Description des missions</span>
         <p>{{post.description}}</p>
         <ul>
           <li *ngFor="let detail of details">{{detail.content}}</li>
@@ -43,7 +43,7 @@ export type ApplyForm = {
       </div>
 
       <div class="documents">
-        <span class="title text-emphasis">Documents importants</span>
+        <span class="title  ">Documents importants</span>
         <ul>
           <li *ngFor="let file of files">
             <a (click)="openFile(file)">{{file.name}}</a>

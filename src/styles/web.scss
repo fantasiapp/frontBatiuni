@@ -1,7 +1,6 @@
-@import 'mixins';
-@import 'variables';
-@import 'responsive';
-
+@use 'mixins' as *;
+@use 'variables' as *;
+@use 'responsive' as *;
 
 @media (max-width: 768px) {
   body { font-size: 16px !important; }
@@ -29,6 +28,13 @@
     margin-top: $sticky-header-height;
     height: calc(100vh - #{$sticky-header-height});
   }
+}
+
+.full-width { width: 100%; }
+.full-height { height: 100% }
+.cover-parent {
+  @extend .full-width;
+  @extend .full-height;
 }
 
 .web-content {

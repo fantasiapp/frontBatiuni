@@ -1,4 +1,4 @@
-@import 'src/styles/mixins';
+@use 'src/styles/mixins' as *;
 .credit-card{
     background :  #0C5E8D;
     border-radius: 12px;

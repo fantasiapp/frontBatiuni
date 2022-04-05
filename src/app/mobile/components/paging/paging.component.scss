@@ -1,5 +1,5 @@
-@import 'src/styles/variables';
-@import 'src/styles/mixins';
+@use 'src/styles/variables' as *;
+@use 'src/styles/mixins' as *;
 
 
 :host {
@@ -13,7 +13,7 @@
 }
 
 .decoration-cover {
-  background-color: $buttonGradient;
+  background-color: $secondaryBackground;
 }
 
 .decoration {

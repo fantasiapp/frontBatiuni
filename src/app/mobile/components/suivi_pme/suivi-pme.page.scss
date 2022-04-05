@@ -1,14 +1,23 @@
-@import 'src/styles/variables';
-@import 'src/styles/mixins';
+@use 'src/styles/variables' as *;
+@use 'src/styles/mixins' as *;
 
 :host {
   display: block;
   width: 100%;
 }
+h3{
+  font-weight: 500;
+}
+.contract{
+
+  h3 {
+    margin-top: 3rem;
+  }
+}
 
 .annonce {
-  background: #FFFFFF !important;
-  color: black;
+  background: $bg-white !important;
+  color: $dark;
 }
 
 .dashed {
@@ -20,21 +29,28 @@
 }
 
 .contrat-title {
-  color: #0D6191;
+  color: $primary;
   font-size: 1rem;
+  font-weight: 500;
 }
 
 .suivi-notification {
   width: 100vw;
-  margin-left: -30px;
-  padding-left: 30px;
-
+  padding: 1rem 2rem;
   color: white;
-  height: 80px;
-  background-color:#0D6191 ;
-  h6 {
-    font-weight: 200;
+  height: 5rem;
+  background-color: $primary ;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  h4 {
+    font-weight: 400;
     font-size: 1em; 
+  }
+  p {
+    font-size: 0.875rem;
+    font-weight: 200;
   }
 }
 
@@ -56,4 +72,40 @@ details summary::-webkit-details-marker {
 
 .green {
   filter: invert(74%) sepia(69%) saturate(5734%) hue-rotate(85deg) brightness(116%) contrast(131%);
+}
+
+swipeup {
+  h6 {
+    color: $primary;
+    font-size: 0.875rem;
+  }
+
+  .cloture-swipeup{
+    display: flex;
+    flex-direction: column;
+    row-gap: $spacer-150;
+
+    
+  }
+}
+
+.form-input {
+  display: flex;
+  flex-direction: column;
+  row-gap: $spacer-50;
+}
+
+.form-input > textarea {
+  resize: vertical;
+  width: 100%;
+  font-size: 1rem;
+}
+
+.star-container {
+  display: flex;
+  column-gap: $spacer-50;  
+
+  > img {
+    left: unset;
+  }
 }

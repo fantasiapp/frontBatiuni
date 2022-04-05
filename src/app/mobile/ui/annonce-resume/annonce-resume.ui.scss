@@ -1,6 +1,6 @@
 @use "sass:math";
-@import 'src/styles/variables';
-@import 'src/styles/mixins';
+@use 'src/styles/variables' as *;
+@use 'src/styles/mixins' as *;
 
 :host {
   display: block;
@@ -10,7 +10,7 @@
 
 .annonce {
   background: #FFFFFF !important;
-  color: black;
+  color: $dark;
 }
 
 .star-annonce{
@@ -31,7 +31,7 @@
     
 }
 .company {
-  color: #999999;
+  color: $light;
 }
 
 .stars {
@@ -39,9 +39,9 @@
 }
 
 .needs, .description, .documents {
-  .title { color: #333; font-size: 1.1em; }
+  .title { color: $dark;}
   ul {
-    color: #999;
+    color: $light;
     white-space: normal;
     li {
       margin: 0.5rem 1rem;
@@ -70,6 +70,6 @@
 }
 
 .sticky-footer {
-  background: white;
+  background: $bg-white;
   box-shadow: 0 -3px 3px 0 #eee;
 }

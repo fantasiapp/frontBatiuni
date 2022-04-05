@@ -3,14 +3,14 @@
 
   <!-- CONTRAT DOCUSIGN URL -->
   <div *ngIf="isNotSigned" class="contrat">
-    <h6 class="title font-Poppins" style="margin-bottom: 20px;">
+    <h3>
       Le contrat
-    </h6> 
+    </h3> 
     <div class="flex center-cross space-around" (click)="signContract()">
       <file-svg name="Contrat" color="red"></file-svg>
-      <h6 *ngIf="isNotSignedByUser" class="contrat-title font-Poppins">
+      <h4 *ngIf="isNotSignedByUser" class="contrat-title font-Poppins">
         Signer le contrat
-      </h6> 
+      </h4> 
   </div>
 </div>
 <!-- ENDBLOCK CONTRAT -->
@@ -19,9 +19,9 @@
     Suivi du chantier
   </h6> -->
 </div>
-<div class="suivi-notification flex column" style="margin-left:0">
-  <h6 class="font-Poppins" style="margin:5px">Suivi du chantier</h6>
-  <h6 class="font-Poppins" style="margin:5px">Avec {{contactName}} entreprise {{ companyName }} </h6>
+<div class="suivi-notification">
+  <h4 class="font-Poppins">Suivi du chantier</h4>
+  <p class="font-Roboto">Avec {{contactName}} entreprise {{ companyName }} </p>
 </div>
 <div class="full-width flex column">
   <suivi-chantier_date *ngFor="let date of dates" [date]="date" [mission]="mission" [reloadMission]="reloadMission"></suivi-chantier_date>
@@ -40,42 +40,38 @@
 </swipeup>
 
 <swipeup [(open)]="missionMenu.swipeupCloseMission">
-  <span>Noter l'entreprise</span>
-  <div style="display:flex; flex-direction:horizontal">
-    <p *ngIf="mission">{{ mission!.subContractorName }}</p>
-    <div style="width:30px"></div>
-    <img *ngFor="let flag of getArrayStar('general'); let index=index;" (click)="starAction(index, 'general')" [src]="flag ? 'assets/starFull.svg' : 'assets/starEmpty.svg'">
-  </div>
-
-  <div>
-    <div style="height:30px; width:30px"></div>
-    <p>Qualité du travail fourni</p>
-    <div style="display:flex; flex-direction:horizontal">
-      <img *ngFor="let flag of getArrayStar('quality'); let index=index;" (click)="starAction(index, 'quality')" [src]="flag ? 'assets/starFull.svg' : 'assets/starEmpty.svg'">
+  <div class="cloture-swipeup">
+    <h3>Noter l'entreprise</h3>
+    <h6 *ngIf="mission">{{ mission!.subContractorName }}</h6>
+    <div class="star-container">
+      <img *ngFor="let flag of getArrayStar('general'); let index=index;" (click)="starAction(index, 'general')" [src]="flag ? 'assets/starFull.svg' : 'assets/starEmpty.svg'">
     </div>
-    <textarea (click)="textStarAction('quality')" placeholder="Ajouter un commentaire" rows="5" cols="30" id="starTextQuality"></textarea>
-  </div>
-  
-  <div>
-    <div style="height:30px; width:30px"></div>
-    <p>Respect de la sécurité et de la propreté du chantier</p>
-    <div style="display:flex; flex-direction:horizontal">
-      <img *ngFor="let flag of getArrayStar('security'); let index=index;" (click)="starAction(index, 'security')" [src]="flag ? 'assets/starFull.svg' : 'assets/starEmpty.svg'">
-    </div>
-    <textarea (click)="textStarAction('security')" placeholder="Ajouter un commentaire" rows="5" cols="30" id="starTextQuality"></textarea>
-  </div>
 
-  <div>
-    <div style="height:30px; width:30px"></div>
-    <p>Organisation</p>
-    <div style="display:flex; flex-direction:horizontal">
-      <img *ngFor="let flag of getArrayStar('organisation'); let index=index;" (click)="starAction(index, 'organisation')" [src]="flag ? 'assets/starFull.svg' : 'assets/starEmpty.svg'">
+    <div class="form-input">
+      <p>Qualité du travail fourni</p>
+      <div class="star-container">
+        <img *ngFor="let flag of getArrayStar('quality')" [src]="flag ? 'assets/starFull.svg' : 'assets/starEmpty.svg'">
+      </div>
+      <textarea (click)="textStarAction('quality')" placeholder="Ajouter un commentaire" rows="5" cols="30" id="starTextQuality"></textarea>
     </div>
-    <textarea (click)="textStarAction('organisation')" placeholder="Ajouter un commentaire" rows="5" cols="30" id="starTextQuality"></textarea>
-  </div>
-  <div style="height:30px; width:30px"></div>
-  <button (click)="validerStar()">Valider</button>
+    
+    <div class="form-input">
+      <p>Respect de la sécurité et de la propreté du chantier</p>
+      <div class="star-container">
+        <img *ngFor="let flag of getArrayStar('security')" [src]="flag ? 'assets/starFull.svg' : 'assets/starEmpty.svg'">
+      </div>
+      <textarea (click)="textStarAction('security')" placeholder="Ajouter un commentaire" rows="5" cols="30" id="starTextQuality"></textarea>
+    </div>
 
+    <div class="form-input">
+      <p>Organisation</p>
+      <div class="star-container">
+        <img *ngFor="let flag of getArrayStar('organisation')" [src]="flag ? 'assets/starFull.svg' : 'assets/starEmpty.svg'">
+      </div>
+      <textarea (click)="textStarAction('organisation')" placeholder="Ajouter un commentaire" rows="5" cols="30" id="starTextQuality"></textarea>
+    </div>
+    <button (click)="validerStar()">Valider</button>
+  </div>
 </swipeup>
 
 <ng-template #comment>

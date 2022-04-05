@@ -1,5 +1,5 @@
-@import "src/styles/variables";
-@import "src/styles/mixins";
+@use "src/styles/variables" as *;
+@use "src/styles/mixins" as *;
 
 :host {
   font-family: "Poppins";
@@ -21,7 +21,7 @@ p {
 }
 
 .image-container {
-  margin-left: -$page-padding + 10px;
+  margin-left: calc(-$page-padding + 10px);
 }
 
 // Success Circle with the  confirmation SVG

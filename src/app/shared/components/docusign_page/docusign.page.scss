@@ -1,11 +1,11 @@
-@import 'src/styles/variables';
-@import 'src/styles/mixins';
+@use 'src/styles/variables' as *;
+@use 'src/styles/mixins' as *;
 
 :host {
     display: block;
     font-family: 'Roboto';
     width: 100vw;
-    background-color: #f7f7f7;
+    background-color: $bg-white;
     height: 100vh;
     padding: 12px 16px;
 }
@@ -21,7 +21,7 @@ span {
 h3 {
     text-align: center;
 }
-h1{
+span {
     font-weight: 200;
 }
 button {

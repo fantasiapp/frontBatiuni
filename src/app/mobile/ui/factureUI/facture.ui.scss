@@ -1,5 +1,5 @@
-@import "src/styles/mixins";
-@import "src/styles/variables";
+@use 'src/styles/mixins' as *;
+@use 'src/styles/variables' as *;
 
 :host {
     display: block;
@@ -18,14 +18,14 @@ p {
 }
 
 .date {
-    color: #070A28;
+    color: $dark;
     font-weight: 500;
 }
 
 .price{
     span{
         font-weight: 500;
-        color: #070A28;
+        color: $dark;
         font-size: 18px ;
     }
 }

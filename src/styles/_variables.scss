@@ -1,12 +1,17 @@
+@forward  "variables_new";
+@use "variables_new" as *;
 
-$mainColor: #000000;
-$landingColor: #ffffff;
-$buttonColor: #0C5E8D;
-$secondaryBackground: #0D6191;
+
+$mainColor: $dark;
+$landingColor: #fff;
+// $buttonColor: #0C5E8D;
+$buttonColor: $primary;
+// $secondaryBackground: #0D6191;
+$secondaryBackground: $primary;
 $buttonGradient: $secondaryBackground;
-$formulaireMainColor : #080F18;
-$externelLinks : #0F557C;
-$succesCircleShadow : #CDCFD0;
+$formulaireMainColor : $dark;
+$externelLinks : $primary;
+$succesCircleShadow : $light;
 $infosColor : #52D1BD;
 $input-image-offset-x: 20px;
 $input-image-offset-y: 5px;
@@ -17,30 +22,31 @@ $paging-decoration-height: 12px;
 $navigation-height: 70px;
 
 // spacing
-$item-padding: 10px;
-$page-padding: 30px;
-$title-padding: 30px;
-$section-margin: 30px;
-$highlight-margin: 20px;
-$spacing-margin: 15px;
-$small-spacing-margin: 10px;
-$big-spacing-margin: 20px;
+$item-padding: $spacer-75;
+$page-padding: $spacer-200;
+$title-padding: $spacer-200;
+$section-margin: $spacer-200;
+$highlight-margin: $spacer-150;
+$spacing-margin: $spacer-100;
+$small-spacing-margin: $spacer-75;
+$big-spacing-margin: $spacer-150;
 
-$form-item-spacing: 40px;
+$form-item-spacing: $spacer-200;
 $form-border-bottom: 2px solid #cdcfd0; 
 
 
 // Switch box
-$switch-size-x: 40px;
-$switch-size-y: 20px;
-$switch-padding: 2px;
+$switch-size-x: $spacer-200;
+$switch-size-y: 1.25rem;
+$switch-padding: 0.125rem;
 $switch-button-size: min($switch-size-x, $switch-size-y) - 2 * $switch-padding;
 $switch-gradient-start: #009BE0;
 $switch-gradient-end: #69F0AE;
 
+// Utiliser que une fois dans box.component 
 // UI checkbox
-$box-size: 25px;
-$box-padding: 8px;
+$box-size: $spacer-150;
+$box-padding: $spacer-50;
 
 //Profile page
 $tick-size-x: 3px;
@@ -63,9 +69,9 @@ $icon-size: 25px;
 
 
 // Availibilty Colors =====>
-$available : #B9EDAF;
-$availableWithLimits : #FFC425;
-$unavailable : #E80000;
+$available : $success;
+$availableWithLimits : $warning;
+$unavailable : $danger;
 $icon-padding: 2px;
 
 //search-bar
@@ -78,8 +84,8 @@ $searchbar-padding: 16px;
 $tab-height: 40px;
 $tab-padding: 10px;
 $tab-default-background: #E5E5E5;
-$tab-default-color: #9A9A9A;
-$tab-active-background: white;
+$tab-default-color: $light;
+$tab-active-background: $bg-white;
 $tab-active-color: $secondaryBackground;
 $tab-spacing: 8px;
 

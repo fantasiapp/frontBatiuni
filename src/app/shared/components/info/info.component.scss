@@ -1,6 +1,6 @@
 @use "sass:math";
-@import 'src/styles/variables';
-@import 'src/styles/mixins';
+@use 'src/styles/variables' as *;
+@use 'src/styles/mixins' as *;
 
 
 :host {
@@ -43,13 +43,13 @@ img {
 }
 
 .error {
-  background-color: #c0392b;
+  background-color: $danger;
 }
 
 .success {
-  background-color: #27ae60;
+  background-color: $success;
 }
 
 .info {
-  background-color: #2980b9;
+  background-color: $info;
 }

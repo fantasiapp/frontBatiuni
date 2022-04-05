@@ -20,7 +20,7 @@ import { DataQueries, QueryProfile, Snapshot } from "src/models/new/data.state";
   `,
   styles: [`
     @use "sass:math";
-    @import 'src/styles/variables';
+    @use 'src/styles/variables' as *;
 
     $profile-card-padding: 15px;
     $profile-size-target: 80px;

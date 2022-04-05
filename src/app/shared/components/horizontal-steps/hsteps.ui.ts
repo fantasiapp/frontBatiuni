@@ -10,8 +10,8 @@ import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
     `,
   styles: [`
     @use "sass:math";
-    @import 'src/styles/variables';
-    @import 'src/styles/mixins';
+    @use 'src/styles/variables' as *;
+    @use 'src/styles/mixins' as *;
 
     $ball-size: 40px;
     $line-thickness: 0.75px;

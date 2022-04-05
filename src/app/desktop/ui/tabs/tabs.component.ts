@@ -10,12 +10,13 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from 
     </ul>
   `,
   styles: [`
-    @import 'src/styles/variables';
+    @use 'src/styles/variables' as *;
     
     :host { display: block; width: 100%; }
     ul { margin: 0 auto; max-width: 450px + 20px; }
     li { flex: 0 0 150px; height: $tab-height; cursor: pointer; }
     li.active { font-weight: 700; color: $buttonGradient; }
+
   `],
   changeDetection: ChangeDetectionStrategy.OnPush
 })

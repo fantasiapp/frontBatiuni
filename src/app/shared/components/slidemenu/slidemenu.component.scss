@@ -1,5 +1,5 @@
-@import 'src/styles/variables';
-@import 'src/styles/mixins';
+@use 'src/styles/variables' as *;
+@use 'src/styles/mixins' as *;
 
 :host {
   position: fixed;
@@ -16,6 +16,7 @@
 }
 
 .return {
+  position: absolute; // to make the title next to it able to be centered
   width: $navigation-arrow-icon-size;
   height: $navigation-arrow-icon-size;
 }
@@ -53,7 +54,7 @@
 }
 .company-name {
   font-weight: 800;
-  color: #333333;
+  color: $text-color-grey;
 }
 
 .criterion {
@@ -67,7 +68,7 @@
     transform: scale(0.7);
   }
   span {
-    color: #999999;
+    color: $light;
     white-space: normal;
   }
 }

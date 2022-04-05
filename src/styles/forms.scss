@@ -1,3 +1,9 @@
+@forward 'flex';
+@use 'variables' as *;
+@use 'responsive' as *;
+@use 'mixins' as *;
+
+
 // FORMULAIRES
 
 .arrow_right {
@@ -14,6 +20,10 @@
 
 .curved-border {
   border-radius: 15px 15px 0 0;
+}
+
+.background-white {
+  background-color: $landingColor;
 }
 
 .hosted-page {
@@ -114,8 +124,8 @@
 }
 
 .title {
-  font-size: 1.2em;
-  font-weight: 600;
+  font-size: 1rem;
+  font-weight: 500;
   margin-bottom: $title-padding;
 }
 

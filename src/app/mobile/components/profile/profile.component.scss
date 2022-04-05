@@ -1,6 +1,6 @@
 @use "sass:math";
-@import "src/styles/variables";
-@import "src/styles/mixins";
+@use 'src/styles/variables' as *;
+@use 'src/styles/mixins' as *;
 
 :host {
   @extend %page;
@@ -22,7 +22,7 @@ header {
 }
 .company-name {
   font-weight: 800;
-  color: #333333;
+  color: $dark;
 }
 
 .criterion {
@@ -36,7 +36,7 @@ header {
     transform: scale(0.7);
   }
   span {
-    color: #999999;
+    color: $light;
     white-space: normal;
   }
 }

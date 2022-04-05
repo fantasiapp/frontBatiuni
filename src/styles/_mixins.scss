@@ -1,8 +1,8 @@
 @use "sass:list";
 @use "sass:math";
-@import './variables';
-@import './responsive';
-@import './positioning';
+@use 'variables' as *;
+@use 'responsive' as *;
+@use 'positioning' as *;
 
 @mixin cover-background {
   position: absolute;

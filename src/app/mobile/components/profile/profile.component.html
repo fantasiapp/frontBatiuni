@@ -1,7 +1,7 @@
 <!--Configure role accordingly-->
 <ng-container *ngIf="(profile$ | async) as profile">
   <header class="clear-margin full-width sticky-header flex center-cross">
-    <span class="grow text-light-emphasis">Mon Profil</span>
+    <h1 class="grow">Mon Profil</h1>
     <img src="assets/notification.svg" (click)="openNotifications = true" />
     <img src="assets/menu.svg" (click)="openMenu = true" />
   </header>
@@ -24,7 +24,7 @@
   </swipeup>
 
   <slidemenu [footer]="modifyPassword ? 'small' : 'medium'" [(open)]="openModifyMenu" #modifyMenu>    
-    <span header>Modifier mon Profil</span>
+    <h1 header>Modifier mon Profil</h1>
     <div class="modify-page hosted-page flex column center-cross space-children-margin" content>
       <swipeup [(open)]="openModifyPicture" #modifyPicture>
         <li (click)="takePhoto()">Accédez à l'appareil photo</li>

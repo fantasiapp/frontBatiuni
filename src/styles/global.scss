@@ -1,25 +1,28 @@
+@forward  'forms.scss';
+@forward  'mapbox-gl.scss';
+@forward  'ngx-slider.scss';
+@forward  'web.scss';
+@forward  'animations';
+
+
 @use "sass:math";
-@import 'mixins';
-@import 'variables';
-@import 'responsive';
-@import 'animations.scss';
-@import 'forms.scss';
-@import 'mapbox-gl.scss';
-@import 'ngx-slider.scss';
-@import 'web.scss';
+
+@use 'animations.scss' as *;
+@use 'variables' as *;
+@use 'mixins' as *;
+@use 'responsive' as *;
 
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-
 }
 
 :root {
-  --main-landing-color: #{$mainColor}; 
-  --main-app-color: #{$landingColor};
-  --main-button-color: #{$buttonColor};
-  --main-button-gradient: #{$buttonGradient};
+  --main-landing-color: $mainColor; 
+  --main-app-color: $landingColor;
+  --main-button-color: $buttonColor;
+  --main-button-gradient: $primary;
 }
 
 .clear-margin {
@@ -30,17 +33,16 @@
   padding: 0;
 }
 
-* {
-  @extend .clear-margin;
-  @extend .clear-padding;
-  box-sizing: border-box;
-}
+h1, h2, h3 { font-size: 1rem}
+h1 {  font-family: "Roboto"; font-weight: 700}
+h2 {  font-family: "Poppins"; font-weight: 500; color: $primary;}
+h3 {  font-family: "Roboto"; font-weight: 600;}
+h4 {  font-family: "Poppins"; font-weight: 400}
 
-.full-width { width: 100%; }
-.full-height { height: 100% }
-.cover-parent {
-  @extend .full-width;
-  @extend .full-height;
+header {
+  > img:first-child{
+    position: absolute;
+  }
 }
 
 .page-content {
@@ -55,6 +57,7 @@
   height: calc(100vh - #{$sticky-header-height} - env(safe-area-inset-bottom));
 }
 
+// Never used ???
 .full-page {
   @extend %overflow-y;
   @include set-safe-area(top);
@@ -80,7 +83,8 @@ button {
   display: inline-block;
   outline: none;
   border: none;
-  padding: 10px 15px;
+  // padding: 10px 15px;
+  padding: $spacer-100 $spacer-200;
   border-radius: 8px;
   font-family: inherit;
   font-weight: 200;
@@ -93,7 +97,7 @@ button {
     }
 
     &.gradient {
-      background: linear-gradient($secondaryBackground, #{lighten($secondaryBackground, 5%)});
+      background: $primary;
     }
 
     &.passive {
@@ -122,17 +126,11 @@ a {
   @include cover-background;
 }
 
-.text-left {
-  text-align: left;
-}
+.text-left { text-align: left;}
 
-.center-text {
-  text-align: center;
-}
+.center-text { text-align: center;}
 
-.text-right {
-  text-align: right;
-}
+.text-right { text-align: right;}
 
 .block {
   display: block;
@@ -140,43 +138,6 @@ a {
 
 .half-rotation {
   transform: rotate(180deg);
-}
-
-.flex {
-  display: flex !important;
-
-  &.row {
-    flex-flow: row nowrap;
-  }
-
-  &.column {
-    flex-flow: column nowrap;
-  }
-
-  &.center-main {
-    justify-content: center;
-  }
-
-  &.space-between {
-    justify-content: space-between;
-  }
-
-  &.space-around {
-    justify-content: space-around;
-  }
-
-  &.center-cross {
-    align-items: center;
-  }
-
-  &.strech-children {
-    align-items: stretch;
-  }
-
-  &.center {
-    @extend .center-main;
-    @extend .center-cross;
-  }
 }
 
 .grow { flex-grow: 1; }
@@ -187,11 +148,6 @@ a {
 
 .auto-margin-y {
   margin: auto 0;
-}
-//-----------------------------------------------
-//Colors
-.background-white {
-  background-color: $landingColor;
 }
 
 //------------------------------------------------
@@ -230,10 +186,13 @@ a {
 }
 //--------------------------------------------------
 //fonts
+
+// used only in ModifyProfile.form
 .font-Roboto {
   font-family: "Roboto";
 }
 
+// used a lot
 .font-Poppins {
   font-family: "Poppins";
 }
@@ -253,13 +212,15 @@ a {
   text-overflow: ellipsis;
 }
 
+
+// used only in profile-resume.component
 .modify-icon {
   width: $icon-size + 2 * $icon-padding;
   height: $icon-size + 2 * $icon-padding;
   
   &.image {
     position: absolute;
-    bottom: $icon-size; left: $profile-image-size - $highlight-margin - $icon-size;
+    bottom: $icon-size; left: calc($profile-image-size - $highlight-margin - $icon-size);
   }
   
   &.text {
@@ -308,6 +269,7 @@ input {
   list-style-type: none;
   margin-top: auto;
   white-space: nowrap;
+  gap: $tab-spacing;
   li {
     height: $tab-height;
     padding: $tab-padding;
@@ -317,7 +279,7 @@ input {
     line-height: $tab-height - 2*$tab-padding;
 
     &.active { background: $tab-active-background; color: $tab-active-color; font-weight: 500; }
-    &:not(:last-child) { margin-right: $tab-spacing; }
+    // &:not(:last-child) { margin-right: $tab-spacing; }
   }
 }
 .radio-item {
@@ -337,13 +299,7 @@ input {
  }
 }
 
-textarea {
-  width: 100%;
-  min-height: 80px;
-  border: 2px solid #aaa;
-  outline: none;
-  border-radius: 3px;
-}
+
 
 //----------------------------------------------------
 //clear fixes
@@ -376,7 +332,7 @@ input[type=number] {
 .offres {
   justify-content: space-between;
   box-shadow: 0 5px 3px 0 rgba(149, 157, 165, 0.2); // x y spread outline color
-  padding: $item-padding 2 * $item-padding;
+  padding: $item-padding calc(2 * $item-padding);
   color: #999999;
   font-size: 15px;
   border-radius: 5px;
@@ -472,5 +428,5 @@ input[type=number] {
 
 .validate-application {
   position: relative;
-  
+
 }

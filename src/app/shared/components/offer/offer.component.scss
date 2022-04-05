@@ -1,5 +1,5 @@
-@import "src/styles/mixins";
-@import "src/styles/variables";
+@use 'src/styles/mixins' as *;
+@use 'src/styles/variables' as *;
 @import "src/styles/responsive";
 
 :host {
@@ -16,10 +16,10 @@
 
 .container {
   display: flex;
-  background: white;
+  background: $bg-white;
   box-shadow: 0 5px 3px 0 rgba(149, 157, 165, 0.2); // x y spread outline color
   padding: $item-padding (2*$item-padding);
-  color: #999999;
+  color: $light;
   border-radius: 12px;
   justify-content: center;
   margin-bottom: 1rem;
@@ -39,7 +39,7 @@ p {
 }
 
 .metier, .date {
-  color: #333333;
+  color: $text-color-grey;
 }
 
 .adresse { overflow: hidden; text-overflow: ellipsis; font-weight: 300; }
@@ -50,7 +50,7 @@ p {
   }
   padding: 1rem;
   position: absolute;
-  background-color: #FFF;
+  background-color: $bg-white;
   min-width: 160px;
   overflow: auto;
   border-radius: 12px;

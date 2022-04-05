@@ -1,4 +1,4 @@
-@import 'src/styles/variables';
+@use 'src/styles/variables' as *;
 
 //started off with borders, but later realized they aren't shown in all cases
 //keep calc the same and just hide them for now

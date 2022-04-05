@@ -1,5 +1,5 @@
-@import "src/styles/variables";
-@import "src/styles/mixins";
+@use 'src/styles/variables' as *;
+@use 'src/styles/mixins' as *;
 
 :host {
     @extend %page;
@@ -7,11 +7,11 @@
 }
 .abonnement {
     background: #ffffff !important;
-    color: black;
+    color: $mainColor;
 }
 
 page-header::ng-deep header {
-    background-color: #ffffff !important;
+    background-color: $bg-white !important;
     border-bottom: 1px solid #e5e5e5;
 }
 page-header::ng-deep .tabs {
@@ -48,7 +48,7 @@ page-header::ng-deep .tabs {
     }
 }
 .caroussel-button {
-    background: white !important;
+    background: $bg-white !important;
     position: fixed;
     bottom: 0;
     height: 70px;

@@ -1,6 +1,6 @@
 @use "sass:math";
-@import 'src/styles/variables';
-@import 'src/styles/mixins';
+@use 'src/styles/variables' as *;
+@use 'src/styles/mixins' as *;
 
 :host {
   display: block;
@@ -23,7 +23,7 @@ $comment-factor: math.div($target-size, $profile-image-size);
 }
 
 .body {
-  background-color: #F7F7F7;
+  background-color: $bg-white;
   border-radius: 12px;
   padding: 12px;
   margin-left: 12px;

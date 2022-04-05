@@ -1,5 +1,5 @@
-@import 'src/styles/variables';
-@import 'src/styles/mixins';
+@use 'src/styles/variables' as *;
+@use 'src/styles/mixins' as *;
 
 
 :host {
@@ -14,7 +14,7 @@ section {
 }
 
 .infos .timer {
-  color: #999999;
+  color: $light;
 }
 
 .offres-logo {
@@ -44,5 +44,5 @@ section {
 
 .timer {
   font-size: 12px;
-  color : #999999;
+  color : $light;
 }

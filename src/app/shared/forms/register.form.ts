@@ -99,7 +99,7 @@ import { GetCompanies } from "src/models/new/search/search.actions";
     </ng-template>
   `,
   styles: [`
-    @import 'src/styles/mixins';
+    @use 'src/styles/mixins' as *;
     
     :host(.mobile-view) {
       @extend %content-with-paging-and-big-footer;

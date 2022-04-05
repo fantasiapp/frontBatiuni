@@ -1,6 +1,6 @@
 @use "sass:math";
-@import 'src/styles/variables';
-@import 'src/styles/mixins';
+@use 'src/styles/variables' as *;
+@use 'src/styles/mixins' as *;
 
 
 :host {
@@ -55,12 +55,16 @@
   @include absolute-center('xy', absolute);
 }
 
+
+
 .list {
   font-size: 0.9em;
   list-style-type: none;
-  padding: 20px 60px;
+  padding: 20px 2rem;
   @include with-set-safe-area(padding, bottom, 20px);
 
+
+  // ?? 
   ::ng-deep img {
     width: $icon-size;
     height: $icon-size;
