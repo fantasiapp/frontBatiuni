@@ -42,10 +42,11 @@
 <swipeup [(open)]="missionMenu.swipeupCloseMission">
   <div class="cloture-swipeup">
     <h3>Noter l'entreprise</h3>
-    <h6 *ngIf="mission">{{ mission!.subContractorName }}</h6>
-    <div class="star-container">
-      <img *ngFor="let flag of getArrayStar('general'); let index=index;" (click)="starAction(index, 'general')" [src]="flag ? 'assets/starFull.svg' : 'assets/starEmpty.svg'">
-    </div>
+    <h6 *ngIf="mission">{{ mission!.subContractorName }}
+      <div class="star-container">
+        <img *ngFor="let flag of getArrayStar('general'); let index=index;" (click)="starAction(index, 'general')" [src]="flag ? 'assets/starFull.svg' : 'assets/starEmpty.svg'">
+      </div>
+    </h6>
 
     <div class="form-input">
       <p>Qualité du travail fourni</p>
