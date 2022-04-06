@@ -81,5 +81,5 @@ $swipeup-height: 70vh;
 
 .content {
   overflow-y: auto;
-  max-height: calc($swipeup-height - #{$swipeup-decoration-height});
+  max-height: calc(#{$swipeup-height} - #{$swipeup-decoration-height});
 }
