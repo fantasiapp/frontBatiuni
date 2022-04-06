@@ -1,6 +1,6 @@
 <ng-container *ngIf="post">
   <div class="container grow flex center-cross space-between">
-    <div class="offres-infos">
+    <div [ngClass]="isClosedClass">
       <p class="entreprise">{{company?.name || 'Entreprise'}}</p>
       <p class="metier">{{post?.manPower ? 'Main d\'oeuvre' : 'Fourniture et Pose'}}</p>
       <p class="address">{{post?.address || 'addresse'}}</p>

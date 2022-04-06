@@ -169,6 +169,7 @@ export type Mission = Post & {
   securityComment: string;
   organisation: number;
   organisationComment: string;
+  isClosed: boolean;
   contract: Ref<File>;
   supervisions: Ref<Supervision>[]
 };

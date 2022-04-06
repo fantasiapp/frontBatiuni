@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, HostBinding, HostListener, Input, O
 import { Store } from "@ngxs/store";
 import { Subject } from "rxjs";
 import { take } from "rxjs/operators";
-import { Post, Company } from "src/models/new/data.interfaces";
+import { Post, Company, Mission } from "src/models/new/data.interfaces";
 import { DataQueries } from "src/models/new/data.state";
 import { DeletePost } from "src/models/new/user/user.actions";
 import { PopupService } from "../popup/popup.component";
@@ -37,7 +37,16 @@ export class OfferComponent {
 
   company: Company | null = null;
   private _post!: Post | null;
-  get post() { return this._post; }
+  get post() {
+    return this._post; }
+
+  get isClosedClass() {
+    let mission = this._post as Mission
+    if (mission && mission.isClosed)
+      return "offres-infos-closed"
+    return "offres-infos"
+
+  }
   
   @Input() set post(p: Post | null) {
     this._post = p;

@@ -43,34 +43,35 @@
   <div class="cloture-swipeup">
     <h3>Noter l'entreprise</h3>
     <h6 *ngIf="mission">{{ mission!.subContractorName }}</h6>
-    <div class="star-container">
-      <img ngIf="getArrayStar('general')[0]" *ngFor="let flag of getArrayStar('general'); let index=index;" [src]="flag ? 'assets/starFull.svg' : 'assets/starEmpty.svg'">
+    <div class="star-container" *ngIf="hasGeneralStars">
+      <!-- <img ngIf="getArrayStar('general')[0]" *ngFor="let flag of getArrayStar('general'); let index=index;" [src]="flag ? 'assets/starFull.svg' : 'assets/starEmpty.svg'"> -->
+      <img  *ngFor="let flag of getArrayStar('general'); let index=index;" [src]="flag ? 'assets/starFull.svg' : 'assets/starEmpty.svg'">
     </div>
 
-    <div class="form-input">
+    <div *ngIf="mission" class="form-input">
       <p>Qualité du travail fourni</p>
       <div class="star-container">
         <img *ngFor="let flag of getArrayStar('quality'); let index=index;" (click)="starAction(index, 'quality')" [src]="flag ? 'assets/starFull.svg' : 'assets/starEmpty.svg'">
       </div>
-      <textarea (click)="textStarAction('quality')" placeholder="Ajouter un commentaire" rows="5" cols="30" id="starTextQuality"></textarea>
+      <textarea (focusout)="textStarAction('quality')" placeholder="Ajouter un commentaire" rows="5" cols="30" id="starTextQuality">{{ mission!.qualityComment }}</textarea>
     </div>
     
-    <div class="form-input">
+    <div *ngIf="mission" class="form-input">
       <p>Respect de la sécurité et de la propreté du chantier</p>
       <div class="star-container">
         <img *ngFor="let flag of getArrayStar('security'); let index=index;" (click)="starAction(index, 'security')" [src]="flag ? 'assets/starFull.svg' : 'assets/starEmpty.svg'">
       </div>
-      <textarea (click)="textStarAction('security')" placeholder="Ajouter un commentaire" rows="5" cols="30" id="starTextQuality"></textarea>
+      <textarea (click)="textStarAction('security')" placeholder="Ajouter un commentaire" rows="5" cols="30" id="starTextSecurity">{{ mission!.securityComment }}</textarea>
     </div>
 
-    <div class="form-input">
+    <div *ngIf="mission" class="form-input">
       <p>Organisation</p>
       <div class="star-container">
         <img *ngFor="let flag of getArrayStar('organisation'); let index=index;" (click)="starAction(index, 'organisation')" [src]="flag ? 'assets/starFull.svg' : 'assets/starEmpty.svg'">
       </div>
-      <textarea (click)="textStarAction('organisation')" placeholder="Ajouter un commentaire" rows="5" cols="30" id="starTextQuality"></textarea>
+      <textarea (click)="textStarAction('organisation')" placeholder="Ajouter un commentaire" rows="5" cols="30" id="starTextOrganisation">{{ mission!.organisationComment }}</textarea>
     </div>
-    <button (click)="validerStar()">Valider</button>
+    <button [ngClass]="classSubmit" (click)="submitStar()">Valider</button>
   </div>
 </swipeup>
 

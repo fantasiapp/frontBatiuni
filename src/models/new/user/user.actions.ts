@@ -2,7 +2,7 @@ import { FormGroup } from "@angular/forms";
 import { FileUIOutput } from "src/app/shared/components/filesUI/files.ui";
 import { PropertyTrap } from "src/app/shared/common/classes";
 import { getDirtyValues } from "src/app/shared/common/functions";
-import { DataTypes, Post, PostDetail, Profile } from "../data.interfaces";
+import { DataTypes, Post, PostDetail, Profile, Mission } from "../data.interfaces";
 import { CalendarUI, DayState } from "src/app/shared/components/calendar/calendar.ui";
 import { availabilityToName } from "../data.mapper";
 import { ApplyForm } from "src/app/mobile/ui/annonce-resume/annonce-resume.ui";
@@ -292,6 +292,13 @@ export class ModifyDetailedPost {
   }
 }
 
+export class CloseMission {
+  static readonly type = '[Data] set stars and comments';
+  action = 'closeMission'
+  constructor(public missionId: number, public qualityStars:number, public qualityComment:string, public securityStars:number, public securityComment:string, public organisationStars:number, public organisationComment:string) {
+  }
+}
+
 export class CreateSupervision {
   static readonly type = '[Data] Create Supervision';
   action = 'createSupervision'
@@ -308,7 +315,6 @@ export class SetFavorite {
 export class MarkViewed {
   static readonly type = '[User.ST] View Post';
   action = 'isViewed';
-
   constructor(public Post: number) {}
 };
 
