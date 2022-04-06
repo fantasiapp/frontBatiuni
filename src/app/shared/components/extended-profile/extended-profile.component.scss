@@ -35,8 +35,18 @@ ul {
   list-style: none;
 }
 
-.documents object {
-  width: $document-image-size-x;
+// .documents object {
+//   width: $document-image-size-x;
+// }
+
+.documents-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+
+  file-svg {
+    width: fit-content;
+    margin: 0 auto;
+  }
 }
 
 .contact {
