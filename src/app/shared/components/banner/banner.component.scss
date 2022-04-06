@@ -1,0 +1,29 @@
+$triangle-lenght: 0.5rem;
+
+.banner-container {
+    padding: 0.75rem 1.5rem;
+    position: absolute;
+    right: -$triangle-lenght * 2;
+    top: 0.5rem;
+    color: white;
+    font-weight: 300;
+    &::before {
+        content: "";
+        // background: #BC3939;
+        // position: relative;
+        display: block;
+        position: absolute;
+        right: 0;
+        bottom: - 2 * $triangle-lenght;
+        width: 0;
+        height: 0;
+        border: $triangle-lenght solid transparent;
+        border-top: $triangle-lenght solid #BC3939;
+        border-left: $triangle-lenght solid #BC3939;
+    }
+}
+
+
+.red {
+    background-color: #E28282;
+}
