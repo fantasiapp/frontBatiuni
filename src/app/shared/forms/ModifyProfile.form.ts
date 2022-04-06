@@ -220,7 +220,6 @@ import { SpacingPipe } from "../pipes/spacing.pipe";
     @use 'src/styles/responsive' as *;
     @use 'src/styles/forms' as *;
 
-
     :host {
       position: relative;
       width: 100%;
@@ -228,15 +227,9 @@ import { SpacingPipe } from "../pipes/spacing.pipe";
       flex-flow: column nowrap;
       flex-shrink: 0;
     }
-
-    .form-title, .form-input label {
-      /* font-size: 1em; */
-    }
-
     .metiers options {
       margin-bottom: 20px;
     }
-
     .number-name {
       display: block;
       white-space: pre;
@@ -255,7 +248,6 @@ import { SpacingPipe } from "../pipes/spacing.pipe";
       flex: 1;
       background-color: white;
       @extend %overflow-y;
-
       @include from($mobile) { background: transparent; }
     }
 
@@ -271,7 +263,7 @@ import { SpacingPipe } from "../pipes/spacing.pipe";
 
     .metiers {
       & > .form-element {
-        border-bottom: 2px solid #cdcfd0 !important; //otherwise it will focus all fields
+        border-bottom: 2px solid #cdcfd0 !important;
       }
 
       .form-element:focus-within {
