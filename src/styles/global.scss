@@ -25,12 +25,12 @@
   --main-button-gradient: $primary;
 }
 
-.clear-margin {
-  margin: 0;
-}
-
-.clear-padding {
-  padding: 0;
+html, body {
+	font-size: 16px;
+	font-family: 'Roboto', sans-serif;
+	background: white;
+	height: 100vh;
+	overflow-x: hidden;
 }
 
 h1, h2, h3 { font-size: 1rem}
@@ -49,6 +49,14 @@ h4 {  font-family: "Poppins"; font-weight: 400}
 
 
 // -----------------------------
+
+.clear-margin {
+  margin: 0;
+}
+
+.clear-padding {
+  padding: 0;
+}
 
 header {
   > img:first-child{
