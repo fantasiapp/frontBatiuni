@@ -270,6 +270,11 @@ input {
   color: white;
   @extend %header;
 }
+.white-header {
+  background-color: $bg-white;
+  color: $dark;
+}
+
 
 .section {
   position: relative;
