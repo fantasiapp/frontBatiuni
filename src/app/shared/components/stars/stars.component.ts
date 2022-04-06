@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Host
 import { NG_VALUE_ACCESSOR } from "@angular/forms";
 import { UIDefaultAccessor } from "../../common/classes";
 
-export const ratingStarWidth = 25;
+export const ratingStarWidth = 18;
 
 //add to forms
 @Component({
