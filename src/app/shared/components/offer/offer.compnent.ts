@@ -44,7 +44,7 @@ export class OfferComponent {
     let mission = this._post as Mission
     if (mission && mission.isClosed)
       return "offres-infos-closed"
-    return "offres-infos"
+    return ""
 
   }
   

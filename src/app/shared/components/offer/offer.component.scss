@@ -17,7 +17,7 @@
 .container {
   display: flex;
   background: $bg-white;
-  box-shadow: 0 5px 3px 0 rgba(149, 157, 165, 0.2); // x y spread outline color
+  box-shadow: 10px 24px 54px #3333330D; // x y spread outline color
   padding: $item-padding (2*$item-padding);
   color: $light;
   border-radius: 12px;
@@ -37,7 +37,11 @@
   flex : 1;
   white-space: nowrap;
   overflow: hidden;
-  background-color: #E5E5E5;
+  // background-color: rgb(252, 252, 255);
+
+  div img {
+    opacity: .64;
+  }
 }
 
 p {
