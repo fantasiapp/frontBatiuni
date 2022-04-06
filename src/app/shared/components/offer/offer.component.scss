@@ -1,6 +1,6 @@
 @use 'src/styles/mixins' as *;
 @use 'src/styles/variables' as *;
-@import "src/styles/responsive";
+@use "src/styles/responsive" as *; 
 
 :host {
   position: relative;
