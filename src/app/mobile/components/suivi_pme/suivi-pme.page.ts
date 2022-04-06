@@ -1,10 +1,12 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, SimpleChanges } from "@angular/core";
 import { Select, Store } from "@ngxs/store";
 import { Observable } from "rxjs";
+import { take } from "rxjs/operators";
 import { PopupService } from "src/app/shared/components/popup/popup.component";
-import { MissionFilterForm } from "src/app/shared/forms/missions.form";
+import { CloseMission } from "src/models/new/user/user.actions";
 import { Company, Mission, PostMenu, PostDetail, Profile, Supervision, DateG, Task } from "src/models/new/data.interfaces";
 import { DataQueries, DataState } from "src/models/new/data.state";
+import { ApplyForm } from "src/app/mobile/ui/annonce-resume/annonce-resume.ui";
 
 // export type Task = PostDetail & {validationImage:string, invalidationImage:string}
 
@@ -158,7 +160,7 @@ export class SuiviPME {
 
 
   closeMission() {
-    if (this.mission?.subContractor) {
+    if (this.mission!.subContractor && !this.mission!.isClosed) {
       const company = this.store.selectSnapshot(DataQueries.getById('Company', this.mission!.subContractor))
       this.popup.openCloseMission(company!, this)
     }
@@ -173,21 +175,34 @@ export class SuiviPME {
   }
 
   starAction(index:number, nature:string) {
-    console.log("starAction", index, nature)
     if (nature == "quality")
       this.mission!.quality = index + 1
     if (nature == "security")
       this.mission!.security = index + 1
     if (nature == "organisation")
       this.mission!.organisation = index + 1
-    else
-      this.mission!.security
     this.cd.markForCheck()
   }
 
+  get hasGeneralStars() { return this.getArrayStar("general")[0] == true }
+
+  get classSubmit() {
+    if (this.hasGeneralStars) {return "submitActivated"}
+    else {return "submitDisable"}
+  }
+
   textStarAction(nature:string) {
-    let content = document.getElementById("starTextQuality") as HTMLTextAreaElement;
-    console.log("textStarAction", nature, content!.value)
+    if (nature == "quality") {
+      let content = document.getElementById("starTextQuality") as HTMLTextAreaElement;
+      this.mission!.qualityComment = content!.value
+      console.log("textStarAction", this.mission!.qualityComment)
+    } else if (nature == "security") {
+      let content = document.getElementById("starTextSecurity") as HTMLTextAreaElement;
+      this.mission!.securityComment = content!.value
+    } else if (nature == "organisation") {
+      let content = document.getElementById("starTextSecurity") as HTMLTextAreaElement;
+      this.mission!.organisationComment = content!.value
+    }
   }
 
   getArrayStar (nature:string){
@@ -215,8 +230,10 @@ export class SuiviPME {
       return array
   }
 
-  validerStar() {
-    console.log("validerStar")
+  submitStar() {
+    if (this.hasGeneralStars)
+      console.log("validerStar", this.mission, this.hasGeneralStars)
+      this.store.dispatch(new CloseMission(this.mission!.id, this.mission!.quality, this.mission!.qualityComment, this.mission!.security, this.mission!.securityComment, this.mission!.organisation, this.mission!.organisationComment)).pipe(take(1)).subscribe(() => {});
   }
 
   @Select(DataQueries.currentProfile)

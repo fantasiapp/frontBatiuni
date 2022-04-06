@@ -119,6 +119,7 @@ export class UIAnnonceResume {
   view: 'ST' | 'PME' = 'ST';
   ngOnInit() {
     this.view = this.store.selectSnapshot(DataState.view);
+    console.log("annonce-resume", this.company)
   }
 
   openFile(file: File) {

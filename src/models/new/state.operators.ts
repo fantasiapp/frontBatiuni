@@ -28,7 +28,6 @@ namespace mutable {
 
   //configure type so this can only be called on complex types
   export function update(draft: any, target: DataTypes, values: Record<any>) {
-    console.log("start update", values, "target", target)
     const targetObjects = draft[target],
       fields = draft.fields[target];
     
