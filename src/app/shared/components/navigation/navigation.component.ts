@@ -53,7 +53,6 @@ export class NavigationMenu extends Destroy$ {
   constructor(private router: Router, private store: Store, info: InfoService) {
     super();
     this.menu = new BehaviorSubject(this.store.selectSnapshot(DataState.view) == 'PME' ? PMEMenu : STMenu);
-    console.log('navigation', this.menu);
     this.router.events.pipe(takeUntil(this.destroy$)).subscribe((event) => {
       if (!(event instanceof NavigationEnd)) return;
       info.hide();
