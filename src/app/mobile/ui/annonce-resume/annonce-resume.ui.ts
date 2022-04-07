@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from 
 import { FormControl, FormGroup } from "@angular/forms";
 import { Store } from "@ngxs/store";
 import { PopupService } from "src/app/shared/components/popup/popup.component";
-import { Company, User, Post, File, PostDetail, Job } from "src/models/new/data.interfaces";
+import { Company, User, Post, File, PostDetail, Job, Mission } from "src/models/new/data.interfaces";
 import { DataQueries, DataState } from "src/models/new/data.state";
 
 export type ApplyForm = {
@@ -21,7 +21,7 @@ export type ApplyForm = {
         <stars class="stars" [value]="company!.stars || 4" disabled></stars>
         <span>{{ (post.manPower) ? "Main d'oeuvre" : "Fourniture et pose" }}</span>
         <span>Du {{ toLocateDate(post.startDate) }} Au {{toLocateDate(post.endDate)}}</span>
-        <span>{{ this.post.amount || 0 }} {{this.post.currency}} </span>
+        <span>{{ this.amount || 0 }} {{this.post.currency}} </span>
       </div>
       
 
@@ -105,7 +105,18 @@ export class UIAnnonceResume {
   //rename this to item of type compatible with both Post and Mission
   private _post: Post | null = null;
   get post(): any { return this._post; }
-  
+  get amount(): number {
+    if (this._post?.counterOffer) {
+      let mission = this._post as Mission
+      let candidate = this.store.selectSnapshot(DataQueries.getById('Candidate', mission.subContractor))
+      if (mission && mission.counterOffer && candidate) {
+        return candidate?.amount
+      }
+    }
+
+    return this.post.amount
+  }
+
   @Input('post') set post(p: Post | null) {
     this._post = p;
     this.company = p ? this.store.selectSnapshot(DataQueries.getById('Company', p.company)) : null;
