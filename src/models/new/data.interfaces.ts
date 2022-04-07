@@ -147,6 +147,8 @@ export interface Candidate {
   company: Ref<Company>;
   amount: number;
   devis: string;
+  isChoosen : boolean;
+  isRefused : boolean;
 };
 
 export interface Establishement {

@@ -164,10 +164,10 @@ export class HomePageComponent extends Destroy$ {
       );
   }
 
-  devis = ['Par Heure', 'Par Jour', 'Par Semaine'].map((name, id) => ({ id, name }));
+  // devis = ['Par Heure', 'Par Jour', 'Par Semaine'].map((name, id) => ({ id, name }));
   devisForm = new FormGroup({
     amount: new FormControl(0),
-    devis: new FormControl([this.devis[0]])
+    // devis: new FormControl([this.devis[0]])
   });
 
   testPopup() {
