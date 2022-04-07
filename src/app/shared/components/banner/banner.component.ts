@@ -30,10 +30,12 @@ export class BannerComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if (this.isClosed) {
+    let mission = this._post as Mission
+    console.log('banner', mission);
+    if (mission.isClosed) {
       this.bannerString = 'Mission cloturée'
     } else {
-      let counterOfferPrice = this.post?.candidates[2];
+      let counterOfferPrice = this.post?.candidates;
       this.counterOfferPrice = counterOfferPrice + '€' // placeholder
       this.bannerString = 'Contre offre : ';
 
