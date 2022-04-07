@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Mission, Post } from 'src/models/new/data.interfaces';
+import { Candidate, Mission, Post } from 'src/models/new/data.interfaces';
 
 @Component({
   selector: 'app-banner',
@@ -17,7 +17,12 @@ export class BannerComponent implements OnInit {
     this._post = p;
   }
 
-  bannerString!: String | null;
+  private _candidate!: Candidate | null;
+  @Input() set candidate(c: Candidate | null) {
+    this._candidate = c;
+  }
+
+  bannerString: String = 'Placeholder';
   counterOfferPrice!: string;
 
   constructor() { 
