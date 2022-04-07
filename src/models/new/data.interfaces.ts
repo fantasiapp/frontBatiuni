@@ -80,6 +80,7 @@ export interface PostDetail {
 export interface Supervision {
   id: Ref<Supervision>;
   author: string;
+  companyId: number;
   date: number;
   comment: string;
   files: Ref<File>[];

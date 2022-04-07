@@ -97,6 +97,7 @@ export class SuiviChantierDate extends Destroy${
   }
 
   validate(task: Task) {
+    console.log("validate")
     if (this.view == 'ST' && !task.refused && !this.mission!.isClosed) {
       task.validated = !task.validated
       this.store.dispatch(new ModifyDetailedPost(task)).pipe(take(1)).subscribe(() => {

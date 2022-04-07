@@ -30,15 +30,16 @@ export class UIProfileImageComponent extends Destroy$ {
   profile!: number | Observable<Profile> | Profile;
 
   @Input()
+  companyId:number | null = null
+
+  @Input()
   borders: boolean = true;
 
   ngOnChanges(changes: SimpleChanges) {
-    
     if ( changes['profile'] ) {
       (this.profile as Observable<Profile>).pipe(take(1)).subscribe(profile => {
         this.setColor(profile.company)
         this.image = this.store.selectSnapshot(DataQueries.getProfileImage(profile.company.id));
-        console.log("image", this.image, profile.company.id)
         if ( !this.image ) {
           const fullname = profile.company.name[0].toUpperCase();
           this.src = this.imageGenerator.generate(fullname);
@@ -128,11 +129,5 @@ export class UIProfileImageComponent extends Destroy$ {
   constructor(private cd: ChangeDetectorRef, private store: Store, private imageGenerator: ImageGenerator, private downloader: FileDownloader) {
     super();
   }
-
-  // computeColor(): string {
-  //   let colorList:{ [key: string]: string } = {"red":"#C95555", "orange":"#FFD375", "listGreen":"#BBEFB10", "green":"#BBEFB1", "grey":"#aaa"}
-  //   return "background: conic-gradient(var(--my-var) 11.50%, white 11.50% 13.50%, #FFD375 13.5% 36.5%, white 36.50% 38.50%, #D2FFCB 38.50% 61.5%,white 61.50% 63.5%, #BBEFB1 63.5% 86.5%, white 86.5% 88.5%, #C95555 88.5%);"
-  //   // return [colorList.grey, colorList.grey, colorList.red, colorList.grey]
-  // }
 
 };
