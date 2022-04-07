@@ -33,8 +33,8 @@ export class BannerComponent implements OnInit {
     if (this.isClosed) {
       this.bannerString = 'Mission cloturée'
     } else {
-      let amount = this.post?.amount;
-      this.counterOfferPrice = amount + '€' // placeholder
+      let counterOfferPrice = this.post?.candidates[2];
+      this.counterOfferPrice = counterOfferPrice + '€' // placeholder
       this.bannerString = 'Contre offre : ';
 
     }
