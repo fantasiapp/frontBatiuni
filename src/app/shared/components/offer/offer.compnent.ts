@@ -40,12 +40,11 @@ export class OfferComponent {
   get post() {
     return this._post; }
 
-  get isClosedClass() {
+  get isClosed() {
     let mission = this._post as Mission
     if (mission && mission.isClosed)
-      return "offres-infos-closed"
-    return ""
-
+      return mission.isClosed
+    return false
   }
   
   @Input() set post(p: Post | null) {

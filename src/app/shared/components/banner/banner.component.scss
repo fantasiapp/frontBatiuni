@@ -1,5 +1,9 @@
 $triangle-lenght: 0.5rem;
 
+$cloture-primary: #E28282;
+$cloture-secondary: #BC3939;
+$contre-offre-primary: #FAD08D;
+$contre-offre-secondary: #F8B930;
 .banner-container {
     padding: 0.75rem 1.5rem;
     position: absolute;
@@ -18,12 +22,26 @@ $triangle-lenght: 0.5rem;
         width: 0;
         height: 0;
         border: $triangle-lenght solid transparent;
-        border-top: $triangle-lenght solid #BC3939;
-        border-left: $triangle-lenght solid #BC3939;
+        border-top: $triangle-lenght solid;
+        border-left: $triangle-lenght solid;
     }
 }
 
 
-.red {
-    background-color: #E28282;
+.cloture {
+    background-color: $cloture-primary;
+
+    &::before {
+        border-top-color: $cloture-secondary;
+        border-left-color: $cloture-secondary;
+    }
+}
+
+.contre-offre {
+    background-color: $contre-offre-primary;
+    
+    &::before {
+        border-top-color: $contre-offre-secondary;
+        border-left-color: $contre-offre-secondary;
+    }
 }
