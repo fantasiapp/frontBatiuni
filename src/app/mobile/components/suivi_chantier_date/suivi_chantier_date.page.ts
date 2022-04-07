@@ -73,6 +73,7 @@ export class SuiviChantierDate extends Destroy${
   }
 
   addDateToPost() {
+    console.log("get mission", !this._mission!.isClosed); 
     this.popup.openDateDialog(this.mission!, this.date, this);
     this.swipeMenu = false
   }
@@ -96,7 +97,7 @@ export class SuiviChantierDate extends Destroy${
   }
 
   validate(task: Task) {
-    if (this.view == 'ST' && !task.refused) {
+    if (this.view == 'ST' && !task.refused && !this.mission!.isClosed) {
       task.validated = !task.validated
       this.store.dispatch(new ModifyDetailedPost(task)).pipe(take(1)).subscribe(() => {
         let control = document.getElementById("control_validate_"+task.id) as HTMLImageElement;
@@ -106,7 +107,7 @@ export class SuiviChantierDate extends Destroy${
   }
 
   refuse(task: Task) {
-    if (this.view == 'ST' && !task.validated) {
+    if (this.view == 'ST' && !task.validated && !this.mission!.isClosed) {
       task.refused = !task.refused
       this.store.dispatch(new ModifyDetailedPost(task)).pipe(take(1)).subscribe(() => {
         this.mission = this.store.selectSnapshot(DataQueries.getById('Mission', this.mission!.id))
@@ -120,7 +121,7 @@ export class SuiviChantierDate extends Destroy${
     let idInput = task ? "input_"+task!.id : "input_general"
     let input = document.getElementById(idInput) as HTMLInputElement;
     this.currentTaskId = task ? task!.id : null
-    if (input) {
+    if (input && !this.mission!.isClosed) {
       let detailPostId: number | null = task ? task.id : null
       this.store.dispatch(new CreateSupervision(this.mission!.id, detailPostId, null, input.value, this.date.value)).pipe(take(1)).subscribe(() => {
         this.updatePageOnlyDate()
