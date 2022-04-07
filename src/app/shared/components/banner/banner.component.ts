@@ -31,7 +31,6 @@ export class BannerComponent implements OnInit {
 
   ngOnInit(): void {
     let mission = this._post as Mission
-    console.log('banner', mission);
     if (mission.isClosed) {
       this.bannerString = 'Mission cloturée'
     } else {
