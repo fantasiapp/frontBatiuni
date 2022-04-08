@@ -1,32 +1,101 @@
-accordion {
-  padding: 0 2rem;
+@use 'src/styles/variables' as *;
+
+
+
+.chantier-tache-container {
+  display: flex;
+  flex-direction: column;
+  row-gap: 2rem;
+
+  > *:not(:last-child) {
+    padding-inline: 2rem;
+  }
 }
 
+.chantier-tache {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.details {
+  align-items: center;
+}
+
+.detail-name::before {
+  content: '';
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #000;
+  margin-right: 0.5rem;
+}
+
+
 .controls {
+  display: flex;
   img:first-child {
     margin-right: 15px;
   }
 }
 
+.taskByDate {
+  display: flex;
+  flex-direction: column;
+  row-gap: 1rem;
+  >div:nth-child(n + 3){
+    width: 95%;
+    margin-left: auto;
+  }
+
+  .divComment:nth-child(n + 4) {
+    width: 70%;
+
+    &::before {
+      content: "";
+      position: absolute;
+      display: block;
+      height: 2rem;
+      width: 1rem;
+      left: -1.5rem;
+      top: -.5rem;
+      border-left: 1px solid #9A9A9A;
+      border-bottom: 1px solid #9A9A9A;
+    }
+  }
+
+}
+
 .divComment {
-  display:flex;
-  flex-direction:row;
-  border:1px solid #0D6191 ;
-  ;
-  border-radius: 20px;
-  height:40px;
-  margin:15px;
-  width:96%;
-  padding: 10px;
+  display: flex;
+  position: relative;
+  flex-direction: row;
+  padding: .5rem 1.5rem;
+  background: white;
+  border-radius: 1.5rem;
+  border: 1px solid #F7F7F7;
+  
+  &:focus-within {
+    border: 1px solid $primary;
+  }
+  img {
+    height: 1.5rem;
+  }
 }
 
 .inputComment {
   width:90%
 }
 
-.detail-name {
-  padding-left:3%;
-  width:80%
+.partenerComment-container {
+  h2 {
+    margin: 0 2rem 1rem
+  }
+  .partenerComment {
+    background: #e5e8ed;
+    padding: 2rem;
+  }
 }
 
 .newDate {

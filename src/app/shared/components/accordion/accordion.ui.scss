@@ -8,6 +8,10 @@
   font-family: "Poppins";
 }
 
+h3 {
+  padding-inline: 2rem;
+}
+
 img {
   vertical-align: middle;
 }
@@ -36,4 +40,10 @@ img {
   overflow: hidden;
   max-height: 0;
   transition: max-height 200ms ease-out 0s
+}
+
+.taskBydate {
+  display: flex;
+  flex-direction: column;
+  row-gap: 2rem;
 }
