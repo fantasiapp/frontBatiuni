@@ -61,8 +61,8 @@ $swipeup-height: 70vh;
 .list {
   font-size: 0.9em;
   list-style-type: none;
-  padding: 20px 2rem;
-  @include with-set-safe-area(padding, bottom, 20px);
+  padding: 1rem 2rem 2rem;
+  @include with-set-safe-area(padding, bottom, 2rem);
 
 
   // ?? 
@@ -81,5 +81,5 @@ $swipeup-height: 70vh;
 
 .content {
   overflow-y: auto;
-  max-height: calc($swipeup-height - #{$swipeup-decoration-height});
+  max-height: calc(#{$swipeup-height} - #{$swipeup-decoration-height});
 }

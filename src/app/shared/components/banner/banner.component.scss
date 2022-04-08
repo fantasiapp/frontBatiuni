@@ -1,0 +1,49 @@
+$triangle-lenght: 0.5rem;
+
+$cloture-primary: #E28282;
+$cloture-secondary: #BC3939;
+$contre-offre-primary: #FAD08D;
+$contre-offre-secondary: #F8B930;
+
+.banner-container {
+    z-index: 2;
+    padding: 0.75rem 1.5rem;
+    position: absolute;
+    right: -$triangle-lenght * 2;
+    top: 1.25rem;
+    color: white;
+    font-weight: 300;
+    &::before {
+        content: "";
+        // background: #BC3939;
+        // position: relative;
+        display: block;
+        position: absolute;
+        right: 0;
+        bottom: - 2 * $triangle-lenght;
+        width: 0;
+        height: 0;
+        border: $triangle-lenght solid transparent;
+        border-top: $triangle-lenght solid;
+        border-left: $triangle-lenght solid;
+    }
+}
+
+
+.cloture {
+    background-color: $cloture-primary;
+
+    &::before {
+        border-top-color: $cloture-secondary;
+        border-left-color: $cloture-secondary;
+    }
+}
+
+.contre-offre {
+    background-color: $contre-offre-primary;
+    
+    &::before {
+        border-top-color: $contre-offre-secondary;
+        border-left-color: $contre-offre-secondary;
+    }
+}

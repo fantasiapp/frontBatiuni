@@ -29,7 +29,7 @@
     flex-shrink: 0;
     border-radius: 50%;
     // transform: rotate(0deg);
-    background: conic-gradient(white 1%,  var(--color1) 1% 24%, white 24% 26%, var(--color2) 26% 49%, white 49% 51%,  var(--color3) 51% 74%, white 74% 76%,  var(--color4) 76% 99%, white 99%);
+    background: conic-gradient(transparent 1%,  var(--color1) 1% 24%, transparent 24% 26%, var(--color2) 26% 49%, transparent 49% 51%,  var(--color3) 51% 74%, transparent 74% 76%,  var(--color4) 76% 99%, transparent 99%);
   }
 
   .image-container {

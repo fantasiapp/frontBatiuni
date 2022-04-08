@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
 import { Store } from "@ngxs/store";
 import { Observable } from "rxjs";
-import { Company, Job, Profile } from "src/models/new/data.interfaces";
+import { Candidate, Company, Job, Profile } from "src/models/new/data.interfaces";
 import { DataQueries, QueryProfile, Snapshot } from "src/models/new/data.state";
 
 //maybe merge with sos ?
@@ -9,11 +9,13 @@ import { DataQueries, QueryProfile, Snapshot } from "src/models/new/data.state";
   selector: 'profile-card',
   template: `
     <ng-container *ngIf="(profile$ | cast | async) as profile">
+      <!-- <app-banner [candidate]="candidate"]></app-banner> -->
       <profile-image [profile]="profile"></profile-image>
       <div class="flex column small-space-children-margin font-Poppins description">
         <span>{{ profile.company.name || "Nom de l'entreprise" }}</span>
         <span>Propose {{ employeeCount }} {{job.name || 'Employées'}}</span>
         <span>Note générale (4.5 par 35 personnes)</span>
+        <span>{{ candidate!.amount }}</span>
         <stars [value]="4.5" disabled></stars>
       </div>
     </ng-container>
@@ -53,6 +55,9 @@ export class ProfileCardComponent {
   @QueryProfile()
   @Input('profile')
   profile$!: number | Profile | Observable<Profile>;
+
+  @Input()
+  candidate: Candidate | null = null;
 
   @Input()
   @Snapshot('Job')
