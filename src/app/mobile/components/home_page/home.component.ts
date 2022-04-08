@@ -11,9 +11,10 @@ import { SlidemenuService } from "src/app/shared/components/slidemenu/slidemenu.
 import { SwipeupService } from "src/app/shared/components/swipeup/swipeup.component";
 import { ApplyPost, DeletePost, DuplicatePost, HandleApplication, MarkViewed, SetFavorite, SwitchPostType } from "src/models/new/user/user.actions";
 import { DataQueries, DataState, QueryAll } from 'src/models/new/data.state';
-import { Profile, Post, Mission, PostMenu } from "src/models/new/data.interfaces";
+import { Profile, Post, Mission, PostMenu, Candidate } from "src/models/new/data.interfaces";
 import { FilterService } from "src/app/shared/services/filter.service";
 import { ApplyForm } from "../../ui/annonce-resume/annonce-resume.ui";
+import { calcPossibleSecurityContexts } from "@angular/compiler/src/template_parser/binding_parser";
 
 @Component({
   selector: 'home',
@@ -183,16 +184,24 @@ export class HomeComponent extends Destroy$ {
     });
   }
 
-  showCandidates() {
-    this.postMenu.swipeup = false;
+  get possibleCandidates() {
     const candidatesIds = this.postMenu.post?.candidates || [],
       candidates = this.store.selectSnapshot(DataQueries.getMany('Candidate', candidatesIds));
+    return candidates.reduce((possibleCandidates:Candidate[], candidate:Candidate) => {
+      if (!candidate.isRefused) {
+        possibleCandidates.push(candidate)
+      }
+      return possibleCandidates;
+    }, [])
+  }
 
+  showCandidates() {
+    this.postMenu.swipeup = false;
     this.swipeupService.show({
       type: 'template',
       template: this.candidatesTemplate,
       context: {
-        $implicit: candidates,
+        $implicit: this.possibleCandidates,
         job: this.postMenu.post!.job,
       }
     })

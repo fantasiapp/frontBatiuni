@@ -31,6 +31,7 @@ export class SuiviComments {
     id: -1,
     Supervisions: [],
     author: 'Gabriel Dubois', //maybe this should be a UserProfile ?
+    companyId: 1,
     date: 13-11-2021,
     comment: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
     files: []

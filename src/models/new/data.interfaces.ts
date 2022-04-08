@@ -80,6 +80,7 @@ export interface PostDetail {
 export interface Supervision {
   id: Ref<Supervision>;
   author: string;
+  companyId: number;
   date: number;
   comment: string;
   files: Ref<File>[];
@@ -146,6 +147,8 @@ export interface Candidate {
   company: Ref<Company>;
   amount: number;
   devis: string;
+  isChoosen : boolean;
+  isRefused : boolean;
 };
 
 export interface Establishement {
