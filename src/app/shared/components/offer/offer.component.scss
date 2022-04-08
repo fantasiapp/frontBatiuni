@@ -70,11 +70,12 @@ p {
   z-index:1500;
 }
 
-.container::before {
+.container.offres-infos-closed::before {
   content: "";
   width: 100%;
   height: 4px;
   position: absolute;
   bottom: 0;
   background: $danger;
+  opacity: 0.6;
 }
