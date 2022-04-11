@@ -1,9 +1,11 @@
 @use 'src/styles/variables' as *;
 @use 'src/styles/responsive' as *;
 
+
 :host {
   position: relative;
-  display: inline-block;
+  display: flex;
+  align-items: center;
   height: $searchbar-height;
   border-radius: 5px;
   z-index: 100;
@@ -17,11 +19,12 @@ img {
   position: absolute;
   width: $searchbar-icon-size; height: $searchbar-icon-size;
   left: $searchbar-icon-padding;
-  top: 50%; transform: translateY(-50%);
+  pointer-events: none;
+  // top: 50%; transform: translateY(-50%);
 }
 
 input {
-  font-size: 1em;
+  font-size: 1rem;
   padding: $searchbar-padding;
   padding-left: $searchbar-icon-size + 2*$searchbar-icon-padding;
   border-radius: 12px;

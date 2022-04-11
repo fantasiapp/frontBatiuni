@@ -13,7 +13,7 @@ export type Info = {
 export type InfoAlignType = 'header' | 'paging' | 'header_search' | 'last';
 
 const TRANSITION_TIME = 150;
-const HEADER_HEIGHT = 60;
+const HEADER_HEIGHT = 4*16; // $sticky-header-height
 const PAGING_HEIGHT = 75;
 const HEADER_SEARCH_HEIGHT = 150;
 
