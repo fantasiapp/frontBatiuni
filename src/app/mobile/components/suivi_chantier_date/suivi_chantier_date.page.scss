@@ -89,8 +89,11 @@
 }
 
 .partenerComment-container {
-  h2 {
-    margin: 0 2rem 1rem
+  & > div {
+    display: flex;
+    flex-direction: column;
+    row-gap: 1rem;
+    padding: 2rem;
   }
   .partenerComment {
     background: #e5e8ed;
