@@ -229,15 +229,20 @@
   position: relative;
   &::after {
     content: attr(data-notification-number);
-    position: absolute;
     // @include circle(var(--notification-size, #{$notification-size}),red);
     @include circle($notification-size,red);
-
-    // right: -$notification-size; 
+    
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    left: 5px;
     top: math.div(-$notification-size, 2);
-    text-align: center;
-    line-height: $notification-size;
-    font-size: $notification-size*0.7;
+    // position: absolute;
+    // right: -$notification-size; 
+    // text-align: center;
+    // line-height: $notification-size;
+    font-size: $notification-size*0.6;
     font-weight: normal;
     color: white;
   }
