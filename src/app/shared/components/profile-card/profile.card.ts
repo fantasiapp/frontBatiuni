@@ -15,7 +15,7 @@ import { DataQueries, QueryProfile, Snapshot } from "src/models/new/data.state";
         <span>{{ profile.company.name || "Nom de l'entreprise" }}</span>
         <span>Propose {{ employeeCount }} {{job.name || 'Employées'}}</span>
         <span>Note générale (4.5 par 35 personnes)</span>
-        <span>{{ candidate!.amount }}</span>
+        <!-- <span>{{ candidate!.amount }}</span> -->
         <stars [value]="4.5" disabled></stars>
       </div>
     </ng-container>
