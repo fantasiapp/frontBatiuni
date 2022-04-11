@@ -246,10 +246,11 @@ a {
 }
 //---------------------------------------------------
 //Inputs
-input {
+input, textarea {
   outline: none;
   border: none;
   background: none;
+  font-family: 'Poppins', sans-serif
 }
 
 //---------------------------------------------------
