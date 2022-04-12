@@ -216,9 +216,9 @@
 
 .page-content-with-tabs {
   @extend %overflow-y;
-  @include with-set-safe-area(margin, top, $mission-header-height);
+  @include with-set-safe-area(margin, top, #{$mission-header-height});
   @include with-set-safe-area(margin, bottom);
-  height: calc(100vh - #{$mission-header-height + $navigation-height} - env(safe-area-inset-bottom));
+  height: calc(100vh - #{$mission-header-height} - #{$navigation-height} - env(safe-area-inset-bottom));
 }
 
 %pull-down {
