@@ -320,6 +320,37 @@ input, textarea {
  }
 }
 
+// Cloture
+
+.cloture-swipeup{
+  display: flex;
+  flex-direction: column;
+  row-gap: $spacer-200;
+
+  h6 {
+    color: $primary;
+    font-size: 0.875rem;
+    display: flex;
+    align-items: center;
+    column-gap: $spacer-100;
+  }
+}
+
+.star-container {
+  display: flex;
+  column-gap: $spacer-50;  
+
+  > img {
+    left: unset;
+  }
+}
+
+.form-input {
+  display: flex;
+  flex-direction: column;
+  row-gap: $spacer-50;
+}
+
 
 
 //----------------------------------------------------
