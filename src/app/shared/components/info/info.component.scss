@@ -5,7 +5,7 @@
 
 :host {
   display: block;
-  overflow: hidden;
+  // overflow: hidden;
   position: fixed;
   @include with-set-safe-area(top, top, $sticky-header-height);
   z-index: 100000;
@@ -40,10 +40,11 @@ img {
 
 .error, .success, .info {
   opacity: 1;
+  box-shadow: 0 4px 6px #00000031;
 }
 
 .error {
-  background-color: $danger;
+  background-color: $danger-soft;
 }
 
 .success {

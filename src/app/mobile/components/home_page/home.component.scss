@@ -45,13 +45,13 @@
 
 .content-with-header-and-footer {
   @extend %overflow-y;
-  height: calc(100vh - #{$sticky-header-height + $sticky-footer-height} - env(safe-area-inset-bottom));
+  height: calc(100vh - #{$sticky-header-height} + #{$sticky-footer-height} - env(safe-area-inset-bottom));
   background: white;
 }
 
 .sticky-footer.application {
   box-shadow: 0 -3px 3px #ccc;
   button {
-    height: 80%;
+    // height: 80%;
   }
 }

@@ -8,5 +8,8 @@
 }
 
 connexion-form {
+  border-top-left-radius: 3rem;
+  border-top-right-radius: 3rem;
+
   @include cover-with-offset-top($paging-height); 
 }

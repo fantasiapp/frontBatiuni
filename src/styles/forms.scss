@@ -15,7 +15,7 @@
 };
 
 .arrow_right, .arrow_left {
-  margin: 0 8px;
+  // margin: 0 8px;
 }
 
 .curved-border {
@@ -126,7 +126,7 @@
 .title {
   font-size: 1rem;
   font-weight: 500;
-  margin-bottom: $title-padding;
+  // margin-bottom: $title-padding;
 }
 
 .subtitle {
@@ -145,6 +145,15 @@
   @extend .flex;
   @extend .column;
   
+  &.section-host {
+    .form-section {
+      margin-bottom: 4rem;
+      display: flex;
+      flex-direction: column;
+      row-gap: $form-item-spacing;
+    }
+  }
+
   .form-title {
     @extend .title;
     &:not(:first-child) { margin-top: $title-padding; }
@@ -164,7 +173,8 @@
 .form-input {
   font-family: "Poppins";
   position: relative;
-
+  // margin-bottom: $form-item-spacing;
+  
 
   &:focus-within {
     label { color: #2980b9; }
@@ -175,7 +185,7 @@
     & > .form-element { border-bottom-color: #2980b9 !important; }
   }
 
-  .error { color: #ff0033; font-size: 0.75em; }
+  .error { color: $danger; font-size: 0.75em; }
 
   & > * {
     display: block;
@@ -186,7 +196,7 @@
     margin-bottom: 10px;
     font-weight: 400;
   }
-
+  
   .form-element, & > input {
     border-bottom: $form-border-bottom !important; //override default
     font-family: inherit;
@@ -220,7 +230,6 @@
     bottom: $input-image-offset-y;
   }
 
-  margin-bottom: $form-item-spacing;
 
   span.number {
     margin-bottom: $form-item-spacing;

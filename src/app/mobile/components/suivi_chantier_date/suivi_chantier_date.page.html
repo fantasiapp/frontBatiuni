@@ -1,40 +1,45 @@
 <accordion [title]="'Le ' + date.value">
-    <div id="taskMain_{{date.id}}" class="form-input">
-        <div *ngIf="date.view=='PME' && !mission!.isClosed" class="clear-margin full-width flex center-cross space-arround">
-            <label style="color:#0C5E8D; padding-left:3%">Choisir les tâches pour ce jour</label>
-            <div style="width:45%"></div>
+  <div class="chantier-tache-container">
+    <div id="taskMain_{{date.id}}" *ngIf="date.view=='PME' && !mission!.isClosed">
+        <div class="chantier-tache">
+            <label>Choisir les tâches pour ce jour</label>
             <img (click)="swipeMenu = true" src="assets/Option.svg"/>
         </div>
-        <div style="height:20px"></div>
     </div>
-    <div class="taskByDate" *ngFor="let task of date.selectedTasks" style="width:97%">
-        <div class="details flex center-cross space-between">
-          <span class="detail-name"> {{ task.content }}</span>
-          <span class="controls">
+    <div class="taskByDate" *ngFor="let task of date.selectedTasks">
+        <div class="details chantier-tache">
+          <span class="detail-name">{{ task.content }}</span>
+          <div class="controls">
             <img (click)="validate(task)" id="control_validate_{{task.id}}" [src]= "task.validationImage"/>
             <img (click)="refuse(task)" id="control_refuse_{{task.id}}" [src]= "task.invalidationImage"/>
-          </span>
+          </div>
         </div>
         <div *ngFor="let supervision of task.supervisionsObject">
             <comment-suivi  [supervision]="supervision"></comment-suivi>
         </div>
         <div *ngIf="task.refused && !mission!.isClosed" class="divComment">
           <input id="input_{{task.id}}" class="inputComment" type="text" placeholder="Ajouter un commentaire" (focusout)="mainComment(task)">
-          <img (click)="swipeMenuImage = true" src="assets/camera.png"/>
+          <img (click)="swipeMenuImage = true" src="assets/camera-outline.svg"/>
         </div>
-    <div style="height:30px"></div>
     </div>
-    <div *ngFor="let supervision of date.supervisions">
-        <comment-suivi  [supervision]="supervision"></comment-suivi>
-    </div>
-    <div *ngIf="!mission!.isClosed" class="form-input">
-        <label style="color:#0C5E8D; padding-left:3%">Communiquer avec votre partenaire de chantier</label>
-        <div class="divComment">
-          <input id="input_general" class="inputComment" type="text" placeholder="Ajouter un commentaire" (focusout)="mainComment(null)">
+    
+
+    <div class="partenerComment-container">
+      <div *ngIf="!mission!.isClosed">
+          <h2>Communiquer avec votre partenaire de chantier</h2>
+
+          <div *ngFor="let supervision of date.supervisions">
+            <comment-suivi  [supervision]="supervision"></comment-suivi>
+          </div>
+      </div>
+      <div *ngIf="!mission!.isClosed" class="partenerComment">
+        <div  class="divComment">
+          <textarea id="input_general" class="inputComment" type="text" placeholder="Ajouter un commentaire" (focusout)="mainComment(null)"></textarea>
           <img (click)="swipeMenuImage == true" src="assets/camera.png"/>
         </div>
+      </div>
     </div>
-    <div style="height:30px"></div>
+  </div>
 </accordion>
 <hr class="dashed" style="margin-left: 0 !important;">
 

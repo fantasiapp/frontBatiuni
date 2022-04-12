@@ -1,6 +1,6 @@
 @use 'src/styles/variables' as *;
 @use 'src/styles/mixins' as *;
-@import "src/styles/effects";
+@use "src/styles/effects" as *;
 
 :host {
   font-family: "Poppins";

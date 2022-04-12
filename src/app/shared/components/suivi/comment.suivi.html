@@ -1,9 +1,14 @@
-<div class="comment-provider flex center-cross">
+<div class="comment-provider">
   <profile-image class="user-image" [profile]="supervision.companyId"></profile-image>
 
-  <div class="user-info">
-    <span class="user-name">{{supervision.author}}</span><br/>
-    <span class="post-date">Le {{supervision.date}}</span>
+  <div class="comment-box">
+    <div class="user-info">
+      <span class="user-name">{{supervision.author}}</span>
+      <!-- <span class="post-date">Le {{supervision.date}}</span> -->
+    </div>
+    <div class="suivi-comment">
+      {{supervision.comment}}
+    </div>
   </div>
 </div>
 
@@ -15,9 +20,7 @@
     <img (click)="slides.slide('right')" class="position-absolute right" [class.hidden]="slides.last" src="assets/arrowright.svg"/>  
   </ng-container>
 </div>
-<div class="suivi-comment">
-  {{supervision.comment}}
-</div>
+
 
 <div class="parent-comment" *ngIf="parentComment">
   <ng-content select="comment-suivi"></ng-content>

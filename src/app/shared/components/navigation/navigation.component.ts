@@ -96,7 +96,9 @@ export class NavigationMenu extends Destroy$ {
       const nextMenu = type == 'PME' ? PMEMenu : STMenu;
       this.menu.next(nextMenu);
       this.getIndexFromUrl(this.router.url);
+      
     });
+
   }
 
   redirectHome() {

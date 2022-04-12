@@ -6,7 +6,7 @@
   display: block;
 }
 
-$target-size: 50px;
+$target-size: 3rem;
 $comment-factor: math.div($target-size, $profile-image-size);
 
 .image-container {
@@ -16,7 +16,7 @@ $comment-factor: math.div($target-size, $profile-image-size);
 
   profile-image {
     transform-origin: 0 0;
-    transform: scale($comment-factor);  
+    transform: scale(#{$comment-factor});  
   }
 
   align-self: flex-start;
@@ -32,7 +32,7 @@ $comment-factor: math.div($target-size, $profile-image-size);
 .author { font-size: 1em; }
 .body { font-size: 0.95em; }
 
-$icon-size: 25px;
+$icon-size: 1.5rem;
 $icon-factor: math.div($icon-size, $profile-image-size);
 .reply-container {
   width: $icon-size;
@@ -41,7 +41,7 @@ $icon-factor: math.div($icon-size, $profile-image-size);
 
   profile-image {
     transform-origin: 0 0;
-    transform: scale($icon-factor);  
+    transform: scale(#{$icon-factor});
   }
 }
 

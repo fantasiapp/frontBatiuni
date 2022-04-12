@@ -6,6 +6,8 @@
 //   background: conic-gradient(#C95555 0% 11.50%, white 11.50% 13.50%, #FFD375 13.5% 36.5%, white 36.50% 38.50%, #BBEFB1 38.50% 61.5%,white 61.50% 63.5%, #D2FFCB 63.5% 86.5%, white 86.5% 88.5%, #C95555 88.5%);
 // }
 
+$profile-level-thickness: 5%;
+
 :host {
   display: block;
   position: relative; 
@@ -20,6 +22,7 @@
 
   &, .image-container, img {
     border-radius: 50%;
+    background: white;
   }
 
   .host-container {
@@ -29,7 +32,7 @@
     flex-shrink: 0;
     border-radius: 50%;
     // transform: rotate(0deg);
-    background: conic-gradient(white 1%,  var(--color1) 1% 24%, white 24% 26%, var(--color2) 26% 49%, white 49% 51%,  var(--color3) 51% 74%, white 74% 76%,  var(--color4) 76% 99%, white 99%);
+    background: conic-gradient(transparent 1%,  var(--color1) 1% 24%, transparent 24% 26%, var(--color2) 26% 49%, transparent 49% 51%,  var(--color3) 51% 74%, transparent 74% 76%,  var(--color4) 76% 99%, transparent 99%);
   }
 
   .image-container {
@@ -39,10 +42,15 @@
     left: $profile-level-thickness;
     position: absolute;
 
-    &, img {
-      width: $profile-image-size - 2 * $profile-level-thickness;
-      height: $profile-image-size - 2 * $profile-level-thickness;
+    & {
+      width: calc(100% - 2 * #{$profile-level-thickness}); 
+      height: calc(100% - 2 * #{$profile-level-thickness}); 
       object-fit: cover;
+
+      img {
+        width: 100%;
+        height: 100%;
+      }
     }
   }
 }

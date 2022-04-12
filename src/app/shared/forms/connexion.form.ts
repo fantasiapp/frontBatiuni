@@ -12,27 +12,29 @@ import { ComplexPassword, setErrors } from "src/validators/verify";
   selector: 'connexion-form',
   template: `
   <!-- Form -->
-  <form class="full-height form-control curved-border" [formGroup]="loginForm" (ngSubmit)="onSubmit($event)">
+  <form class="full-height form-control section-host curved-border" [formGroup]="loginForm" (ngSubmit)="onSubmit($event)">
   <!-- Main title ex: Je me connecte, Créer un compte  -->
-    <h3 class="form-title">Je me connecte</h3>
-    <div class="form-input">
-        <label >Adresse e-mail contact</label>
-        <input class="form-element" type="email" formControlName="email"/>
-        <div *ngIf="loginForm.get('email')!.errors?.email" class="error">Format invalide.</div>
-        <div *ngIf="loginForm.get('email')!.errors?.server" class="server-error">
-          {{ loginForm.get('email')!.errors?.server }}
-        </div>
-    </div>
-    <div class="form-input">
-        <label >Mot de passe</label>
-        <input type="password" class="form-element" formControlName="password"/>
-        <!-- <div *ngIf="loginForm.get('password')!.touched && loginForm.get('password')!.errors?.minlength" class="error">Doit contenir au moins 8 caractères</div> -->
-        <!-- <div *ngIf="loginForm.get('password')!.touched && loginForm.get('password')!.errors?.uppercase" class="error">Doit contenir au moins une lettre en majuscule</div> -->
-        <!-- <div *ngIf="loginForm.get('password')!.touched && loginForm.get('password')!.errors?.lowercase" class="error">Doit contenir au moins une lettre en miniscule</div> -->
-    </div>
-    <a class="external-links form-links block text-right" [routerLink]="['', 'mail']">
-      Mot de passe oublié !
-    </a>
+    <section class="form-section">
+      <h3 class="form-title">Je me connecte</h3>
+      <div class="form-input">
+          <label >Adresse e-mail contact</label>
+          <input class="form-element" type="email" formControlName="email"/>
+          <div *ngIf="loginForm.get('email')!.errors?.email" class="error">Format invalide.</div>
+          <div *ngIf="loginForm.get('email')!.errors?.server" class="server-error">
+            {{ loginForm.get('email')!.errors?.server }}
+          </div>
+      </div>
+      <div class="form-input">
+          <label >Mot de passe</label>
+          <input type="password" class="form-element" formControlName="password"/>
+          <!-- <div *ngIf="loginForm.get('password')!.touched && loginForm.get('password')!.errors?.minlength" class="error">Doit contenir au moins 8 caractères</div> -->
+          <!-- <div *ngIf="loginForm.get('password')!.touched && loginForm.get('password')!.errors?.uppercase" class="error">Doit contenir au moins une lettre en majuscule</div> -->
+          <!-- <div *ngIf="loginForm.get('password')!.touched && loginForm.get('password')!.errors?.lowercase" class="error">Doit contenir au moins une lettre en miniscule</div> -->
+      </div>
+      <a class="external-links form-links block text-right" [routerLink]="['', 'mail']">
+        Mot de passe oublié !
+      </a>
+    </section>
     <div class="form-action" style="margin-top: auto;">
       <div *ngIf="loginForm.errors?.server" class="server-error">
         {{ loginForm.errors?.server }}
@@ -45,7 +47,7 @@ import { ComplexPassword, setErrors } from "src/validators/verify";
   </form>
   `,
   styles: [`
-
+    @use "/src/styles/forms.scss" as *;
   `],
   changeDetection: ChangeDetectionStrategy.OnPush
 })

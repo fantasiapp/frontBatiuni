@@ -7,6 +7,7 @@ import { CloseMission } from "src/models/new/user/user.actions";
 import { Company, Mission, PostMenu, PostDetail, Profile, Supervision, DateG, Task } from "src/models/new/data.interfaces";
 import { DataQueries, DataState } from "src/models/new/data.state";
 import { ApplyForm } from "src/app/mobile/ui/annonce-resume/annonce-resume.ui";
+import { InfoService } from "src/app/shared/components/info/info.component";
 
 // export type Task = PostDetail & {validationImage:string, invalidationImage:string}
 
@@ -18,6 +19,7 @@ import { ApplyForm } from "src/app/mobile/ui/annonce-resume/annonce-resume.ui";
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SuiviPME {
+
 
   company: Company | null = null;
   subContractor: Company | null = null;
@@ -36,6 +38,7 @@ export class SuiviPME {
   // get mission() { return this._mission }
 
   _missionMenu: PostMenu<Mission> = new PostMenu<Mission>()
+  info: InfoService;
   get missionMenu() { return this._missionMenu }
 
   @Input()
@@ -60,6 +63,11 @@ export class SuiviPME {
   @Input() callBackParent: (b:boolean, type:string) => void = (b:boolean, type:string): void => {}
   @Input() toogle: boolean = false
 
+
+  ngAfterViewChecked() {
+    if (this.mission?.isClosed) this.info.show('error', 'Contract cloturé')
+    else this.info.hide()
+  }
 
   computeDates (mission:Mission) {
     let supervisionsTaks: number[] = []
@@ -153,7 +161,9 @@ export class SuiviPME {
     }
   }
 
-  constructor(private store: Store, private popup: PopupService, private cd: ChangeDetectorRef) {}
+  constructor(private store: Store, private popup: PopupService, private cd: ChangeDetectorRef, info: InfoService) {    
+    this.info = info;
+  }
 
 
   closeMission() {

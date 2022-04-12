@@ -49,7 +49,7 @@ import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
     </ng-container>
   `,
   styles: [`
-    @import 'src/styles/responsive';
+    @use 'src/styles/responsive' as *;
 
     :host {
       display: block;
