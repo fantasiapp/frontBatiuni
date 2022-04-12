@@ -105,8 +105,9 @@ export class UISlideMenuComponent extends UIOpenMenu {
 
   close() {
     this.openChange.emit(this._open = false);
+
+    this.info.hide()
     setTimeout(() => {
-      this.info.hide()
       if ( !this.keepAlive ) this.view?.clear();
       if( this.content?.close ) this.content.close();
     }, TRANSITION_DURATION);

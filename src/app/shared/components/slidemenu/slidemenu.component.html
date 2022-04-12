@@ -11,11 +11,11 @@
 </div>
 
 <ng-template #defaultHeader>
-  <header class="clear-margin full-width sticky-header flex center-cross">
-    <img class="return" src="assets/arrowleft.svg" (click)="close()"><img>
-    <span class="grow center-text text-light-emphasis">
-      <span *ngIf="title else contentTitle">{{title}}</span>
-    </span>
+  <header class="clear-margin full-width sticky-header flex center-cross white-header">
+    <img src="assets/arrowlblack.svg" (click)="close()">
+    <h1 class="grow center-text" *ngIf="title else contentTitle">
+    {{title}}
+    </h1>
     <ng-template #contentTitle>
       <ng-content></ng-content> 
     </ng-template>

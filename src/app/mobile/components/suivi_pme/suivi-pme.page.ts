@@ -59,7 +59,6 @@ export class SuiviPME {
   @Input() callBackParent: (b:boolean, type:string) => void = (b:boolean, type:string): void => {}
   @Input() toogle: boolean = false
 
-
   computeDates (mission:Mission) {
     let supervisionsTaks: number[] = []
     this.tasks = this.store.selectSnapshot(DataQueries.getMany('DetailedPost', mission.details)).map(detail => (
