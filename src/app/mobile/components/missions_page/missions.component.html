@@ -1,5 +1,5 @@
 <page-header name="Mes missions" [(activeView)]="activeView" (filterClicked)="openFilterMenu = true">
-  <span tab_0>Vue liste</span>
+  <span tab_0>Vue liste test</span>
   <span tab_1>Calendrier</span>
 </page-header>
 
@@ -18,4 +18,39 @@
 
 <swipeup [(open)]="openFilterMenu" type="view">
   <mission-filter-form view></mission-filter-form>
+</swipeup>
+
+<swipeup [(open)]="openCloseMission" [doClose]="false">
+  <div *ngIf="missionToClose" class="cloture-swipeup">
+    <h3>Noter l'entreprise</h3>
+    <h6 >{{ missionCompany }}, contact: {{ missionToClose.contactName }}</h6>
+    <div class="star-container" *ngIf="hasGeneralStarsST">
+      <img  *ngFor="let flag of getArrayStarST('generalST'); let index=index;" [src]="flag ? 'assets/starFull.svg' : 'assets/starEmpty.svg'">
+    </div>
+
+    <div *ngIf="missionToClose" class="form-input">
+      <p>Ambiance sur le chantier</p>
+      <div class="star-container">
+        <img *ngFor="let flag of getArrayStarST('vibeST'); let index=index;" (click)="starActionST(index, 'vibeST')" [src]="flag ? 'assets/starFull.svg' : 'assets/starEmpty.svg'">
+      </div>
+      <textarea (focusout)="textStarActionST('vibeST')" placeholder="Ajouter un commentaire" rows="5" cols="30" id="starTextQualityST">{{ missionToClose!.vibeCommentST }}</textarea>
+    </div>
+    
+    <div *ngIf="missionToClose" class="form-input">
+      <p>Respect de la sécurité et de la propreté du chantier</p>
+      <div class="star-container">
+        <img *ngFor="let flag of getArrayStarST('securityST'); let index=index;" (click)="starActionST(index, 'securityST')" [src]="flag ? 'assets/starFull.svg' : 'assets/starEmpty.svg'">
+      </div>
+      <textarea (click)="textStarActionST('securityST')" placeholder="Ajouter un commentaire" rows="5" cols="30" id="starTextSecurityST">{{ missionToClose!.securityCommentST }}</textarea>
+    </div>
+
+    <div *ngIf="missionToClose" class="form-input">
+      <p>Organisation PME</p>
+      <div class="star-container">
+        <img *ngFor="let flag of getArrayStarST('organisationST'); let index=index;" (click)="starActionST(index, 'organisationST')" [src]="flag ? 'assets/starFull.svg' : 'assets/starEmpty.svg'">
+      </div>
+      <textarea (click)="textStarActionST('organisationST')" placeholder="Ajouter un commentaire" rows="5" cols="30" id="starTextOrganisationST">{{ missionToClose?.organisationCommentST }}</textarea>
+    </div>
+    <button [ngClass]="classSubmit" (click)="submitStarST()">Valider</button>
+  </div>
 </swipeup>

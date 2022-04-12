@@ -50,7 +50,8 @@ export interface Company {
   capital: string;
   revenue: number;
   logo: any;
-  stars: string;
+  starsST: string;
+  starsPME: string;
   latitude: number;
   longitude: number;
   companyPhone: string;
@@ -166,12 +167,21 @@ export type Mission = Post & {
   subContractorName: string;
   signedByCompany: boolean;
   signedBySubContractor: boolean;
+
   quality: number;
   qualityComment: string;
   security: number;
   securityComment: string;
   organisation: number;
   organisationComment: string;
+
+  vibeST: number;
+  vibeCommentST: string;
+  securityST: number;
+  securityCommentST: string;
+  organisationST: number;
+  organisationCommentST: string;
+
   isClosed: boolean;
   contract: Ref<File>;
   supervisions: Ref<Supervision>[]

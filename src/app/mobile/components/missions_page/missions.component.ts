@@ -1,13 +1,14 @@
-import { ChangeDetectionStrategy, Component, ViewChild } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from "@angular/core";
 import { Select, Store } from "@ngxs/store";
 import { combineLatest, Observable } from "rxjs";
-import { map, takeUntil } from "rxjs/operators";
+import { take, takeUntil } from "rxjs/operators";
 import { Destroy$ } from "src/app/shared/common/classes";
 import { assignCopy } from "src/app/shared/common/functions";
 import { MissionDetailedDay } from "src/app/shared/components/horizontalcalendar/horizontal.component";
 import { InfoService } from "src/app/shared/components/info/info.component";
 import { Mission, PostMenu, Profile } from "src/models/new/data.interfaces";
 import { DataQueries, QueryAll } from "src/models/new/data.state";
+import { CloseMissionST } from "src/models/new/user/user.actions";
 
 import * as moment from 'moment';
 
@@ -27,6 +28,8 @@ export class MissionsComponent extends Destroy$ {
   missionMenu = new PostMenu<Mission>()
 
   detailedDays: MissionDetailedDay[] = [];
+  _openCloseMission = false
+  missionCompany:String = ""
 
 
   @Select(DataQueries.currentProfile)
@@ -35,7 +38,7 @@ export class MissionsComponent extends Destroy$ {
   @QueryAll('Mission')
   missions$!: Observable<Mission[]>;
 
-  constructor(private store: Store, private info: InfoService) {
+  constructor(private store: Store, private info: InfoService, private cd: ChangeDetectorRef) {
     super();
   }
 
@@ -69,6 +72,14 @@ export class MissionsComponent extends Destroy$ {
         }
       }
     });
+    if (this.missionToClose) {
+      this._openCloseMission = this.missionToClose.securityST == 0
+      const company = this.store.selectSnapshot(DataQueries.getById('Company', this.missionToClose.company))
+      this.missionCompany = company!.name
+    } else {
+      this._openCloseMission = false
+    }
+
   }
 
   openMission(mission: Mission) {
@@ -78,5 +89,71 @@ export class MissionsComponent extends Destroy$ {
   ngOnDestroy(): void {
     this.info.alignWith('last');
     super.ngOnDestroy();
+  }
+
+  get missionToClose (): Mission | null {
+    const missionToClose = this.myMissions.filter(mission=>mission.isClosed)
+    if (missionToClose) {
+      return missionToClose[0]
+    }
+    return null
+  }
+
+  get classSubmit() {
+    if (this.hasGeneralStarsST) {return "submitActivated"}
+    else {return "submitDisable"}
+  }
+
+  get openCloseMission() {return this._openCloseMission}
+  set openCloseMission(b:boolean) {
+    console.log("openCloseMission", b)
+    this._openCloseMission = !this._openCloseMission
+  }
+
+  get hasGeneralStarsST() { return this.getArrayStarST("generalST")[0] == true}
+
+  submitStarST() {
+    if (this.hasGeneralStarsST)
+      console.log("validerStarST", this.missionToClose, this.hasGeneralStarsST)
+      this.store.dispatch(new CloseMissionST(this.missionToClose!.id, this.missionToClose!.vibeST, this.missionToClose!.vibeCommentST, this.missionToClose!.securityST, this.missionToClose!.securityCommentST, this.missionToClose!.organisationST, this.missionToClose!.organisationCommentST)).pipe(take(1)).subscribe(() => {});
+  }
+
+  starActionST(index:number, nature:string) {
+    if (nature == "vibeST")
+      this.missionToClose!.vibeST = index + 1
+    if (nature == "securityST")
+      this.missionToClose!.securityST = index + 1
+    if (nature == "organisationST")
+      this.missionToClose!.organisationST = index + 1
+    this.cd.markForCheck()
+  }
+
+  textStarActionST(test:string) {
+    return "work in progress"
+  }
+
+  getArrayStarST(nature:string) {
+    let array = new Array<boolean>(5)
+    if (this.missionToClose) {
+      let lastStar = 0
+      if (nature == "vibeST") {
+        lastStar = this.missionToClose!.vibeST
+      }
+      else if (nature == "securityST") {
+        lastStar = this.missionToClose!.securityST
+      }
+      else if (nature == "organisationST") {
+        lastStar = this.missionToClose!.organisationST
+      }
+      else if (nature == "generalST") {
+        if (this.missionToClose!.vibeST && this.missionToClose!.securityST && this.missionToClose!.organisationST) {
+          lastStar = Math.round((this.missionToClose!.vibeST + this.missionToClose!.securityST + this.missionToClose!.organisationST) / 3)
+        }
+      }
+      for (let index=0; index < 5; index++) {
+        array[index] = (index < lastStar) ? true : false
+      }
+    }
+      return array
   }
 };

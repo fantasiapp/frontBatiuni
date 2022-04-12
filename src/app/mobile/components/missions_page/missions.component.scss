@@ -8,3 +8,11 @@
 switch::ng-deep .slider {
   background: #ccc;
 }
+
+.submitActivated {
+  background-color: #0D6191;
+  color:white;
+}
+.submitDisable {
+  color: black;
+}

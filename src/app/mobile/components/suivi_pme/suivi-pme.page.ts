@@ -60,9 +60,6 @@ export class SuiviPME {
   @Input() callBackParent: (b:boolean, type:string) => void = (b:boolean, type:string): void => {}
   @Input() toogle: boolean = false
 
-  ngOnChanges() {
-    console.log("ngOnChanges", this.missionMenu)
-  }
 
   computeDates (mission:Mission) {
     let supervisionsTaks: number[] = []

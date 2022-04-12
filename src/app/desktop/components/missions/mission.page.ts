@@ -22,7 +22,9 @@ import { animate, style, transition, trigger } from "@angular/animations";
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MissionPage {
-    activeView: number = 0;
-    annonces = new Array(10).fill(0);
-    showFilters:boolean = false;
+  activeView: number = 0;
+  annonces = new Array(10).fill(0);
+  showFilters:boolean = false;
+  _openCloseMission: boolean = false
 }
+

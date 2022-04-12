@@ -299,6 +299,13 @@ export class CloseMission {
   }
 }
 
+export class CloseMissionST {
+  static readonly type = '[Data] set stars and comments';
+  action = 'closeMissionST'
+  constructor(public missionId: number, public vibeSTStars:number, public vibeSTComment:string, public securitySTStars:number, public securitySTComment:string, public organisationSTStars:number, public organisationSTComment:string) {
+  }
+}
+
 export class CreateSupervision {
   static readonly type = '[Data] Create Supervision';
   action = 'createSupervision'

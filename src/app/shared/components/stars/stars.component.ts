@@ -31,10 +31,11 @@ export class UIStarsComponent extends UIDefaultAccessor<string | number> {
   set number(x: number) { this._number = Math.max(1, Math.floor(x)); }
 
   @HostBinding('style.width')
-  get width() { return (this.number * ratingStarWidth) + 'px'; }
+  get width() {
+    return (this.number * ratingStarWidth) + 'px'; }
   
   get spanWidth() {
-    return (+(this._value!) * ratingStarWidth) + 'px';
+    return (+(this.value!) * ratingStarWidth) + 'px';
   } 
 
   get fullStarUrl() {
@@ -69,6 +70,7 @@ export class UIStarsComponent extends UIDefaultAccessor<string | number> {
   protected getInput(e: MouseEvent): string | number {
     if ( this._toggleMode ) {
       //works with undefined so cool
+      console.log("getInput", this.value)
       return +!+this.value!;
     }
 
@@ -80,7 +82,6 @@ export class UIStarsComponent extends UIDefaultAccessor<string | number> {
       floor = Math.floor(ratio),
       frac = ratio - floor,
       value = frac >= this.threshold ? (floor + 1) / q : floor / q;
-
     return value;
   }
 }

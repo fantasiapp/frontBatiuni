@@ -128,7 +128,6 @@ export class HomePageComponent extends Destroy$ {
       this.allOnlinePosts = mapping.get(this.symbols.otherOnlinePost) || [];
       this.cd.markForCheck();
     });
-    console.log("profile resume", this.postResumer.counterOffer)
   }
 
   switchDraft(id: number) {

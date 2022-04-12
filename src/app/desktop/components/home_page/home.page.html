@@ -59,6 +59,7 @@
               <div class="report-search">
                 Resultat <span class="no-result">{{ allOnlinePosts.length }}</span>
               </div>
+              <p>un essai</p>
               <offer *ngFor="let onlinePost of allOnlinePosts" [deletable]="false" [post]="onlinePost"
                 (click)="showPostResumer(onlinePost,'enligne')" src="assets/enligne.svg"></offer>
             </section>
@@ -150,7 +151,6 @@
             <li class="flex row center-cross"><img src="assets/Numero.svg" />Afficher le numéro portable</li>
             <li class="flex row center-cross"><img src="assets/cloturer.svg" />Clôturer la mission</li>
             <li class="flex row center-cross "><img src="assets/Dupliquer.svg" />Dupliquer l’annonce</li>
-
           </ul>
         </section>
 
@@ -164,7 +164,7 @@
               <li class="flex row center-cross"><img src="assets/pauseicon.svg" />Mettre en pause l’annonce</li>
             </ul>
           </section>
-          <ng-template #stview let-form="devisForm">
+          <!-- <ng-template #stview let-form="devisForm">
             <section class="flex column center space-children-margin transparent">
               <ul class="options-list nothover space-children-margin">
                 <li class="flex row center-cross">LE POSTE</li>
@@ -181,16 +181,16 @@
                     formControlName="amount">
 
                 </div>
-                <!-- <div class="option-container">
+                <div class="option-container">
                   <options [searchable]="false" type="radio" [options]="devis" formControlName="devis"></options>
-                </div> -->
+                </div>
               </div>
               
               <button class="button active full-width" [disabled]="!devisForm.valid"
                 (click)="applyPost(postResumer)">Postuler test</button>
 
             </section>
-          </ng-template>
+          </ng-template> -->
         </ng-template>
       </div>
     </div>

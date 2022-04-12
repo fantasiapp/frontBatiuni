@@ -33,6 +33,9 @@ export class UISwipeupComponent extends UIOpenMenu {
   fromService: boolean = false;
 
   @Input()
+  doClose: boolean = true;
+
+  @Input()
   keepAlive: boolean = true;
 
   ngOnInit() {
@@ -74,14 +77,17 @@ export class UISwipeupComponent extends UIOpenMenu {
 
   willClose = false;
   close() {
-    this.willClose = true;
-    setTimeout(() => {
-      if ( !this.keepAlive ) this.view?.clear();
-      this.willClose = false;
-      this._open = false;
-      this.openChange.emit(this._open = false); //this saves cd.markForCheck() ??
-      this.cd.markForCheck();
-    }, TRANSITION_DURATION);
+    console.log("swipeup doclose ", this.doClose)
+    if (this.doClose) {
+      this.willClose = true;
+      setTimeout(() => {
+        if ( !this.keepAlive ) this.view?.clear();
+        this.willClose = false;
+        this._open = false;
+        this.openChange.emit(this._open = false); //this saves cd.markForCheck() ??
+        this.cd.markForCheck();
+      }, TRANSITION_DURATION);
+    }
   }
 
 //extends destroy, no multiple inheritance :(

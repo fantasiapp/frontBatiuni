@@ -18,7 +18,7 @@ export type ApplyForm = {
       <div class="company-intro flex column center-cross space-children-margin">
         <profile-image [profile]="{company: company!, user: user}"></profile-image>
         <span class="company">{{ company!.name }}</span>
-        <stars class="stars" [value]="company!.stars || 4" disabled></stars>
+        <stars class="stars" [value]="company!.starsPME || 3" disabled></stars>
         <span>{{ (post.manPower) ? "Main d'oeuvre" : "Fourniture et pose" }}</span>
         <span>Du {{ toLocateDate(post.startDate) }} Au {{toLocateDate(post.endDate)}}</span>
         <span>{{ this.post.amount || 0 }} {{this.post.currency}} </span>
@@ -64,14 +64,14 @@ export type ApplyForm = {
           <label>Montant</label>
           <div class="flex row space-between remuneration">
             <input type="number" min="0" style="max-height: 51px" class="grow form-element" placeholder="Montant" formControlName="amount">
-            <div class="option-container">
+            <!-- <div class="option-container">
               <options [searchable]="false" type="radio" [options]="devis" formControlName="devis"></options>
-            </div>
+            </div> -->
           </div>
         </div>
       </form>
       <footer class="sticky-footer">
-        <button class="button full-width active" (click)="onApply()" [disabled]="form.invalid">
+        <button class="button full-width active" (click)="onApply()" [disabled]="form.invalid || hasPostulated">
           Postuler
         </button>
       </footer>
@@ -102,6 +102,15 @@ export class UIAnnonceResume {
   files: File[] = [];
   details: PostDetail[] = [];
 
+  get hasPostulated () {
+    const profile = this.store.selectSnapshot(DataQueries.currentProfile)
+    let companiesId = this.post.candidates.map((id:number) => {
+      let candidate = this.store.selectSnapshot(DataQueries.getById('Candidate', id))
+      return candidate!.company
+    })
+    return companiesId.includes(profile.company.id)
+  }
+
   //rename this to item of type compatible with both Post and Mission
   private _post: Post | null = null;
   get post(): any { return this._post; }
@@ -118,8 +127,7 @@ export class UIAnnonceResume {
 
   view: 'ST' | 'PME' = 'ST';
   ngOnInit() {
-    this.view = this.store.selectSnapshot(DataState.view);
-    console.log("annonce-resume", this.company)
+    this.view = this.store.selectSnapshot(DataState.view)
   }
 
   openFile(file: File) {

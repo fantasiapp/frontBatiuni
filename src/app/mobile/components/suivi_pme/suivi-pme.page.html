@@ -44,7 +44,6 @@
     <h3>Noter l'entreprise</h3>
     <h6 *ngIf="mission">{{ mission!.subContractorName }}</h6>
     <div class="star-container" *ngIf="hasGeneralStars">
-      <!-- <img ngIf="getArrayStar('general')[0]" *ngFor="let flag of getArrayStar('general'); let index=index;" [src]="flag ? 'assets/starFull.svg' : 'assets/starEmpty.svg'"> -->
       <img  *ngFor="let flag of getArrayStar('general'); let index=index;" [src]="flag ? 'assets/starFull.svg' : 'assets/starEmpty.svg'">
     </div>
 

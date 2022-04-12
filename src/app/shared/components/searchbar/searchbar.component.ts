@@ -14,7 +14,7 @@ export class SearchbarComponent extends UIDefaultAccessor<string> {
   }
 
   @Input()
-  placeholder: string = "Recherche une annone";
+  placeholder: string = "Rechercher une annonce";
 
   protected getInput(e: any) {
     return e.target.value;

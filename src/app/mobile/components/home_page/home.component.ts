@@ -14,7 +14,6 @@ import { DataQueries, DataState, QueryAll } from 'src/models/new/data.state';
 import { Profile, Post, Mission, PostMenu, Candidate } from "src/models/new/data.interfaces";
 import { FilterService } from "src/app/shared/services/filter.service";
 import { ApplyForm } from "../../ui/annonce-resume/annonce-resume.ui";
-import { calcPossibleSecurityContexts } from "@angular/compiler/src/template_parser/binding_parser";
 
 @Component({
   selector: 'home',
@@ -44,6 +43,11 @@ export class HomeComponent extends Destroy$ {
   allOnlinePosts: Post[] = [];
   missions: Mission[] = [];
 
+  get missionToClose () {
+    console.log("mission to close", this.missions, this.missions[0])
+    return this.missions[0]
+  }
+
 
   @ViewChild('pausePostTemplate', {read: TemplateRef, static: true})
   pausePostTemplate!: TemplateRef<any>;
@@ -59,6 +63,15 @@ export class HomeComponent extends Destroy$ {
 
   @ViewChild('suiviPME', {read: TemplateRef, static: true})
   suiviChantier!: TemplateRef<any>;
+
+  activeView: number = 0;
+  _openCloseMission: boolean = false
+  openAdFilterMenu: boolean = false
+  toogle:boolean = false
+  imports = { DistanceSliderConfig, SalarySliderConfig }
+  draftMenu = new PostMenu
+  postMenu = new PostMenu
+  missionMenu = new PostMenu<Mission>()
 
   constructor(
     private cd: ChangeDetectorRef, private store: Store,
@@ -86,6 +99,10 @@ export class HomeComponent extends Destroy$ {
       this.missions = this.store.selectSnapshot(DataQueries.getMany('Mission', profile.company.missions));
       this.cd.markForCheck();
     });
+    // const view = this.store.selectSnapshot(DataState.view)
+    // this._openCloseMission = view == 'ST' && this.missions.length != 0
+    // console.log("ngOnInit", view, this.missions, this._openCloseMission)
+    
   }
 
   ngOnDestroy(): void {
@@ -101,14 +118,11 @@ export class HomeComponent extends Destroy$ {
     console.log("change home component")
   }
 
-
-  activeView: number = 0;
-  openAdFilterMenu: boolean = false
-  imports = { DistanceSliderConfig, SalarySliderConfig }
-  draftMenu = new PostMenu
-  postMenu = new PostMenu
-  missionMenu = new PostMenu<Mission>()
-  toogle:boolean = false
+  get openCloseMission() {return this._openCloseMission}
+  set openCloseMission(b:boolean) {
+    console.log("openCloseMission", b)
+    this._openCloseMission = !this._openCloseMission
+  }
 
   swipeupMenu() {
     this.missionMenu.swipeup = !this.missionMenu.swipeup
