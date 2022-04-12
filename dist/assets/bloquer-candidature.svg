@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="57.881" height="57.104" viewBox="0 0 57.881 57.104">
+  <defs>
+    <filter id="Path_107" x="0" y="0" width="57.881" height="57.104" filterUnits="userSpaceOnUse">
+      <feOffset dy="3" input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feFlood flood-opacity="0.161"/>
+      <feComposite operator="in" in2="blur"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+  </defs>
+  <g id="Group_138" data-name="Group 138" transform="translate(-24 -774)">
+    <g id="Group_137" data-name="Group 137" transform="translate(33 780)">
+      <g id="Ellipse_21" data-name="Ellipse 21" opacity="0.736">
+        <circle id="Ellipse_21-2" data-name="Ellipse 21" cx="20.456" cy="20.456" r="20.456" transform="translate(1.278 2.346)" fill="#999"/>
+        <path id="Ellipse_21_-_Outline" data-name="Ellipse 21 - Outline" d="M20.456,1a19.461,19.461,0,0,0-7.573,37.383A19.461,19.461,0,0,0,28.029,2.529,19.333,19.333,0,0,0,20.456,1m0-1A20.456,20.456,0,1,1,0,20.456,20.456,20.456,0,0,1,20.456,0Z" transform="translate(1.278 2.346)" fill="#747373"/>
+      </g>
+      <g transform="matrix(1, 0, 0, 1, -9, -6)" filter="url(#Path_107)">
+        <path id="Path_107-2" data-name="Path 107" d="M188.474,198.6H187.7a19.552,19.552,0,0,1-19.552-19.552h0A19.552,19.552,0,0,1,187.7,159.492h.777a19.552,19.552,0,0,1,19.552,19.552h0A19.552,19.552,0,0,1,188.474,198.6Z" transform="translate(-159.15 -153.49)" fill="#fff"/>
+      </g>
+    </g>
+    <rect id="Rectangle_39" data-name="Rectangle 39" width="24.955" height="5.199" transform="translate(40.278 797.676)" fill="#434343"/>
+  </g>
+</svg>

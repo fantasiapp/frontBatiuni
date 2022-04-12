@@ -22,17 +22,18 @@
           <img (click)="swipeMenuImage = true" src="assets/camera-outline.svg"/>
         </div>
     </div>
-    <div *ngFor="let supervision of date.supervisions">
-        <comment-suivi  [supervision]="supervision"></comment-suivi>
-    </div>
+    
 
     <div class="partenerComment-container">
       <div *ngIf="!mission!.isClosed">
           <h2>Communiquer avec votre partenaire de chantier</h2>
+          <div *ngFor="let supervision of date.supervisions">
+            <comment-suivi  [supervision]="supervision"></comment-suivi>
+          </div>
       </div>
-      <div class="partenerComment">
-        <div *ngIf="!mission!.isClosed" class="divComment">
-          <input id="input_general" class="inputComment" type="text" placeholder="Ajouter un commentaire" (focusout)="mainComment(null)">
+      <div *ngIf="!mission!.isClosed" class="partenerComment">
+        <div  class="divComment">
+          <textarea id="input_general" class="inputComment" type="text" placeholder="Ajouter un commentaire" (focusout)="mainComment(null)"></textarea>
           <img (click)="swipeMenuImage == true" src="assets/camera.png"/>
         </div>
       </div>

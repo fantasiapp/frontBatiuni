@@ -71,7 +71,7 @@
   display: flex;
   position: relative;
   flex-direction: row;
-  padding: .5rem 1.5rem;
+  padding: .5rem 1rem;
   background: white;
   border-radius: 1.5rem;
   border: 1px solid #F7F7F7;
@@ -89,12 +89,34 @@
 }
 
 .partenerComment-container {
-  h2 {
-    margin: 0 2rem 1rem
+  & > div {
+    display: flex;
+    flex-direction: column;
+    row-gap: 1rem;
+    padding: 2rem;
   }
   .partenerComment {
     background: #e5e8ed;
     padding: 2rem;
+  }
+
+  .divComment {
+    padding: unset;
+    border-color: #bdbdbd;
+    border-radius: 4px;
+    justify-content: space-between;
+    textarea {
+      padding: .5rem;
+      resize: none;
+      min-height: 50px;
+      max-height: 100px;
+    }
+    img {
+      align-self: flex-end;
+      position: relative;
+      top: -.5rem;
+      right: .5rem
+    }
   }
 }
 

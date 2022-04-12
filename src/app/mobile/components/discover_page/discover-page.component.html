@@ -1,6 +1,6 @@
 <ng-template #page let-ctx>
   <div class="hosted-page full-width section flex column">
-    <header style="flex-grow: 0;">
+    <header>
       <h2 class="title">{{ ctx.title }}</h2>
       <p class="font-Poppins">
         <span *ngFor="let text of ctx.texts" [class.text-emphasis]="text.emphasis">

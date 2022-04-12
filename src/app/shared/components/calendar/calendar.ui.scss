@@ -40,6 +40,7 @@ ol {
   row-gap: 1rem;
   list-style: none;
   display: grid;
+  justify-items: center;
   margin-bottom: 5px;
   grid-template-columns: repeat(7, 1fr);
   margin: 0;

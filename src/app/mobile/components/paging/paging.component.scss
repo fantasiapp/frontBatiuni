@@ -12,6 +12,13 @@
   @include set-safe-area(padding, top);
 }
 
+a {
+  margin-left: $spacer-200;
+  img {
+    margin-right: 1rem;
+  }
+}
+
 .decoration-cover {
   background-color: $secondaryBackground;
 }

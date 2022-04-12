@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, SimpleChanges } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from "@angular/core";
 import { Select, Store } from "@ngxs/store";
 import { Observable } from "rxjs";
 import { take } from "rxjs/operators";
@@ -6,7 +6,6 @@ import { PopupService } from "src/app/shared/components/popup/popup.component";
 import { CloseMission } from "src/models/new/user/user.actions";
 import { Company, Mission, PostMenu, PostDetail, Profile, Supervision, DateG, Task } from "src/models/new/data.interfaces";
 import { DataQueries, DataState } from "src/models/new/data.state";
-import { ApplyForm } from "src/app/mobile/ui/annonce-resume/annonce-resume.ui";
 
 // export type Task = PostDetail & {validationImage:string, invalidationImage:string}
 
