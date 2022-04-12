@@ -191,7 +191,6 @@ export class SuiviPME {
     if (nature == "quality") {
       let content = document.getElementById("starTextQuality") as HTMLTextAreaElement;
       this.mission!.qualityComment = content!.value
-      console.log("textStarAction", this.mission!.qualityComment)
     } else if (nature == "security") {
       let content = document.getElementById("starTextSecurity") as HTMLTextAreaElement;
       this.mission!.securityComment = content!.value
@@ -228,8 +227,10 @@ export class SuiviPME {
 
   submitStar() {
     if (this.hasGeneralStars)
-      console.log("validerStar", this.mission, this.hasGeneralStars)
-      this.store.dispatch(new CloseMission(this.mission!.id, this.mission!.quality, this.mission!.qualityComment, this.mission!.security, this.mission!.securityComment, this.mission!.organisation, this.mission!.organisationComment)).pipe(take(1)).subscribe(() => {});
+      this.store.dispatch(new CloseMission(this.mission!.id, this.mission!.quality, this.mission!.qualityComment, this.mission!.security, this.mission!.securityComment, this.mission!.organisation, this.mission!.organisationComment)).pipe(take(1)).subscribe(() => {
+        this._missionMenu.swipeupCloseMission = false
+        this.cd.markForCheck()
+      });
   }
 
   @Select(DataQueries.currentProfile)
@@ -240,7 +241,6 @@ export class SuiviPME {
   }
 
   reloadMission = (dateOld:DateG): (DateG|Mission)[] =>  {
-    console.log("reloadMission")
     let dateResult = dateOld
     this.mission = this.store.selectSnapshot(DataQueries.getById('Mission', this.mission!.id))
     this.dates.forEach(dateNew => {

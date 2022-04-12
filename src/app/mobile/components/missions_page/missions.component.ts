@@ -29,6 +29,7 @@ export class MissionsComponent extends Destroy$ {
 
   detailedDays: MissionDetailedDay[] = [];
   _openCloseMission = false
+  doClose:boolean = false
   missionCompany:String = ""
 
 
@@ -47,8 +48,7 @@ export class MissionsComponent extends Destroy$ {
 
     combineLatest([this.profile$, this.missions$]).pipe(takeUntil(this.destroy$)).subscribe(([profile, missions]) => {
       //filter own missions
-      //for now accept all misisons
-      console.log("ngOnInit missions", missions)
+      //for now accept all missions
       this.myMissions = missions.filter(mission => mission.subContractor == profile.company.id);
       //compute work days
 
@@ -73,7 +73,6 @@ export class MissionsComponent extends Destroy$ {
         }
       }
     });
-    console.log("ngOnInit", this.missionToClose)
     if (this.missionToClose) {
       // console.log("ngOnInit", this.missionToClose)
       this._openCloseMission = this.missionToClose.securityST == 0
@@ -109,16 +108,19 @@ export class MissionsComponent extends Destroy$ {
 
   get openCloseMission() { return this._openCloseMission }
   set openCloseMission(b:boolean) {
-    console.log("openCloseMission", b)
-    this._openCloseMission = !this._openCloseMission
+    this._openCloseMission = b
   }
 
   get hasGeneralStarsST() { return this.getArrayStarST("generalST")[0] == true}
 
   submitStarST() {
     if (this.hasGeneralStarsST)
-      console.log("validerStarST", this.missionToClose, this.hasGeneralStarsST)
-      this.store.dispatch(new CloseMissionST(this.missionToClose!.id, this.missionToClose!.vibeST, this.missionToClose!.vibeCommentST, this.missionToClose!.securityST, this.missionToClose!.securityCommentST, this.missionToClose!.organisationST, this.missionToClose!.organisationCommentST)).pipe(take(1)).subscribe(() => {});
+      this.store.dispatch(new CloseMissionST(this.missionToClose!.id, this.missionToClose!.vibeST, this.missionToClose!.vibeCommentST, this.missionToClose!.securityST, this.missionToClose!.securityCommentST, this.missionToClose!.organisationST, this.missionToClose!.organisationCommentST)).pipe(take(1)).subscribe(() => {
+        this.doClose = true
+        this.openCloseMission = false
+        this.cd.markForCheck()
+        console.log("submitStarST", this.doClose, this.openCloseMission)
+      });
   }
 
   starActionST(index:number, nature:string) {

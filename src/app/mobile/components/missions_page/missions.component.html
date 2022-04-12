@@ -1,11 +1,12 @@
 <page-header name="Mes missions" [(activeView)]="activeView" (filterClicked)="openFilterMenu = true">
-  <span tab_0>Vue liste test</span>
+  <span tab_0>Vue liste</span>
   <span tab_1>Calendrier</span>
 </page-header>
 
 <div class="hosted-page space-children-margin page-content-with-tabs">
   <ng-container [ngSwitch]="activeView">
     <ng-container *ngSwitchCase="0">
+      <p>{{ doClose }} {{ openCloseMission }}</p>
       <offer *ngFor="let mission of myMissions" [post]="mission" src="assets/validée.svg" (click)="openMission(mission)"></offer>
     </ng-container>
     <horizontal-calendar [detailedDays]="detailedDays" class="space-children-margin" *ngSwitchCase="1"></horizontal-calendar>
@@ -20,7 +21,7 @@
   <mission-filter-form view></mission-filter-form>
 </swipeup>
 
-<swipeup [(open)]="openCloseMission" [doClose]="false">
+<swipeup [(open)]="openCloseMission" [doClose]="doClose">
   <div *ngIf="missionToClose" class="cloture-swipeup">
     <h3>Noter l'entreprise</h3>
     <h6 >{{ missionCompany }}, contact: {{ missionToClose.contactName }}</h6>
