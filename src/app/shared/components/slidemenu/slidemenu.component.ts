@@ -106,10 +106,7 @@ export class UISlideMenuComponent extends UIOpenMenu {
   close() {
     this.openChange.emit(this._open = false);
 
-    // arnaque pour contourner le lifehook de suivi-pme : ngAfterViewChecked
-    setTimeout(()=> {
-      this.info.hide()
-    },0)
+    this.info.hide()
     setTimeout(() => {
       if ( !this.keepAlive ) this.view?.clear();
       if( this.content?.close ) this.content.close();

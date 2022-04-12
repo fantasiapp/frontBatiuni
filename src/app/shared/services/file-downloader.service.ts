@@ -18,7 +18,7 @@ export class FileDownloader {
 
   toSecureBase64(file: BasicFile) {
     //assume downloaded
-    console.log('to secure 64', file);
+    // console.log('to secure 64', file);
     if ( !file.content )
       throw `Download file before using base64`;
     return this.sanitizer.bypassSecurityTrustResourceUrl(`data:${getFileType(file.ext)};base64,${file.content}`)

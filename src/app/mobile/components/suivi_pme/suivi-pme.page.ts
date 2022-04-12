@@ -63,12 +63,6 @@ export class SuiviPME {
   @Input() callBackParent: (b:boolean, type:string) => void = (b:boolean, type:string): void => {}
   @Input() toogle: boolean = false
 
-
-  ngAfterViewChecked() {
-    if (this.mission?.isClosed) this.info.show('error', 'Contract cloturé')
-    else this.info.hide()
-  }
-
   computeDates (mission:Mission) {
     let supervisionsTaks: number[] = []
     this.tasks = this.store.selectSnapshot(DataQueries.getMany('DetailedPost', mission.details)).map(detail => (
