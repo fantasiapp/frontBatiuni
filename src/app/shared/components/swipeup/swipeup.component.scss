@@ -2,6 +2,7 @@
 @use 'src/styles/variables' as *;
 @use 'src/styles/mixins' as *;
 
+$swipeup-height: 70vh;
 
 :host {
   position: fixed;
@@ -31,7 +32,7 @@
   bottom: 0;
   transform: translateY(100%);
   transition: transform 250ms ease-out 0s;
-  max-height: 45vh;
+  max-height: $swipeup-height;
 
   &.open {
     transform: translateY(0);
@@ -60,8 +61,8 @@
 .list {
   font-size: 0.9em;
   list-style-type: none;
-  padding: 20px 2rem;
-  @include with-set-safe-area(padding, bottom, 20px);
+  padding: 1rem 2rem 2rem;
+  @include with-set-safe-area(padding, bottom, 2rem);
 
 
   // ?? 
@@ -80,5 +81,5 @@
 
 .content {
   overflow-y: auto;
-  max-height: calc(45vh - #{$swipeup-decoration-height});
+  max-height: calc(#{$swipeup-height} - #{$swipeup-decoration-height});
 }

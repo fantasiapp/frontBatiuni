@@ -30,6 +30,7 @@ import { ComplexPassword, MatchField } from "src/validators/verify";
   styles: [`
     @use 'src/styles/variables' as *;
     @use 'src/styles/mixins' as *;
+    @use 'src/styles/forms' as *;
 
     :host { width: 100%; }
 

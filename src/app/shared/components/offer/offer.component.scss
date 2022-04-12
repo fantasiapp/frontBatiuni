@@ -1,11 +1,15 @@
 @use 'src/styles/mixins' as *;
 @use 'src/styles/variables' as *;
-@import "src/styles/responsive";
+@use "src/styles/responsive" as *; 
 
 :host {
   position: relative;
   right: 0;
   display: flex;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 10px 24px 54px #00000024; // x y spread outline color
+  margin-bottom: 1rem;
 }
 
 .address {
@@ -17,12 +21,9 @@
 .container {
   display: flex;
   background: $bg-white;
-  box-shadow: 0 5px 3px 0 rgba(149, 157, 165, 0.2); // x y spread outline color
   padding: $item-padding (2*$item-padding);
   color: $light;
-  border-radius: 12px;
   justify-content: center;
-  margin-bottom: 1rem;
   flex-shrink: 0;
 
   width: 100%;
@@ -37,7 +38,11 @@
   flex : 1;
   white-space: nowrap;
   overflow: hidden;
-  background-color: #E5E5E5;
+  // background-color: rgb(252, 252, 255);
+
+  div img {
+    opacity: .64;
+  }
 }
 
 p {
@@ -63,4 +68,14 @@ p {
   right:0;
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
   z-index:1500;
+}
+
+.container.offres-infos-closed::before {
+  content: "";
+  width: 100%;
+  height: 4px;
+  position: absolute;
+  bottom: 0;
+  background: $danger;
+  opacity: 0.6;
 }

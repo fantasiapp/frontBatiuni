@@ -59,6 +59,7 @@ import { UIComment } from "./components/comment/comment.ui";
 import { FilterService } from "./services/filter.service";
 import { MissionFilterForm } from "./forms/missions.form";
 import { FileViewer } from "./components/file-viewer/file-viewer.component";
+import { BannerComponent } from './components/banner/banner.component';
 
 @NgModule({
   declarations: [
@@ -119,7 +120,8 @@ import { FileViewer } from "./components/file-viewer/file-viewer.component";
     UIAccordion,
     UIComment,
     MissionFilterForm,
-    FileViewer
+    FileViewer,
+    BannerComponent
   ],
   imports: [
     CommonModule,

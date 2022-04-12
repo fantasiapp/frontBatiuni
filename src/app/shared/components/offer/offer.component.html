@@ -1,6 +1,7 @@
 <ng-container *ngIf="post">
-  <div class="container grow flex center-cross space-between">
-    <div [ngClass]="isClosedClass">
+  <!-- <app-banner *ngIf="(isClosed)" [post]="post"></app-banner> -->
+  <div class="container grow flex center-cross space-between" [ngClass]="(isClosed) ? 'offres-infos-closed' : ''">
+    <div class="offres-infos">
       <p class="entreprise">{{company?.name || 'Entreprise'}}</p>
       <p class="metier">{{post?.manPower ? 'Main d\'oeuvre' : 'Fourniture et Pose'}}</p>
       <p class="address">{{post?.address || 'addresse'}}</p>

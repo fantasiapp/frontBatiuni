@@ -32,7 +32,7 @@
     <hr class="dashed"/>
     <section class="full-width documents">
       <!-- <h4>Documents importants</h4> -->
-      <div class="flex images">
+      <div class="documents-grid">
         <file-svg *ngFor="let file of attachedFiles" [name]="file.name" [color]="getFileColor(file.name)" (click)="openFile(file)"></file-svg>
       </div>
     </section>

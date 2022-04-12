@@ -1,4 +1,4 @@
-@import 'src/styles/responsive';
+@use 'src/styles/responsive' as *;
 
 :host {
   display: block;

@@ -1,9 +1,9 @@
 <!--Configure role accordingly-->
 <ng-container *ngIf="(profile$ | async) as profile">
-  <header class="clear-margin full-width sticky-header flex center-cross">
+  <header class="clear-margin full-width sticky-header flex center-cross white-header">
     <h1 class="grow">Mon Profil</h1>
-    <img src="assets/notification.svg" (click)="openNotifications = true" />
-    <img src="assets/menu.svg" (click)="openMenu = true" />
+    <img src="assets/notification.svg" (click)="openNotifications = true" alt="notification_button"/>
+    <img src="assets/menu.svg" (click)="openMenu = true" alt="menu_button"/>
   </header>
 
   <extended-profile class="page-content" [profile]="profile" (ratingsClicked)="openRatings = true">

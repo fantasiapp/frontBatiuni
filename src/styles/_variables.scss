@@ -51,8 +51,8 @@ $box-padding: $spacer-50;
 //Profile page
 $tick-size-x: 3px;
 $tick-size-y: 10px;
-$profile-level-thickness: 8px;
-$profile-image-size: 150px - 2 * $profile-level-thickness;
+$profile-level-thickness: $spacer-50;
+$profile-image-size: 8.75rem - 2 * $profile-level-thickness;
 $notifications-padding: 20px;
 
 //Swipe up
@@ -65,14 +65,14 @@ $rating-star-width: 25px;
 $sticky-header-height: 60px;
 $navigation-arrow-icon-size: 25px;
 
-$icon-size: 25px;
+$icon-size: $spacer-150;
 
 
 // Availibilty Colors =====>
 $available : $success;
 $availableWithLimits : $warning;
 $unavailable : $danger;
-$icon-padding: 2px;
+$icon-padding: 0.125rem;
 
 //search-bar
 $searchbar-height: 48px;

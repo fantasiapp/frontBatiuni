@@ -48,6 +48,7 @@ export class MissionsComponent extends Destroy$ {
     combineLatest([this.profile$, this.missions$]).pipe(takeUntil(this.destroy$)).subscribe(([profile, missions]) => {
       //filter own missions
       //for now accept all misisons
+      console.log("ngOnInit missions", missions)
       this.myMissions = missions.filter(mission => mission.subContractor == profile.company.id);
       //compute work days
 
@@ -72,7 +73,9 @@ export class MissionsComponent extends Destroy$ {
         }
       }
     });
+    console.log("ngOnInit", this.missionToClose)
     if (this.missionToClose) {
+      // console.log("ngOnInit", this.missionToClose)
       this._openCloseMission = this.missionToClose.securityST == 0
       const company = this.store.selectSnapshot(DataQueries.getById('Company', this.missionToClose.company))
       this.missionCompany = company!.name
@@ -93,7 +96,7 @@ export class MissionsComponent extends Destroy$ {
 
   get missionToClose (): Mission | null {
     const missionToClose = this.myMissions.filter(mission=>mission.isClosed)
-    if (missionToClose) {
+    if (missionToClose.length != 0) {
       return missionToClose[0]
     }
     return null
@@ -104,7 +107,7 @@ export class MissionsComponent extends Destroy$ {
     else {return "submitDisable"}
   }
 
-  get openCloseMission() {return this._openCloseMission}
+  get openCloseMission() { return this._openCloseMission }
   set openCloseMission(b:boolean) {
     console.log("openCloseMission", b)
     this._openCloseMission = !this._openCloseMission
