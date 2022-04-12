@@ -33,7 +33,7 @@
 </div>
 
 <swipeup [(open)]="missionMenu.swipeup">
-  <li>Modifier les horaires de présence bis</li>
+  <li (click)="modifyTimeTable()">Modifier les horaires de présence ou les dates</li>
   <li>Appeler le 06 21 94 03 86</li>
   <li (click)="closeMission()">Clôturer la mission</li>
   <li>Dupliquer l'annonce</li>
@@ -71,6 +71,20 @@
       <textarea (click)="textStarAction('organisation')" placeholder="Ajouter un commentaire" rows="5" cols="30" id="starTextOrganisation">{{ mission!.organisationComment }}</textarea>
     </div>
     <button [ngClass]="classSubmit" (click)="submitStar()">Valider</button>
+  </div>
+</swipeup>
+
+<swipeup [(open)]="swipeupModifyDate">
+  <div class="form-input">
+    <label>Horaires du chantier</label>
+    <div class="flex row space-between">
+      <span>
+        De: <input type="time" class="form-element time-picker" formControlName="hourlyStart"/>
+      </span>
+      <span>
+        Jusqu'à: <input type="time" class="form-element time-picker" formControlName="hourlyEnd"/>
+      </span>
+    </div>
   </div>
 </swipeup>
 

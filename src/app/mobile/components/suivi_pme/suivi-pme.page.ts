@@ -30,6 +30,7 @@ export class SuiviPME {
   contactName : string = ""
   view: 'ST' | 'PME' = "PME";
   mission: Mission | null = null
+  swipeupModifyDate:boolean = false
 
   // _mission: Mission | null = null
   // get mission() { return this._mission }
@@ -249,5 +250,11 @@ export class SuiviPME {
     })
     this.cd.markForCheck()
     return [dateResult, this.mission!]
+  }
+
+  modifyTimeTable() {
+    this.missionMenu.swipeup = false
+    this.swipeupModifyDate = true
+    this.cd.markForCheck()
   }
 }

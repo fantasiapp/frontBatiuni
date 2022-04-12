@@ -77,7 +77,6 @@ export class UISwipeupComponent extends UIOpenMenu {
 
   willClose = false;
   close(doClose=true) {
-    console.log("activate swipeup", doClose, this.doClose)
     if (doClose) {
       this.willClose = true;
       setTimeout(() => {

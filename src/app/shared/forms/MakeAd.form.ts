@@ -81,7 +81,7 @@ import { InfoService } from "../components/info/info.component";
         <label>Horaires du chantier</label>
         <div class="flex row space-between">
           <span>
-            Du: <input type="time" class="form-element time-picker" formControlName="hourlyStart"/>
+            De: <input type="time" class="form-element time-picker" formControlName="hourlyStart"/>
           </span>
           <span>
             Jusqu'à: <input type="time" class="form-element time-picker" formControlName="hourlyEnd"/>

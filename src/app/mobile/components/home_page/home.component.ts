@@ -162,8 +162,6 @@ export class HomeComponent extends Destroy$ {
 
   openMission(mission: Mission | null) {
     this.missionMenu = assignCopy(this.missionMenu, {post: mission, open: !!mission, swipeup: false, swipeupCloseMission: false});
-    console.log("openMission", mission)
-
     this.toogleSlideState()
     if (mission?.isClosed && this.toogleSlideState) this.info.show('error', 'Contract cloturé')
     else this.info.hide()

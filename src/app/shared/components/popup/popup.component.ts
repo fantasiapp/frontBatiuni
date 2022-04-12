@@ -167,7 +167,6 @@ export class PopupService {
   }
 
   openFile(file: BasicFile | File) {
-    console.log("openFile", file)
     if ( !file.content ) {
       this.downloader.downloadFile((file as File).id!, true).subscribe(file => this.openFile(file));
       return;
