@@ -15,8 +15,8 @@
     <h3 class="text-light-emphasis">{{
       (profile.user ? (profile.user.firstName + " " + profile.user.lastName) : profile.company.name) | titlecase
     }}</h3>
-    <span>{{ profile.user!.username }}</span>
-    <span>{{ profile.user!.cellPhone | space: 2:1 }}</span>
+    <span *ngIf="!ratingDetails">{{ profile.user!.username }}</span>
+    <span *ngIf="!ratingDetails">{{ profile.user!.cellPhone | space: 2:1 }}</span>
     <stars *ngIf="star" (click)="ratingsClicked.emit()" value="{{ (view$ | async) == 'ST' ? profile.company.starsST : 3 }}" disabled></stars>
   </ng-container>
 </section>

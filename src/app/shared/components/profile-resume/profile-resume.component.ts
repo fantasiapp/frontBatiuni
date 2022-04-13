@@ -33,6 +33,9 @@ export class ProfileResume {
   @Input()
   canChangePicture: boolean = false;
 
+  @Input()
+  ratingDetails: boolean = false;
+
   @Output()
   ratingsClicked = new EventEmitter();
 

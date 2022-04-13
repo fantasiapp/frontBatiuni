@@ -41,6 +41,16 @@ header {
   }
 }
 
+.recommendation-button {
+  display: flex;
+  align-items: center;
+
+  img {
+    height: 1.5rem;
+    margin-right: 1rem
+  }
+}
+
 .form-container {
   @extend %overflow-y;
 }
