@@ -129,7 +129,8 @@ button {
     }
 
     &.active {
-      background: #134C6C;
+      // background: #134C6C;
+      background: $primary;
     }
   }
 }
