@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, ContentChild, Input, ViewChild } from "@angular/core";
-import { DomSanitizer } from "@angular/platform-browser";
+import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser";
 import { Store } from "@ngxs/store";
 import { map, take } from "rxjs/operators";
 import { Supervision, File } from "src/models/new/data.interfaces";
@@ -57,12 +57,24 @@ export class SuiviComments {
   //   return this.downloader.downloadFile(file).pipe(map(file => this.downloader.toSecureBase64(file)));
   // }
 
-  getImage(file:number[]) {
+  getImage(file: number[]) {
     // let fileObject = this.store.selectSnapshot(DataQueries.getById('File', file[0]));
-    let test = this.downloader.downloadFile(file[0])    // return this.downloader.downloadFile(file[0]).pipe(map(file => 
+    let src: SafeResourceUrl | string = "";
+    let test = this.downloader.downloadFile(file[0]);
+    console.log("getFile test :", test)
+    src = test.subscribe(image => {
+      console.log('test subscribe image:', image);
+      src = this.downloader.toSecureBase64(image);
+      console.log('test subscribe src:', src)
+      return src;
+    })
+    console.log("getFile source :", src);
+    // return this.downloader.downloadFile(file[0]).pipe(map(file => 
     //   {
-    //     this.downloader.toSecureBase64(file)}));
-    //   }
-    return null
+    //     this.downloader.toSecureBase64(file)
+    //   }));
+    // console.log("getFile", test)
+    // return test
+    return src;
   }
 }
