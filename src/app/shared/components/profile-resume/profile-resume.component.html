@@ -17,7 +17,7 @@
     }}</h3>
     <span *ngIf="!ratingDetails">{{ profile.user!.username }}</span>
     <span *ngIf="!ratingDetails">{{ profile.user!.cellPhone | space: 2:1 }}</span>
-    <stars *ngIf="star" (click)="ratingsClicked.emit()" value="{{ (view$ | async) == 'ST' ? profile.company.starsST : 3 }}" disabled></stars>
+    <stars *ngIf="star" (click)="ratingsClicked.emit()" value="{{ (view$ | async) == 'ST' ? profile.company.starsST : profile.company.starsPME }}" disabled></stars>
   </ng-container>
 </section>
 <ng-content></ng-content>

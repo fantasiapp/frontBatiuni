@@ -14,43 +14,6 @@ header {
   }
 }
 
-.company-rate {
-  font-family: "Roboto";
-  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
-  padding: 10px;
-  margin: 10px 0;
-}
-.company-name {
-  font-weight: 800;
-  color: $dark;
-}
-
-.criterion {
-  margin: 10px;
-  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
-  padding: 10px;
-  .criterion-stars {
-    font-size: 14px;
-  }
-  .stars {
-    transform: scale(0.7);
-  }
-  span {
-    color: $light;
-    white-space: normal;
-  }
-}
-
-.recommendation-button {
-  display: flex;
-  align-items: center;
-
-  img {
-    height: 1.5rem;
-    margin-right: 1rem
-  }
-}
-
 .form-container {
   @extend %overflow-y;
 }
