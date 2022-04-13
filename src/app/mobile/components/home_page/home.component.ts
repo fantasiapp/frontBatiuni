@@ -68,7 +68,6 @@ export class HomeComponent extends Destroy$ {
   _openCloseMission: boolean = false
   openAdFilterMenu: boolean = false
   toogle:boolean = false
-  toogleSlide: boolean = false
   imports = { DistanceSliderConfig, SalarySliderConfig }
   draftMenu = new PostMenu
   postMenu = new PostMenu
@@ -125,9 +124,6 @@ export class HomeComponent extends Destroy$ {
     this._openCloseMission = !this._openCloseMission
   }
 
-  toogleSlideState(){
-    this.toogleSlide = !this.toogleSlide
-  }
 
   swipeupMenu() {
     this.missionMenu.swipeup = !this.missionMenu.swipeup
@@ -143,8 +139,6 @@ export class HomeComponent extends Destroy$ {
   //factor two menu into objects
   openDraft(post: Post | null) {
     this.draftMenu = assignCopy(this.draftMenu, {post, open: !!post});
-
-    this.toogleSlideState()
   }
   
   openPost(post: Post | null) {
@@ -152,8 +146,6 @@ export class HomeComponent extends Destroy$ {
     this.postMenu = assignCopy(this.postMenu, {post, open: !!post, swipeup: false});
     if ( post )
       this.store.dispatch(new MarkViewed(post.id));
-
-    this.toogleSlideState()
   }
 
   setFavorite(fav: any) {
@@ -162,8 +154,7 @@ export class HomeComponent extends Destroy$ {
 
   openMission(mission: Mission | null) {
     this.missionMenu = assignCopy(this.missionMenu, {post: mission, open: !!mission, swipeup: false, swipeupCloseMission: false});
-    this.toogleSlideState()
-    if (mission?.isClosed && this.toogleSlideState) this.info.show('error', 'Contract cloturé')
+    if (mission?.isClosed && this.missionMenu.open) this.info.show('error', 'Contract cloturé')
     else this.info.hide()
   }
 
