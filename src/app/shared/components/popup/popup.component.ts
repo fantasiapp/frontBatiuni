@@ -96,6 +96,7 @@ export class UIPopup extends DimensionMenu {
 
   willClose = false;
   close() {
+    console.log("close popup")
     this.willClose = true;
     setTimeout(() => {
       if ( !this.keepAlive ) this.view.clear();

@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewChild } from "@angular/core";
+import { FormArray, FormControl, FormGroup, Validators } from "@angular/forms";
 import { Select, Store } from "@ngxs/store";
 import { Observable } from "rxjs";
 import { take } from "rxjs/operators";
@@ -6,6 +7,7 @@ import { PopupService } from "src/app/shared/components/popup/popup.component";
 import { CloseMission } from "src/models/new/user/user.actions";
 import { Company, Mission, PostMenu, PostDetail, Profile, Supervision, DateG, Task } from "src/models/new/data.interfaces";
 import { DataQueries, DataState } from "src/models/new/data.state";
+import { CalendarUI, DayState } from "src/app/shared/components/calendar/calendar.ui";
 
 // export type Task = PostDetail & {validationImage:string, invalidationImage:string}
 
@@ -31,12 +33,17 @@ export class SuiviPME {
   view: 'ST' | 'PME' = "PME";
   mission: Mission | null = null
   swipeupModifyDate:boolean = false
-
-  // _mission: Mission | null = null
-  // get mission() { return this._mission }
+  alert: string = "."
 
   _missionMenu: PostMenu<Mission> = new PostMenu<Mission>()
   get missionMenu() { return this._missionMenu }
+
+  AdFormDate = new FormGroup({
+    hourlyStart: new FormControl('07:00'),
+    hourlyEnd: new FormControl('17:30:00'),
+    calendar: new FormControl([]),
+  })
+
 
   @Input()
   set missionMenu(mM: PostMenu<Mission>) {
@@ -54,11 +61,28 @@ export class SuiviPME {
       this.contactName = this.view == 'ST' ? this.mission!.subContractorContact : ""
       
     }
+    if (mission) {
+      this.AdFormDate.get('hourlyStart')?.setValue(mission!.hourlyStart);
+      this.AdFormDate.get('hourlyEnd')?.setValue(mission!.hourlyEnd);
+      
+      let daystates: DayState[] = [];
+      if (mission!.dates.length) {
+        if ( typeof mission!.dates[0] == 'string' )
+          daystates =  mission!.dates.map(date => ({date: date as unknown as string, availability: 'selected'}))
+        else
+          daystates = this.store.selectSnapshot(DataQueries.getMany('DatePost', mission!.dates))
+            .map(({name}) => ({date: name, availability: 'selected'}))
 
+        this.AdFormDate.get('calendar')?.setValue(daystates);
+        this.calendar?.viewCurrentDate();
+      }
+    }
   }
 
   @Input() callBackParent: (b:boolean, type:string) => void = (b:boolean, type:string): void => {}
   @Input() toogle: boolean = false
+
+  @ViewChild(CalendarUI, {static: false}) calendar!: CalendarUI;
 
   computeDates (mission:Mission) {
     let supervisionsTaks: number[] = []
@@ -256,5 +280,36 @@ export class SuiviPME {
     this.missionMenu.swipeup = false
     this.swipeupModifyDate = true
     this.cd.markForCheck()
+  }
+
+  submitAdFormDate() {
+    console.log("submitAdFormDate", this.AdFormDate.value, this.mission)
+    let datesSelected = this.AdFormDate.get('calendar')!.value.map((dayState:DayState) => {
+      return dayState.date
+    })
+    console.log("submitAdFormDate", datesSelected, typeof(datesSelected[0]))
+    let blockedDates = this.computeBlockedDate()
+    console.log("check cast", typeof(blockedDates[0]))
+    this.alert = ""
+    blockedDates.forEach((date) => {
+      if (!datesSelected.includes(date)) {
+        this.alert += `La date ${date} doit obligatoirement être sélectionnée.\r\n`
+      }
+    })
+    console.log("alert", this.alert)
+    this.cd.markForCheck
+  }
+
+  computeBlockedDate() {
+    let listBlockedDate:number[] = []
+    let listDetailedPost = this.mission!.details
+    listDetailedPost.forEach( (detailId) => {
+      let detailDate = this.store.selectSnapshot(DataQueries.getById('DetailedPost', detailId))!.date
+      if (!listBlockedDate.includes(detailDate)) {
+        listBlockedDate.push(detailDate)
+        console.log("check type", typeof(detailDate))
+      }
+    })
+    return listBlockedDate
   }
 }
