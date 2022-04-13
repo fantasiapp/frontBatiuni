@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, ContentChild, Input, ViewChild } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChild, Input, SimpleChanges, ViewChild } from "@angular/core";
 import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser";
 import { Store } from "@ngxs/store";
 import { map, take } from "rxjs/operators";
@@ -7,6 +7,7 @@ import { DownloadFile } from "src/models/new/user/user.actions";
 import { SlideTemplate } from "../../directives/slideTemplate.directive";
 import { FileDownloader } from "../../services/file-downloader.service";
 import { DataQueries } from "src/models/new/data.state";
+import { ImageGenerator } from "../../services/image-generator.service";
 
 @Component({
   selector: 'comment-suivi',
@@ -23,9 +24,11 @@ export class SuiviComments {
   @ContentChild(SuiviComments, {read: SuiviComments})
   parentComment: SuiviComments | null = null;
 
-  constructor(private downloader: FileDownloader, private sanitizer: DomSanitizer, private store: Store) {
-    
+  constructor(private cd: ChangeDetectorRef, private imageGenerator: ImageGenerator,private downloader: FileDownloader, private sanitizer: DomSanitizer, private store: Store) {
+
   }
+
+  src: SafeResourceUrl | string = '';
 
   _supervision: Supervision = {
     id: -1,
@@ -41,6 +44,7 @@ export class SuiviComments {
 
   @Input()
   set supervision(supervision: Supervision) {
+    console.log("supervision input:", supervision);
     this._supervision = supervision;
   }
 
@@ -50,31 +54,18 @@ export class SuiviComments {
     //download fields on the go
   }
 
-  // getImage(file?: File) {
-  //   if ( !file ) return null;
-  //   if ( file.content ) return this.downloader.toSecureBase64(file);
 
-  //   return this.downloader.downloadFile(file).pipe(map(file => this.downloader.toSecureBase64(file)));
-  // }
-
-  getImage(file: number[]) {
-    // let fileObject = this.store.selectSnapshot(DataQueries.getById('File', file[0]));
-    let src: SafeResourceUrl | string = "";
-    let test = this.downloader.downloadFile(file[0]);
-    console.log("getFile test :", test)
-    src = test.subscribe(image => {
-      console.log('test subscribe image:', image);
-      src = this.downloader.toSecureBase64(image);
-      console.log('test subscribe src:', src)
-      return src;
-    })
-    console.log("getFile source :", src);
-    // return this.downloader.downloadFile(file[0]).pipe(map(file => 
-    //   {
-    //     this.downloader.toSecureBase64(file)
-    //   }));
-    // console.log("getFile", test)
-    // return test
-    return src;
+  ngOnChanges(changes: SimpleChanges) {
+    console.log("Change:", changes);
+    if ( changes['supervision'] ) {
+      console.log("change supervision", this.supervision.files);
+      this.downloader.downloadFile(this.supervision.files[0]).subscribe(image => {
+        this.src = this.downloader.toSecureBase64(image);
+        this.cd.markForCheck();
+        console.log("markForCheck src:", this.src);
+      })
+    }
+    console.log("change src:", this.src);
   }
+
 }
