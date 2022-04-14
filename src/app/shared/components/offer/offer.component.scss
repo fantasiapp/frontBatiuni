@@ -45,10 +45,7 @@
     white-space: nowrap;
     overflow: hidden;
     // background-color: rgb(252, 252, 255);
-
-    div  {
-      opacity: .34;
-    }
+    opacity: .34;
   }
 }
 
@@ -88,7 +85,6 @@
     position: absolute;
     bottom: $item-padding * 2;
     color: $text-color;
-    z-index: 2;
-    opacity: 1;
+    opacity: .6;
   }
 }

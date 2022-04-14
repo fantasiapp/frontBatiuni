@@ -49,10 +49,15 @@ export class OfferComponent {
 
   get hasPostulated() {
     const profile = this.store.selectSnapshot(DataQueries.currentProfile)
-    let companiesId = this._post?.candidates.map((id:number) => {
-      let candidate = this.store.selectSnapshot(DataQueries.getById('Candidate', id))
-      return candidate!.company
-    })
+    let companiesId;
+    if(this._post){
+      companiesId = this._post.candidates?.map((id:number) => {
+
+        let candidate = this.store.selectSnapshot(DataQueries.getById('Candidate', id))
+        console.log('Candidates', candidate);
+        return candidate!.company
+      })
+    }
     return companiesId?.includes(profile.company.id)
   }
   

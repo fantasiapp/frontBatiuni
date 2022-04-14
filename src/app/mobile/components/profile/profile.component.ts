@@ -72,7 +72,7 @@ export class ProfileComponent extends Destroy$ {
     this.notificationsUnseen = 0
       const view = this.store.selectSnapshot(DataState.view)
       this.companyId = profile.company.id
-      profile.company.Notification.map((notificationId) => {
+      profile.company.Notification?.map((notificationId) => {
         let notification = this.store.selectSnapshot(DataQueries.getById('Notification', notificationId))
         if (view == notification!.role) {
           this.notifications.push(notification!)

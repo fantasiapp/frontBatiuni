@@ -1,14 +1,14 @@
 <ng-container *ngIf="post">
   <!-- <app-banner *ngIf="(isClosed)" [post]="post"></app-banner> -->
-  <div class="container grow flex center-cross space-between" [ngClass]="{'offres-infos-closed': isClosed, 'offres-infos-postulated': hasPostulated}">
-    <div class="offres-infos">
+  <div class="container grow flex center-cross space-between" >
+    <div class="offres-infos" [ngClass]="{'offres-infos-closed': isClosed, 'offres-infos-postulated': hasPostulated}">
       <span class="entreprise">{{company?.name || 'Entreprise'}}</span>
       <span class="metier">{{post?.manPower ? 'Main d\'oeuvre' : 'Fourniture et Pose'}}</span>
       <span class="address">{{post?.address || 'addresse'}}</span>
       <span class="date">{{post?.dueDate ?  toLocateDate(post.dueDate) : '19 Janvier 2038'}}</span>
     </div>
     <div class="offer-logo flex center">
-      <img [src]="src"/>
+      <img [src]="src" [ngClass]="{'offres-infos-closed': isClosed, 'offres-infos-postulated': hasPostulated}"/>
       <span *ngIf="hasPostulated">Déjà postulé</span>
     </div>
   </div>
