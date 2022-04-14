@@ -167,5 +167,6 @@ export class UIAnnonceResume {
       amount: formValue.amount,
       devis: formValue.devis[0].name
     });
+    console.log("apply")
   }
 };
