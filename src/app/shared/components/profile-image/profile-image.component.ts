@@ -56,7 +56,7 @@ export class UIProfileImageComponent extends Destroy$ {
 
   setColor(company:Company) {
     const colorList:{ [key: string]: string } = {"red":"#C95555", "orange":"#FFD375", "lightGreen":"#D2FFCB", "green":"#BBEFB1", "grey":"#aaa"}
-    const files: (File | null)[] = company.files.map(fileId => this.store.selectSnapshot(DataQueries.getById('File', fileId)))
+    const files: (File | null)[] = company.files?.map(fileId => this.store.selectSnapshot(DataQueries.getById('File', fileId)))
     const filesName = files.map(file => {
       if (file) {
         return file.name

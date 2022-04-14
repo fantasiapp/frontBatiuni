@@ -15,6 +15,11 @@ import { DataQueries } from "src/models/new/data.state";
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SuiviComments {
+
+  deleteComment(){
+    console.log('Ce commentaire est supprimé');
+  }
+
   // We can get the name and the profile image from the state
 
   @ViewChild(SlideTemplate, {read: SlideTemplate, static: true})

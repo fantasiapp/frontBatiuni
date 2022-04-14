@@ -35,6 +35,11 @@ export class ExtendedProfileComponent extends Destroy$ {
   @Input()
   showContact: boolean = false;
 
+  @Input()
+  showSwitch: boolean = true;
+  @Input()
+  showRecomandation: boolean = true;
+
   constructor(private store: Store, private popup: PopupService, private cd: ChangeDetectorRef) {
     super();
   }

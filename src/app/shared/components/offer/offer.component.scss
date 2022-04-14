@@ -10,6 +10,7 @@
   overflow: hidden;
   box-shadow: 10px 24px 54px #00000024; // x y spread outline color
   margin-bottom: 1rem;
+  line-height: 1rem;
 }
 
 .address {
@@ -21,7 +22,7 @@
 .container {
   display: flex;
   background: $bg-white;
-  padding: $item-padding (2*$item-padding);
+  padding: 2 * $item-padding;
   color: $light;
   justify-content: center;
   flex-shrink: 0;
@@ -33,20 +34,19 @@
   flex : 1;
   white-space: nowrap;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  row-gap: 1rem;
 }
-.offres-infos-closed {
-  flex : 1;
-  white-space: nowrap;
-  overflow: hidden;
-  // background-color: rgb(252, 252, 255);
 
-  div img {
-    opacity: .64;
+.offres-infos {
+  &-closed, &-postulated {
+    flex : 1;
+    white-space: nowrap;
+    overflow: hidden;
+    // background-color: rgb(252, 252, 255);
+    opacity: .34;
   }
-}
-
-p {
-  margin: 0.6em;
 }
 
 .metier, .date {
@@ -78,4 +78,13 @@ p {
   bottom: 0;
   background: $danger;
   opacity: 0.6;
+}
+
+.offer-logo {
+  span {
+    position: absolute;
+    bottom: $item-padding * 2;
+    color: $text-color;
+    opacity: .6;
+  }
 }

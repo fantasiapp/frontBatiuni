@@ -14,6 +14,8 @@ import { ChangeProfileType } from "src/models/new/user/user.actions";
 export class ProfileResume {
 
   openRatings: boolean = false;
+  @Input()
+  showRecomandation: boolean = true;
 
   constructor(private store: Store) {}
 

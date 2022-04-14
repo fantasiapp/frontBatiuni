@@ -5,6 +5,8 @@
     <div class="user-info">
       <span class="user-name">{{supervision.author}}</span>
       <!-- <span class="post-date">Le {{supervision.date}}</span> -->
+
+      <img (click)="deleteComment()" src="assets/trash-outline.svg" alt="delete-comment">
     </div>
     <div class="suivi-comment">
       {{supervision.comment}}
