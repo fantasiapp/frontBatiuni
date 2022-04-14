@@ -59,6 +59,7 @@ export class SuiviChantierDate extends Destroy${
       resultType: CameraResultType.Base64,
       source: CameraSource.Camera
     });
+    this.swipeMenuImage = false;
     // this.store.dispatch(new ChangeProfilePicture(photo, 'image'));
     // scr = photo.format, imageBase64 = photo.base64String, 
   }
@@ -69,7 +70,15 @@ export class SuiviChantierDate extends Destroy${
       resultType: CameraResultType.Base64,
       source: CameraSource.Photos,
     });
-    this.store.dispatch(new UploadImageSupervision(photo, this.mission!.id, this.currentTaskId));
+    try {
+    this.store.dispatch(new UploadImageSupervision(photo, this.mission!.id, this.currentTaskId)).pipe(take(1)).subscribe(() => {
+      this.updatePageOnlyDate();
+    });
+    } catch (error) {
+
+    } finally {
+      this.swipeMenuImage = false;
+    }
   }
 
   addDateToPost() {

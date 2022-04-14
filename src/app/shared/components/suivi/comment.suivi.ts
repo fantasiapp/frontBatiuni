@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChild, Input, SimpleChanges, ViewChild } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChild, Input, OnChanges, SimpleChanges, ViewChild } from "@angular/core";
 import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser";
 import { Store } from "@ngxs/store";
 import { map, take } from "rxjs/operators";
@@ -15,7 +15,7 @@ import { ImageGenerator } from "../../services/image-generator.service";
   styleUrls: ['./comment.suivi.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SuiviComments {
+export class SuiviComments implements OnChanges {
   // We can get the name and the profile image from the state
 
   @ViewChild(SlideTemplate, {read: SlideTemplate, static: true})
@@ -59,11 +59,13 @@ export class SuiviComments {
     console.log("Change:", changes);
     if ( changes['supervision'] ) {
       console.log("change supervision", this.supervision.files);
-      this.downloader.downloadFile(this.supervision.files[0]).subscribe(image => {
-        this.src = this.downloader.toSecureBase64(image);
-        this.cd.markForCheck();
-        console.log("markForCheck src:", this.src);
-      })
+      if ( this.supervision.files[0]){
+        this.downloader.downloadFile(this.supervision.files[0]).subscribe(image => {
+          this.src = this.downloader.toSecureBase64(image);
+          this.cd.markForCheck();
+          console.log("markForCheck src:", this.src);
+        })
+      }
     }
     console.log("change src:", this.src);
   }
