@@ -136,14 +136,14 @@
 
 <ng-template #candidates let-possibleCandidates let-job="job">
   <div class="hosted-page">
-    <p class="font-Poppins">Vous avez: {{ possibleCandidates.length }} réponses</p>
+    <p class="font-Poppins">Vous avez : {{ possibleCandidates.length }} réponses</p>
     <profile-card *ngFor="let candidate of possibleCandidates" (click)="showCompany(candidate.company, candidate.id)" [job]="job" [profile]="candidate.company"></profile-card>
   </div>
 </ng-template>
 
 <ng-template #candidature let-company let-post="post" let-application="application">
   <extended-profile class="content-with-header-and-footer" [showContact]="true" [profile]="profile$" [showSwitch]="false" [showRecomandation]="false"></extended-profile>
-  <footer class="sticky-footer flex center-cross application">
+  <footer class="sticky-footer flex center-cross application background-white">
     <button class="button active full-width" (click)="handleApplication(post, application)">Traiter la candidature</button>
   </footer>
 </ng-template>

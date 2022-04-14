@@ -16,9 +16,8 @@ import { DataQueries, QueryProfile, Snapshot } from "src/models/new/data.state";
         <span>Propose {{ employeeCount }} {{job.name || 'Employées'}}</span>
         <span>Note générale ({{ profile.company.starsST }}/5 par {{ profile.company.missions.length }} personnes)</span>
         <!-- <span>{{ candidate!.amount }}</span> -->
-        <stars (click)='openRatings = false; stopPropagation($event)' class="stars" value="{{ profile.company.starsST }}" disabled></stars>
+        <stars class="stars" value="{{ profile.company.starsST }}" disabled></stars>
       </div>
-      <rating [profile]="profile" [(open)]="openRatings" [ngClass]="{'open' : openRatings}"></rating>
     </ng-container>
   `,
   styles: [`
@@ -49,12 +48,6 @@ import { DataQueries, QueryProfile, Snapshot } from "src/models/new/data.state";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProfileCardComponent {
-  
-  openRatings: boolean = false;
-  missions: Mission[] | undefined;
-  stopPropagation(e:Event){
-    e.stopImmediatePropagation()
-  }
 
   //we can get away with using these because this component is used inside a template
   //otherwise we will get type errors 
