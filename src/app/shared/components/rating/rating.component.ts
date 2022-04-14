@@ -40,7 +40,6 @@ export class RatingComponent extends UIOpenMenu {
   ngOnChanges(){
     let company = this.profile.company    
     let missions = this.store.selectSnapshot(DataQueries.getMany('Mission', company.missions))
-    console.log(missions);
     this.missions = missions;
   }
   
