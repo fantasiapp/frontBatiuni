@@ -18,6 +18,10 @@ header {
   @extend %overflow-y;
 }
 
+.notification {
+  @extend %has-notifications
+}
+
 /* im sorry for writing this page badly */
 /* i had some difficulties with scrolling */
 .modify-page {
