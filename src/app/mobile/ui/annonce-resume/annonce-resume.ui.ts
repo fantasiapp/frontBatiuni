@@ -1,8 +1,9 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
-import { Store } from "@ngxs/store";
+import { Select, Store } from "@ngxs/store";
+import { Observable } from "rxjs";
 import { PopupService } from "src/app/shared/components/popup/popup.component";
-import { Company, User, Post, File, PostDetail, Job, Mission } from "src/models/new/data.interfaces";
+import { Company, User, Post, File, PostDetail, Job, Mission, Profile } from "src/models/new/data.interfaces";
 import { DataQueries, DataState } from "src/models/new/data.state";
 
 export type ApplyForm = {
@@ -18,12 +19,11 @@ export type ApplyForm = {
       <div class="company-intro flex column center-cross space-children-margin">
         <profile-image [profile]="{company: company!, user: user}"></profile-image>
         <span class="company">{{ company!.name }}</span>
-        <stars class="stars" [value]="company!.starsPME || 3" disabled></stars>
+        <stars (click)='openRatings = true' class="stars" value="{{ company!.starsPME }}" disabled></stars>
         <span>{{ (post.manPower) ? "Main d'oeuvre" : "Fourniture et pose" }}</span>
         <span>Du {{ toLocateDate(post.startDate) }} Au {{toLocateDate(post.endDate)}}</span>
         <span>{{ this.amount || 0 }} {{this.post.currency}} </span>
       </div>
-      
 
       <div class="needs">
         <span class="title  ">Nous avons besoin de:</span>
@@ -54,6 +54,8 @@ export type ApplyForm = {
     <div *ngIf="collapsible" (click)="collapsed = !collapsed" class="collapse-controller full-width center-text">
       <span>{{collapsed ? 'Lire la suite' : 'Lire moins'}}</span>  <img src="assets/arrowdown.svg" [style.transform]="'rotate(' + (180 * +!collapsed) + 'deg)'"/>
     </div>
+
+    <rating [profile]="{company: company!, user: user}" [(open)]="openRatings" [ngClass]="{'open' : openRatings}"></rating>
 
     <ng-container *ngIf="application && view == 'ST'">
       <hr class="dashed"/>
@@ -101,6 +103,7 @@ export class UIAnnonceResume {
   job: Job | null = null;
   files: File[] = [];
   details: PostDetail[] = [];
+  openRatings: boolean = false;
 
   get hasPostulated () {
     const profile = this.store.selectSnapshot(DataQueries.currentProfile)
