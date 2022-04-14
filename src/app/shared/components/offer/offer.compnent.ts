@@ -52,9 +52,7 @@ export class OfferComponent {
     let companiesId;
     if(this._post){
       companiesId = this._post.candidates?.map((id:number) => {
-
         let candidate = this.store.selectSnapshot(DataQueries.getById('Candidate', id))
-        console.log('Candidates', candidate);
         return candidate!.company
       })
     }
