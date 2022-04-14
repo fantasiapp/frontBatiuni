@@ -4,7 +4,7 @@ import { Observable, of, Subject } from "rxjs";
 import { concatMap, map, tap } from "rxjs/operators";
 import { HttpService } from "src/app/services/http.service";
 import { GetGeneralData, HandleApplication, SignContract, MarkViewed, ModifyAvailability, SetFavorite, TakePicture } from "./user/user.actions";
-import { ApplyPost, ChangePassword, ChangeProfilePicture, ChangeProfileType, DeleteFile, DeletePost, DownloadFile, DuplicatePost, GetUserData, ModifyUserProfile, CreateDetailedPost, ModifyDetailedPost, CreateSupervision, SwitchPostType, CloseMission, CloseMissionST, UploadFile, UploadPost, UploadImageSupervision } from "./user/user.actions";
+import { ApplyPost, ChangePassword, ChangeProfilePicture, ChangeProfileType, DeleteFile, DeletePost, DownloadFile, DuplicatePost, GetUserData, ModifyUserProfile, CreateDetailedPost, ModifyDetailedPost, CreateSupervision, SwitchPostType, ModifyMissionDate, CloseMission, CloseMissionST, UploadFile, UploadPost, UploadImageSupervision, NotificationViewed } from "./user/user.actions";
 import { Company, Interface, User } from "./data.interfaces";
 import { DataReader, NameMapping, TranslatedName } from "./data.mapper";
 import { Record, DataTypes } from "./data.interfaces";
@@ -567,6 +567,23 @@ export class DataState {
     )
   }
 
+  @Action(ModifyMissionDate)
+  modifyMissionDAte(ctx:StateContext<DataModel>, application: ModifyMissionDate) {
+    const profile = this.store.selectSnapshot(DataQueries.currentProfile)!
+    return this.http.post('data', application).pipe(
+      tap((response:any) => {
+        if ( response[application.action] !== 'OK' ) {
+          this.inZone(() => this.info.show("error", response.messages, 3000));
+          throw response.messages;
+        }
+        delete response[application.action];
+        ctx.setState(
+          addComplexChildren('Company', profile.company.id, 'Mission', response)
+        )
+      })
+    )
+  }
+
   @Action(CloseMission)
   closeMission(ctx:StateContext<DataModel>, application: CloseMission) {
     const profile = this.store.selectSnapshot(DataQueries.currentProfile)!;
@@ -597,6 +614,24 @@ export class DataState {
         delete response[application.action];
         ctx.setState(
           addComplexChildren('Company', profile.company.id, 'Mission', response)
+        );
+      })
+    )
+  }
+
+  @Action(NotificationViewed)
+  notificationViewed(ctx:StateContext<DataModel>, application: NotificationViewed) {
+    const profile = this.store.selectSnapshot(DataQueries.currentProfile)!;
+    return this.http.post('data', application).pipe(
+      tap((response:any) => {
+        console.log("NotificationViewed", response, application.companyId)
+        if ( response[application.action] !== 'OK' ) {
+          this.inZone(() => this.info.show("error", response.messages, 3000));
+          throw response.messages;
+        }
+        delete response[application.action];
+        ctx.setState(
+          addComplexChildren('Company', application.companyId, 'Company', response)
         );
       })
     )

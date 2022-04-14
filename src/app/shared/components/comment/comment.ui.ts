@@ -42,7 +42,7 @@ export class UIComment {
     companyId: 1,
     Supervisions: [],
     comment: "Lorem ipsum dolor sit amet",
-    date: 11-11-2022,
+    date: '11-11-2022',
     files: []
   };
 

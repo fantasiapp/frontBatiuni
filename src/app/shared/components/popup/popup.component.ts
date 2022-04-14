@@ -125,6 +125,7 @@ export class UIPopup extends DimensionMenu {
   }
 
   modifyDetailedPostDate(task:Task, date:DateG) {
+    console.log("modifyDetailedPostDate", date.value, typeof(date.value))
     task.date = date.value
     this.store.dispatch(new ModifyDetailedPost(task)).pipe(take(1)).subscribe(() => {});
   }

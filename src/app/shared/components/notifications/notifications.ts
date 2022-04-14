@@ -1,7 +1,8 @@
 import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
 import * as moment from "moment";
+import { Notification } from "src/models/new/data.interfaces";
 
-export interface Notification {
+export interface NotificationDisplay {
   id: number;
   date: Date | string;
   src: string;
@@ -16,43 +17,25 @@ export interface Notification {
 })
 export class Notifications {
   @Input()
-  notification: Notification[] = [
-    {
-      id: 1,
-      date: new Date(Date.now()),
-      src: 'assets/PS1B.svg',
-      text: 'Vos horaires pour le chantier Lorem ipsum à été modifier.'
-    },
-  {
-      id: 2,
-      date: "2022-01-03T00:00:00Z",
-      src: 'assets/PS1B.svg',
-      text: 'Vos horaires pour le chantier Lorem ipsum à été modifier. '
-    },
-  {
-      id: 5,
-      date: "2021-12-16T11:30:00Z",
-      src: 'assets/PS1B.svg',
-      text: 'Vos horaires pour le chantier Lorem ipsum à été modifier. '
-    },
-  {
-      id: 3,
-      date: "2021-12-15T00:00:00Z",
-      src: 'assets/PS1B.svg',
-      text: 'Vos horaires pour le chantier Lorem ipsum à été modifier.'
-    },
-  {
-      id: 4,
-      date: "2021-12-16T00:00:00Z",
-      src: 'assets/PS1B.svg',
-      text: 'Vos horaires pour le chantier Lorem ipsum à été modifier.'
-    },
-  ]
+  notifications: Notification[] = []
+
+  notification: NotificationDisplay[] = []
 
   today: any;
   month: any;
   timer: any[] = [];
   ngOnInit() {
+    this.notifications.forEach((notificationAny, index) => {
+      let notification = notificationAny as Notification
+      console.log("notification", index, new Date(notification.timestamp), notification.timestamp * 1000)
+      let notificationDisplay = {
+        id: index,
+        date: new Date(notification.timestamp * 1000),
+        src:'assets/PS1B.svg',
+        text: notification.content
+      }
+      this.notification.push(notificationDisplay)
+    })
     let today = new Date(Date.now())
     this.month = this.notification.filter(notif => moment(moment(today).format('L')).isAfter(moment(notif.date).format('L')))
     this.today = this.notification.filter(notif => moment(moment(today).format('L')).isSame(moment(notif.date).format('L')))

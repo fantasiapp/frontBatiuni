@@ -281,7 +281,7 @@ export class SignContract {
 export class CreateDetailedPost {
   static readonly type = '[Data] Create DetailedPost';
   action = 'createDetailedPost';
-  constructor(public missionId: number, public content: string, public date: number) {
+  constructor(public missionId: number, public content: string, public date: string) {
   }
 }
 
@@ -289,6 +289,13 @@ export class ModifyDetailedPost {
   static readonly type = '[Data] Modify DetailedPost';
   action = 'modifyDetailedPost';
   constructor(public detailedPost: PostDetail | null) {
+  }
+}
+
+export class ModifyMissionDate {
+  static readonly type = '[Data] modify date Mission';
+  action = 'modifyMissionDate'
+  constructor(public missionId: number, public hourlyStart:string, public hourlyEnd:string, public calendar:string[]) {
   }
 }
 
@@ -309,7 +316,13 @@ export class CloseMissionST {
 export class CreateSupervision {
   static readonly type = '[Data] Create Supervision';
   action = 'createSupervision'
-  constructor(public missionId: number, public detailedPostId: number | null, public parentId: number | null, public comment: string, public date:number) {}
+  constructor(public missionId: number, public detailedPostId: number | null, public parentId: number | null, public comment: string, public date:string) {}
+}
+
+export class NotificationViewed {
+  static readonly type = '[Data] Notification has been viewed';
+  action = 'notificationViewed'
+  constructor(public companyId: number, public role: string) {}
 }
 
 export class SetFavorite {

@@ -130,7 +130,7 @@ export class CalendarUI extends UIDefaultAccessor<DayState[]> {
     //set click listener on the host and when the emitted event occurs
     //read the value and show what needs to be shown
 
-    console.log(this.rangeStart)
+    console.log("onDayClicked", this.rangeStart)
     if ( this.rangeStart !== null) {
       const min = Math.min(this.rangeStart, index),
         max = Math.max(this.rangeStart, index);

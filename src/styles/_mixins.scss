@@ -229,7 +229,6 @@
   position: relative;
   &::after {
     content: attr(data-notification-number);
-    // @include circle(var(--notification-size, #{$notification-size}),red);
     @include circle($notification-size,red);
     
     display: inline-flex;

@@ -10,9 +10,11 @@ import { take } from "rxjs/operators";
 import { FormGroup } from "@angular/forms";
 import { ModifyProfileForm } from "src/app/shared/forms/ModifyProfile.form";
 import { PopupService } from "src/app/shared/components/popup/popup.component";
-import { DataQueries } from "src/models/new/data.state";
+import { DataQueries, DataState } from "src/models/new/data.state";
 import { Destroy$ } from "src/app/shared/common/classes";
 import { Profile } from "src/models/new/data.interfaces";
+import { Notification } from "src/models/new/data.interfaces";
+import { NotificationViewed } from "src/models/new/user/user.actions";
 
 
 @Component({
@@ -35,7 +37,25 @@ export class ProfileComponent extends Destroy$ {
   openRatings: boolean = false;
   modifyPassword: boolean = false;
   openModifyPicture: boolean = false;
-  openNotifications : boolean = false;
+  _openNotifications : boolean = false;
+  notificationsUnseen: number = 0
+  notifications: Notification[] = []
+  companyId:number = -1
+
+  get openNotifications() {return this._openNotifications}
+  set openNotifications(b: boolean) {
+    this._openNotifications = !this._openNotifications
+    if (b) {
+      console.log("openNotifications", b)
+      const view = this.store.selectSnapshot(DataState.view)
+      this.store.dispatch(new NotificationViewed(this.companyId, view)).pipe(take(1)).subscribe(() => {
+      });
+    } else {
+      const profile = this.store.selectSnapshot(DataQueries.currentProfile)
+      this.updateProfile(profile)
+      this.cd.markForCheck()
+    }
+  }
   
   @Select(DataQueries.currentProfile)
   profile$!: Observable<Profile>;
@@ -43,7 +63,26 @@ export class ProfileComponent extends Destroy$ {
   constructor(private store: Store, private cd: ChangeDetectorRef, private info: InfoService, private popup: PopupService) {
     super();
     this.profile$.subscribe((profile) => {
+      this.updateProfile(profile)
     });
+  }
+
+  updateProfile(profile:Profile) {
+    console.log("profile", profile)
+    this.notifications = []
+    this.notificationsUnseen = 0
+      const view = this.store.selectSnapshot(DataState.view)
+      this.companyId = profile.company.id
+      profile.company.Notification.map((notificationId) => {
+        let notification = this.store.selectSnapshot(DataQueries.getById('Notification', notificationId))
+        if (view == notification!.role) {
+          this.notifications.push(notification!)
+          if (!notification!.hasBeenViewed) {
+            this.notificationsUnseen++
+          }
+        }
+      })
+      console.log("notification", this.notifications, this.notificationsUnseen)
   }
 
   slideModifyMenu(modifyPassword: boolean) {

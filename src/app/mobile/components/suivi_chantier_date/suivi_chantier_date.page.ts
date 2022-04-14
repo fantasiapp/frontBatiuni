@@ -30,7 +30,7 @@ export class SuiviChantierDate extends Destroy${
     super()
   }
 
-  _date: DateG = {id:0, value: 0, tasks:[], selectedTasks:[], taskWithoutDouble:[], view:this.view, supervisions: []};
+  _date: DateG = {id:0, value: "1970:01:01", tasks:[], selectedTasks:[], taskWithoutDouble:[], view:this.view, supervisions: []};
   get date() { return this._date; }
 
   @Input()

@@ -11,7 +11,7 @@
 </section>
 
 <section>
-  <span class="text-emphasis">Ce mois</span>
+  <span *ngIf="month.length" class="text-emphasis">Ce mois</span>
   <div *ngFor="let notification of month; let index = index" class="monthly-notifications flex">
     <div class="offres-logo flex center">
       <img [src]="notification.src" />

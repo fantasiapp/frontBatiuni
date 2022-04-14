@@ -4,10 +4,11 @@ import { Select, Store } from "@ngxs/store";
 import { Observable } from "rxjs";
 import { take } from "rxjs/operators";
 import { PopupService } from "src/app/shared/components/popup/popup.component";
-import { CloseMission } from "src/models/new/user/user.actions";
-import { Company, Mission, PostMenu, PostDetail, Profile, Supervision, DateG, Task } from "src/models/new/data.interfaces";
+import { CloseMission, ModifyMissionDate } from "src/models/new/user/user.actions";
+import { Company, Mission, PostMenu, PostDetail, Profile, Supervision, DateG, Task, PostDate } from "src/models/new/data.interfaces";
 import { DataQueries, DataState } from "src/models/new/data.state";
 import { CalendarUI, DayState } from "src/app/shared/components/calendar/calendar.ui";
+import { DataLayerManager } from "@agm/core";
 
 // export type Task = PostDetail & {validationImage:string, invalidationImage:string}
 
@@ -95,15 +96,22 @@ export class SuiviPME {
         supervisions:detail.supervisions,
         supervisionsObject:this.computeSupervisionsforTask(detail.supervisions, supervisionsTaks),
         validationImage:SuiviPME.computeTaskImage(detail, "validated"),
-        invalidationImage:SuiviPME.computeTaskImage(detail, "refused")}))
-    this.dates = mission.dates.map((value, id) => (
-      { id:id,
-        value: value,
+        invalidationImage:SuiviPME.computeTaskImage(detail, "refused"
+      )})
+    )
+    console.log("test type", mission.dates, typeof(mission.dates as any))
+    this.dates = mission.dates.map((value:unknown, id) => {
+      let date = value as string
+      return { id:id,
+        value: date,
         tasks:this.tasks,
-        selectedTasks:this.computeSelectedTask(value),
+        selectedTasks:this.computeSelectedTask(date),
         taskWithoutDouble:this.dateWithoutDouble(),
         view:this.view,
-        supervisions: this.computeSupervisionsForMission(value, supervisionsTaks)}))
+        supervisions: this.computeSupervisionsForMission(date, supervisionsTaks)
+      }
+    }
+    )
   }
 
   computeSupervisionsforTask(supervisionsId: number[], supervisionsTask:number[]) {
@@ -118,7 +126,7 @@ export class SuiviPME {
     return supervisions
   }
 
-  computeSupervisionsForMission(date:number, supervisionsTask:number[]):Supervision[] {
+  computeSupervisionsForMission(date:string, supervisionsTask:number[]):Supervision[] {
     let supervisions: Supervision[] = []
     let allSupervisions: (Supervision|null)[] = this.mission!.supervisions.map(id => {
       let supervision = this.store.selectSnapshot(DataQueries.getById('Supervision', id))
@@ -164,13 +172,13 @@ export class SuiviPME {
     return listWithOutDouble
   }
 
-  computeSelectedTask(date:number) {
+  computeSelectedTask(date:string) {
     let selectedTask: Task[] = []
     this.tasks!.forEach(task => this.computeSelectedTaskAction(selectedTask, date, task))
     return selectedTask
   }
 
-  computeSelectedTaskAction(selectedTask:Task[], date:number, task:Task) {
+  computeSelectedTaskAction(selectedTask:Task[], date:string, task:Task) {
     if (date == task.date) {
       selectedTask.push(task)
     }
@@ -289,25 +297,48 @@ export class SuiviPME {
     })
     console.log("submitAdFormDate", datesSelected, typeof(datesSelected[0]))
     let blockedDates = this.computeBlockedDate()
-    console.log("check cast", typeof(blockedDates[0]))
     this.alert = ""
+    let dateToBeSelected:string[] = []
     blockedDates.forEach((date) => {
       if (!datesSelected.includes(date)) {
         this.alert += `La date ${date} doit obligatoirement être sélectionnée.\r\n`
+        console.log("type", date, typeof(date))
+        dateToBeSelected.push(date)
       }
     })
+    this.setupDayState(this.mission!, dateToBeSelected)
+    this.saveToBackAdFormDate()
     console.log("alert", this.alert)
-    this.cd.markForCheck
   }
 
-  computeBlockedDate() {
-    let listBlockedDate:number[] = []
+  setupDayState (mission:Mission, dateToBeSelected:string[]) {
+    console.log("setupDayState", dateToBeSelected)
+    let dayStates: DayState[] = dateToBeSelected.map((date) => {
+      return {date:date, availability: 'selected'}
+    })
+    this.AdFormDate.get('calendar')?.value.forEach((day:DayState) => {
+      dayStates.push(day)
+    })
+    this.AdFormDate.get('calendar')?.setValue(dayStates);
+    }
+
+    saveToBackAdFormDate() {
+      console.log("saveToBackAdFormDate", this.AdFormDate.value)
+      const selectedDate:string[] = this.AdFormDate.get('calendar')!.value.map((dayState:DayState) => {return dayState.date})
+      this.store.dispatch(new ModifyMissionDate(this.mission!.id, this.AdFormDate.get('hourlyStart')!.value, this.AdFormDate.get('hourlyEnd')!.value, selectedDate)).pipe(take(1)).subscribe(() => {
+        if (!this.alert)
+          this.swipeupModifyDate = false
+        this.cd.markForCheck()
+      });
+    }
+
+  computeBlockedDate() : string[] {
+    let listBlockedDate:string[] = []
     let listDetailedPost = this.mission!.details
     listDetailedPost.forEach( (detailId) => {
       let detailDate = this.store.selectSnapshot(DataQueries.getById('DetailedPost', detailId))!.date
       if (!listBlockedDate.includes(detailDate)) {
         listBlockedDate.push(detailDate)
-        console.log("check type", typeof(detailDate))
       }
     })
     return listBlockedDate

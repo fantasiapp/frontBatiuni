@@ -5,7 +5,7 @@ export type Record<T = any> = {
 export type DataTypes = 'Job' | 'Label' | 'Role' | 'UserProfile' | 'Company' |
   'Post' | 'DetailedPost' | 'Supervision' | 'Disponibility' | 'File' |
   'JobForCompany' | 'LabelForCompany' | 'Candidate' | 'Mission' |
-  'Establishments'| 'DatePost' ; //..
+  'Establishments'| 'DatePost' | 'Notification' ; //..
 
 //just to indicate
 export type Ref<T> = number;
@@ -66,12 +66,12 @@ export interface Company {
   amount: number;
   saturdayDisponibility: boolean
   allQualifications : boolean
-
+  Notification: Ref<Notification>[]
 };
 
 export interface PostDetail {
   id: Ref<PostDetail>;
-  date: number;
+  date: string;
   content: string;
   validated : boolean;
   refused : boolean;
@@ -82,7 +82,7 @@ export interface Supervision {
   id: Ref<Supervision>;
   author: string;
   companyId: number;
-  date: number;
+  date: string;
   comment: string;
   files: Ref<File>[];
   Supervisions: Ref<Supervision>[];
@@ -161,6 +161,16 @@ export interface Establishement {
   NTVAI: string;
 };
 
+export type Notification = {
+  id: Ref<PostDate>
+  post: Ref<Post>
+  mission: Ref<Mission>
+  role: string
+  timestamp: number
+  content: string
+  hasBeenViewed: boolean
+};
+
 export type Mission = Post & {
   subContractor: Ref<Company>;
   subContractorContact: string;
@@ -200,7 +210,7 @@ export type Task = PostDetail & {
 
 export type DateG = {
   id: number
-  value: number
+  value: string
   tasks: Task[] | null
   selectedTasks: Task[]
   taskWithoutDouble: Task[]
@@ -225,6 +235,7 @@ export type Interface<K extends DataTypes> =
   K extends 'Mission' ? Mission :
   K extends 'DatePost' ? PostDate :
   K extends 'Establishments' ? Establishement :
+  K extends 'Notification' ? Notification :
   K;
 
 export type Profile = {
