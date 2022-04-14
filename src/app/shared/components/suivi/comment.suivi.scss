@@ -16,14 +16,21 @@
 }
 
 .user-info{
+  display: flex;
+  align-items: center;
   span {
     display: inline-block;
   }
   .user-name{
     font-weight: 500;
+    margin-right: auto;
   }
   .post-date{
     font-weight: 200;
+  }
+
+  img {
+    height: 1rem;
   }
 }
 
