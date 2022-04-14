@@ -116,7 +116,7 @@ import { InfoService } from "../components/info/info.component";
       </ng-container>
 
       <div class="form-input">
-        <div class="form-input center-text add-field" (click)="addDocument()">
+        <div class="form-input flex row center-text add-field" (click)="addDocument()">
           <img src="assets/icons/add.svg"/>
           <span>Ajouter un document</span>
         </div>
