@@ -45,7 +45,6 @@ export class ProfileComponent extends Destroy$ {
   set openNotifications(b: boolean) {
     this._openNotifications = !this._openNotifications
     if (b) {
-      console.log("openNotifications", b)
       const view = this.store.selectSnapshot(DataState.view)
       this.store.dispatch(new NotificationViewed(this.companyId, view)).pipe(take(1)).subscribe(() => {
       });
@@ -72,15 +71,17 @@ export class ProfileComponent extends Destroy$ {
     this.notificationsUnseen = 0
       const view = this.store.selectSnapshot(DataState.view)
       this.companyId = profile.company.id
-      profile.company.Notification.map((notificationId) => {
-        let notification = this.store.selectSnapshot(DataQueries.getById('Notification', notificationId))
-        if (view == notification!.role) {
-          this.notifications.push(notification!)
-          if (!notification!.hasBeenViewed) {
-            this.notificationsUnseen++
+      if (profile.company.Notification) {
+        profile.company.Notification.map((notificationId) => {
+          let notification = this.store.selectSnapshot(DataQueries.getById('Notification', notificationId))
+          if (view == notification!.role) {
+            this.notifications.push(notification!)
+            if (!notification!.hasBeenViewed) {
+              this.notificationsUnseen++
+            }
           }
-        }
-      })
+        })
+      }
       console.log("notification", this.notifications, this.notificationsUnseen)
   }
 

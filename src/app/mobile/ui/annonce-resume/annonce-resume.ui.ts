@@ -1,10 +1,10 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
-import { Select, Store } from "@ngxs/store";
-import { Observable } from "rxjs";
+import { Store } from "@ngxs/store";
 import { PopupService } from "src/app/shared/components/popup/popup.component";
-import { Company, User, Post, File, PostDetail, Job, Mission, Profile } from "src/models/new/data.interfaces";
+import { Company, User, Post, File, PostDetail, Job, Mission, Candidate } from "src/models/new/data.interfaces";
 import { DataQueries, DataState } from "src/models/new/data.state";
+import { Destroy$ } from "src/app/shared/common/classes";
 
 export type ApplyForm = {
   amount: number;
@@ -22,7 +22,7 @@ export type ApplyForm = {
         <stars (click)='openRatings = true' class="stars" value="{{ company!.starsPME }}" disabled></stars>
         <span>{{ (post.manPower) ? "Main d'oeuvre" : "Fourniture et pose" }}</span>
         <span>Du {{ toLocateDate(post.startDate) }} Au {{toLocateDate(post.endDate)}}</span>
-        <span>{{ this.amount || 0 }} {{this.post.currency}} </span>
+        <span>{{ this.amountOrigin || 0 }} {{this.post.currency}} </span>
       </div>
 
       <div class="needs">
@@ -66,14 +66,11 @@ export type ApplyForm = {
           <label>Montant</label>
           <div class="flex row space-between remuneration">
             <input type="number" min="0" style="max-height: 51px" class="grow form-element" placeholder="Montant" formControlName="amount">
-            <!-- <div class="option-container">
-              <options [searchable]="false" type="radio" [options]="devis" formControlName="devis"></options>
-            </div> -->
           </div>
         </div>
       </form>
       <footer class="sticky-footer">
-        <button class="button full-width active" (click)="onApply()" [disabled]="form.invalid || hasPostulated">
+        <button class="button full-width active" (click)="onApply()" [disabled]="disableValidation">
           Postuler
         </button>
       </footer>
@@ -84,7 +81,7 @@ export type ApplyForm = {
   styleUrls: ['./annonce-resume.ui.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class UIAnnonceResume {
+export class UIAnnonceResume extends Destroy$ {
   @Input()
   collapsed: boolean = false;
   collapsible: boolean = true;
@@ -104,29 +101,57 @@ export class UIAnnonceResume {
   files: File[] = [];
   details: PostDetail[] = [];
   openRatings: boolean = false;
+  profile = this.store.selectSnapshot(DataQueries.currentProfile)
+
+  get disableValidation ():boolean {
+    console.log("disableValidation", this.amount, this.hasPostulated)
+    return this.hasPostulated || this.amount == null
+  }
 
   get hasPostulated () {
-    const profile = this.store.selectSnapshot(DataQueries.currentProfile)
     let companiesId = this.post.candidates.map((id:number) => {
       let candidate = this.store.selectSnapshot(DataQueries.getById('Candidate', id))
       return candidate!.company
     })
-    return companiesId.includes(profile.company.id)
+    return companiesId.includes(this.profile.company.id)
   }
 
   //rename this to item of type compatible with both Post and Mission
   private _post: Post | null = null;
   get post(): any { return this._post; }
-  get amount(): number {
-    if (this._post?.counterOffer) {
-      let mission = this._post as Mission
-      let candidate = this.store.selectSnapshot(DataQueries.getById('Candidate', mission.subContractor))
-      if (mission && mission.counterOffer && candidate) {
-        return candidate?.amount
-      }
-    }
 
-    return this.post.amount
+  get amount(): number | null{
+    if (this.form && this.form.get('amount')?.value) {
+      return this.form.get('amount')!.value
+    }
+    if (this._post?.counterOffer) {
+      let candidate = this.searchCandidate(this._post!)
+      console.log("amount", candidate?.amount, typeof(candidate?.amount))
+      this.form.get("amount")?.setValue(candidate?.amount ? candidate!.amount : null)
+      return candidate?.amount ? candidate!.amount : null
+    }
+    return null
+  }
+
+  get amountOrigin () {
+    if (this._post?.counterOffer) {
+      return this._post.amount
+    }
+    return null
+  }
+
+  searchCandidate(post:Post): (Candidate | null) {
+    const candidates = post.candidates
+    const companyId = this.profile.company.id
+    console.log("search", candidates, companyId)
+    let goodCandidate = null
+    candidates.forEach((candidateId) => {
+      let candidate = this.store.selectSnapshot(DataQueries.getById('Candidate', candidateId))
+      if (candidate?.company == companyId) {
+        goodCandidate = candidate
+      }
+    })
+    return goodCandidate
   }
 
   @Input('post') set post(p: Post | null) {
@@ -137,11 +162,26 @@ export class UIAnnonceResume {
     this.job = p ? this.store.selectSnapshot(DataQueries.getById('Job', p.job)) : null;
   }
 
-  constructor(private store: Store, private popup: PopupService) {}
+  constructor(private store: Store, private popup: PopupService) {
+    super()
+  }
 
   view: 'ST' | 'PME' = 'ST';
   ngOnInit() {
     this.view = this.store.selectSnapshot(DataState.view)
+  }
+
+  ngOnChange() {
+    console.log("ngOnChange")
+    this.form = new FormGroup({
+      amount: new FormControl(this.amount),
+      devis: new FormControl([this.devis[0]])
+    });
+  }
+
+  ngOnDestroy(): void {
+    console.log("ngdestroy")
+    super.ngOnDestroy();
   }
 
   openFile(file: File) {
@@ -157,7 +197,7 @@ export class UIAnnonceResume {
 
   devis = ['Par Heure', 'Par Jour', 'Par Semaine'].map((name, id) => ({id, name}));
   form = new FormGroup({
-    amount: new FormControl(0),
+    amount: new FormControl(this.amount),
     devis: new FormControl([this.devis[0]])
   });
 
