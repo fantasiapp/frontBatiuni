@@ -34,6 +34,32 @@
   }
 }
 
+.comment-option-container {
+  position: relative;
+  .comment-option-open {
+    position: absolute;
+    background-color: hsl(0deg 0% 81%);
+    padding: 0.5rem 1rem;
+    border-radius: 1rem;
+    left: -8rem;
+    z-index: 10;
+    > div {
+      position: fixed;
+      left: 0;
+      top: 0;
+      height: 100vh;
+      width: 100vw;
+    }
+    button {
+      display: block;
+      margin: 0.5rem auto;
+      padding: 0.5rem;
+      width: 8rem;
+      background: white;
+    }
+  }
+}
+
 .user-image{
   width: 2.5rem;
   height: 2.5rem;

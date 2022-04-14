@@ -16,6 +16,13 @@ import { DataQueries } from "src/models/new/data.state";
 })
 export class SuiviComments {
 
+  commentOption: boolean = false;
+
+  toogleCommentOption(){ this.commentOption = !this.commentOption }
+  get showCommentOption(){
+    return this.commentOption
+  }
+
   deleteComment(){
     console.log('Ce commentaire est supprimé');
   }
