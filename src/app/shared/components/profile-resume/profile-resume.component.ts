@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, SimpleChanges } from "@angular/core";
 import { Select, Store } from "@ngxs/store";
 import { Observable } from "rxjs";
-import { Profile, File } from "src/models/new/data.interfaces";
+import { Profile, File, Company, User } from "src/models/new/data.interfaces";
 import { DataQueries, DataState } from "src/models/new/data.state";
 import { ChangeProfileType } from "src/models/new/user/user.actions";
 
@@ -12,6 +12,8 @@ import { ChangeProfileType } from "src/models/new/user/user.actions";
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProfileResume {
+
+  openRatings: boolean = false;
 
   constructor(private store: Store) {}
 

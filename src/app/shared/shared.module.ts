@@ -60,6 +60,7 @@ import { FilterService } from "./services/filter.service";
 import { MissionFilterForm } from "./forms/missions.form";
 import { FileViewer } from "./components/file-viewer/file-viewer.component";
 import { BannerComponent } from './components/banner/banner.component';
+import { RatingComponent } from "./components/rating/rating.component";
 
 @NgModule({
   declarations: [
@@ -121,7 +122,8 @@ import { BannerComponent } from './components/banner/banner.component';
     UIComment,
     MissionFilterForm,
     FileViewer,
-    BannerComponent
+    BannerComponent,
+    RatingComponent
   ],
   imports: [
     CommonModule,
@@ -189,7 +191,8 @@ import { BannerComponent } from './components/banner/banner.component';
     UIAccordion,
     UIComment,
     MissionFilterForm,
-    FileViewer
+    FileViewer,
+    RatingComponent
   ],
   providers: [ImageGenerator, FileDownloader, FilterService]
 })

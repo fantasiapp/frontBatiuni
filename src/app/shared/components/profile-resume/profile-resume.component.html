@@ -20,4 +20,6 @@
     <stars *ngIf="star" (click)="ratingsClicked.emit()" value="{{ (view$ | async) == 'ST' ? profile.company.starsST : profile.company.starsPME }}" disabled></stars>
   </ng-container>
 </section>
+
+<rating [profile]="profile" [(open)]="openRatings" [ngClass]="{'open' : openRatings}"></rating>
 <ng-content></ng-content>
