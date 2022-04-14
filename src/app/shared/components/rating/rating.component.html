@@ -10,7 +10,9 @@
       <profile-image [profile]="profile"></profile-image>
       <span class="company">{{ profile.company!.name }}</span>
       <stars (click)='openRatings = true' class="stars" value="{{ profile.company!.starsPME }}" disabled></stars>
-
+      <button *ngIf="profileRecommandation" class="recommendation-button button active"><img src="assets/mail-outline.svg" alt="recommandation">
+        Demander une recommandation
+      </button>
       <section class="full-width section modify-profile">
         <div *ngFor="let mission of missions" class="company-rate">
           <span class="company-name">{{ view == 'ST' ?  mission.contactName : mission.subContractorContact }}</span>
@@ -21,8 +23,7 @@
               <stars class="stars" [value]="mission.quality" disabled></stars>
             </div>
 
-            <span>{{ mission.qualityComment }} Lorem ipsum dolor sit, amet consectetur adipisicing elit. Explicabo distinctio illo atque? Corrupti placeat iusto nobis, repudiandae dignissimos similique animi impedit vel expedita nemo laudantium sapiente molestias? Quisquam, molestias nisi ex accusamus repellendus nesciunt quaerat officiis repudiandae, praesentium corrupti ipsum?</span>
-
+            <span>{{ mission.qualityComment }}</span>
           </div>
           <div class="criterion">
             <div class="flex center-cross">

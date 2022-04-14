@@ -22,6 +22,10 @@ export class RatingComponent extends UIOpenMenu {
 
   @Input()
   profile!: Profile;
+
+  @Input()
+  profileRecommandation: boolean = false
+
   missions: Mission[] | undefined;
   
   constructor(private info: InfoService, private store: Store) {
