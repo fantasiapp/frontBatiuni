@@ -2,9 +2,10 @@
   <div class="hosted-page flex column center-cross space-children-margin font-Poppins">
     <profile-resume class="flex column center-cross space-children-margin"
       [canChangePicture]="false"
-      (ratingsClicked)="ratingsClicked.emit($event)"
       [showMore]="true"
       [profile]="profile"
+      [switch]="showSwitch"
+      [showRecomandation]="showRecomandation"
     ></profile-resume>
   
     <section class="job-description full-width flex column space-children-margin">

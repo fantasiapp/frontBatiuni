@@ -46,6 +46,18 @@ export class OfferComponent {
       return mission.isClosed
     return false
   }
+
+  get hasPostulated() {
+    const profile = this.store.selectSnapshot(DataQueries.currentProfile)
+    let companiesId;
+    if(this._post){
+      companiesId = this._post.candidates?.map((id:number) => {
+        let candidate = this.store.selectSnapshot(DataQueries.getById('Candidate', id))
+        return candidate!.company
+      })
+    }
+    return companiesId?.includes(profile.company.id)
+  }
   
   @Input() set post(p: Post | null) {
     this._post = p;

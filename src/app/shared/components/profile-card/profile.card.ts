@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
 import { Store } from "@ngxs/store";
 import { Observable } from "rxjs";
-import { Candidate, Company, Job, Profile } from "src/models/new/data.interfaces";
+import { Candidate, Company, Job, Mission, Profile } from "src/models/new/data.interfaces";
 import { DataQueries, QueryProfile, Snapshot } from "src/models/new/data.state";
 
 //maybe merge with sos ?
@@ -14,9 +14,9 @@ import { DataQueries, QueryProfile, Snapshot } from "src/models/new/data.state";
       <div class="flex column small-space-children-margin font-Poppins description">
         <span>{{ profile.company.name || "Nom de l'entreprise" }}</span>
         <span>Propose {{ employeeCount }} {{job.name || 'Employées'}}</span>
-        <span>Note générale (4.5 par 35 personnes)</span>
+        <span>Note générale ({{ profile.company.starsST }}/5 par {{ profile.company.missions.length }} personnes)</span>
         <!-- <span>{{ candidate!.amount }}</span> -->
-        <stars [value]="4.5" disabled></stars>
+        <stars class="stars" value="{{ profile.company.starsST }}" disabled></stars>
       </div>
     </ng-container>
   `,
@@ -48,7 +48,6 @@ import { DataQueries, QueryProfile, Snapshot } from "src/models/new/data.state";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProfileCardComponent {
-  
 
   //we can get away with using these because this component is used inside a template
   //otherwise we will get type errors 
@@ -69,7 +68,7 @@ export class ProfileCardComponent {
   constructor(private store: Store) {}
   
   ngOnInit() {
-    if ( this.profile$ == void 0 ) return;
+    if( this.profile$ == void 0 ) return;
 
     (this.profile$ as Observable<Profile>).subscribe(profile => {
       const jobForCompany = this.store.selectSnapshot(DataQueries.getMany('JobForCompany', (profile.company as Company).jobs))
