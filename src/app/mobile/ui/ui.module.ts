@@ -8,6 +8,8 @@ import { FactureUI } from './factureUI/facture.ui';
 import { RouterModule } from '@angular/router';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { ReactiveFormsModule } from '@angular/forms';
+import { MobileModule } from '../mobile.module';
+import { RatingComponent } from './rating/rating.component';
 
 
 @NgModule({
@@ -16,13 +18,14 @@ import { ReactiveFormsModule } from '@angular/forms';
     UIAbonnement,
     HeaderComponent,
     UIAnnonceResume,
-    FactureUI
+    FactureUI,
+    RatingComponent
   ],
   imports: [
     CommonModule,
     RouterModule,
     SharedModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ],
   exports: [
     UICreditCard,

@@ -43,10 +43,14 @@
     <div class="full-width center-text text-emphasis" header>Mes notes</div>
     <div class="hosted-page flex column center-cross space-children-margin" content>
 
-      <!-- <profile-resume [company]="user.profile!.company" class="flex column center-cross space-children-margin"></profile-resume> -->
+      <profile-resume [canChangePicture]="false"
+      [showMore]="true"
+      [profile]="profile"
+      [ratingDetails]="true"
+      class="flex column center-cross space-children-margin"></profile-resume>
 
-      <span class="full-width section " style="text-align: center;font-size: 12px; margin-bottom: 10px;">Demander une
-        recommandation</span>
+      <button class="recommendation-button button active"><img src="assets/mail-outline.svg" alt="recommandation"> Demander une
+        recommandation</button>
       <section class="full-width section modify-profile">
         <div class="company-rate">
           <span class="company-name">SARL</span>

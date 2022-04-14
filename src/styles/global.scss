@@ -129,7 +129,8 @@ button {
     }
 
     &.active {
-      background: #134C6C;
+      // background: #134C6C;
+      background: $primary;
     }
   }
 }
@@ -318,6 +319,79 @@ input, textarea {
     margin-left: 20px;
     position: relative;
  }
+}
+
+// Cloture
+
+.cloture-swipeup{
+  display: flex;
+  flex-direction: column;
+  row-gap: $spacer-200;
+
+  h6 {
+    color: $primary;
+    font-size: 0.875rem;
+    display: flex;
+    align-items: center;
+    column-gap: $spacer-100;
+  }
+}
+
+.star-container {
+  display: flex;
+  column-gap: $spacer-50;  
+
+  > img {
+    left: unset;
+  }
+}
+
+.form-input {
+  display: flex;
+  flex-direction: column;
+  row-gap: $spacer-50;
+}
+
+// rating + profile component
+
+.recommendation-button {
+  display: flex;
+  align-items: center;
+  font-size: 0.875rem;
+  padding: 0.75rem 1.5rem;
+  img {
+    height: 1.5rem;
+    margin-right: 1rem
+  }
+}
+
+.company-rate {
+  font-family: "Roboto";
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+  padding: 10px;
+  margin: 10px 0;
+}
+.company-name {
+  font-weight: 800;
+  color: $dark;
+}
+
+.criterion {
+  margin: 10px;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+  padding: 10px;
+  .criterion-stars {
+    font-size: 14px;
+    font-weight: 400;
+    width: calc(100% - 5rem);
+  }
+  .stars {
+    transform: scale(0.7);
+  }
+  > span {
+    color: $light;
+    white-space: normal;
+  }
 }
 
 

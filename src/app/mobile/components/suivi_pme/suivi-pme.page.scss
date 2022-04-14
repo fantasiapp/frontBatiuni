@@ -74,44 +74,13 @@ details summary::-webkit-details-marker {
   filter: invert(74%) sepia(69%) saturate(5734%) hue-rotate(85deg) brightness(116%) contrast(131%);
 }
 
-swipeup {
-  
-}
-
-.cloture-swipeup{
-  display: flex;
-  flex-direction: column;
-  row-gap: $spacer-200;
-
-  h6 {
-    color: $primary;
-    font-size: 0.875rem;
-    display: flex;
-    align-items: center;
-    column-gap: $spacer-100;
-  }
-}
-
-.form-input {
-  display: flex;
-  flex-direction: column;
-  row-gap: $spacer-50;
-}
-
 .form-input > textarea {
   resize: vertical;
   width: 100%;
   font-size: 1rem;
 }
 
-.star-container {
-  display: flex;
-  column-gap: $spacer-50;  
 
-  > img {
-    left: unset;
-  }
-}
 
 .submitActivated {
   background-color: #0D6191;
