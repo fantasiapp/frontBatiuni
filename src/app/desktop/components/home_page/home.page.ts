@@ -11,8 +11,8 @@ import { PopupService } from "src/app/shared/components/popup/popup.component";
 import { ApplyPost, DeletePost, SwitchPostType } from "src/models/new/user/user.actions";
 import { DataQueries, DataState, QueryAll, Snapshot, SnapshotArray } from 'src/models/new/data.state'
 import { Candidate, Company, File, Job, Post, PostDetail, Profile } from "src/models/new/data.interfaces";
-import * as UserActions from "src/models/new/user/user.actions";
-import { OfferComponent } from "src/app/shared/components/offer/offer.compnent";
+// import * as UserActions from "src/models/new/user/user.actions";
+// import { OfferComponent } from "src/app/shared/components/offer/offer.compnent";
 import { ApplyForm } from "src/app/mobile/ui/annonce-resume/annonce-resume.ui";
 
 type PostMenu = { open: boolean; post: Post | null; };

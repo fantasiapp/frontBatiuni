@@ -46,6 +46,15 @@ export class SuiviComments {
 
   get manyFiles() { return this.supervision.files.length > 1; }
 
+
+  modifySupervision() {
+    console.log("modifySupervision")
+  }
+
+  deleteSupervision() {
+    console.log("deleteSupervision")
+  }
+
   slide(k: number) {
     //download fields on the go
   }
