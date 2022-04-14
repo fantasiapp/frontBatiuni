@@ -34,7 +34,6 @@ export class ProfileComponent extends Destroy$ {
   //move to state
   openMenu: boolean = false;
   openModifyMenu: boolean = false;
-  openRatings: boolean = false;
   modifyPassword: boolean = false;
   openModifyPicture: boolean = false;
   _openNotifications : boolean = false;

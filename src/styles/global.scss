@@ -352,50 +352,6 @@ input, textarea {
   row-gap: $spacer-50;
 }
 
-// rating + profile component
-
-.recommendation-button {
-  display: flex;
-  align-items: center;
-  font-size: 0.875rem;
-  padding: 0.75rem 1.5rem;
-  img {
-    height: 1.5rem;
-    margin-right: 1rem
-  }
-}
-
-.company-rate {
-  font-family: "Roboto";
-  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
-  padding: 10px;
-  margin: 10px 0;
-}
-.company-name {
-  font-weight: 800;
-  color: $dark;
-}
-
-.criterion {
-  margin: 10px;
-  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
-  padding: 10px;
-  .criterion-stars {
-    font-size: 14px;
-    font-weight: 400;
-    width: calc(100% - 5rem);
-  }
-  .stars {
-    transform: scale(0.7);
-  }
-  > span {
-    color: $light;
-    white-space: normal;
-  }
-}
-
-
-
 //----------------------------------------------------
 //clear fixes
 input[type="date"]::-webkit-inner-spin-button,

@@ -7,7 +7,7 @@
     <img src="assets/menu.svg" (click)="openMenu = true" alt="menu_button"/>
   </header>
 
-  <extended-profile class="page-content" [profile]="profile" (ratingsClicked)="openRatings = true">
+  <extended-profile class="page-content" [profile]="profile">
   </extended-profile>
 
   <swipeup [(open)]="openMenu">
@@ -39,99 +39,6 @@
     </div>
   </slidemenu>
 
-  <slidemenu [(open)]="openRatings">
-    <div class="full-width center-text text-emphasis" header>Mes notes</div>
-    <div class="hosted-page flex column center-cross space-children-margin" content>
-
-      <profile-resume [canChangePicture]="false"
-      [showMore]="true"
-      [profile]="profile"
-      [ratingDetails]="true"
-      class="flex column center-cross space-children-margin"></profile-resume>
-
-      <button class="recommendation-button button active"><img src="assets/mail-outline.svg" alt="recommandation"> Demander une
-        recommandation</button>
-      <section class="full-width section modify-profile">
-        <div class="company-rate">
-          <span class="company-name">SARL</span>
-          <div class="criterion ">
-            <div class="flex center-cross">
-              <span class="criterion-stars">CRITERE 1
-              </span>
-              <stars class="stars" value="3.9" disabled></stars>
-            </div>
-
-            <span>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-              dolore Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
-              et dolore</span>
-
-          </div>
-          <div class="criterion ">
-            <div class="flex center-cross">
-              <span class="criterion-stars">CRITERE 1
-              </span>
-              <stars class="stars" value="3.9" disabled></stars>
-            </div>
-
-            <span>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-              dolore Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
-              et dolore</span>
-
-          </div>
-          <div class="criterion ">
-            <div class="flex center-cross">
-              <span class="criterion-stars">CRITERE 1
-              </span>
-              <stars class="stars" value="3.9" disabled></stars>
-            </div>
-
-            <span>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-              dolore Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
-              et dolore</span>
-          </div>
-        </div>
-        <div class="company-rate">
-          <span class="company-name">SARL</span>
-          <div class="criterion ">
-            <div class="flex center-cross">
-              <span class="criterion-stars">CRITERE 1
-              </span>
-              <stars class="stars" value="3.9" disabled></stars>
-            </div>
-
-            <span>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-              dolore Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
-              et dolore</span>
-
-          </div>
-          <div class="criterion ">
-            <div class="flex center-cross">
-              <span class="criterion-stars">CRITERE 1
-              </span>
-              <stars class="stars" value="3.9" disabled></stars>
-            </div>
-
-            <span>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-              dolore Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
-              et dolore</span>
-
-          </div>
-          <div class="criterion ">
-            <div class="flex center-cross">
-              <span class="criterion-stars">CRITERE 1
-              </span>
-              <stars class="stars" value="3.9" disabled></stars>
-            </div>
-
-            <span>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-              dolore Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
-              et dolore</span>
-          </div>
-        </div>
-      </section>
-    </div>
-  </slidemenu>
-  
   <slidemenu [(open)]="openNotifications">
     <div class="full-width center-text text-emphasis" header>Notifications</div>
     <notifications class="hosted-page flex column center-cross space-children-margin" [notifications]="notifications" content></notifications>
