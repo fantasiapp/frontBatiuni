@@ -7,7 +7,7 @@
       <!-- <span class="post-date">Le {{supervision.date}}</span> -->
       <div class="comment-option-container">
         <img (click)="toogleCommentOption()" src="assets/ellipsis-vertical-outline.svg" alt="comment-option">
-        <div *ngIf="commentOption" class="comment-option-open" >
+        <div [ngClass]="{'open' : commentOption}" class="comment-option-open" >
           <div (click)="toogleCommentOption()"></div>
           <button (click)="modifySupervision()">Modifier</button>
           <button (click)="deleteSupervision()">Supprimer</button>

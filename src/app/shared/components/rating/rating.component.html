@@ -9,13 +9,13 @@
 
     <profile-image [profile]="profile"></profile-image>
     <span class="company">{{ profile.company!.name }}</span>
-    <stars (click)='openRatings = true' class="stars" value="{{ profile.company!.starsPME }}" disabled></stars>
+    <stars (click)='openRatings = true' class="stars" value="{{ view == 'ST' ? profile.company!.starsST : profile.company!.starsPME  }}" disabled></stars>
     <button *ngIf="profileRecommandation" class="recommendation-button button active"><img src="assets/mail-outline.svg" alt="recommandation">
       Demander une recommandation
     </button>
     <section class="full-width section modify-profile">
       <div *ngFor="let mission of missions" class="company-rate">
-        <span class="company-name">{{ view == 'ST' ?  mission.contactName : mission.subContractorContact }}</span>
+        <span class="company-name">Note par {{ view == 'ST' ?  mission.contactName : mission.subContractorContact }} de {{ view == 'ST' ? '' : '' }}</span>
         <div class="criterion">
           <div class="flex center-cross">
             <span class="criterion-stars">Qualité du travail fourni

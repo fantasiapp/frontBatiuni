@@ -27,6 +27,7 @@ export class RatingComponent extends UIOpenMenu {
   profileRecommandation: boolean = false
 
   missions: Mission[] | undefined;
+  company: Company | undefined;
   
   constructor(private info: InfoService, private store: Store) {
     super()
@@ -35,12 +36,26 @@ export class RatingComponent extends UIOpenMenu {
   view: 'ST' | 'PME' = 'ST';
   ngOnInit() {
     this.view = this.store.selectSnapshot(DataState.view)
+    console.log('profile', this.profile);
   }
 
   ngOnChanges(){
-    let company = this.profile.company    
-    let missions = this.store.selectSnapshot(DataQueries.getMany('Mission', company.missions))
-    this.missions = missions;
+    
+    this.company = this.profile.company 
+    let missionRated = []
+    if( this.view == 'ST'){
+      let missions = this.store.selectSnapshot(DataQueries.getAll('Mission'))
+      for (const mission of missions) {
+        (mission.subContractor == this.company.id && mission.isClosed) && missionRated.push(mission)
+      }
+    } else {
+      let missions = this.store.selectSnapshot(DataQueries.getMany('Mission', this.company.missions))
+      for (const mission of missions) {
+        console.log('missions', mission);
+        mission.isClosed && missionRated.push(mission)
+      }
+    }
+    this.missions = missionRated
   }
   
   set open(value: boolean) {   
