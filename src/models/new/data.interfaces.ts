@@ -146,6 +146,7 @@ export interface Post {
 export interface Candidate {
   id: Ref<Candidate>;
   company: Ref<Company>;
+  contact:string
   amount: number;
   devis: string;
   isChoosen : boolean;
