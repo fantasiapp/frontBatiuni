@@ -417,7 +417,7 @@ export class DataState {
     if ( download.notify )
       console.log(`Téléchargement du fichier ${file[nameIndex] || ''}...`)
       this.inZone(() => {
-        this.info.show("info", `Téléchargement du fichier ${file[nameIndex] || ''}...`)
+        this.info.show("info", `Téléchargement du fichier ${file[nameIndex] || ''}...`, 2000)
       })
     
     return req.pipe(
