@@ -11,7 +11,7 @@ import { SlidemenuService } from "src/app/shared/components/slidemenu/slidemenu.
 import { SwipeupService } from "src/app/shared/components/swipeup/swipeup.component";
 import { ApplyPost, DeletePost, DuplicatePost, HandleApplication, MarkViewed, SetFavorite, SwitchPostType } from "src/models/new/user/user.actions";
 import { DataQueries, DataState, QueryAll } from 'src/models/new/data.state';
-import { Profile, Post, Mission, PostMenu, Candidate } from "src/models/new/data.interfaces";
+import { Profile, Post, Mission, PostMenu, Candidate, User } from "src/models/new/data.interfaces";
 import { FilterService } from "src/app/shared/services/filter.service";
 import { ApplyForm } from "../../ui/annonce-resume/annonce-resume.ui";
 
@@ -22,6 +22,9 @@ import { ApplyForm } from "../../ui/annonce-resume/annonce-resume.ui";
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HomeComponent extends Destroy$ {
+
+  profileSubContractor:Profile | null = null
+  amountSubContractor:String | null = null
   
   @Select(DataQueries.currentProfile)
   profile$!: Observable<Profile>;
@@ -263,13 +266,22 @@ export class HomeComponent extends Destroy$ {
     })
   }
 
-  showCompany(company: number, application: number) {
+  showCompany(companyId: number, application: number) {
     //postMenu is still open
+    const candidate = this.store.selectSnapshot(DataQueries.getById('Candidate', application))
+    const company = this.store.selectSnapshot(DataQueries.getById('Company', companyId))
+    console.log("candidate", candidate)
+    const user =  {
+      firstName:candidate!.contact,
+      lastName:'',
+    } as unknown
+    this.profileSubContractor={user:user as User, company:company!} as Profile
+    this.amountSubContractor = candidate?.amount ? candidate!.amount.toString() + " €"  : null
     this.slideService.show('Candidature', {
       type: 'template',
       template: this.candidature,
       context: {
-        $implicit: company,
+        $implicit: companyId,
         application,
         post: this.postMenu.post
       }
