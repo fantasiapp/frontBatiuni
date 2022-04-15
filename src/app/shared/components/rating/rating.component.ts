@@ -6,6 +6,19 @@ import { InfoService } from 'src/app/shared/components/info/info.component';
 import { Company, Mission, Profile } from 'src/models/new/data.interfaces';
 import { DataQueries, DataState } from 'src/models/new/data.state';
 
+interface ratingInfo {
+  contactName: string;
+  subContractorName: string;
+  companyContractor: string;
+  subContractorContact: string;
+  quality: number;
+  qualityComment: string;
+  security: number;
+  securityComment: string;
+  organisation: number;
+  organisationComment: string;
+}
+
 @Component({
   selector: 'rating',
   templateUrl: './rating.component.html',
@@ -27,6 +40,7 @@ export class RatingComponent extends UIOpenMenu {
   profileRecommandation: boolean = false
 
   missions: Mission[] | undefined;
+  ratingInfos?: ratingInfo[];
   company: Company | undefined;
   
   constructor(private info: InfoService, private store: Store) {
@@ -42,20 +56,54 @@ export class RatingComponent extends UIOpenMenu {
   ngOnChanges(){
     
     this.company = this.profile.company 
-    let missionRated = []
+    this.setRatingInfos(this.company)
+  }
+
+  setRatingInfos(company: Company){
+    this.ratingInfos = []
     if( this.view == 'ST'){
       let missions = this.store.selectSnapshot(DataQueries.getAll('Mission'))
-      for (const mission of missions) {
-        (mission.subContractor == this.company.id && mission.isClosed) && missionRated.push(mission)
+      for ( let i = 0; i < missions.length; i++ ) {
+        const mission = missions[i];
+        console.log(missions);
+        if (mission.subContractor == company.id && mission.isClosed) {
+          let companyContractor = this.store.selectSnapshot(DataQueries.getById('Company', mission.company))
+          let ratingInfo: ratingInfo = {
+            contactName: mission.contactName,
+            subContractorName: '',
+            companyContractor: companyContractor!.name,
+            subContractorContact: '',
+            quality: mission.quality,
+            qualityComment: mission.qualityComment,
+            security: mission.security,
+            securityComment: mission.securityComment,
+            organisation: mission.organisation,
+            organisationComment: mission.organisationComment,
+          }
+          this.ratingInfos.push(ratingInfo);
+        }
       }
     } else {
-      let missions = this.store.selectSnapshot(DataQueries.getMany('Mission', this.company.missions))
+      let missions = this.store.selectSnapshot(DataQueries.getMany('Mission', company.missions))
       for (const mission of missions) {
         console.log('missions', mission);
-        mission.isClosed && missionRated.push(mission)
+        if (mission.isClosed) {
+          let ratingInfo: ratingInfo = {
+            contactName: '',
+            subContractorName: mission.subContractorContact,
+            companyContractor: '',
+            subContractorContact: mission.subContractorName,
+            quality: mission.quality,
+            qualityComment: mission.qualityComment,
+            security: mission.security,
+            securityComment: mission.securityComment,
+            organisation: mission.organisation,
+            organisationComment: mission.organisationComment,
+          }
+          this.ratingInfos.push(ratingInfo)
+        }
       }
     }
-    this.missions = missionRated
   }
   
   set open(value: boolean) {   
