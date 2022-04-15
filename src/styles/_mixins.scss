@@ -193,7 +193,7 @@
 %content-with-header-and-mid-footer {
   @extend %overflow-y;
   @include with-set-safe-area(margin, top, $sticky-header-height);
-  height: calc(100vh - #{$sticky-header-height} + #{$mid-sticky-footer-height} - env(safe-area-inset-bottom));
+  height: calc(100vh - #{$sticky-header-height} - #{$mid-sticky-footer-height} - env(safe-area-inset-bottom));
 }
 
 %content-with-paging-and-big-footer {
@@ -205,7 +205,7 @@
 %content-with-header-and-big-footer {
   @extend %overflow-y;
   @include with-set-safe-area(margin, top, $sticky-header-height);
-  height: calc(100vh - #{$sticky-header-height} + #{$big-sticky-footer-height} - env(safe-area-inset-bottom));
+  height: calc(100vh - #{$sticky-header-height} - #{$big-sticky-footer-height} - env(safe-area-inset-bottom));
 }
 
 %paging-only-content {
