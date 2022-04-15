@@ -96,10 +96,10 @@ export class RatingComponent extends UIOpenMenu {
             subContractorContact: mission.subContractorName,
             qualityVibe: mission.vibeST,
             qualityVibeComment: mission.vibeCommentST,
-            security: mission.security,
-            securityComment: mission.securityComment,
-            organisation: mission.organisation,
-            organisationComment: mission.organisationComment,
+            security: mission.securityST,
+            securityComment: mission.securityCommentST,
+            organisation: mission.organisationST,
+            organisationComment: mission.organisationCommentST,
           }
           this.ratingInfos.push(ratingInfo)
         }

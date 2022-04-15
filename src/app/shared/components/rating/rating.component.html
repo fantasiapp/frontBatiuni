@@ -18,7 +18,7 @@
         <span class="company-name">Note par {{ view == 'ST' ?  ratingInfo.contactName : ratingInfo.subContractorName }} de {{ view == 'ST' ? ratingInfo.companyContractor : ratingInfo.subContractorContact }}</span>
         <div class="criterion">
           <div class="flex center-cross">
-            <span class="criterion-stars">Qualité du travail fourni
+            <span class="criterion-stars">{{ view == 'ST' ? 'Qualité du travail fourni' : 'Ambiance sur le chantier' }}
             </span>
             <stars class="stars" [value]="ratingInfo.qualityVibe" disabled></stars>
           </div>
@@ -37,7 +37,7 @@
         </div>
         <div class="criterion">
           <div class="flex center-cross">
-            <span class="criterion-stars">Organisation
+            <span class="criterion-stars">{{ view == 'ST' ? 'Organisation' : 'Organisation PME' }}
             </span>
             <stars class="stars" [value]="ratingInfo.organisation" disabled></stars>
           </div>

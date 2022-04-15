@@ -271,12 +271,9 @@ export class HomeComponent extends Destroy$ {
     const candidate = this.store.selectSnapshot(DataQueries.getById('Candidate', application))
     const company = this.store.selectSnapshot(DataQueries.getById('Company', companyId))
     console.log("candidate", candidate)
-    const user =  {
-      firstName:candidate!.contact,
-      lastName:'',
-    } as unknown
+    const user =  {firstName:candidate!.contact, lastName:''} as unknown
     this.profileSubContractor={user:user as User, company:company!} as Profile
-    this.amountSubContractor = candidate?.amount ? candidate!.amount.toString() + " €"  : null
+    this.amountSubContractor = candidate?.amount ? "Contre-Offre: " +candidate!.amount.toString() + " €"  : null
     this.slideService.show('Candidature', {
       type: 'template',
       template: this.candidature,
