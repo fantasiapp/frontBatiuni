@@ -127,6 +127,15 @@ export class SuiviChantierDate extends Destroy${
     }
   }
 
+  detectKey($event: KeyboardEvent, task: Task| null){
+    console.log($event)
+    if ($event.key === "Enter") {
+      console.log("enter")
+      this.mainComment(task);
+      (document.getElementById("input_general")! as HTMLInputElement).value! = "";
+    }
+  }
+
   mainComment(task:Task | null) {
     let idInput = task ? "input_"+task!.id : "input_general"
     let input = document.getElementById(idInput) as HTMLInputElement;
