@@ -70,15 +70,11 @@ export class SuiviChantierDate extends Destroy${
       resultType: CameraResultType.Base64,
       source: CameraSource.Photos,
     });
-    try {
     this.store.dispatch(new UploadImageSupervision(photo, this.mission!.id, this.currentTaskId)).pipe(take(1)).subscribe(() => {
       this.updatePageOnlyDate();
-    });
-    } catch (error) {
-
-    } finally {
       this.swipeMenuImage = false;
-    }
+    });
+      
   }
 
   addDateToPost() {
