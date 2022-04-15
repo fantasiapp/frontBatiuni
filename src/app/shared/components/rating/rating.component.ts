@@ -50,13 +50,15 @@ export class RatingComponent extends UIOpenMenu {
   view: 'ST' | 'PME' = 'ST';
   ngOnInit() {
     this.view = this.store.selectSnapshot(DataState.view)
-    console.log('profile', this.profile);
   }
 
   ngOnChanges(){
     
-    this.company = this.profile.company 
-    this.setRatingInfos(this.company)
+    // permet de limiter l'appel de 
+    if (this.company != this.profile.company ) {
+      this.company = this.profile.company
+      this.setRatingInfos(this.company)
+    }
   }
 
   setRatingInfos(company: Company){
@@ -65,7 +67,6 @@ export class RatingComponent extends UIOpenMenu {
       let missions = this.store.selectSnapshot(DataQueries.getAll('Mission'))
       for ( let i = 0; i < missions.length; i++ ) {
         const mission = missions[i];
-        console.log(missions);
         if (mission.subContractor == company.id && mission.isClosed) {
           let companyContractor = this.store.selectSnapshot(DataQueries.getById('Company', mission.company))
           let ratingInfo: ratingInfo = {
