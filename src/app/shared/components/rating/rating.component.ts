@@ -11,8 +11,8 @@ interface ratingInfo {
   subContractorName: string;
   companyContractor: string;
   subContractorContact: string;
-  quality: number;
-  qualityComment: string;
+  qualityVibe: number;
+  qualityVibeComment: string;
   security: number;
   securityComment: string;
   organisation: number;
@@ -55,10 +55,10 @@ export class RatingComponent extends UIOpenMenu {
   ngOnChanges(){
     
     // permet de limiter l'appel de 
-    if (this.company != this.profile.company ) {
+    // if (this.company != this.profile.company ) {
       this.company = this.profile.company
       this.setRatingInfos(this.company)
-    }
+    // }
   }
 
   setRatingInfos(company: Company){
@@ -74,8 +74,8 @@ export class RatingComponent extends UIOpenMenu {
             subContractorName: '',
             companyContractor: companyContractor!.name,
             subContractorContact: '',
-            quality: mission.quality,
-            qualityComment: mission.qualityComment,
+            qualityVibe: mission.quality,
+            qualityVibeComment: mission.qualityComment,
             security: mission.security,
             securityComment: mission.securityComment,
             organisation: mission.organisation,
@@ -94,8 +94,8 @@ export class RatingComponent extends UIOpenMenu {
             subContractorName: mission.subContractorContact,
             companyContractor: '',
             subContractorContact: mission.subContractorName,
-            quality: mission.quality,
-            qualityComment: mission.qualityComment,
+            qualityVibe: mission.vibeST,
+            qualityVibeComment: mission.vibeCommentST,
             security: mission.security,
             securityComment: mission.securityComment,
             organisation: mission.organisation,
