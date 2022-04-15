@@ -67,7 +67,7 @@ header {
 .page-content {
   @extend %overflow-y;
   @include with-set-safe-area(margin, top, $sticky-header-height);
-  height: calc(100vh - #{$sticky-header-height} + #{$navigation-height} - env(safe-area-inset-bottom));
+  height: calc(100vh - #{$sticky-header-height} - #{$navigation-height} - env(safe-area-inset-bottom));
 }
 
 .page-content-without-nav {
