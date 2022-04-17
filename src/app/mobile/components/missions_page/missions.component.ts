@@ -74,10 +74,10 @@ export class MissionsComponent extends Destroy$ {
       }
     });
     if (this.missionToClose) {
-      // console.log("ngOnInit", this.missionToClose)
       this._openCloseMission = this.missionToClose.securityST == 0
       const company = this.store.selectSnapshot(DataQueries.getById('Company', this.missionToClose.company))
       this.missionCompany = company!.name
+      this._openCloseMission = true
     } else {
       this._openCloseMission = false
     }
@@ -106,7 +106,8 @@ export class MissionsComponent extends Destroy$ {
     else {return "submitDisable"}
   }
 
-  get openCloseMission() { return this._openCloseMission }
+  get openCloseMission() {
+    return this._openCloseMission }
   set openCloseMission(b:boolean) {
     this._openCloseMission = b
   }
@@ -119,7 +120,6 @@ export class MissionsComponent extends Destroy$ {
         this.doClose = true
         this.openCloseMission = false
         this.cd.markForCheck()
-        console.log("submitStarST", this.doClose, this.openCloseMission)
       });
   }
 

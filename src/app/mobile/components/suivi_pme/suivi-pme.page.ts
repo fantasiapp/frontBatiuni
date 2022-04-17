@@ -189,6 +189,7 @@ export class SuiviPME {
 
   closeMission() {
     if (this.mission!.subContractor && !this.mission!.isClosed) {
+      console.log("closeMission")
       const company = this.store.selectSnapshot(DataQueries.getById('Company', this.mission!.subContractor))
       this.popup.openCloseMission(company!, this)
     }
@@ -227,7 +228,7 @@ export class SuiviPME {
       let content = document.getElementById("starTextSecurity") as HTMLTextAreaElement;
       this.mission!.securityComment = content!.value
     } else if (nature == "organisation") {
-      let content = document.getElementById("starTextSecurity") as HTMLTextAreaElement;
+      let content = document.getElementById("starTextOrganisation") as HTMLTextAreaElement;
       this.mission!.organisationComment = content!.value
     }
   }

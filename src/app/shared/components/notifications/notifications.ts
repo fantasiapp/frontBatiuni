@@ -39,10 +39,12 @@ export class Notifications {
     let today = new Date(Date.now())
     this.month = this.notification.filter(notif => moment(moment(today).format('L')).isAfter(moment(notif.date).format('L')))
     this.today = this.notification.filter(notif => moment(moment(today).format('L')).isSame(moment(notif.date).format('L')))
+    console.log("today", this.today)
 
     for (let i = 0; i < this.today.length; i++) {
-        this.timer.push(moment(moment(this.today[i].date)).startOf('hour').fromNow());
+        this.timer.unshift(moment(moment(this.today[i].date)).startOf('minute').fromNow());
     }
+    console.log("timer", this.timer)
   
   }
 }

@@ -20,7 +20,8 @@
   <mission-filter-form view></mission-filter-form>
 </swipeup>
 
-<swipeup [(open)]="openCloseMission" [doClose]="doClose">
+<!-- <swipeup [(open)]="openCloseMission" [doClose]="doClose"> -->
+  <swipeup [(open)]="openCloseMission" [doClose]="doClose">
   <div *ngIf="missionToClose" class="cloture-swipeup">
     <h3>Noter l'entreprise</h3>
     <h6 >{{ missionCompany }}, contact: {{ missionToClose.contactName }}</h6>
