@@ -23,7 +23,10 @@ export class ProfileResume {
   profile!: Profile;  
 
   @Select(DataState.view)
-  view$!: Observable<string>;
+  view$!: Observable<'ST' | 'PME'>;
+
+  @Input()
+  showView!: 'ST' | 'PME';
 
   @Input()
   switch: boolean = true;

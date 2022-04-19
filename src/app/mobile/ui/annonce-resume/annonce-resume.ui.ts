@@ -56,7 +56,7 @@ export type ApplyForm = {
       <span>{{collapsed ? 'Lire la suite' : 'Lire moins'}}</span>  <img src="assets/arrowdown.svg" [style.transform]="'rotate(' + (180 * +!collapsed) + 'deg)'"/>
     </div>
 
-    <rating [profile]="{company: company!, user: user}" [(open)]="openRatings" [ngClass]="{'open' : openRatings}"></rating>
+    <rating [view]="view" [profile]="{company: company!, user: user}" [(open)]="openRatings" [ngClass]="{'open' : openRatings}"></rating>
 
     <ng-container *ngIf="application && view == 'ST'">
       <hr class="dashed"/>
