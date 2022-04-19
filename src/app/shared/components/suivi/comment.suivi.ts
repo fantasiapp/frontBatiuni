@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChild, Input, OnChanges, SimpleChanges, ViewChild } from "@angular/core";
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChild, Input, OnChanges, SimpleChanges, ViewChild, ViewChildren } from "@angular/core";
 import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser";
 import { Store } from "@ngxs/store";
 import { map, take } from "rxjs/operators";
@@ -13,12 +13,12 @@ import { ImageGenerator } from "../../services/image-generator.service";
   selector: 'comment-suivi',
   templateUrl: './comment.suivi.html',
   styleUrls: ['./comment.suivi.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SuiviComments implements OnChanges {
+export class SuiviComments implements OnChanges, AfterViewInit {
   // We can get the name and the profile image from the state
 
-  @ViewChild(SlideTemplate, {read: SlideTemplate, static: true})
+  @ViewChild(SlideTemplate, {read: SlideTemplate, static: false})
   slides!: SlideTemplate<{src: string}>;
 
   @ContentChild(SuiviComments, {read: SuiviComments})
@@ -48,26 +48,54 @@ export class SuiviComments implements OnChanges {
     this._supervision = supervision;
   }
 
-  get manyFiles() { return this.supervision.files.length > 1; }
+  get manyFiles() { if (this.supervision.files.length > 1){console.log('mayny files')}; return this.supervision.files.length > 1; }
 
   slide(k: number) {
     //download fields on the go
+    console.log("slide", k);
   }
 
+  getImages(){
+    var images: SafeResourceUrl[] = [];
+
+    for(let file of this.supervision.files){
+      this.downloader.downloadFile(file).subscribe(image => {
+        images.push(this.downloader.toSecureBase64(image));
+      })
+    }
+    return images
+  }
 
   ngOnChanges(changes: SimpleChanges) {
     console.log("Change:", changes);
-    if ( changes['supervision'] ) {
-      console.log("change supervision", this.supervision.files);
-      if ( this.supervision.files[0]){
-        this.downloader.downloadFile(this.supervision.files[0]).subscribe(image => {
-          this.src = this.downloader.toSecureBase64(image);
-          this.cd.markForCheck();
-          console.log("markForCheck src:", this.src);
-        })
-      }
-    }
+
+    // if ( changes['supervision'] ) {
+    //   console.log("change supervision", this.supervision.files);
+    //   if ( this.supervision.files[0]){
+    //     this.downloader.downloadFile(this.supervision.files[0]).subscribe(image => {
+    //       this.src = this.downloader.toSecureBase64(image);
+    //       this.cd.markForCheck();
+    //       console.log("markForCheck src:", this.src);
+    //     })
+    //   }
+    // }
     console.log("change src:", this.src);
+    
+  }
+
+  ngAfterViewInit(): void {
+    console.log('ngAfterViewInit');
+    console.log(this.slides);
+    for(let file in this.supervision.files ){
+      this.downloader.downloadFile(this.supervision.files[file]).subscribe(image => {
+        this.slides.contexts.push(this.downloader.toSecureBase64(image))
+      })
+    }
+    console.log(this.slides);
+    // this.slides.changes.subscribe((slides: => SlideTemplate<{src: string}>{
+
+
+    //   }))
   }
 
 }
