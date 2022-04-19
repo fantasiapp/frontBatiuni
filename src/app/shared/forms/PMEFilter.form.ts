@@ -6,7 +6,7 @@ import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
     <ng-container [ngSwitch]="activeView">
       <form class="form-control full-width" *ngSwitchCase="0">
         <div class="form-input">
-          <label style="margin-bottom:1rem;">Date de mission</label>
+          <label class="form-title">Date de mission</label>
           <input type="date" class="form-element"/>
           <img src="assets/calendar.png"/>
         </div>
@@ -16,13 +16,13 @@ import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
           <input type="text" class="form-element"/>
         </div>
 
-        <div class="form-input" style="margin-bottom:3rem;">
+        <div class="form-input form-spacer">
           <label>Métier</label>
           <options></options>
         </div>
 
-        <div class="form-input" style="margin-bottom:3rem;">
-          <label style="margin-bottom:1rem;">Type</label>
+        <div class="form-input form-spacer">
+          <label class="form-title">Type</label>
           <div class="flex row radio-container">
             <div class="radio-item">
               <radiobox class="grow" name="job-type"></radiobox>
@@ -35,13 +35,13 @@ import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
           </div>
         </div>
 
-        <div class="form-input space-children-margin">
-          <label style="margin-bottom:2rem;">Réorganiser la liste selon</label>
+        <div class="form-input">
+          <label class="form-title">Réorganiser la liste selon</label>
           <div class="switch-container flex center-cross">
-            <span class="criteria">Les brouillons les plus anciens</span> <switch class="default"></switch>
+            <span class="">Les brouillons les plus anciens</span> <switch class="default"></switch>
           </div>
           <div class="switch-container flex center-cross">
-            <span class="criteria">Les brouillons les plus complets</span> <switch class="default"></switch>
+            <span class="">Les brouillons les plus complets</span> <switch class="default"></switch>
           </div>
         </div>
       </form>
@@ -58,6 +58,10 @@ import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
 
     form {
       
+    }
+
+    .form-title {
+      margin-bottom: 0.5rem
     }
     
     switch::ng-deep .slider {
