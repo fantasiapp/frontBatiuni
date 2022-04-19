@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, ContentChild, Input, ViewChild } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChild, Input, ViewChild } from "@angular/core";
 import { DomSanitizer } from "@angular/platform-browser";
 import { Store } from "@ngxs/store";
 import { map, take } from "rxjs/operators";
@@ -16,27 +16,30 @@ import { DataQueries } from "src/models/new/data.state";
 })
 export class SuiviComments {
 
+  
   commentOption: boolean = false;
-
+  
   toogleCommentOption(){ this.commentOption = !this.commentOption }
   get showCommentOption(){
     return this.commentOption
   }
-
+  
   deleteComment(){
     console.log('Ce commentaire est supprimé');
   }
-
+  
   // We can get the name and the profile image from the state
-
+  
   @ViewChild(SlideTemplate, {read: SlideTemplate, static: true})
   slides!: SlideTemplate<{src: string}>;
-
+  
   @ContentChild(SuiviComments, {read: SuiviComments})
   parentComment: SuiviComments | null = null;
-
-  constructor(private downloader: FileDownloader, private sanitizer: DomSanitizer, private store: Store) {
-    
+  
+  constructor(private downloader: FileDownloader, private sanitizer: DomSanitizer, private store: Store, private cd: ChangeDetectorRef) {  
+  }
+  check(){
+    this.cd.markForCheck()
   }
 
   _supervision: Supervision = {

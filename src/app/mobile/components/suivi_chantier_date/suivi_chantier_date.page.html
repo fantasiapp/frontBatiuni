@@ -1,4 +1,4 @@
-<accordion [title]="'Le ' + date.value" id="accordeon_{{date.value}}">
+<accordion [title]="'Le ' + date.value" id="accordeon_{{date.value}}" #accordion>
   <div class="chantier-tache-container">
     <div id="taskMain_{{date.id}}" *ngIf="date.view=='PME' && !mission!.isClosed">
         <div class="chantier-tache">
@@ -33,7 +33,7 @@
       </div>
       <div *ngIf="!mission!.isClosed" class="partenerComment">
         <div  class="divComment">
-          <textarea id="input_general" class="inputComment" type="text" placeholder="Ajouter un commentaire" (focusout)="mainComment(null)"></textarea>
+          <textarea id="input_general" class="inputComment" type="text" placeholder="Ajouter un commentaire" (focusout)="mainComment(null)" (keyup.enter)="mainComment(null)"></textarea>
           <img (click)="swipeMenuImage == true" src="assets/camera.png"/>
         </div>
       </div>

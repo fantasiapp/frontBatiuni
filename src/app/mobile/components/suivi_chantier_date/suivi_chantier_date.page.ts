@@ -1,5 +1,5 @@
 import { Select, Store } from "@ngxs/store";
-import { ChangeDetectionStrategy, Component, ChangeDetectorRef, Input} from "@angular/core";
+import { ChangeDetectionStrategy, Component, ChangeDetectorRef, Input, ViewChild} from "@angular/core";
 import { Destroy$ } from "src/app/shared/common/classes";
 import { Mission, DateG, Task } from "src/models/new/data.interfaces";
 import { PopupService } from "src/app/shared/components/popup/popup.component";
@@ -8,6 +8,8 @@ import { take } from "rxjs/operators";
 import { ModifyDetailedPost, CreateSupervision, CreateDetailedPost, UploadImageSupervision } from "src/models/new/user/user.actions";
 import { SuiviPME } from "../suivi_pme/suivi-pme.page";
 import { Camera, CameraResultType, CameraSource } from "@capacitor/camera";
+import { i18nMetaToJSDoc } from "@angular/compiler/src/render3/view/i18n/meta";
+import { SuiviComments } from "src/app/shared/components/suivi/comment.suivi";
 
 @Component({
     selector: 'suivi-chantier_date',
@@ -33,6 +35,12 @@ export class SuiviChantierDate extends Destroy${
   _date: DateG = {id:0, value: "1970:01:01", tasks:[], selectedTasks:[], taskWithoutDouble:[], view:this.view, supervisions: []};
   get date() { return this._date; }
 
+  @ViewChild('comment-suivi') commentSuivi!:SuiviComments;
+
+  ngAfterViewInit(){
+    console.log('suivi', this.commentSuivi);
+  }
+  
   @Input()
   set date(date: DateG) {
     this._date = date;
@@ -93,7 +101,9 @@ export class SuiviChantierDate extends Destroy${
     let [date, mission] = this._reloadMission(this.date)
     this.date = date as DateG
     this.mission = mission as Mission
-    this.cd.markForCheck()
+    // this.cd.markForCheck()
+    // this.accodion.toggle()
+    this.commentSuivi.check()
     console.log("updatePageOnlyDate", this.date.supervisions, this.mission)
   }
 
@@ -122,13 +132,15 @@ export class SuiviChantierDate extends Destroy${
   mainComment(task:Task | null) {
     console.log("mainComment")
     let idInput = task ? "input_"+task!.id : "input_general"
+    console.log('idInput', idInput, task);
     let input = document.getElementById(idInput) as HTMLInputElement;
     this.currentTaskId = task ? task!.id : null
     if (input.value.trim() != '' && !this.mission!.isClosed) {
       let detailPostId: number | null = task ? task.id : null
       this.store.dispatch(new CreateSupervision(this.mission!.id, detailPostId, null, input.value, this.date.value)).pipe(take(1)).subscribe(() => {
+        input.value = ''
         this.updatePageOnlyDate()
-        console.log("end main Comment")
+        
       })
     }
   }

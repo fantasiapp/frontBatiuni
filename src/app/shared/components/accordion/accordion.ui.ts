@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, ElementRef, Input, ViewChild } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input, ViewChild } from "@angular/core";
 
 export type AccordionItem = {
   name: string;
@@ -12,6 +12,8 @@ export type AccordionItem = {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UIAccordion {
+  
+
   @Input()
   title: string = 'Accordion';
 
