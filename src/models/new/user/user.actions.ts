@@ -260,6 +260,12 @@ export class ApplyPost {
   }
 }
 
+export class CandidateViewed {
+  static readonly type = 'declare Candidate Viewed';
+  action = 'candidateViewed';
+  constructor(public candidateId: number) {}
+}
+
 export class GetGeneralData {
   static readonly type = '[Data] Get General data';
   action = 'getGeneralData';

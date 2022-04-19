@@ -67,7 +67,7 @@ export class RatingComponent extends UIOpenMenu {
       let missions = this.store.selectSnapshot(DataQueries.getAll('Mission'))
       for ( let i = 0; i < missions.length; i++ ) {
         const mission = missions[i];
-        if (mission.subContractor == company.id && mission.isClosed) {
+        if (mission.subContractor == company.id && mission.isClosed && mission.quality ) {
           let companyContractor = this.store.selectSnapshot(DataQueries.getById('Company', mission.company))
           let ratingInfo: ratingInfo = {
             contactName: mission.contactName,
@@ -87,8 +87,7 @@ export class RatingComponent extends UIOpenMenu {
     } else {
       let missions = this.store.selectSnapshot(DataQueries.getMany('Mission', company.missions))
       for (const mission of missions) {
-        console.log('missions', mission);
-        if (mission.isClosed) {
+        if (mission.isClosed && mission.vibeST) {
           let ratingInfo: ratingInfo = {
             contactName: '',
             subContractorName: mission.subContractorContact,

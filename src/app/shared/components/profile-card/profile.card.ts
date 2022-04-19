@@ -14,7 +14,7 @@ import { DataQueries, QueryProfile, Snapshot } from "src/models/new/data.state";
       <div class="flex column small-space-children-margin font-Poppins description">
         <span>{{ profile.company.name || "Nom de l'entreprise" }}</span>
         <span>Propose {{ employeeCount }} {{job.name || 'Employées'}}</span>
-        <span>Note générale ({{ profile.company.starsST }}/5 par {{ profile.company.missions.length }} personnes)</span>
+        <span>Note générale ({{ profile.company.starsST }}/5 par {{ numberOfQuotations }} personnes)</span>
         <!-- <span>{{ candidate!.amount }}</span> -->
         <stars class="stars" value="{{ profile.company.starsST }}" disabled></stars>
       </div>
@@ -65,16 +65,36 @@ export class ProfileCardComponent {
   employeeCount: number = 0;
   src: string = '';
 
+  numberOfQuotations:number = 0
+
+    // (this.profile$ as Observable<Profile>).subscribe(profile => {
+    //   const company = profile.company
+    //   let candidates = this.store.selectSnapshot(DataQueries.getAll('Candidate')).map((candidate)=>{return candidate})
+    //   console.log("numberOfQuotations", candidates)
+    //   test = 1
+    //   // this.store.selectSnapshot(DataQueries.getAll('Candidate').map((candidate)=>{
+
+    //   // })
+    // })
+  //   return 3
+  // }
+
   constructor(private store: Store) {}
   
   ngOnInit() {
     if( this.profile$ == void 0 ) return;
-
     (this.profile$ as Observable<Profile>).subscribe(profile => {
       const jobForCompany = this.store.selectSnapshot(DataQueries.getMany('JobForCompany', (profile.company as Company).jobs))
       this.employeeCount = jobForCompany.find(({job, number}) => {
         return job == (this.job as Job).id;
       })?.number || 0;
-    });
+      this.numberOfQuotations = 0
+      this.store.selectSnapshot(DataQueries.getAll('Mission')).forEach((mission)=>{
+        if (mission.isClosed && mission.subContractor == profile.company.id) this.numberOfQuotations++
+
+
+      })
+
+    })
   }
 };

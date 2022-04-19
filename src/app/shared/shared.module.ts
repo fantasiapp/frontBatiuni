@@ -24,7 +24,7 @@ import { EmailConfirmation } from "./validators/email_confirmation/emailconfirma
 import { RegistrationSuccess } from "./validators/registration_success/registrationsuccess.component";
 import { ModifyPasswordForm } from "./forms/ModifyPassword.form";
 import { ImageGenerator } from "./services/image-generator.service";
-import { OfferComponent } from "./components/offer/offer.compnent";
+import { OfferComponent } from "./components/offer/offer.component";
 import { NavigationMenu } from "./components/navigation/navigation.component";
 import { ModifyProfileForm } from "./forms/ModifyProfile.form";
 import { ProfileResume } from "./components/profile-resume/profile-resume.component";

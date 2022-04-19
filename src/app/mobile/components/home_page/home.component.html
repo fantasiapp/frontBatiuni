@@ -23,6 +23,7 @@
             <offer
               *ngFor="let onlinePost of userOnlinePosts"
               src="assets/enligne.svg"
+              [showCandidate]="view == 'PME'"
               [deletable]="false"
               [post]="onlinePost"
               (click)="openPost(onlinePost)"
@@ -51,6 +52,7 @@
               (click)="openPost(onlinePost)"
               ></offer>
           </ng-container>
+
           <mapbox-batiuni [posts]="allOnlinePosts" class="space-children-margin" *ngSwitchCase="1" (postClick)="openPost($event)"></mapbox-batiuni>
         </ng-container>
       </ng-template>
@@ -64,7 +66,6 @@
     <!-- Component one -->
     <slidemenu [(open)]="draftMenu.open" [header]="true">
       <h1 class="grow center-text" header>Brouillon</h1>
-      
       <div class="hosted-page flex column center-cross space-children-margin" content>
         <ad-form [post]="draftMenu.post" (done)="openDraft(null)" [page]="false" content></ad-form>     
       </div>
@@ -136,7 +137,7 @@
 
 <ng-template #candidates let-possibleCandidates let-job="job">
   <div class="hosted-page">
-    <p class="font-Poppins">Vous avez : {{ possibleCandidates.length }} réponses</p>
+    <p class="font-Poppins">Vous avez : {{ possibleCandidates.length }} réponse(s)</p>
     <profile-card *ngFor="let candidate of possibleCandidates" (click)="showCompany(candidate.company, candidate.id)" [job]="job" [profile]="candidate.company"></profile-card>
   </div>
 </ng-template>

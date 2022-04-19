@@ -99,19 +99,16 @@ export class SuiviPME {
         invalidationImage:SuiviPME.computeTaskImage(detail, "refused"
       )})
     )
-    console.log("test type", mission.dates, typeof(mission.dates as any))
     this.dates = mission.dates.map((value:unknown, id) => {
-      let date = value as string
       return { id:id,
-        value: date,
+        value: value as string,
         tasks:this.tasks,
-        selectedTasks:this.computeSelectedTask(date),
+        selectedTasks:this.computeSelectedTask(value as string),
         taskWithoutDouble:this.dateWithoutDouble(),
         view:this.view,
-        supervisions: this.computeSupervisionsForMission(date, supervisionsTaks)
-      }
-    }
-    )
+        supervisions: this.computeSupervisionsForMission(value as string, supervisionsTaks)
+      } as DateG
+    })
   }
 
   computeSupervisionsforTask(supervisionsId: number[], supervisionsTask:number[]) {
@@ -189,7 +186,6 @@ export class SuiviPME {
 
   closeMission() {
     if (this.mission!.subContractor && !this.mission!.isClosed) {
-      console.log("closeMission")
       const company = this.store.selectSnapshot(DataQueries.getById('Company', this.mission!.subContractor))
       this.popup.openCloseMission(company!, this)
     }
@@ -276,12 +272,14 @@ export class SuiviPME {
   reloadMission = (dateOld:DateG): (DateG|Mission)[] =>  {
     let dateResult = dateOld
     this.mission = this.store.selectSnapshot(DataQueries.getById('Mission', this.mission!.id))
+    this.computeDates(this.mission!)
     this.dates.forEach(dateNew => {
       if (dateNew.value == dateOld.value) {
         dateResult = dateNew
       }
     })
-    this.cd.markForCheck()
+    // this.cd.markForCheck()
+    console.log("realoadMission", this.dates)
     return [dateResult, this.mission!]
   }
 
@@ -292,28 +290,23 @@ export class SuiviPME {
   }
 
   submitAdFormDate() {
-    console.log("submitAdFormDate", this.AdFormDate.value, this.mission)
     let datesSelected = this.AdFormDate.get('calendar')!.value.map((dayState:DayState) => {
       return dayState.date
     })
-    console.log("submitAdFormDate", datesSelected, typeof(datesSelected[0]))
     let blockedDates = this.computeBlockedDate()
     this.alert = ""
     let dateToBeSelected:string[] = []
     blockedDates.forEach((date) => {
       if (!datesSelected.includes(date)) {
         this.alert += `La date ${date} doit obligatoirement être sélectionnée.\r\n`
-        console.log("type", date, typeof(date))
         dateToBeSelected.push(date)
       }
     })
     this.setupDayState(this.mission!, dateToBeSelected)
     this.saveToBackAdFormDate()
-    console.log("alert", this.alert)
   }
 
   setupDayState (mission:Mission, dateToBeSelected:string[]) {
-    console.log("setupDayState", dateToBeSelected)
     let dayStates: DayState[] = dateToBeSelected.map((date) => {
       return {date:date, availability: 'selected'}
     })
@@ -324,7 +317,6 @@ export class SuiviPME {
     }
 
     saveToBackAdFormDate() {
-      console.log("saveToBackAdFormDate", this.AdFormDate.value)
       const selectedDate:string[] = this.AdFormDate.get('calendar')!.value.map((dayState:DayState) => {return dayState.date})
       this.store.dispatch(new ModifyMissionDate(this.mission!.id, this.AdFormDate.get('hourlyStart')!.value, this.AdFormDate.get('hourlyEnd')!.value, selectedDate)).pipe(take(1)).subscribe(() => {
         if (!this.alert)

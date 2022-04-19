@@ -94,7 +94,7 @@ export class MissionsComponent extends Destroy$ {
   }
 
   get missionToClose (): Mission | null {
-    const missionToClose = this.myMissions.filter(mission=>mission.isClosed)
+    const missionToClose = this.myMissions.filter(mission=>mission.isClosed && mission.vibeST == 0)
     if (missionToClose.length != 0) {
       return missionToClose[0]
     }
@@ -133,8 +133,17 @@ export class MissionsComponent extends Destroy$ {
     this.cd.markForCheck()
   }
 
-  textStarActionST(test:string) {
-    return "work in progress"
+  textStarActionST(nature:string) {
+    if (nature == "vibeST") {
+      let content = document.getElementById("starTextVibeST") as HTMLTextAreaElement;
+      this.missionToClose!.vibeCommentST = content!.value
+    } else if (nature == "securityST") {
+      let content = document.getElementById("starTextSecurityST") as HTMLTextAreaElement;
+      this.missionToClose!.securityCommentST = content!.value
+    } else if (nature == "organisationST") {
+      let content = document.getElementById("starTextOrganisationST") as HTMLTextAreaElement;
+      this.missionToClose!.organisationCommentST = content!.value
+    }
   }
 
   getArrayStarST(nature:string) {

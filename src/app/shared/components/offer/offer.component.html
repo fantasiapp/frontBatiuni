@@ -3,6 +3,7 @@
   <div class="container grow flex center-cross space-between" >
     <div class="offres-infos" [ngClass]="{'offres-infos-closed': isClosed, 'offres-infos-postulated': hasPostulated}">
       <span class="entreprise">{{company?.name || 'Entreprise'}}</span>
+      <span *ngIf="unseenCandidate && showCandidate" [attr.data-notification-number]="unseenCandidate" class="notification"></span>
       <span class="metier">{{post?.manPower ? 'Main d\'oeuvre' : 'Fourniture et Pose'}}</span>
       <span class="address">{{post?.address || 'addresse'}}</span>
       <span class="date">{{post?.dueDate ?  toLocateDate(post.dueDate) : '19 Janvier 2038'}}</span>

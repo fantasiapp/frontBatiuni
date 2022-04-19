@@ -9,7 +9,7 @@ import { InfoService } from "src/app/shared/components/info/info.component";
 import { PopupService } from "src/app/shared/components/popup/popup.component";
 import { SlidemenuService } from "src/app/shared/components/slidemenu/slidemenu.component";
 import { SwipeupService } from "src/app/shared/components/swipeup/swipeup.component";
-import { ApplyPost, DeletePost, DuplicatePost, HandleApplication, MarkViewed, SetFavorite, SwitchPostType } from "src/models/new/user/user.actions";
+import { ApplyPost, CandidateViewed, DeletePost, DuplicatePost, HandleApplication, MarkViewed, SetFavorite, SwitchPostType } from "src/models/new/user/user.actions";
 import { DataQueries, DataState, QueryAll } from 'src/models/new/data.state';
 import { Profile, Post, Mission, PostMenu, Candidate, User } from "src/models/new/data.interfaces";
 import { FilterService } from "src/app/shared/services/filter.service";
@@ -47,7 +47,6 @@ export class HomeComponent extends Destroy$ {
   missions: Mission[] = [];
 
   get missionToClose () {
-    console.log("mission to close", this.missions, this.missions[0])
     return this.missions[0]
   }
 
@@ -117,13 +116,8 @@ export class HomeComponent extends Destroy$ {
     this.filters.filter('ST', this.allOnlinePosts);
   }
 
-  ngOnChanges() {
-    console.log("change home component")
-  }
-
   get openCloseMission() {return this._openCloseMission}
   set openCloseMission(b:boolean) {
-    console.log("openCloseMission", b)
     this._openCloseMission = !this._openCloseMission
   }
 
@@ -270,10 +264,11 @@ export class HomeComponent extends Destroy$ {
     //postMenu is still open
     const candidate = this.store.selectSnapshot(DataQueries.getById('Candidate', application))
     const company = this.store.selectSnapshot(DataQueries.getById('Company', companyId))
-    console.log("candidate", candidate)
     const user =  {firstName:candidate!.contact, lastName:''} as unknown
     this.profileSubContractor={user:user as User, company:company!} as Profile
     this.amountSubContractor = candidate?.amount ? "Contre-Offre: " +candidate!.amount.toString() + " €"  : null
+    console.log("to declare viewed")
+    this.store.dispatch(new CandidateViewed(application)).pipe(take(1)).subscribe(() => {})
     this.slideService.show('Candidature', {
       type: 'template',
       template: this.candidature,

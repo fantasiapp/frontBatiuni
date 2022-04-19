@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, HostBinding, HostListener, Input, O
 import { Store } from "@ngxs/store";
 import { Subject } from "rxjs";
 import { take } from "rxjs/operators";
-import { Post, Company, Mission } from "src/models/new/data.interfaces";
+import { Post, Candidate, Mission, Company } from "src/models/new/data.interfaces";
 import { DataQueries } from "src/models/new/data.state";
 import { DeletePost } from "src/models/new/user/user.actions";
 import { PopupService } from "../popup/popup.component";
@@ -16,6 +16,22 @@ import { PopupService } from "../popup/popup.component";
 export class OfferComponent { 
 
   constructor(private store: Store, private popup: PopupService) {}
+
+  @Input()
+  showCandidate:boolean = false
+
+  get unseenCandidate(): number {
+    let possibleCandidates:number = 0
+    if (this._post) {
+      const candidatesIds = this._post!.candidates || [],
+        candidates = this.store.selectSnapshot(DataQueries.getMany('Candidate', candidatesIds))
+        candidates.forEach((candidate) => {
+          if (!candidate.isRefused && !candidate.isViewed) possibleCandidates++
+        })
+    }
+    return possibleCandidates
+  }
+
 
   @Input()
   src: string = "assets/confirmation.svg"

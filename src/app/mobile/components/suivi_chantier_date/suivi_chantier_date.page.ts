@@ -86,7 +86,6 @@ export class SuiviChantierDate extends Destroy${
     } else {
       this.updatePageOnlyDate()
       document.getElementById("accordion") as HTMLImageElement;
-
     }
   }
 
@@ -94,6 +93,8 @@ export class SuiviChantierDate extends Destroy${
     let [date, mission] = this._reloadMission(this.date)
     this.date = date as DateG
     this.mission = mission as Mission
+    this.cd.markForCheck()
+    console.log("updatePageOnlyDate", this.date.supervisions, this.mission)
   }
 
   validate(task: Task) {
@@ -119,13 +120,15 @@ export class SuiviChantierDate extends Destroy${
   }
 
   mainComment(task:Task | null) {
+    console.log("mainComment")
     let idInput = task ? "input_"+task!.id : "input_general"
     let input = document.getElementById(idInput) as HTMLInputElement;
     this.currentTaskId = task ? task!.id : null
-    if (input && !this.mission!.isClosed) {
+    if (input.value.trim() != '' && !this.mission!.isClosed) {
       let detailPostId: number | null = task ? task.id : null
       this.store.dispatch(new CreateSupervision(this.mission!.id, detailPostId, null, input.value, this.date.value)).pipe(take(1)).subscribe(() => {
         this.updatePageOnlyDate()
+        console.log("end main Comment")
       })
     }
   }

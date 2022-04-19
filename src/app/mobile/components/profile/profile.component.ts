@@ -66,7 +66,6 @@ export class ProfileComponent extends Destroy$ {
   }
 
   updateProfile(profile:Profile) {
-    console.log("profile", profile)
     this.notifications = []
     this.notificationsUnseen = 0
       const view = this.store.selectSnapshot(DataState.view)
@@ -82,7 +81,6 @@ export class ProfileComponent extends Destroy$ {
           }
         })
       }
-      console.log("notification", this.notifications, this.notificationsUnseen)
   }
 
   slideModifyMenu(modifyPassword: boolean) {

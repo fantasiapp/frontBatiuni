@@ -1,4 +1,4 @@
-<accordion [title]="'Le ' + date.value">
+<accordion [title]="'Le ' + date.value" id="accordeon_{{date.value}}">
   <div class="chantier-tache-container">
     <div id="taskMain_{{date.id}}" *ngIf="date.view=='PME' && !mission!.isClosed">
         <div class="chantier-tache">

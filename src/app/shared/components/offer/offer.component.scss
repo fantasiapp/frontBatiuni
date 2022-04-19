@@ -13,6 +13,13 @@
   line-height: 1rem;
 }
 
+.notification {
+  @extend %has-notifications;
+  position:absolute;
+  top:20px;
+  right:20px;
+}
+
 .address {
   white-space: pre;
   overflow: hidden;
