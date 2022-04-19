@@ -1,4 +1,4 @@
-<accordion [title]="'Le ' + date.value" id="accordeon_{{date.value}}" #accordion>
+<accordion [title]="'Le ' + date.value" id="accordeon_{{date.value}}">
   <div class="chantier-tache-container">
     <div id="taskMain_{{date.id}}" *ngIf="date.view=='PME' && !mission!.isClosed">
         <div class="chantier-tache">
@@ -28,7 +28,7 @@
       <div *ngIf="!mission!.isClosed">
           <h2>Communiquer avec votre partenaire de chantier</h2>
           <div *ngFor="let supervision of date.supervisions">
-            <comment-suivi  [supervision]="supervision"></comment-suivi>
+            <comment-suivi  [supervision]="supervision" #commentSuivi></comment-suivi>
           </div>
       </div>
       <div *ngIf="!mission!.isClosed" class="partenerComment">

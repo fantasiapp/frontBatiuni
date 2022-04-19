@@ -35,7 +35,7 @@ export class SuiviChantierDate extends Destroy${
   _date: DateG = {id:0, value: "1970:01:01", tasks:[], selectedTasks:[], taskWithoutDouble:[], view:this.view, supervisions: []};
   get date() { return this._date; }
 
-  @ViewChild('comment-suivi') commentSuivi!:SuiviComments;
+  @ViewChild('commentSuivi') commentSuivi!:SuiviComments;
 
   ngAfterViewInit(){
     console.log('suivi', this.commentSuivi);
@@ -101,8 +101,8 @@ export class SuiviChantierDate extends Destroy${
     let [date, mission] = this._reloadMission(this.date)
     this.date = date as DateG
     this.mission = mission as Mission
+
     // this.cd.markForCheck()
-    // this.accodion.toggle()
     this.commentSuivi.check()
     console.log("updatePageOnlyDate", this.date.supervisions, this.mission)
   }
