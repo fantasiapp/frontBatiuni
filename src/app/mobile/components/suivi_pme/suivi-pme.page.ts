@@ -286,6 +286,7 @@ export class SuiviPME {
   modifyTimeTable() {
     this.missionMenu.swipeup = false
     this.swipeupModifyDate = true
+    console.log("modifyTimeTable", this.mission)
     this.cd.markForCheck()
   }
 

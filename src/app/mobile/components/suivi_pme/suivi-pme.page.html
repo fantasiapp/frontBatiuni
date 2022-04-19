@@ -1,6 +1,5 @@
 <div class="container hosted-page space-children-margin">
   <annonce-resume [collapsed]="true" [application]="false" [post]="mission"></annonce-resume>
-
   <!-- CONTRAT DOCUSIGN URL -->
   <div *ngIf="isNotSigned" class="contrat">
     <h3>
@@ -35,7 +34,7 @@
 <swipeup [(open)]="missionMenu.swipeup">
   <li (click)="modifyTimeTable()">Modifier les horaires de présence ou les dates</li>
   <li>Appeler le 06 21 94 03 86</li>
-  <li (click)="closeMission()">Clôturer la mission</li>
+  <li *ngIf="mission!.signedByCompany && mission!.signedBySubContractor" (click)="closeMission()">Clôturer la mission</li>
   <li>Dupliquer l'annonce</li>
 </swipeup>
 

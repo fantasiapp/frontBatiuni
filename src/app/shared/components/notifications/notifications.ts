@@ -34,16 +34,13 @@ export class Notifications {
         text: notification.content
       }
       this.notification.unshift(notificationDisplay)
-      console.log("notification", notificationDisplay.date)
     })
     let today = new Date(Date.now())
     this.month = this.notification.filter(notif => moment(moment(today).format('L')).isAfter(moment(notif.date).format('L')))
     this.today = this.notification.filter(notif => moment(moment(today).format('L')).isSame(moment(notif.date).format('L')))
 
     for (let i = 0; i < this.today.length; i++) {
-      console.log("timer", moment(moment(this.today[i].date)).startOf('minute').fromNow())
       this.timer.push(moment(moment(this.today[i].date)).startOf('minute').fromNow());
     }
-  
   }
 }

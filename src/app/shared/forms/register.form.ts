@@ -183,23 +183,24 @@ export class RegisterForm extends Destroy$ {
     companyName: new FormControl(''),
     jobs: new FormControl([], [Validators.required])
   }, { });
+
   onSubmit(f: any) {
-    this.pending = !this.pending;
-    this.store.dispatch(Register.fromFormGroup(this.registerForm))
-      .pipe(take(1))
-      .subscribe(
+    console.log("create account", this.pending)
+    if (!this.pending) {
+      this.pending = true;
+      this.store.dispatch(Register.fromFormGroup(this.registerForm)).pipe(take(1)).subscribe(
         success => {
           this.router.navigate(['', 'success'])
         },
         errors => {
-          this.pending = !this.pending;
           if ( errors.email ) {
             errors.all = errors.all ? errors.all + '\n' + errors.email : errors.email;
           }
           setErrors(this.registerForm, errors);
           this.cd.markForCheck();
         }
-      );
+      )
+    }
   }
 
   ngOnInit() {
