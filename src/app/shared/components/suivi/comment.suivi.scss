@@ -17,6 +17,7 @@
   border-radius: 12px;
   padding: 1rem;
   font-size: 0.875rem;
+  width: calc(100% - 3.5rem);
 }
 
 .user-info{
@@ -59,7 +60,7 @@
 }
 
 .suivi-comment{
-  inline-size: 14rem;
+  // inline-size: 13rem;
   overflow-wrap: break-word;
 }
 
