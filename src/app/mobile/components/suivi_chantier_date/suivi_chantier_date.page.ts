@@ -59,6 +59,7 @@ export class SuiviChantierDate extends Destroy${
       resultType: CameraResultType.Base64,
       source: CameraSource.Camera
     });
+    this.swipeMenuImage = false;
     // this.store.dispatch(new ChangeProfilePicture(photo, 'image'));
     // scr = photo.format, imageBase64 = photo.base64String, 
   }
@@ -69,7 +70,11 @@ export class SuiviChantierDate extends Destroy${
       resultType: CameraResultType.Base64,
       source: CameraSource.Photos,
     });
-    this.store.dispatch(new UploadImageSupervision(photo, this.mission!.id, this.currentTaskId));
+    this.store.dispatch(new UploadImageSupervision(photo, this.mission!.id, this.currentTaskId)).pipe(take(1)).subscribe(() => {
+      this.updatePageOnlyDate();
+      this.swipeMenuImage = false;
+    });
+      
   }
 
   addDateToPost() {
@@ -116,6 +121,15 @@ export class SuiviChantierDate extends Destroy${
         let control = document.getElementById("control_refuse_"+task.id) as HTMLImageElement;
         control.src = SuiviPME.computeTaskImage(task, "refused")
       })
+    }
+  }
+
+  detectKey($event: KeyboardEvent, task: Task| null){
+    console.log($event)
+    if ($event.key === "Enter") {
+      console.log("enter")
+      this.mainComment(task);
+      (document.getElementById("input_general")! as HTMLInputElement).value! = "";
     }
   }
 
