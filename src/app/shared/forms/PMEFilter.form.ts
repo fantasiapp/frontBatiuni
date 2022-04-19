@@ -6,7 +6,7 @@ import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
     <ng-container [ngSwitch]="activeView">
       <form class="form-control full-width" *ngSwitchCase="0">
         <div class="form-input">
-          <label class="form-title">Date de mission</label>
+          <label>Date de mission</label>
           <input type="date" class="form-element"/>
           <img src="assets/calendar.png"/>
         </div>
