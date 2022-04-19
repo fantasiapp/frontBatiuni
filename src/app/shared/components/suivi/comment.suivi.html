@@ -20,20 +20,12 @@
   </div>
 </div>
 
-<div class="comment-image position-relative" *ngIf="supervision.files.length > 0">
-  <div class="cover-parent" [slide-template]="image" [contexts]="getImages()"></div>
-
-  <ng-container *ngIf="slides">
-    <img (click)="slides.slide('right')" class="position-absolute left" [class.hidden]="slides.first" src="assets/arrowleft.svg"/>
-    <img (click)="slides.slide('left')" class="position-absolute right" [class.hidden]="slides.last" src="assets/arrowright.svg"/>  
-  </ng-container>
-</div>
+<div class="comment-image position-relative" *ngIf="images.length">
+  <img class="main" [src]="images[nbImageSelected] || 'assets/unavailable.jpg'"/>
+  <img *ngIf="imageHasNext" (click)="otherImage(1)" class="position-absolute right" src="assets/arrowright.svg"/>
+  <img *ngIf="imageHasPrevious" (click)="otherImage(-1)" class="position-absolute left" src="assets/arrowleft.svg"/>
 
 
 <div class="parent-comment" *ngIf="parentComment">
   <ng-content select="comment-suivi"></ng-content>
 </div>
-
-<ng-template #image let-ctx>
-  <img class="main" [src]="ctx ? ctx.content : 'assets/unavailable.jpg'"/>
-</ng-template>

@@ -9,6 +9,7 @@ import { FileDownloader } from "../../services/file-downloader.service";
 import { DataQueries } from "src/models/new/data.state";
 import { ImageGenerator } from "../../services/image-generator.service";
 
+
 @Component({
   selector: 'comment-suivi',
   templateUrl: './comment.suivi.html',
@@ -30,9 +31,6 @@ export class SuiviComments {
 
   // We can get the name and the profile image from the state
 
-  @ViewChild(SlideTemplate, {read: SlideTemplate, static: false})
-  slides!: SlideTemplate<{src: string}>;
-
   @ContentChild(SuiviComments, {read: SuiviComments})
   parentComment: SuiviComments | null = null;
 
@@ -40,7 +38,17 @@ export class SuiviComments {
 
   }
 
-  src: SafeResourceUrl | string = '';
+  images: SafeResourceUrl[] = [];
+  nbImageSelected:number = 0
+  get imageHasNext():boolean {
+    return this.nbImageSelected + 1 < this.images.length}
+  get imageHasPrevious():boolean {
+    return this.nbImageSelected > 0}
+
+  otherImage(change:number) {
+    this.nbImageSelected += change
+    this.cd.markForCheck()
+  }
 
   _supervision: Supervision = {
     id: -1,
@@ -60,8 +68,6 @@ export class SuiviComments {
     this._supervision = supervision;
   }
 
-  get manyFiles() { if (this.supervision.files.length > 1){console.log('mayny files')}; return this.supervision.files.length > 1; }
-
 
   modifySupervision() {
     console.log("modifySupervision")
@@ -71,52 +77,27 @@ export class SuiviComments {
     console.log("deleteSupervision")
   }
 
-  slide(k: number) {
-    //download fields on the go
-    console.log("slide", k);
-  }
-
   getImages(){
     var images: SafeResourceUrl[] = [];
-
+    console.log(this.supervision.files)
     for(let file of this.supervision.files){
       this.downloader.downloadFile(file).subscribe(image => {
         images.push(this.downloader.toSecureBase64(image));
+        console.log("getImages inside", images.length)
       })
     }
+    console.log("getImages outside", images.length)
     return images
-  }
-
-  ngOnChanges(changes: SimpleChanges) {
-    console.log("Change:", changes);
-
-    // if ( changes['supervision'] ) {
-    //   console.log("change supervision", this.supervision.files);
-    //   if ( this.supervision.files[0]){
-    //     this.downloader.downloadFile(this.supervision.files[0]).subscribe(image => {
-    //       this.src = this.downloader.toSecureBase64(image);
-    //       this.cd.markForCheck();
-    //       console.log("markForCheck src:", this.src);
-    //     })
-    //   }
-    // }
-    console.log("change src:", this.src);
-    
   }
 
   ngAfterViewInit(): void {
     console.log('ngAfterViewInit');
-    console.log(this.slides);
     for(let file in this.supervision.files ){
       this.downloader.downloadFile(this.supervision.files[file]).subscribe(image => {
-        this.slides.contexts.push(this.downloader.toSecureBase64(image))
+        this.images.push(this.downloader.toSecureBase64(image))
+        this.cd.markForCheck()
       })
     }
-    console.log(this.slides);
-    // this.slides.changes.subscribe((slides: => SlideTemplate<{src: string}>{
-
-
-    //   }))
   }
 
 }
