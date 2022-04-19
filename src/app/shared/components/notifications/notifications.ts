@@ -27,24 +27,23 @@ export class Notifications {
   ngOnInit() {
     this.notifications.forEach((notificationAny, index) => {
       let notification = notificationAny as Notification
-      console.log("notification", index, new Date(notification.timestamp), notification.timestamp * 1000)
       let notificationDisplay = {
         id: index,
         date: new Date(notification.timestamp * 1000),
         src:'assets/PS1B.svg',
         text: notification.content
       }
-      this.notification.push(notificationDisplay)
+      this.notification.unshift(notificationDisplay)
+      console.log("notification", notificationDisplay.date)
     })
     let today = new Date(Date.now())
     this.month = this.notification.filter(notif => moment(moment(today).format('L')).isAfter(moment(notif.date).format('L')))
     this.today = this.notification.filter(notif => moment(moment(today).format('L')).isSame(moment(notif.date).format('L')))
-    console.log("today", this.today)
 
     for (let i = 0; i < this.today.length; i++) {
-        this.timer.unshift(moment(moment(this.today[i].date)).startOf('minute').fromNow());
+      console.log("timer", moment(moment(this.today[i].date)).startOf('minute').fromNow())
+      this.timer.push(moment(moment(this.today[i].date)).startOf('minute').fromNow());
     }
-    console.log("timer", this.timer)
   
   }
 }

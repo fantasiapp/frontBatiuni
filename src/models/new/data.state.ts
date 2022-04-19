@@ -643,7 +643,6 @@ export class DataState {
     const profile = this.store.selectSnapshot(DataQueries.currentProfile)!;
     return this.http.post('data', application).pipe(
       tap((response:any) => {
-        console.log("NotificationViewed", response, application.companyId)
         if ( response[application.action] !== 'OK' ) {
           this.inZone(() => this.info.show("error", response.messages, 3000));
           throw response.messages;
