@@ -15,18 +15,6 @@ import { DataQueries } from "src/models/new/data.state";
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SuiviComments {
-
-  
-  commentOption: boolean = false;
-  
-  toogleCommentOption(){ this.commentOption = !this.commentOption }
-  get showCommentOption(){
-    return this.commentOption
-  }
-  
-  deleteComment(){
-    console.log('Ce commentaire est supprimé');
-  }
   
   // We can get the name and the profile image from the state
   
@@ -36,10 +24,7 @@ export class SuiviComments {
   @ContentChild(SuiviComments, {read: SuiviComments})
   parentComment: SuiviComments | null = null;
   
-  constructor(private downloader: FileDownloader, private sanitizer: DomSanitizer, private store: Store, private cd: ChangeDetectorRef) {  
-  }
-  check(){
-    this.cd.markForCheck()
+  constructor(private downloader: FileDownloader, private sanitizer: DomSanitizer, private store: Store) {  
   }
 
   _supervision: Supervision = {
