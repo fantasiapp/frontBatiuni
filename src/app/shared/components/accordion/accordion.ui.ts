@@ -29,11 +29,9 @@ export class UIAccordion {
   @Input()
   set open(b:boolean){
     this._open = b
-    console.log('set open', this._open);
   }
 
   get open() { 
-    console.log('this.open', this._open);
     return this._open;
   }
 
@@ -47,7 +45,6 @@ export class UIAccordion {
   panel!: ElementRef;
 
   toggle() {
-    console.log('toggle');
     this.open = !this._open
   }
 

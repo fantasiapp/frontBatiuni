@@ -19,7 +19,12 @@ header {
 }
 
 .notification {
-  @extend %has-notifications
+  @extend %has-notifications;
+
+  &::after {
+    left: -20px;
+    top: -20px
+  }
 }
 
 /* im sorry for writing this page badly */

@@ -2,8 +2,10 @@
 <ng-container *ngIf="(profile$ | async) as profile">
   <header class="clear-margin full-width sticky-header flex center-cross white-header">
     <h1 class="grow">Mon Profil</h1>
-    <img src="assets/notification.svg" (click)="openNotifications = true" alt="notification_button"/>
-    <span *ngIf="notificationsUnseen" [attr.data-notification-number]="notificationsUnseen" class="notification"></span>
+    <div class="notification-container">
+      <img src="assets/notification.svg" (click)="openNotifications = true" alt="notification_button"/>
+      <span *ngIf="notificationsUnseen" [attr.data-notification-number]="notificationsUnseen" class="notification"></span>
+    </div>
     <img src="assets/menu.svg" (click)="openMenu = true" alt="menu_button"/>
   </header>
 
