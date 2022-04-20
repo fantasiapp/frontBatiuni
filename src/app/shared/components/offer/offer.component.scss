@@ -88,10 +88,17 @@
 }
 
 .offer-logo {
+  width: $profile-image-size;
+  height: $profile-image-size;
+
   span {
     position: absolute;
     bottom: $item-padding * 2;
     color: $text-color;
     opacity: .6;
+  }
+  img {
+    width: 100%;
+    height: 100%;
   }
 }
