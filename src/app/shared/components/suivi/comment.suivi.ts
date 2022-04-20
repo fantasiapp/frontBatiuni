@@ -40,10 +40,8 @@ export class SuiviComments {
 
   images: SafeResourceUrl[] = [];
   nbImageSelected:number = 0
-  get imageHasNext():boolean {
-    return this.nbImageSelected + 1 < this.images.length}
-  get imageHasPrevious():boolean {
-    return this.nbImageSelected > 0}
+  get imageHasNext():boolean {return this.nbImageSelected + 1 < this.images.length}
+  get imageHasPrevious():boolean {return this.nbImageSelected > 0}
 
   otherImage(change:number) {
     this.nbImageSelected += change
@@ -75,19 +73,6 @@ export class SuiviComments {
 
   deleteSupervision() {
     console.log("deleteSupervision")
-  }
-
-  getImages(){
-    var images: SafeResourceUrl[] = [];
-    console.log(this.supervision.files)
-    for(let file of this.supervision.files){
-      this.downloader.downloadFile(file).subscribe(image => {
-        images.push(this.downloader.toSecureBase64(image));
-        console.log("getImages inside", images.length)
-      })
-    }
-    console.log("getImages outside", images.length)
-    return images
   }
 
   ngAfterViewInit(): void {
