@@ -1,6 +1,6 @@
-import { Component, ChangeDetectionStrategy, SimpleChange, SimpleChanges, ViewChild, TemplateRef, ChangeDetectorRef, Input } from "@angular/core";
+import { Component, ChangeDetectionStrategy, SimpleChange, SimpleChanges, ViewChild, TemplateRef, ChangeDetectorRef, Input, EventEmitter, Output } from "@angular/core";
 import { Select, Store } from "@ngxs/store";
-import { combineLatest, Observable } from "rxjs";
+import { combineLatest, Observable, Subject } from "rxjs";
 import { take, takeUntil } from "rxjs/operators";
 import { Destroy$ } from "src/app/shared/common/classes";
 import { DistanceSliderConfig, SalarySliderConfig } from "src/app/shared/common/config";
@@ -13,7 +13,7 @@ import { ApplyPost, CandidateViewed, DeletePost, DuplicatePost, HandleApplicatio
 import { DataQueries, DataState, QueryAll } from 'src/models/new/data.state';
 import { Profile, Post, Mission, PostMenu, Candidate, User } from "src/models/new/data.interfaces";
 import { FilterService } from "src/app/shared/services/filter.service";
-import { ApplyForm } from "../../ui/annonce-resume/annonce-resume.ui";
+import { ApplyForm, UIAnnonceResume } from "../../ui/annonce-resume/annonce-resume.ui";
 
 @Component({
   selector: 'home',
@@ -151,7 +151,9 @@ export class HomeComponent extends Destroy$ {
 
   openMission(mission: Mission | null) {
     this.missionMenu = assignCopy(this.missionMenu, {post: mission, open: !!mission, swipeup: false, swipeupCloseMission: false});
-    if (mission?.isClosed && this.missionMenu.open) this.info.show('error', 'Contract cloturé')
+    if (mission?.isClosed && this.missionMenu.open) {
+      this.info.show('error', 'Contract cloturé')
+    }
     else this.info.hide()
   }
 
@@ -280,5 +282,13 @@ export class HomeComponent extends Destroy$ {
     });
 
     this.swipeupService.hide();
+  }
+
+  @ViewChild(UIAnnonceResume, {static: false})
+  private annonceResume!: UIAnnonceResume;
+
+
+  slideOnlinePostClose(){
+    this.annonceResume.close()
   }
 };

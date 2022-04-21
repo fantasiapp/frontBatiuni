@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, Output } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { Store } from "@ngxs/store";
 import { PopupService } from "src/app/shared/components/popup/popup.component";
@@ -175,7 +175,7 @@ export class UIAnnonceResume extends Destroy$ {
     this.job = p ? this.store.selectSnapshot(DataQueries.getById('Job', p.job)) : null;
   }
 
-  constructor(private store: Store, private popup: PopupService) {
+  constructor(private store: Store, private popup: PopupService, private cd: ChangeDetectorRef) {
     super()
   }
 
@@ -190,6 +190,7 @@ export class UIAnnonceResume extends Destroy$ {
       amount: new FormControl(this.amount),
       devis: new FormControl([this.devis[0]])
     });
+
   }
 
   ngOnDestroy(): void {
@@ -221,5 +222,9 @@ export class UIAnnonceResume extends Destroy$ {
       devis: formValue.devis[0].name
     });
     console.log("apply")
+  }
+
+  close() {
+    this.form.get('amount')?.setValue(null)
   }
 };
