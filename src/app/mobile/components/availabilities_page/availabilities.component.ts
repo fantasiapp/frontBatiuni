@@ -4,7 +4,7 @@ import { Observable } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { Destroy$ } from "src/app/shared/common/classes";
 import { Availability, CalendarUI, DayState } from "src/app/shared/components/calendar/calendar.ui";
-import { SwipeupService } from "src/app/shared/components/swipeup/swipeup.component";
+import { SwipeupService, SwipeupView } from "src/app/shared/components/swipeup/swipeup.component";
 import { Profile } from "src/models/new/data.interfaces";
 import { nameToAvailability } from "src/models/new/data.mapper";
 import { DataQueries } from "src/models/new/data.state";
@@ -30,24 +30,28 @@ export class AvailabilitiesComponent extends Destroy$ {
     class: 'disponible',
     click: () => {
       this.setCalendarDayState('available');
+      this.submit(this.calendar);
     }
   }, {
     name: 'Disponible sous-conditions',
     class: 'sous-conditions',
     click: () => {
       this.setCalendarDayState('availablelimits');
+      this.submit(this.calendar);
     }
   }, {
     name: 'Pas disponible',
     class: 'pas-disponible',
     click: () => {
       this.setCalendarDayState('unavailable');
+      this.submit(this.calendar);
     }
   }, {
     name: 'Non renseigné',
     class: 'non-renseigne',
     click: () => {
       this.setCalendarDayState('nothing');
+      this.submit(this.calendar);
     },
   }]
 
@@ -91,6 +95,5 @@ export class AvailabilitiesComponent extends Destroy$ {
 
   ngOnDestroy() {
     super.ngOnDestroy();
-    this.submit(this.calendar);
   }
 }
