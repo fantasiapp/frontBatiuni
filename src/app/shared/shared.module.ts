@@ -61,6 +61,7 @@ import { MissionFilterForm } from "./forms/missions.form";
 import { FileViewer } from "./components/file-viewer/file-viewer.component";
 import { BannerComponent } from './components/banner/banner.component';
 import { RatingComponent } from "./components/rating/rating.component";
+import { ApplicationsComponent } from './components/applications/applications.component';
 
 @NgModule({
   declarations: [
@@ -123,7 +124,8 @@ import { RatingComponent } from "./components/rating/rating.component";
     MissionFilterForm,
     FileViewer,
     BannerComponent,
-    RatingComponent
+    RatingComponent,
+    ApplicationsComponent
   ],
   imports: [
     CommonModule,
@@ -192,7 +194,8 @@ import { RatingComponent } from "./components/rating/rating.component";
     UIComment,
     MissionFilterForm,
     FileViewer,
-    RatingComponent
+    RatingComponent,
+    ApplicationsComponent
   ],
   providers: [ImageGenerator, FileDownloader, FilterService]
 })

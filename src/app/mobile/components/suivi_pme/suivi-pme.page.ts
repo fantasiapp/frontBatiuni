@@ -4,8 +4,8 @@ import { Select, Store } from "@ngxs/store";
 import { Observable } from "rxjs";
 import { take } from "rxjs/operators";
 import { PopupService } from "src/app/shared/components/popup/popup.component";
-import { CloseMission, ModifyMissionDate } from "src/models/new/user/user.actions";
-import { Company, Mission, PostMenu, PostDetail, Profile, Supervision, DateG, Task, PostDate } from "src/models/new/data.interfaces";
+import { CloseMission, ModifyMissionDate, DuplicatePost } from "src/models/new/user/user.actions";
+import { Company, Mission, PostMenu, PostDetail, Profile, Supervision, DateG, Task } from "src/models/new/data.interfaces";
 import { DataQueries, DataState } from "src/models/new/data.state";
 import { CalendarUI, DayState } from "src/app/shared/components/calendar/calendar.ui";
 import { DataLayerManager } from "@agm/core";
@@ -289,6 +289,18 @@ export class SuiviPME {
     console.log("modifyTimeTable", this.mission)
     this.cd.markForCheck()
   }
+
+  duplicateMission() {
+    this.missionMenu.swipeup = false
+    console.log("duplicateMission", this.mission)
+    // this.info.show("info", "Duplication en cours...", Infinity);
+    this.store.dispatch(new DuplicatePost(this.mission!.id)).pipe(take(1)).subscribe(() => {
+    }, () => {
+      // this.info.show("error", "Erreur lors de la duplication de l'annonce");
+    });
+  }
+
+
 
   submitAdFormDate() {
     let datesSelected = this.AdFormDate.get('calendar')!.value.map((dayState:DayState) => {
