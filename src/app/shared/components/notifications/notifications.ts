@@ -54,7 +54,7 @@ export class Notifications {
       else if ( notification.nature == "Profil"){
         src = "assets/Icon_!.svg";
       } else {
-        src = "assets/Icon_2.svg";
+        src = "assets/Icon_alert.svg";
       }
       
       console.log("Notification")
