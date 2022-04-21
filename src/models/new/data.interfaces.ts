@@ -165,12 +165,14 @@ export interface Establishement {
 
 export type Notification = {
   id: Ref<PostDate>
+  company: Ref<Company>
   post: Ref<Post>
   mission: Ref<Mission>
   role: string
   timestamp: number
   content: string
   hasBeenViewed: boolean
+  nature: string
 };
 
 export type Mission = Post & {
