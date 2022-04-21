@@ -84,17 +84,16 @@ export class ProfileCardComponent {
   ngOnInit() {
     if( this.profile$ == void 0 ) return;
     (this.profile$ as Observable<Profile>).subscribe(profile => {
-      const jobForCompany = this.store.selectSnapshot(DataQueries.getMany('JobForCompany', (profile.company as Company).jobs))
-      this.employeeCount = jobForCompany.find(({job, number}) => {
-        return job == (this.job as Job).id;
-      })?.number || 0;
-      this.numberOfQuotations = 0
-      this.store.selectSnapshot(DataQueries.getAll('Mission')).forEach((mission)=>{
-        if (mission.isClosed && mission.subContractor == profile.company.id) this.numberOfQuotations++
-
-
-      })
-
+      if (profile.company) {
+        const jobForCompany = this.store.selectSnapshot(DataQueries.getMany('JobForCompany', (profile.company as Company).jobs))
+        this.employeeCount = jobForCompany.find(({job, number}) => {
+          return job == (this.job as Job).id;
+        })?.number || 0;
+        this.numberOfQuotations = 0
+        this.store.selectSnapshot(DataQueries.getAll('Mission')).forEach((mission)=>{
+          if (mission.isClosed && mission.subContractor == profile.company.id) this.numberOfQuotations++
+        })
+      }
     })
   }
 };

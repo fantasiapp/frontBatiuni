@@ -380,17 +380,23 @@ export class DataState {
   };
 
   @Action(DuplicatePost)
-  duplicatePost(ctx: StateContext<DataModel>, duplicate: DuplicatePost) {
-    return this.http.get('data', duplicate).pipe(
-      tap((response: any) => {
-        if ( response[duplicate.action] !== 'OK' )
-          throw response[duplicate.action];
-        
-        delete response[duplicate.action];
-        ctx.setState(addValues('Post', response));
+  duplicatePost(ctx: StateContext<DataModel>, application: DuplicatePost) {
+    const profile = this.store.selectSnapshot(DataQueries.currentProfile)!;
+    return this.http.get('data', application).pipe(
+      tap((response:any) => {
+        console.log("DuplicatePost", response)
+        if ( response[application.action] !== 'OK' ) {
+          this.inZone(() => this.info.show("error", response.messages, 2000));
+          throw response.messages;
+        }
+        delete response[application.action];
+        ctx.setState(
+          addComplexChildren('Company', profile.company.id, 'Post', response)
+        )
+        this.inZone(() => this.info.show("info", "Duplication réalisée", 2000))
       })
     )
-  };
+  }
 
   @Action(DownloadFile)
   downloadFile(ctx: StateContext<DataModel>, download: DownloadFile) {
@@ -454,7 +460,6 @@ export class DataState {
   @Action(CandidateViewed)
   candidateViewed(ctx: StateContext<DataModel>, application: ApplyPost) {
     const profile = this.store.selectSnapshot(DataQueries.currentProfile)!;
-
     return this.http.get('data', application).pipe(
       tap((response:any) => {
         console.log("candidateViewed", response)
