@@ -5,6 +5,7 @@ import { PopupService } from "src/app/shared/components/popup/popup.component";
 import { Company, User, Post, File, PostDetail, Job, Mission, Candidate } from "src/models/new/data.interfaces";
 import { DataQueries, DataState } from "src/models/new/data.state";
 import { Destroy$ } from "src/app/shared/common/classes";
+import { InfoService } from "src/app/shared/components/info/info.component";
 
 export type ApplyForm = {
   amount: number;
@@ -106,6 +107,7 @@ export class UIAnnonceResume extends Destroy$ {
 
   get disableValidation ():boolean {
     console.log("disableValidation", this.amount, this.hasPostulated)
+    if(this.hasPostulated) this.info.show('info', 'Vous avez déjà postulé à cette annonce')
     return this.hasPostulated || this.amount == null
   }
 
@@ -175,7 +177,7 @@ export class UIAnnonceResume extends Destroy$ {
     this.job = p ? this.store.selectSnapshot(DataQueries.getById('Job', p.job)) : null;
   }
 
-  constructor(private store: Store, private popup: PopupService, private cd: ChangeDetectorRef) {
+  constructor(private store: Store, private popup: PopupService, private info: InfoService) {
     super()
   }
 
@@ -190,7 +192,6 @@ export class UIAnnonceResume extends Destroy$ {
       amount: new FormControl(this.amount),
       devis: new FormControl([this.devis[0]])
     });
-
   }
 
   ngOnDestroy(): void {
@@ -226,5 +227,15 @@ export class UIAnnonceResume extends Destroy$ {
 
   close() {
     this.form.get('amount')?.setValue(null)
+    console.log('CLOOOSE', this.amount);
+  }
+
+  open(){
+    let amount;
+    if(this._post) amount = this.searchCandidate(this._post)?.amount
+    else amount = null
+    console.log('OPENNNNN', amount);
+
+    this.form.get('amount')?.setValue(amount)
   }
 };
