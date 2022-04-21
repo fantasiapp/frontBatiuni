@@ -32,10 +32,10 @@
 </div>
 
 <swipeup [(open)]="missionMenu.swipeup">
-  <li (click)="modifyTimeTable()">Modifier les horaires de présence ou les dates</li>
+  <li *ngIf="!mission?.isClosed" (click)="modifyTimeTable()">Modifier les horaires de présence ou les dates</li>
   <li>Appeler le 06 21 94 03 86</li>
-  <li *ngIf="mission?.signedByCompany && mission?.signedBySubContractor" (click)="closeMission()">Clôturer la mission</li>
-  <li>Dupliquer l'annonce</li>
+  <li *ngIf="mission?.signedByCompany && mission?.signedBySubContractor && !mission?.isClosed" (click)="closeMission()">Clôturer la mission</li>
+  <li (click)="duplicateMission()">Dupliquer l'annonce</li>
 </swipeup>
 
 <swipeup [(open)]="missionMenu.swipeupCloseMission">
