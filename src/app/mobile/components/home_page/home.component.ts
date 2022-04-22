@@ -7,9 +7,9 @@ import { DistanceSliderConfig, SalarySliderConfig } from "src/app/shared/common/
 import { assignCopy, splitByOutput } from "src/app/shared/common/functions";
 import { InfoService } from "src/app/shared/components/info/info.component";
 import { PopupService } from "src/app/shared/components/popup/popup.component";
-import { SlidemenuService } from "src/app/shared/components/slidemenu/slidemenu.component";
+import { SlidemenuService, UISlideMenuComponent } from "src/app/shared/components/slidemenu/slidemenu.component";
 import { SwipeupService } from "src/app/shared/components/swipeup/swipeup.component";
-import { ApplyPost, CandidateViewed, DeletePost, DuplicatePost, HandleApplication, MarkViewed, SetFavorite, SwitchPostType } from "src/models/new/user/user.actions";
+import { ApplyPost, CandidateViewed, DeletePost, DownloadFile, DuplicatePost, HandleApplication, MarkViewed, SetFavorite, SwitchPostType } from "src/models/new/user/user.actions";
 import { DataQueries, DataState, QueryAll } from 'src/models/new/data.state';
 import { Profile, Post, Mission, PostMenu, Candidate, User } from "src/models/new/data.interfaces";
 import { FilterService } from "src/app/shared/services/filter.service";
@@ -156,9 +156,9 @@ export class HomeComponent extends Destroy$ {
   openMission(mission: Mission | null) {
     this.missionMenu = assignCopy(this.missionMenu, {post: mission, open: !!mission, swipeup: false, swipeupCloseMission: false});
     if (mission?.isClosed && this.missionMenu.open) {
+      // setTimeout(()=> this.info.show('error', 'Contract cloturé'), 20)
       this.info.show('error', 'Contract cloturé')
-    }
-    else this.info.hide()
+    } else this.info.hide()
   }
 
   duplicatePost(id: number) {
@@ -230,9 +230,16 @@ export class HomeComponent extends Destroy$ {
     this.info.show("info", "Candidature en cours...", Infinity);
     this.store.dispatch(new ApplyPost(post.id, form)).pipe(take(1))
       .subscribe(
-        success => this.info.show("success", "Candidature envoyée", 2000),
+        success => {
+          this.info.show("success", "Candidature envoyée", 2000)
+
+          // Si la candidature est envoyée on quite la vue de la candidature
+          this.slideOnlinePostClose()
+        },
         error => this.info.show("error", "Echec de l'envoi de la candidature", 5000)
       ); 
+    
+      
   }
 
   handleApplication(post: Post, application: number) {
@@ -243,6 +250,7 @@ export class HomeComponent extends Destroy$ {
         name: 'Valider la candidature',
         class: 'validate application-response',
         click: () => {
+          console.log('valider la candidature');
           this.store.dispatch(new HandleApplication(application, post, true)).pipe(take(1)).subscribe(() => {
             //if successful, quit the slidemenu
             this.openPost(null);
@@ -254,6 +262,7 @@ export class HomeComponent extends Destroy$ {
         class: 'reject application-response',
         click: () => {
           this.store.dispatch(new HandleApplication(application, post, false)).pipe(take(1)).subscribe(() => {
+            console.log('refuser la candidature');
             this.openPost(null);
             this.cd.markForCheck();  
           });
@@ -291,7 +300,14 @@ export class HomeComponent extends Destroy$ {
   @ViewChild(UIAnnonceResume, {static: false})
   private annonceResume!: UIAnnonceResume;
 
+  @ViewChild('slideOnlinePost') private slideOnlinePost!: UISlideMenuComponent;
+
   slideOnlinePostClose(){
+    // Close View
+    this.slideOnlinePost.close()
+    console.log('CLoooose');
+
+    // Update
     this.annonceResume.close()
   }
 };
