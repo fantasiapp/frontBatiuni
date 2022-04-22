@@ -94,9 +94,7 @@ export class OfferComponent {
 
   ngOnInit() {
     if (!this.src) {
-      console.log("mission company", this.company);
       let logo = this.store.selectSnapshot(DataQueries.getProfileImage(this.company!.id));
-      console.log(logo);
       if (!logo) {
         const fullname = this.company!.name[0].toUpperCase();
         this.src = this.imageGenerator.generate(fullname);

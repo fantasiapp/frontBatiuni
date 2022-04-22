@@ -34,6 +34,7 @@ export class ProfileComponent extends Destroy$ {
   //move to state
   openMenu: boolean = false;
   openModifyMenu: boolean = false;
+  openApplications: boolean = false;
   modifyPassword: boolean = false;
   openModifyPicture: boolean = false;
   _openNotifications : boolean = false;
@@ -161,5 +162,10 @@ export class ProfileComponent extends Destroy$ {
 
 
     this.store.dispatch(new UserActions.ChangeProfilePicture(photo, 'image'));
+  }
+
+  openApplicationsMenu(){
+    this.openMenu = false;
+    this.openApplications = true;
   }
 };
