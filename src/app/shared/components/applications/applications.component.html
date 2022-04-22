@@ -1,8 +1,19 @@
-<!-- <section class="full-width section">
+
+<header class="clear-margin full-width sticky-header flex column center-cross white-header">
+    <div class="pick flex row">
+        <img class="left" [routerLink]="['','home','profile']"  src="assets/arrowlblack.svg" />
+        <h1 class="grow center-text">Candidatures en cours</h1>
+    </div>
+    <div class="pick flex row">
+        <searchbar class="grow"></searchbar>
+        <img src="assets/Filtrer par.svg"/>
+    </div>
+</header>
+<div class="hosted-page clear-margin full-width page-content-without-nav">
     <offer
         *ngFor="let onlinePost of allOnlinePosts"
         [deletable]="false"
         [post]="onlinePost"
         (click)="openPost(onlinePost)"
         ></offer>
-</section> -->
+</div>

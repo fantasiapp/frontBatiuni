@@ -1,10 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Select } from '@ngxs/store';
+import { Select, Store } from '@ngxs/store';
 import { combineLatest, Observable } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { Post, Profile } from 'src/models/new/data.interfaces';
+import { Post, PostMenu, Profile } from 'src/models/new/data.interfaces';
 import { DataQueries, QueryAll } from 'src/models/new/data.state';
 import { Destroy$ } from "src/app/shared/common/classes";
+import { assignCopy, splitByOutput } from '../../common/functions';
+import { MarkViewed } from 'src/models/new/user/user.actions';
 
 @Component({
   selector: 'applications',
@@ -19,11 +21,21 @@ export class ApplicationsComponent extends Destroy$ implements OnInit {
   @QueryAll('Post')
   posts$!: Observable<Post[]>;
   
-  constructor() { 
+   //split the set all of posts into these (what we need)
+   private symbols = {
+    userDraft: 0, userOnlinePost: 1,
+    otherOnlinePost: 2, discard: -1
+  };
+
+  postMenu = new PostMenu
+  
+
+  userDrafts: Post[] = [];
+  userOnlinePosts: Post[] = [];
+  allOnlinePosts: Post[] = [];
+  constructor(private store: Store) { 
     super()
   }
-
-  allOnlinePosts: Post[] = [];
 
   ngOnInit(): void {
     combineLatest([this.profile$, this.posts$]).pipe(takeUntil(this.destroy$)).subscribe(([profile, posts]) => {
@@ -39,12 +51,18 @@ export class ApplicationsComponent extends Destroy$ implements OnInit {
       this.userDrafts = mapping.get(this.symbols.userDraft) || [];
       this.userOnlinePosts = mapping.get(this.symbols.userOnlinePost) || [];
       this.allOnlinePosts = [...otherOnlinePost, ...this.userOnlinePosts];
-      this.missions = this.store.selectSnapshot(DataQueries.getMany('Mission', profile.company.missions));
-      this.cd.markForCheck();
     });
   }
 
+  openPost(post: Post | null) {
+    //mark as viewed
+    this.postMenu = assignCopy(this.postMenu, {post, open: !!post, swipeup: false});
+    if ( post )
+      this.store.dispatch(new MarkViewed(post.id));
+  }
+
   ngOnDestroy(): void {
+    console.log("Destroy applications")
     super.ngOnDestroy();
   }
 }
