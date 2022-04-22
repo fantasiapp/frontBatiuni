@@ -305,7 +305,6 @@ export class HomeComponent extends Destroy$ {
   slideOnlinePostClose(){
     // Close View
     this.slideOnlinePost.close()
-    console.log('CLoooose');
 
     // Update
     this.annonceResume.close()
