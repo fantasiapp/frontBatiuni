@@ -218,6 +218,10 @@ export class UIAnnonceResume extends Destroy$ {
 
   onApply() {
     const formValue = this.form.value;
+    if( this.form.value == 0) {
+      this.info.show('error', 'Montant incorrect', 2000)
+      return
+    }
     this.apply.emit({
       amount: formValue.amount,
       devis: formValue.devis[0].name
