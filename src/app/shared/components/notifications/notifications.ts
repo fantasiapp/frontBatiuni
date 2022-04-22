@@ -92,6 +92,8 @@ export class Notifications {
           break;
       }
     })
+
+    this.updateNotifications();
   }
 
 
