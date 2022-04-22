@@ -142,6 +142,7 @@
   color: $formulaireMainColor;
   flex: 1;
   font-family: "Poppins";
+  row-gap: 1rem;
   @extend .flex;
   @extend .column;
   
@@ -168,6 +169,10 @@
   .form-subtitle {
     @extend .subtitle;
   }
+
+  .form-spacer{
+    margin-bottom: 1rem
+  }
 }
 
 .form-input {
@@ -193,7 +198,6 @@
   }
 
   & > label {
-    margin-bottom: 10px;
     font-weight: 400;
   }
   

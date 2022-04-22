@@ -1,10 +1,11 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, Output } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { Store } from "@ngxs/store";
 import { PopupService } from "src/app/shared/components/popup/popup.component";
 import { Company, User, Post, File, PostDetail, Job, Mission, Candidate } from "src/models/new/data.interfaces";
 import { DataQueries, DataState } from "src/models/new/data.state";
 import { Destroy$ } from "src/app/shared/common/classes";
+import { InfoService } from "src/app/shared/components/info/info.component";
 
 export type ApplyForm = {
   amount: number;
@@ -56,7 +57,7 @@ export type ApplyForm = {
       <span>{{collapsed ? 'Lire la suite' : 'Lire moins'}}</span>  <img src="assets/arrowdown.svg" [style.transform]="'rotate(' + (180 * +!collapsed) + 'deg)'"/>
     </div>
 
-    <rating [profile]="{company: company!, user: user}" [(open)]="openRatings" [ngClass]="{'open' : openRatings}"></rating>
+    <rating [view]="view" [profile]="{company: company!, user: user}" [(open)]="openRatings" [ngClass]="{'open' : openRatings}"></rating>
 
     <ng-container *ngIf="application && view == 'ST'">
       <hr class="dashed"/>
@@ -106,6 +107,7 @@ export class UIAnnonceResume extends Destroy$ {
 
   get disableValidation ():boolean {
     console.log("disableValidation", this.amount, this.hasPostulated)
+    if(this.hasPostulated) this.info.show('info', 'Vous avez déjà postulé à cette annonce')
     return this.hasPostulated || this.amount == null
   }
 
@@ -175,7 +177,7 @@ export class UIAnnonceResume extends Destroy$ {
     this.job = p ? this.store.selectSnapshot(DataQueries.getById('Job', p.job)) : null;
   }
 
-  constructor(private store: Store, private popup: PopupService) {
+  constructor(private store: Store, private popup: PopupService, private info: InfoService) {
     super()
   }
 
@@ -221,5 +223,19 @@ export class UIAnnonceResume extends Destroy$ {
       devis: formValue.devis[0].name
     });
     console.log("apply")
+  }
+
+  close() {
+    this.form.get('amount')?.setValue(null)
+    console.log('CLOOOSE', this.amount);
+  }
+
+  open(){
+    let amount;
+    if(this._post) amount = this.searchCandidate(this._post)?.amount
+    else amount = null
+    console.log('OPENNNNN', amount);
+
+    this.form.get('amount')?.setValue(amount)
   }
 };

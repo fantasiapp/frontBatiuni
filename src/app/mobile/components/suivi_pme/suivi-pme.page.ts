@@ -13,6 +13,12 @@ import { DataLayerManager } from "@agm/core";
 // export type Task = PostDetail & {validationImage:string, invalidationImage:string}
 
 // , validationImage:"assets/suivi-valider.svg", invalidationImage:"assets/suivi-refuser.svg"
+
+export interface accordionData {
+  date: DateG,
+  open: boolean 
+}
+
 @Component({
   selector: 'suivi-chantier',
   templateUrl:"suivi-pme.page.html",
@@ -45,6 +51,16 @@ export class SuiviPME {
     calendar: new FormControl([]),
   })
 
+  accordionsData: accordionData[] = [];
+
+
+  openAccordion(accordion: accordionData){
+    for (const accordionData of this.accordionsData) {
+      if(accordionData.date == accordion.date){
+        accordionData.open = accordion.open
+      }
+    }
+  }
 
   @Input()
   set missionMenu(mM: PostMenu<Mission>) {
@@ -109,6 +125,10 @@ export class SuiviPME {
         supervisions: this.computeSupervisionsForMission(value as string, supervisionsTaks)
       } as DateG
     })
+    if(this.accordionsData.length != 0) return
+    for (const date of this.dates) {
+      this.accordionsData.push({date: date, open: false})
+    }
   }
 
   computeSupervisionsforTask(supervisionsId: number[], supervisionsTask:number[]) {
@@ -280,6 +300,8 @@ export class SuiviPME {
     })
     // this.cd.markForCheck()
     console.log("realoadMission", this.dates)
+
+    
     return [dateResult, this.mission!]
   }
 

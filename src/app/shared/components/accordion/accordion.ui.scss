@@ -39,7 +39,11 @@ img {
 .content {
   overflow: hidden;
   max-height: 0;
-  transition: max-height 200ms ease-out 0s
+  transition: max-height 800ms ease-out 0s
+}
+
+.panel-open {
+  max-height: unset;
 }
 
 .taskBydate {

@@ -39,6 +39,9 @@ export class RatingComponent extends UIOpenMenu {
   @Input()
   profileRecommandation: boolean = false
 
+  @Input()
+  view: 'ST' | 'PME' | null = 'PME'
+
   missions: Mission[] | undefined;
   ratingInfos?: ratingInfo[];
   company: Company | undefined;
@@ -47,10 +50,10 @@ export class RatingComponent extends UIOpenMenu {
     super()
   }
 
-  view: 'ST' | 'PME' = 'ST';
-  ngOnInit() {
-    this.view = this.store.selectSnapshot(DataState.view)
-  }
+  // view: 'ST' | 'PME' = 'ST';
+  // ngOnInit() {
+    // this.view = this.store.selectSnapshot(DataState.view)
+  // }
 
   ngOnChanges(){
     

@@ -73,7 +73,7 @@
     <!-- Component two -->
     <slidemenu [(open)]="postMenu.open" [header]="false" #slideOnlinePost>
       <header class="clear-margin full-width sticky-header flex center-cross annonce" customHeader>
-        <img (click)="slideOnlinePost.close()" src="assets/arrowlblack.svg" />
+        <img (click)="slideOnlinePost.close(); slideOnlinePostClose()" src="assets/arrowlblack.svg" />
         <h1 class="grow center-text">Annonce(s) en Ligne</h1>
         <img *ngIf="view == 'PME'" (click)="postMenu.swipeup = true" src="assets/Option.svg"/>
         <!-- <ng-template #starTemplate>
@@ -143,7 +143,7 @@
 
 <ng-template #candidature let-company let-post="post" let-application="application">
   <span *ngIf="amountSubContractor">{{ amountSubContractor }}</span>
-  <extended-profile class="content-with-header-and-footer" [showContact]="true" [profile]="profileSubContractor!" [showSwitch]="false" [showRecomandation]="false"></extended-profile>
+  <extended-profile class="content-with-header-and-footer" [showContact]="true" [profile]="profileSubContractor!" [showSwitch]="false" [showRecomandation]="false" [showView]="'ST'"></extended-profile>
   <footer class="sticky-footer flex center-cross application background-white">
     <button class="button active full-width" (click)="handleApplication(post, application)">Traiter la candidature</button>
   </footer>

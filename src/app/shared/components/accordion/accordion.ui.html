@@ -3,6 +3,6 @@
   <img [class.open]="open" src="assets/arrowdown.svg"/>
 </h3>
 
-<div class="content" #panel>
+<div class="content" #panel [ngClass]="{'panel-open' : open}">
   <ng-content></ng-content>
 </div>

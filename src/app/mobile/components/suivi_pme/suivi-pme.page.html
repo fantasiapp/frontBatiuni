@@ -23,7 +23,7 @@
   <p class="font-Roboto">Avec {{contactName}} entreprise {{ companyName }} </p>
 </div>
 <div class="full-width flex column">
-  <suivi-chantier_date *ngFor="let date of dates" [date]="date" [mission]="mission" [reloadMission]="reloadMission"></suivi-chantier_date>
+  <suivi-chantier_date *ngFor="let accordionData of accordionsData" [date]="accordionData.date" [mission]="mission" [reloadMission]="reloadMission" [_accordionOpen]="accordionData.open" (openEmit)="openAccordion($event)"></suivi-chantier_date>
   <!-- <div class="newDate">
     <img src="assets/plusBlue.svg">
     <span>Ajouter une nouvelle date</span>

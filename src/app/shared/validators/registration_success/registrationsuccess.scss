@@ -21,7 +21,7 @@ p {
 }
 
 .image-container {
-  margin-left: calc(-$page-padding + 10px);
+  margin-left: calc(-#{$page-padding} + 10px);
 }
 
 // Success Circle with the  confirmation SVG
@@ -30,7 +30,7 @@ p {
 }
 
 .overlap, .content {
-  padding: $page-padding;
+  // padding: $page-padding;
 }
 
 .overlap {

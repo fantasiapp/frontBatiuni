@@ -3,7 +3,7 @@ import { Store } from "@ngxs/store";
 import * as UserActions from "src/models/new/user/user.actions";
 import { take } from "rxjs/operators";
 import { PopupService } from "src/app/shared/components/popup/popup.component";
-import { DataQueries, QueryProfile, SnapshotArray } from "src/models/new/data.state";
+import { DataQueries, DataState, QueryProfile, SnapshotArray } from "src/models/new/data.state";
 import { Job, File, Profile, JobForCompany} from "src/models/new/data.interfaces";
 import { Observable } from "rxjs";
 import { Destroy$ } from "src/app/shared/common/classes";
@@ -39,6 +39,9 @@ export class ExtendedProfileComponent extends Destroy$ {
   showSwitch: boolean = true;
   @Input()
   showRecomandation: boolean = true;
+  
+  @Input()
+  showView: 'ST' | 'PME' = this.store.selectSnapshot(DataState.view);
 
   constructor(private store: Store, private popup: PopupService, private cd: ChangeDetectorRef) {
     super();
