@@ -1,11 +1,12 @@
-import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from "@angular/core";
 import { Store } from "@ngxs/store";
 import * as moment from "moment";
-import { Notification } from "src/models/new/data.interfaces";
+import { Company, Mission, Notification, Post, User } from "src/models/new/data.interfaces";
 import { FileDownloader } from "../../services/file-downloader.service";
 import { DataQueries } from "src/models/new/data.state";
 import { ImageGenerator } from "../../services/image-generator.service";
 import { SafeResourceUrl } from "@angular/platform-browser";
+import { update } from "src/models/new/state.operators";
 
 export interface NotificationDisplay {
   id: number;
@@ -30,44 +31,21 @@ export class Notifications {
   month: any;
   timer: any[] = [];
 
-  constructor(private store: Store, private downloader: FileDownloader, private imageGenerator: ImageGenerator){
+  constructor(private store: Store, private downloader: FileDownloader, private imageGenerator: ImageGenerator, private cd: ChangeDetectorRef){
   }
 
-  ngOnInit() {
-    this.notifications.forEach((notificationAny, index) => {
-      let notification = notificationAny as Notification
+  addNotification(notification: Notification, index: number, src: SafeResourceUrl | string){
+    let notificationDisplay = {
+      id: index,
+      date: new Date(notification.timestamp * 1000),
+      src: (src || "assets/arrow_left.svg") as string,
+      text: notification.content
+    }
+    this.notification.unshift(notificationDisplay)
+    this.updateNotifications();
+  }
 
-      let src: SafeResourceUrl | string = "";
-      if ( notification.nature == "Commentaire" || notification.nature == "Horaires"){
-        let company = this.store.selectSnapshot(DataQueries.getById('Company', notification.company))!
-        let logo = this.store.selectSnapshot(DataQueries.getProfileImage(company.id));
-        console.log(logo);
-        if (!logo) {
-          const fullname = company.name[0].toUpperCase();
-          src = this.imageGenerator.generate(fullname);
-        } else {
-          this.downloader.downloadFile(logo).subscribe(image => {
-            src = this.downloader.toSecureBase64(image);
-          })
-        }
-      }
-      else if ( notification.nature == "Profil"){
-        src = "assets/Icon_!.svg";
-      } else {
-        src = "assets/Icon_alert.svg";
-      }
-      
-      console.log("Notification")
-      console.log(notification)
-      console.log(src)
-      let notificationDisplay = {
-        id: index,
-        date: new Date(notification.timestamp * 1000),
-        src: src as string,
-        text: notification.content
-      }
-      this.notification.unshift(notificationDisplay)
-    })
+  updateNotifications(){
     let today = new Date(Date.now())
     this.month = this.notification.filter(notif => moment(moment(today).format('L')).isAfter(moment(notif.date).format('L')))
     this.today = this.notification.filter(notif => moment(moment(today).format('L')).isSame(moment(notif.date).format('L')))
@@ -76,4 +54,47 @@ export class Notifications {
       this.timer.push(moment(moment(this.today[i].date)).startOf('minute').fromNow());
     }
   }
+
+  ngOnInit() {
+    this.notifications.forEach((notificationAny, index) => {
+      let notification = notificationAny as Notification
+      console.log("Notificaiton", notification)
+      let src: SafeResourceUrl | string = "";
+
+      switch ( notification.nature ){
+        case "PME":
+        case "ST":
+          let company: Company;
+          if (notification.missions){
+            let mission = this.store.selectSnapshot(DataQueries.getById("Mission", notification.missions)!) as Mission;
+            company = this.store.selectSnapshot(DataQueries.getById("Company", mission.company)) as Company;
+          }
+          else {
+            let post = this.store.selectSnapshot(DataQueries.getById("Post", notification.posts)!) as Post;
+            company = this.store.selectSnapshot(DataQueries.getById("Company", post.company)) as Company;
+          }
+
+          let logo = this.store.selectSnapshot(DataQueries.getProfileImage(company.id));
+          if (!logo) {
+            const fullname = company.name[0].toUpperCase();
+            src = this.imageGenerator.generate(fullname);
+            this.addNotification(notification, index, src);
+          } else {
+            this.downloader.downloadFile(logo).subscribe(image => {
+              src = this.downloader.toSecureBase64(image);
+              this.addNotification(notification, index, src);
+            })
+          }
+          break;
+        case "alert":
+          src = "assets/Icon_alert.svg"
+          this.addNotification(notification, index, src);
+          break;
+      }
+    })
+
+    this.updateNotifications();
+  }
+
+
 }

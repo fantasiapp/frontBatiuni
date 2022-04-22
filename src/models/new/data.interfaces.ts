@@ -166,8 +166,8 @@ export interface Establishement {
 export type Notification = {
   id: Ref<PostDate>
   company: Ref<Company>
-  post: Ref<Post>
-  mission: Ref<Mission>
+  posts: Ref<Post>
+  missions: Ref<Mission>
   role: string
   timestamp: number
   content: string
