@@ -141,8 +141,12 @@ export class HomeComponent extends Destroy$ {
   openPost(post: Post | null) {
     //mark as viewed
     this.postMenu = assignCopy(this.postMenu, {post, open: !!post, swipeup: false});
-    if ( post )
-      this.store.dispatch(new MarkViewed(post.id));
+    if ( post ) this.store.dispatch(new MarkViewed(post.id));
+
+    // arnaque pour laisser le temps a post de s'update
+    setTimeout(()=>{
+      this.annonceResume.open()
+    },20)
   }
 
   setFavorite(fav: any) {
@@ -286,7 +290,6 @@ export class HomeComponent extends Destroy$ {
 
   @ViewChild(UIAnnonceResume, {static: false})
   private annonceResume!: UIAnnonceResume;
-
 
   slideOnlinePostClose(){
     this.annonceResume.close()
