@@ -61,6 +61,7 @@ import { MissionFilterForm } from "./forms/missions.form";
 import { FileViewer } from "./components/file-viewer/file-viewer.component";
 import { BannerComponent } from './components/banner/banner.component';
 import { RatingComponent } from "./components/rating/rating.component";
+import { SlideProfileComponent } from './components/slide-profile/slide-profile.component';
 import { ApplicationsComponent } from './components/applications/applications.component';
 
 @NgModule({
@@ -125,6 +126,7 @@ import { ApplicationsComponent } from './components/applications/applications.co
     FileViewer,
     BannerComponent,
     RatingComponent,
+    SlideProfileComponent,
     ApplicationsComponent
   ],
   imports: [
@@ -195,6 +197,7 @@ import { ApplicationsComponent } from './components/applications/applications.co
     MissionFilterForm,
     FileViewer,
     RatingComponent,
+    SlideProfileComponent,
     ApplicationsComponent
   ],
   providers: [ImageGenerator, FileDownloader, FilterService]

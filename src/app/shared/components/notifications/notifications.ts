@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from "@angular/core";
 import { Store } from "@ngxs/store";
 import * as moment from "moment";
-import { Company, Mission, Notification, Post, User } from "src/models/new/data.interfaces";
+import { Company, Mission, Notification, Post, Candidate } from "src/models/new/data.interfaces";
 import { FileDownloader } from "../../services/file-downloader.service";
 import { DataQueries } from "src/models/new/data.state";
 import { ImageGenerator } from "../../services/image-generator.service";
@@ -58,18 +58,38 @@ export class Notifications {
   ngOnInit() {
     this.notifications.forEach((notificationAny, index) => {
       let notification = notificationAny as Notification
-      console.log("Notificaiton", notification)
-      let src: SafeResourceUrl | string = "";
-
+      console.log("Notification", notification)
+      let src: SafeResourceUrl | string = ""
+      let company: Company
       switch ( notification.nature ){
         case "PME":
-        case "ST":
-          let company: Company;
-          if (notification.missions){
+          if (notification.missions) {
             let mission = this.store.selectSnapshot(DataQueries.getById("Mission", notification.missions)!) as Mission;
             company = this.store.selectSnapshot(DataQueries.getById("Company", mission.company)) as Company;
+            console.log("init notification", company)
+          } else {
+            let post = this.store.selectSnapshot(DataQueries.getById("Post", notification.posts)!) as Post;
+            company = this.store.selectSnapshot(DataQueries.getById("Company", post.company)) as Company;
           }
-          else {
+          let logoPME = this.store.selectSnapshot(DataQueries.getProfileImage(company.id))
+          if (!logoPME) {
+            const fullname = company.name[0].toUpperCase();
+            src = this.imageGenerator.generate(fullname);
+            this.addNotification(notification, index, src);
+          } else {
+            this.downloader.downloadFile(logoPME).subscribe(image => {
+              src = this.downloader.toSecureBase64(image);
+              this.addNotification(notification, index, src);
+            })
+          }
+          break
+        case "ST":
+          if (notification.missions) {
+            let mission = this.store.selectSnapshot(DataQueries.getById("Mission", notification.missions)!) as Mission;
+            let candidates = this.store.selectSnapshot(DataQueries.getAll("Candidate")!) as Candidate[];
+            console.log("ST", candidates)
+            company = this.store.selectSnapshot(DataQueries.getById("Company", mission.subContractor)) as Company;
+          } else {
             let post = this.store.selectSnapshot(DataQueries.getById("Post", notification.posts)!) as Post;
             company = this.store.selectSnapshot(DataQueries.getById("Company", post.company)) as Company;
           }

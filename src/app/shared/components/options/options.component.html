@@ -1,11 +1,11 @@
 <div class="cover-parent flex column center-cross">
   <div class="form-select full-width">
 
-    <div class="input-select full-width flex row center-cross">  
+    <div class="input-select full-width flex row center-cross" (click)="onToggle($event)">  
       <ul *ngIf="showChosenItems" class="chosen-items" [class.multiple]="_type[0] == 'checkbox'" [attr.data-if-empty]="ifEmpty">
         <li *ngFor="let choice of value; let i = index" (click)="onChange(['delete', i])">{{choice.name}}</li>
       </ul>
-      <img src="assets/arrowdown.svg" (click)="onToggle($event)"/>
+      <img src="assets/arrowdown.svg"/>
     </div>
     <div *ngIf="showDropDown" class="dropdown">
       <div *ngIf="searchable" class="dropdown-choices full-width flex row center-cross">
@@ -15,16 +15,16 @@
      
       <div *ngIf="options.length" class="dropdown-content">
         <ul *ngIf="_type[0] == 'checkbox'; else radioMenu">
-          <li *ngFor="let option of availableOptions; let index = index" class="flex center-cross">
+          <li *ngFor="let option of availableOptions; let index = index" class="flex center-cross" (click)="checkbox.onChange($event)">
             {{option.name}} 
-            <checkbox (valueChange)="onChange(['toggle', option.id])" [value]="value!.includes(option)"></checkbox>
+            <checkbox (valueChange)="onChange(['toggle', option.id])" [value]="value!.includes(option)" #checkbox></checkbox>
           </li>
         </ul>
         <ng-template #radioMenu>
           <ul>
-            <li *ngFor="let option of availableOptions; let index = index" class="flex center-cross">
+            <li *ngFor="let option of availableOptions; let index = index" class="flex center-cross" (click)="radiobox.onChange($event)">
               {{option.name}} 
-              <radiobox [name]="_type[1]" (valueChange)="onChange(['toggle', option.id])" [value]="value!.includes(option)"></radiobox>
+              <radiobox [name]="_type[1]" (valueChange)="onChange(['toggle', option.id])" [value]="value!.includes(option)" #radiobox></radiobox>
             </li>
           </ul>
         </ng-template>
