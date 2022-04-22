@@ -57,7 +57,7 @@ export type ApplyForm = {
       <span>{{collapsed ? 'Lire la suite' : 'Lire moins'}}</span>  <img src="assets/arrowdown.svg" [style.transform]="'rotate(' + (180 * +!collapsed) + 'deg)'"/>
     </div>
 
-    <rating [view]="view" [profile]="{company: company!, user: user}" [(open)]="openRatings" [ngClass]="{'open' : openRatings}"></rating>
+    <rating [view]="'PME'" [profile]="{company: company!, user: user}" [(open)]="openRatings" [ngClass]="{'open' : openRatings}"></rating>
 
     <ng-container *ngIf="application && view == 'ST'">
       <hr class="dashed"/>
@@ -225,17 +225,16 @@ export class UIAnnonceResume extends Destroy$ {
     console.log("apply")
   }
 
+
+  // Permet de reset la value lorsque l'on sort d'une annonce, notament lorsqu'on passe d'une annonce a une autre ou le montant afficher restait le meme
   close() {
     this.form.get('amount')?.setValue(null)
-    console.log('CLOOOSE', this.amount);
   }
 
   open(){
     let amount;
     if(this._post) amount = this.searchCandidate(this._post)?.amount
     else amount = null
-    console.log('OPENNNNN', amount);
-
     this.form.get('amount')?.setValue(amount)
   }
 };
