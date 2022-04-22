@@ -17,18 +17,7 @@ import { ImageGenerator } from "../../services/image-generator.service";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SuiviComments {
-
-  commentOption: boolean = false;
-
-  toogleCommentOption(){ this.commentOption = !this.commentOption }
-  get showCommentOption(){
-    return this.commentOption
-  }
-
-  deleteComment(){
-    console.log('Ce commentaire est supprimé');
-  }
-
+  
   // We can get the name and the profile image from the state
 
   @ContentChild(SuiviComments, {read: SuiviComments})
@@ -47,7 +36,7 @@ export class SuiviComments {
     this.nbImageSelected += change
     this.cd.markForCheck()
   }
-
+  
   _supervision: Supervision = {
     id: -1,
     Supervisions: [],

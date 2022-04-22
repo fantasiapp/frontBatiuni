@@ -4,7 +4,7 @@ import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
   selector: 'online-filter-form',
   template: `
   <form class="form-control full-width">
-    <div class="form-input">
+    <div class="form-input form-spacer">
       <label>Date de mission</label>
       <input type="date" class="form-element"/>
       <img src="assets/calendar.png"/>
@@ -20,8 +20,8 @@ import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
       <options></options>
     </div>
 
-    <div class="form-input">
-      <label>Type</label>
+    <div class="form-input form-spacer">
+      <label class="form-title">Type</label>
       <div class="flex row radio-container">
         <div class="radio-item">
           <radiobox class="grow" name="job-type"></radiobox>
@@ -34,10 +34,10 @@ import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
       </div>
     </div>
 
-    <div class="form-input space-children-margin">
-      <label>Réorganiser la liste selon</label>
+    <div class="form-input">
+      <label class="form-title">Réorganiser la liste selon</label>
       <div class="switch-container flex center-cross">
-        <span class="criteria">Annonces contentant des {{target}} en premier</span> <switch class="default"></switch>
+        <span>Annonces contentant des {{target}} en premier</span> <switch class="default"></switch>
       </div>
     </div>
   </form>
