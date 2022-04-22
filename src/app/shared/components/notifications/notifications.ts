@@ -66,7 +66,6 @@ export class Notifications {
           if (notification.missions) {
             let mission = this.store.selectSnapshot(DataQueries.getById("Mission", notification.missions)!) as Mission;
             company = this.store.selectSnapshot(DataQueries.getById("Company", mission.company)) as Company;
-            console.log("init notification", company)
           } else {
             let post = this.store.selectSnapshot(DataQueries.getById("Post", notification.posts)!) as Post;
             company = this.store.selectSnapshot(DataQueries.getById("Company", post.company)) as Company;
@@ -86,12 +85,10 @@ export class Notifications {
         case "ST":
           if (notification.missions) {
             let mission = this.store.selectSnapshot(DataQueries.getById("Mission", notification.missions)!) as Mission;
-            let candidates = this.store.selectSnapshot(DataQueries.getAll("Candidate")!) as Candidate[];
-            console.log("ST", candidates)
             company = this.store.selectSnapshot(DataQueries.getById("Company", mission.subContractor)) as Company;
           } else {
-            let post = this.store.selectSnapshot(DataQueries.getById("Post", notification.posts)!) as Post;
-            company = this.store.selectSnapshot(DataQueries.getById("Company", post.company)) as Company;
+            company = this.store.selectSnapshot(DataQueries.getById("Company", notification.subContractor)!) as Company;
+            console.log("ngInit company", company)
           }
 
           let logo = this.store.selectSnapshot(DataQueries.getProfileImage(company.id));
@@ -112,7 +109,6 @@ export class Notifications {
           break;
       }
     })
-
     this.updateNotifications();
   }
 
