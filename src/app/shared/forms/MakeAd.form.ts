@@ -171,7 +171,7 @@ import { InfoService } from "../components/info/info.component";
       padding-top: 10px;
       button {
         max-width: 45%;
-        padding: unset;
+        padding: 0.75rem 1.25rem;
       }
     }
 
