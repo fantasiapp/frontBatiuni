@@ -1,6 +1,6 @@
-@use 'src/styles/variables' as *;
 @use 'src/styles/mixins' as *;
-
+@use 'src/styles/variables' as *;
+@use "src/styles/responsive" as *; 
 
 :host {
   @extend %page;
@@ -15,12 +15,6 @@ section {
 
 .infos .timer {
   color: $light;
-}
-
-.offres-logo {
-    margin-right: 0.5em;
-    height: 51px;
-    width: 51px;
 }
 
 .todays-notifications,
@@ -45,4 +39,14 @@ section {
 .timer {
   font-size: 12px;
   color : $light;
+}
+
+.offer-logo {
+  margin-right: 0.5em;
+  height: 51px;
+  width: 51px;
+
+  img {
+    height: 100%;
+  }
 }

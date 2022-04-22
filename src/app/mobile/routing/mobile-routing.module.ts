@@ -27,6 +27,7 @@ import { DocusignPage } from 'src/app/shared/components/docusign_page/docusign.p
 import { ForgotPassword } from '../components/forgot_password/forgot.password';
 import { MailSender } from '../components/only_mail/only.mail';
 import { UIAccordion } from 'src/app/shared/components/accordion/accordion.ui';
+import { ApplicationsComponent } from 'src/app/shared/components/applications/applications.component';
 
 const routes: Routes = [{
     path: 'landing',
@@ -76,6 +77,9 @@ const routes: Routes = [{
   } , {
     path: 'booster',
     component: BoosterPage
+  }, {
+    path: 'applications',
+    component: ApplicationsComponent,
   }, {
     path: 'factures',
     component: FacturePage,

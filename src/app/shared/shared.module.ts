@@ -62,6 +62,7 @@ import { FileViewer } from "./components/file-viewer/file-viewer.component";
 import { BannerComponent } from './components/banner/banner.component';
 import { RatingComponent } from "./components/rating/rating.component";
 import { SlideProfileComponent } from './components/slide-profile/slide-profile.component';
+import { ApplicationsComponent } from './components/applications/applications.component';
 
 @NgModule({
   declarations: [
@@ -125,7 +126,8 @@ import { SlideProfileComponent } from './components/slide-profile/slide-profile.
     FileViewer,
     BannerComponent,
     RatingComponent,
-    SlideProfileComponent
+    SlideProfileComponent,
+    ApplicationsComponent
   ],
   imports: [
     CommonModule,
@@ -195,7 +197,8 @@ import { SlideProfileComponent } from './components/slide-profile/slide-profile.
     MissionFilterForm,
     FileViewer,
     RatingComponent,
-    SlideProfileComponent
+    SlideProfileComponent,
+    ApplicationsComponent
   ],
   providers: [ImageGenerator, FileDownloader, FilterService]
 })

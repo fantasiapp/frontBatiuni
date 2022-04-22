@@ -15,7 +15,7 @@
   <swipeup [(open)]="openMenu">
     <li (click)="slideModifyMenu(false)">Modifier mon profil</li>
     <li (click)="slideModifyMenu(true)">Modifier mon mot de passe</li>
-    <li>Candidatures en cours</li>
+    <li [routerLink]="['','applications']"> Candidatures en cours</li>
     <li [routerLink]="['','abonnement']">Gérer mes abonnements</li>
     <li [routerLink]="['','factures']">Mes factures</li>
     <li>Partager l'application</li>
@@ -45,4 +45,5 @@
     <div class="full-width center-text text-emphasis" header>Notifications</div>
     <notifications class="hosted-page flex column center-cross space-children-margin" [notifications]="notifications" content></notifications>
   </slidemenu>
+
 </ng-container>
