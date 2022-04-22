@@ -18,8 +18,8 @@ export type ApplyForm = {
   <div *ngIf="post" class="collapse-container" [class.is-collapsed]="collapsed">
     <div class="collapse-content space-children-margin">
       <div class="company-intro flex column center-cross space-children-margin">
-        <span *ngIf="candidates" [attr.data-notification-number]="candidates" class="notification"></span>
-        <profile-image [profile]="{company: company!, user: user}"></profile-image>
+        <span *ngIf="candidates && view == 'PME'" [attr.data-notification-number]="candidates" class="notification"></span>
+        <profile-image [profile]="{company: company!, user: user}" (click)="openProfile()"></profile-image>
         <span class="company">{{ company!.name }}</span>
         <stars (click)='openRatings = true' class="stars" value="{{ company!.starsPME }}" disabled></stars>
         <span>{{ (post.manPower) ? "Main d'oeuvre" : "Fourniture et pose" }}</span>
@@ -58,7 +58,7 @@ export type ApplyForm = {
     </div>
 
     <rating [view]="'PME'" [profile]="{company: company!, user: user}" [(open)]="openRatings" [ngClass]="{'open' : openRatings}"></rating>
-
+    <slide-profile [(open)]="slideProfileOpen" [profile]="{company: company!, user: null}" [post]="post" [ngClass]="{'open' : slideProfileOpen}"></slide-profile>
     <ng-container *ngIf="application && view == 'ST'">
       <hr class="dashed"/>
       <form  *ngIf="post.counterOffer" class="devis form-control" [formGroup]="form">
@@ -169,6 +169,11 @@ export class UIAnnonceResume extends Destroy$ {
     return goodCandidate
   }
 
+  slideProfileOpen: boolean = false;
+  openProfile(){
+    this.slideProfileOpen = true
+  }
+
   @Input('post') set post(p: Post | null) {
     this._post = p;
     this.company = p ? this.store.selectSnapshot(DataQueries.getById('Company', p.company)) : null;
@@ -218,7 +223,7 @@ export class UIAnnonceResume extends Destroy$ {
 
   onApply() {
     const formValue = this.form.value;
-    if( this.form.value == 0) {
+    if( this.form.value == 0 || !this.form.valid) {
       this.info.show('error', 'Montant incorrect', 2000)
       return
     }

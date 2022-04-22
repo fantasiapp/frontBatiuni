@@ -1,0 +1,28 @@
+<slidemenu [(open)]="openSlideProfile">
+    <!-- <header class="clear-margin full-width sticky-header flex center-cross white-header" header>
+      <img src="assets/arrowlblack.svg" (click)="close()">
+      <h1 class="grow center-text">
+        Les notes
+      </h1>
+    </header>
+    <div class="hosted-page flex column center-cross space-children-margin" content>
+  
+      <profile-image [profile]="profile"></profile-image>
+      <span class="company">{{ profile.company!.name }}</span>
+      <stars (click)='openRatings = true' class="stars" value="{{ company!.starsPME }}" disabled></stars>
+      <button *ngIf="profileRecommandation" class="recommendation-button button active"><img src="assets/mail-outline.svg" alt="recommandation">
+        Demander une recommandation
+      </button>
+
+    </div> -->
+    <header class="clear-margin full-width sticky-header flex center-cross white-header" header>
+        <img src="assets/arrowlblack.svg" (click)="close()">
+        <h1 class="grow center-text">
+          Les notes
+        </h1>
+    </header>
+
+    <extended-profile class="" [profile]="profile" [showContact]="true" [showSwitch]="false" [showView]="'PME'" content>
+    </extended-profile>
+</slidemenu>
+
