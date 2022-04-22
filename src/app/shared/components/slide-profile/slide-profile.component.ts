@@ -39,10 +39,10 @@ export class SlideProfileComponent extends UIOpenMenu {
     let fakeUser: User = {
       id: -1,
       email: '',
-      username: this.post.contactName,
+      username: '',
       company: this.profile.company.id,
       firstName: '',
-      lastName: '',
+      lastName: this.post.contactName,
       proposer: '',
       cellPhone: '',
       function: '',

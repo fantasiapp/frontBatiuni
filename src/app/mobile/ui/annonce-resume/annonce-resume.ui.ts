@@ -58,7 +58,7 @@ export type ApplyForm = {
     </div>
 
     <rating [view]="'PME'" [profile]="{company: company!, user: user}" [(open)]="openRatings" [ngClass]="{'open' : openRatings}"></rating>
-    <slide-profile [(open)]="slideProfileOpen" [profile]="{company: company!, user: null}" [post]="post" [ngClass]="{'open' : slideProfileOpen}"></slide-profile>
+    <slide-profile *ngIf="view == 'ST'" [(open)]="slideProfileOpen" [profile]="{company: company!, user: null}" [post]="post" [ngClass]="{'open' : slideProfileOpen}"></slide-profile>
     <ng-container *ngIf="application && view == 'ST'">
       <hr class="dashed"/>
       <form  *ngIf="post.counterOffer" class="devis form-control" [formGroup]="form">
