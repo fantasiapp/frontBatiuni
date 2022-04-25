@@ -57,7 +57,7 @@ export class UIRadioboxAccessor extends UIDefaultAccessor<string | boolean | num
 @Component({
   selector: 'radiobox',
   template: `
-    <input type="radio" [attr.name]="name || null" [value]="onselect" (change)="onChange($event)" [attr.checked]="value || null" tabindex="-1"/>
+    <input type="radio" [attr.name]="name || null" [value]="onselect" (change)="onChange($event)" [checked]="value || null" tabindex="-1"/>
     <span></span>
   `,
   styleUrls: ['./box.component.scss'],
@@ -79,9 +79,11 @@ export class UIRadioboxComponent {
   //action used in accessors
   @Output() selection = new EventEmitter<string | boolean | number>();
 
-  constructor(private cd: ChangeDetectorRef) {}
+  constructor(private cd: ChangeDetectorRef) {
+  }
 
   onChange(e: Event) {
+    console.log('TEST', this.onselect);
     this.valueChange.emit(this.value = true);
     this.selection.emit(this.onselect);
   }
