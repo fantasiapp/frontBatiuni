@@ -18,7 +18,6 @@ export type ApplyForm = {
   <div *ngIf="post" class="collapse-container" [class.is-collapsed]="collapsed">
     <div class="collapse-content space-children-margin">
       <div class="company-intro flex column center-cross space-children-margin">
-        <span *ngIf="candidates && view == 'PME'" [attr.data-notification-number]="candidates" class="notification"></span>
         <profile-image [profile]="{company: company!, user: user}" (click)="openProfile()"></profile-image>
         <span class="company">{{ company!.name }}</span>
         <stars (click)='openRatings = true' class="stars" value="{{ company!.starsPME }}" disabled></stars>
@@ -141,18 +140,6 @@ export class UIAnnonceResume extends Destroy$ {
       return this._post.amount
     }
     return null
-  }
-
-  get candidates(): number {
-    let possibleCandidates:number = 0
-    if (this._post) {
-      const candidatesIds = this._post!.candidates || [],
-        candidates = this.store.selectSnapshot(DataQueries.getMany('Candidate', candidatesIds))
-        candidates.forEach((candidate) => {
-          if (!candidate.isRefused && !candidate.isViewed) possibleCandidates++
-        })
-    }
-    return possibleCandidates
   }
 
   searchCandidate(post:Post): (Candidate | null) {

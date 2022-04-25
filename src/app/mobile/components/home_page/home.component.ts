@@ -309,4 +309,24 @@ export class HomeComponent extends Destroy$ {
     // Update
     this.annonceResume.close()
   }
+
+  
+  // Notifications in header /////
+  currentPost?: Post;
+  
+  updateCurrentPost(p: Post) {
+    this.currentPost = p;
+  }
+  // Used in notification
+  get currentCandidates(): number{
+    let possibleCandidates:number = 0
+    if (this.currentPost) {
+      const candidatesIds = this.currentPost!.candidates || [],
+        candidates = this.store.selectSnapshot(DataQueries.getMany('Candidate', candidatesIds))
+        candidates.forEach((candidate) => {
+          if (!candidate.isRefused && !candidate.isViewed) possibleCandidates++
+        })
+    }
+    return possibleCandidates
+  }
 };
