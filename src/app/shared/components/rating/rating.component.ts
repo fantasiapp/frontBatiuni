@@ -60,7 +60,6 @@ export class RatingComponent extends UIOpenMenu {
     // permet de limiter l'appel de 
     // if (this.company != this.profile.company ) {
       this.company = this.profile.company
-      console.log(this.company);
       this.setRatingInfos(this.company)
     // }
   }
