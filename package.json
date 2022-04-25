@@ -28,6 +28,7 @@
     "@capacitor/device": "^1.1.0",
     "@capacitor/geolocation": "^1.3.0",
     "@capacitor/ios": "^3.3.2",
+    "@capacitor/keyboard": "^1.2.2",
     "@capacitor/local-notifications": "^1.0.9",
     "@capacitor/splash-screen": "^1.1.6",
     "@ngxs/router-plugin": "^3.7.2",
