@@ -8,7 +8,8 @@
     display: block;
     width: 100%;
     position: fixed;
-    @include set-safe-area(bottom);
+    bottom: 0;
+    @include set-safe-area(padding, bottom);
     z-index: 10;
     background-color: white;
   }

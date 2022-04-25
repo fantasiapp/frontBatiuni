@@ -4,6 +4,6 @@
   position: relative;
   width: 100vw !important;
   height: 100vh;
-  height: calc(100vh - env(safe-area-inset-bottom));
-  @include set-safe-area(top, top);
+  height: calc(100vh);
+  // @include set-safe-area(top, top);
 }

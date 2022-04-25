@@ -11,6 +11,8 @@ import { Camera, CameraResultType, CameraSource } from "@capacitor/camera";
 import { i18nMetaToJSDoc } from "@angular/compiler/src/render3/view/i18n/meta";
 import { SuiviComments } from "src/app/shared/components/suivi/comment.suivi";
 import { UIAccordion } from "src/app/shared/components/accordion/accordion.ui";
+import { Keyboard } from '@capacitor/keyboard';
+
 
 @Component({
     selector: 'suivi-chantier_date',
@@ -34,6 +36,9 @@ export class SuiviChantierDate extends Destroy${
     private cd: ChangeDetectorRef, private store: Store, private popup: PopupService
   ) {
     super()
+    Keyboard.addListener('keyboardDidHide', () => {
+      console.log('keyboard did hide');
+    });
   }
 
   _date: DateG = {id:0, value: "1970:01:01", tasks:[], selectedTasks:[], taskWithoutDouble:[], view:this.view, supervisions: []};
@@ -144,6 +149,7 @@ export class SuiviChantierDate extends Destroy${
       this.mainComment(task);
       (document.getElementById("input_general")! as HTMLInputElement).value! = "";
     }
+
   }
 
   mainComment(task:Task | null) {
