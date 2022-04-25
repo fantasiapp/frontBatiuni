@@ -1,0 +1,35 @@
+<header class="clear-margin full-width sticky-header flex column white-header">
+    <div class="pick flex row small-space-children-margin">
+        <img class="left" [routerLink]="['','home','profile']"  src="assets/arrowlblack.svg" />
+        <h1 class="grow center-text">Candidatures en cours</h1>
+    </div>
+    <div class="pick flex center-cross">
+        <searchbar class="grow"></searchbar>
+        <img src="assets/filterBlue.svg" (click)="openAdFilterMenu = true"/>
+    </div>
+
+    <swipeup [(open)]="openAdFilterMenu" type="view">
+        <ng-template #stfilter><st-filter-form (update)="allOnlinePosts = $event"></st-filter-form></ng-template>
+    </swipeup>
+</header>
+
+<div class="hosted-page space-children-margin page-content-with-tabs">
+    <div *ngFor="let onlinePost of allOnlinePosts">
+        <offer *ngIf="hasPostulated(onlinePost)" 
+                [deletable]="false"
+        [post]="onlinePost"
+        (click)="openPost(onlinePost)"
+        ></offer>
+    </div>
+</div>
+
+
+<slidemenu [(open)]="postMenu.open" title="Candidatures en cours"> 
+    <!-- <header>
+        <img (click)="slideOnlinePostClose()" src="assets/arrowlblack.svg" />
+        <h1 class="grow center-text">Annonce candidatée</h1>
+    </header> -->
+    <ng-container content>
+        <annonce-resume class="hosted-page content-with-footer" [collapsible]="false" [application]="false" [post]="postMenu.post"></annonce-resume>
+    </ng-container>
+</slidemenu>
