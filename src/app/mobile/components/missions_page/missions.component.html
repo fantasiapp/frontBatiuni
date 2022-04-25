@@ -8,6 +8,7 @@
     <ng-container *ngSwitchCase="0">
       <offer *ngFor="let mission of myMissions" [post]="mission" (click)="openMission(mission)"></offer>
     </ng-container>
+    <span>test</span>
     <horizontal-calendar [detailedDays]="detailedDays" class="space-children-margin" *ngSwitchCase="1"></horizontal-calendar>
   </ng-container>
 </div>
