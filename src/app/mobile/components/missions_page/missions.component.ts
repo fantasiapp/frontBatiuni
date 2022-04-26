@@ -52,8 +52,11 @@ export class MissionsComponent extends Destroy$ {
       this.myMissions = missions.filter(mission => mission.subContractor == profile.company.id);
       //compute work days
 
-      this.detailedDays.length = 0;
+      this.detailedDays = [];
+      let usedDay: number[] = []
       for ( const mission of this.myMissions ) {
+        const availabilities = this.store.selectSnapshot(DataQueries.getMany('Disponibility', profile.company.availabilities))
+        console.log("availabilities", availabilities, typeof(availabilities[0].date))
         const start = moment(mission.startDate),
           end = moment(mission.endDate),
           contractor = this.store.selectSnapshot(DataQueries.getById('Company', mission.company))!;
@@ -62,13 +65,13 @@ export class MissionsComponent extends Destroy$ {
 
         let day = start.clone();
         for ( let i = 0; i < diffDays; i++ ) {
+          // console.log("day", day.locale('fr').format('YYYY-MM-DD'), typeof(day.locale('fr').format('YYYY-MM-DD')))
           this.detailedDays.push({
             date: day.locale('fr').format('YYYY-MM-DD'),
             start: mission.hourlyStart,
             end: mission.hourlyEnd,
             text: 'Chantier de ' + contractor.name 
           });
-
           day = day.add(1, 'day');
         }
       }

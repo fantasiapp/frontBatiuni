@@ -88,12 +88,11 @@ export class Notifications {
             company = this.store.selectSnapshot(DataQueries.getById("Company", mission.subContractor)) as Company;
           } else {
             company = this.store.selectSnapshot(DataQueries.getById("Company", notification.subContractor)!) as Company;
-            console.log("ngInit company", company)
+            console.log("ST company", notification, company)
           }
-
-          let logo = this.store.selectSnapshot(DataQueries.getProfileImage(company.id));
+          let logo = company ? this.store.selectSnapshot(DataQueries.getProfileImage(company.id)) : null
           if (!logo) {
-            const fullname = company.name[0].toUpperCase();
+            const fullname = company ? company.name[0].toUpperCase() : "A"
             src = this.imageGenerator.generate(fullname);
             this.addNotification(notification, index, src);
           } else {

@@ -75,6 +75,7 @@
       <header class="clear-margin full-width sticky-header flex center-cross annonce" customHeader>
         <img (click)="slideOnlinePostClose()" src="assets/arrowlblack.svg" />
         <h1 class="grow center-text">Annonce(s) en Ligne</h1>
+        <span>{{ postMenu.post?.address }}</span>
         <img *ngIf="view == 'PME'" (click)="postMenu.swipeup = true" src="assets/Option.svg"/>
         <!-- <ng-template #starTemplate>
           <stars [toggle]="true"

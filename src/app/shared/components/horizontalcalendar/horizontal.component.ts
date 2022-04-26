@@ -68,6 +68,7 @@ export class HorizantaleCalendar implements OnInit {
   }
 
   toCalendarDays(workDays: MissionDetailedDay[]): DayState[] {
+    console.log("toCalendar days", this.detailedDays)
     this.detailedDays = workDays;
     return workDays.map((workDay) => ({
       date: workDay.date,
