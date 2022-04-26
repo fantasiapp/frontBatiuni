@@ -226,21 +226,20 @@
 }
 
 %has-notifications {
+  display: inline-block;
   position: relative;
+  width: 0;
+  height: 0;
+  pointer-events: none;
   &::after {
     content: attr(data-notification-number);
-    @include circle($notification-size,red);
-    
-    display: inline-flex;
+    min-width: $notification-size;
+    height: $notification-size;
+    background-color: $danger;
+    border-radius: math.div($notification-size, 2 ) ;
+    display: flex;
     justify-content: center;
     align-items: center;
-    position: relative;
-    left: 5px;
-    top: math.div(-$notification-size, 2);
-    position: absolute;
-    // right: -$notification-size; 
-    // text-align: center;
-    // line-height: $notification-size;
     font-size: $notification-size*0.6;
     font-weight: normal;
     color: white;
