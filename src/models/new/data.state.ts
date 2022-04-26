@@ -462,7 +462,6 @@ export class DataState {
     const profile = this.store.selectSnapshot(DataQueries.currentProfile)!;
     return this.http.get('data', application).pipe(
       tap((response:any) => {
-        console.log("candidateViewed", response)
         if ( response[application.action] !== 'OK' ) {
           this.inZone(() => this.info.show("error", response.messages, 3000));
           throw response.messages;
@@ -499,6 +498,7 @@ export class DataState {
     const {post, ...data} = handle;
     return this.http.get('data', data).pipe(
       tap((response: any) => {
+        console.log("handleApplication start", response, response.length)
         if ( response[handle.action] !== 'OK' ) {
           this.inZone(() => this.info.show("error", response.messages, 3000));
           throw response.messages;
@@ -508,11 +508,13 @@ export class DataState {
         const company = this.store.selectSnapshot(DataQueries.currentCompany);
         this.inZone(() => this.info.show("success", "Réponse envoyée.", 3000))
         this.slide.hide();
-        if (data["response"])
+        if (data["response"]) {
+          console.log("handleApplication", response)
           ctx.setState(compose(
             deleteIds('Post', [handle.post.id]),
             addComplexChildren('Company', company.id, 'Mission', response)
           ))
+        }
         else
           ctx.setState(compose(
             deleteIds('Post', [handle.post.id]),

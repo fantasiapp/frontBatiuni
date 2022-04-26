@@ -8,7 +8,6 @@ import { CloseMission, ModifyMissionDate, DuplicatePost } from "src/models/new/u
 import { Company, Mission, PostMenu, PostDetail, Profile, Supervision, DateG, Task } from "src/models/new/data.interfaces";
 import { DataQueries, DataState } from "src/models/new/data.state";
 import { CalendarUI, DayState } from "src/app/shared/components/calendar/calendar.ui";
-import { type } from "os";
 
 // export type Task = PostDetail & {validationImage:string, invalidationImage:string}
 
@@ -88,6 +87,8 @@ export class SuiviPME {
           daystates =  mission!.dates.map(date => ({date: date as unknown as string, availability: 'selected'}))
         else
           daystates = this.store.selectSnapshot(DataQueries.getMany('DatePost', mission!.dates))
+            .map(({name}) => ({date: name, availability: 'selected'}))
+            daystates = this.store.selectSnapshot(DataQueries.getMany('DatePost', mission!.dates))
             .map(({name}) => ({date: name, availability: 'selected'}))
 
         this.AdFormDate.get('calendar')?.setValue(daystates);
