@@ -592,7 +592,7 @@ export class DataState {
   }
 
   @Action(ModifyMissionDate)
-  modifyMissionDAte(ctx:StateContext<DataModel>, application: ModifyMissionDate) {
+  modifyMissionDate(ctx:StateContext<DataModel>, application: ModifyMissionDate) {
     const profile = this.store.selectSnapshot(DataQueries.currentProfile)!
     return this.http.post('data', application).pipe(
       tap((response:any) => {
