@@ -6,7 +6,7 @@ import { Destroy$ } from "src/app/shared/common/classes";
 import { assignCopy } from "src/app/shared/common/functions";
 import { MissionDetailedDay } from "src/app/shared/components/horizontalcalendar/horizontal.component";
 import { InfoService } from "src/app/shared/components/info/info.component";
-import { Mission, PostMenu, Profile } from "src/models/new/data.interfaces";
+import { DateG, Mission, PostMenu, Profile } from "src/models/new/data.interfaces";
 import { DataQueries, QueryAll } from "src/models/new/data.state";
 import { CloseMissionST } from "src/models/new/user/user.actions";
 
@@ -58,18 +58,35 @@ export class MissionsComponent extends Destroy$ {
           end = moment(mission.endDate),
           contractor = this.store.selectSnapshot(DataQueries.getById('Company', mission.company))!;
         
-        const diffDays = end.diff(start, 'days', true);
-
+        const tasks = this.store.selectSnapshot(DataQueries.getMany('DetailedPost', mission.details)).map(detail => (
+            { id:detail.id,
+              date:detail.date,
+              content:detail.content,
+              validated:detail.validated,
+              refused:detail.refused,
+              supervisions:detail.supervisions,
+            })
+          )
+        
+        // const diffDays = end.diff(start, 'days', true);
         let day = start.clone();
-        for ( let i = 0; i < diffDays; i++ ) {
-          this.detailedDays.push({
-            date: day.locale('fr').format('YYYY-MM-DD'),
-            start: mission.hourlyStart,
-            end: mission.hourlyEnd,
-            text: 'Chantier de ' + contractor.name 
-          });
-
-          day = day.add(1, 'day');
+        
+        console.log('TAKS', tasks);
+        let dateAlreadyParsedFromMission:string[] = []
+        for (const task of tasks) {
+          if(dateAlreadyParsedFromMission.includes(task.date)) {
+            let lenght = this.detailedDays.length
+            if (lenght != 0) this.detailedDays[lenght -1].text.push(task.content)
+          } else {
+            dateAlreadyParsedFromMission.push(task.date)
+            this.detailedDays.push({
+              date: task.date,
+              start: mission.hourlyStart,
+              end: mission.hourlyEnd,
+              title: 'Chantier de ' + contractor.name,
+              text: [task.content]
+            });
+          }
         }
       }
     });
@@ -82,6 +99,9 @@ export class MissionsComponent extends Destroy$ {
       this._openCloseMission = false
     }
 
+  }
+  computeSupervisionsforTask(supervisions: number[], supervisionsTaks: any): any {
+    throw new Error("Method not implemented.");
   }
 
   openMission(mission: Mission) {
@@ -171,3 +191,7 @@ export class MissionsComponent extends Destroy$ {
       return array
   }
 };
+
+function supervisionsTaks(supervisions: number[], supervisionsTaks: any): any {
+  throw new Error("Function not implemented.");
+}

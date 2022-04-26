@@ -52,8 +52,7 @@ export class SuiviPME {
   })
 
   accordionsData: accordionData[] = [];
-
-
+  
   openAccordion(accordion: accordionData){
     for (const accordionData of this.accordionsData) {
       if(accordionData.date == accordion.date){
@@ -125,7 +124,7 @@ export class SuiviPME {
         supervisions: this.computeSupervisionsForMission(value as string, supervisionsTaks)
       } as DateG
     })
-    if(this.accordionsData.length != 0) return
+    this.accordionsData = []
     for (const date of this.dates) {
       this.accordionsData.push({date: date, open: false})
     }
@@ -201,7 +200,8 @@ export class SuiviPME {
     }
   }
 
-  constructor(private store: Store, private popup: PopupService, private cd: ChangeDetectorRef) {}
+  constructor(private store: Store, private popup: PopupService, private cd: ChangeDetectorRef){
+  }
 
 
   closeMission() {
@@ -323,25 +323,34 @@ export class SuiviPME {
   }
 
 
-
-  submitAdFormDate() {
+  async submitAdFormDate() {
+    console.log('dates', this.dates);
     let datesSelected = this.AdFormDate.get('calendar')!.value.map((dayState:DayState) => {
       return dayState.date
     })
+
+    console.log(datesSelected);
     let blockedDates = this.computeBlockedDate()
+    console.log('blockedDAtes', blockedDates);
     this.alert = ""
     let dateToBeSelected:string[] = []
+
     blockedDates.forEach((date) => {
       if (!datesSelected.includes(date)) {
         this.alert += `La date ${date} doit obligatoirement être sélectionnée.\r\n`
         dateToBeSelected.push(date)
       }
     })
-    this.setupDayState(this.mission!, dateToBeSelected)
+    
+    this.setupDayState(dateToBeSelected)
     this.saveToBackAdFormDate()
+
+    // Il faut maintenant update mission, et accordionDates 
+      
   }
 
-  setupDayState (mission:Mission, dateToBeSelected:string[]) {
+  // Reset le calendrier si on a deselectionner ou selectionner des dates bloquer
+  setupDayState (dateToBeSelected:string[]) {
     let dayStates: DayState[] = dateToBeSelected.map((date) => {
       return {date:date, availability: 'selected'}
     })
@@ -349,22 +358,29 @@ export class SuiviPME {
       dayStates.push(day)
     })
     this.AdFormDate.get('calendar')?.setValue(dayStates);
-    }
+  }
 
-    saveToBackAdFormDate() {
-      const selectedDate:string[] = this.AdFormDate.get('calendar')!.value.map((dayState:DayState) => {return dayState.date})
-      this.store.dispatch(new ModifyMissionDate(this.mission!.id, this.AdFormDate.get('hourlyStart')!.value, this.AdFormDate.get('hourlyEnd')!.value, selectedDate)).pipe(take(1)).subscribe(() => {
-        if (!this.alert)
-          this.swipeupModifyDate = false
-        this.cd.markForCheck()
-      });
-    }
+  saveToBackAdFormDate() {
+    const selectedDate:string[] = this.AdFormDate.get('calendar')!.value.map((dayState:DayState) => {return dayState.date})
+
+    console.log('selectedDate Calendar', selectedDate);
+    this.store.dispatch(new ModifyMissionDate(this.mission!.id, this.AdFormDate.get('hourlyStart')!.value, this.AdFormDate.get('hourlyEnd')!.value, selectedDate)).pipe(take(1)).subscribe(() => {
+      if (!this.alert) this.swipeupModifyDate = false
+
+      // Update de mission et accordionData puis update la vue
+      this.mission = this.store.selectSnapshot(DataQueries.getById('Mission', this.mission!.id))
+      this.computeDates(this.mission!)
+      this.cd.markForCheck()
+    });
+  }
 
   computeBlockedDate() : string[] {
     let listBlockedDate:string[] = []
     let listDetailedPost = this.mission!.details
+    console.log('mission.detail', listDetailedPost);
     listDetailedPost.forEach( (detailId) => {
       let detailDate = this.store.selectSnapshot(DataQueries.getById('DetailedPost', detailId))!.date
+      console.log('detailDate', detailDate);
       if (!listBlockedDate.includes(detailDate)) {
         listBlockedDate.push(detailDate)
       }
