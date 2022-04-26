@@ -93,9 +93,23 @@
   span {
     position: absolute;
     bottom: $item-padding * 2;
-    color: $text-color;
     opacity: .6;
+
+    
   }
+
+  .hasPostulated {
+    color: $text-color;
+  }
+
+  .ongoing {
+    color: rgb(5, 71, 108);
+  }
+  
+  .refused {
+    color: rgb(201, 85, 85);
+  }
+  
   img {
     width: 100%;
     height: 100%;
