@@ -32,6 +32,9 @@
 
 .chosen-items {
   list-style-type: none;
+  max-height: 5rem;
+  width: 95%;
+  overflow: auto;
 
   li{
     @extend %chosen-format;

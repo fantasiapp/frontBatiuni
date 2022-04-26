@@ -26,7 +26,7 @@
               [showCandidate]="view == 'PME'"
               [deletable]="false"
               [post]="onlinePost"
-              (click)="openPost(onlinePost)"
+              (click)="openPost(onlinePost); updateCurrentPost(onlinePost)"
               ></offer>
           </ng-container>
           <ng-container *ngSwitchCase="2">
@@ -77,6 +77,9 @@
         <h1 class="grow center-text">Annonce(s) en Ligne</h1>
         <span>{{ postMenu.post?.address }}</span>
         <img *ngIf="view == 'PME'" (click)="postMenu.swipeup = true" src="assets/Option.svg"/>
+
+        <span *ngIf="currentCandidates && view == 'PME'" [attr.data-notification-number]="currentCandidates" class="notification"></span>
+
         <!-- <ng-template #starTemplate>
           <stars [toggle]="true"
             [value]="+(postMenu.post! && profile.user!.favoritePosts.includes(postMenu.post!.id))"

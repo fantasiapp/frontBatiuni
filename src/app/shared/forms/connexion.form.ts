@@ -35,7 +35,7 @@ import { ComplexPassword, setErrors } from "src/validators/verify";
         Mot de passe oublié !
       </a>
     </section>
-    <div class="form-action" style="margin-top: auto;">
+    <div class="form-action" style="margin-top: auto; margin-bottom: unset">
       <div *ngIf="loginForm.errors?.server" class="server-error">
         {{ loginForm.errors?.server }}
       </div>
@@ -48,6 +48,11 @@ import { ComplexPassword, setErrors } from "src/validators/verify";
   `,
   styles: [`
     @use "/src/styles/forms.scss" as *;
+
+    :host{
+      padding-bottom: calc(env(safe-area-inset-bottom) + 2rem)
+    }
+
   `],
   changeDetection: ChangeDetectionStrategy.OnPush
 })

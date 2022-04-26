@@ -294,7 +294,6 @@ export class SuiviPME {
     this.mission = this.store.selectSnapshot(DataQueries.getById('Mission', this.mission!.id))
     this.computeDates(this.mission!)
     this.dates.forEach(dateNew => {
-      console.log("reloadMission", dateNew.value, dateOld.value)
       if (dateNew.value == dateOld.value) {
         dateResult = dateNew
       }

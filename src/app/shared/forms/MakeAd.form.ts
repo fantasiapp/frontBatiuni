@@ -101,7 +101,7 @@ import { InfoService } from "../components/info/info.component";
         </div>
       </div>
 
-      <div class="form-input">
+      <div class="form-input flex row">
         <checkbox formControlName="counterOffer"></checkbox>
         <span>Autoriser une contre-offre</span>
       </div>
@@ -166,12 +166,18 @@ import { InfoService } from "../components/info/info.component";
     }
 
     .submit-container {
-      height: $sticky-footer-height;
+      height: 4.5rem;
       padding-left: 10px; padding-right: 10px;
       padding-top: 10px;
       button {
+        padding: 0 0.5rem;
         max-width: 45%;
-        padding: 0.75rem 1.25rem;
+        /* height: 100%; */
+        display: flex;
+        flex-grow: 1;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
       }
     }
 
@@ -202,9 +208,9 @@ import { InfoService } from "../components/info/info.component";
     }
 
     .page footer {
-      bottom: 70px;
-      bottom: calc(constant(safe-area-inset-bottom) + 70px);
-      bottom: calc(env(safe-area-inset-bottom) + 70px);
+      bottom: 4.5rem;
+      bottom: calc(constant(safe-area-inset-bottom) +  $navigation-height);
+      bottom: calc(env(safe-area-inset-bottom) +  $navigation-height);
     }
   `],
   changeDetection: ChangeDetectionStrategy.OnPush
