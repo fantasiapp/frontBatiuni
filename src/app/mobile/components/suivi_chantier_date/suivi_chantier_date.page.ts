@@ -36,9 +36,6 @@ export class SuiviChantierDate extends Destroy${
     private cd: ChangeDetectorRef, private store: Store, private popup: PopupService
   ) {
     super()
-    Keyboard.addListener('keyboardDidHide', () => {
-      console.log('keyboard did hide');
-    });
   }
 
   _date: DateG = {id:0, value: "1970:01:01", tasks:[], selectedTasks:[], taskWithoutDouble:[], view:this.view, supervisions: []};
