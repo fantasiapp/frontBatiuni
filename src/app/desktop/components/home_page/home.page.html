@@ -9,7 +9,7 @@
     <div class="web-page">
       <section class="filters">
         <div class="header">
-          <img src="assets/Filter.svg" /> Filtrer par
+          <img src="assets/filterBlue.svg" /> Filtrer par
         </div>
         <pme-filter-form [activeView]="activeView"></pme-filter-form>
       </section>
@@ -19,7 +19,7 @@
             <searchbar
               [placeholder]="activeView == 0 ? 'Recheche brouillon...' : activeView == 1 ? 'Recheche annonces enligne...' :  'Recheche annonces validées'">
             </searchbar>
-            <img class="filterOnly" (click)="showFilters = !showFilters" src="assets/Filter.svg">
+            <img class="filterOnly" (click)="showFilters = !showFilters" src="assets/filterBlue.svg">
           </div>
           <div class="report-search">
             Resultat <span class="no-result">{{ viewPostLength() }}</span>
@@ -54,7 +54,7 @@
               <div class="flex row center">
                 <searchbar placeholder="Recheche liste...">
                 </searchbar>
-                <img class="filterOnly" (click)="showFilters = !showFilters" src="assets/Filter.svg">
+                <img class="filterOnly" (click)="showFilters = !showFilters" src="assets/filterBlue.svg">
               </div>
               <div class="report-search">
                 Resultat <span class="no-result">{{ allOnlinePosts.length }}</span>
