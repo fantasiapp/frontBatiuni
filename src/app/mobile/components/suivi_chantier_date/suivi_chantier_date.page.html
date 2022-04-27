@@ -33,7 +33,7 @@
       </div>
       <div *ngIf="!mission!.isClosed" class="partenerComment">
         <div  class="divComment">
-          <textarea id="input_general" class="inputComment" type="text" placeholder="Ajouter un commentaire" (keyup)="detectKey($event, null)"></textarea>
+          <textarea id="input_general" class="inputComment" inputmode="search" type="text" placeholder="Ajouter un commentaire" (keyup)="detectKey($event, null)"></textarea>
           <img (click)="swipeMenuImage = true" src="assets/camera.png"/>
         </div>
       </div>
