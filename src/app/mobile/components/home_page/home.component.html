@@ -92,7 +92,10 @@
         <annonce-resume class="hosted-page content-with-footer" [collapsible]="false" [post]="postMenu.post!" (apply)="applyPost(postMenu.post!, $event)" #resume></annonce-resume>
   
         <swipeup [(open)]="postMenu.swipeup">
-          <li *ngIf="possibleCandidates.length" [attr.data-notification-number]="possibleCandidates.length" [class.notification]="postMenu.candidates.length" (click)="showCandidates()"><img src="assets/responses.svg"/> Afficher les réponses</li>
+          <li *ngIf="possibleCandidates.length"  (click)="showCandidates()">
+            <img src="assets/responses.svg"/> Afficher les réponses
+            <span *ngIf="currentCandidates && view == 'PME'" [attr.data-notification-number]="possibleCandidates.length" [class.notification]="postMenu.candidates.length" class="notification"></span>
+          </li>
           <li [routerLink]="['','booster']"><img src="assets/booster.svg"/>Booster Mon annonce</li>
           <li (click)="deletePost(postMenu.post!.id)"><img src="assets/cloturer.svg"/>Supprimer l'annonce</li>
           <li (click)="duplicatePost(postMenu.post!.id)"><img src="assets/Dupliquer.svg"/>Dupliquer l'annonce</li>

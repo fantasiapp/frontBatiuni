@@ -1,17 +1,16 @@
-<ul class="paging flex row">
-  <li>
-    <a (click)="onClick(-1)">
-      <img class="arrow_left" src="assets/Fleche.svg" />
-      <span> {{ showPageName ? (!index ? 'Accueil' : 'Etape précedente') : '' }} </span>
-    </a>
-  </li>
+<div class="header flex row">
+  
+  <a (click)="onClick(-1)">
+    <img class="arrow_left" src="assets/Fleche.svg" />
+    <span> {{ showPageName ? (!index ? 'Accueil' : 'Etape précedente') : '' }} </span>
+  </a>
   <!-- <li *ngIf="showNext && (index < length-1)" style="text-align: right;">
     <a (click)="onClick(1)">
       <span>{{ showPageName ? 'Etape suivante' : '' }}</span>
       <img class="arrow_right" src="assets/Fleche.svg" />
     </a>
   </li> -->
-</ul>
+</div>
 <div class="decoration-cover">
   <div class="decoration background-white"></div>
 </div>

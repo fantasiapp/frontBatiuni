@@ -132,7 +132,7 @@ export class SuiviChantierDate extends Destroy${
     if (this.view == 'ST' && !task.validated && !this.mission!.isClosed) {
       task.refused = !task.refused
       this.store.dispatch(new ModifyDetailedPost(task)).pipe(take(1)).subscribe(() => {
-        this.mission = this.store.selectSnapshot(DataQueries.getById('Mission', this.mission!.id))
+        // this.mission = this.store.selectSnapshot(DataQueries.getById('Mission', this.mission!.id))
         let control = document.getElementById("control_refuse_"+task.id) as HTMLImageElement;
         control.src = SuiviPME.computeTaskImage(task, "refused")
       })
