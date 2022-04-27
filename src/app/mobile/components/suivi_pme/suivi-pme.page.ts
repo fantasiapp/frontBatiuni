@@ -52,15 +52,6 @@ export class SuiviPME {
 
   accordionsData: accordionData[] = [];
 
-  ngOnChanges() {
-    console.log("ngOnChange accordeon data", this.mission, this.mission?.hourlyStart)
-    // if (this.mission) {
-    //   this.accordionsData = []
-    //   this.computeDates(this.mission)
-    // }
-  }
-
-
   openAccordion(accordion: accordionData){
     for (const accordionData of this.accordionsData) {
       if(accordionData.date == accordion.date){
