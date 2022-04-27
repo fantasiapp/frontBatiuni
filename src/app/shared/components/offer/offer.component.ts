@@ -67,6 +67,12 @@ export class OfferComponent {
     return false
   }
 
+  @Input()
+  isAppliedPage: boolean = false;
+
+  @Input()
+  isRefused: boolean = false;
+
   get hasPostulated() {
     const profile = this.store.selectSnapshot(DataQueries.currentProfile)
     let companiesId;
@@ -76,7 +82,7 @@ export class OfferComponent {
         return candidate!.company
       })
     }
-    return companiesId?.includes(profile.company.id)
+    return companiesId?.includes(profile.company.id) 
   }
 
   @Input() set post(p: Post | null) {

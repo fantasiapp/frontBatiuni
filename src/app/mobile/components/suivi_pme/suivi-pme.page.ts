@@ -8,7 +8,6 @@ import { CloseMission, ModifyMissionDate, DuplicatePost } from "src/models/new/u
 import { Company, Mission, PostMenu, PostDetail, Profile, Supervision, DateG, Task } from "src/models/new/data.interfaces";
 import { DataQueries, DataState } from "src/models/new/data.state";
 import { CalendarUI, DayState } from "src/app/shared/components/calendar/calendar.ui";
-import { DataLayerManager } from "@agm/core";
 
 // export type Task = PostDetail & {validationImage:string, invalidationImage:string}
 
@@ -77,22 +76,22 @@ export class SuiviPME {
       this.contactName = this.view == 'ST' ? this.mission!.subContractorContact : ""
       
     }
-    if (mission) {
-      this.AdFormDate.get('hourlyStart')?.setValue(mission!.hourlyStart);
-      this.AdFormDate.get('hourlyEnd')?.setValue(mission!.hourlyEnd);
-      
-      let daystates: DayState[] = [];
-      if (mission!.dates.length) {
-        if ( typeof mission!.dates[0] == 'string' )
-          daystates =  mission!.dates.map(date => ({date: date as unknown as string, availability: 'selected'}))
-        else
-          daystates = this.store.selectSnapshot(DataQueries.getMany('DatePost', mission!.dates))
-            .map(({name}) => ({date: name, availability: 'selected'}))
+    if (mission) this.updateDate(mission!)
+  }
 
-        this.AdFormDate.get('calendar')?.setValue(daystates);
-        this.calendar?.viewCurrentDate();
-      }
-    }
+  updateDate(mission:Mission) {
+    this.AdFormDate.get('hourlyStart')?.setValue(mission.hourlyStart);
+    this.AdFormDate.get('hourlyEnd')?.setValue(mission.hourlyEnd);
+    
+    let daystates: DayState[] = [];
+    if ( typeof mission!.dates === "object" && !Array.isArray(mission.dates) )
+      daystates = Object.values(mission.dates).map(date => {return {date: date as string, availability: 'selected'}})
+    else
+      daystates = this.store.selectSnapshot(DataQueries.getMany('DatePost', mission.dates))
+        .map((date) => ({date: date.name, availability: 'selected'}))
+
+    this.AdFormDate.get('calendar')?.setValue(daystates);
+    this.calendar?.viewCurrentDate();
   }
 
   @Input() callBackParent: (b:boolean, type:string) => void = (b:boolean, type:string): void => {}
@@ -101,6 +100,7 @@ export class SuiviPME {
   @ViewChild(CalendarUI, {static: false}) calendar!: CalendarUI;
 
   computeDates (mission:Mission) {
+    console.log("computeDates")
     let supervisionsTaks: number[] = []
     this.tasks = this.store.selectSnapshot(DataQueries.getMany('DetailedPost', mission.details)).map(detail => (
       { id:detail.id,
@@ -114,9 +114,13 @@ export class SuiviPME {
         invalidationImage:SuiviPME.computeTaskImage(detail, "refused"
       )})
     )
-    this.dates = mission.dates.map((value:unknown, id) => {
+    let dates = mission.dates
+    if ( typeof mission.dates === "object" && !Array.isArray(mission.dates) )
+        dates = Object.keys(mission.dates).map(key => (key as unknown as number))
+    this.dates = dates.map((value:unknown, id) => {
+      let date = typeof(value) == "number" ? this.store.selectSnapshot(DataQueries.getById('DatePost', value as number))!.name : value
       return { id:id,
-        value: value as string,
+        value: date as string,
         tasks:this.tasks,
         selectedTasks:this.computeSelectedTask(value as string),
         taskWithoutDouble:this.dateWithoutDouble(),
@@ -124,6 +128,7 @@ export class SuiviPME {
         supervisions: this.computeSupervisionsForMission(value as string, supervisionsTaks)
       } as DateG
     })
+    // if(this.accordionsData.length != 0) return
     this.accordionsData = []
     for (const date of this.dates) {
       this.accordionsData.push({date: date, open: false})
@@ -380,10 +385,8 @@ export class SuiviPME {
     console.log('mission.detail', listDetailedPost);
     listDetailedPost.forEach( (detailId) => {
       let detailDate = this.store.selectSnapshot(DataQueries.getById('DetailedPost', detailId))!.date
-      console.log('detailDate', detailDate);
-      if (!listBlockedDate.includes(detailDate)) {
+      if (!listBlockedDate.includes(detailDate))
         listBlockedDate.push(detailDate)
-      }
     })
     return listBlockedDate
   }

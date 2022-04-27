@@ -1,7 +1,7 @@
 <ng-container *ngIf="post">
   <!-- <app-banner *ngIf="(isClosed)" [post]="post"></app-banner> -->
   <div class="container grow flex center-cross space-between" >
-    <div class="offres-infos" [ngClass]="{'offres-infos-closed': isClosed, 'offres-infos-postulated': hasPostulated}">
+    <div class="offres-infos" [ngClass]="{'offres-infos-closed': isClosed, 'offres-infos-postulated': hasPostulated && !isAppliedPage}">
       <span class="entreprise">{{company?.name || 'Entreprise'}}</span>
       <span *ngIf="unseenCandidate && showCandidate" [attr.data-notification-number]="unseenCandidate" class="notification"></span>
       <span class="metier">{{post?.manPower ? 'Main d\'oeuvre' : 'Fourniture et Pose'}}</span>
@@ -9,8 +9,10 @@
       <span class="date">{{post?.dueDate ?  toLocateDate(post.dueDate) : '19 Janvier 2038'}}</span>
     </div>
     <div class="offer-logo flex center">
-      <img [src]="src" [ngClass]="{'offres-infos-closed': isClosed, 'offres-infos-postulated': hasPostulated}"/>
-      <span *ngIf="hasPostulated">Déjà postulé</span>
+      <img [src]="src" [ngClass]="{'offres-infos-closed': isClosed, 'offres-infos-postulated': hasPostulated && !isAppliedPage}"/>
+      <span class="hasPostulated" *ngIf="hasPostulated && !isAppliedPage">Déjà postulé</span>
+      <span class="ongoing" *ngIf="hasPostulated && isAppliedPage && !isRefused">En cours</span>
+      <span class="refused" *ngIf="hasPostulated && isAppliedPage && isRefused">Refusé</span>
     </div>
   </div>
 </ng-container>

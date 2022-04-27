@@ -52,8 +52,11 @@ export class MissionsComponent extends Destroy$ {
       this.myMissions = missions.filter(mission => mission.subContractor == profile.company.id);
       //compute work days
 
-      this.detailedDays.length = 0;
+      this.detailedDays = [];
+      let usedDay: number[] = []
       for ( const mission of this.myMissions ) {
+        const availabilities = this.store.selectSnapshot(DataQueries.getMany('Disponibility', profile.company.availabilities))
+        console.log("availabilities", availabilities, typeof(availabilities[0].date))
         const start = moment(mission.startDate),
           end = moment(mission.endDate),
           contractor = this.store.selectSnapshot(DataQueries.getById('Company', mission.company))!;
