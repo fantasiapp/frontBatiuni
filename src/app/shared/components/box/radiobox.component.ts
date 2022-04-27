@@ -57,7 +57,7 @@ export class UIRadioboxAccessor extends UIDefaultAccessor<string | boolean | num
 @Component({
   selector: 'radiobox',
   template: `
-    <input type="radio" [attr.name]="name || null" [value]="onselect" (change)="onChange($event)" [checked]="value || null" tabindex="-1"/>
+    <input type="radio" [attr.name]="name || null" [value]="onselect" (click)="onChange($event)" [checked]="value || null" tabindex="-1"/>
     <span></span>
   `,
   styleUrls: ['./box.component.scss'],
@@ -83,9 +83,14 @@ export class UIRadioboxComponent {
   }
 
   onChange(e: Event) {
-    console.log('TEST', this.onselect);
+    console.log('Radiobox TEST', this.value, this.onselect);
+    if (this.value) {
+      this.selection.emit(undefined);
+    } else {
     this.valueChange.emit(this.value = true);
     this.selection.emit(this.onselect);
+    }
+    this.cd.markForCheck()
   }
 
   forceUpdate() { this.cd.markForCheck(); }
