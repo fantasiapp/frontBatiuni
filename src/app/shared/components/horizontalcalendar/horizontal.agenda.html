@@ -34,11 +34,17 @@
     [style.height.px]="card.cardHeight" 
     [style.top.px]="card.cardFromTop" [@inOutAnimation]="{params: {currHeight: card.cardHeight}}">
         <h4>
-            {{ card.cardTitle}}
+            {{ card.title }}
         </h4>
-        <p *ngFor="let tache of card.cardContent">
-            {{ tache }}
-        </p>
+        <div class="task-container" *ngFor="let task of card.tasks">
+            <p >
+                {{ task.content }}            
+            </p>
+            <div class="validator">
+                <button class="button" (click)="refuse(task)" [ngClass]="{'refused' :task.refused}">NON</button>
+                <button class="button" (click)="validate(task)" [ngClass]="{'validated' :task.validated}">OUI</button>
+            </div>
+        </div>
     </div>
    
 </div>

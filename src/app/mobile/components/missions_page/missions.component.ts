@@ -6,7 +6,7 @@ import { Destroy$ } from "src/app/shared/common/classes";
 import { assignCopy } from "src/app/shared/common/functions";
 import { MissionDetailedDay } from "src/app/shared/components/horizontalcalendar/horizontal.component";
 import { InfoService } from "src/app/shared/components/info/info.component";
-import { DateG, Mission, PostMenu, Profile } from "src/models/new/data.interfaces";
+import { DateG, Mission, PostDetail, PostMenu, Profile } from "src/models/new/data.interfaces";
 import { DataQueries, QueryAll } from "src/models/new/data.state";
 import { CloseMissionST } from "src/models/new/user/user.actions";
 
@@ -58,25 +58,16 @@ export class MissionsComponent extends Destroy$ {
           end = moment(mission.endDate),
           contractor = this.store.selectSnapshot(DataQueries.getById('Company', mission.company))!;
         
-        const tasks = this.store.selectSnapshot(DataQueries.getMany('DetailedPost', mission.details)).map(detail => (
-            { id:detail.id,
-              date:detail.date,
-              content:detail.content,
-              validated:detail.validated,
-              refused:detail.refused,
-              supervisions:detail.supervisions,
-            })
-          )
+        const tasks: PostDetail[] = this.store.selectSnapshot(DataQueries.getMany('DetailedPost', mission.details))
         
         // const diffDays = end.diff(start, 'days', true);
-        let day = start.clone();
+        // let day = start.clone();
         
-        console.log('TAKS', tasks);
         let dateAlreadyParsedFromMission:string[] = []
         for (const task of tasks) {
           if(dateAlreadyParsedFromMission.includes(task.date)) {
             let lenght = this.detailedDays.length
-            if (lenght != 0) this.detailedDays[lenght -1].text.push(task.content)
+            if (lenght != 0) this.detailedDays[lenght -1].tasks.push(task)
           } else {
             dateAlreadyParsedFromMission.push(task.date)
             this.detailedDays.push({
@@ -84,7 +75,7 @@ export class MissionsComponent extends Destroy$ {
               start: mission.hourlyStart,
               end: mission.hourlyEnd,
               title: 'Chantier de ' + contractor.name,
-              text: [task.content]
+              tasks: [task]
             });
           }
         }

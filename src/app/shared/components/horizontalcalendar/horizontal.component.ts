@@ -1,5 +1,6 @@
 import {
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   Input,
   OnInit,
@@ -8,20 +9,25 @@ import {
 import * as moment from 'moment';
 import { Availability, CalendarUI, DayState } from '../calendar/calendar.ui';
 import { trigger, state, style, animate, transition } from '@angular/animations';
+import { PostDetail, Ref } from 'src/models/new/data.interfaces';
+import { DataQueries } from 'src/models/new/data.state';
+import { ModifyDetailedPost } from 'src/models/new/user/user.actions';
+import { take } from 'rxjs/operators';
+import { Store } from '@ngxs/store';
 
 export type MissionDetailedDay = {
   date: string;
   start: string;
   end: string;
   title: string;
-  text: string[];
+  tasks: PostDetail[]
 };
 
 export interface calendarItem {
   cardFromTop: number,
   cardHeight: number,
-  cardTitle: string,
-  cardContent: string[]
+  title: string,
+  tasks: PostDetail[]
 }
 
 @Component({
@@ -87,6 +93,8 @@ export class HorizantaleCalendar implements OnInit {
   // detailedDays: MissionDetailedDay[] = []
 
   currentCardCalendars: calendarItem[] = [];
+  constructor(private cd: ChangeDetectorRef, private store: Store) {
+  }
 
   ngOnInit(): void {
     let now = new Date(Date.now());
@@ -229,18 +237,44 @@ export class HorizantaleCalendar implements OnInit {
       this.currentCardCalendars.push({
         cardFromTop: heightTop[0],
         cardHeight: heightTop[1],
-        cardTitle: today.title,
-        cardContent: today.text
+        title: today.title,
+        tasks: today.tasks
       })
     }
-    // if (today.length) {
-      // this.calculator(today[0].start, today[0].end);
-    //   this.bilan = today[0];
-    // } else {
-    //   this.greenCardFromTop = 0;
-    //   this.greenCardHeight = 0;
-    // }
-    
+
+    console.log('currentCardCalendar', this.currentCardCalendars);
+  }
+
+  taskValidation(decision: boolean, task: any){
+    const detailPost: PostDetail | null = this.store.selectSnapshot(DataQueries.getById('DetailedPost', task.idTask))
+
+    if (!detailPost!.refused) {
+      detailPost!.validated = decision
+      task.validated = decision
+      this.store.dispatch(new ModifyDetailedPost(detailPost)).pipe(take(1)).subscribe(() => {
+        this.cd.markForCheck()
+      })
+    }
+  }
+
+
+  //potentiellement besoin de rajouter isClosed de la mission afficher pour eviter de changer apres cloture
+  validate(task: PostDetail) {
+    if (!task.refused) {
+      task.validated = !task.validated
+      this.store.dispatch(new ModifyDetailedPost(task)).pipe(take(1)).subscribe(() => {
+        this.cd.markForCheck()
+      })
+    }
+  }
+
+  refuse(task: PostDetail) {
+    if (!task.validated) {
+      task.refused = !task.refused
+      this.store.dispatch(new ModifyDetailedPost(task)).pipe(take(1)).subscribe(() => {
+        this.cd.markForCheck()   
+      })
+    }
   }
 
   showgrey(selectedday: any) {
