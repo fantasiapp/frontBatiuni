@@ -173,9 +173,9 @@ export abstract class UIDefaultAccessor<T> implements ControlValueAccessor {
   set(next: T, notifyForm: boolean = true) {
     if ( next !== this.value ) {
       this.valueChange.emit(this.value = next);
-      if ( notifyForm ) this.onChanged(this.value);
-      this.cd.markForCheck();
     }
+    if ( notifyForm ) this.onChanged(this.value);
+    this.cd.markForCheck();
     //apparently skipping this call breaks everything
     this.$onTouched();
   }
