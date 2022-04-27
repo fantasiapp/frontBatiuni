@@ -100,7 +100,6 @@ export class SuiviPME {
   @ViewChild(CalendarUI, {static: false}) calendar!: CalendarUI;
 
   computeDates (mission:Mission) {
-    console.log("computeDates")
     let supervisionsTaks: number[] = []
     this.tasks = this.store.selectSnapshot(DataQueries.getMany('DetailedPost', mission.details)).map(detail => (
       { id:detail.id,
@@ -111,24 +110,23 @@ export class SuiviPME {
         supervisions:detail.supervisions,
         supervisionsObject:this.computeSupervisionsforTask(detail.supervisions, supervisionsTaks),
         validationImage:SuiviPME.computeTaskImage(detail, "validated"),
-        invalidationImage:SuiviPME.computeTaskImage(detail, "refused"
-      )})
+        invalidationImage:SuiviPME.computeTaskImage(detail, "refused")
+      })
     )
     let dates = mission.dates
     if ( typeof mission.dates === "object" && !Array.isArray(mission.dates) )
-        dates = Object.keys(mission.dates).map(key => (key as unknown as number))
+      dates = Object.keys(mission.dates).map(key => (+key as number))
     this.dates = dates.map((value:unknown, id) => {
       let date = typeof(value) == "number" ? this.store.selectSnapshot(DataQueries.getById('DatePost', value as number))!.name : value
       return { id:id,
         value: date as string,
         tasks:this.tasks,
-        selectedTasks:this.computeSelectedTask(value as string),
+        selectedTasks:this.computeSelectedTask(date as string),
         taskWithoutDouble:this.dateWithoutDouble(),
         view:this.view,
-        supervisions: this.computeSupervisionsForMission(value as string, supervisionsTaks)
+        supervisions: this.computeSupervisionsForMission(date as string, supervisionsTaks)
       } as DateG
     })
-    // if(this.accordionsData.length != 0) return
     this.accordionsData = []
     for (const date of this.dates) {
       this.accordionsData.push({date: date, open: false})
@@ -303,8 +301,6 @@ export class SuiviPME {
         dateResult = dateNew
       }
     })
-    // this.cd.markForCheck()
-    console.log("realoadMission", this.dates)
 
     
     return [dateResult, this.mission!]
@@ -313,13 +309,11 @@ export class SuiviPME {
   modifyTimeTable() {
     this.missionMenu.swipeup = false
     this.swipeupModifyDate = true
-    console.log("modifyTimeTable", this.mission)
     this.cd.markForCheck()
   }
 
   duplicateMission() {
     this.missionMenu.swipeup = false
-    console.log("duplicateMission", this.mission)
     // this.info.show("info", "Duplication en cours...", Infinity);
     this.store.dispatch(new DuplicatePost(this.mission!.id)).pipe(take(1)).subscribe(() => {
     }, () => {
@@ -329,14 +323,10 @@ export class SuiviPME {
 
 
   async submitAdFormDate() {
-    console.log('dates', this.dates);
     let datesSelected = this.AdFormDate.get('calendar')!.value.map((dayState:DayState) => {
       return dayState.date
     })
-
-    console.log(datesSelected);
     let blockedDates = this.computeBlockedDate()
-    console.log('blockedDAtes', blockedDates);
     this.alert = ""
     let dateToBeSelected:string[] = []
 
@@ -367,8 +357,6 @@ export class SuiviPME {
 
   saveToBackAdFormDate() {
     const selectedDate:string[] = this.AdFormDate.get('calendar')!.value.map((dayState:DayState) => {return dayState.date})
-
-    console.log('selectedDate Calendar', selectedDate);
     this.store.dispatch(new ModifyMissionDate(this.mission!.id, this.AdFormDate.get('hourlyStart')!.value, this.AdFormDate.get('hourlyEnd')!.value, selectedDate)).pipe(take(1)).subscribe(() => {
       if (!this.alert) this.swipeupModifyDate = false
 
@@ -382,7 +370,6 @@ export class SuiviPME {
   computeBlockedDate() : string[] {
     let listBlockedDate:string[] = []
     let listDetailedPost = this.mission!.details
-    console.log('mission.detail', listDetailedPost);
     listDetailedPost.forEach( (detailId) => {
       let detailDate = this.store.selectSnapshot(DataQueries.getById('DetailedPost', detailId))!.date
       if (!listBlockedDate.includes(detailDate))
