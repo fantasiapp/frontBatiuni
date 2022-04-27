@@ -1,6 +1,6 @@
 <paging [length]="2" [(index)]="form.slider.index" (navigate)="form.onNavigate($event)"></paging>
-<register-form [showSteps]="false" [showSubmitButton]="false" class="mobile-view"></register-form>
-<footer class="big-sticky-footer flex column">
+<register-form [showSteps]="false" [showSubmitButton]="false" class="mobile-view" [ngClass]="{'footerHide': !showFooter}"></register-form>
+<footer [@showFooter]="showFooter" class="big-sticky-footer flex column">
   <a class="external-links form-links block center-text" [routerLink]="['', 'connexion']">
     J'ai déjà un compte
   </a>

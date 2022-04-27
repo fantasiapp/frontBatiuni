@@ -12,4 +12,6 @@ connexion-form {
   border-top-right-radius: 12px;
 
   @include cover-with-offset-top($paging-height); 
+
+  top: calc(#{$paging-height} + #{$paging-decoration-height} + env(safe-area-inset-top));
 }

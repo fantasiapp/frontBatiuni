@@ -23,25 +23,24 @@ import { GetCompanies } from "src/models/new/search/search.actions";
         <h3 class="form-title">Créer un compte !</h3>
         <h4 class="form-subtitle">Informations contact</h4>
         <div class="form-input">
-          <label>Nom du contact</label> <input type="text" formControlName="lastname"/>
+          <label>Nom du contact</label> <input class="form-element" type="text" formControlName="lastname"/>
         </div>
-      
         <div class="form-input">
-          <label>Prénom du contact</label> <input type="text" formControlName="firstname"/>
+          <label>Prénom du contact</label> <input class="form-element" type="text" formControlName="firstname"/>
         </div>
       
         <div class="form-input">
           <label>Adresse e-mail contact</label>
-          <input type="email" formControlName="email"/>
+          <input class="form-element" type="email" formControlName="email"/>
         </div>
       
         <div class="form-input">
           <label>Vérification addresse e-mail</label>
-          <input type="email" formControlName="emailVerification"/>
+          <input class="form-element" type="email" formControlName="emailVerification"/>
         </div>
       
         <div class="form-input">
-          <label>Mot de passe</label> <input type="password" formControlName="password"/>
+          <label>Mot de passe</label> <input class="form-element" type="password" formControlName="password"/>
         </div>
         <div class="form-action">
           <button *ngIf="showSubmitButton" class="button discover gradient" style="width: 250px" (click)="slider.left()">Etape suivante</button>
@@ -65,7 +64,7 @@ import { GetCompanies } from "src/models/new/search/search.actions";
       
           <div class="form-input">
             <label>Nom de l'entreprise</label>
-            <input type="text" class="form-element" formControlName="company" style="display: none"/>
+            <input class="form-element" type="text" class="form-element" formControlName="company" style="display: none"/>
             <span class="position-relative">
               <input type="text" class="form-element" autocomplete="off" formControlName="companyName" [novalidate]="true" (input)="onCompanySearch($event)" #search/>
               <img *ngIf="suggestionBox && suggestionBox.picked" src="assets/X.svg" class="cancel-company" (click)="cancelCompany() && search.focus()"/>
@@ -100,9 +99,17 @@ import { GetCompanies } from "src/models/new/search/search.actions";
   `,
   styles: [`
     @use 'src/styles/mixins' as *;
+    @use 'src/styles/variables' as *;
     
     :host(.mobile-view) {
-      @extend %content-with-paging-and-big-footer;
+      
+      @extend %overflow-y;
+      @include with-set-safe-area(margin, top, $paging-height + $paging-decoration-height);
+      height: calc(100vh - #{$paging-height} - #{$paging-decoration-height} - 148px - env(safe-area-inset-top));
+    }
+
+    :host(.footerHide){
+      height: calc(100vh - #{$paging-height} - #{$paging-decoration-height} - env(safe-area-inset-top));
     }
 
     :host(:not(.mobile-view)) {
