@@ -1,35 +1,39 @@
-import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, OnInit } from "@angular/core";
+import { FormControl, FormGroup } from "@angular/forms";
+import { Store } from "@ngxs/store";
+import { Job } from "src/models/new/data.interfaces";
+import { SnapshotAll } from "src/models/new/data.state";
 
 @Component({
   selector: 'pme-filter-form',
   template: `
     <ng-container [ngSwitch]="activeView">
-      <form class="form-control full-width" *ngSwitchCase="0">
+      <form class="form-control full-width" *ngSwitchCase="0" [formGroup]="filterForm">
         <div class="form-input">
           <label>Date de mission</label>
-          <input type="date" class="form-element"/>
+          <input type="date" class="form-element" formControlName="date"/>
           <img src="assets/calendar.png"/>
         </div>
 
         <div class="form-input">
           <label>Adresse de chantier</label>
-          <input type="text" class="form-element"/>
+          <input type="text" class="form-element" formControlName="address"/>
         </div>
 
         <div class="form-input form-spacer">
           <label>Métier</label>
-          <options></options>
+          <options type="checkbox" [options]="allJobs"></options>
         </div>
 
         <div class="form-input form-spacer">
           <label class="form-title">Type</label>
           <div class="flex row radio-container">
             <div class="radio-item">
-              <radiobox class="grow" name="job-type"></radiobox>
+              <radiobox class="grow" onselect="true" name="job-type" formControlName="type"></radiobox>
               <span>Main d'oeuvre</span>
             </div>
             <div class="radio-item">
-              <radiobox class="grow" name="job-type"></radiobox>
+              <radiobox class="grow" onselect="false" name="job-type" formControlName="type"></radiobox>
               <span>Fourniture et pose</span>
             </div>
           </div>
@@ -70,9 +74,30 @@ import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
   `],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class PMEFilterForm {
+export class PMEFilterForm implements OnInit {
   //determine which filter is open
   @Input()
   activeView: number = 0;
+
+  filterForm = new FormGroup({
+    date: new FormControl(undefined),
+    address: new FormControl(undefined),
+    jobs: new FormControl(undefined),
+    type: new FormControl(undefined),
+  },
+    {}
+  );
+
+  constructor(private store: Store){}
+
+  @SnapshotAll('Job')
+  allJobs!: Job[];
+
+  ngOnInit(){
+    console.log("start form test")
+    this.filterForm.valueChanges.subscribe(val => {
+      console.log("form test", val);
+    })
+  }
   
 }
