@@ -269,14 +269,12 @@ export class MakeAdForm {
     
     //load dates
     //heavens forgive me for this atrocy
-    let daystates: DayState[] = [];
-    if ( p.dates.length )
-      // if ( typeof p.dates[0] == 'string' )
-      //   daystates =  p.dates.map(date => ({date: date as unknown as string, availability: 'selected'}))
-      // else
-      //   daystates = this.store.selectSnapshot(DataQueries.getMany('DatePost', p.dates))
-      //     .map(({name}) => ({date: name, availability: 'selected'}))
-      daystates =  p.dates.map(date => ({date: date as unknown as string, availability: 'selected'}))
+    let daystates: DayState[] = []
+    if ( typeof p.dates === "object" && !Array.isArray(p.dates) )
+      daystates = Object.values(p.dates).map((date) => ({date: date as string, availability: 'selected'}))
+    else
+      daystates = this.store.selectSnapshot(DataQueries.getMany('DatePost', p.dates))
+        .map(({name}) => ({date: name, availability: 'selected'}))
     
     this.makeAdForm.get('calendar')?.setValue(daystates);
     this.calendar?.viewCurrentDate();
