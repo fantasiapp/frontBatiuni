@@ -76,9 +76,7 @@
         <img (click)="slideOnlinePostClose()" src="assets/arrowlblack.svg" />
         <h1 class="grow center-text">Annonce(s) en Ligne</h1>
         <div>
-          <!-- <span>{{ postMenu.post?.address }}</span> -->
           <img *ngIf="view == 'PME'" (click)="postMenu.swipeup = true" src="assets/Option.svg"/>
-
           <span *ngIf="currentCandidates && view == 'PME'" [attr.data-notification-number]="currentCandidates" class="notification"></span>
         </div>
       </header>
