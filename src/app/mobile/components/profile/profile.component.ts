@@ -75,7 +75,8 @@ export class ProfileComponent extends Destroy$ {
       this.companyId = profile.user?.company!
       profile.company = this.store.selectSnapshot(DataQueries.getById('Company', this.companyId))!
 
-      if (profile.company.Notification) {
+      console.log("updateProfile", profile)
+      if (profile.company?.Notification) {
         profile.company.Notification.map((notificationId) => {
           let notification = this.store.selectSnapshot(DataQueries.getById('Notification', notificationId))
           if (view == notification!.role) {

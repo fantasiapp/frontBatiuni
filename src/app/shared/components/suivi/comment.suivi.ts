@@ -51,7 +51,6 @@ export class SuiviComments {
 
   @Input()
   set supervision(supervision: Supervision) {
-    console.log("supervision input:", supervision);
     this._supervision = supervision;
   }
 
@@ -65,8 +64,7 @@ export class SuiviComments {
   }
 
   ngAfterViewInit(): void {
-    console.log('ngAfterViewInit');
-    for(let file in this.supervision.files ){
+    for (let file in this.supervision.files ){
       this.downloader.downloadFile(this.supervision.files[file]).subscribe(image => {
         this.images.push(this.downloader.toSecureBase64(image))
         this.cd.markForCheck()

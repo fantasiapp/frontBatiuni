@@ -29,7 +29,8 @@ export class Notifications {
 
   today: any;
   month: any;
-  timer: any[] = [];
+  timerToday: any[] = [];
+  timerMonth: any[] = [];
 
   constructor(private store: Store, private downloader: FileDownloader, private imageGenerator: ImageGenerator, private cd: ChangeDetectorRef){
   }
@@ -51,7 +52,10 @@ export class Notifications {
     this.today = this.notification.filter(notif => moment(moment(today).format('L')).isSame(moment(notif.date).format('L')))
 
     for (let i = 0; i < this.today.length; i++) {
-      this.timer.push(moment(moment(this.today[i].date)).startOf('minute').fromNow());
+      this.timerToday.push(moment(moment(this.today[i].date)).startOf('minute').fromNow());
+    }
+    for (let i = 0; i < this.month.length; i++) {
+      this.timerMonth.push(moment(moment(this.month[i].date)).startOf('day').fromNow());
     }
   }
 

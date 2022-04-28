@@ -89,8 +89,7 @@ export class SuiviChantierDate extends Destroy${
       
   }
 
-  addDateToPost() {
-    console.log("get mission", !this._mission!.isClosed); 
+  addDateToPost() { 
     this.popup.openDateDialog(this.mission!, this.date, this);
     this.swipeMenu = false
   }
@@ -114,11 +113,9 @@ export class SuiviChantierDate extends Destroy${
     // this.cd.markForCheck()
     this.openEmit.emit([this.accordion.isOpen(), this.date]);
     this.accordion.markForCheck()
-    console.log("updatePageOnlyDate", this.date.supervisions, this.mission)
   }
 
   validate(task: Task) {
-    console.log("validate")
     if (this.view == 'ST' && !task.refused && !this.mission!.isClosed) {
       task.validated = !task.validated
       this.store.dispatch(new ModifyDetailedPost(task)).pipe(take(1)).subscribe(() => {
@@ -140,9 +137,7 @@ export class SuiviChantierDate extends Destroy${
   }
 
   detectKey($event: KeyboardEvent, task: Task| null){
-    console.log($event)
     if ($event.key === "Enter") {
-      console.log("enter")
       this.mainComment(task);
       (document.getElementById("input_general")! as HTMLInputElement).value! = "";
     }
@@ -150,9 +145,7 @@ export class SuiviChantierDate extends Destroy${
   }
 
   mainComment(task:Task | null) {
-    console.log("mainComment")
     let idInput = task ? "input_"+task!.id : "input_general"
-    console.log('idInput', idInput, task);
     let input = document.getElementById(idInput) as HTMLInputElement;
     this.currentTaskId = task ? task!.id : null
     if (input.value.trim() != '' && !this.mission!.isClosed) {

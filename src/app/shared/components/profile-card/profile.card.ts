@@ -15,7 +15,7 @@ import { DataQueries, QueryProfile, Snapshot } from "src/models/new/data.state";
         <span>{{ profile.company.name || "Nom de l'entreprise" }}</span>
         <span>Propose {{ employeeCount }} {{job.name || 'Employées'}}</span>
         <span>Note générale ({{ profile.company.starsST }}/5 par {{ numberOfQuotations }} personnes)</span>
-        <!-- <span>{{ candidate!.amount }}</span> -->
+        <span *ngIf="candidate?.amount">Contre Offre : {{ candidate!.amount }} €</span>
         <stars class="stars" value="{{ profile.company.starsST }}" disabled></stars>
       </div>
     </ng-container>
@@ -84,7 +84,7 @@ export class ProfileCardComponent {
   ngOnInit() {
     if( this.profile$ == void 0 ) return;
     (this.profile$ as Observable<Profile>).subscribe(profile => {
-      if (profile.company) {
+      if (profile?.company) {
         const jobForCompany = this.store.selectSnapshot(DataQueries.getMany('JobForCompany', (profile.company as Company).jobs))
         this.employeeCount = jobForCompany.find(({job, number}) => {
           return job == (this.job as Job).id;

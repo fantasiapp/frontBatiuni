@@ -135,12 +135,7 @@ export class UIAnnonceResume extends Destroy$ {
     return null
   }
 
-  get amountOrigin () {
-    if (this._post?.counterOffer) {
-      return this._post.amount
-    }
-    return null
-  }
+  get amountOrigin () {return this._post?.amount}
 
   searchCandidate(post:Post): (Candidate | null) {
     const candidates = post.candidates

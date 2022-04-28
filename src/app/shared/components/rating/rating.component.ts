@@ -107,7 +107,6 @@ export class RatingComponent extends UIOpenMenu {
         }
       }
     }
-    console.log('ratingInfo', this.ratingInfos);
   }
   
   set open(value: boolean) {   
