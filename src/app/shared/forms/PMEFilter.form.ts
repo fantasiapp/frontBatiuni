@@ -22,18 +22,18 @@ import { SnapshotAll } from "src/models/new/data.state";
 
         <div class="form-input form-spacer">
           <label>Métier</label>
-          <options type="checkbox" [options]="allJobs"></options>
+          <options [options]="allJobs" formControlName="jobs"></options>
         </div>
 
         <div class="form-input form-spacer">
           <label class="form-title">Type</label>
           <div class="flex row radio-container">
             <div class="radio-item">
-              <radiobox class="grow" onselect="true" name="job-type" formControlName="type"></radiobox>
+              <radiobox class="grow" onselect="true" name="job-type" formControlName="manPower"></radiobox>
               <span>Main d'oeuvre</span>
             </div>
             <div class="radio-item">
-              <radiobox class="grow" onselect="false" name="job-type" formControlName="type"></radiobox>
+              <radiobox class="grow" onselect="false" name="job-type" formControlName="manPower"></radiobox>
               <span>Fourniture et pose</span>
             </div>
           </div>
@@ -79,11 +79,14 @@ export class PMEFilterForm implements OnInit {
   @Input()
   activeView: number = 0;
 
+  @Input()
+  callbackFilter: Function = () => {};
+
   filterForm = new FormGroup({
-    date: new FormControl(undefined),
-    address: new FormControl(undefined),
-    jobs: new FormControl(undefined),
-    type: new FormControl(undefined),
+    date: new FormControl(""),
+    address: new FormControl(""),
+    jobs: new FormControl([]),
+    manPower: new FormControl(undefined),
   },
     {}
   );
@@ -95,8 +98,11 @@ export class PMEFilterForm implements OnInit {
 
   ngOnInit(){
     console.log("start form test")
-    this.filterForm.valueChanges.subscribe(val => {
-      console.log("form test", val);
+    this.callbackFilter(this.filterForm.value);
+
+    this.filterForm.valueChanges.subscribe(value => {
+      console.log("form test", value);
+      this.callbackFilter(value);
     })
   }
   
