@@ -1,26 +1,14 @@
-import { animate, state, style, transition, trigger } from "@angular/animations";
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, ViewChild } from "@angular/core";
-import { Capacitor } from "@capacitor/core";
-import { Keyboard } from "@capacitor/keyboard";
-import { Observable } from "rxjs";
+import { footerTranslate } from "src/animations/footer.animation";
 import { RegisterForm } from "src/app/shared/forms/register.form";
+import { Mobile } from "src/app/shared/services/mobile-footer.service";
 
 @Component({
   selector: 'register',
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  animations: [
-    trigger('showFooter', [
-      state('false', style({
-        transform: 'translateY(100%)'
-      })),
-      state('true', style({
-        transform: 'translateY(0%)'
-      })),
-      transition('* <=> *', [animate('0.2s')])
-    ])
-  ]
+  animations: footerTranslate
 })
 export class RegisterComponent {
   @ViewChild(RegisterForm, {static: true})
@@ -38,34 +26,13 @@ export class RegisterComponent {
     this.form.onNavigate(-1);
   }
 
-  @ViewChild('footer') footer!: HTMLElement;
-
-  constructor(private cd: ChangeDetectorRef){
-    this.mobileInit()
+  constructor(private cd: ChangeDetectorRef, public mobile: Mobile){
   }
 
-  ngAfterViewInit() {
-    
-  }
-
-  mobileInit(){
-    if (Capacitor.getPlatform() !== "web") {
-      Keyboard.setAccessoryBarVisible({isVisible: true})
-      Keyboard.addListener('keyboardWillShow', (info: any) => {
-        this.showFooter = false
-        this.cd.detectChanges()
-      });
-      Keyboard.addListener('keyboardDidHide', () => {
-        console.log('keyboard did hide');
-        this.showFooter = true;
-        this.cd.detectChanges()
-      });
-    }
-  }
-
-  ngOnDestroy() {
-    if (Capacitor.getPlatform() !== "web") {
-      Keyboard.removeAllListeners()
-    }
+  ngOnInit(){
+    this.mobile.footerStateSubject.subscribe(b => {
+      this.showFooter = b;
+      this.cd.detectChanges()
+    })
   }
 };

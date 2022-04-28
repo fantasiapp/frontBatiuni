@@ -2,11 +2,13 @@
 @use 'src/styles/mixins' as *;
 
 :host {
-  @extend %page;
+  // @extend %page;
 }
 
 .hosted-page {
   @extend %content-with-header-and-big-footer;
+
+  @include footerHideMobile(calc(100vh - #{$sticky-header-height} - #{$big-sticky-footer-height} - env(safe-area-inset-bottom)));
 }
 
 .remuneration > * {

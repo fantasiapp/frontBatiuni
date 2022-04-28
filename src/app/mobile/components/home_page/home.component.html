@@ -6,7 +6,7 @@
       <span tab_2>Validées</span>
     </page-header>
     
-    <div class="hosted-page space-children-margin page-content-with-tabs">
+    <div class="hosted-page space-children-margin page-content-with-tabs" [ngClass]="{'footerHideMobile': !showFooter}">
       <!-- Page pour PME -->
       <ng-container *ngIf="view == 'PME'; else stview">
         <ng-container *ngIf="(posts$ | async) as posts" [ngSwitch]="activeView">

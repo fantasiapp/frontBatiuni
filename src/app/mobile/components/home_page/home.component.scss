@@ -5,6 +5,21 @@
   @extend %page
 }
 
+:host(.footerHide){
+  height: calc(100vh - env(safe-area-inset-top));
+  transition: height 200ms;
+}
+
+
+
+.hosted-page {
+  transition: height 200ms;
+  height: unset;
+  &.footerHideMobile {
+    height: calc(100vh - #{$mission-header-height} - env(safe-area-inset-top))
+  }
+}
+
 .submit-container {
   button { max-width: 45%;}
 }

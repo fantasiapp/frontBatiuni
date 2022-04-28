@@ -1,7 +1,8 @@
-import { ChangeDetectionStrategy, Component, ElementRef, EventEmitter, HostBinding, Input, Output, ViewChild } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostBinding, Input, Output, ViewChild } from "@angular/core";
 import { FormArray, FormControl, FormGroup, Validators } from "@angular/forms";
 import { Store } from "@ngxs/store";
-import { take } from "rxjs/operators";
+import { take, takeLast } from "rxjs/operators";
+import { footerTranslate } from "src/animations/footer.animation";
 import { Post, Job } from "src/models/new/data.interfaces";
 import { DataQueries, SnapshotAll } from "src/models/new/data.state";
 import { DeleteFile, SwitchPostType, UploadPost } from "src/models/new/user/user.actions";
@@ -9,6 +10,7 @@ import { Required } from "src/validators/verify";
 import { CalendarUI, DayState } from "../components/calendar/calendar.ui";
 import { defaultFileUIOuput } from "../components/filesUI/files.ui";
 import { InfoService } from "../components/info/info.component";
+import { Mobile } from "../services/mobile-footer.service";
 
 @Component({
   selector: 'ad-form',
@@ -124,7 +126,7 @@ import { InfoService } from "../components/info/info.component";
     </section>
   </form>
 
-  <footer class="flex row space-between sticky-footer full-width submit-container" style="background-color: white;">
+  <footer [@footerTranslate]="showFooter" class="flex row space-between sticky-footer full-width submit-container" style="background-color: white;">
     <button class="button passive font-Poppins full-width" (click)="submit(true)" [disabled]="invalid">
       {{this.post ? 'Enregistrer' : 'Brouillon'}}
     </button>
@@ -166,18 +168,32 @@ import { InfoService } from "../components/info/info.component";
     }
 
     .submit-container {
-      height: 4.5rem;
+      /* height: 4.5rem; */
       padding-left: 10px; padding-right: 10px;
       padding-top: 10px;
+      /* position: relative; */
       button {
         padding: 0 0.5rem;
         max-width: 45%;
+        height: calc(4.5rem - 20px);
         /* height: 100%; */
         display: flex;
         flex-grow: 1;
         justify-content: center;
         align-items: center;
-        height: 100%;
+        z-index: 2;
+      }
+
+      &::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        background: white;
+        height: calc(4.5rem + #{$navigation-height} + env(safe-area-inset-bottom));
+        z-index: 1;
+        pointer-events: none;
       }
     }
 
@@ -192,7 +208,11 @@ import { InfoService } from "../components/info/info.component";
 
     :host(.page) {
       footer {
-        @include with-set-safe-area(bottom, bottom, $navigation-height);
+        bottom: $navigation-height;
+        /* bottom: calc(env(safe-area-inset-bottom) +  #{$navigation-height}); */
+        /* bottom: calc(constant(safe-area-inset-bottom) +  #{$navigation-height}); */
+        /* bottom: calc(#{$navigation-height} + 10px); */
+        /* padding-bottom: env(safe-area-inset-bottom); */
       }
     }
 
@@ -207,13 +227,9 @@ import { InfoService } from "../components/info/info.component";
       transform: scale(0.7);
     }
 
-    .page footer {
-      bottom: 4.5rem;
-      bottom: calc(constant(safe-area-inset-bottom) +  $navigation-height);
-      bottom: calc(env(safe-area-inset-bottom) +  $navigation-height);
-    }
   `],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  animations: footerTranslate
 })
 export class MakeAdForm {
   @HostBinding('class.page')
@@ -293,7 +309,20 @@ export class MakeAdForm {
   currencies = ['$', '€', '£'].map((currency, id) => ({id, name: currency}));
   commonDocuments = ['Plan', 'Document Technique', 'Descriptif du chantier', 'Calendrier d\'éxecution'];
   
-  constructor(private store: Store, private info: InfoService) {}
+  showFooter: boolean = true;
+
+  constructor(private store: Store, private info: InfoService, public mobile: Mobile, private cd: ChangeDetectorRef) {
+    // setInterval(()=>{
+    //   this.mobile.test1()
+    // }, 1000)
+  }
+
+  ngOnInit(){
+    this.mobile.footerStateSubject.subscribe(b => {
+      this.showFooter = b
+      this.cd.detectChanges()
+    })
+  }
 
 
   makeAdForm = new FormGroup({

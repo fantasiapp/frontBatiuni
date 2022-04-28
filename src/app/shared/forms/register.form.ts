@@ -105,11 +105,12 @@ import { GetCompanies } from "src/models/new/search/search.actions";
       
       @extend %overflow-y;
       @include with-set-safe-area(margin, top, $paging-height + $paging-decoration-height);
-      height: calc(100vh - #{$paging-height} - #{$paging-decoration-height} - 148px - env(safe-area-inset-top));
+      height: calc(100vh - #{$paging-height} - #{$paging-decoration-height} - 146px - env(safe-area-inset-top));
     }
 
     :host(.footerHide){
       height: calc(100vh - #{$paging-height} - #{$paging-decoration-height} - env(safe-area-inset-top));
+      
     }
 
     :host(:not(.mobile-view)) {

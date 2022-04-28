@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, SimpleChange, SimpleChanges, ViewChild, TemplateRef, ChangeDetectorRef, Input, EventEmitter, Output } from "@angular/core";
+import { Component, ChangeDetectionStrategy, SimpleChange, SimpleChanges, ViewChild, TemplateRef, ChangeDetectorRef, Input, EventEmitter, Output, HostBinding } from "@angular/core";
 import { Select, Store } from "@ngxs/store";
 import { combineLatest, Observable, Subject } from "rxjs";
 import { take, takeUntil } from "rxjs/operators";
@@ -14,6 +14,7 @@ import { DataQueries, DataState, QueryAll } from 'src/models/new/data.state';
 import { Profile, Post, Mission, PostMenu, Candidate, User } from "src/models/new/data.interfaces";
 import { FilterService } from "src/app/shared/services/filter.service";
 import { ApplyForm, UIAnnonceResume } from "../../ui/annonce-resume/annonce-resume.ui";
+import { Mobile } from "src/app/shared/services/mobile-footer.service";
 
 @Component({
   selector: 'home',
@@ -75,12 +76,18 @@ export class HomeComponent extends Destroy$ {
   postMenu = new PostMenu
   missionMenu = new PostMenu<Mission>()
 
+  showFooter: boolean = true
+  @HostBinding('class.footerHide') get footer(){return this.showFooter}
+
+
   constructor(
     private cd: ChangeDetectorRef, private store: Store,
     private info: InfoService, private popup: PopupService, private swipeupService: SwipeupService, private slideService: SlidemenuService,
-    private filters: FilterService
+    private filters: FilterService, private mobile: Mobile
   ) {
     super();
+
+    
   }
   
   ngOnInit() {
@@ -105,6 +112,11 @@ export class HomeComponent extends Destroy$ {
     // this._openCloseMission = view == 'ST' && this.missions.length != 0
     // console.log("ngOnInit", view, this.missions, this._openCloseMission)
     
+    this.mobile.footerStateSubject.subscribe(b => {
+      this.showFooter = b
+      this.cd.detectChanges()
+    })
+
   }
 
   ngOnDestroy(): void {
