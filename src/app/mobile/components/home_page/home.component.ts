@@ -138,9 +138,9 @@ export class HomeComponent extends Destroy$ {
       let isDifferentDate = (filter.date && filter.date != post.dueDate)
       let isNotIncludedAddress = (filter.address && post.address.toLowerCase().search(filter.address.toLowerCase()) == -1)
       let isDifferentManPower = (filter.manPower && post.manPower != (filter.manPower === "true"))
-      let isNotIncludedJob = (filter.jobs != [] && filter.jobs)
+      let isNotIncludedJob = (filter.jobs && filter.jobs.length && filter.jobs.every((job: any) => {return job.id != post.job}))
       
-      if ( isDifferentDate || isDifferentManPower || isNotIncludedAddress ) { continue }
+      if ( isDifferentDate || isDifferentManPower || isNotIncludedAddress || isNotIncludedJob) { continue }
       this.userDrafts.push(post)
       }
   }
