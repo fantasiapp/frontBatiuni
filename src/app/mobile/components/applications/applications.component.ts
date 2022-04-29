@@ -8,7 +8,7 @@ import { Destroy$ } from "src/app/shared/common/classes";
 import { assignCopy, splitByOutput } from '../../../shared/common/functions';
 import { MarkViewed } from 'src/models/new/user/user.actions';
 import { UIAnnonceResume } from 'src/app/mobile/ui/annonce-resume/annonce-resume.ui';
-import { UISlideMenuComponent } from 'src/app/shared/components/slidemenu/slidemenu.component';
+// import { UISlideMenuComponent } from 'src/app/shared/components/slidemenu/slidemenu.component';
 
 @Component({
   selector: 'applications',

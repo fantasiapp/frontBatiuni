@@ -338,6 +338,13 @@ export class SetFavorite {
   constructor(public value: boolean, public Post: number) {}
 }
 
+export class InviteFriend {
+  static readonly type = 'invite Friend';
+  action = 'inviteFriend';
+
+  constructor(public emailAddress: string) {}
+}
+
 export class MarkViewed {
   static readonly type = '[User.ST] View Post';
   action = 'isViewed';

@@ -35,6 +35,7 @@ export class ProfileComponent extends Destroy$ {
   openMenu: boolean = false;
   openModifyMenu: boolean = false;
   openApplications: boolean = false;
+  openInviteFriendMenu: boolean = false;
   modifyPassword: boolean = false;
   openModifyPicture: boolean = false;
   _openNotifications : boolean = false;
@@ -74,8 +75,6 @@ export class ProfileComponent extends Destroy$ {
       // Arnaque du bug
       this.companyId = profile.user?.company!
       profile.company = this.store.selectSnapshot(DataQueries.getById('Company', this.companyId))!
-
-      console.log("updateProfile", profile)
       if (profile.company?.Notification) {
         profile.company.Notification.map((notificationId) => {
           let notification = this.store.selectSnapshot(DataQueries.getById('Notification', notificationId))
@@ -98,6 +97,12 @@ export class ProfileComponent extends Destroy$ {
       this.fixScrollTop();
       this.modifyForm?.reload();
     }
+  }
+
+  slideInviteFriends() {
+    console.log("slideInviteFriends")
+    this.openMenu = false;
+    this.openInviteFriendMenu = true
   }
   
   private fixScrollTop() {

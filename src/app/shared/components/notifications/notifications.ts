@@ -58,7 +58,6 @@ export class Notifications {
   ngOnInit() {
     this.notifications.forEach((notificationAny, index) => {
       let notification = notificationAny as Notification
-      console.log("Notification", notification)
       let src: SafeResourceUrl | string = ""
       let company: Company
       switch ( notification.nature ){
@@ -88,7 +87,6 @@ export class Notifications {
             company = this.store.selectSnapshot(DataQueries.getById("Company", mission.subContractor)) as Company;
           } else {
             company = this.store.selectSnapshot(DataQueries.getById("Company", notification.subContractor)!) as Company;
-            console.log("ngInit company", company)
           }
 
           let logo = this.store.selectSnapshot(DataQueries.getProfileImage(company.id));

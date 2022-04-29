@@ -174,7 +174,6 @@ export class UIAnnonceResume extends Destroy$ {
   }
 
   ngOnChange() {
-    console.log("ngOnChange")
     this.form = new FormGroup({
       amount: new FormControl(this.amount),
       devis: new FormControl([this.devis[0]])
@@ -182,7 +181,6 @@ export class UIAnnonceResume extends Destroy$ {
   }
 
   ngOnDestroy(): void {
-    console.log("ngdestroy")
     super.ngOnDestroy();
   }
 

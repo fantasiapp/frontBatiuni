@@ -405,7 +405,6 @@ export class ModifyProfileForm {
 
   reload() {
     const { user, company} = this.profile as {user: User, company: Company};
-    console.log("reload", company.saturdayDisponibility)
     this.companyFiles = this.store.selectSnapshot(DataQueries.getMany('File', this.profile.company.files));
     this.companyLabels = this.store.selectSnapshot(DataQueries.getMany('LabelForCompany', this.profile.company.labels));
     this.companyJobs = this.store.selectSnapshot(DataQueries.getMany('JobForCompany', this.profile.company.jobs));

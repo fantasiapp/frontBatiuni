@@ -25,6 +25,7 @@ import { AppRoutingModule } from "./routing/mobile-routing.module";
 import { ForgotPassword } from "./components/forgot_password/forgot.password";
 import { MailSender } from "./components/only_mail/only.mail";
 import { ApplicationsComponent } from "./components/applications/applications.component";
+import { InviteFriendsComponent } from "./components/invite_friends/invite_friends.component";
 
 @NgModule({
   declarations: [
@@ -48,7 +49,8 @@ import { ApplicationsComponent } from "./components/applications/applications.co
     SuiviChantierDate,
     ForgotPassword,
     MailSender,
-    ApplicationsComponent
+    ApplicationsComponent,
+    InviteFriendsComponent
   ],
   imports: [
     CommonModule,

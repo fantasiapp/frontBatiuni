@@ -3,7 +3,7 @@ import { Action, createSelector, Selector, State, StateContext, Store } from "@n
 import { Observable, of, Subject } from "rxjs";
 import { concatMap, map, tap } from "rxjs/operators";
 import { HttpService } from "src/app/services/http.service";
-import { GetGeneralData, HandleApplication, SignContract, MarkViewed, ModifyAvailability, SetFavorite, TakePicture } from "./user/user.actions";
+import { GetGeneralData, HandleApplication, SignContract, MarkViewed, ModifyAvailability, SetFavorite, TakePicture, InviteFriend } from "./user/user.actions";
 import { ApplyPost, CandidateViewed, ChangePassword, ChangeProfilePicture, ChangeProfileType, DeleteFile, DeletePost, DownloadFile, DuplicatePost, GetUserData, ModifyUserProfile, CreateDetailedPost, ModifyDetailedPost, CreateSupervision, SwitchPostType, ModifyMissionDate, CloseMission, CloseMissionST, UploadFile, UploadPost, UploadImageSupervision, NotificationViewed } from "./user/user.actions";
 import { Company, Interface, User } from "./data.interfaces";
 import { DataReader, NameMapping, TranslatedName } from "./data.mapper";
@@ -714,7 +714,21 @@ export class DataState {
       })
     )
   }
-};
+
+  @Action(InviteFriend)
+  inviteFriend(ctx:StateContext<DataModel>, application: InviteFriend) {
+    return this.http.get('data', application).pipe(
+      tap((response:any) => {
+        if ( response[application.action] !== 'OK' ) {
+          this.inZone(() => this.info.show("error", response.messages, 3000))
+        } else {
+          this.inZone(() => this.info.show("info", response.messages, 3000))
+        }
+      }
+    ))
+  }
+      
+}
 
 //make a deep version of toJSON
 

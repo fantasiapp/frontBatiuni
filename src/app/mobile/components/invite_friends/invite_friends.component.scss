@@ -1,0 +1,18 @@
+@use "sass:math";
+@use 'src/styles/variables' as *;
+@use 'src/styles/mixins' as *;
+
+.inviteFriendsInput {
+  width:100%;
+  height:40px;
+  padding: 0 1% 0 1%;
+  border: 1px solid grey;
+  border-radius: 10px;
+}
+
+.inviteFriendsSubmit {
+  position: absolute;
+  bottom: 10px;
+  left: 2%;
+  width:96%
+}

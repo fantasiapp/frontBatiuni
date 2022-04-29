@@ -18,7 +18,8 @@
     <li [routerLink]="['','applications']"> Candidatures en cours</li>
     <li [routerLink]="['','abonnement']">Gérer mes abonnements</li>
     <li [routerLink]="['','factures']">Mes factures</li>
-    <li>Partager l'application</li>
+    <li (click)="slideInviteFriends()">Inviter vos amis</li>
+    <li >Partager l'application</li>
     <li>Noter l'application</li>
     <li>Nous contacter</li>
     <li>FAQ</li>
@@ -33,11 +34,15 @@
         <li (click)="takePhoto()">Accédez à l'appareil photo</li>
         <li (click)="selectPhoto()">Télécharger une image</li>
       </swipeup>
-
       <profile-resume [profile]="profile" [canChangePicture]="!modifyPassword" class="flex column center-cross space-children-margin" (changePicture)="swipeModifyPicture()"></profile-resume>
-  
       <modify-password-form *ngIf="modifyPassword" class="grow" (submit)="changePassword($event)"></modify-password-form>
       <modify-profile-form *ngIf="!modifyPassword" class="grow" [profile]="profile" (submit)="modifyProfile($event)" #modifyForm></modify-profile-form>
+    </div>
+  </slidemenu>
+
+  <slidemenu [(open)]="openInviteFriendMenu" #inviteFriends>
+    <div class="modify-page hosted-page flex column center-cross space-children-margin" content>
+      <invite_friends class="flex column center-cross space-children-margin"></invite_friends>
     </div>
   </slidemenu>
 
