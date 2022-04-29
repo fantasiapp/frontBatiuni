@@ -88,7 +88,7 @@ export class SuiviPME {
       daystates = Object.values(mission.dates).map(date => {return {date: date as string, availability: 'selected'}})
     else
       daystates = this.store.selectSnapshot(DataQueries.getMany('DatePost', mission.dates))
-        .map((date) => ({date: date.name, availability: 'selected'}))
+        .map((date) => ({date: date.date, availability: 'selected'}))
 
     this.AdFormDate.get('calendar')?.setValue(daystates);
     this.calendar?.viewCurrentDate();
@@ -117,14 +117,15 @@ export class SuiviPME {
     if ( typeof mission.dates === "object" && !Array.isArray(mission.dates) )
       dates = Object.keys(mission.dates).map(key => (+key as number))
     this.dates = dates.map((value:unknown, id) => {
-      let date = typeof(value) == "number" ? this.store.selectSnapshot(DataQueries.getById('DatePost', value as number))!.name : value
+      let date = typeof(value) == "number" ? this.store.selectSnapshot(DataQueries.getById('DatePost', value as number))!.date : value
       return { id:id,
         value: date as string,
         tasks:this.tasks,
         selectedTasks:this.computeSelectedTask(date as string),
         taskWithoutDouble:this.dateWithoutDouble(),
         view:this.view,
-        supervisions: this.computeSupervisionsForMission(date as string, supervisionsTaks)
+        supervisions: this.computeSupervisionsForMission(date as string, supervisionsTaks),
+
       } as DateG
     })
     this.accordionsData = []
