@@ -74,8 +74,7 @@ export class MissionsComponent extends Destroy$ {
             dateAlreadyParsedFromMission.push(task.date)
             this.detailedDays.push({
               date: task.date,
-              start: mission.hourlyStart,
-              end: mission.hourlyEnd,
+              mission: mission,
               title: 'Chantier de ' + contractor.name,
               tasks: [task]
             });

@@ -131,7 +131,9 @@ export interface Post {
   startDate: string;
   endDate: string;
   hourlyStart: string;
+  hourlyStartChange:string;
   hourlyEnd: string;
+  hourlyEndChange: string;
   amount: number;
   currency: string;
   unitOfTime: string;

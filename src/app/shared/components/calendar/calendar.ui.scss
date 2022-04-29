@@ -15,8 +15,13 @@
 .header-calendar {
   align-content: center;
   justify-content: space-between;
+  margin-bottom: 0.5rem;
   h1 {
     color: #1e2843;
+  }
+
+  .btn-next {
+    margin-left: 1rem;
   }
 }
 .wrapper-calendar {

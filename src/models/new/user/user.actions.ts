@@ -305,6 +305,13 @@ export class ModifyMissionDate {
   }
 }
 
+export class ValidateMissionDate {
+  static readonly type = '[Data] validate date Mission';
+  action = 'validateMissionDate'
+  constructor(public missionId: number, public field: string, public state:boolean, public date: string) {
+  }
+}
+
 export class CloseMission {
   static readonly type = '[Data] set stars and comments';
   action = 'closeMission'
