@@ -2,6 +2,6 @@
   <h1 class="grow">Créer une annonce</h1>
 </header>
 
-<div class="hosted-page flex column center-cross space-children-margin">
+<div class="hosted-page flex column center-cross space-children-margin" [ngClass]="{'footerHideMobile':showFooter}">
   <ad-form [page]="page"></ad-form>
 </div>

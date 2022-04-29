@@ -126,7 +126,7 @@ export interface Post {
   longitude: number;
   contactName: string;
   draft: boolean;
-  manPower: number;
+  manPower: boolean;
   dueDate: string;
   startDate: string;
   endDate: string;

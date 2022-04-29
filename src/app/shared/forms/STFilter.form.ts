@@ -21,7 +21,7 @@ import { FilterService } from "../services/filter.service";
 
     <div class="form-input">
       <label>Adresse de chantier</label>
-      <input type="text" class="form-element" formControlName="match_address"/>
+      <input type="text" class="form-element" formControlName="search_address"/>
     </div>
 
     <div class="form-input">
@@ -155,7 +155,7 @@ export class STFilterForm extends Filter<Post> {
         return user.viewedPosts.includes(post.id);
       }),
       this.match('dueDate'),
-      this.match('address'),
+      this.search('address'),
       this.some(
         'employee',
         this.onlyIf('$employeeCount', count => 1 <= count && count <= 10, [], true),

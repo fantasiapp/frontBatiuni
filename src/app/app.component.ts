@@ -9,6 +9,9 @@ import { SlideChildrenLeft, SlideChildrenRight } from 'src/animations/slide.anim
 import { AsyncSubject } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { GetGeneralData } from 'src/models/new/user/user.actions';
+import { Keyboard } from '@capacitor/keyboard';
+import { Capacitor } from '@capacitor/core';
+import { Mobile } from './shared/services/mobile-footer.service';
 
 
 @Component({
@@ -24,8 +27,9 @@ import { GetGeneralData } from 'src/models/new/user/user.actions';
   ]
 })
 export class AppComponent extends Destroy$ {
-  constructor(private store: Store) {
+  constructor(private store: Store, private mobile: Mobile) {
     super();
+    this.mobile.init()
   }
 
   ready$ = new AsyncSubject<true>();
@@ -47,4 +51,10 @@ export class AppComponent extends Destroy$ {
   prepareRoute(outlet: RouterOutlet) {
     return outlet?.activatedRouteData?.['animation'];
   }
+
+  // mobileInit(){
+  //   if (Capacitor.getPlatform() !== "web") {
+  //     Keyboard.setAccessoryBarVisible({isVisible: true})
+  //   }
+  // }
 }

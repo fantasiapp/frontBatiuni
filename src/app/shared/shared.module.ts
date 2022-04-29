@@ -62,6 +62,7 @@ import { FileViewer } from "./components/file-viewer/file-viewer.component";
 import { BannerComponent } from './components/banner/banner.component';
 import { RatingComponent } from "./components/rating/rating.component";
 import { SlideProfileComponent } from './components/slide-profile/slide-profile.component';
+import { Mobile } from "./services/mobile-footer.service";
 
 @NgModule({
   declarations: [
@@ -197,6 +198,6 @@ import { SlideProfileComponent } from './components/slide-profile/slide-profile.
     RatingComponent,
     SlideProfileComponent,
   ],
-  providers: [ImageGenerator, FileDownloader, FilterService]
+  providers: [ImageGenerator, FileDownloader, FilterService, Mobile]
 })
 export class SharedModule {}

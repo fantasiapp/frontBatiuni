@@ -76,6 +76,15 @@
   }
 }
 
+@mixin footerHideMobile($height) {
+  // height: $height;
+  transition: height 200ms;
+  height: unset;
+  &.footerHideMobile {
+    height: $height
+  }
+}
+
 //-----------------------------------------------
 //Size
 
