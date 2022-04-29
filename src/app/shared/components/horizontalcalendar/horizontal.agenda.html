@@ -30,27 +30,24 @@
             <div class="agenda-line full-width"></div>
         </li>
     </ol>
-    <div *ngFor="let card of currentCardCalendars" class="topthing position-absolute" 
-    [style.height.px]="card.cardHeight" 
-    [style.top.px]="card.cardFromTop" [@inOutAnimation]="{params: {currHeight: card.cardHeight}}">
-        <div>
-            <h4>
-                {{ card.title }}
-            </h4>
-            <span>{{ card.mission.address }}</span>
-
-            <span>Les tâche pour ce jour :</span>
-            <div class="task-container" *ngFor="let task of card.tasks">
-                <span>- {{ task.content }}</span>
-                <!-- <div class="validator">
-                    <button class="button" (click)="refuse(task)" [ngClass]="{'refused' :task.refused}">NON</button>
-                    <button class="button" (click)="validate(task)" [ngClass]="{'validated' :task.validated}">OUI</button>
-                </div> -->
+    <div class="topthing position-absolute">
+        <div *ngFor="let card of currentCardCalendars" class="card-container" 
+        [style.height.px]="card.cardHeight" 
+        [style.top.px]="card.cardFromTop" [@inOutAnimation]="{params: {currHeight: card.cardHeight}}">
+            <div>
+                <h4>
+                    {{ card.title }}
+                </h4>
+                <span>{{ card.mission.address }}</span><br>
     
+                <span *ngIf="card.tasks[0]">Les tâche pour ce jour :</span>
+                <div class="task-container" *ngFor="let task of card.tasks">
+                    <span>- {{ task.content }}</span>
+                </div>
+                <notification-agenda *ngIf="card.change" [card]="card" [field]="fieldValidation(card)" [date]="card.date" (cardUpdate)="onCardUpdate(card)"></notification-agenda>
             </div>
-            <notification-agenda *ngIf="card.change" [card]="card" [field]="fieldValidation(card)" [date]="card.date" (cardUpdate)="onCardUpdate(card)"></notification-agenda>
+    
         </div>
-
     </div>
    
 </div>

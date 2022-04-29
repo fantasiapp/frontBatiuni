@@ -65,20 +65,26 @@ export class MissionsComponent extends Destroy$ {
         
         // const diffDays = end.diff(start, 'days', true);
         // let day = start.clone();
+        console.log('Mission;', mission);
         
         let dateAlreadyParsedFromMission:string[] = []
-        for (const task of tasks) {
-          if(dateAlreadyParsedFromMission.includes(task.date)) {
-            let lenght = this.detailedDays.length
-            if (lenght != 0) this.detailedDays[lenght -1].tasks.push(task)
-          } else {
-            dateAlreadyParsedFromMission.push(task.date)
-            this.detailedDays.push({
-              date: task.date,
-              mission: mission,
-              title: 'Chantier de ' + contractor.name,
-              tasks: [task]
-            });
+
+        for (const dateid of mission.dates) {
+          let date = this.store.selectSnapshot(DataQueries.getById('DatePost', dateid))
+
+          dateAlreadyParsedFromMission.push(date!.date)
+
+          this.detailedDays.push({
+            date: date!.date,
+            mission: mission,
+            title: 'Chantier de ' + contractor.name,
+            tasks: []
+          })
+          for (const task of tasks) {
+            if(dateAlreadyParsedFromMission.includes(task.date)) {
+              let lenght = this.detailedDays.length
+              if (lenght != 0) this.detailedDays[lenght -1].tasks.push(task)
+            }
           }
         }
       }

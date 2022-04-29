@@ -295,26 +295,6 @@ export class HorizantaleCalendar implements OnInit {
     }
   }
 
-
-  //potentiellement besoin de rajouter isClosed de la mission afficher pour eviter de changer apres cloture
-  // validate(task: PostDetail) {
-  //   if (!task.refused) {
-  //     task.validated = !task.validated
-  //     this.store.dispatch(new ModifyDetailedPost(task)).pipe(take(1)).subscribe(() => {
-  //       this.cd.markForCheck()
-  //     })
-  //   }
-  // }
-
-  // refuse(task: PostDetail) {
-  //   if (!task.validated) {
-  //     task.refused = !task.refused
-  //     this.store.dispatch(new ModifyDetailedPost(task)).pipe(take(1)).subscribe(() => {
-  //       this.cd.markForCheck()   
-  //     })
-  //   }
-  // }
-
   showgrey(selectedday: any) {
     this.selectedDay.forEach((item: any) => (item.selected = false));
     selectedday.selected = true;
