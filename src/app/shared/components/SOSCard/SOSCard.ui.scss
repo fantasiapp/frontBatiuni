@@ -26,7 +26,7 @@
 .presentation {
   flex-grow: 0;
   transform: scale(0.9);
-  profile-image { transform: scale(0.9) rotate(45deg); }
+  profile-image { transform: scale(0.9); }
 }
 
 .description {
