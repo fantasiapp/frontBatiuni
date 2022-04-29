@@ -206,7 +206,9 @@ export type Mission = Post & {
 
 export type PostDate = {
   id: Ref<PostDate>;
-  name: string;
+  date: string;
+  validated: boolean;
+  deleted: boolean
 };
 
 export type Task = PostDetail & {
