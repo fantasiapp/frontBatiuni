@@ -42,11 +42,13 @@ export class HomeComponent extends Destroy$ {
   };
 
   userDrafts: Post[] = [];
+  allUserDrafts: Post[] = [];
   userOnlinePosts: Post[] = [];
   allUserOnlinePosts: Post[] = [];
   allOnlinePosts: Post[] = [];
   missions: Mission[] = [];
-  allUserDrafts: Post[] = [];
+  allMissions: Mission[] = [];
+  
 
   get missionToClose () {
     return this.missions[0]
@@ -100,12 +102,13 @@ export class HomeComponent extends Destroy$ {
       this.allUserDrafts = mapping.get(this.symbols.userDraft) || [];
       this.allUserOnlinePosts = mapping.get(this.symbols.userOnlinePost) || [];
       this.allOnlinePosts = [...otherOnlinePost, ...this.userOnlinePosts];
-      this.missions = this.store.selectSnapshot(DataQueries.getMany('Mission', profile.company.missions));
+      this.allMissions = this.store.selectSnapshot(DataQueries.getMany('Mission', profile.company.missions));
       this.cd.markForCheck();
 
       console.log("ngOnInit end");
       this.selectDraft(null);
       this.selectUserOnline(null);
+      this.selectMission(null);
     });
     // const view = this.store.selectSnapshot(DataState.view)
     // this._openCloseMission = view == 'ST' && this.missions.length != 0
@@ -163,6 +166,24 @@ export class HomeComponent extends Destroy$ {
     this.cd.markForCheck();
   }
 
+  selectMission(filter: any) {
+    this.missions = [];
+    if (filter == null ) { this.missions = this.allMissions }
+    else {
+      for (let mission of this.allMissions) {
+      
+      let isDifferentDate = (filter.date && filter.date != mission.dueDate)
+      let isNotIncludedAddress = (filter.address && mission.address.toLowerCase().search(filter.address.toLowerCase()) == -1)
+      let isDifferentManPower = (filter.manPower && mission.manPower != (filter.manPower === "true"))
+      let isNotIncludedJob = (filter.jobs && filter.jobs.length && filter.jobs.every((job: any) => {return job.id != mission.job}))
+      
+      if ( isDifferentDate || isDifferentManPower || isNotIncludedAddress || isNotIncludedJob) { continue }
+      this.missions.push(mission)
+      }
+  }
+    this.cd.markForCheck();
+  }
+
   swipeupMenu() {
     this.missionMenu.swipeup = !this.missionMenu.swipeup
     // toogle activate update
@@ -185,6 +206,9 @@ export class HomeComponent extends Destroy$ {
         console.log("callbackUserOnlineFilter", filter)
         this.selectUserOnline(filter)
         break;
+      case 2:
+        console.log("callbackMissions", filter)
+        this.selectMission(filter);
     }
     
   }
