@@ -57,9 +57,18 @@
       </ng-template>
     </div>
     
-    <swipeup [(open)]="openAdFilterMenu" type="view">
+    <!-- <swipeup [(open)]="openAdFilterMenu" type="view">
       <pme-filter-form [activeView]="activeView" [callbackFilter]="callbackFilter" *ngIf="view == 'PME'; else stfilter" view></pme-filter-form>
       <ng-template #stfilter><st-filter-form (update)="allOnlinePosts = $event"></st-filter-form></ng-template>
+    </swipeup> -->
+
+    <swipeup [(open)]="openAdFilterMenu" type="view">
+      <ng-container *ngIf="view == 'PME'; else stfilter" view>
+        <pme-filter-form [activeView]="activeView" [callbackFilter]="callbackFilter"></pme-filter-form>
+      </ng-container>
+      <ng-template #stfilter>
+        <st-filter-form (update)="allOnlinePosts = $event"></st-filter-form>
+      </ng-template>
     </swipeup>
     
     <!-- Component one -->

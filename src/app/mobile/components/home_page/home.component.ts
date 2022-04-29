@@ -43,6 +43,7 @@ export class HomeComponent extends Destroy$ {
 
   userDrafts: Post[] = [];
   userOnlinePosts: Post[] = [];
+  allUserOnlinePosts: Post[] = [];
   allOnlinePosts: Post[] = [];
   missions: Mission[] = [];
   allUserDrafts: Post[] = [];
@@ -97,13 +98,14 @@ export class HomeComponent extends Destroy$ {
 
       const otherOnlinePost = (mapping.get(this.symbols.otherOnlinePost) || []);
       this.allUserDrafts = mapping.get(this.symbols.userDraft) || [];
-      this.userOnlinePosts = mapping.get(this.symbols.userOnlinePost) || [];
+      this.allUserOnlinePosts = mapping.get(this.symbols.userOnlinePost) || [];
       this.allOnlinePosts = [...otherOnlinePost, ...this.userOnlinePosts];
       this.missions = this.store.selectSnapshot(DataQueries.getMany('Mission', profile.company.missions));
       this.cd.markForCheck();
 
       console.log("ngOnInit end");
       this.selectDraft(null);
+      this.selectUserOnline(null);
     });
     // const view = this.store.selectSnapshot(DataState.view)
     // this._openCloseMission = view == 'ST' && this.missions.length != 0
@@ -130,10 +132,6 @@ export class HomeComponent extends Destroy$ {
     if (filter == null ) { this.userDrafts = this.allUserDrafts }
     else {
     for (let post of this.allUserDrafts) {
-      // if (filter.manPower !== null && post.manPower != Boolean(filter.manPower) ) {
-      //   console.log("break", filter)
-      //   continue
-      // }
       
       let isDifferentDate = (filter.date && filter.date != post.dueDate)
       let isNotIncludedAddress = (filter.address && post.address.toLowerCase().search(filter.address.toLowerCase()) == -1)
@@ -142,6 +140,24 @@ export class HomeComponent extends Destroy$ {
       
       if ( isDifferentDate || isDifferentManPower || isNotIncludedAddress || isNotIncludedJob) { continue }
       this.userDrafts.push(post)
+      }
+  }
+    this.cd.markForCheck();
+  }
+
+  selectUserOnline(filter: any){
+    this.userOnlinePosts = [];
+    if (filter == null ) { this.userOnlinePosts = this.allUserOnlinePosts }
+    else {
+    for (let post of this.allUserOnlinePosts) {
+      
+      let isDifferentDate = (filter.date && filter.date != post.dueDate)
+      let isNotIncludedAddress = (filter.address && post.address.toLowerCase().search(filter.address.toLowerCase()) == -1)
+      let isDifferentManPower = (filter.manPower && post.manPower != (filter.manPower === "true"))
+      let isNotIncludedJob = (filter.jobs && filter.jobs.length && filter.jobs.every((job: any) => {return job.id != post.job}))
+      
+      if ( isDifferentDate || isDifferentManPower || isNotIncludedAddress || isNotIncludedJob) { continue }
+      this.userOnlinePosts.push(post)
       }
   }
     this.cd.markForCheck();
@@ -159,11 +175,18 @@ export class HomeComponent extends Destroy$ {
   }
 
   callbackFilter = (filter: any): void => {
-    console.log("callbackFilter", filter)
-    this.selectDraft(filter)
-    // this.selectDraft(this.allUserDrafts, filter)
-    // this.selectDraft()
-    // this.userDrafts = mapping.get(this.symbols.userDraft) || [];
+    console.log("callbackFilter activeView", this.activeView)
+    switch (this.activeView) {
+      case 0:
+        console.log("callbackDraftFilter", filter);
+        this.selectDraft(filter);
+        break;
+      case 1:
+        console.log("callbackUserOnlineFilter", filter)
+        this.selectUserOnline(filter)
+        break;
+    }
+    
   }
 
   //factor two menu into objects
