@@ -20,6 +20,11 @@ interface Match<T, ComputedProperties, Key extends KeyOf<T, ComputedProperties> 
   name: Key; //keys are matched against formControl
 };
 
+interface Search<T, ComputedProperties, Key extends KeyOf<T, ComputedProperties> = KeyOf<T, ComputedProperties>> {
+  type: 'search';
+  name: Key; //keys are matched against formControl
+};
+
 interface If<T, ComputedProperties, Key extends KeyOf<T, ComputedProperties> = KeyOf<T, ComputedProperties>> {
   //applies condition on items
   type: 'if';
@@ -49,7 +54,7 @@ interface Every<T, ComputedProperties> {
 };
 
 export type Step<T = any, ComputedProperties = any> =
-  Compute<T, ComputedProperties> | Match<T, ComputedProperties> | If<T, ComputedProperties> | Sort<T, ComputedProperties> | Some<T, ComputedProperties> | Every<T, ComputedProperties>;
+  Compute<T, ComputedProperties> | Match<T, ComputedProperties> | If<T, ComputedProperties> | Sort<T, ComputedProperties> | Some<T, ComputedProperties> | Every<T, ComputedProperties> | Search<T, ComputedProperties>;
 
 export class AugmentedType<T extends {id: number}, ComputedProperties> {
   private cache: Record<Partial<ComputedProperties>> = {};
@@ -109,6 +114,10 @@ export abstract class Filter<T extends {id: number}> extends Destroy$ {
 
   protected match<ComputedProperties, K extends KeyOf<T, ComputedProperties>>(name: K): Match<T, ComputedProperties, K> {
     return { type: 'match', name }
+  }
+
+  protected search<ComputedProperties, K extends KeyOf<T, ComputedProperties>>(name: K): Search<T, ComputedProperties, K> {
+    return { type: 'search', name }
   }
 
   protected onlyIf<ComputedProperties, K extends KeyOf<T, ComputedProperties>>(name: K, condition: (t: ValueOf<T, ComputedProperties, K>, ...args: any[]) => boolean, otherwise?: T[], initialValue: boolean = false): If<T, ComputedProperties> {
@@ -175,13 +184,25 @@ export abstract class Filter<T extends {id: number}> extends Destroy$ {
   private evaluateStep(input: T[], control: any, step: Step<T>) {
     const controlValue = control.value;
     let lastValue: Set<T>;
-    
+    console.log('evaluateStep', controlValue, step);
     switch ( step.type ) {
       case 'match':
+        console.log("match input",input);
+        console.log("match controlValue",controlValue);
         return input.filter(item => {
-          return controlValue == this.type.getValue(item, step);
+          return controlValue == this.type.getValue(item, step) || controlValue == "" || controlValue == null;
         });
-      
+      case 'search':
+        return input.filter(item => {
+          const value = this.type.getValue(item, step);
+          if ( controlValue == null ) return true;
+          if ( controlValue == "" ) return true;
+          if ( typeof controlValue == 'string' ) {
+            const search = controlValue.toLowerCase();
+            return value.toLowerCase().indexOf(search) != -1;
+          }
+          return value == controlValue;
+        });
       case 'if':
         if ( controlValue ) {
           const res = input.filter(item => step.condition(this.type.getValue(item, step), controlValue))
@@ -225,16 +246,20 @@ export abstract class Filter<T extends {id: number}> extends Destroy$ {
     //emit and return
     const controls = this.form.controls;
     let input = this.input;
-
+    
+    console.log("updateEvent", input);
+    console.log("pipeline", this.pipeline);
+    console.log("form", this.form.value);
+    console.log("controls", controls);
+    console.log("Initial input", this.input);
     if ( !input.length ) return [];
     
     for ( const step of this.pipeline ) {
       const name = step.type + '_' + (step.name as string);
-      if ( controls[name].touched ) {
-        input = this.evaluateStep(input, controls[name], step);
-      }
+      console.log("controls[name].touched", name);
+      input = this.evaluateStep(input, controls[name], step);
+      console.log(input);
     }
-
     this.updateEvent.emit(input);
     return input;
   }

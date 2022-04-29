@@ -45,7 +45,7 @@
         <ng-container [ngSwitch]="activeView">
           <ng-container *ngSwitchCase="0">
             <offer
-              *ngFor="let onlinePost of allOnlinePosts"
+              *ngFor="let onlinePost of displayOnlinePosts"
               [deletable]="false"
               [post]="onlinePost"
               (click)="openPost(onlinePost)"
@@ -67,7 +67,7 @@
         <pme-filter-form [activeView]="activeView" [callbackFilter]="callbackFilter"></pme-filter-form>
       </ng-container>
       <ng-template #stfilter>
-        <st-filter-form (update)="allOnlinePosts = $event"></st-filter-form>
+        <st-filter-form (update)="displayOnlinePosts = $event"></st-filter-form>
       </ng-template>
     </swipeup>
     

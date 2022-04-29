@@ -45,6 +45,7 @@ export class HomeComponent extends Destroy$ {
   allUserDrafts: Post[] = [];
   userOnlinePosts: Post[] = [];
   allUserOnlinePosts: Post[] = [];
+  displayOnlinePosts: Post[] = [];
   allOnlinePosts: Post[] = [];
   missions: Mission[] = [];
   allMissions: Mission[] = [];
