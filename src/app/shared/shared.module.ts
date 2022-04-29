@@ -63,6 +63,7 @@ import { BannerComponent } from './components/banner/banner.component';
 import { RatingComponent } from "./components/rating/rating.component";
 import { SlideProfileComponent } from './components/slide-profile/slide-profile.component';
 import { Mobile } from "./services/mobile-footer.service";
+import { NotificationAgendaComponent } from './components/notification-agenda/notification-agenda.component';
 
 @NgModule({
   declarations: [
@@ -127,6 +128,7 @@ import { Mobile } from "./services/mobile-footer.service";
     BannerComponent,
     RatingComponent,
     SlideProfileComponent,
+    NotificationAgendaComponent,
   ],
   imports: [
     CommonModule,

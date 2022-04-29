@@ -9,25 +9,28 @@ import {
 import * as moment from 'moment';
 import { Availability, CalendarUI, DayState } from '../calendar/calendar.ui';
 import { trigger, state, style, animate, transition } from '@angular/animations';
-import { PostDetail, Ref } from 'src/models/new/data.interfaces';
+import { Mission, PostDetail, Ref } from 'src/models/new/data.interfaces';
 import { DataQueries } from 'src/models/new/data.state';
 import { ModifyDetailedPost } from 'src/models/new/user/user.actions';
 import { take } from 'rxjs/operators';
 import { Store } from '@ngxs/store';
+import { MissionFilterForm } from '../../forms/missions.form';
 
 export type MissionDetailedDay = {
-  date: string;
-  start: string;
-  end: string;
-  title: string;
+  date: string,
+  mission: Mission,
+  title: string,
   tasks: PostDetail[]
 };
 
 export interface calendarItem {
   cardFromTop: number,
   cardHeight: number,
+  mission: Mission,
   title: string,
-  tasks: PostDetail[]
+  tasks: PostDetail[],
+  date: string,
+  change: boolean
 }
 
 @Component({
@@ -221,6 +224,8 @@ export class HorizantaleCalendar implements OnInit {
     let hoursMinutes = time.split(/[.:]/);
     let hours = parseInt(hoursMinutes[0], 10);
     let minutes = hoursMinutes[1] ? parseInt(hoursMinutes[1], 10) : 0;
+
+    //arrondie a 30min
     minutes = ~~(minutes / 30) * 30
     return hours + minutes / 60;
   }
@@ -231,19 +236,51 @@ export class HorizantaleCalendar implements OnInit {
       .format('dddd D - MMMM - YYYY');
     let todayDates = this.detailedDays.filter((item) => item?.date == date);
 
+    
 
     this.currentCardCalendars = []
     for (const today of todayDates) {
-      let heightTop = this.calculator(today.start, today.end)
+      let heightTop = this.calculator(today.mission.hourlyStart, today.mission.hourlyEnd)
       this.currentCardCalendars.push({
         cardFromTop: heightTop[0],
         cardHeight: heightTop[1],
         title: today.title,
-        tasks: today.tasks
+        tasks: today.tasks,
+        mission: today.mission,
+        date: today.date,
+        change: this.dateChange(today.mission)
       })
     }
 
     console.log('currentCardCalendar', this.currentCardCalendars);
+  }
+
+  dateChange(mission: Mission): boolean{
+    let isChange = false;
+    isChange = (!!mission.hourlyEndChange || !!mission.hourlyStartChange)
+    return isChange
+  }
+
+  onCardUpdate(card: calendarItem){
+    let mission = this.store.selectSnapshot(DataQueries.getById('Mission', card.mission.id))
+    let heightTop = this.calculator(mission!.hourlyStart, mission!.hourlyEnd)
+    
+    card.mission = mission!
+    card.cardFromTop = heightTop[0]
+    card.cardHeight = heightTop[1]
+    card.change = this.dateChange(mission!);
+  
+    this.cd.markForCheck()
+  }
+
+  fieldValidation(card: calendarItem){
+    console.log(card.mission.hourlyStartChange);
+    if(card.mission.hourlyStartChange) {
+      console.log(card.mission.hourlyStartChange);
+      return 'hourlyStart'
+    }
+    if(card.mission.hourlyEndChange) return 'hourlyEnd'
+    return ''
   }
 
   taskValidation(decision: boolean, task: any){
@@ -254,26 +291,6 @@ export class HorizantaleCalendar implements OnInit {
       task.validated = decision
       this.store.dispatch(new ModifyDetailedPost(detailPost)).pipe(take(1)).subscribe(() => {
         this.cd.markForCheck()
-      })
-    }
-  }
-
-
-  //potentiellement besoin de rajouter isClosed de la mission afficher pour eviter de changer apres cloture
-  validate(task: PostDetail) {
-    if (!task.refused) {
-      task.validated = !task.validated
-      this.store.dispatch(new ModifyDetailedPost(task)).pipe(take(1)).subscribe(() => {
-        this.cd.markForCheck()
-      })
-    }
-  }
-
-  refuse(task: PostDetail) {
-    if (!task.validated) {
-      task.refused = !task.refused
-      this.store.dispatch(new ModifyDetailedPost(task)).pipe(take(1)).subscribe(() => {
-        this.cd.markForCheck()   
       })
     }
   }
