@@ -1,7 +1,9 @@
 import { ChangeDetectionStrategy, Component, Input, QueryList, ViewChildren } from "@angular/core";
+import { FormControl, FormGroup } from "@angular/forms";
 import { Store } from "@ngxs/store";
 import { DistanceSliderConfig, SalarySliderConfig } from "src/app/shared/common/config";
-import { Mission } from "src/models/new/data.interfaces";
+import { Job, Mission } from "src/models/new/data.interfaces";
+import { SnapshotAll } from "src/models/new/data.state";
 import { UISwitchComponent } from "../components/switch/switch.component";
 import { Filter } from "../directives/filter.directive";
 import { FilterService } from "../services/filter.service";
@@ -10,39 +12,38 @@ import { FilterService } from "../services/filter.service";
 @Component({
   selector: 'mission-filter-form',
   template: `
-  <!--
-    <form class="form-control full-width" [formGroup]="form">
+    <form class="form-control full-width" [formGroup]="filterForm">
       <div class="form-input">
         <label>Date de validation</label>
-        <input type="date"/>
+        <input type="date" formControlName="validationDate"/>
         <img src="assets/calendar.png"/>
       </div>
 
       <div class="form-input">
         <label>Date de mission</label>
-        <input type="date"/>
+        <input type="date" formControlName="missionDate"/>
         <img src="assets/calendar.png"/>
       </div>
 
       <div class="form-input">
         <label>Adresse de chantier</label>
-        <input type="text"/>
+        <input type="text" formControlName="address"/>
       </div>
 
       <div class="form-input">
         <label>Métier</label>
-        <options></options>
+        <options [options]="allJobs" formControlName="jobs"></options>
       </div>
 
       <div class="form-input">
         <label>Type</label>
         <div class="flex row radio-container">
           <div class="radio-item">
-            <radiobox class="grow" name="job-type"></radiobox>
+            <radiobox class="grow" name="job-type" formControlName="manPower"></radiobox>
             Main d'oeuvre
           </div>
           <div class="radio-item">
-            <radiobox class="grow" name="job-type"></radiobox>
+            <radiobox class="grow" name="job-type" formControlName="manPower"></radiobox>
             Fourniture et pose
           </div>
         </div>
@@ -51,7 +52,7 @@ import { FilterService } from "../services/filter.service";
       <div class="form-input space-children-margin">
         <div class="switch-container flex center-cross">
           <span class="criteria">Norifications suivi de chantier non lu</span>
-          <switch class="default" (valueChange)="onSwitchClick($event, [switch2])"></switch>
+          <switch class="default" (valueChange)="onSwitchClick($event, [switch2])" formControlName="unread"></switch>
         </div>
 
         <label>Réorganiser la liste selon</label>
@@ -65,8 +66,7 @@ import { FilterService } from "../services/filter.service";
         </div>
       </div>
     </form>
-  -->
-  <div>hello</div>
+ 
   `,
   styles: [`
     :host {
@@ -87,8 +87,22 @@ export class MissionFilterForm extends Filter<Mission> {
 
   @Input('filter') name: string = 'Mission';
 
+  @Input()
+  callbackFilter: Function = () => {};
+
   @ViewChildren(UISwitchComponent)
   switches!: QueryList<UISwitchComponent>;
+
+  filterForm = new FormGroup({
+    missionDate: new FormControl(""),
+    validationDate: new FormControl(""),
+    address: new FormControl(""),
+    jobs: new FormControl([]),
+    manPower: new FormControl(undefined),
+    unread: new FormControl(false),
+  },
+    {}
+  );
 
   //cancel other filters
   onSwitchClick(value: boolean, cancelIfTrue: UISwitchComponent[]) {
@@ -108,7 +122,19 @@ export class MissionFilterForm extends Filter<Mission> {
     super(service);
   }
 
+  @SnapshotAll('Job')
+  allJobs!: Job[];
+
   ngOnInit(): void {
     super.ngOnInit();
+    console.log("start form test")
+    console.log("form init callbackFilter", this.callbackFilter)
+    this.callbackFilter(this.filterForm.value);
+
+    this.filterForm.valueChanges.subscribe(value => {
+      console.log("form test", value);
+      console.log(this.callbackFilter)
+      this.callbackFilter(value);
+    })
   }
 }
