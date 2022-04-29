@@ -70,21 +70,19 @@ export class ProfileComponent extends Destroy$ {
   updateProfile(profile:Profile) {
     this.notifications = []
     this.notificationsUnseen = 0
-      const view = this.store.selectSnapshot(DataState.view)
-
+    const view = this.store.selectSnapshot(DataState.view)
       // Arnaque du bug
       this.companyId = profile.user?.company!
       profile.company = this.store.selectSnapshot(DataQueries.getById('Company', this.companyId))!
       if (profile.company?.Notification) {
-        profile.company.Notification.map((notificationId) => {
-          let notification = this.store.selectSnapshot(DataQueries.getById('Notification', notificationId))
+        for (const notification of this.store.selectSnapshot(DataQueries.getMany('Notification', profile.company!.Notification)))
           if (view == notification!.role) {
             this.notifications.push(notification!)
             if (!notification!.hasBeenViewed) {
               this.notificationsUnseen++
             }
+            console.log("notification", notification, this.notificationsUnseen)
           }
-        })
       }
   }
 

@@ -655,6 +655,9 @@ export class DataState {
           throw response.messages;
         }
         delete response[application.action];
+        ctx.setState(compose(
+          addSimpleChildren('Company', profile.company.id, 'Notification', response),
+        ));
       })
     )
   }
