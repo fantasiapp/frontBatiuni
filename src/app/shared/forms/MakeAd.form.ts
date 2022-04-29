@@ -290,7 +290,7 @@ export class MakeAdForm {
       daystates = Object.values(p.dates).map((date) => ({date: date as string, availability: 'selected'}))
     else
       daystates = this.store.selectSnapshot(DataQueries.getMany('DatePost', p.dates))
-        .map(({name}) => ({date: name, availability: 'selected'}))
+        .map(({date: name}) => ({date: name, availability: 'selected'}))
     
     this.makeAdForm.get('calendar')?.setValue(daystates);
     this.calendar?.viewCurrentDate();
