@@ -113,7 +113,6 @@ export class HomeComponent extends Destroy$ {
       this.allMissions = this.store.selectSnapshot(DataQueries.getMany('Mission', profile.company.missions));
       this.cd.markForCheck();
 
-      console.log("ngOnInit end");
       this.selectDraft(null);
       this.selectUserOnline(null);
       this.selectMission(null);
@@ -209,18 +208,14 @@ export class HomeComponent extends Destroy$ {
   }
 
   callbackFilter = (filter: any): void => {
-    console.log("callbackFilter activeView", this.activeView)
     switch (this.activeView) {
       case 0:
-        console.log("callbackDraftFilter", filter);
         this.selectDraft(filter);
         break;
       case 1:
-        console.log("callbackUserOnlineFilter", filter)
         this.selectUserOnline(filter)
         break;
       case 2:
-        console.log("callbackMissions", filter)
         this.selectMission(filter);
     }
     

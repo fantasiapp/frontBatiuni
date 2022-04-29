@@ -109,13 +109,8 @@ export class PMEFilterForm implements OnInit {
   allJobs!: Job[];
 
   ngOnInit(){
-    console.log("start form test")
-    console.log("form init callbackFilter", this.callbackFilter)
     this.callbackFilter(this.filterForm.value);
-
     this.filterForm.valueChanges.subscribe(value => {
-      console.log("form test", value);
-      console.log(this.callbackFilter)
       this.callbackFilter(value);
     })
   }
