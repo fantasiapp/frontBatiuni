@@ -28,11 +28,13 @@ namespace mutable {
 
   //configure type so this can only be called on complex types
   export function update(draft: any, target: DataTypes, values: Record<any>) {
+    console.log("target", target, values)
     const targetObjects = draft[target],
       fields = draft.fields[target];
     
     //translate data
     Object.entries<any>(values).forEach(([id, item]) => {
+      console.log("update", id, item)
       const current = targetObjects[id];
       //if not created create
       if ( !current ) {

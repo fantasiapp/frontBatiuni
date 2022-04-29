@@ -655,9 +655,6 @@ export class DataState {
           throw response.messages;
         }
         delete response[application.action];
-        ctx.setState(
-          addComplexChildren('Company', application.companyId, 'Company', response)
-        );
       })
     )
   }
