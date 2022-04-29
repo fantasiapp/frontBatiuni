@@ -8,7 +8,9 @@
     <ng-container *ngSwitchCase="0">
       <offer *ngFor="let mission of myMissions" [post]="mission" (click)="openMission(mission)"></offer>
     </ng-container>
-    <horizontal-calendar [detailedDays]="detailedDays" class="space-children-margin" *ngSwitchCase="1"></horizontal-calendar>
+    <ng-container *ngSwitchCase="1">
+      <horizontal-calendar [detailedDays]="detailedDays" class="space-children-margin"></horizontal-calendar>
+    </ng-container>
   </ng-container>
 </div>
 
@@ -17,7 +19,7 @@
 </slidemenu>
 
 <swipeup [(open)]="openFilterMenu" type="view">
-  <mission-filter-form view></mission-filter-form>
+  <mission-filter-form [callbackFilter]="callbackFilter" view></mission-filter-form>
 </swipeup>
 
 <!-- <swipeup [(open)]="openCloseMission" [doClose]="doClose"> -->

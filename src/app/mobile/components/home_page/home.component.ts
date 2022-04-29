@@ -43,9 +43,14 @@ export class HomeComponent extends Destroy$ {
   };
 
   userDrafts: Post[] = [];
+  allUserDrafts: Post[] = [];
   userOnlinePosts: Post[] = [];
+  allUserOnlinePosts: Post[] = [];
+  displayOnlinePosts: Post[] = [];
   allOnlinePosts: Post[] = [];
   missions: Mission[] = [];
+  allMissions: Mission[] = [];
+  
 
   get missionToClose () {
     return this.missions[0]
@@ -89,7 +94,7 @@ export class HomeComponent extends Destroy$ {
 
     
   }
-  
+
   ngOnInit() {
     this.info.alignWith('header_search');
     combineLatest([this.profile$, this.posts$]).pipe(takeUntil(this.destroy$)).subscribe(([profile, posts]) => {
@@ -102,11 +107,16 @@ export class HomeComponent extends Destroy$ {
       });
 
       const otherOnlinePost = (mapping.get(this.symbols.otherOnlinePost) || []);
-      this.userDrafts = mapping.get(this.symbols.userDraft) || [];
-      this.userOnlinePosts = mapping.get(this.symbols.userOnlinePost) || [];
+      this.allUserDrafts = mapping.get(this.symbols.userDraft) || [];
+      this.allUserOnlinePosts = mapping.get(this.symbols.userOnlinePost) || [];
       this.allOnlinePosts = [...otherOnlinePost, ...this.userOnlinePosts];
-      this.missions = this.store.selectSnapshot(DataQueries.getMany('Mission', profile.company.missions));
+      this.allMissions = this.store.selectSnapshot(DataQueries.getMany('Mission', profile.company.missions));
       this.cd.markForCheck();
+
+      console.log("ngOnInit end");
+      this.selectDraft(null);
+      this.selectUserOnline(null);
+      this.selectMission(null);
     });
     // const view = this.store.selectSnapshot(DataState.view)
     // this._openCloseMission = view == 'ST' && this.missions.length != 0
@@ -133,6 +143,59 @@ export class HomeComponent extends Destroy$ {
     this._openCloseMission = !this._openCloseMission
   }
 
+  selectDraft(filter: any){
+    this.userDrafts = [];
+    if (filter == null ) { this.userDrafts = this.allUserDrafts }
+    else {
+    for (let post of this.allUserDrafts) {
+      
+      let isDifferentDate = (filter.date && filter.date != post.dueDate)
+      let isNotIncludedAddress = (filter.address && post.address.toLowerCase().search(filter.address.toLowerCase()) == -1)
+      let isDifferentManPower = (filter.manPower && post.manPower != (filter.manPower === "true"))
+      let isNotIncludedJob = (filter.jobs && filter.jobs.length && filter.jobs.every((job: any) => {return job.id != post.job}))
+      
+      if ( isDifferentDate || isDifferentManPower || isNotIncludedAddress || isNotIncludedJob) { continue }
+      this.userDrafts.push(post)
+      }
+  }
+    this.cd.markForCheck();
+  }
+
+  selectUserOnline(filter: any){
+    this.userOnlinePosts = [];
+    if (filter == null ) { this.userOnlinePosts = this.allUserOnlinePosts }
+    else {
+    for (let post of this.allUserOnlinePosts) {
+      
+      let isDifferentDate = (filter.date && filter.date != post.dueDate)
+      let isNotIncludedAddress = (filter.address && post.address.toLowerCase().search(filter.address.toLowerCase()) == -1)
+      let isDifferentManPower = (filter.manPower && post.manPower != (filter.manPower === "true"))
+      let isNotIncludedJob = (filter.jobs && filter.jobs.length && filter.jobs.every((job: any) => {return job.id != post.job}))
+      
+      if ( isDifferentDate || isDifferentManPower || isNotIncludedAddress || isNotIncludedJob) { continue }
+      this.userOnlinePosts.push(post)
+      }
+  }
+    this.cd.markForCheck();
+  }
+
+  selectMission(filter: any) {
+    this.missions = [];
+    if (filter == null ) { this.missions = this.allMissions }
+    else {
+      for (let mission of this.allMissions) {
+      
+      let isDifferentDate = (filter.date && filter.date != mission.dueDate)
+      let isNotIncludedAddress = (filter.address && mission.address.toLowerCase().search(filter.address.toLowerCase()) == -1)
+      let isDifferentManPower = (filter.manPower && mission.manPower != (filter.manPower === "true"))
+      let isNotIncludedJob = (filter.jobs && filter.jobs.length && filter.jobs.every((job: any) => {return job.id != mission.job}))
+      
+      if ( isDifferentDate || isDifferentManPower || isNotIncludedAddress || isNotIncludedJob) { continue }
+      this.missions.push(mission)
+      }
+  }
+    this.cd.markForCheck();
+  }
 
   swipeupMenu() {
     this.missionMenu.swipeup = !this.missionMenu.swipeup
@@ -143,6 +206,24 @@ export class HomeComponent extends Destroy$ {
   callBackSwipeup = (b:boolean, type:string): void => {
     if (type == "menu") { this.missionMenu.swipeup = b }
     else {this.missionMenu.swipeupCloseMission = b}
+  }
+
+  callbackFilter = (filter: any): void => {
+    console.log("callbackFilter activeView", this.activeView)
+    switch (this.activeView) {
+      case 0:
+        console.log("callbackDraftFilter", filter);
+        this.selectDraft(filter);
+        break;
+      case 1:
+        console.log("callbackUserOnlineFilter", filter)
+        this.selectUserOnline(filter)
+        break;
+      case 2:
+        console.log("callbackMissions", filter)
+        this.selectMission(filter);
+    }
+    
   }
 
   //factor two menu into objects

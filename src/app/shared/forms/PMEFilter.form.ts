@@ -8,7 +8,7 @@ import { SnapshotAll } from "src/models/new/data.state";
   selector: 'pme-filter-form',
   template: `
     <ng-container [ngSwitch]="activeView">
-      <form class="form-control full-width" *ngSwitchCase="0" [formGroup]="filterForm">
+      <form class="form-control full-width" [formGroup]="filterForm">
         <div class="form-input">
           <label>Date de mission</label>
           <input type="date" class="form-element" formControlName="date"/>
@@ -22,18 +22,18 @@ import { SnapshotAll } from "src/models/new/data.state";
 
         <div class="form-input form-spacer">
           <label>Métier</label>
-          <options type="checkbox" [options]="allJobs"></options>
+          <options [options]="allJobs" formControlName="jobs"></options>
         </div>
 
         <div class="form-input form-spacer">
           <label class="form-title">Type</label>
           <div class="flex row radio-container">
             <div class="radio-item">
-              <radiobox class="grow" onselect="true" name="job-type" formControlName="type"></radiobox>
+              <radiobox class="grow" onselect="true" name="job-type" formControlName="manPower"></radiobox>
               <span>Main d'oeuvre</span>
             </div>
             <div class="radio-item">
-              <radiobox class="grow" onselect="false" name="job-type" formControlName="type"></radiobox>
+              <radiobox class="grow" onselect="false" name="job-type" formControlName="manPower"></radiobox>
               <span>Fourniture et pose</span>
             </div>
           </div>
@@ -41,15 +41,27 @@ import { SnapshotAll } from "src/models/new/data.state";
 
         <div class="form-input">
           <label class="form-title">Réorganiser la liste selon</label>
-          <div class="switch-container flex center-cross">
-            <span class="">Les brouillons les plus anciens</span> <switch class="default"></switch>
-          </div>
-          <div class="switch-container flex center-cross">
-            <span class="">Les brouillons les plus complets</span> <switch class="default"></switch>
-          </div>
+          <ng-container *ngSwitchCase="0">
+            <div class="switch-container flex center-cross">
+              <span class="">Les brouillons les plus anciens</span> <switch class="default"></switch>
+            </div>
+            <div class="switch-container flex center-cross">
+              <span class="">Les brouillons les plus complets</span> <switch class="default"></switch>
+            </div>
+          </ng-container>
+          <ng-container *ngSwitchCase="1">
+            <div class="switch-container flex center-cross">
+              <span>Annonces contentant des réponses en premier</span> <switch class="default"></switch>
+            </div>
+          </ng-container>
+          <ng-container *ngSwitchCase="2">
+            <div class="switch-container flex center-cross">
+              <span>Annonces contentant des notifications en premier</span> <switch class="default"></switch>
+            </div>
+          </ng-container>
         </div>
       </form>
-      <online-filter-form [target]="activeView == 1 ? 'réponses' : 'notifications'" *ngSwitchDefault></online-filter-form>
+      <!-- <online-filter-form [target]="activeView == 1 ? 'réponses' : 'notifications'" *ngSwitchDefault></online-filter-form> -->
     </ng-container>
   `,
   styles: [`
@@ -79,11 +91,14 @@ export class PMEFilterForm implements OnInit {
   @Input()
   activeView: number = 0;
 
+  @Input()
+  callbackFilter: Function = () => {};
+
   filterForm = new FormGroup({
-    date: new FormControl(undefined),
-    address: new FormControl(undefined),
-    jobs: new FormControl(undefined),
-    type: new FormControl(undefined),
+    date: new FormControl(""),
+    address: new FormControl(""),
+    jobs: new FormControl([]),
+    manPower: new FormControl(undefined),
   },
     {}
   );
@@ -95,8 +110,13 @@ export class PMEFilterForm implements OnInit {
 
   ngOnInit(){
     console.log("start form test")
-    this.filterForm.valueChanges.subscribe(val => {
-      console.log("form test", val);
+    console.log("form init callbackFilter", this.callbackFilter)
+    this.callbackFilter(this.filterForm.value);
+
+    this.filterForm.valueChanges.subscribe(value => {
+      console.log("form test", value);
+      console.log(this.callbackFilter)
+      this.callbackFilter(value);
     })
   }
   

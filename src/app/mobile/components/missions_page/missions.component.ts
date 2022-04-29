@@ -25,6 +25,7 @@ export class MissionsComponent extends Destroy$ {
 
   openFilterMenu: boolean = false;
   myMissions: Mission[] = []
+  allMyMissions: Mission[] = []
   missionMenu = new PostMenu<Mission>()
 
   detailedDays: MissionDetailedDay[] = [];
@@ -49,12 +50,12 @@ export class MissionsComponent extends Destroy$ {
     combineLatest([this.profile$, this.missions$]).pipe(takeUntil(this.destroy$)).subscribe(([profile, missions]) => {
       //filter own missions
       //for now accept all missions
-      this.myMissions = missions.filter(mission => mission.subContractor == profile.company.id);
+      this.allMyMissions = missions.filter(mission => mission.subContractor == profile.company.id);
       //compute work days
 
       this.detailedDays = [];
       let usedDay: number[] = []
-      for ( const mission of this.myMissions ) {
+      for ( const mission of this.allMyMissions ) {
         const availabilities = this.store.selectSnapshot(DataQueries.getMany('Disponibility', profile.company.availabilities))
         const start = moment(mission.startDate),
           end = moment(mission.endDate),
@@ -92,7 +93,34 @@ export class MissionsComponent extends Destroy$ {
       this._openCloseMission = false
     }
 
+    this.selectMissions(null);
   }
+
+  callbackFilter = (filter: any): void => {
+    console.log("callbackFilter activeView", this.activeView)
+    this.selectMissions(filter);
+  }
+
+  selectMissions(filter: any){
+    this.myMissions = [];
+    if (filter == null ) { this.myMissions = this.allMyMissions }
+    else {
+      for (let mission of this.allMyMissions) {
+      
+      let isDifferentValidationDate = (filter.validationDate && filter.validationDate != mission.dueDate)
+      let isNotInMissionDate = (filter.missionDate && mission.dates.every((date: number) => {console.log(date, filter.missionDate); return date != filter.missionDate}));        
+      let isNotIncludedAddress = (filter.address && mission.address.toLowerCase().search(filter.address.toLowerCase()) == -1)
+      let isDifferentManPower = (filter.manPower && mission.manPower != (filter.manPower === "true"))
+      let isNotIncludedJob = (filter.jobs && filter.jobs.length && filter.jobs.every((job: any) => {return job.id != mission.job}))
+      let isUnread = filter.unread; // TODO check if unread button is on
+
+      if ( isDifferentValidationDate || isNotInMissionDate || isDifferentManPower || isNotIncludedAddress || isNotIncludedJob) { continue }
+      this.myMissions.push(mission)
+      }
+  }
+    this.cd.markForCheck();
+  }
+
   computeSupervisionsforTask(supervisions: number[], supervisionsTaks: any): any {
     throw new Error("Method not implemented.");
   }
@@ -107,7 +135,7 @@ export class MissionsComponent extends Destroy$ {
   }
 
   get missionToClose (): Mission | null {
-    const missionToClose = this.myMissions.filter(mission=>mission.isClosed && mission.vibeST == 0)
+    const missionToClose = this.allMyMissions.filter(mission=>mission.isClosed && mission.vibeST == 0)
     if (missionToClose.length != 0) {
       return missionToClose[0]
     }
