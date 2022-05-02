@@ -11,7 +11,6 @@ import { Camera, CameraResultType, CameraSource } from "@capacitor/camera";
 import { i18nMetaToJSDoc } from "@angular/compiler/src/render3/view/i18n/meta";
 import { SuiviComments } from "src/app/shared/components/suivi/comment.suivi";
 import { UIAccordion } from "src/app/shared/components/accordion/accordion.ui";
-import { Keyboard } from '@capacitor/keyboard';
 
 
 @Component({

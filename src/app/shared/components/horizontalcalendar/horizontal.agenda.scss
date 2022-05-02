@@ -149,6 +149,8 @@
             font-size: 12px;
             font-weight: 600;
         }
+
+    overflow-y: scroll;
 }
 
 .agenda-line {
@@ -162,8 +164,11 @@
     width: 82%;
     left : 15%;
     height: 0;
+    // height: 337.5px;
     display: flex;
     column-gap: 0.5rem;
+
+    // overflow-y: scroll;
     .card-container{
         position: relative;
         color: $bg-white;
@@ -173,11 +178,13 @@
         background : linear-gradient(#B9EDAF,#b0d8a8);
         box-shadow: rgba(185,237,175, 0.16) 0px 1px 4px;
         transition: all 200ms ease-out 0s;
-        > div {
+        width: 100%;
+        min-width: 6rem;
+        
         height: 100%;
-        overflow: scroll;
+        // overflow: scroll;
         padding: 1rem;
-        }
+        
     }
     span {
         font-size: 0.875rem;

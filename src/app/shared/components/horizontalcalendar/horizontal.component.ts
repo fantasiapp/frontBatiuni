@@ -15,6 +15,7 @@ import { ModifyDetailedPost } from 'src/models/new/user/user.actions';
 import { take } from 'rxjs/operators';
 import { Store } from '@ngxs/store';
 import { MissionFilterForm } from '../../forms/missions.form';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 export type MissionDetailedDay = {
   date: string,
@@ -239,6 +240,8 @@ export class HorizantaleCalendar implements OnInit {
     
 
     this.currentCardCalendars = []
+    this.cd.markForCheck()
+    
     for (const today of todayDates) {
       let heightTop = this.calculator(today.mission.hourlyStart, today.mission.hourlyEnd)
       this.currentCardCalendars.push({
@@ -251,6 +254,8 @@ export class HorizantaleCalendar implements OnInit {
         change: this.dateChange(today.mission)
       })
     }
+    this.cd.markForCheck()
+
 
     console.log('currentCardCalendar', this.currentCardCalendars);
   }
