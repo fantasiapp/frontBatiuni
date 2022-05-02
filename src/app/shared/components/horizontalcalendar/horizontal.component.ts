@@ -51,13 +51,6 @@ export interface calendarItem {
             
           ]
         ),
-        transition(
-          ':leave', 
-          [
-            style({ opacity: 1 }),
-            animate('200ms ease-in', style({ opacity: 0 }))
-          ]
-        )
       ]
     )
   ]
