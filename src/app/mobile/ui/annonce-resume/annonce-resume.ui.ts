@@ -106,7 +106,9 @@ export class UIAnnonceResume extends Destroy$ {
 
   get disableValidation ():boolean {
     console.log("disableValidation", this.amount, this.hasPostulated)
-    if(this.hasPostulated) this.info.show('info', 'Vous avez déjà postulé à cette annonce')
+    if(this.hasPostulated) {
+      this.info.show('info', 'Vous avez déjà postulé à cette annonce', Infinity)
+    }
     return this.hasPostulated || this.amount == null
   }
 
