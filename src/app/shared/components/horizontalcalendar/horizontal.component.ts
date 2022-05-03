@@ -9,7 +9,7 @@ import {
 import * as moment from 'moment';
 import { Availability, CalendarUI, DayState } from '../calendar/calendar.ui';
 import { trigger, state, style, animate, transition } from '@angular/animations';
-import { Mission, PostDetail, Ref } from 'src/models/new/data.interfaces';
+import { Disponibility, Mission, PostDetail, Profile, Ref } from 'src/models/new/data.interfaces';
 import { DataQueries } from 'src/models/new/data.state';
 import { ModifyDetailedPost } from 'src/models/new/user/user.actions';
 import { take } from 'rxjs/operators';
@@ -88,12 +88,18 @@ export class HorizantaleCalendar implements OnInit {
   greenCardHeight: number = 0;
   bilan?: MissionDetailedDay[] = [];
   // detailedDays: MissionDetailedDay[] = []
+  disponibilities!: Disponibility[];
+  curDisponibility?: Disponibility;
 
   currentCardCalendars: calendarItem[] = [];
   constructor(private cd: ChangeDetectorRef, private store: Store) {
   }
 
   ngOnInit(): void {
+
+    const profile = this.store.selectSnapshot(DataQueries.currentProfile)
+    this.disponibilities = this.store.selectSnapshot(DataQueries.getMany('Disponibility', profile.company.availabilities))
+
     let now = new Date(Date.now());
     this.getDaysFromDate(now.getMonth() + 1, now.getFullYear());
     this.setSelectedDays();
@@ -108,6 +114,7 @@ export class HorizantaleCalendar implements OnInit {
   toCalendarDays(workDays: MissionDetailedDay[]): DayState[] {
     console.log("toCalendar days", this.detailedDays)
     this.detailedDays = workDays;
+    
     return workDays.map((workDay) => ({
       date: workDay.date,
       availability: 'selected',
@@ -230,7 +237,10 @@ export class HorizantaleCalendar implements OnInit {
       .format('dddd D - MMMM - YYYY');
     let todayDates = this.detailedDays.filter((item) => item?.date == date);
 
-    
+    this.curDisponibility = undefined
+    for (const dip of this.disponibilities) {
+      if(dip.date == date) this.curDisponibility = dip
+    }
 
     this.currentCardCalendars = []
     this.cd.markForCheck()

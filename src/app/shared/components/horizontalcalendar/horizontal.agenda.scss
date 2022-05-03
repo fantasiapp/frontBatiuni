@@ -87,13 +87,22 @@
     margin-right: 10px;
 }
 
-.disponible::before {
-    @extend %before-element;
-    @include circle(1.2em, $available);
-}
-.sous-conditions::before {
+.disponibilities::before {
     @extend %before-element;
     @include circle(1.2em, $availableWithLimits);
+    background-color: unset;
+}
+
+.disponibilities.disponible::before{
+    background-color: $success;
+}
+
+.disponibilities.sous-condition::before {
+    background-color: $warning;
+}
+
+.disponibilities.non-disponible::before {
+    background-color: $danger;
 }
 // .pas-disponible::before {
 //     @extend %before-element;

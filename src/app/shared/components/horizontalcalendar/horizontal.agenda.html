@@ -20,7 +20,10 @@
 </div>
 <div class="day-availibility space-children-margin">
     <div class="selected-day">{{spanShowToday}}</div>
-    <div class="selected-day-availibility flex center-cross">Vous étes dispo <div class="sous-conditions"></div></div>
+    <div class="selected-day-availibility flex center-cross">Votre disponibilité : <div class="disponibilities" 
+        [ngClass]="{'disponible':curDisponibility?.nature == 'Disponible', 
+        'sous-condition': curDisponibility?.nature == 'Disponible Sous Conditions', 
+        'non-disponible': curDisponibility?.nature == 'Non Disponible'}"></div></div>
 </div>
 <div class="agenda flex position-relative " >
     <ol class="full-width"> 
