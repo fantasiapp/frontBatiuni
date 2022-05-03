@@ -39,19 +39,19 @@ import { FilterService } from "../services/filter.service";
         <label>Type</label>
         <div class="flex row radio-container">
           <div class="radio-item">
-            <radiobox class="grow" name="job-type" formControlName="manPower"></radiobox>
-            Main d'oeuvre
+            <radiobox class="grow" name="job-type" formControlName="manPower" #manPower1></radiobox>
+            <span (click)="manPower1.onChange($event)">Main d'oeuvre</span>
           </div>
           <div class="radio-item">
-            <radiobox class="grow" name="job-type" formControlName="manPower"></radiobox>
-            Fourniture et pose
+            <radiobox class="grow" name="job-type" formControlName="manPower" #manPower2></radiobox>
+            <span (click)="manPower2.onChange($event)">Fourniture et pose</span>
           </div>
         </div>
       </div>
 
       <div class="form-input space-children-margin">
         <div class="switch-container flex center-cross">
-          <span class="criteria">Norifications suivi de chantier non lu</span>
+          <span class="criteria">Notifications suivi de chantier non lu</span>
           <switch class="default" (valueChange)="onSwitchClick($event, [switch2])" formControlName="unread"></switch>
         </div>
 
