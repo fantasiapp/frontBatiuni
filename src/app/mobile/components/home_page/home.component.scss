@@ -69,3 +69,8 @@
     // height: 80%;
   }
 }
+
+header > div > img ~ span::after { 
+  position: relative;
+  top: -15px;
+} 
