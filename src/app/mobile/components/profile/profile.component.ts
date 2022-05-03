@@ -120,7 +120,24 @@ export class ProfileComponent extends Destroy$ {
   }
   
   logout() {
-    this.store.dispatch(new Logout()).subscribe(console.log)
+    this.store.dispatch(new Logout()).subscribe(() => {
+    this.cd.markForCheck()
+    let cookies = document.cookie.split(";")
+    console.log('CookKies;', cookies);
+    
+    // function deleteAllCookies() {
+    //   var cookies = document.cookie.split(";");
+    //   console.log('cooKIe', cookies);
+  
+    //   for (var i = 0; i < cookies.length; i++) {
+    //       var cookie = cookies[i];
+    //       var eqPos = cookie.indexOf("=");
+    //       var name = eqPos > -1 ? cookie[eqPos] : cookie;
+    //       document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
+    //   }
+    // }
+      // deleteAllCookies()
+    })
   }
   
   modifyProfile(form: any /*FormGroup*/) {

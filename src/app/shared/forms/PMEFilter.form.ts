@@ -29,12 +29,12 @@ import { SnapshotAll } from "src/models/new/data.state";
           <label class="form-title">Type</label>
           <div class="flex row radio-container">
             <div class="radio-item">
-              <radiobox class="grow" onselect="true" name="job-type" formControlName="manPower"></radiobox>
-              <span>Main d'oeuvre</span>
+              <radiobox class="grow" onselect="true" name="job-type" formControlName="manPower" #manPower1></radiobox>
+              <span (click)="manPower1.onChange($event)">Main d'oeuvre</span>
             </div>
             <div class="radio-item">
-              <radiobox class="grow" onselect="false" name="job-type" formControlName="manPower"></radiobox>
-              <span>Fourniture et pose</span>
+              <radiobox class="grow" onselect="false" name="job-type" formControlName="manPower" #manPower2></radiobox>
+              <span (click)="manPower2.onChange($event)">Fourniture et pose</span>
             </div>
           </div>
         </div>
