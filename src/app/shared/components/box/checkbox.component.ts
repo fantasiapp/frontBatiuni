@@ -22,6 +22,12 @@ export class UICheckboxComponent extends UIDefaultAccessor<boolean> {
     this._value = false;
   }
 
+
+  onChange(e: Event) {
+    this.valueChange.emit(this.value = !this.value);
+    this.cd.markForCheck()
+  }
+
   getInput(e: Event) {
     let target = e.target as HTMLInputElement;
     return target.checked;
