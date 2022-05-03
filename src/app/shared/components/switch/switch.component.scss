@@ -2,12 +2,12 @@
 @use 'src/styles/variables' as *;
 
 :host {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
 }
 
 :host > * {
   display: inline-block;
-  vertical-align: middle;
 }
 
 span {

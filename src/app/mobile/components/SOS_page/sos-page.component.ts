@@ -56,8 +56,11 @@ export class SOSPageComponent {
       type: 'component',
       component: ExtendedProfileComponent,
       init: (component: ExtendedProfileComponent) => {
-        component.profile$ = {company};
+        component.profile$ = {company: company, user: null};
         component.showContact = true;
+        component.showView = 'ST';
+        component.showSwitch = false
+        component.showRecomandation = false
       }
     })
   }

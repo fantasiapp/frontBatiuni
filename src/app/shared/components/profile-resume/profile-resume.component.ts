@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, SimpleChanges } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, Output, SimpleChanges } from "@angular/core";
 import { Select, Store } from "@ngxs/store";
 import { Observable } from "rxjs";
 import { Profile, File, Company, User } from "src/models/new/data.interfaces";
@@ -17,7 +17,8 @@ export class ProfileResume {
   @Input()
   showRecomandation: boolean = true;
 
-  constructor(private store: Store) {}
+  constructor(private store: Store) {
+  }
 
   @Input()
   profile!: Profile;  
