@@ -18,7 +18,7 @@
             <comment-suivi  [supervision]="supervision"></comment-suivi>
         </div>
         <div *ngIf="task.refused && !mission!.isClosed" class="divComment">
-          <input id="input_{{task.id}}" class="inputComment" type="text" placeholder="Ajouter un commentaire" (keyup)="detectKey($event, task)">
+          <input id="input_{{task.id}}" class="inputComment" type="text" placeholder="Ajouter un commentaire" (keyup)="detectKey($event, task, comment)" #comment>
           <img (click)="swipeMenuImage = true" src="assets/camera-outline.svg"/>
         </div>
     </div>
@@ -33,7 +33,7 @@
       </div>
       <div *ngIf="!mission!.isClosed" class="partenerComment">
         <div  class="divComment">
-          <textarea id="input_general" class="inputComment" inputmode="search" type="text" placeholder="Ajouter un commentaire" (keyup)="detectKey($event, null)"></textarea>
+          <textarea id="input_general" class="inputComment" inputmode="search" type="text" placeholder="Ajouter un commentaire" (keyup)="detectKey($event, null, chantierMain)" #chantierMain></textarea>
           <img (click)="swipeMenuImage = true" src="assets/camera.png"/>
         </div>
       </div>

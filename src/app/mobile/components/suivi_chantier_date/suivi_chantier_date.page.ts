@@ -135,17 +135,15 @@ export class SuiviChantierDate extends Destroy${
     }
   }
 
-  detectKey($event: KeyboardEvent, task: Task| null){
+  detectKey($event: KeyboardEvent, task: Task| null, inputEl: HTMLTextAreaElement | HTMLInputElement){
     if ($event.key === "Enter") {
-      this.mainComment(task);
-      (document.getElementById("input_general")! as HTMLInputElement).value! = "";
+      this.mainComment(task, inputEl);
+      inputEl.value = '';
     }
-
   }
-
-  mainComment(task:Task | null) {
+  mainComment(task:Task | null, inputEl: HTMLTextAreaElement | HTMLInputElement) {
     let idInput = task ? "input_"+task!.id : "input_general"
-    let input = document.getElementById(idInput) as HTMLInputElement;
+    let input = inputEl
     this.currentTaskId = task ? task!.id : null
     if (input.value.trim() != '' && !this.mission!.isClosed) {
       let detailPostId: number | null = task ? task.id : null
