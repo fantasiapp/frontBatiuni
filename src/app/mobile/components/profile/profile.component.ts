@@ -123,11 +123,9 @@ export class ProfileComponent extends Destroy$ {
     this.store.dispatch(new Logout()).subscribe(() => {
     this.cd.markForCheck()
     let cookies = document.cookie.split(";")
-    console.log('CookKies;', cookies);
     
     function deleteAllCookies() {
       var cookies = document.cookie.split(";");
-      console.log('cooKIe', cookies);
   
       for (var i = 0; i < cookies.length; i++) {
           var cookie = cookies[i];
