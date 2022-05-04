@@ -10,8 +10,8 @@ import { DataQueries, QueryProfile, Snapshot } from "src/models/new/data.state";
   template: `
     <ng-container *ngIf="(profile$ | cast | async) as profile">
       <!-- <app-banner [candidate]="candidate"]></app-banner> -->
-      <profile-image [profile]="profile"></profile-image>
-      <div class="flex column small-space-children-margin font-Poppins description">
+      <div class="flex column font-Poppins description">
+        <profile-image [profile]="profile"></profile-image>
         <span>{{ profile.company.name || "Nom de l'entreprise" }}</span>
         <span>Propose {{ employeeCount }} {{job.name || 'Employées'}}</span>
         <span>Note générale ({{ profile.company.starsST }}/5 par {{ numberOfQuotations }} personnes)</span>
@@ -33,16 +33,22 @@ import { DataQueries, QueryProfile, Snapshot } from "src/models/new/data.state";
       display: block;
       border-radius: 12px;
       padding: $profile-card-padding;
-      box-shadow: 1px 2px 5px 0 #ddd;
+      box-shadow: 10px 24px 54px #33333340;
+      font-family: 'Roboto', sans-serif;
+      font-size: 0.875rem
     }
 
     profile-image {
-      position: absolute; left: 0; top: 0;
-      transform: scale(0.5) translate(-10px, -30px);
+      /* transform: scale(0.5) translate(-10px, -30px); */
+      width: 3.5rem;
+      height: 3.5rem
     }
 
     .description {
-      margin-top: $profile-size-target;
+      row-gap: 0.375rem;
+      span:nth-child(2){
+        color: #999999
+      }
     }
   `],
   changeDetection: ChangeDetectionStrategy.OnPush,

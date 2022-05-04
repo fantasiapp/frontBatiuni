@@ -1,6 +1,5 @@
 <ng-container *ngIf="post">
   <!-- <app-banner *ngIf="(isClosed)" [post]="post"></app-banner> -->
-  <span *ngIf="unseenCandidate && showCandidate" [attr.data-notification-number]="unseenCandidate" class="notification"></span>
   <div class="container grow flex center-cross space-between" [ngClass]="{'offres-infos-closed': isClosed, 'offres-infos-postulated': hasPostulated && !isAppliedPage}">
     <div class="offres-infos">
       <span class="entreprise">{{company?.name || 'Entreprise'}}</span>
@@ -19,4 +18,5 @@
       <span class="refused" *ngIf="hasPostulated && isAppliedPage && isRefused">Refusé</span>
     </div>
   </div>
+  <span *ngIf="unseenCandidate && showCandidate" [attr.data-notification-number]="unseenCandidate" class="notification"></span>
 </ng-container>
