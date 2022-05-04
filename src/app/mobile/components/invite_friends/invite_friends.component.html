@@ -3,8 +3,8 @@
   <h1 style="padding-bottom: 50px">Inviter vos amis</h1>
   <span>A rejoindre l'application BatiUni avec votre code parrain</span>
 
-  <div style="text-align:left; padding-top: 50px">
-    <input type="text" class="inviteFriendsInput" placeholder="Saisissez l'adresse email de votre ami" id="inviteFriendInput">
-  </div>
-  <button class="flex center button active" style="background-color: #0D6191; cursor: pointer; color: white;" class="inviteFriendsSubmit" (click)="inviteFriend()">Enregistrer</button>
+  <form [formGroup]="emailForm" style="text-align:left; padding-top: 50px">
+    <input class="inviteFriendsInput" type="email" formControlName="email" placeholder="Saisissez l'adresse email de votre ami"/>
+    <button class="flex center button active" style="background-color: #0D6191; cursor: pointer; color: white;" class="inviteFriendsSubmit" (click)="inviteFriend()">Enregistrer</button>
+  </form>
 </div>

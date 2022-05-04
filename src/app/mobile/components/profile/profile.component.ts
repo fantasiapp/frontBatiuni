@@ -81,7 +81,6 @@ export class ProfileComponent extends Destroy$ {
             if (!notification!.hasBeenViewed) {
               this.notificationsUnseen++
             }
-            console.log("notification", notification, this.notificationsUnseen)
           }
       }
   }
@@ -98,7 +97,9 @@ export class ProfileComponent extends Destroy$ {
   }
 
   slideInviteFriends() {
-    console.log("slideInviteFriends")
+    let content = document.getElementById("inviteFriendInput") as HTMLInputElement;
+    console.log("slideInviteFriends", content?.value)
+    // this.store.dispatch(new CloseMissionST(this.missionToClose!.id, this.missionToClose!.vibeST, this.missionToClose!.vibeCommentST, this.missionToClose!.securityST, this.missionToClose!.securityCommentST, this.missionToClose!.organisationST, this.missionToClose!.organisationCommentST)).pipe(take(1)).subscribe(() => {
     this.openMenu = false;
     this.openInviteFriendMenu = true
   }
