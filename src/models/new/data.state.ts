@@ -712,8 +712,11 @@ export class DataState {
           else
             return favorites.filter(id => favorite.Post !== id)
         }));
-
-        this.inZone(() => this.info.show("success", favorite.value ? 'Annonce ajoutée au favoris.' : 'Annonce retirée des favoris', 1000));
+        if(favorite.value) {
+          this.inZone(() => this.info.show("success",'Annonce ajoutée au favoris.', 1000));
+        } else {
+          this.inZone(() => this.info.show("info", 'Annonce retirée des favoris', 1000));
+        }
       })
     )
   }
