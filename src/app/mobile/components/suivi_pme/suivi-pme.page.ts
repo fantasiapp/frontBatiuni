@@ -52,10 +52,13 @@ export class SuiviPME {
 
   accordionsData: accordionData[] = [];
   
-  openAccordion(accordion: accordionData){
+  openAccordion(accordion: any){
+    console.log('accordiom', accordion, this.accordionsData);
     for (const accordionData of this.accordionsData) {
-      if(accordionData.date == accordion.date){
-        accordionData.open = accordion.open
+      if(accordionData.date.value == accordion[1].value){
+        accordionData.open = accordion[0]
+
+        this.cd.markForCheck()
       }
     }
   }
@@ -71,7 +74,7 @@ export class SuiviPME {
     if ( mission ) {
       this.isNotSigned = !(mission.signedByCompany && mission.signedBySubContractor)
       this.isNotSignedByUser = (!mission.signedByCompany && this.view == 'PME') || (!mission.signedBySubContractor && this.view == 'ST')
-      this.computeDates (mission)
+      this.computeDates(mission)
       this.companyName  = this.view == 'ST' ? this.subContractor!.name : this.company!.name
       this.contactName = this.view == 'ST' ? this.mission!.subContractorContact : ""
       
@@ -87,18 +90,21 @@ export class SuiviPME {
     if ( typeof mission!.dates === "object" && !Array.isArray(mission.dates) )
       daystates = Object.values(mission.dates).map(date => {return {date: date as string, availability: 'selected'}})
     else
-      daystates = this.store.selectSnapshot(DataQueries.getMany('DatePost', mission.dates))
-        .map((date) => ({date: date.date, availability: 'selected'}))
-
+    daystates = this.store.selectSnapshot(DataQueries.getMany('DatePost', mission.dates))
+    .map((date) => ({date: date.date, availability: 'selected'}))
+    
     this.AdFormDate.get('calendar')?.setValue(daystates);
     this.calendar?.viewCurrentDate();
   }
-
+  
   @Input() callBackParent: (b:boolean, type:string) => void = (b:boolean, type:string): void => {}
   @Input() toogle: boolean = false
-
+  
   @ViewChild(CalendarUI, {static: false}) calendar!: CalendarUI;
 
+  constructor(private store: Store, private popup: PopupService, private cd: ChangeDetectorRef){
+  }
+  
   computeDates (mission:Mission) {
     let supervisionsTaks: number[] = []
     this.tasks = this.store.selectSnapshot(DataQueries.getMany('DetailedPost', mission.details)).map(detail => (
@@ -202,9 +208,6 @@ export class SuiviPME {
     if (date == task.date) {
       selectedTask.push(task)
     }
-  }
-
-  constructor(private store: Store, private popup: PopupService, private cd: ChangeDetectorRef){
   }
 
 
