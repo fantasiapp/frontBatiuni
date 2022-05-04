@@ -32,7 +32,7 @@ export class CalendarUI extends UIDefaultAccessor<DayState[]> {
   @Input()
   mode: CalendarMode = 'single';
 
-  private rangeStart: number | null = null;
+  public rangeStart: number | null = null;
 
   @Output()
   dayClick = new EventEmitter();

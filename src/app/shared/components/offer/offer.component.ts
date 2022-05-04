@@ -1,11 +1,11 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostBinding, HostListener, Input, Output } from "@angular/core";
 import { SafeResourceUrl } from "@angular/platform-browser";
-import { Store } from "@ngxs/store";
-import { Subject } from "rxjs";
+import { Select, Store } from "@ngxs/store";
+import { Observable, Subject } from "rxjs";
 import { take } from "rxjs/operators";
-import { Post, Candidate, Mission, Company } from "src/models/new/data.interfaces";
+import { Post, Mission, Company, User } from "src/models/new/data.interfaces";
 import { DataQueries } from "src/models/new/data.state";
-import { DeletePost } from "src/models/new/user/user.actions";
+import { DeletePost, SetFavorite } from "src/models/new/user/user.actions";
 import { FileDownloader } from "../../services/file-downloader.service";
 import { ImageGenerator } from "../../services/image-generator.service";
 import { PopupService } from "../popup/popup.component";
@@ -19,6 +19,11 @@ import { PopupService } from "../popup/popup.component";
 export class OfferComponent {
 
   constructor(private store: Store, private popup: PopupService, private cd: ChangeDetectorRef, private imageGenerator: ImageGenerator, private downloader: FileDownloader) { }
+
+
+  @Select(DataQueries.currentUser)
+  user$!: Observable<User>;
+  favoritePost: boolean = false;
 
   @Input()
   showCandidate: boolean = false
@@ -112,5 +117,18 @@ export class OfferComponent {
         })
       }
     }
+
+    this.user$.pipe(take(1)).subscribe(usr => {
+      for (const userFavPosts of usr.favoritePosts) {
+        if(userFavPosts == this.post?.id) this.favoritePost = true
+      }
+    })
+  }
+
+  toggleFavorite(e :Event){
+    e.stopImmediatePropagation()
+    this.favoritePost = !this.favoritePost
+
+    this.store.dispatch(new SetFavorite(this.favoritePost, this.post!.id));
   }
 };

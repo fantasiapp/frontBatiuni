@@ -69,11 +69,12 @@ export class MissionsComponent extends Destroy$ {
         
         let dateAlreadyParsedFromMission:string[] = []
 
-        for (const dateid of mission.dates) {
+        for(let i= 0; i < mission.dates.length; i++){
+          const dateid = mission.dates[i]
           let date = this.store.selectSnapshot(DataQueries.getById('DatePost', dateid))
-
+  
           dateAlreadyParsedFromMission.push(date!.date)
-
+  
           this.detailedDays.push({
             date: date!.date,
             mission: mission,

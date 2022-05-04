@@ -15,6 +15,14 @@
   position:absolute;
   top:20px;
   right:20px;
+
+  &::after{
+    position: relative;
+    left: 0.5rem;
+    top: -0.25rem;
+  }
+
+
 }
 
 .address {
@@ -33,7 +41,8 @@
   border-radius: 12px;
   width: 100%;
   box-shadow: 10px 24px 54px #00000024; // x y spread outline color
-
+  overflow: hidden;
+  position: relative;
 }
 
 .offres-infos {
@@ -43,16 +52,7 @@
   display: flex;
   flex-direction: column;
   row-gap: 1rem;
-}
-
-.offres-infos {
-  &-closed, &-postulated {
-    flex : 1;
-    white-space: nowrap;
-    overflow: hidden;
-    // background-color: rgb(252, 252, 255);
-    opacity: .34;
-  }
+  padding-right: 0.5rem;
 }
 
 .metier, .date {
@@ -76,24 +76,24 @@
   z-index:1500;
 }
 
-.container.offres-infos-closed::before {
+.container.offres-infos-closed::after {
   content: "";
   width: 100%;
   height: 4px;
   position: absolute;
   bottom: 0;
   background: $danger;
-  opacity: 0.6;
+  // opacity: 0.6;
 }
 
 .offer-logo {
-  width: $profile-image-size;
-  height: $profile-image-size;
+  width: 5rem;
+  height: 5rem;
 
   span {
     position: absolute;
     bottom: $item-padding * 2;
-    opacity: .6;
+    // opacity: .6;
 
     
   }
@@ -110,8 +110,21 @@
     color: rgb(201, 85, 85);
   }
   
+  .imageProfile {
+    border-radius: 50%;
+    width: 100%;
+  }
+}
+
+.favorite-container {
+  width: 1.5rem;
+  height: 1.5rem;
+  position: absolute;
+  right: 1rem;
+  top: 1rem;
   img {
     width: 100%;
     height: 100%;
   }
 }
+

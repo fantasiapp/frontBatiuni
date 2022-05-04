@@ -1,54 +1,56 @@
 @use 'src/styles/mixins' as *;
+@use 'src/styles/variables' as *;
 
-%fixed { position: fixed; }
+// %fixed { position: fixed; }
 
 :host {
-  display: block;
+  display: flex;
+  // height: 100vh;
+  // width: 100vw;
+  background-image: url('./../../../../assets/landing-page-sous-traitant.jpeg');
+  background-size: 100%;
+  background-position: top 0 right 0;
+  background-repeat: no-repeat;
   @extend %absolute-cover;
-}
+  flex-direction: column;
+  align-items: center;
+  font-family: 'Roboto', sans-serif;
+  overflow: hidden;
 
-div.main {
-  color: white;
-  @extend %absolute-cover;
-}
+  svg {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    aspect-ratio: 140 / 88 ;
+    width: 5.5rem;
+  }
 
-.background-image {
-  z-index: -1;
-}
-
-.overlay {
-  font-size: 28px;
-  padding-bottom: 20px;
-  span.name {
-    font-family: "Poppins";
-    font-size: 36px;
-    font-weight: bold;
+  &::before {
+    content: '';
+    position: absolute;
+    height: 100vh;
+    aspect-ratio:  1 / 1;
+    border-radius: 50%;
+    background-color: #F4F4F4;
+    bottom: -40%;
   }
 }
 
-.arrow_right, .arrow_left {
-  /* fix should be 50% 50% */
-  transform-origin: 50% 20%;
-  @include absolute-center('y', absolute);
-  z-index: 1;
-}
-
-.arrow_right {
-  right: 0;
-}
-
-.arrow_left {
-  left: 0;
-  transform: rotate(180deg);
-}
-
-.links {
-  text-align: center;
+.action-call-container {
   position: absolute;
-  bottom: 60px;
+  @include set-safe-area(bottom, bottom);
+  margin-bottom: 3rem;
+  flex-direction: column;
+  align-items: center;
+  row-gap: 3.5rem;
+  button {
+    width: 18rem;
+    height: 3.25rem;
+    background-color: $primary;
+    font-weight: 400;
+  }
 
-  .discover {
-    margin-bottom: 15px;
-    min-width: 280px;
+  a {
+    color: $primary;
   }
 }

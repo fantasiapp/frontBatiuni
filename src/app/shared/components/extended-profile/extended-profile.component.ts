@@ -37,6 +37,8 @@ export class ExtendedProfileComponent extends Destroy$ {
 
   @Input()
   showSwitch: boolean = true;
+
+  // rating demander recommandation button
   @Input()
   showRecomandation: boolean = true;
   

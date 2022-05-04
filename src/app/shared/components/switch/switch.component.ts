@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, HostBinding, Input, Output } from "@angular/core";
+import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
 import { NG_VALUE_ACCESSOR } from "@angular/forms";
 import { UIDefaultAccessor } from "src/app/shared/common/classes";
 
@@ -29,6 +29,11 @@ export class UISwitchComponent extends UIDefaultAccessor<boolean> {
 
   @Input()
   on = "";
+
+  onChangeCall(){
+    this._value = !this._value
+    this.cd.markForCheck()
+  }
 
   getInput(e: any) {
     let target = e.target as HTMLInputElement;

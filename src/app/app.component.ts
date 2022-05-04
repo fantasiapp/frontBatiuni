@@ -9,8 +9,6 @@ import { SlideChildrenLeft, SlideChildrenRight } from 'src/animations/slide.anim
 import { AsyncSubject } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { GetGeneralData } from 'src/models/new/user/user.actions';
-import { Keyboard } from '@capacitor/keyboard';
-import { Capacitor } from '@capacitor/core';
 import { Mobile } from './shared/services/mobile-footer.service';
 
 

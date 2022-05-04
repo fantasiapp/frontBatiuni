@@ -15,15 +15,15 @@
      
       <div *ngIf="options.length" class="dropdown-content">
         <ul *ngIf="_type[0] == 'checkbox'; else radioMenu">
-          <li *ngFor="let option of availableOptions; let index = index" class="flex center-cross" (click)="checkbox.onChange($event)">
-            {{option.name}} 
+          <li *ngFor="let option of availableOptions; let index = index" class="flex center-cross">
+            <span (click)="checkbox.onChange($event)">{{option.name}}</span>
             <checkbox (valueChange)="onChange(['toggle', option.id])" [value]="value!.includes(option)" #checkbox></checkbox>
           </li>
         </ul>
         <ng-template #radioMenu>
           <ul>
-            <li *ngFor="let option of availableOptions; let index = index" class="flex center-cross" (click)="radiobox.onChange($event)">
-              {{option.name}} 
+            <li *ngFor="let option of availableOptions; let index = index" class="flex center-cross">
+              <span (click)="radiobox.onChange($event)">{{option.name}}</span>
               <radiobox [name]="_type[1]" (valueChange)="onChange(['toggle', option.id])" [value]="value!.includes(option)" #radiobox></radiobox>
             </li>
           </ul>

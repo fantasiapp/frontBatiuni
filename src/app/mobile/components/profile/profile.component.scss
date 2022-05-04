@@ -35,3 +35,10 @@ header {
     padding-bottom: $page-padding;
   }
 }
+
+.notification::after {
+  position: relative;
+  top: -1rem;
+  left: -1rem;
+
+}
