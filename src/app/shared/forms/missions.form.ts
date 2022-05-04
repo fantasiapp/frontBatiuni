@@ -51,17 +51,17 @@ import { FilterService } from "../services/filter.service";
 
       <div class="form-input space-children-margin">
         <div class="switch-container flex center-cross">
-          <span class="criteria">Notifications suivi de chantier non lu</span>
-          <switch class="default" (valueChange)="onSwitchClick($event, [switch2])" formControlName="unread"></switch>
+          <span class="criteria" (click)="unRead.onChangeCall()">Notifications suivi de chantier non lu</span>
+          <switch class="default" (valueChange)="onSwitchClick($event, [switch2])" formControlName="unread" #unRead></switch>
         </div>
 
         <label>Réorganiser la liste selon</label>
         <div class="switch-container flex center-cross">
-          <span class="criteria">Mission clôturer</span>
+          <span class="criteria" (click)="switch1.onChangeCall()">Mission clôturer</span>
           <switch class="default" (valueChange)="onSwitchClick($event, [switch2])" #switch1></switch>
         </div>
         <div class="switch-container flex center-cross">
-          <span class="criteria">Date de mission la plus proche à la plus lointaine</span>
+          <span class="criteria" (click)="switch2.onChangeCall()">Date de mission la plus proche à la plus lointaine</span>
           <switch class="default" (valueChange)="onSwitchClick($event, [switch2])" #switch2></switch>
         </div>
       </div>
