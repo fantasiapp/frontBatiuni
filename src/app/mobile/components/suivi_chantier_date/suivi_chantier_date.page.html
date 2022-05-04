@@ -14,7 +14,7 @@
             <img (click)="refuse(task)" id="control_refuse_{{task.id}}" [src]= "task.invalidationImage"/>
           </div>
         </div>
-        <div *ngFor="let supervision of task.supervisionsObject">
+        <div class="comment-container" *ngFor="let supervision of task.supervisionsObject">
             <comment-suivi  [supervision]="supervision"></comment-suivi>
         </div>
         <div *ngIf="task.refused && !mission!.isClosed" class="divComment">

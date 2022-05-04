@@ -44,27 +44,10 @@
   display: flex;
   flex-direction: column;
   row-gap: 1rem;
-  >div:nth-child(n + 3){
-    width: 95%;
-    margin-left: auto;
+
+  >.comment-container:nth-child(2n + 1) comment-suivi .comment-provider.reverse{
+    flex-direction: row-reverse;
   }
-
-  .divComment:nth-child(n + 4) {
-    width: 70%;
-
-    &::before {
-      content: "";
-      position: absolute;
-      display: block;
-      height: 2rem;
-      width: 1rem;
-      left: -1.5rem;
-      top: -.75rem;
-      border-left: 1px solid #9A9A9A;
-      border-bottom: 1px solid #9A9A9A;
-    }
-  }
-
 }
 
 .divComment {

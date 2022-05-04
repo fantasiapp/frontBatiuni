@@ -1,5 +1,5 @@
 import { Select, Store } from "@ngxs/store";
-import { ChangeDetectionStrategy, Component, ChangeDetectorRef, Input, ViewChild, EventEmitter, Output} from "@angular/core";
+import { ChangeDetectionStrategy, Component, ChangeDetectorRef, Input, ViewChild, EventEmitter, Output, ViewEncapsulation} from "@angular/core";
 import { Destroy$ } from "src/app/shared/common/classes";
 import { Mission, DateG, Task } from "src/models/new/data.interfaces";
 import { PopupService } from "src/app/shared/components/popup/popup.component";
@@ -17,7 +17,8 @@ import { UIAccordion } from "src/app/shared/components/accordion/accordion.ui";
     selector: 'suivi-chantier_date',
     templateUrl:"suivi_chantier_date.page.html",
     styleUrls:['suivi_chantier_date.page.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    encapsulation: ViewEncapsulation.None
   })
 
 export class SuiviChantierDate extends Destroy${
