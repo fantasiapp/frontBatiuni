@@ -2,6 +2,25 @@
 @use 'src/styles/variables' as *;
 @use 'src/styles/mixins' as *;
 
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  row-gap: 2rem;
+  position: absolute;
+  @include set-safe-area(bottom, bottom);
+  // bottom: calc(env(safe-are-inset-bottom));
+  width: 85%;
+  height: 100%;
+  justify-content: space-evenly;
+  margin-bottom: 1.5rem
+}
+
+.input-container {
+  width: 90%;
+
+}
+
 .inviteFriendsInput {
   width:100%;
   height:40px;
@@ -11,8 +30,7 @@
 }
 
 .inviteFriendsSubmit {
-  position: absolute;
-  bottom: 10px;
-  left: 2%;
-  width:96%
+  width:90%;
+  background-color: $primary;
+
 }
