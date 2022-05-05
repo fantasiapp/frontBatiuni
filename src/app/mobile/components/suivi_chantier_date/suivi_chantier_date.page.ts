@@ -17,8 +17,7 @@ import { UIAccordion } from "src/app/shared/components/accordion/accordion.ui";
     selector: 'suivi-chantier_date',
     templateUrl:"suivi_chantier_date.page.html",
     styleUrls:['suivi_chantier_date.page.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    encapsulation: ViewEncapsulation.None
+    changeDetection: ChangeDetectionStrategy.OnPush
   })
 
 export class SuiviChantierDate extends Destroy${

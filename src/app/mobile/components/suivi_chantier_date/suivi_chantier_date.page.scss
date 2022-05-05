@@ -44,10 +44,6 @@
   display: flex;
   flex-direction: column;
   row-gap: 1rem;
-
-  >.comment-container:nth-child(2n + 1) comment-suivi .comment-provider.reverse{
-    flex-direction: row-reverse;
-  }
 }
 
 .divComment {
