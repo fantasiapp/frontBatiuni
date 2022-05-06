@@ -184,11 +184,8 @@ export abstract class Filter<T extends {id: number}> extends Destroy$ {
   private evaluateStep(input: T[], control: any, step: Step<T>) {
     const controlValue = control.value;
     let lastValue: Set<T>;
-    console.log('evaluateStep', controlValue, step);
     switch ( step.type ) {
       case 'match':
-        console.log("match input",input);
-        console.log("match controlValue",controlValue);
         return input.filter(item => {
           return controlValue == this.type.getValue(item, step) || controlValue == "" || controlValue == null;
         });
@@ -246,19 +243,11 @@ export abstract class Filter<T extends {id: number}> extends Destroy$ {
     //emit and return
     const controls = this.form.controls;
     let input = this.input;
-    
-    console.log("updateEvent", input);
-    console.log("pipeline", this.pipeline);
-    console.log("form", this.form.value);
-    console.log("controls", controls);
-    console.log("Initial input", this.input);
     if ( !input.length ) return [];
     
     for ( const step of this.pipeline ) {
       const name = step.type + '_' + (step.name as string);
-      console.log("controls[name].touched", name);
       input = this.evaluateStep(input, controls[name], step);
-      console.log(input);
     }
     this.updateEvent.emit(input);
     return input;

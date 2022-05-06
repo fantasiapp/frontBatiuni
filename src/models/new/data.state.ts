@@ -188,13 +188,15 @@ export class DataState {
 
     return req.pipe(
       tap((response: any) => {
+        console.log("ModifyUserProfile", response)
         if ( response[modify.action] !== 'OK' )
           // this.inZone(() => this.info.show("error", response.messages, 3000));
           throw response.messages;
         
         delete response[modify.action];
-
-        ctx.setState(compose(...this.reader.readUpdates(response)));
+        console.log("still alive")
+        ctx.setState(compose(...this.reader.readUpdates(response)))
+        console.log("still alive 2")
       }),
       concatMap(() => {
         labelFiles.forEach(file => ctx.dispatch(new UploadFile(file, 'labels', file.nature, 'Company')));
@@ -675,6 +677,9 @@ export class DataState {
           throw response.messages;
         }
         delete response[application.action];
+        ctx.setState(compose(
+          addSimpleChildren('Company', profile.company.id, 'Notification', response),
+        ));
       })
     )
   }

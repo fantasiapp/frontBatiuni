@@ -105,11 +105,10 @@ export class UIAnnonceResume extends Destroy$ {
   profile = this.store.selectSnapshot(DataQueries.currentProfile)
 
   get disableValidation ():boolean {
-    console.log("disableValidation", this.amount, this.hasPostulated)
     if(this.hasPostulated) {
       this.info.show('info', 'Vous avez déjà postulé à cette annonce', Infinity)
     }
-    return this.hasPostulated || this.amount == null
+    return this.hasPostulated || (this.amount == null && this.post.counterOffer)
   }
 
   get hasPostulated () {
@@ -213,7 +212,6 @@ export class UIAnnonceResume extends Destroy$ {
       amount: formValue.amount,
       devis: formValue.devis[0].name
     });
-    console.log("apply")
   }
 
 

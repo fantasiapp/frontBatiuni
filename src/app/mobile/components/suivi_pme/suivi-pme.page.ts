@@ -5,7 +5,7 @@ import { Observable } from "rxjs";
 import { take } from "rxjs/operators";
 import { PopupService } from "src/app/shared/components/popup/popup.component";
 import { CloseMission, ModifyMissionDate, DuplicatePost } from "src/models/new/user/user.actions";
-import { Company, Mission, PostMenu, PostDetail, Profile, Supervision, DateG, Task } from "src/models/new/data.interfaces";
+import { Company, Mission, PostMenu, PostDetail, Profile, Supervision, DateG, Task, PostDate } from "src/models/new/data.interfaces";
 import { DataQueries, DataState } from "src/models/new/data.state";
 import { CalendarUI, DayState } from "src/app/shared/components/calendar/calendar.ui";
 
@@ -105,15 +105,15 @@ export class SuiviPME {
     let dates = mission.dates
     if ( typeof mission.dates === "object" && !Array.isArray(mission.dates) )
       dates = Object.keys(mission.dates).map(key => (+key as number))
-    this.dates = dates.map((value:unknown, id) => {
-      let date = typeof(value) == "number" ? this.store.selectSnapshot(DataQueries.getById('DatePost', value as number))!.date : value
+    this.dates = dates.map((value:number, id) => {
+      let dateObject:PostDate = this.store.selectSnapshot(DataQueries.getById('DatePost', value))!
       return { id:id,
-        value: date as string,
+        value: dateObject.date,
         tasks:this.tasks,
-        selectedTasks:this.computeSelectedTask(date as string),
+        selectedTasks:this.computeSelectedTask(dateObject.date),
         taskWithoutDouble:this.dateWithoutDouble(),
         view:this.view,
-        supervisions: this.computeSupervisionsForMission(date as string, supervisionsTaks),
+        supervisions: this.computeSupervisionsForMission(dateObject.date, supervisionsTaks),
 
       } as DateG
     })
@@ -134,6 +134,7 @@ export class SuiviPME {
 
   computeSupervisionsForMission(date:string, supervisionsTask:number[]):Supervision[] {
     let supervisions: Supervision[] = []
+    console.log(this.mission!)
     let allSupervisions: (Supervision|null)[] = this.mission!.supervisions.map(id => {
       let supervision = this.store.selectSnapshot(DataQueries.getById('Supervision', id))
       if (supervision && supervision.date == date && !supervisionsTask.includes(supervision.id )) {
@@ -168,13 +169,16 @@ export class SuiviPME {
   dateWithoutDouble(): Task[] {
     let listWithOutDouble: Task[] = []
     let listWithOutDoubleStr: string[] = []
-    let dictionary = Object.assign({}, ...this.tasks!.map((task) => ({[task.content]: task})))
-    Object.keys(dictionary).forEach( key => {
-      if (!listWithOutDoubleStr.includes(dictionary[key])) {
-        listWithOutDouble.push(dictionary[key])
-        listWithOutDoubleStr.push(key)
-      }
-    })
+    console.log("dateWithoutDouble", this.tasks)
+    if (this.tasks) {
+      let dictionary = Object.assign({}, ...this.tasks!.map((task) => ({[task.content]: task})))
+      Object.keys(dictionary).forEach( key => {
+        if (!listWithOutDoubleStr.includes(dictionary[key])) {
+          listWithOutDouble.push(dictionary[key])
+          listWithOutDoubleStr.push(key)
+        }
+      })
+    }
     return listWithOutDouble
   }
 

@@ -1,6 +1,9 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ChangeDetectorRef } from '@angular/core';
+import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { Store } from "@ngxs/store";
 import { InviteFriend } from "src/models/new/user/user.actions";
+import { Destroy$ } from "src/app/shared/common/classes";
+import { Email } from "src/validators/persist";
 
 @Component({
   selector: 'invite_friends',
@@ -9,15 +12,25 @@ import { InviteFriend } from "src/models/new/user/user.actions";
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class InviteFriendsComponent {
+export class InviteFriendsComponent extends Destroy$ {
+  emailForm = new FormGroup({
+    email: new FormControl('', [
+      Validators.required,
+      Email()
+    ])
+  }, {})
 
-  constructor(private store: Store) {}
+
+  constructor(private store: Store, private cd: ChangeDetectorRef) {
+    super()
+  }
 
   disabled:boolean = true
 
   inviteFriend () {
-    let email = document.getElementById("inviteFriendInput") as HTMLTextAreaElement;
-    console.log("inviteFriend", email!.value)
-    this.store.dispatch(new InviteFriend(email!.value));
+    console.log("inviteFriend", this.emailForm.get('email')?.value)
+    if (this.emailForm.valid) {
+      this.store.dispatch(new InviteFriend(this.emailForm.get('email')!.value));
+    }
   }
 }
