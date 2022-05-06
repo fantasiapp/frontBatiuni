@@ -30,6 +30,14 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
   // _accordionOpen: boolean = false;
   // get accordionOpen(){  return this._accordionOpen}
 
+  tasks!: Task[];
+  dates!: DateG[]
+
+  ngOnInit(){
+    this.computeDates(this.mission!)
+
+  }
+
   constructor(
     private cd: ChangeDetectorRef, private store: Store, private popup: PopupService
   ) {
@@ -45,7 +53,7 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
     this._date = date;
   }
 
-  _mission: Mission | null = null;
+  _mission!: Mission | null;
   get mission() { return this._mission; }
 
   @Input()
@@ -100,9 +108,8 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
     this.date = date as DateG
     this.mission = mission as Mission
 
-    // this.cd.markForCheck()
-    // this.openEmit.emit([this.accordion.isOpen(), this.date]);
-    // this.accordion.markForCheck()
+    console.log('DAtee',date);
+    this.cd.markForCheck()
   }
 
   validate(task: Task) {
@@ -141,7 +148,7 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
       this.store.dispatch(new CreateSupervision(this.mission!.id, detailPostId, null, input.value, this.date.value)).pipe(take(1)).subscribe(() => {
         input.value = ''
         this.updatePageOnlyDate()
-        this.cd.detectChanges()
+        // this.cd.markForCheck()
       })
     }
   }
@@ -153,8 +160,11 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
 
   reloadMission = (dateOld:DateG): (DateG|Mission)[] =>  {
     let dateResult = dateOld
-    this.mission = this.store.selectSnapshot(DataQueries.getById('Mission', this.mission!.id))
-    this.computeDates(this.mission!)
+    let mission = this.store.selectSnapshot(DataQueries.getById('Mission', this.mission!.id))
+    this.mission = mission
+
+    this.computeDates(mission!)
+    console.log('reloadMission', this.dates, dateOld);
     this.dates?.forEach(dateNew => {
       if (dateNew.value == dateOld.value) {
         dateResult = dateNew
@@ -164,13 +174,12 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
     
     return [dateResult, this.mission!]
   }
-
-  tasks?: Task[];
-  dates?: DateG[]
   
   computeDates (mission:Mission) {
     let supervisionsTaks: number[] = []
-    this.tasks = this.store.selectSnapshot(DataQueries.getMany('DetailedPost', mission.details))?.map(detail => (
+    let detailsId = this.distToArray(mission.details)
+
+    this.tasks = this.store.selectSnapshot(DataQueries.getMany('DetailedPost', detailsId))?.map(detail => (
       { id:detail.id,
         date:detail.date,
         content:detail.content,
@@ -182,26 +191,29 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
         invalidationImage:SuiviPME.computeTaskImage(detail, "refused")
       })
     )
+
     let dates = mission.dates
     if ( typeof mission.dates === "object" && !Array.isArray(mission.dates) )
       dates = Object.keys(mission.dates).map(key => (+key as number))
+
     this.dates = dates.map((value:unknown, id) => {
       let date = typeof(value) == "number" ? this.store.selectSnapshot(DataQueries.getById('DatePost', value as number))!.date : value
       return { id:id,
         value: date as string,
-        tasks:this.tasks,
-        selectedTasks:this.computeSelectedTask(date as string),
-        taskWithoutDouble:this.dateWithoutDouble(),
-        view:this.view,
+        tasks: this.tasks,
+        selectedTasks: this.computeSelectedTask(date as string),
+        taskWithoutDouble: this.dateWithoutDouble(),
+        view: this.view,
         supervisions: this.computeSupervisionsForMission(date as string, supervisionsTaks),
-  
+        
       } as DateG
     })
-  
   }
 
   computeSupervisionsforTask(supervisionsId: number[], supervisionsTask:number[]) {
     let supervisions: Supervision[] = []
+
+    // let supervisionId = this.distToArray(supervisionsId)
     supervisionsId.forEach(id => {
       let supervision = this.store.selectSnapshot(DataQueries.getById('Supervision', id))
       if (supervision) {
@@ -226,19 +238,35 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
   dateWithoutDouble(): Task[] {
     let listWithOutDouble: Task[] = []
     let listWithOutDoubleStr: string[] = []
-    let dictionary = Object.assign({}, ...this.tasks!.map((task) => ({[task.content]: task})))
-    Object.keys(dictionary).forEach( key => {
-      if (!listWithOutDoubleStr.includes(dictionary[key])) {
-        listWithOutDouble.push(dictionary[key])
-        listWithOutDoubleStr.push(key)
-      }
-    })
+    if (this.tasks) {
+      let dictionary = Object.assign({}, ...this.tasks!.map((task) => ({[task.content]: task})))
+      Object.keys(dictionary).forEach( key => {
+        if (!listWithOutDoubleStr.includes(dictionary[key])) {
+          listWithOutDouble.push(dictionary[key])
+          listWithOutDoubleStr.push(key)
+        }
+      })
+    }
     return listWithOutDouble
   }
+
+  distToArray(dist: any){
+    let arr;
+    if(Array.isArray(dist)) arr = dist
+    else arr = Object.keys(dist).map(key => (+key as number))
+    return arr
+  }
+
   computeSupervisionsForMission(date:string, supervisionsTask:number[]):Supervision[] {
     let supervisions: Supervision[] = []
-    let allSupervisions: (Supervision|null)[] = this.mission!.supervisions.map(id => {
+    let supervisionId = this.distToArray(this.mission!.supervisions)
+    
+    console.log('supervisionId', supervisionId);
+
+    let allSupervisions: (Supervision|null)[] = supervisionId.map(id => {
       let supervision = this.store.selectSnapshot(DataQueries.getById('Supervision', id))
+
+      console.log('supervision;', supervision);
       if (supervision && supervision.date == date && !supervisionsTask.includes(supervision.id )) {
         return supervision
       }

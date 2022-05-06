@@ -11,7 +11,6 @@ import { File, Company, Mission, DateG, Task, Ref } from "src/models/new/data.in
 import { DataQueries, DataState } from "src/models/new/data.state";
 import { FileContext, FileViewer } from "../file-viewer/file-viewer.component";
 import { SignContract, ModifyDetailedPost, CreateDetailedPost } from "src/models/new/user/user.actions";
-import { SuiviChantierDate } from "src/app/mobile/components/suivi_chantier_date/suivi_chantier_date.page";
 import { SuiviPME } from "src/app/mobile/components/suivi_pme/suivi-pme.page";
 import { SuiviChantierDateContentComponent } from "src/app/mobile/components/suivi_chantier_date-content/suivi_chantier_date-content.component";
 
