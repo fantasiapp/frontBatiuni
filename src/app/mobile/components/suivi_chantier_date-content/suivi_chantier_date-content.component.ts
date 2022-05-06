@@ -93,14 +93,14 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
   }
 
   updatePage(content:string | null, missionId:number) {
-    if (content) {
-      this.store.dispatch(new CreateDetailedPost(missionId, content, this.date.value)).pipe(take(1)).subscribe(() => {
-        this.updatePageOnlyDate()
-      })
-    } else {
+    // if (content) {
+    //   this.store.dispatch(new CreateDetailedPost(missionId, content, this.date.value)).pipe(take(1)).subscribe(() => {
+    //     this.updatePageOnlyDate()
+    //   })
+    // } else {
       this.updatePageOnlyDate()
       // document.getElementById("accordion") as HTMLImageElement;
-    }
+    // }
   }
 
   updatePageOnlyDate() {

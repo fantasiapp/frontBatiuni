@@ -13,6 +13,7 @@ import { FileContext, FileViewer } from "../file-viewer/file-viewer.component";
 import { SignContract, ModifyDetailedPost, CreateDetailedPost } from "src/models/new/user/user.actions";
 import { SuiviPME } from "src/app/mobile/components/suivi_pme/suivi-pme.page";
 import { SuiviChantierDateContentComponent } from "src/app/mobile/components/suivi_chantier_date-content/suivi_chantier_date-content.component";
+import { UICheckboxComponent } from "../box/checkbox.component";
 
 const TRANSITION_DURATION = 200;
 
@@ -155,12 +156,13 @@ export class UIPopup extends DimensionMenu {
     return false
   }
 
-  modifyDetailedPostDate(task:Task, date:DateG) {
+  modifyDetailedPostDate(task:Task, date:DateG, checkbox: UICheckboxComponent) {
     task.date = date.value
-    let unset = this.checkedCheckbox(task, date)
+    // let unset = this.checkedCheckbox(task, date)
+    let unset = checkbox.value
     console.log('unsEt', unset);
     this.store.dispatch(new ModifyDetailedPost(task, unset)).pipe(take(1)).subscribe(() => {
-      this.cd.markForCheck()
+      this.cd.markForCheck();
     });
   }
 
@@ -311,6 +313,8 @@ export class PopupService {
         first = false;
       }
   }
+
+
 
   openCloseMission(company: Company, object: SuiviPME) {
     let first: boolean = true;
