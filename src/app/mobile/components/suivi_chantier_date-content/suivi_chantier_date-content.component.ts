@@ -107,8 +107,6 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
     let [date, mission] = this.reloadMission(this.date)
     this.date = date as DateG
     this.mission = mission as Mission
-
-    console.log('DAtee',date);
     this.cd.markForCheck()
   }
 
@@ -164,7 +162,6 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
     this.mission = mission
 
     this.computeDates(mission!)
-    console.log('reloadMission', this.dates, dateOld);
     this.dates?.forEach(dateNew => {
       if (dateNew.value == dateOld.value) {
         dateResult = dateNew
@@ -260,13 +257,8 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
   computeSupervisionsForMission(date:string, supervisionsTask:number[]):Supervision[] {
     let supervisions: Supervision[] = []
     let supervisionId = this.distToArray(this.mission!.supervisions)
-    
-    console.log('supervisionId', supervisionId);
-
     let allSupervisions: (Supervision|null)[] = supervisionId.map(id => {
       let supervision = this.store.selectSnapshot(DataQueries.getById('Supervision', id))
-
-      console.log('supervision;', supervision);
       if (supervision && supervision.date == date && !supervisionsTask.includes(supervision.id )) {
         return supervision
       }

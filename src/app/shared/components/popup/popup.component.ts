@@ -130,8 +130,13 @@ export class UIPopup extends DimensionMenu {
   addNewTask(e: Event, assignDate: assignDateType, input: HTMLInputElement){
     console.log('date', assignDate.date);
     this.store.dispatch(new CreateDetailedPost(assignDate.missionId, input.value, assignDate.date.value)).pipe(take(1)).subscribe(() => {
-      
       input.value = ''
+      
+      const mission = this.store.selectSnapshot(DataQueries.getById('Mission', assignDate.missionId))
+      const missionPostDetail = this.store.selectSnapshot(DataQueries.getMany('DetailedPost', mission!.details)) as Task[]
+      const newTask = missionPostDetail[missionPostDetail.length - 1]
+      assignDate.date.taskWithoutDouble.push(newTask)
+      assignDate.date.selectedTasks.push(newTask)
       this.cd.markForCheck()
     });
   }
