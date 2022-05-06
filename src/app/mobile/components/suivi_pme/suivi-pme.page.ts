@@ -13,10 +13,6 @@ import { CalendarUI, DayState } from "src/app/shared/components/calendar/calenda
 
 // , validationImage:"assets/suivi-valider.svg", invalidationImage:"assets/suivi-refuser.svg"
 
-export interface accordionData {
-  date: DateG,
-  open: boolean 
-}
 
 @Component({
   selector: 'suivi-chantier',
@@ -49,19 +45,6 @@ export class SuiviPME {
     hourlyEnd: new FormControl('17:30:00'),
     calendar: new FormControl([]),
   })
-
-  accordionsData: accordionData[] = [];
-  
-  openAccordion(accordion: any){
-    console.log('accordiom', accordion, this.accordionsData);
-    for (const accordionData of this.accordionsData) {
-      if(accordionData.date.value == accordion[1].value){
-        accordionData.open = accordion[0]
-
-        this.cd.markForCheck()
-      }
-    }
-  }
 
   @Input()
   set missionMenu(mM: PostMenu<Mission>) {
@@ -107,7 +90,7 @@ export class SuiviPME {
   
   computeDates (mission:Mission) {
     let supervisionsTaks: number[] = []
-    this.tasks = this.store.selectSnapshot(DataQueries.getMany('DetailedPost', mission.details)).map(detail => (
+    this.tasks = this.store.selectSnapshot(DataQueries.getMany('DetailedPost', mission.details))?.map(detail => (
       { id:detail.id,
         date:detail.date,
         content:detail.content,
@@ -134,10 +117,7 @@ export class SuiviPME {
 
       } as DateG
     })
-    this.accordionsData = []
-    for (const date of this.dates) {
-      this.accordionsData.push({date: date, open: false})
-    }
+
   }
 
   computeSupervisionsforTask(supervisionsId: number[], supervisionsTask:number[]) {
@@ -200,7 +180,7 @@ export class SuiviPME {
 
   computeSelectedTask(date:string) {
     let selectedTask: Task[] = []
-    this.tasks!.forEach(task => this.computeSelectedTaskAction(selectedTask, date, task))
+    this.tasks?.forEach(task => this.computeSelectedTaskAction(selectedTask, date, task))
     return selectedTask
   }
 

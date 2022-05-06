@@ -13,6 +13,7 @@ import { FileContext, FileViewer } from "../file-viewer/file-viewer.component";
 import { SignContract, ModifyDetailedPost, CreateDetailedPost } from "src/models/new/user/user.actions";
 import { SuiviChantierDate } from "src/app/mobile/components/suivi_chantier_date/suivi_chantier_date.page";
 import { SuiviPME } from "src/app/mobile/components/suivi_pme/suivi-pme.page";
+import { SuiviChantierDateContentComponent } from "src/app/mobile/components/suivi_chantier_date-content/suivi_chantier_date-content.component";
 
 const TRANSITION_DURATION = 200;
 
@@ -277,7 +278,7 @@ export class PopupService {
     });
   }
 
-  openDateDialog(mission: Mission, date:DateG, objectSuivi:SuiviChantierDate) {
+  openDateDialog(mission: Mission, date:DateG, objectSuivi:SuiviChantierDateContentComponent) {
     const view = this.store.selectSnapshot(DataState.view),
       closed$ = new Subject<void>();
     let first: boolean = true;

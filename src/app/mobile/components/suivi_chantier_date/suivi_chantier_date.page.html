@@ -1,52 +1,5 @@
-<accordion [open]="accordionOpen" [title]="'Le ' + date.value" id="accordeon_{{date.value}}" #accordion>
-  <div class="chantier-tache-container">
-    <div id="taskMain_{{date.id}}" *ngIf="date.view=='PME' && !mission!.isClosed">
-        <div class="chantier-tache">
-            <label>Choisir les tâches pour ce jour</label>
-            <img (click)="swipeMenu = true" src="assets/Option.svg"/>
-        </div>
-    </div>
-    <div class="taskByDate" *ngFor="let task of date.selectedTasks">
-        <div class="details chantier-tache">
-          <span class="detail-name">{{ task.content }}</span>
-          <div class="controls">
-            <img (click)="validate(task)" id="control_validate_{{task.id}}" [src]= "task.validationImage"/>
-            <img (click)="refuse(task)" id="control_refuse_{{task.id}}" [src]= "task.invalidationImage"/>
-          </div>
-        </div>
-        <div class="comment-container" *ngFor="let supervision of task.supervisionsObject">
-            <comment-suivi  [supervision]="supervision"></comment-suivi>
-        </div>
-        <div *ngIf="task.refused && !mission!.isClosed" class="divComment">
-          <input id="input_{{task.id}}" class="inputComment" type="text" placeholder="Ajouter un commentaire" (keyup)="detectKey($event, task, comment)" #comment>
-          <img (click)="swipeMenuImage = true" src="assets/camera-outline.svg"/>
-        </div>
-    </div>
-    
-
-    <div class="partenerComment-container">
-      <div *ngIf="!mission!.isClosed">
-          <h2>Communiquer avec votre partenaire de chantier</h2>
-          <div *ngFor="let supervision of date.supervisions">
-            <comment-suivi  [supervision]="supervision" #commentSuivi></comment-suivi>
-          </div>
-      </div>
-      <div *ngIf="!mission!.isClosed" class="partenerComment">
-        <div  class="divComment">
-          <textarea id="input_general" class="inputComment" inputmode="search" type="text" placeholder="Ajouter un commentaire" (keyup)="detectKey($event, null, chantierMain)" #chantierMain></textarea>
-          <img (click)="swipeMenuImage = true" src="assets/camera.png"/>
-        </div>
-      </div>
-    </div>
-  </div>
+<accordion [title]="'Le ' + date.value" id="accordeon_{{date.value}}" #accordion>
+  <suivi-chantier-date-content [date]="date" [view]="view" [mission]="mission"></suivi-chantier-date-content>
 </accordion>
 <hr class="dashed" style="margin-left: 0 !important;">
 
-<swipeup [(open)]="swipeMenu">
-  <li (click)="addDateToPost()"> Modifier les tâches</li>
-</swipeup>
-
-<swipeup [(open)]="swipeMenuImage" #modifyPicture>
-  <li (click)="takePhoto()">Accédez à l'appareil photo</li>
-  <li (click)="selectPhoto()">Télécharger une image</li>
-</swipeup>

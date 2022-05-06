@@ -21,142 +21,40 @@ import { UIAccordion } from "src/app/shared/components/accordion/accordion.ui";
   })
 
 export class SuiviChantierDate extends Destroy${
-  swipeMenu: boolean = false;
-  swipeMenuImage: boolean = false;
-  view: 'ST' | 'PME' = "PME";
-  currentTaskId: (number | null) = null
-  _reloadMission : (date:DateG) => (DateG|Mission)[] = (date:DateG): (DateG|Mission)[] => {return [this.date, this.mission!]}
 
-  @Input()
-  _accordionOpen: boolean = false;
-  get accordionOpen(){  return this._accordionOpen}
 
-  constructor(
-    private cd: ChangeDetectorRef, private store: Store, private popup: PopupService
-  ) {
-    super()
-  }
-
-  _date: DateG = {id:0, value: "1970:01:01", tasks:[], selectedTasks:[], taskWithoutDouble:[], view:this.view, supervisions: []};
-  get date() { return this._date; }
-
-  @ViewChild('accordion') accordion!:UIAccordion;
 
   
-
+  constructor(private cd: ChangeDetectorRef, private store: Store, private popup: PopupService) {
+    super()
+  }
+    
+  @Input()
+  view: 'ST' | 'PME' = "PME";
+  _date: DateG = {id:0, value: "1970:01:01", tasks:[], selectedTasks:[], taskWithoutDouble:[], view:this.view, supervisions: []};
+  get date() { return this._date; }
+  
+  @ViewChild('accordion') accordion!:UIAccordion;
+  
+  
+  
   @Input()
   set date(date: DateG) {
     this._date = date;
   }
-
+  
   _mission: Mission | null = null;
   get mission() { return this._mission; }
-
+  
   @Input()
   set mission(mission: Mission | null) {
-    this.view = this.store.selectSnapshot(DataState.view)
+    // this.view = this.store.selectSnapshot(DataState.view)
     this._mission = mission;
   }
-
-  get reloadMission() { return this._reloadMission; }
-  @Input()
-    set reloadMission(callBack: (date:DateG) => any) {
-      this._reloadMission = callBack
-    }
-
-  async takePhoto() {        
-    const photo = await Camera.getPhoto({
-      allowEditing: false,
-      resultType: CameraResultType.Base64,
-      source: CameraSource.Camera
-    });
-    this.swipeMenuImage = false;
-    // this.store.dispatch(new ChangeProfilePicture(photo, 'image'));
-    // scr = photo.format, imageBase64 = photo.base64String, 
-  }
-
-  async selectPhoto() {
-    const photo = await Camera.getPhoto({
-      allowEditing: false,
-      resultType: CameraResultType.Base64,
-      source: CameraSource.Photos,
-    });
-    this.store.dispatch(new UploadImageSupervision(photo, this.mission!.id, this.currentTaskId)).pipe(take(1)).subscribe(() => {
-      this.updatePageOnlyDate();
-      this.swipeMenuImage = false;
-    });
-      
-  }
-
-  addDateToPost() { 
-    this.popup.openDateDialog(this.mission!, this.date, this);
-    this.swipeMenu = false
-  }
-
-  updatePage(content:string | null, missionId:number) {
-    if (content) {
-      this.store.dispatch(new CreateDetailedPost(missionId, content, this.date.value)).pipe(take(1)).subscribe(() => {
-        this.updatePageOnlyDate()
-      })
-    } else {
-      this.updatePageOnlyDate()
-      // document.getElementById("accordion") as HTMLImageElement;
-    }
-  }
-
-  updatePageOnlyDate() {
-    let [date, mission] = this._reloadMission(this.date)
-    this.date = date as DateG
-    this.mission = mission as Mission
-
-    // this.cd.markForCheck()
-    this.openEmit.emit([this.accordion.isOpen(), this.date]);
-    this.accordion.markForCheck()
-  }
-
-  validate(task: Task) {
-    if (this.view == 'ST' && !task.refused && !this.mission!.isClosed) {
-      task.validated = !task.validated
-      this.store.dispatch(new ModifyDetailedPost(task)).pipe(take(1)).subscribe(() => {
-        let control = document.getElementById("control_validate_"+task.id) as HTMLImageElement;
-        control.src = SuiviPME.computeTaskImage(task, "validated")
-      })
-    }
-  }
-
-  refuse(task: Task) {
-    if (this.view == 'ST' && !task.validated && !this.mission!.isClosed) {
-      task.refused = !task.refused
-      this.store.dispatch(new ModifyDetailedPost(task)).pipe(take(1)).subscribe(() => {
-        // this.mission = this.store.selectSnapshot(DataQueries.getById('Mission', this.mission!.id))
-        let control = document.getElementById("control_refuse_"+task.id) as HTMLImageElement;
-        control.src = SuiviPME.computeTaskImage(task, "refused")
-      })
-    }
-  }
-
-  detectKey($event: KeyboardEvent, task: Task| null, inputEl: HTMLTextAreaElement | HTMLInputElement){
-    if ($event.key === "Enter") {
-      this.mainComment(task, inputEl);
-      inputEl.value = '';
-    }
-  }
-  mainComment(task:Task | null, inputEl: HTMLTextAreaElement | HTMLInputElement) {
-    let idInput = task ? "input_"+task!.id : "input_general"
-    let input = inputEl
-    this.currentTaskId = task ? task!.id : null
-    if (input.value.trim() != '' && !this.mission!.isClosed) {
-      let detailPostId: number | null = task ? task.id : null
-      this.store.dispatch(new CreateSupervision(this.mission!.id, detailPostId, null, input.value, this.date.value)).pipe(take(1)).subscribe(() => {
-        input.value = ''
-        this.updatePageOnlyDate()
-        
-      })
-    }
-
-    this._accordionOpen = true
-  }
-
-  @Output() openEmit: EventEmitter<any> = new EventEmitter();
+  
+  // get reloadMission() { return this._reloadMission; }
+  
+@Input()
+reloadMission!: (date:DateG) => (DateG|Mission)[] 
   
 }
