@@ -34,12 +34,11 @@
     <label class="subtitle-date">Choisissez les tâches du jour :</label>
     <ul id="list-date">
       <li *ngFor="let task of assignDate.date.taskWithoutDouble" [ngClass]="{'disabled': disableCheckbox(task, assignDate.date)}">
-        <checkbox (click)="modifyDetailedPostDate(task, assignDate.date, checkbox)" [value]="checkedCheckbox(task, assignDate.date)" #checkbox></checkbox>
-        <span (click)="modifyDetailedPostDate(task, assignDate.date, checkbox); checkbox.onChange($event)">{{ task.content }}</span>
+        <checkbox (click)="modifyDetailedPostDate(task, assignDate.date, assignDate.missionId, checkbox)" [value]="checkedCheckbox(task, assignDate.date)" #checkbox></checkbox>
+        <span (click)="modifyDetailedPostDate(task, assignDate.date, assignDate.missionId, checkbox); checkbox.onChange($event)">{{ task.content }}</span>
       </li>
     </ul>
     <input id="addTask" type="text" placeholder="Ajouter une nouvelle tâche"  (keyup.enter)="addNewTask($event, assignDate, addTask)" #addTask>
-    <!-- <input id="addTask" type="text" placeholder="Ajouter une nouvelle tâche"  (keyup.enter)="addNewTask(assignDate.missionId, assignDate.date.value)" #addTask> -->
   </div>
 </ng-template>
 

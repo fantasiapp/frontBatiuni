@@ -156,14 +156,25 @@ export class UIPopup extends DimensionMenu {
     return false
   }
 
-  modifyDetailedPostDate(task:Task, date:DateG, checkbox: UICheckboxComponent) {
-    task.date = date.value
-    // let unset = this.checkedCheckbox(task, date)
+  modifyDetailedPostDate(task:Task, date:DateG, missionId: Ref<Mission>, checkbox: UICheckboxComponent) {
     let unset = checkbox.value
-    console.log('unsEt', unset);
-    this.store.dispatch(new ModifyDetailedPost(task, unset)).pipe(take(1)).subscribe(() => {
+    this.store.dispatch(new ModifyDetailedPost(this.findTaskWithDate(date, task, missionId, unset!), unset)).pipe(take(1)).subscribe(() => {
       this.cd.markForCheck();
     });
+  }
+
+  findTaskWithDate(date:DateG, task:Task, missionId: Ref<Mission>, unset: boolean ){
+
+    // essayer d'avoir un this.mission plutot que de l'appeler 20fois
+    const mission = this.store.selectSnapshot(DataQueries.getById('Mission', missionId))
+    let taskWithId = task
+    this.store.selectSnapshot(DataQueries.getMany('DetailedPost', mission!.details)).forEach(detail => {
+      console.log('detail.date', detail.date, typeof(detail.date));
+      if(unset && detail.date == date.value && detail.content == task.content) taskWithId = detail as Task
+      else if(!unset && !detail.date && detail.content == task.content) taskWithId = detail as Task
+    })
+    taskWithId.date = date.value
+    return taskWithId
   }
 
   openWindow(url: string) {

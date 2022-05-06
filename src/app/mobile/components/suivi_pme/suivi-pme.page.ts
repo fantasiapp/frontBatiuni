@@ -167,19 +167,7 @@ export class SuiviPME {
   }
 
   dateWithoutDouble(): Task[] {
-    let listWithOutDouble: Task[] = []
-    let listWithOutDoubleStr: string[] = []
-    console.log("dateWithoutDouble", this.tasks)
-    if (this.tasks) {
-      let dictionary = Object.assign({}, ...this.tasks!.map((task) => ({[task.content]: task})))
-      Object.keys(dictionary).forEach( key => {
-        if (!listWithOutDoubleStr.includes(dictionary[key])) {
-          listWithOutDouble.push(dictionary[key])
-          listWithOutDoubleStr.push(key)
-        }
-      })
-    }
-    return listWithOutDouble
+    return this.tasks!.filter(task => !task.date)
   }
 
   computeSelectedTask(date:string) {
