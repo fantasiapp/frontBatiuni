@@ -7,16 +7,22 @@ import { Dimension, DimensionMenu } from "src/app/shared/common/classes";
 import { ContextUpdate, TemplateContext, ViewComponent, ViewTemplate } from "../../common/types";
 import { FileDownloader } from "../../services/file-downloader.service";
 import { BasicFile } from "../filesUI/files.ui";
-import { File, Company, Mission, DateG, Task } from "src/models/new/data.interfaces";
+import { File, Company, Mission, DateG, Task, Ref } from "src/models/new/data.interfaces";
 import { DataQueries, DataState } from "src/models/new/data.state";
 import { FileContext, FileViewer } from "../file-viewer/file-viewer.component";
-import { SignContract, ModifyDetailedPost } from "src/models/new/user/user.actions";
+import { SignContract, ModifyDetailedPost, CreateDetailedPost } from "src/models/new/user/user.actions";
 import { SuiviChantierDate } from "src/app/mobile/components/suivi_chantier_date/suivi_chantier_date.page";
 import { SuiviPME } from "src/app/mobile/components/suivi_pme/suivi-pme.page";
 
 const TRANSITION_DURATION = 200;
 
 //extend to support components
+
+export interface assignDateType {
+  missionId: Ref<Mission>,
+  date: DateG,
+  view: 'ST' | 'PME'
+}
 
 @Component({
   selector: 'popup',
@@ -121,13 +127,36 @@ export class UIPopup extends DimensionMenu {
     });
   }
 
-  addNewTask(missionId:number, date:number) {
+  addNewTask(e: Event, assignDate: assignDateType, input: HTMLInputElement){
+    console.log('date', assignDate.date);
+    this.store.dispatch(new CreateDetailedPost(assignDate.missionId, input.value, assignDate.date.value)).pipe(take(1)).subscribe(() => {
+      
+      input.value = ''
+      this.cd.markForCheck()
+    });
+  }
+
+  disableCheckbox(task: Task, date: DateG){
+    for (const selectedTask of date.selectedTasks) {
+      if(task.content == selectedTask.content && (selectedTask.refused || selectedTask.validated)) return true
+    }
+    return false
+  }
+
+  checkedCheckbox(task: Task, date: DateG){
+    for (const selectedTask of date.selectedTasks) {
+      if(task.content == selectedTask.content) return true
+    }
+    return false
   }
 
   modifyDetailedPostDate(task:Task, date:DateG) {
-    console.log("modifyDetailedPostDate", date.value, typeof(date.value))
     task.date = date.value
-    this.store.dispatch(new ModifyDetailedPost(task)).pipe(take(1)).subscribe(() => {});
+    let unset = this.checkedCheckbox(task, date)
+    console.log('unsEt', unset);
+    this.store.dispatch(new ModifyDetailedPost(task, unset)).pipe(take(1)).subscribe(() => {
+      this.cd.markForCheck()
+    });
   }
 
   openWindow(url: string) {
@@ -256,7 +285,7 @@ export class PopupService {
       const context = {
         $implicit: {
           missionId: mission!.id,
-          date:date,
+          date: date,
           view: view
         }
       }

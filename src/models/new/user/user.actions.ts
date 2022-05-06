@@ -294,7 +294,7 @@ export class CreateDetailedPost {
 export class ModifyDetailedPost {
   static readonly type = '[Data] Modify DetailedPost';
   action = 'modifyDetailedPost';
-  constructor(public detailedPost: PostDetail | null) {
+  constructor(public detailedPost: PostDetail | null, public unset: boolean = false) {
   }
 }
 

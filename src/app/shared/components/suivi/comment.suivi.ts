@@ -23,8 +23,18 @@ export class SuiviComments {
   @ContentChild(SuiviComments, {read: SuiviComments})
   parentComment: SuiviComments | null = null;
 
+  reverseComment: boolean = false;
   constructor(private cd: ChangeDetectorRef, private imageGenerator: ImageGenerator,private downloader: FileDownloader, private sanitizer: DomSanitizer, private store: Store) {
 
+  }
+
+  ngOnInit() {
+    console.log('comment suivi', this.supervision.author);
+
+    const myUser = this.store.selectSnapshot(DataQueries.currentUser)
+    const myName = myUser.firstName + ' ' + myUser.lastName
+    
+    myName == this.supervision.author && (this.reverseComment = true)
   }
 
   images: SafeResourceUrl[] = [];

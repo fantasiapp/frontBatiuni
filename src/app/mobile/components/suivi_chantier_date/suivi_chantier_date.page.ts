@@ -1,5 +1,5 @@
 import { Select, Store } from "@ngxs/store";
-import { ChangeDetectionStrategy, Component, ChangeDetectorRef, Input, ViewChild, EventEmitter, Output} from "@angular/core";
+import { ChangeDetectionStrategy, Component, ChangeDetectorRef, Input, ViewChild, EventEmitter, Output, ViewEncapsulation} from "@angular/core";
 import { Destroy$ } from "src/app/shared/common/classes";
 import { Mission, DateG, Task } from "src/models/new/data.interfaces";
 import { PopupService } from "src/app/shared/components/popup/popup.component";
