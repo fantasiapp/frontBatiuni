@@ -107,7 +107,7 @@ export class SuiviPME {
   
   computeDates (mission:Mission) {
     let supervisionsTaks: number[] = []
-    this.tasks = this.store.selectSnapshot(DataQueries.getMany('DetailedPost', mission.details)).map(detail => (
+    this.tasks = this.store.selectSnapshot(DataQueries.getMany('DetailedPost', mission.details))?.map(detail => (
       { id:detail.id,
         date:detail.date,
         content:detail.content,
@@ -154,6 +154,7 @@ export class SuiviPME {
 
   computeSupervisionsForMission(date:string, supervisionsTask:number[]):Supervision[] {
     let supervisions: Supervision[] = []
+    console.log(this.mission!)
     let allSupervisions: (Supervision|null)[] = this.mission!.supervisions.map(id => {
       let supervision = this.store.selectSnapshot(DataQueries.getById('Supervision', id))
       if (supervision && supervision.date == date && !supervisionsTask.includes(supervision.id )) {
@@ -188,19 +189,22 @@ export class SuiviPME {
   dateWithoutDouble(): Task[] {
     let listWithOutDouble: Task[] = []
     let listWithOutDoubleStr: string[] = []
-    let dictionary = Object.assign({}, ...this.tasks!.map((task) => ({[task.content]: task})))
-    Object.keys(dictionary).forEach( key => {
-      if (!listWithOutDoubleStr.includes(dictionary[key])) {
-        listWithOutDouble.push(dictionary[key])
-        listWithOutDoubleStr.push(key)
-      }
-    })
+    console.log("dateWithoutDouble", this.tasks)
+    if (this.tasks) {
+      let dictionary = Object.assign({}, ...this.tasks!.map((task) => ({[task.content]: task})))
+      Object.keys(dictionary).forEach( key => {
+        if (!listWithOutDoubleStr.includes(dictionary[key])) {
+          listWithOutDouble.push(dictionary[key])
+          listWithOutDoubleStr.push(key)
+        }
+      })
+    }
     return listWithOutDouble
   }
 
   computeSelectedTask(date:string) {
     let selectedTask: Task[] = []
-    this.tasks!.forEach(task => this.computeSelectedTaskAction(selectedTask, date, task))
+    this.tasks?.forEach(task => this.computeSelectedTaskAction(selectedTask, date, task))
     return selectedTask
   }
 
