@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, Output } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { Store } from '@ngxs/store';
 import { take } from 'rxjs/internal/operators/take';
@@ -137,11 +138,21 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
     }
   }
 
+  commentTask = new FormGroup({
+    comment: new FormControl('', [
+      Validators.required,
+    ]),
+  });
+
+  commentMain = new FormGroup({
+    comment: new FormControl('', [
+      Validators.required,
+    ]),
+  });
+
   detectKey($event: KeyboardEvent, task: Task| null, inputEl: HTMLTextAreaElement | HTMLInputElement){
-    if ($event.key === "Enter") {
-      this.mainComment(task, inputEl);
-      inputEl.value = '';
-    }
+    this.mainComment(task, inputEl);
+    inputEl.value = '';
   }
   mainComment(task:Task | null, inputEl: HTMLTextAreaElement | HTMLInputElement) {
     let idInput = task ? "input_"+task!.id : "input_general"

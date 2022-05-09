@@ -38,7 +38,9 @@
         <span (click)="modifyDetailedPostDate(task, assignDate.date, assignDate.missionId, checkbox); checkbox.onChange($event)">{{ task.content }}</span>
       </li>
     </ul>
-    <input inputmode="search" id="addTask" type="text" placeholder="Ajouter une nouvelle tâche"  (keyup.enter)="addNewTask($event, assignDate, addTask)" #addTask>
+    <form (ngSubmit)="addNewTask($event, assignDate, addTask)" [formGroup]="newTaskForm">
+      <input id="addTask" type="text" placeholder="Ajouter une nouvelle tâche" formControlName="task" #addTask>
+    </form>
   </div>
 </ng-template>
 
