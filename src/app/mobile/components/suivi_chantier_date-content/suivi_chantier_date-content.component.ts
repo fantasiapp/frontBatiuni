@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, Output } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { Store } from '@ngxs/store';
 import { take } from 'rxjs/internal/operators/take';
@@ -36,8 +37,6 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
 
   ngOnInit(){
     this.computeDates(this.mission!)
-
-
     this.popup.taskWithoutDouble.pipe(takeUntil(this.destroy$)).subscribe(tasks => {
       this.date.taskWithoutDouble = tasks;
       this.cd.markForCheck()
@@ -137,11 +136,22 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
     }
   }
 
+  formTask = new FormGroup({
+    commentTask: new FormControl('', [
+      Validators.required,
+    ]),
+  });
+
+  formMain = new FormGroup({
+    commentMain: new FormControl('', [
+      Validators.required,
+    ]),
+  });
+
   detectKey($event: KeyboardEvent, task: Task| null, inputEl: HTMLTextAreaElement | HTMLInputElement){
-    if ($event.key === "Enter") {
-      this.mainComment(task, inputEl);
-      inputEl.value = '';
-    }
+    console.log('keyup');
+    this.mainComment(task, inputEl);
+    // inputEl.value = '';
   }
   mainComment(task:Task | null, inputEl: HTMLTextAreaElement | HTMLInputElement) {
     let idInput = task ? "input_"+task!.id : "input_general"
@@ -208,9 +218,9 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
         taskWithoutDouble: this.dateWithoutDouble(),
         view: this.view,
         supervisions: this.computeSupervisionsForMission(date as string, supervisionsTaks),
-        
       } as DateG
     })
+    this.dates.sort((date1, date2) => (date1.value > date2.value) ? 1 : -1)
   }
 
   computeSupervisionsforTask(supervisionsId: number[], supervisionsTask:number[]) {

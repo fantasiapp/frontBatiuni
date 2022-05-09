@@ -14,6 +14,7 @@ import { SignContract, ModifyDetailedPost, CreateDetailedPost } from "src/models
 import { SuiviPME } from "src/app/mobile/components/suivi_pme/suivi-pme.page";
 import { SuiviChantierDateContentComponent } from "src/app/mobile/components/suivi_chantier_date-content/suivi_chantier_date-content.component";
 import { UICheckboxComponent } from "../box/checkbox.component";
+import { FormControl, FormGroup, Validators } from "@angular/forms";
 
 const TRANSITION_DURATION = 200;
 
@@ -32,6 +33,13 @@ export interface assignDateType {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UIPopup extends DimensionMenu {
+
+  newTaskForm = new FormGroup({
+    task: new FormControl('', [
+      Validators.required,
+    ]),
+  });
+
   constructor(private cd: ChangeDetectorRef, private componentFactoryResolver: ComponentFactoryResolver,
     private popupService: PopupService, private store: Store ) {
     super();

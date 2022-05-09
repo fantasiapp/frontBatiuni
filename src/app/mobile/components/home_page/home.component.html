@@ -17,6 +17,7 @@
               [deletable]="true"
               [post]="draft"
               (click)="openDraft(draft)"
+              [view]="'PME'"
               ></offer> 
           </ng-container>
           <ng-container *ngSwitchCase="1">
@@ -27,6 +28,7 @@
               [deletable]="false"
               [post]="onlinePost"
               (click)="openPost(onlinePost); updateCurrentPost(onlinePost)"
+              [view]="'PME'"
               ></offer>
           </ng-container>
           <ng-container *ngSwitchCase="2">
@@ -35,6 +37,7 @@
               [post]="mission"
               src="assets/validée.svg"
               (click)="openMission(mission)"
+              [view]="'PME'"
             ></offer>
           </ng-container>
         </ng-container>
@@ -49,6 +52,7 @@
               [deletable]="false"
               [post]="onlinePost"
               (click)="openPost(onlinePost)"
+              [view]="'ST'"
               ></offer>
           </ng-container>
 
@@ -151,7 +155,7 @@
 </ng-template>
 
 <ng-template #candidature let-company let-post="post" let-application="application">
-  <span *ngIf="amountSubContractor">{{ amountSubContractor }}</span>
+  <!-- <span *ngIf="amountSubContractor">{{ amountSubContractor }}</span> -->
   <extended-profile class="content-with-header-and-footer" [showContact]="true" [profile]="profileSubContractor!" [showSwitch]="false" [showRecomandation]="false" [showView]="'ST'"></extended-profile>
   <footer class="sticky-footer flex center-cross application background-white">
     <button class="button active full-width" (click)="handleApplication(post, application)">Traiter la candidature</button>
