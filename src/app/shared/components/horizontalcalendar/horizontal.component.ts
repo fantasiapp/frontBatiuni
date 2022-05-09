@@ -14,8 +14,6 @@ import { DataQueries } from 'src/models/new/data.state';
 import { ModifyDetailedPost } from 'src/models/new/user/user.actions';
 import { take } from 'rxjs/operators';
 import { Store } from '@ngxs/store';
-import { MissionFilterForm } from '../../forms/missions.form';
-import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 export type MissionDetailedDay = {
   date: string,
@@ -92,6 +90,10 @@ export class HorizantaleCalendar implements OnInit {
   curDisponibility?: Disponibility;
 
   currentCardCalendars: calendarItem[] = [];
+
+  @Input()
+  detailedDays: MissionDetailedDay[] = [];
+
   constructor(private cd: ChangeDetectorRef, private store: Store) {
   }
 
@@ -207,9 +209,6 @@ export class HorizantaleCalendar implements OnInit {
     }
     this.hoursperday = items;
   }
-
-  @Input()
-  detailedDays: MissionDetailedDay[] = [];
 
   calculator(workstart: string, workend: string) {
     let start = this.hoursTodecimal(workstart);

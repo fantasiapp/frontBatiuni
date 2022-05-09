@@ -63,8 +63,20 @@
   }
 }
 
-.inputComment {
-  width:90%
+form {
+  width:90%;
+  .inputComment {
+    width: 100%;
+    word-break: break-word;
+
+    &.mainInputComment {
+      height: 3rem;
+      padding: .5rem;
+      // resize: none;
+      // min-height: 50px;
+      // max-height: 100px;
+    }
+  }
 }
 
 .partenerComment-container {

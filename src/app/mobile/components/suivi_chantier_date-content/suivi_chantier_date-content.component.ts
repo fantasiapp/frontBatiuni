@@ -138,21 +138,22 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
     }
   }
 
-  commentTask = new FormGroup({
-    comment: new FormControl('', [
+  formTask = new FormGroup({
+    commentTask: new FormControl('', [
       Validators.required,
     ]),
   });
 
-  commentMain = new FormGroup({
-    comment: new FormControl('', [
+  formMain = new FormGroup({
+    commentMain: new FormControl('', [
       Validators.required,
     ]),
   });
 
   detectKey($event: KeyboardEvent, task: Task| null, inputEl: HTMLTextAreaElement | HTMLInputElement){
+    console.log('keyup');
     this.mainComment(task, inputEl);
-    inputEl.value = '';
+    // inputEl.value = '';
   }
   mainComment(task:Task | null, inputEl: HTMLTextAreaElement | HTMLInputElement) {
     let idInput = task ? "input_"+task!.id : "input_general"
