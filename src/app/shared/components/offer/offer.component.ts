@@ -3,7 +3,7 @@ import { SafeResourceUrl } from "@angular/platform-browser";
 import { Select, Store } from "@ngxs/store";
 import { Observable, Subject } from "rxjs";
 import { take } from "rxjs/operators";
-import { Post, Mission, Company, User } from "src/models/new/data.interfaces";
+import { Post, Mission, Company, User, Job } from "src/models/new/data.interfaces";
 import { DataQueries } from "src/models/new/data.state";
 import { DeletePost, SetFavorite } from "src/models/new/user/user.actions";
 import { FileDownloader } from "../../services/file-downloader.service";
@@ -20,6 +20,7 @@ export class OfferComponent {
 
   constructor(private store: Store, private popup: PopupService, private cd: ChangeDetectorRef, private imageGenerator: ImageGenerator, private downloader: FileDownloader) { }
 
+  @Input() view: 'ST' | 'PME' = 'PME';
 
   @Select(DataQueries.currentUser)
   user$!: Observable<User>;
@@ -27,6 +28,8 @@ export class OfferComponent {
 
   @Input()
   showCandidate: boolean = false
+  
+  metier?: Job;
 
   get unseenCandidate(): number {
     let possibleCandidates: number = 0
@@ -124,6 +127,8 @@ export class OfferComponent {
         if(userFavPosts == this.post?.id) this.favoritePost = true
       }
     })
+
+    this.metier = this.store.selectSnapshot(DataQueries.getById('Job', this.post!.job )) || undefined
   }
 
   toggleFavorite(e :Event){
