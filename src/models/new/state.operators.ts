@@ -33,6 +33,8 @@ namespace mutable {
     
     //translate data
     Object.entries<any>(values).forEach(([id, item]) => {
+      //An horrible patch waiting for a true solution
+      if (!targetObjects) return
       const current = targetObjects[id];
       //if not created create
       if ( !current ) {

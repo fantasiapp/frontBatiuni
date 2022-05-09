@@ -142,7 +142,8 @@ export class ProfileComponent extends Destroy$ {
       const action = this.store.dispatch(new UserActions.ModifyUserProfile({profile: profile, form}));
       this.info.show("info", "Mise à jour en cours...", Infinity);
       action.pipe(take(1))
-        .subscribe(success => {
+        .subscribe(
+          success => {
           this.openModifyMenu = false;
           this.info.show("success", "Profil modifié avec succès", 2000);
           (form as FormGroup).markAsPristine(); (form as FormGroup).markAsUntouched();
@@ -151,7 +152,8 @@ export class ProfileComponent extends Destroy$ {
         err => {
           this.info.show("error", "Aucune valeur n'est modifiée", 5000);
           this.cd.markForCheck();
-        });
+        }
+        );
     });
   }
 

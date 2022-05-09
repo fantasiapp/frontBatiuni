@@ -189,18 +189,18 @@ export class DataState {
     return req.pipe(
       tap((response: any) => {
         console.log("ModifyUserProfile", response)
-        if ( response[modify.action] !== 'OK' )
-          // this.inZone(() => this.info.show("error", response.messages, 3000));
+        if ( response[modify.action] !== 'OK' ) {
+          this.inZone(() => this.info.show("error", response.messages, 3000));
           throw response.messages;
-        
+        }
         delete response[modify.action];
-        console.log("still alive")
         ctx.setState(compose(...this.reader.readUpdates(response)))
-        console.log("still alive 2")
+        this.inZone(() => this.info.show("success", "Profil modifié avec succès", 2000))
       }),
       concatMap(() => {
         labelFiles.forEach(file => ctx.dispatch(new UploadFile(file, 'labels', file.nature, 'Company')));
         Object.keys(adminFiles).forEach(name => ctx.dispatch(new UploadFile(adminFiles[name], 'admin', name, 'Company')))
+        console.log(of(true))
         return of(true);
       })
     )
