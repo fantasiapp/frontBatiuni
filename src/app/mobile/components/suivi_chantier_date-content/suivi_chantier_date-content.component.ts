@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, In
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { Store } from '@ngxs/store';
 import { take } from 'rxjs/internal/operators/take';
+import { takeUntil } from 'rxjs/operators';
 import { Destroy$ } from 'src/app/shared/common/classes';
 import { PopupService } from 'src/app/shared/components/popup/popup.component';
 import { DateG, Mission, Supervision, Task } from 'src/models/new/data.interfaces';
@@ -36,6 +37,11 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
   ngOnInit(){
     this.computeDates(this.mission!)
 
+
+    this.popup.taskWithoutDouble.pipe(takeUntil(this.destroy$)).subscribe(tasks => {
+      this.date.taskWithoutDouble = tasks;
+      this.cd.markForCheck()
+    })
   }
 
   constructor(

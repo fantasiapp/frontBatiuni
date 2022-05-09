@@ -61,6 +61,8 @@ export class UIPopup extends DimensionMenu {
   @Input()
   keepAlive: boolean = true;
 
+  missionId?: Ref<Mission>;
+
   ngOnInit() {
     if ( !this.fromService ) return;
   
@@ -100,6 +102,13 @@ export class UIPopup extends DimensionMenu {
       this.cd.markForCheck();
     });
   }
+  
+  // ngAfterContentChecked(){
+  //   console.log('afterInit');
+  //   this.cd.markForCheck()
+  // }
+
+
 
   willClose = false;
   close() {
@@ -114,6 +123,7 @@ export class UIPopup extends DimensionMenu {
       }
       this.cd.markForCheck();
     }, TRANSITION_DURATION);
+
   }
   //extends destroy, no multiple inheritance :(
   protected destroy$ = new Subject<void>();
@@ -138,6 +148,7 @@ export class UIPopup extends DimensionMenu {
       const newTask = missionPostDetail[missionPostDetail.length - 1]
       assignDate.date.taskWithoutDouble.push(newTask)
       assignDate.date.selectedTasks.push(newTask)
+      this.popupService.taskWithoutDouble.next(assignDate.date.taskWithoutDouble)
       this.cd.markForCheck()
     });
   }
@@ -205,6 +216,7 @@ export type PopupView = (ViewTemplate | ViewComponent | ContextUpdate | Predefin
 export class PopupService {
   popups$ = new Subject<PopupView>();
   dimension$ = new Subject<Dimension>();
+  taskWithoutDouble = new Subject<Task[]>();
   defaultDimension: Dimension = {left: '20px', top: '30px', width: 'calc(100% - 40px)', height: 'calc(100% - 60px)'}
 
   constructor(private store: Store, private downloader: FileDownloader) {
@@ -323,6 +335,7 @@ export class PopupService {
         });
         first = false;
       }
+
   }
 
 
