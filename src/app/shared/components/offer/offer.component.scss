@@ -51,13 +51,23 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  row-gap: 1rem;
+  row-gap: 0.75rem;
   padding-right: 0.5rem;
 }
 
-.metier, .date {
+// .man-pow, .date {
+//   color: $text-color-grey;
+// }
+
+.text-light {
   color: $text-color-grey;
 }
+
+.text-dark{
+  color: $text-color;
+}
+
+
 
 .adresse { overflow: hidden; text-overflow: ellipsis; font-weight: 300; }
 
