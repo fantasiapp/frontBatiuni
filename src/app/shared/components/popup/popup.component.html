@@ -1,13 +1,13 @@
 <div class="cover" [class.open]="open && !willClose"></div>
 
 <div class="menu cover-parent background-white flex column center space-children-margin center-text" [class.open]="open && !willClose">
+  <img src="assets/X.svg" (click)="close()" class="position-absolute close-button"/>
   <ng-container #view>
     <ng-content></ng-content>
   </ng-container>
 </div>
 
 <ng-template #delete let-output>
-  <img src="assets/X.svg" (click)="close()" class="position-absolute close-button"/>
 
   Voudriez-vous supprimer l'annonce ?
   <hr class="dashed" style="margin-left: 0 !important"/>
@@ -19,14 +19,14 @@
 
 <ng-template #sign let-signature>
   <file-viewer [fileContext]="signature.fileContext" class="grow"></file-viewer>
-  <button *ngIf="!signature.signedByProfile" class="button active" (click)="actionSign(signature.missionId, signature.view)">Signer</button>
+  <button *ngIf="!signature.signedByProfile" class="button active" id="signer" (click)="actionSign(signature.missionId, signature.view)">Signer</button>
 </ng-template>
 
 <ng-template #setDate let-assignDate>
-  <div class="main-date">
+  <div class="main-date" #tache>
     <div class="header-container">
       <h3 class="title-date">Le {{assignDate.date.value}}</h3>
-      <img src="assets/X.svg" (click)="close()"/>
+      <!-- <img src="assets/X.svg" (click)="close()"/> -->
     </div>
 
     <img class="hero-img" src="assets/popup-contrat.svg" alt="contrat">
@@ -43,7 +43,7 @@
 </ng-template>
 
 <ng-template #closeMission let-context>
-  <img src="assets/X.svg" (click)="close()" class="position-absolute close-button"/>
+  <!-- <img src="assets/X.svg" (click)="close()" class="position-absolute close-button"/> -->
   <label>Noter l'entreprise {{ context.name }}</label>
   <label>Confirmer-vous la clôture de cette mission ?</label>
   <div style="height:5%;"></div>
