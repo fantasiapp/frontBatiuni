@@ -338,6 +338,7 @@ export class SuiviPME {
 
       // Update de mission et accordionData puis update la vue
       this.mission = this.store.selectSnapshot(DataQueries.getById('Mission', this.mission!.id))
+      console.log('updated mission date', this.mission?.dates);
       this.computeDates(this.mission!)
       this.cd.markForCheck()
     });

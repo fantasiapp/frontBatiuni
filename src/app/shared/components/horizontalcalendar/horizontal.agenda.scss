@@ -159,7 +159,7 @@
             font-weight: 600;
         }
 
-    overflow-y: scroll;
+    // overflow-y: scroll;
 }
 
 .agenda-line {
@@ -180,7 +180,6 @@
     // overflow-y: scroll;
     .card-container{
         position: relative;
-        color: $bg-white;
         color: black;
         border-radius: 7px;
         opacity: 0.7;
@@ -191,9 +190,11 @@
         min-width: 6rem;
         
         height: 100%;
-        // overflow: scroll;
         padding: 1rem;
-        
+        > div {
+            height: 100%;
+            overflow: scroll;
+        }        
     }
     span {
         font-size: 0.875rem;

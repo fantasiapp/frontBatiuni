@@ -50,12 +50,14 @@ export class MissionsComponent extends Destroy$ {
     combineLatest([this.profile$, this.missions$]).pipe(takeUntil(this.destroy$)).subscribe(([profile, missions]) => {
       //filter own missions
       //for now accept all missions
+      
       this.allMyMissions = missions.filter(mission => mission.subContractor == profile.company.id);
       //compute work days
 
       this.detailedDays = [];
       let usedDay: number[] = []
-      for ( const mission of this.allMyMissions ) {
+      for ( let mission of this.allMyMissions ) {
+        mission = this.store.selectSnapshot(DataQueries.getById('Mission', mission.id)) as Mission
         const availabilities = this.store.selectSnapshot(DataQueries.getMany('Disponibility', profile.company.availabilities))
         const start = moment(mission.startDate),
           end = moment(mission.endDate),
@@ -73,6 +75,7 @@ export class MissionsComponent extends Destroy$ {
           const dateid = mission.dates[i]
           let date = this.store.selectSnapshot(DataQueries.getById('DatePost', dateid))
   
+          console.log('date', date);
           dateAlreadyParsedFromMission.push(date!.date)
   
           this.detailedDays.push({
