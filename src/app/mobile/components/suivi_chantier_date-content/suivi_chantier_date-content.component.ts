@@ -148,10 +148,10 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
     ]),
   });
 
-  detectKey($event: KeyboardEvent, task: Task| null, inputEl: HTMLTextAreaElement | HTMLInputElement){
+  detectKey( task: Task| null, inputEl: HTMLTextAreaElement | HTMLInputElement){
     console.log('keyup');
     this.mainComment(task, inputEl);
-    // inputEl.value = '';
+    inputEl.value = '';
   }
   mainComment(task:Task | null, inputEl: HTMLTextAreaElement | HTMLInputElement) {
     let idInput = task ? "input_"+task!.id : "input_general"
