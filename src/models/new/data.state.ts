@@ -742,12 +742,17 @@ export class DataState {
 
   @Action(InviteFriend)
   inviteFriend(ctx:StateContext<DataModel>, application: InviteFriend) {
+    const user = this.store.selectSnapshot(DataQueries.currentUser);
     return this.http.get('data', application).pipe(
       tap((response:any) => {
-        if ( response[application.action] !== 'OK' ) {
-          this.inZone(() => this.info.show("error", response.messages, 3000))
-        } else {
-          this.inZone(() => this.info.show("info", response.messages, 3000))
+          if (application.register) {
+            const token = application.register ? response.token : ''
+          if ( response[application.action] !== 'OK' ) {
+            this.inZone(() => this.info.show("error", response.messages, 3000))
+          } else {
+            if (application.register) this.inZone(() => this.info.show("info", response.messages, 3000))
+            ctx.setState(transformField('UserProfile', user.id, 'tokenFriend', (draft) => token))
+          }
         }
       }
     ))

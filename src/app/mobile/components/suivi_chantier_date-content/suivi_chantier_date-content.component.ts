@@ -37,8 +37,6 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
 
   ngOnInit(){
     this.computeDates(this.mission!)
-
-
     this.popup.taskWithoutDouble.pipe(takeUntil(this.destroy$)).subscribe(tasks => {
       this.date.taskWithoutDouble = tasks;
       this.cd.markForCheck()
@@ -220,9 +218,9 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
         taskWithoutDouble: this.dateWithoutDouble(),
         view: this.view,
         supervisions: this.computeSupervisionsForMission(date as string, supervisionsTaks),
-        
       } as DateG
     })
+    this.dates.sort((date1, date2) => (date1.value > date2.value) ? 1 : -1)
   }
 
   computeSupervisionsforTask(supervisionsId: number[], supervisionsTask:number[]) {
