@@ -238,7 +238,10 @@ export class HorizantaleCalendar implements OnInit {
     this.spanShowToday = moment(date, 'YYYY-MM-DD')
       .locale('fr')
       .format('dddd D - MMMM - YYYY');
+
+    console.log('this.detailedDays', this.detailedDays);
     let todayDates = this.detailedDays.filter((item) => item?.date == date);
+    console.log('todayDAtes;', todayDates);
 
     this.curDisponibility = undefined
     for (const dip of this.disponibilities) {
@@ -298,16 +301,15 @@ export class HorizantaleCalendar implements OnInit {
 
     if(dayDestroy){
       console.log('currentCardCalendars', this.currentCardCalendars, card.date);
-      let newCardCalendars = [];
-      for (const curCard of this.currentCardCalendars) {
-        if(curCard.mission.id == card.mission.id){
-        }else{
-          newCardCalendars.push(curCard)
-        }
+      let newCardCalendars: calendarItem[] = [];
+      for (let curCard of this.currentCardCalendars) {
+        if(curCard.mission.id != card.mission.id || curCard.date != card.date) newCardCalendars.push(curCard)
       }
       this.currentCardCalendars = newCardCalendars
+    } else if (dayDestroy == false){
+      card.change.deleted = false
     }
-  
+    
     this.cd.markForCheck()
   }
 
