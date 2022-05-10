@@ -263,6 +263,8 @@ export class HorizantaleCalendar implements OnInit {
         change: this.dateChange(today.mission, today.date)
       })
     }
+
+    console.log('currentCalendare', this.currentCardCalendars, todayDates);
     this.cd.markForCheck()
 
 

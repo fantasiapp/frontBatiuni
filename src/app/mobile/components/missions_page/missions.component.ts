@@ -67,13 +67,11 @@ export class MissionsComponent extends Destroy$ {
         
         // const diffDays = end.diff(start, 'days', true);
         // let day = start.clone();
-        console.log('Mission;', mission);
         let missionDatesId: Ref<PostDate>[];
         if (typeof mission.dates === "object" && !Array.isArray(mission.dates)) {
           missionDatesId = Object.keys(mission.dates).map(key => (+key as number))
         }
         else missionDatesId = mission.dates
-        
         let dateAlreadyParsedFromMission:string[] = []
 
         for(let i= 0; i < missionDatesId.length; i++){
@@ -90,9 +88,9 @@ export class MissionsComponent extends Destroy$ {
             tasks: []
           })
           for (const task of tasks) {
-            if(dateAlreadyParsedFromMission.includes(task.date)) {
+            if(date!.date == task.date){
               let lenght = this.detailedDays.length
-              if (lenght != 0) this.detailedDays[lenght -1].tasks.push(task)
+              if (lenght != 0) this.detailedDays[lenght -1].tasks.push(task)  
             }
           }
         }
