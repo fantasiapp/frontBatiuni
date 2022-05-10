@@ -35,6 +35,7 @@ export interface User {
   proposer: string;
   cellPhone: string;
   function: string;
+  tokenFriend: string;
   favoritePosts: Ref<Post>[];
   viewedPosts: Ref<Post>[];
 };

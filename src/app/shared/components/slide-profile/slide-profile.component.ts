@@ -46,6 +46,7 @@ export class SlideProfileComponent extends UIOpenMenu {
       proposer: '',
       cellPhone: '',
       function: '',
+      tokenFriend: '',
       favoritePosts: [],
       viewedPosts: []
     }

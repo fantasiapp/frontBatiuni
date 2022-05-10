@@ -349,7 +349,7 @@ export class InviteFriend {
   static readonly type = 'invite Friend';
   action = 'inviteFriend';
 
-  constructor(public mail: string) {}
+  constructor(public mail: string, public register: boolean) {}
 }
 
 export class MarkViewed {
