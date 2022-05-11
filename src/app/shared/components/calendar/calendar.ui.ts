@@ -32,7 +32,7 @@ export class CalendarUI extends UIDefaultAccessor<DayState[]> {
   @Input()
   mode: CalendarMode = 'single';
 
-  public rangeStart: number | null = null;
+  rangeMomentStart: moment.Moment | null = null
 
   @Output()
   dayClick = new EventEmitter();
@@ -122,30 +122,29 @@ export class CalendarUI extends UIDefaultAccessor<DayState[]> {
     const nextDate = flag < 0 ? this.dateSelect.clone().subtract(1, "month") : this.dateSelect.clone().add(1, "month");
     this.currentMonth = nextDate.get('M') + 1; this.currentYear = nextDate.get('Y');
     this.getDaysFromDate(this.fillZero(this.currentMonth), this.currentYear);
-    this.rangeStart = null; //cancel selection
   }
 
-  onDayClicked(index: number, day: string, e: Event) {
+  onDayClicked(day: string, e: Event) {
     //e shouldnt be passed, it should be the host responsibility
     //set click listener on the host and when the emitted event occurs
     //read the value and show what needs to be shown
-
-    console.log("onDayClicked", this.rangeStart)
-    if ( this.rangeStart !== null) {
-      const min = Math.min(this.rangeStart, index),
-        max = Math.max(this.rangeStart, index);
-      
-      const selection: string[] = [];
-      for ( let i = min; i <= max; i++ )
-        selection.push(this.monthSelect[i].date);
-      
+    
+    const dayMoment = moment(day)
+    console.log('dayMo', dayMoment, day);
+    if(this.rangeMomentStart !== null){
+      const min = moment.min(dayMoment, this.rangeMomentStart),
+        max = moment.max(dayMoment, this.rangeMomentStart),
+        selection: string[] = []
+      for(let i = 0; i <= max.diff(min, 'days'); i++){
+        selection.push(moment(min).locale('fr').add(i, 'days').format('YYYY-MM-DD'))
+      }
+      console.log('selection', selection);
       this.setSelection(selection);
-      this.rangeStart = null;
+      this.rangeMomentStart = null
     } else {
-      //first click
-      if ( this.mode == 'range' )
-        this.rangeStart = index;
-      else {
+      if (this.mode == 'range') {
+        this.rangeMomentStart = dayMoment
+      } else {
         this.setSelection([day]);
         this.dayClick.emit([e, this.selection]);
       }
