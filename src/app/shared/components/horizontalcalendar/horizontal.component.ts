@@ -56,7 +56,8 @@ export interface calendarItem {
     )
   ]
 })
-export class HorizantaleCalendar implements OnInit {
+export class HorizontaleCalendar implements OnInit {
+  static NUMBER_OF_DAYS_DISPLAYED: number = 50;
   @ViewChild(CalendarUI, { static: true })
   calendar!: CalendarUI;
 
@@ -112,6 +113,7 @@ export class HorizantaleCalendar implements OnInit {
     this.spanShowToday = moment(now)
       .locale('fr')
       .format('dddd D - MMMM - YYYY');
+
     this.showAgenda(moment(now).format('YYYY-MM-DD'));
     this.showColors();
   }
@@ -127,32 +129,18 @@ export class HorizantaleCalendar implements OnInit {
   }
 
   setSelectedDays() {
-    let currentDate = moment();
-    let daysInMonth = currentDate.daysInMonth();
-    let weekStart = currentDate.clone().startOf('isoWeek');
+    const currentDate = moment(),
+      currentDateFormated = currentDate.locale('fr').format('D,dddd,YYYY-MM-DD').split(','),
+      weekStart = currentDate.clone().startOf('isoWeek');
     let days = [];
-    for (var i = 1; i <= daysInMonth; i++) {
-      if (i == 1) {
-        days.push({
-          day: moment(weekStart)
-            .locale('fr')
-            .add(i, 'days')
-            .format('D,dddd,YYYY-MM-DD')
-            .split(','),
-          status: '',
-          selected: true,
-        });
-      } else {
-        days.push({
-          day: moment(weekStart)
-            .locale('fr')
-            .add(i, 'days')
-            .format('D,dddd,YYYY-MM-DD')
-            .split(','),
-          status: '',
-          selected: false,
-        });
-      }
+    for (let i = 0; i < HorizontaleCalendar.NUMBER_OF_DAYS_DISPLAYED; i++) {
+      const dayFormated = moment(weekStart).locale('fr').add(i, 'days').format('D,dddd,YYYY-MM-DD').split(',')
+      const selected = dayFormated[2] == currentDateFormated[2]
+      days.push({
+        day: dayFormated,
+        status: '',
+        selected: selected,
+      })
     }
     this.selectedDay = days;
   }

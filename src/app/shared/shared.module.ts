@@ -33,7 +33,7 @@ import { UISOSCard } from "./components/SOSCard/SOSCard.ui";
 import { InfoHandler } from "./components/info/info.component";
 import { ConnexionForm } from "./forms/connexion.form";
 import { CalendarUI } from "./components/calendar/calendar.ui";
-import { HorizantaleCalendar } from "./components/horizontalcalendar/horizontal.component";
+import { HorizontaleCalendar } from "./components/horizontalcalendar/horizontal.component";
 import { UISuggestionBox } from "./components/suggestionbox/suggestionbox.component";
 import { ControlErrorsDirective, ErrorMessageComponent } from "./common/formerrors";
 import { SpacingPipe } from "./pipes/spacing.pipe";
@@ -98,7 +98,7 @@ import { NotificationAgendaComponent } from './components/notification-agenda/no
     UISOSCard,
     InfoHandler,
     CalendarUI,
-    HorizantaleCalendar,
+    HorizontaleCalendar,
     UISuggestionBox,
     ErrorMessageComponent,
     ControlErrorsDirective,
@@ -169,7 +169,7 @@ import { NotificationAgendaComponent } from './components/notification-agenda/no
     UISOSCard,
     CalendarUI,
     InfoHandler,
-    HorizantaleCalendar,
+    HorizontaleCalendar,
     UISuggestionBox,
     ErrorMessageComponent,
     ControlErrorsDirective,
