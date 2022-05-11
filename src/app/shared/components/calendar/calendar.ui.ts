@@ -125,20 +125,14 @@ export class CalendarUI extends UIDefaultAccessor<DayState[]> {
   }
 
   onDayClicked(day: string, e: Event) {
-    //e shouldnt be passed, it should be the host responsibility
-    //set click listener on the host and when the emitted event occurs
-    //read the value and show what needs to be shown
-    
+
     const dayMoment = moment(day)
-    console.log('dayMo', dayMoment, day);
     if(this.rangeMomentStart !== null){
       const min = moment.min(dayMoment, this.rangeMomentStart),
-        max = moment.max(dayMoment, this.rangeMomentStart),
-        selection: string[] = []
-      for(let i = 0; i <= max.diff(min, 'days'); i++){
+        max = moment.max(dayMoment, this.rangeMomentStart)
+      let selection: string[] = []
+      for(let i = 0; i <= max.diff(min, 'days'); i++)
         selection.push(moment(min).locale('fr').add(i, 'days').format('YYYY-MM-DD'))
-      }
-      console.log('selection', selection);
       this.setSelection(selection);
       this.rangeMomentStart = null
     } else {
