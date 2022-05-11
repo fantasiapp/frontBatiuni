@@ -43,10 +43,12 @@ export class Notifications {
       text: notification.content
     }
     this.notification.unshift(notificationDisplay)
+    // console.log("notification", this.notification)
     this.updateNotifications();
   }
 
   updateNotifications(){
+    this.timerToday = []
     let today = new Date(Date.now())
     this.month = this.notification.filter(notif => moment(moment(today).format('L')).isAfter(moment(notif.date).format('L')))
     this.today = this.notification.filter(notif => moment(moment(today).format('L')).isSame(moment(notif.date).format('L')))
@@ -57,6 +59,7 @@ export class Notifications {
     for (let i = 0; i < this.month.length; i++) {
       this.timerMonth.push(moment(moment(this.month[i].date)).startOf('day').fromNow());
     }
+    // console.log("today", this.timerToday)
   }
 
   ngOnInit() {
@@ -64,6 +67,8 @@ export class Notifications {
       let notification = notificationAny as Notification
       let src: SafeResourceUrl | string = ""
       let company: Company
+      this.notifications = []
+      this.timerToday = []
       switch ( notification.nature ){
         case "PME":
           if (notification.missions) {
@@ -111,6 +116,8 @@ export class Notifications {
           break;
       }
     })
+    this.notifications.sort((notification1:Notification, notification2:Notification) => notification1.timestamp > notification2.timestamp ? 1 : -1)
+    console.log("notification", this.notifications)
     this.updateNotifications();
   }
 
