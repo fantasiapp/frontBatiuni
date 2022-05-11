@@ -1,15 +1,25 @@
-<ng-container *ngIf="(view$ | async) as view">
-  <ng-container *ngIf="(profile$ | async) as profile">
-    <page-header [name]="view == 'PME' ? 'Mes Annonces' : 'Annonces qui peuvent vous intéresser'" [tabs]="view == 'PME' ? 3 : 2" [(activeView)]="activeView" (filterClicked)="openAdFilterMenu = true">
-      <span tab_0>{{ view == 'PME' ? 'Brouillon' : 'Vue liste' }}</span>
-      <span tab_1>{{ view == 'PME' ? 'En ligne' : 'Carte' }}</span>
+<ng-container *ngIf="view$ | async as view">
+  <ng-container *ngIf="profile$ | async as profile">
+    <page-header
+      [name]="
+        view == 'PME' ? 'Mes Annonces' : 'Annonces qui peuvent vous intéresser'
+      "
+      [tabs]="view == 'PME' ? 3 : 2"
+      [(activeView)]="activeView"
+      (filterClicked)="openAdFilterMenu = true"
+    >
+      <span tab_0>{{ view == "PME" ? "Brouillon" : "Vue liste" }}</span>
+      <span tab_1>{{ view == "PME" ? "En ligne" : "Carte" }}</span>
       <span tab_2>Validées</span>
     </page-header>
-    
-    <div class="hosted-page space-children-margin page-content-with-tabs" [ngClass]="{'footerHideMobile': !showFooter}">
+
+    <div
+      class="hosted-page space-children-margin page-content-with-tabs"
+      [ngClass]="{ footerHideMobile: !showFooter }"
+    >
       <!-- Page pour PME -->
       <ng-container *ngIf="view == 'PME'; else stview">
-        <ng-container *ngIf="(posts$ | async) as posts" [ngSwitch]="activeView">
+        <ng-container *ngIf="posts$ | async as posts" [ngSwitch]="activeView">
           <ng-container *ngSwitchCase="0">
             <offer
               *ngFor="let draft of userDrafts"
@@ -18,7 +28,7 @@
               [post]="draft"
               (click)="openDraft(draft)"
               [view]="'PME'"
-              ></offer> 
+            ></offer>
           </ng-container>
           <ng-container *ngSwitchCase="1">
             <offer
@@ -29,7 +39,7 @@
               [post]="onlinePost"
               (click)="openPost(onlinePost); updateCurrentPost(onlinePost)"
               [view]="'PME'"
-              ></offer>
+            ></offer>
           </ng-container>
           <ng-container *ngSwitchCase="2">
             <offer
@@ -42,7 +52,7 @@
           </ng-container>
         </ng-container>
       </ng-container>
-  
+
       <!-- Page pour ST -->
       <ng-template #stview>
         <ng-container [ngSwitch]="activeView">
@@ -53,14 +63,19 @@
               [post]="onlinePost"
               (click)="openPost(onlinePost)"
               [view]="'ST'"
-              ></offer>
+            ></offer>
           </ng-container>
 
-          <mapbox-batiuni [posts]="allOnlinePosts" class="space-children-margin" *ngSwitchCase="1" (postClick)="openPost($event)"></mapbox-batiuni>
+          <mapbox-batiuni
+            [posts]="allOnlinePosts"
+            class="space-children-margin"
+            *ngSwitchCase="1"
+            (postClick)="openPost($event)"
+          ></mapbox-batiuni>
         </ng-container>
       </ng-template>
     </div>
-    
+
     <!-- <swipeup [(open)]="openAdFilterMenu" type="view">
       <pme-filter-form [activeView]="activeView" [callbackFilter]="callbackFilter" *ngIf="view == 'PME'; else stfilter" view></pme-filter-form>
       <ng-template #stfilter><st-filter-form (update)="allOnlinePosts = $event"></st-filter-form></ng-template>
@@ -68,78 +83,128 @@
 
     <swipeup [(open)]="openAdFilterMenu" type="view">
       <ng-container *ngIf="view == 'PME'; else stfilter" view>
-        <pme-filter-form [activeView]="activeView" [callbackFilter]="callbackFilter"></pme-filter-form>
+        <pme-filter-form
+          [activeView]="activeView"
+          [callbackFilter]="callbackFilter"
+        ></pme-filter-form>
       </ng-container>
       <ng-template #stfilter>
         <st-filter-form (update)="displayOnlinePosts = $event"></st-filter-form>
       </ng-template>
     </swipeup>
-    
+
     <!-- Component one -->
     <slidemenu [(open)]="draftMenu.open" [header]="true">
       <h1 class="grow center-text" header>Brouillon</h1>
-      <div class="hosted-page flex column center-cross space-children-margin" content>
-        <ad-form [post]="draftMenu.post" (done)="openDraft(null)" [page]="false" content></ad-form>     
+      <div
+        class="hosted-page flex column center-cross space-children-margin"
+        content
+      >
+        <ad-form
+          [post]="draftMenu.post"
+          (done)="openDraft(null)"
+          [page]="false"
+          content
+        ></ad-form>
       </div>
     </slidemenu>
-    
+
     <!-- Component two -->
     <slidemenu [(open)]="postMenu.open" [header]="false" #slideOnlinePost>
-      <header class="clear-margin full-width sticky-header flex center-cross annonce" customHeader>
+      <header
+        class="clear-margin full-width sticky-header flex center-cross annonce"
+        customHeader
+      >
         <img (click)="slideOnlinePostClose()" src="assets/arrowlblack.svg" />
         <h1 class="grow center-text">Annonce(s) en Ligne</h1>
         <div>
-          <img *ngIf="view == 'PME'" (click)="postMenu.swipeup = true" src="assets/Option.svg"/>
-          <span *ngIf="currentCandidates && view == 'PME'" [attr.data-notification-number]="currentCandidates" class="notification"></span>
+          <img
+            *ngIf="view == 'PME'"
+            (click)="postMenu.swipeup = true"
+            src="assets/Option.svg"
+          />
+          <span
+            *ngIf="currentCandidates && view == 'PME'"
+            [attr.data-notification-number]="currentCandidates"
+            class="notification"
+          ></span>
         </div>
       </header>
-  
+
       <ng-container content>
-        <annonce-resume class="hosted-page content-with-footer" [collapsible]="false" [post]="postMenu.post!" (apply)="applyPost(postMenu.post!, $event)" #resume></annonce-resume>
-  
+        <annonce-resume
+          class="hosted-page content-with-footer"
+          [collapsible]="false"
+          [post]="postMenu.post!"
+          (apply)="applyPost(postMenu.post!, $event)"
+          #resume
+        ></annonce-resume>
+
         <swipeup [(open)]="postMenu.swipeup">
-          <li *ngIf="possibleCandidates.length"  (click)="showCandidates()">
-            <img src="assets/responses.svg"/> Afficher les réponses
-            <span *ngIf="currentCandidates && view == 'PME'" [attr.data-notification-number]="possibleCandidates.length" [class.notification]="postMenu.candidates.length" class="notification"></span>
+          <li *ngIf="possibleCandidates.length" (click)="showCandidates()">
+            <img src="assets/responses.svg" /> Afficher les réponses
+            <span
+              *ngIf="currentCandidates && view == 'PME'"
+              [attr.data-notification-number]="possibleCandidates.length"
+              [class.notification]="postMenu.candidates.length"
+              class="notification"
+            ></span>
           </li>
-          <li [routerLink]="['','booster']"><img src="assets/booster.svg"/>Booster Mon annonce</li>
-          <li (click)="deletePost(postMenu.post!.id)"><img src="assets/cloturer.svg"/>Supprimer l'annonce</li>
-          <li (click)="duplicatePost(postMenu.post!.id)"><img src="assets/Dupliquer.svg"/>Dupliquer l'annonce</li>
-          <li (click)="pausePost(postMenu.post!.id)"><img src="assets/pauseicon.svg"/>Mettre en pause l'annonce</li>
+          <li [routerLink]="['', 'booster']">
+            <img src="assets/booster.svg" />Booster Mon annonce
+          </li>
+          <li (click)="deletePost(postMenu.post!.id)">
+            <img src="assets/cloturer.svg" />Supprimer l'annonce
+          </li>
+          <li (click)="duplicatePost(postMenu.post!.id)">
+            <img src="assets/Dupliquer.svg" />Dupliquer l'annonce
+          </li>
+          <li (click)="pausePost(postMenu.post!.id)">
+            <img src="assets/pauseicon.svg" />Mettre en pause l'annonce
+          </li>
         </swipeup>
-      </ng-container>    
+      </ng-container>
     </slidemenu>
 
     <!-- Component Mission -->
     <slidemenu [(open)]="missionMenu.open" [header]="false" #slideMission>
-      <header class="clear-margin full-width sticky-header flex center-cross annonce" customHeader>
+      <header
+        class="clear-margin full-width sticky-header flex center-cross annonce"
+        customHeader
+      >
         <img (click)="slideMission.close()" src="assets/arrowlblack.svg" />
         <h1 class="grow center-text">Annonce(s) validée</h1>
-        <img (click)="swipeupMenu()" [src]="view == 'PME' ? 'assets/Option.svg' : 'assets/phone.png'"/> 
+        <img
+          (click)="swipeupMenu()"
+          [src]="view == 'PME' ? 'assets/Option.svg' : 'assets/phone.png'"
+        />
       </header>
-      
-      <suivi-chantier [missionMenu]="missionMenu" [callBackParent]="callBackSwipeup" [toogle]="toogle" content></suivi-chantier>
+
+      <suivi-chantier
+        [missionMenu]="missionMenu"
+        [callBackParent]="callBackSwipeup"
+        [toogle]="toogle"
+        content
+      ></suivi-chantier>
     </slidemenu>
   </ng-container>
 </ng-container>
 
-
 <!-- </ng-container> -->
 
 <ng-template #pausePostTemplate>
-  <img src="assets/pause.svg">
+  <img src="assets/pause.svg" />
   <p>Votre annonce a bien été mise en pause</p>
   <p>Vous pouvez toujours l'accéder à partir de vos brouillons.</p>
 </ng-template>
 
 <ng-template #acceptOffer let-profile>
-  <div class="offres-logo"><img src="assets/validée.svg"/>
-  
-  </div>
-  <p>Vous avez bien validé la candidature de 
-    <br> 
-    <span class="text-emphasis">{{ profile.company.name | titlecase }} </span><br>Veuillez 
-    confirmer votre opération pour recevoir le contrat !
+  <div class="offres-logo"><img src="assets/validée.svg" /></div>
+  <p>
+    Vous avez bien validé la candidature de
+    <br />
+    <span class="text-emphasis">{{ profile.company.name | titlecase }} </span
+    ><br />Veuillez confirmer votre opération pour recevoir le contrat !
   </p>
   <div class="flex column space-children-margin full-width">
     <button class="button active">Valider</button>
@@ -149,16 +214,41 @@
 
 <ng-template #candidates let-possibleCandidates let-job="job">
   <div class="hosted-page">
-    <p class="font-Poppins" style="margin-bottom: 2rem;">Vous avez : {{ possibleCandidates.length }} réponse(s)</p>
-    <profile-card *ngFor="let candidate of possibleCandidates" (click)="showCompany(candidate.company, candidate.id)" [job]="job" [profile]="candidate.company" [candidate]="candidate"></profile-card>
+    <p class="font-Poppins" style="margin-bottom: 2rem">
+      Vous avez : {{ possibleCandidates.length }} réponse(s)
+    </p>
+    <profile-card
+      *ngFor="let candidate of possibleCandidates"
+      (click)="showCompany(candidate.company, candidate.id)"
+      [job]="job"
+      [profile]="candidate.company"
+      [candidate]="candidate"
+    ></profile-card>
   </div>
 </ng-template>
 
-<ng-template #candidature let-company let-post="post" let-application="application">
+<ng-template
+  #candidature
+  let-company
+  let-post="post"
+  let-application="application"
+>
   <!-- <span *ngIf="amountSubContractor">{{ amountSubContractor }}</span> -->
-  <extended-profile class="content-with-header-and-footer" [showContact]="true" [profile]="profileSubContractor!" [showSwitch]="false" [showRecomandation]="false" [showView]="'ST'"></extended-profile>
+  <extended-profile
+    class="content-with-header-and-footer"
+    [showContact]="true"
+    [profile]="profileSubContractor!"
+    [showSwitch]="false"
+    [showRecomandation]="false"
+    [showView]="'ST'"
+  ></extended-profile>
   <footer class="sticky-footer flex center-cross application background-white">
-    <button class="button active full-width" (click)="handleApplication(post, application)">Traiter la candidature</button>
+    <button
+      class="button active full-width"
+      (click)="handleApplication(post, application)"
+    >
+      Traiter la candidature
+    </button>
   </footer>
 </ng-template>
 
