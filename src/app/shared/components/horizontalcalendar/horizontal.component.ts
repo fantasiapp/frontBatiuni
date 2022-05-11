@@ -29,7 +29,10 @@ export interface calendarItem {
   title: string,
   tasks: PostDetail[],
   date: string,
-  change: boolean
+  change: {
+    schedule: boolean,
+    deleted: boolean
+  }
 }
 
 @Component({
@@ -53,7 +56,8 @@ export interface calendarItem {
     )
   ]
 })
-export class HorizantaleCalendar implements OnInit {
+export class HorizontaleCalendar implements OnInit {
+  static NUMBER_OF_DAYS_DISPLAYED: number = 50;
   @ViewChild(CalendarUI, { static: true })
   calendar!: CalendarUI;
 
@@ -85,7 +89,6 @@ export class HorizantaleCalendar implements OnInit {
   greenCardFromTop: number = 0;
   greenCardHeight: number = 0;
   bilan?: MissionDetailedDay[] = [];
-  // detailedDays: MissionDetailedDay[] = []
   disponibilities!: Disponibility[];
   curDisponibility?: Disponibility;
 
@@ -106,9 +109,11 @@ export class HorizantaleCalendar implements OnInit {
     this.getDaysFromDate(now.getMonth() + 1, now.getFullYear());
     this.setSelectedDays();
     this.someFunction();
+    // console.log(moment(now));
     this.spanShowToday = moment(now)
       .locale('fr')
       .format('dddd D - MMMM - YYYY');
+
     this.showAgenda(moment(now).format('YYYY-MM-DD'));
     this.showColors();
   }
@@ -124,32 +129,18 @@ export class HorizantaleCalendar implements OnInit {
   }
 
   setSelectedDays() {
-    let currentDate = moment();
-    let daysInMonth = currentDate.daysInMonth();
-    let weekStart = currentDate.clone().startOf('isoWeek');
+    const currentDate = moment(),
+      currentDateFormated = currentDate.locale('fr').format('D,dddd,YYYY-MM-DD').split(','),
+      weekStart = currentDate.clone().startOf('isoWeek');
     let days = [];
-    for (var i = 1; i <= daysInMonth; i++) {
-      if (i == 1) {
-        days.push({
-          day: moment(weekStart)
-            .locale('fr')
-            .add(i, 'days')
-            .format('D,dddd,YYYY-MM-DD')
-            .split(','),
-          status: '',
-          selected: true,
-        });
-      } else {
-        days.push({
-          day: moment(weekStart)
-            .locale('fr')
-            .add(i, 'days')
-            .format('D,dddd,YYYY-MM-DD')
-            .split(','),
-          status: '',
-          selected: false,
-        });
-      }
+    for (let i = 0; i < HorizontaleCalendar.NUMBER_OF_DAYS_DISPLAYED; i++) {
+      const dayFormated = moment(weekStart).locale('fr').add(i, 'days').format('D,dddd,YYYY-MM-DD').split(',')
+      const selected = dayFormated[2] == currentDateFormated[2]
+      days.push({
+        day: dayFormated,
+        status: '',
+        selected: selected,
+      })
     }
     this.selectedDay = days;
   }
@@ -234,6 +225,7 @@ export class HorizantaleCalendar implements OnInit {
     this.spanShowToday = moment(date, 'YYYY-MM-DD')
       .locale('fr')
       .format('dddd D - MMMM - YYYY');
+
     let todayDates = this.detailedDays.filter((item) => item?.date == date);
 
     this.curDisponibility = undefined
@@ -253,30 +245,57 @@ export class HorizantaleCalendar implements OnInit {
         tasks: today.tasks,
         mission: today.mission,
         date: today.date,
-        change: this.dateChange(today.mission)
+        change: this.dateChange(today.mission, today.date)
       })
     }
+
+    console.log('currentCalendare', this.currentCardCalendars, todayDates);
     this.cd.markForCheck()
 
 
     console.log('currentCardCalendar', this.currentCardCalendars);
   }
 
-  dateChange(mission: Mission): boolean{
-    let isChange = false;
-    isChange = (!!mission.hourlyEndChange || !!mission.hourlyStartChange)
+  dateChange(mission: Mission, date: string): {schedule: boolean, deleted: boolean}{
+    let isChange = {
+      schedule: false,
+      deleted: false
+    };
+    console.log('missions;', mission);
+
+    let datesId;
+    if (typeof mission.dates === "object" && !Array.isArray(mission.dates))
+      datesId = Object.keys(mission.dates).map(key => (+key as number))
+    else datesId = mission.dates
+
+    let dates = this.store.selectSnapshot(DataQueries.getMany('DatePost', datesId))
+    console.log('dates', dates);
+    for (const datePost of dates) {
+      if(datePost.date == date) isChange.deleted = datePost.deleted
+    }
+    if(!isChange.deleted) isChange.schedule = (!!mission.hourlyEndChange || !!mission.hourlyStartChange) 
     return isChange
   }
 
-  onCardUpdate(card: calendarItem){
+  onCardUpdate(dayDestroy: boolean | null, card: calendarItem){
     let mission = this.store.selectSnapshot(DataQueries.getById('Mission', card.mission.id))
     let heightTop = this.calculator(mission!.hourlyStart, mission!.hourlyEnd)
     
     card.mission = mission!
     card.cardFromTop = heightTop[0]
     card.cardHeight = heightTop[1]
-    card.change = this.dateChange(mission!);
-  
+    card.change = this.dateChange(mission!, card.date);
+
+    if(dayDestroy){
+      let newCardCalendars: calendarItem[] = [];
+      for (let curCard of this.currentCardCalendars) {
+        if(curCard.mission.id != card.mission.id || curCard.date != card.date) newCardCalendars.push(curCard)
+      }
+      this.currentCardCalendars = newCardCalendars
+    } else if (dayDestroy == false){
+      card.change.deleted = false
+    }
+    
     this.cd.markForCheck()
   }
 

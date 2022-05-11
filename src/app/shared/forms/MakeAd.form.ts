@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostBinding, Input, Output, ViewChild } from "@angular/core";
-import { FormArray, FormControl, FormGroup, Validators } from "@angular/forms";
+import { AbstractControl, FormArray, FormControl, FormGroup, Validators } from "@angular/forms";
 import { Store } from "@ngxs/store";
+import * as moment from "moment";
 import { take, takeLast } from "rxjs/operators";
 import { footerTranslate } from "src/animations/footer.animation";
 import { Post, Job } from "src/models/new/data.interfaces";
@@ -324,9 +325,19 @@ export class MakeAdForm {
     })
   }
 
+  // Valide un brouillon/annonce qui si la date d'echeance est dans le futur, c'est plus commode 
+  dueDateValidator(control: AbstractControl): {[key :string]: any} | null {
+    console.log('controle', moment(control.value), moment())
+    if(control.value && moment(control.value) <= moment()){
+      return {'dueDateInvalid': true}
+    }
+    return null
+  }
+
+  
 
   makeAdForm = new FormGroup({
-    dueDate: new FormControl('2022-01-24'),
+    dueDate: new FormControl('2022-05-24', [Validators.required, this.dueDateValidator]),
     manPower: new FormControl(0),
     job: new FormControl([], [Validators.required]),
     address: new FormControl('1 Rue Joliot Curie, 91190 Gif-sur-Yvette', [Validators.required]),

@@ -11,6 +11,7 @@ import { DataQueries, DataState } from 'src/models/new/data.state';
 import { CreateDetailedPost, CreateSupervision, ModifyDetailedPost, UploadImageSupervision } from 'src/models/new/user/user.actions';
 import { SuiviPME } from '../suivi_pme/suivi-pme.page';
 
+
 @Component({
   selector: 'suivi-chantier-date-content',
   templateUrl: './suivi_chantier_date-content.component.html',
@@ -148,10 +149,16 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
     ]),
   });
 
-  detectKey($event: KeyboardEvent, task: Task| null, inputEl: HTMLTextAreaElement | HTMLInputElement){
+  detectKey( task: Task| null, inputEl: HTMLTextAreaElement | HTMLInputElement){
     console.log('keyup');
     this.mainComment(task, inputEl);
-    // inputEl.value = '';
+    inputEl.value = '';
+  }
+
+  textareaSubmit(e: Event,input: HTMLFormElement){
+    console.log('object');
+    input.dispatchEvent(new Event("submit", {cancelable: true}));
+    e.preventDefault(); // Prevents the addition of a new line in the text field (not needed in a lot of cases)
   }
   mainComment(task:Task | null, inputEl: HTMLTextAreaElement | HTMLInputElement) {
     let idInput = task ? "input_"+task!.id : "input_general"

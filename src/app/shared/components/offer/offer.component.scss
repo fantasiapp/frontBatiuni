@@ -8,6 +8,8 @@
   display: flex;
   margin-bottom: 1rem;
   line-height: 1rem;
+  touch-action: unset !important;
+  -webkit-user-drag: unset !important
 }
 
 .notification {

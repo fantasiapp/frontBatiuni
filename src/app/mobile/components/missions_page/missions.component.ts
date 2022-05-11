@@ -6,7 +6,7 @@ import { Destroy$ } from "src/app/shared/common/classes";
 import { assignCopy } from "src/app/shared/common/functions";
 import { MissionDetailedDay } from "src/app/shared/components/horizontalcalendar/horizontal.component";
 import { InfoService } from "src/app/shared/components/info/info.component";
-import { DateG, Mission, PostDetail, PostMenu, Profile } from "src/models/new/data.interfaces";
+import { DateG, Mission, PostDate, PostDetail, PostMenu, Profile, Ref } from "src/models/new/data.interfaces";
 import { DataQueries, QueryAll } from "src/models/new/data.state";
 import { CloseMissionST } from "src/models/new/user/user.actions";
 
@@ -50,12 +50,14 @@ export class MissionsComponent extends Destroy$ {
     combineLatest([this.profile$, this.missions$]).pipe(takeUntil(this.destroy$)).subscribe(([profile, missions]) => {
       //filter own missions
       //for now accept all missions
+      
       this.allMyMissions = missions.filter(mission => mission.subContractor == profile.company.id);
       //compute work days
 
       this.detailedDays = [];
       let usedDay: number[] = []
-      for ( const mission of this.allMyMissions ) {
+      for ( let mission of this.allMyMissions ) {
+        mission = this.store.selectSnapshot(DataQueries.getById('Mission', mission.id)) as Mission
         const availabilities = this.store.selectSnapshot(DataQueries.getMany('Disponibility', profile.company.availabilities))
         const start = moment(mission.startDate),
           end = moment(mission.endDate),
@@ -65,14 +67,18 @@ export class MissionsComponent extends Destroy$ {
         
         // const diffDays = end.diff(start, 'days', true);
         // let day = start.clone();
-        console.log('Mission;', mission);
-        
+        let missionDatesId: Ref<PostDate>[];
+        if (typeof mission.dates === "object" && !Array.isArray(mission.dates)) {
+          missionDatesId = Object.keys(mission.dates).map(key => (+key as number))
+        }
+        else missionDatesId = mission.dates
         let dateAlreadyParsedFromMission:string[] = []
 
-        for(let i= 0; i < mission.dates.length; i++){
-          const dateid = mission.dates[i]
+        for(let i= 0; i < missionDatesId.length; i++){
+          const dateid = missionDatesId[i]
           let date = this.store.selectSnapshot(DataQueries.getById('DatePost', dateid))
   
+          console.log('date', date);
           dateAlreadyParsedFromMission.push(date!.date)
   
           this.detailedDays.push({
@@ -82,9 +88,9 @@ export class MissionsComponent extends Destroy$ {
             tasks: []
           })
           for (const task of tasks) {
-            if(dateAlreadyParsedFromMission.includes(task.date)) {
+            if(date!.date == task.date){
               let lenght = this.detailedDays.length
-              if (lenght != 0) this.detailedDays[lenght -1].tasks.push(task)
+              if (lenght != 0) this.detailedDays[lenght -1].tasks.push(task)  
             }
           }
         }
