@@ -18,7 +18,7 @@ import { UISwitchComponent } from "./components/switch/switch.component";
 import { FileUI } from "./components/filesUI/files.ui";
 import { RegisterForm } from "./forms/register.form";
 import { RouterModule } from "@angular/router";
-import { ReactiveFormsModule } from "@angular/forms";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { SlidesDirective } from "./directives/slides.directive";
 import { EmailConfirmation } from "./validators/email_confirmation/emailconfirmation.component";
 import { RegistrationSuccess } from "./validators/registration_success/registrationsuccess.component";
@@ -134,7 +134,7 @@ import { NotificationAgendaComponent } from './components/notification-agenda/no
     CommonModule,
     NgxSliderModule,
     RouterModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ],
   exports: [
     OptionsModel,

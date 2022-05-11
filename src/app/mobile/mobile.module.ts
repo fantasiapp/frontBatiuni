@@ -20,7 +20,7 @@ import { SuiviPME } from "./components/suivi_pme/suivi-pme.page";
 import { SuiviChantierDate } from "./components/suivi_chantier_date/suivi_chantier_date.page";
 import { UIModule } from "./ui/ui.module";
 import { SharedModule } from "../shared/shared.module";
-import { ReactiveFormsModule } from "@angular/forms";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { AppRoutingModule } from "./routing/mobile-routing.module";
 import { ForgotPassword } from "./components/forgot_password/forgot.password";
 import { MailSender } from "./components/only_mail/only.mail";
@@ -60,6 +60,7 @@ import { SuiviChantierDateContentComponent } from './components/suivi_chantier_d
     UIModule,
     AppRoutingModule,
     ReactiveFormsModule,
+    FormsModule,
   ]
 })
 export class MobileModule {}

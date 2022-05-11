@@ -34,9 +34,9 @@
       </div>
       <div *ngIf="!mission!.isClosed" class="partenerComment">
         <div  class="divComment">
-          <!-- <form [formGroup]="formMain" (ngSubmit)="detectKey($event, null, chantierMain)"> -->
-            <textarea id="input_general" rows="5" class="inputComment mainInputComment"  type="submit" placeholder="Ajouter un commentaire" (keyup.enter)="detectKey(null, chantierMain)" #chantierMain></textarea>
-          <!-- </form> -->
+          <form [formGroup]="formMain" (submit)="detectKey( null, chantierMain)" #formMainTest>
+            <textarea id="input_general" class="inputComment mainInputComment" (keyup.enter)="textareaSubmit($event, formMainTest)" type="text" placeholder="Ajouter un commentaire" formControlName="commentMain" #chantierMain></textarea>
+          </form>
           <img (click)="swipeMenuImage = true" src="assets/camera.png"/>
         </div>
       </div>
