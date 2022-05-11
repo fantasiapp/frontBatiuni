@@ -6,59 +6,59 @@
       <span tab_2>Validées</span>
     </page-header>
     
-    <div class="hosted-page space-children-margin page-content-with-tabs" [ngClass]="{'footerHideMobile': !showFooter}">
-      <!-- Page pour PME -->
-      <ng-container *ngIf="view == 'PME'; else stview">
-        <ng-container *ngIf="(posts$ | async) as posts" [ngSwitch]="activeView">
-          <ng-container *ngSwitchCase="0">
-            <offer
-              *ngFor="let draft of userDrafts"
-              src="assets/brouillon.svg"
-              [deletable]="true"
-              [post]="draft"
-              (click)="openDraft(draft)"
-              [view]="'PME'"
-              ></offer> 
+      <div class="hosted-page space-children-margin page-content-with-tabs" [ngClass]="{'footerHideMobile': !showFooter}">
+          <!-- Page pour PME -->
+          <ng-container *ngIf="view == 'PME'; else stview">
+            <ng-container *ngIf="(posts$ | async) as posts" [ngSwitch]="activeView">
+              <ng-container *ngSwitchCase="0">
+                <offer
+                  *ngFor="let draft of userDrafts"
+                  src="assets/brouillon.svg"
+                  [deletable]="true"
+                  [post]="draft"
+                  (click)="openDraft(draft)"
+                  [view]="'PME'"
+                  ></offer> 
+              </ng-container>
+              <ng-container *ngSwitchCase="1">
+                <offer
+                  *ngFor="let onlinePost of userOnlinePosts"
+                  src="assets/enligne.svg"
+                  [showCandidate]="view == 'PME'"
+                  [deletable]="false"
+                  [post]="onlinePost"
+                  (click)="openPost(onlinePost); updateCurrentPost(onlinePost)"
+                  [view]="'PME'"
+                  ></offer>
+              </ng-container>
+              <ng-container *ngSwitchCase="2">
+                <offer
+                  *ngFor="let mission of missions"
+                  [post]="mission"
+                  src="assets/validée.svg"
+                  (click)="openMission(mission)"
+                  [view]="'PME'"
+                ></offer>
+              </ng-container>
+            </ng-container>
           </ng-container>
-          <ng-container *ngSwitchCase="1">
-            <offer
-              *ngFor="let onlinePost of userOnlinePosts"
-              src="assets/enligne.svg"
-              [showCandidate]="view == 'PME'"
-              [deletable]="false"
-              [post]="onlinePost"
-              (click)="openPost(onlinePost); updateCurrentPost(onlinePost)"
-              [view]="'PME'"
-              ></offer>
-          </ng-container>
-          <ng-container *ngSwitchCase="2">
-            <offer
-              *ngFor="let mission of missions"
-              [post]="mission"
-              src="assets/validée.svg"
-              (click)="openMission(mission)"
-              [view]="'PME'"
-            ></offer>
-          </ng-container>
-        </ng-container>
-      </ng-container>
-  
-      <!-- Page pour ST -->
-      <ng-template #stview>
-        <ng-container [ngSwitch]="activeView">
-          <ng-container *ngSwitchCase="0">
-            <offer
-              *ngFor="let onlinePost of displayOnlinePosts"
-              [deletable]="false"
-              [post]="onlinePost"
-              (click)="openPost(onlinePost)"
-              [view]="'ST'"
-              ></offer>
-          </ng-container>
-
-          <mapbox-batiuni [posts]="allOnlinePosts" class="space-children-margin" *ngSwitchCase="1" (postClick)="openPost($event)"></mapbox-batiuni>
-        </ng-container>
-      </ng-template>
+      
+          <!-- Page pour ST -->
+          <ng-template #stview>
+            <ng-container [ngSwitch]="activeView">
+              <ng-container *ngSwitchCase="0">
+                <offer
+                  *ngFor="let onlinePost of displayOnlinePosts"
+                  [deletable]="false"
+                  [post]="onlinePost"
+                  (click)="openPost(onlinePost)"
+                  [view]="'ST'"
+                  ></offer>
+              </ng-container>
+    
+              <mapbox-batiuni [posts]="allOnlinePosts" class="space-children-margin" *ngSwitchCase="1" (postClick)="openPost($event)"></mapbox-batiuni>
+            </ng-container>
+          </ng-template>
     </div>
     
     <!-- <swipeup [(open)]="openAdFilterMenu" type="view">
