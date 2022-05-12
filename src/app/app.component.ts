@@ -42,6 +42,7 @@ export class AppComponent extends Destroy$ {
   }
 
   ready$ = new AsyncSubject<true>();
+  readyToUpdate: boolean = false;
 
   async ngOnInit() {
     await this.store.dispatch(new Load()).toPromise();
@@ -62,13 +63,13 @@ export class AppComponent extends Destroy$ {
   }
 
   async updateUserData() {
-    while (false) {
-      console.log(this.getUserdata());
+    while (this.readyToUpdate) {
+      console.log(this.getUserData());
       await this.delay(10000);
     }
   }
 
-  getUserdata() {
+  getUserData() {
     let token = this.store.selectSnapshot(AuthState.token);
 
     if (!token) return throwError("no token");

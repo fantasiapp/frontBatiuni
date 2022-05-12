@@ -477,7 +477,6 @@ export class MakeAdForm {
 
   // Valide un brouillon/annonce qui si la date d'echeance est dans le futur, c'est plus commode
   dueDateValidator(control: AbstractControl): { [key: string]: any } | null {
-    console.log("controle", moment(control.value), moment());
     if (control.value && moment(control.value) <= moment()) {
       return { dueDateInvalid: true };
     }

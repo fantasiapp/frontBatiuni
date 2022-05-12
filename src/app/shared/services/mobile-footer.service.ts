@@ -4,37 +4,35 @@ import { Keyboard } from "@capacitor/keyboard";
 import { BehaviorSubject } from "rxjs";
 
 @Injectable()
-export class Mobile{
-    showFooter: boolean = true;
+export class Mobile {
+  showFooter: boolean = true;
 
-    footerStateSubject = new BehaviorSubject(true)
-    footerState = this.footerStateSubject.asObservable()
-    
-    constructor(){
-    }
-    init(){
-        if (Capacitor.getPlatform() !== "web") {
-            Keyboard.setAccessoryBarVisible({isVisible: true})
-            Keyboard.addListener('keyboardWillShow', (info: any) => {
-                this.footerStateSubject.next(false)
-            });
-                Keyboard.addListener('keyboardDidHide', () => {
-                console.log('keyboard did hide');
-                this.footerStateSubject.next(true)
-            });
-        }
-    }
+  footerStateSubject = new BehaviorSubject(true);
+  footerState = this.footerStateSubject.asObservable();
 
-    test1(){
-        this.footerStateSubject.next(true)
+  constructor() {}
+  init() {
+    if (Capacitor.getPlatform() !== "web") {
+      Keyboard.setAccessoryBarVisible({ isVisible: true });
+      Keyboard.addListener("keyboardWillShow", (info: any) => {
+        this.footerStateSubject.next(false);
+      });
+      Keyboard.addListener("keyboardDidHide", () => {
+        this.footerStateSubject.next(true);
+      });
     }
-    test2(){
-        this.footerStateSubject.next(false)
+  }
+
+  test1() {
+    this.footerStateSubject.next(true);
+  }
+  test2() {
+    this.footerStateSubject.next(false);
+  }
+
+  destroy() {
+    if (Capacitor.getPlatform() !== "web") {
+      Keyboard.removeAllListeners();
     }
-    
-    destroy(){
-        if (Capacitor.getPlatform() !== "web") {
-            Keyboard.removeAllListeners()
-        }
-    }
-} 
+  }
+}

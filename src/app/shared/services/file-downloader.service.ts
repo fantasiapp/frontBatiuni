@@ -12,28 +12,29 @@ import { FileContext } from "../components/file-viewer/file-viewer.component";
 
 @Injectable()
 export class FileDownloader {
-  constructor(private sanitizer: DomSanitizer, private store: Store) {
-
-  }
+  constructor(private sanitizer: DomSanitizer, private store: Store) {}
 
   toSecureBase64(file: BasicFile) {
     //assume downloaded
-    // console.log('to secure 64', file);
-    if ( !file.content )
-      throw `Download file before using base64`;
-    return this.sanitizer.bypassSecurityTrustResourceUrl(`data:${getFileType(file.ext)};base64,${file.content}`)
+    if (!file.content) throw `Download file before using base64`;
+    return this.sanitizer.bypassSecurityTrustResourceUrl(
+      `data:${getFileType(file.ext)};base64,${file.content}`
+    );
   }
 
   createFileContext(file: BasicFile): FileContext {
     const type = getFileType(file.ext),
-      blob = b64toBlob(Array.isArray(file.content) ? file.content[0] : file.content, type),
+      blob = b64toBlob(
+        Array.isArray(file.content) ? file.content[0] : file.content,
+        type
+      ),
       url = URL.createObjectURL(blob),
       context: FileContext = {
         type,
         url,
-        safeUrl: this.sanitizer.bypassSecurityTrustResourceUrl(url)
+        safeUrl: this.sanitizer.bypassSecurityTrustResourceUrl(url),
       };
-    
+
     return context;
   }
 
@@ -43,17 +44,15 @@ export class FileDownloader {
 
   downloadFile(file: File | number, notify: boolean = false): Observable<File> {
     let id: number;
-    if ( typeof file == 'number' )
-      id = file;
-    else
-      if ( file.content ) return of(file);
-      else id = file.id
-    
+    if (typeof file == "number") id = file;
+    else if (file.content) return of(file);
+    else id = file.id;
+
     return this.store.dispatch(new DownloadFile(id, notify)).pipe(
       take(1), //will unsubscribe
-      map(_ => {
-        return this.store.selectSnapshot(DataQueries.getById('File', id))!
+      map((_) => {
+        return this.store.selectSnapshot(DataQueries.getById("File", id))!;
       })
     );
   }
-};
+}
