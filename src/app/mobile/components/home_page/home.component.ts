@@ -340,7 +340,6 @@ export class HomeComponent extends Destroy$ {
 
   setFavorite(fav: any) {
     this.store.dispatch(new SetFavorite(!!fav, this.postMenu.post!.id));
-    console.log("setFavorite", this.postMenu.post);
   }
 
   openMission(mission: Mission | null) {
@@ -445,7 +444,6 @@ export class HomeComponent extends Destroy$ {
   }
 
   applyPost(post: Post, form: ApplyForm) {
-    console.log("applyPost", form)
     this.info.show("info", "Candidature en cours...", Infinity);
     this.store
       .dispatch(new ApplyPost(post.id, form))
@@ -471,7 +469,6 @@ export class HomeComponent extends Destroy$ {
           name: "Valider la candidature",
           class: "validate application-response",
           click: () => {
-            console.log("valider la candidature");
             this.store
               .dispatch(new HandleApplication(application, post, true))
               .pipe(take(1))
@@ -490,7 +487,6 @@ export class HomeComponent extends Destroy$ {
               .dispatch(new HandleApplication(application, post, false))
               .pipe(take(1))
               .subscribe(() => {
-                console.log("refuser la candidature");
                 this.openPost(null);
                 this.cd.markForCheck();
               });
@@ -521,7 +517,6 @@ export class HomeComponent extends Destroy$ {
     this.amountSubContractor = candidate?.amount
       ? "Contre-Offre: " + candidate!.amount.toString() + " €"
       : null;
-    console.log("to declare viewed");
     this.store
       .dispatch(new CandidateViewed(application))
       .pipe(take(1))
@@ -547,7 +542,6 @@ export class HomeComponent extends Destroy$ {
   slideOnlinePostClose() {
     // Close View
     this.slideOnlinePost.close();
-    console.log("slideOnlinePostClose", this.postMenu.post);
 
     // Update
     this.annonceResume.close();

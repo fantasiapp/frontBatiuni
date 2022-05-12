@@ -409,7 +409,6 @@ export class MakeAdForm {
       DataQueries.getMany("File", p.files)
     );
     //fill form
-    console.log("counterOffer", p)
     this.makeAdForm.get("dueDate")?.setValue(p.dueDate);
     this.makeAdForm.get("manPower")?.setValue(p.manPower);
     this.makeAdForm.get("job")?.setValue(p.job ? [{ id: p.job }] : []);
@@ -516,7 +515,7 @@ export class MakeAdForm {
       Validators.required,
     ]),
     numberOfPeople: new FormControl(1),
-    counterOffer: new FormControl(true),
+    counterOffer: new FormControl(false),
     hourlyStart: new FormControl("07:30:00"),
     hourlyEnd: new FormControl("17:30:00"),
     currency: new FormControl(
