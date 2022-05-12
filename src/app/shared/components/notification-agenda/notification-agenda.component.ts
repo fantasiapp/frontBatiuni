@@ -23,16 +23,17 @@ export class NotificationAgendaComponent {
   @Input() field!: string;
   @Input() date!: string;
 
-  @Output() cardUpdate: EventEmitter<boolean> = new EventEmitter();
+  @Output() cardUpdate: EventEmitter<any> = new EventEmitter();
 
   constructor(private cd: ChangeDetectorRef, private store: Store) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+  }
 
-  validate() {
+  validateHour(b: boolean) {
     this.store
       .dispatch(
-        new ValidateMissionDate(this.card.mission.id, this.field, true, "")
+        new ValidateMissionDate(this.card.mission.id, this.field, b, "")
       )
       .pipe()
       .subscribe(() => {
@@ -40,16 +41,6 @@ export class NotificationAgendaComponent {
       });
   }
 
-  refuse() {
-    this.store
-      .dispatch(
-        new ValidateMissionDate(this.card.mission.id, this.field, false, "")
-      )
-      .pipe()
-      .subscribe(() => {
-        this.cardUpdate.emit();
-      });
-  }
 
   deleted(b: boolean) {
     this.field = "date";
@@ -60,7 +51,7 @@ export class NotificationAgendaComponent {
       )
       .pipe()
       .subscribe(() => {
-        this.cardUpdate.emit(b);
+        this.cardUpdate.emit([b, this.card.change]);
       });
   }
 }
