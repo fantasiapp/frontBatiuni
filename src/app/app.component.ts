@@ -16,6 +16,7 @@ import { Mobile } from "./shared/services/mobile-footer.service";
 import { AuthState } from "src/models/auth/auth.state";
 import { catchError } from "rxjs/operators";
 import { Logout } from "src/models/auth/auth.actions";
+import { delay } from "./shared/common/functions";
 
 @Component({
   selector: "app-root",
@@ -63,9 +64,17 @@ export class AppComponent extends Destroy$ {
   }
 
   async updateUserData() {
-    while (this.readyToUpdate) {
-      console.log(this.getUserData());
-      await this.delay(10000);
+    while (false) {
+      console.log(
+        "changeReadyToUpdate",
+        this.changeReadyToUpdate(false),
+        this.readyToUpdate
+      );
+      if (this.readyToUpdate) {
+        console.log("getUserData", this.getUserData());
+        await delay(5000);
+      }
+      await delay(5000);
     }
   }
 
@@ -82,8 +91,19 @@ export class AppComponent extends Destroy$ {
     );
   }
 
-  delay(ms: number) {
-    return new Promise((resolve) => setTimeout(resolve, ms));
+  changeReadyToUpdate(bool?: boolean) {
+    if (bool !== null) {
+      this.readyToUpdate = bool!;
+      console.log(
+        "changeReadyToUpdate",
+        "bool :",
+        bool,
+        "readyToUpdate",
+        this.readyToUpdate
+      );
+    } else {
+      this.readyToUpdate = !this.readyToUpdate;
+    }
   }
 
   // mobileInit(){

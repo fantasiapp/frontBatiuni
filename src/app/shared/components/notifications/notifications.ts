@@ -102,7 +102,6 @@ export class Notifications {
   }
 
   ngOnInit() {
-    console.log("ngOnInit");
     this.notifications.sort(
       (notification1: Notification, notification2: Notification) =>
         notification1.timestamp > notification2.timestamp ? 1 : -1

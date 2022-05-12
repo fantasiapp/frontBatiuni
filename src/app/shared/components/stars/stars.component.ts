@@ -1,4 +1,12 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, HostBinding, HostListener, Input } from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  HostBinding,
+  HostListener,
+  Input,
+} from "@angular/core";
 import { NG_VALUE_ACCESSOR } from "@angular/forms";
 import { UIDefaultAccessor } from "../../common/classes";
 
@@ -6,37 +14,47 @@ export const ratingStarWidth = 18;
 
 //add to forms
 @Component({
-  selector: 'stars',
+  selector: "stars",
   template: `
-    <span [style.background-image]="this.fullStarUrl" [style.width]="spanWidth"></span>
+    <span
+      [style.background-image]="this.fullStarUrl"
+      [style.width]="spanWidth"
+    ></span>
   `,
-  styleUrls: ['./stars.component.scss'],
+  styleUrls: ["./stars.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [{
-    provide: NG_VALUE_ACCESSOR,
-    multi: true,
-    useExisting: UIStarsComponent
-  }]
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      multi: true,
+      useExisting: UIStarsComponent,
+    },
+  ],
 })
 export class UIStarsComponent extends UIDefaultAccessor<string | number> {
-  @HostBinding('style.background-image')
+  @HostBinding("style.background-image")
   get emptyStarUrl() {
     return `url(assets/starEmpty.svg)`;
   }
 
   private _number: number = 5;
-  get number() { return this._number; }
+  get number() {
+    return this._number;
+  }
 
-  @Input('number')
-  set number(x: number) { this._number = Math.max(1, Math.floor(x)); }
+  @Input("number")
+  set number(x: number) {
+    this._number = Math.max(1, Math.floor(x));
+  }
 
-  @HostBinding('style.width')
+  @HostBinding("style.width")
   get width() {
-    return (this.number * ratingStarWidth) + 'px'; }
-  
+    return this.number * ratingStarWidth + "px";
+  }
+
   get spanWidth() {
-    return (+(this.value!) * ratingStarWidth) + 'px';
-  } 
+    return +this.value! * ratingStarWidth + "px";
+  }
 
   get fullStarUrl() {
     return `url(assets/starFull.svg)`;
@@ -46,19 +64,21 @@ export class UIStarsComponent extends UIDefaultAccessor<string | number> {
     super(cd);
   }
 
-  @HostListener('click', ['$event'])
-  private onClick(e: MouseEvent) { this.onChange(e); }
+  @HostListener("click", ["$event"])
+  private onClick(e: MouseEvent) {
+    this.onChange(e);
+  }
 
   @Input()
   step: number = 0.5;
 
   //between 0 - 1, how much of a step to push
   @Input() threshold: number = 0.5;
-  
+
   _toggleMode: boolean = false;
-  @Input('toggle')
+  @Input("toggle")
   set toggleOption(toggle: boolean) {
-    if ( toggle ) {
+    if (toggle) {
       this.number = 1;
       this.step = 1;
       this.threshold = 0;
@@ -66,19 +86,17 @@ export class UIStarsComponent extends UIDefaultAccessor<string | number> {
     }
   }
 
-
   protected getInput(e: MouseEvent): string | number {
-    if ( this._toggleMode ) {
+    if (this._toggleMode) {
       //works with undefined so cool
-      console.log("getInput", this.value)
       return +!+this.value!;
     }
 
     const rect = this.ref.nativeElement.getBoundingClientRect() as DOMRect,
       q = 1 / this.step;
-    
+
     //const value = Math.round((e.clientX - rect.x)/rect.width * (this.number * q)) / q;
-    const ratio = (e.clientX - rect.x)/rect.width * (this.number * q),
+    const ratio = ((e.clientX - rect.x) / rect.width) * (this.number * q),
       floor = Math.floor(ratio),
       frac = ratio - floor,
       value = frac >= this.threshold ? (floor + 1) / q : floor / q;

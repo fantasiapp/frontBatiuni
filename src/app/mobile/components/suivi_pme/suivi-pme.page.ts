@@ -195,7 +195,6 @@ export class SuiviPME {
     supervisionsTask: number[]
   ): Supervision[] {
     let supervisions: Supervision[] = [];
-    console.log(this.mission!);
     let allSupervisions: (Supervision | null)[] =
       this.mission!.supervisions.map((id) => {
         let supervision = this.store.selectSnapshot(
