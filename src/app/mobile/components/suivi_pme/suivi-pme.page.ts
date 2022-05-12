@@ -35,7 +35,7 @@ export class SuiviPME {
   view: 'ST' | 'PME' = "PME";
   mission: Mission | null = null
   swipeupModifyDate:boolean = false
-  alert: string = "."
+  alert: string = ""
 
   _missionMenu: PostMenu<Mission> = new PostMenu<Mission>()
   get missionMenu() { return this._missionMenu }
@@ -303,15 +303,18 @@ export class SuiviPME {
       return dayState.date
     })
     let blockedDates = this.computeBlockedDate()
+
+    console.log('submitdate', datesSelected, blockedDates);
     this.alert = ""
     let dateToBeSelected:string[] = []
-
+    
     blockedDates.forEach((date) => {
       if (!datesSelected.includes(date)) {
         this.alert += `La date ${date} doit obligatoirement être sélectionnée.\r\n`
         dateToBeSelected.push(date)
       }
     })
+    console.log('ToBeSelected', dateToBeSelected);
     
     this.setupDayState(dateToBeSelected)
     this.saveToBackAdFormDate()
@@ -347,9 +350,10 @@ export class SuiviPME {
   computeBlockedDate() : string[] {
     let listBlockedDate:string[] = []
     let listDetailedPost = this.mission!.details
+    console.log('listDetailedPost', listDetailedPost);
     listDetailedPost.forEach( (detailId) => {
       let detailDate = this.store.selectSnapshot(DataQueries.getById('DetailedPost', detailId))!.date
-      if (!listBlockedDate.includes(detailDate))
+      if (detailDate && !listBlockedDate.includes(detailDate))
         listBlockedDate.push(detailDate)
     })
     return listBlockedDate

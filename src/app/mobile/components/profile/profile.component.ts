@@ -43,16 +43,21 @@ export class ProfileComponent extends Destroy$ {
   notifications: Notification[] = []
   companyId:number = -1
 
-  get openNotifications() {return this._openNotifications}
+  get openNotifications() {
+    return this._openNotifications}
+
+
   set openNotifications(b: boolean) {
     this._openNotifications = !this._openNotifications
     if (b) {
       const view = this.store.selectSnapshot(DataState.view)
       this.store.dispatch(new NotificationViewed(this.companyId, view)).pipe(take(1)).subscribe(() => {
+        const profile = this.store.selectSnapshot(DataQueries.currentProfile)
+        this.updateProfile(profile)
+        this.cd.markForCheck()
       });
     } else {
-      const profile = this.store.selectSnapshot(DataQueries.currentProfile)
-      this.updateProfile(profile)
+      this.notificationsUnseen = 0
       this.cd.markForCheck()
     }
   }
@@ -98,7 +103,6 @@ export class ProfileComponent extends Destroy$ {
 
   slideInviteFriends() {
     let content = document.getElementById("inviteFriendInput") as HTMLInputElement;
-    console.log("slideInviteFriends", content?.value)
     // this.store.dispatch(new CloseMissionST(this.missionToClose!.id, this.missionToClose!.vibeST, this.missionToClose!.vibeCommentST, this.missionToClose!.securityST, this.missionToClose!.securityCommentST, this.missionToClose!.organisationST, this.missionToClose!.organisationCommentST)).pipe(take(1)).subscribe(() => {
     this.openMenu = false;
     this.openInviteFriendMenu = true

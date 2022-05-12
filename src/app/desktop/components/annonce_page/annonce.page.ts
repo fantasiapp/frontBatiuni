@@ -27,7 +27,7 @@ export class AnnoncePage {
 
   ngOnInit() {
     let id = this.router.snapshot.params.id;
-    if (id !== undefined) this.post = this.store.selectSnapshot(DataQueries.getById('Post', id));
+    if (id !== undefined) this.post = this.store.selectSnapshot(DataQueries.getById('Post', id))
   }
   scrollTo(id: number) {
     let name = scrollmapper[id];
