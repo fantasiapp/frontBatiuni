@@ -9,6 +9,7 @@ import { InfoService } from "src/app/shared/components/info/info.component";
 import { DateG, Mission, PostDate, PostDetail, PostMenu, Profile, Ref } from "src/models/new/data.interfaces";
 import { DataQueries, QueryAll } from "src/models/new/data.state";
 import { CloseMissionST } from "src/models/new/user/user.actions";
+import { getLevenshteinDistance } from "src/app/shared/services/levenshtein";
 
 import * as moment from 'moment';
 
@@ -117,16 +118,29 @@ export class MissionsComponent extends Destroy$ {
     this.myMissions = [];
     if (filter == null ) { this.myMissions = this.allMyMissions }
     else {
+      // Array qui contiendra les posts et leur valeur en distance Levenshtein pour une adresse demandée
+      let levenshteinDist: any = []; 
+      if ( filter.address ) { 
+        for (let mission of this.allMyMissions) {
+          levenshteinDist.push([mission, getLevenshteinDistance(mission.address.toLowerCase(), filter.address.toLowerCase())]);
+        }
+        levenshteinDist.sort((a: any,b: any) => a[1] - b[1]);
+        let keys = levenshteinDist.map((key: any) => { return key[0] });    
+
+        // On trie les posts selon leur distance de levenshtein
+        this.allMyMissions.sort((a: any,b: any)=>keys.indexOf(a) - keys.indexOf(b));
+      } else {
+        this.allMyMissions.sort((a,b) => {return a['id'] - b['id']})
+      }
       for (let mission of this.allMyMissions) {
       
       let isDifferentValidationDate = (filter.validationDate && filter.validationDate != mission.dueDate)
       let isNotInMissionDate = (filter.missionDate && mission.dates.every((date: number) => {console.log(date, filter.missionDate); return date != filter.missionDate}));        
-      let isNotIncludedAddress = (filter.address && mission.address.toLowerCase().search(filter.address.toLowerCase()) == -1)
       let isDifferentManPower = (filter.manPower && mission.manPower != (filter.manPower === "true"))
       let isNotIncludedJob = (filter.jobs && filter.jobs.length && filter.jobs.every((job: any) => {return job.id != mission.job}))
       let isUnread = filter.unread; // TODO check if unread button is on
 
-      if ( isDifferentValidationDate || isNotInMissionDate || isDifferentManPower || isNotIncludedAddress || isNotIncludedJob) { continue }
+      if ( isDifferentValidationDate || isNotInMissionDate || isDifferentManPower || isNotIncludedJob) { continue }
       this.myMissions.push(mission)
       }
   }
