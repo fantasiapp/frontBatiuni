@@ -142,7 +142,7 @@
               class="notification"
             ></span>
           </li>
-          <li [routerLink]="['', 'booster']">
+          <li (click)="slideBooster()">
             <img src="assets/booster.svg" />Booster Mon annonce
           </li>
           <li (click)="deletePost(postMenu.post!.id)">
@@ -158,6 +158,9 @@
       </ng-container>
     </slidemenu>
 
+    <!-- <slidemenu [(open)]="postMenu.openBooster()">
+
+    </slidemenu> -->
     <!-- Component Mission -->
     <slidemenu [(open)]="missionMenu.open" [header]="false" #slideMission>
       <header
@@ -244,6 +247,9 @@
   </footer>
 </ng-template>
 
+<ng-template #booster let-post="post">
+  <booster-page></booster-page>
+</ng-template>
 <!-- <swipeup [(open)]="missionMenu.swipeup">
   <li >Modifier les horaires / les dates de présence</li>
   <li>Appeler le 06 34 09 06 94</li>

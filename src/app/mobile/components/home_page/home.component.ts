@@ -112,6 +112,9 @@ export class HomeComponent extends Destroy$ {
   @ViewChild("suiviPME", { read: TemplateRef, static: true })
   suiviChantier!: TemplateRef<any>;
 
+  @ViewChild("booster", { read: TemplateRef, static: true })
+  boosterTemplate!: TemplateRef<any>;
+
   activeView: number = 0;
   _openCloseMission: boolean = false;
   openAdFilterMenu: boolean = false;
@@ -578,4 +581,16 @@ export class HomeComponent extends Destroy$ {
     }
     return possibleCandidates;
   }
+
+  slideBooster(){
+    this.postMenu.swipeup = false;
+    this.slideService.show("Booster", {
+      type: "template",
+      template: this.boosterTemplate,
+      context: {
+        $implicit: this.postMenu.post,
+      },
+    });
+  }
+
 }

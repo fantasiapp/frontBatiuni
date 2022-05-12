@@ -144,6 +144,8 @@ export interface Post {
   files: Ref<File>[];
   candidates: Ref<Candidate>[];
   dates: Ref<PostDate>[];
+  isBoosted: boolean;
+  boostedEndDate: Date;
 };
 
 export interface Candidate {
@@ -186,7 +188,7 @@ export type Mission = Post & {
   signedByCompany: boolean;
   signedBySubContractor: boolean;
 
-  quality: number;
+  quality:            number;
   qualityComment: string;
   security: number;
   securityComment: string;
