@@ -141,7 +141,7 @@ export class STFilterForm extends Filter<Post> {
     }>([
       this.defineComputedProperty('$employeeCount', (post) => {
         const company = this.store.selectSnapshot(DataQueries.getById('Company', post.company))!,
-          jobsForCompany = this.store.selectSnapshot(DataQueries.getMany('JobForCompany', company.jobs));
+        jobsForCompany = this.store.selectSnapshot(DataQueries.getMany('JobForCompany', company.jobs));
         return jobsForCompany.reduce((acc, {number}) => acc + number, 0);
       }),
       this.defineComputedProperty('$favorite', (post) => {
@@ -154,6 +154,14 @@ export class STFilterForm extends Filter<Post> {
         console.log('computing viewed on', post, '=>', user.viewedPosts.includes(post.id))
         return user.viewedPosts.includes(post.id);
       }),
+      this.defineComputedProperty('$candidate', (post) => {
+        const user = this.store.selectSnapshot(DataQueries.currentUser);
+        let candidates = this.store.selectSnapshot(DataQueries.getMany("Candidate", post.candidates))
+        let companies = candidates.map(candidate => candidate.company)
+        console.log('computing candidate on', post, '=>', companies.includes(user.company))
+        return companies.includes(user.company);
+      }),
+
       this.match('dueDate'),
       this.search('address'),
       this.some(
@@ -164,15 +172,9 @@ export class STFilterForm extends Filter<Post> {
         this.onlyIf('$employeeCount', count => count > 50 && count <= 100, [], true),
         this.onlyIf('$employeeCount', count => count > 100, [], true),
       ),
-      this.onlyIf('$viewed', viewed => {
-
-        return viewed;
-      }),
-      this.onlyIf('$favorite', favorite => {
-        
-        return favorite;
-      }),
-      this.onlyIf('$candidate', candidate => candidate),
+      this.onlyIf('$viewed', viewed => { return viewed }),
+      this.onlyIf('$favorite', favorite => { return favorite }),
+      this.onlyIf('$candidate', candidate => { return candidate }),
       this.onlyIf('counterOffer', counterOffer => counterOffer),
       this.onlyIf('$radius', radius => true),
       this.onlyIf('amount', (amount, range) => {
