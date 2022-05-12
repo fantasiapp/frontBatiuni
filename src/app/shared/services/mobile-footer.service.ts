@@ -23,6 +23,16 @@ export class Mobile{
                 this.footerStateSubject.next(true)
             });
         }
+
+        // this.test()
+    }
+    test(){
+        setInterval(()=>{
+            this.test1()
+            setTimeout(()=>{
+                this.test2()
+            },1000)
+        },2000)
     }
 
     test1(){
