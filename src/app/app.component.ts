@@ -64,7 +64,7 @@ export class AppComponent extends Destroy$ {
   }
 
   async updateUserData() {
-    while (true) {
+    while (false) {
       console.log(
         "changeReadyToUpdate",
         this.changeReadyToUpdate(false),
