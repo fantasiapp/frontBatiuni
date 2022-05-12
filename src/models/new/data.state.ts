@@ -541,6 +541,12 @@ export class DataState {
         ctx.setState(
           addComplexChildren("Company", profile.company.id, "Post", response)
         );
+        console.log(
+          "applyPost",
+          this.store.selectSnapshot(
+            DataQueries.getById("Post", +Object.keys(response)[0])
+          )
+        );
       })
     );
   }

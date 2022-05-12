@@ -192,14 +192,13 @@ export class UIAnnonceResume extends Destroy$ {
   }
 
   get hasPostulated() {
-    console.log("hasPostulated", this.post);
     let companiesId = this.post.candidates.map((id: number) => {
       let candidate = this.store.selectSnapshot(
         DataQueries.getById("Candidate", id)
       );
-      console.log("hasPostulated", id, candidate);
       return candidate!.company;
     });
+    console.log("hasPostulated", companiesId, this.profile.company.id);
     return companiesId.includes(this.profile.company.id);
   }
 
