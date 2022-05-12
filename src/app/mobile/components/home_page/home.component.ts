@@ -449,6 +449,7 @@ export class HomeComponent extends Destroy$ {
   }
 
   applyPost(post: Post, form: ApplyForm) {
+    console.log("applyPost", form)
     this.info.show("info", "Candidature en cours...", Infinity);
     this.store
       .dispatch(new ApplyPost(post.id, form))

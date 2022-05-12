@@ -397,6 +397,7 @@ export class DataState {
 
   @Action(UploadPost)
   createPost(ctx: StateContext<DataModel>, post: UploadPost) {
+    console.log("createPost", post)
     const profile = this.store.selectSnapshot(DataQueries.currentProfile),
       { files, ...form } = post,
       uploads = Object.keys(files).map(
