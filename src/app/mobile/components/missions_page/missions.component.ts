@@ -143,7 +143,6 @@ export class MissionsComponent extends Destroy$ {
   }
 
   callbackFilter = (filter: any): void => {
-    console.log("callbackFilter activeView", this.activeView);
     this.selectMissions(filter);
   };
 
@@ -184,7 +183,6 @@ export class MissionsComponent extends Destroy$ {
           (a: any, b: any) =>
             Date.parse(a["startDate"]) - Date.parse(b["startDate"])
         );
-        console.log(this.allMyMissions);
       }
 
       for (let mission of this.allMyMissions) {
@@ -201,8 +199,6 @@ export class MissionsComponent extends Destroy$ {
             return job.id != mission.job;
           });
         const user = this.store.selectSnapshot(DataQueries.currentUser);
-        // console.log(user.viewedPosts)
-        // console.log(mission)
         let isUnread =
           filter.unread &&
           user.viewedPosts.includes(mission.id) == filter.unread;

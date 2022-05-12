@@ -102,6 +102,19 @@ export class Notifications {
   }
 
   ngOnInit() {
+<<<<<<< HEAD
+||||||| 5b40a517
+    console.log("ngOnInit");
+    this.notifications.sort(
+      (notification1: Notification, notification2: Notification) =>
+        notification1.timestamp > notification2.timestamp ? 1 : -1
+    );
+=======
+    this.notifications.sort(
+      (notification1: Notification, notification2: Notification) =>
+        notification1.timestamp > notification2.timestamp ? 1 : -1
+    );
+>>>>>>> 1d61acb4a1b86595aa23c82e6f5c8f0a070f9ce6
     this.notifications.forEach((notificationAny, index) => {
       let notification = notificationAny as Notification;
       let src: SafeResourceUrl | string = "";
