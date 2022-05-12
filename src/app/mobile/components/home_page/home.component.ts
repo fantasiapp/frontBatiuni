@@ -341,6 +341,7 @@ export class HomeComponent extends Destroy$ {
 
   setFavorite(fav: any) {
     this.store.dispatch(new SetFavorite(!!fav, this.postMenu.post!.id));
+    console.log("setFavorite", this.postMenu.post);
   }
 
   openMission(mission: Mission | null) {
@@ -451,13 +452,10 @@ export class HomeComponent extends Destroy$ {
       .pipe(take(1))
       .subscribe(
         (success) => {
-          console.log("applyPostReceived");
           // Si la candidature est envoyée on quite la vue de la candidature
-          this.postMenu.post = this.store.selectSnapshot(
-            DataQueries.getById("Post", post.id)
-          );
-          this.cd.markForCheck();
+          this.filters.filter("ST", this.allOnlinePosts);
           this.slideOnlinePostClose();
+          this.cd.markForCheck();
         },
         (error) =>
           this.info.show("error", "Echec de l'envoi de la candidature", 5000)
@@ -549,6 +547,7 @@ export class HomeComponent extends Destroy$ {
   slideOnlinePostClose() {
     // Close View
     this.slideOnlinePost.close();
+    console.log("slideOnlinePostClose", this.postMenu.post);
 
     // Update
     this.annonceResume.close();

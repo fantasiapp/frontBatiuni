@@ -179,6 +179,7 @@ export class UIAnnonceResume extends Destroy$ {
   profile = this.store.selectSnapshot(DataQueries.currentProfile);
 
   get disableValidation(): boolean {
+    console.log("disableValidation check hasPostulated");
     if (this.hasPostulated) {
       this.info.show(
         "info",
@@ -198,7 +199,12 @@ export class UIAnnonceResume extends Destroy$ {
       );
       return candidate!.company;
     });
-    console.log("hasPostulated", companiesId, this.profile.company.id);
+    console.log(
+      "hasPostulated",
+      companiesId,
+      this.profile.company.id,
+      companiesId.includes(this.profile.company.id)
+    );
     return companiesId.includes(this.profile.company.id);
   }
 
@@ -230,7 +236,6 @@ export class UIAnnonceResume extends Destroy$ {
   searchCandidate(post: Post): Candidate | null {
     const candidates = post.candidates;
     const companyId = this.profile.company.id;
-    console.log("search", candidates, companyId);
     let goodCandidate = null;
     candidates.forEach((candidateId) => {
       let candidate = this.store.selectSnapshot(
@@ -316,7 +321,6 @@ export class UIAnnonceResume extends Destroy$ {
       this.info.show("error", "Montant incorrect", 2000);
       return;
     }
-    console.log("onApply", this.hasPostulated);
     this.apply.emit({
       amount: formValue.amount,
       devis: formValue.devis[0].name,
