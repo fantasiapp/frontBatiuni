@@ -42,6 +42,7 @@ export interface calendarItem {
   tasks: PostDetail[];
   date: string;
   change: {
+    validate: boolean;
     schedule: boolean;
     deleted: boolean;
   };
@@ -266,9 +267,10 @@ export class HorizontaleCalendar implements OnInit {
 
   dateChange(
     mission: Mission,
-    date: string
-  ): { schedule: boolean; deleted: boolean } {
+    date: string,
+  ): { schedule: boolean; deleted: boolean, validate: boolean } {
     let isChange = {
+      validate: false,
       schedule: false,
       deleted: false,
     };
@@ -282,15 +284,20 @@ export class HorizontaleCalendar implements OnInit {
       DataQueries.getMany("DatePost", datesId)
     );
     for (const datePost of dates) {
-      if (datePost.date == date) isChange.deleted = datePost.deleted;
+      if (datePost.date == date) {
+        isChange.validate = datePost.validated;
+        isChange.deleted = datePost.deleted;
+      }
     }
     if (!isChange.deleted)
       isChange.schedule =
         !!mission.hourlyEndChange || !!mission.hourlyStartChange;
+
+    console.log('isChange;', isChange);
     return isChange;
   }
 
-  onCardUpdate(dayDestroy: boolean | null, card: calendarItem) {
+  onCardUpdate(state: any, card: calendarItem) {
     let mission = this.store.selectSnapshot(
       DataQueries.getById("Mission", card.mission.id)
     );
@@ -301,15 +308,19 @@ export class HorizontaleCalendar implements OnInit {
     card.cardHeight = heightTop[1];
     card.change = this.dateChange(mission!, card.date);
 
-    if (dayDestroy) {
+    if (state[0] && state[1].deleted) {
       let newCardCalendars: calendarItem[] = [];
       for (let curCard of this.currentCardCalendars) {
         if (curCard.mission.id != card.mission.id || curCard.date != card.date)
           newCardCalendars.push(curCard);
       }
       this.currentCardCalendars = newCardCalendars;
-    } else if (dayDestroy == false) {
+    } else if (state[0] == false && state[1].deleted) {
       card.change.deleted = false;
+    }
+
+    if(state[0] && !state[1].validate){
+      card.change.validate = true
     }
 
     this.cd.markForCheck();

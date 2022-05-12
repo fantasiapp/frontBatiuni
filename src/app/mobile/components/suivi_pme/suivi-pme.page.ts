@@ -152,12 +152,14 @@ export class SuiviPME {
         invalidationImage: SuiviPME.computeTaskImage(detail, "refused"),
       }));
     let dates = mission.dates;
+    console.log('dates', dates);
     if (typeof mission.dates === "object" && !Array.isArray(mission.dates))
       dates = Object.keys(mission.dates).map((key) => +key as number);
     this.dates = dates.map((value: number, id) => {
       let dateObject: PostDate = this.store.selectSnapshot(
         DataQueries.getById("DatePost", value)
       )!;
+      console.log('dateObject;', dateObject);
       return {
         id: id,
         value: dateObject.date,
