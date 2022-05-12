@@ -50,7 +50,11 @@ import { ComplexPassword, setErrors } from "src/validators/verify";
     @use "/src/styles/forms.scss" as *;
 
     :host{
+      overflow: scroll;
       padding-bottom: calc(env(safe-area-inset-bottom) + 2rem)
+    }
+    form {
+      height: unset
     }
 
   `],

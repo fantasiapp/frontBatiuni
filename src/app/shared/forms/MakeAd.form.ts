@@ -234,7 +234,7 @@ import { Mobile } from "../services/mobile-footer.service";
     </form>
 
     <footer
-      [@footerTranslate]="showFooter"
+      [ngClass]="{'footerHide': !showFooter}"
       class="flex row space-between sticky-footer full-width submit-container"
       style="background-color: white;"
     >
@@ -261,9 +261,10 @@ import { Mobile } from "../services/mobile-footer.service";
     :host {
       display: block;
       width: 100%;
-      height: 100%;    
+      height: unset
+      /* height: 100%;    
       height: max-content;
-      height: fit-content
+      height: fit-content */
     }
     .remuneration > * {
       max-width: 45%;
@@ -348,10 +349,9 @@ import { Mobile } from "../services/mobile-footer.service";
       :host(.page) {
         footer {
           bottom: $navigation-height;
-          /* bottom: calc(env(safe-area-inset-bottom) +  #{$navigation-height}); */
-          /* bottom: calc(constant(safe-area-inset-bottom) +  #{$navigation-height}); */
-          /* bottom: calc(#{$navigation-height} + 10px); */
-          /* padding-bottom: env(safe-area-inset-bottom); */
+          &.footerHide {
+            transform: translateY(100%)
+          }
         }
       }
 
@@ -369,7 +369,6 @@ import { Mobile } from "../services/mobile-footer.service";
     `,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  animations: footerTranslate,
 })
 export class MakeAdForm {
   @HostBinding("class.page")
