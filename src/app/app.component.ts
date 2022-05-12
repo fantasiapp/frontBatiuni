@@ -41,7 +41,7 @@ export class AppComponent extends Destroy$ {
     this.mobile.init();
   }
 
-  ready$ = new AsyncSubject<true>();
+  ready$ = new AsyncSubject<true>()
 
   async ngOnInit() {
     await this.store.dispatch(new Load()).toPromise();

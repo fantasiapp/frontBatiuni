@@ -421,15 +421,19 @@ export class MakeAdForm {
     //load dates
     //heavens forgive me for this atrocy
     let daystates: DayState[] = [];
-    if (typeof p.dates === "object" && !Array.isArray(p.dates))
-      daystates = Object.values(p.dates).map((date) => ({
-        date: date as string,
-        availability: "selected",
-      }));
-    else
+    if (typeof p.dates === "object" && !Array.isArray(p.dates)) {
+      daystates = Object.values(p.dates).map((date) => {
+        const dateArray = date as unknown as any[]
+        return {
+          date: dateArray[0] as string,
+          availability: "selected",
+        }
+    });
+    } else {
       daystates = this.store
         .selectSnapshot(DataQueries.getMany("DatePost", p.dates))
         .map(({ date: name }) => ({ date: name, availability: "selected" }));
+    }
 
     this.makeAdForm.get("calendar")?.setValue(daystates);
     this.calendar?.viewCurrentDate();
@@ -477,7 +481,6 @@ export class MakeAdForm {
 
   // Valide un brouillon/annonce qui si la date d'echeance est dans le futur, c'est plus commode
   dueDateValidator(control: AbstractControl): { [key: string]: any } | null {
-    console.log("controle", moment(control.value), moment());
     if (control.value && moment(control.value) <= moment()) {
       return { dueDateInvalid: true };
     }
@@ -609,12 +612,10 @@ export class MakeAdForm {
         .pipe(take(1))
         .subscribe(
           () => {
-            console.log("success");
             this.info.show("success", "Annonce Envoyée", 2000);
             this.done.emit();
           },
           () => {
-            console.log("success");
             this.info.show("error", "Echec de l'envoi", 5000);
           }
         );
