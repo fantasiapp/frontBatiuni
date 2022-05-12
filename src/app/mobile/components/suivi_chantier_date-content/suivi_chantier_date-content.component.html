@@ -5,20 +5,20 @@
             <img (click)="swipeMenu = true" src="assets/Option.svg"/>
         </div>
     </div>
-    <div class="taskByDate" *ngFor="let task of date.selectedTasks">
+    <div class="taskByDate" *ngFor="let iterable of iterableTasksComment; let index = index">
         <div class="details chantier-tache">
-          <span class="detail-name">{{ task.content }}</span>
+          <span class="detail-name">{{ iterable.selectedTask.content }}</span>
           <div class="controls">
-            <img (click)="validate(task)" id="control_validate_{{task.id}}" [src]= "task.validationImage"/>
-            <img (click)="refuse(task)" id="control_refuse_{{task.id}}" [src]= "task.invalidationImage"/>
+            <img (click)="validate(iterable.selectedTask, validateImg)" id="control_validate_{{iterable.selectedTask.id}}" [src]= "iterable.selectedTask.validationImage" #validateImg/>
+            <img (click)="refuse(iterable.selectedTask, refuseImg)" id="control_refuse_{{iterable.selectedTask.id}}" [src]= "iterable.selectedTask.invalidationImage" #refuseImg/>
           </div>
         </div>
-        <div class="comment-container" *ngFor="let supervision of task.supervisionsObject">
+        <div class="comment-container" *ngFor="let supervision of iterable.selectedTask.supervisionsObject">
             <comment-suivi  [supervision]="supervision"></comment-suivi>
         </div>
-        <div *ngIf="task.refused && !mission!.isClosed" class="divComment">
-          <form [formGroup]="formTask" (ngSubmit)="detectKey(task, comment)">
-            <input id="input_{{task.id}}" class="inputComment" type="text" placeholder="Ajouter un commentaire" formControlName="commentTask" #comment>
+        <div *ngIf="iterable.selectedTask.refused && !mission!.isClosed" class="divComment">
+          <form [formGroup]="iterable.formGroup" (ngSubmit)="onSubmit(iterable.selectedTask, comment)">
+            <input id="input_{{iterable.selectedTask.id}}" class="inputComment" type="text" placeholder="Ajouter un commentaire" formControlName="comment" #comment>
           </form>
           <img (click)="swipeMenuImage = true" src="assets/camera-outline.svg"/>
         </div>
@@ -34,8 +34,8 @@
       </div>
       <div *ngIf="!mission!.isClosed" class="partenerComment">
         <div  class="divComment">
-          <form [formGroup]="formMain" (submit)="detectKey( null, chantierMain)" #formMainTest>
-            <textarea id="input_general" class="inputComment mainInputComment" (keyup.enter)="textareaSubmit($event, formMainTest)" type="text" placeholder="Ajouter un commentaire" formControlName="commentMain" #chantierMain></textarea>
+          <form [formGroup]="formMain" (submit)="onSubmit( null, chantierMain)" #formMainTest>
+            <textarea id="input_general" class="inputComment mainInputComment" (keyup)="textareaSubmit($event, formMainTest)" type="text" placeholder="Ajouter un commentaire" formControlName="commentMain" #chantierMain></textarea>
           </form>
           <img (click)="swipeMenuImage = true" src="assets/camera.png"/>
         </div>

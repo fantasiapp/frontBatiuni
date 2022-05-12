@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component } from "@angular/core";
 import { DistanceSliderConfig, SalarySliderConfig } from "src/app/shared/common/config";
+import { NgxSliderModule } from '@angular-slider/ngx-slider';
 
 @Component({
   selector: 'sos-filter-form',

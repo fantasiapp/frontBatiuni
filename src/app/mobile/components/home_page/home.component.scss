@@ -6,18 +6,16 @@
 }
 
 :host(.footerHide){
-  height: calc(100vh - env(safe-area-inset-top));
-  transition: height 200ms;
+  height: calc(100vh)
 }
-
-
 
 .hosted-page {
-  transition: height 200ms;
-  &.footerHideMobile {
-    height: calc(100vh - #{$mission-header-height} - env(safe-area-inset-top))
+  &.footerHide {
+    height: calc(100vh - #{$sticky-header-height})
   }
 }
+
+
 
 .submit-container {
   button { max-width: 45%;}
@@ -65,9 +63,6 @@
 
 .sticky-footer.application {
   box-shadow: 0 -3px 3px 0 #eee;
-  button {
-    // height: 80%;
-  }
 }
 
 header > div > img ~ span::after { 

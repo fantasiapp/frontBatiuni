@@ -254,19 +254,35 @@ import { Mobile } from "../services/mobile-footer.service";
       </button>
     </footer>
   `,
-  styles: [
-    `
-      @use "src/styles/variables" as *;
-      @use "src/styles/mixins" as *;
+  styles: [`
+    @use 'src/styles/variables' as *;
+    @use 'src/styles/mixins' as *;
 
-      :host {
-        display: block;
-        width: 100%;
-        height: 100%;
-      }
-      .remuneration > * {
-        max-width: 45%;
-      }
+    :host {
+      display: block;
+      width: 100%;
+      height: 100%;    
+      height: max-content;
+      height: fit-content
+    }
+    .remuneration > * {
+      max-width: 45%;
+    }
+    
+    textarea {
+      border: 1px dashed #ccc;
+      outline: none;
+      width: 100%;
+      min-height: 80px;
+      border: 2px solid #aaa;
+      outline: none;
+      border-radius: 3px;
+    }
+
+    .option-container {
+      margin-left: 30px;
+      width: 100px;
+    }
 
       textarea {
         border: 1px dashed #ccc;
@@ -424,12 +440,13 @@ export class MakeAdForm {
     let daystates: DayState[] = [];
     if (typeof p.dates === "object" && !Array.isArray(p.dates)) {
       daystates = Object.values(p.dates).map((date) => {
-        const dateArray = date as unknown as string[]
+        console.log("daystates in Object", date);
+        const dateArray = date as any[];
         return {
           date: dateArray[0],
           availability: "selected",
-        }
-    });
+        };
+      });
     } else {
       daystates = this.store
         .selectSnapshot(DataQueries.getMany("DatePost", p.dates))

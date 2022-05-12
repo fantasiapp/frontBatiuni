@@ -78,7 +78,7 @@
 
 @mixin footerHideMobile($height) {
   // height: $height;
-  transition: height 200ms;
+  // transition: height 200ms;
   height: unset;
   &.footerHideMobile {
     height: $height
@@ -323,3 +323,11 @@ $space-top-mid: 40px;
 };
 
 //default to 2 columns
+
+%fixed {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0
+}
