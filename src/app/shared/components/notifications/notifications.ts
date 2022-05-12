@@ -63,6 +63,7 @@ export class Notifications {
   }
 
   ngOnInit() {
+    console.log("notification start", this.notifications)
     this.notifications.forEach((notificationAny, index) => {
       let notification = notificationAny as Notification
       let src: SafeResourceUrl | string = ""
