@@ -212,12 +212,10 @@ export class DataState {
 
     return req.pipe(
       tap((response: any) => {
-        console.log("$$", response);
         const loadOperations = this.reader.readInitialData(response),
           sessionOperation = this.reader.readCurrentSession(response);
 
         ctx.setState(compose(...loadOperations, sessionOperation));
-        console.log(ctx.getState());
       })
     );
   }
@@ -237,7 +235,6 @@ export class DataState {
 
     return req.pipe(
       tap((response: any) => {
-        console.log("ModifyUserProfile", response);
         if (response[modify.action] !== "OK") {
           this.inZone(() => this.info.show("error", response.messages, 3000));
           throw response.messages;
@@ -257,7 +254,6 @@ export class DataState {
             new UploadFile(adminFiles[name], "admin", name, "Company")
           )
         );
-        console.log(of(true));
         return of(true);
       })
     );
@@ -302,10 +298,8 @@ export class DataState {
     const profile = this.store.selectSnapshot(DataQueries.currentProfile),
       req = this.http.post("data", picture);
 
-    console.log("UploadImageSupervision", picture);
     return req.pipe(
       tap((response: any) => {
-        console.log("UploadImageSupervision response", response);
         if (response[picture.action] !== "OK") throw response["messages"];
 
         delete response[picture.action];
@@ -339,7 +333,6 @@ export class DataState {
 
   @Action(UploadFile)
   uploadFile(ctx: StateContext<DataModel>, upload: UploadFile) {
-    console.log("uploadFile", upload);
     const req = this.http.post("data", upload);
     return req.pipe(
       tap((response: any) => {
@@ -369,7 +362,6 @@ export class DataState {
 
   @Action(TakePicture)
   takePicture(ctx: StateContext<DataModel>, picture: TakePicture) {
-    // console.log("uploadFile", picture)
     // return this.http.post('data', picture).pipe(
     //   tap((response: any) => {
     //     if ( response[picture.action] !== 'OK' )
@@ -456,7 +448,6 @@ export class DataState {
     const profile = this.store.selectSnapshot(DataQueries.currentProfile)!;
     return this.http.get("data", application).pipe(
       tap((response: any) => {
-        console.log("DuplicatePost", response);
         if (response[application.action] !== "OK") {
           this.inZone(() => this.info.show("error", response.messages, 2000));
           throw response.messages;
@@ -493,14 +484,13 @@ export class DataState {
     this.registerPending(key, pending);
 
     if (download.notify)
-      console.log(`Téléchargement du fichier ${file[nameIndex] || ""}...`);
-    this.inZone(() => {
-      this.info.show(
-        "info",
-        `Téléchargement du fichier ${file[nameIndex] || ""}...`,
-        2000
-      );
-    });
+      this.inZone(() => {
+        this.info.show(
+          "info",
+          `Téléchargement du fichier ${file[nameIndex] || ""}...`,
+          2000
+        );
+      });
 
     return req.pipe(
       tap((response: any) => {
@@ -590,7 +580,6 @@ export class DataState {
     const { post, ...data } = handle;
     return this.http.get("data", data).pipe(
       tap((response: any) => {
-        console.log("handleApplication start", response, response.length);
         if (response[handle.action] !== "OK") {
           this.inZone(() => this.info.show("error", response.messages, 3000));
           throw response.messages;
@@ -601,7 +590,6 @@ export class DataState {
         this.inZone(() => this.info.show("success", "Réponse envoyée.", 3000));
         this.slide.hide();
         if (data["response"]) {
-          console.log("handleApplication", response);
           ctx.setState(
             compose(
               deleteIds("Post", [handle.post.id]),
@@ -768,7 +756,6 @@ export class DataState {
     const profile = this.store.selectSnapshot(DataQueries.currentProfile)!;
     return this.http.post("data", application).pipe(
       tap((response: any) => {
-        console.log("CloseMissionST", response);
         if (response[application.action] !== "OK") {
           this.inZone(() => this.info.show("error", response.messages, 3000));
           throw response.messages;
@@ -953,7 +940,6 @@ export class DataQueries {
     fields: Record<string[]>,
     id: number
   ) {
-    console.log("current user change");
     return DataQueries.toJson(fields, "UserProfile", id, profiles[id]);
   }
 

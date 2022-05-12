@@ -179,7 +179,6 @@ export class UIAnnonceResume extends Destroy$ {
   profile = this.store.selectSnapshot(DataQueries.currentProfile);
 
   get disableValidation(): boolean {
-    console.log("disableValidation check hasPostulated");
     if (this.hasPostulated) {
       this.info.show(
         "info",
@@ -199,12 +198,6 @@ export class UIAnnonceResume extends Destroy$ {
       );
       return candidate!.company;
     });
-    console.log(
-      "hasPostulated",
-      companiesId,
-      this.profile.company.id,
-      companiesId.includes(this.profile.company.id)
-    );
     return companiesId.includes(this.profile.company.id);
   }
 
@@ -220,7 +213,6 @@ export class UIAnnonceResume extends Destroy$ {
     }
     if (this._post?.counterOffer) {
       let candidate = this.searchCandidate(this._post!);
-      console.log("amount", candidate?.amount, typeof candidate?.amount);
       this.form
         .get("amount")
         ?.setValue(candidate?.amount ? candidate!.amount : null);
