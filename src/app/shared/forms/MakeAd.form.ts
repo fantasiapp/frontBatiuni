@@ -186,19 +186,19 @@ import { Mobile } from "../services/mobile-footer.service";
               placeholder="Montant"
               formControlName="amount"
             />
-            <div class="option-container">
+            <!-- <div class="option-container">
               <options
                 [searchable]="false"
                 type="radio"
                 [options]="currencies"
                 formControlName="currency"
-              ></options>
-            </div>
+              ></options> 
+            </div> -->
           </div>
         </div>
 
         <div class="form-input flex row">
-          <checkbox formControlName="counterOffer"></checkbox>
+          <input type="checkbox" formControlName="counterOffer"/>
           <span>Autoriser une contre-offre</span>
         </div>
       </section>
@@ -437,11 +437,10 @@ export class MakeAdForm {
     //heavens forgive me for this atrocy
     let daystates: DayState[] = [];
     if (typeof p.dates === "object" && !Array.isArray(p.dates)) {
-      daystates = Object.values(p.dates).map((date) => {
-        console.log("daystates in Object", date);
-        const dateArray = date as any[];
+      const ArrayDate: any = Object.values(p.dates);
+      daystates = ArrayDate.map((date: any[]) => {
         return {
-          date: dateArray[0] as string,
+          date: date[0] as string,
           availability: "selected",
         };
       });
@@ -535,7 +534,7 @@ export class MakeAdForm {
     calendar: new FormControl([]),
   });
   get invalid() {
-    const calendar = this.makeAdForm.get("calendar");
+    const calendar = this.makeAdForm.get("calendar")
     return !this.makeAdForm.valid || calendar?.value.length == 0;
   }
 
@@ -583,12 +582,14 @@ export class MakeAdForm {
   }
 
   submit(draft: boolean) {
+    console.log("submit", this.makeAdForm.value)
     if (this.post) {
       if (!draft) {
         this.info.show("info", "Mise en ligne de l'annonce...", Infinity);
         const action = this.makeAdForm.touched
           ? UploadPost.fromPostForm(this.makeAdForm.value, draft, this.post.id)
           : new SwitchPostType(this.post.id);
+        console.log("submit", this.makeAdForm.value)
         this.store
           .dispatch(action)
           .pipe(take(1))

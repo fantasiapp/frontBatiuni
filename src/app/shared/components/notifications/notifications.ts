@@ -67,7 +67,7 @@ export class Notifications {
           moment(notif.date).format("L")
         )
     );
-    return today;
+    return today.sort((not1:NotificationDisplay, not2:NotificationDisplay) => not1.date < not2.date ? 1 : -1)
   }
 
   get month(): NotificationDisplay[] {
@@ -78,7 +78,7 @@ export class Notifications {
           moment(notif.date).format("L")
         )
     );
-    return month;
+    return month.sort((not1:NotificationDisplay, not2:NotificationDisplay) => not1.date < not2.date ? 1 : -1)
   }
 
   get timerToday(): any[] {
@@ -102,7 +102,6 @@ export class Notifications {
   }
 
   ngOnInit() {
-    console.log("ngOnInit");
     this.notifications.sort(
       (notification1: Notification, notification2: Notification) =>
         notification1.timestamp > notification2.timestamp ? 1 : -1

@@ -168,7 +168,6 @@ export class UIPopup extends DimensionMenu {
 
   willClose = false;
   close() {
-    console.log("close popup");
     this.willClose = true;
     setTimeout(() => {
       if (!this.keepAlive) this.view.clear();
@@ -295,7 +294,6 @@ export class UIPopup extends DimensionMenu {
 
   openActionClose(context: any) {
     context.isActive = true;
-    console.log("openActionClose context", context);
     this.close();
   }
 }

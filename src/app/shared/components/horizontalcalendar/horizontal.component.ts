@@ -115,7 +115,6 @@ export class HorizontaleCalendar implements OnInit {
     this.getDaysFromDate(now.getMonth() + 1, now.getFullYear());
     this.setSelectedDays();
     this.someFunction();
-    // console.log(moment(now));
     this.spanShowToday = moment(now)
       .locale("fr")
       .format("dddd D - MMMM - YYYY");
@@ -125,7 +124,6 @@ export class HorizontaleCalendar implements OnInit {
   }
 
   toCalendarDays(workDays: MissionDetailedDay[]): DayState[] {
-    console.log("toCalendar days", this.detailedDays);
     this.detailedDays = workDays;
 
     return workDays.map((workDay) => ({
@@ -329,9 +327,7 @@ export class HorizontaleCalendar implements OnInit {
   }
 
   fieldValidation(card: calendarItem) {
-    console.log(card.mission.hourlyStartChange);
     if (card.mission.hourlyStartChange) {
-      console.log(card.mission.hourlyStartChange);
       return "hourlyStart";
     }
     if (card.mission.hourlyEndChange) return "hourlyEnd";

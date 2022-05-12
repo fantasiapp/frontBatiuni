@@ -1,6 +1,6 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 
-export type stepperType = 'H' | 'V';
+export type stepperType = "H" | "V";
 
 interface dimension {
   index: number;
@@ -11,16 +11,16 @@ interface dimension {
 }
 
 @Component({
-  selector: 'stepper-sys',
-  templateUrl: 'stepper.component.html',
-  styleUrls: ['stepper.component.scss'],
+  selector: "stepper-sys",
+  templateUrl: "stepper.component.html",
+  styleUrls: ["stepper.component.scss"],
 })
 export class StepperSys implements OnInit {
   @Input()
   testList = [
-    'Infos personnelles',
-    'Infos entreprise',
-    'Certifications & labels',
+    "Infos personnelles",
+    "Infos entreprise",
+    "Certifications & labels",
   ];
 
   @Input()
@@ -30,10 +30,10 @@ export class StepperSys implements OnInit {
   margin: number = 10;
 
   @Input()
-  fill: string = '#b3b3b3';
+  fill: string = "#b3b3b3";
 
   @Input()
-  type: stepperType = 'V';
+  type: stepperType = "V";
 
   nodes: dimension[] = [];
 
@@ -47,12 +47,7 @@ export class StepperSys implements OnInit {
 
   ngOnInit() {
     this.nodes =
-      this.type === 'H'
-        ? this.horizantaleStepper()
-        : this.verticalStepper();
-    console.log(this.nodes);
-
-    
+      this.type === "H" ? this.horizantaleStepper() : this.verticalStepper();
   }
   verticalStepper() {
     const cy = 0;
@@ -92,7 +87,7 @@ export class StepperSys implements OnInit {
     previuosNode[0].current = false;
     [...this.nodes, previuosNode[0]];
     node.current = true;
-    this.nodeId.emit(this.currentIndex = node.index);
+    this.nodeId.emit((this.currentIndex = node.index));
     return [...this.nodes, node];
   }
 }

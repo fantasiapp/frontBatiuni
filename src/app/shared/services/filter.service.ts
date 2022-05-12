@@ -1,10 +1,8 @@
 import { Injectable } from "@angular/core";
 import { Filter } from "../directives/filter.directive";
 
-
-
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class FilterService {
   private mapping = new Map<string, Filter<any>>();
@@ -21,14 +19,17 @@ export class FilterService {
     return this.mapping.has(name);
   }
 
-  filter(name: string, items: any[], providers?: {[key: string]: (t: any) => any}) {
+  filter(
+    name: string,
+    items: any[],
+    providers?: { [key: string]: (t: any) => any }
+  ) {
     const filter = this.mapping.get(name);
-    if ( !filter ) {
+    if (!filter) {
       console.warn(`Unknown filter ${name}.`);
-      console.log(this.mapping);
       return items;
     }
 
     return filter.filter(items, providers);
   }
-};
+}
