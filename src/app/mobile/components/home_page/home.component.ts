@@ -54,6 +54,8 @@ import {
   UIAnnonceResume,
 } from "../../ui/annonce-resume/annonce-resume.ui";
 import { Mobile } from "src/app/shared/services/mobile-footer.service";
+import { getLevenshteinDistance } from "src/app/shared/services/levenshtein";
+
 import { AuthState } from "src/models/auth/auth.state";
 import { Logout } from "src/models/auth/auth.actions";
 
@@ -185,7 +187,6 @@ export class HomeComponent extends Destroy$ {
   }
 
   ngAfterViewInit() {
-    console.log("dans le ngAfterViewInit");
     this.filters.filter("ST", this.allOnlinePosts);
   }
 
@@ -198,99 +199,93 @@ export class HomeComponent extends Destroy$ {
 
   selectDraft(filter: any) {
     this.userDrafts = [];
-    if (filter == null) {
-      this.userDrafts = this.allUserDrafts;
-    } else {
-      for (let post of this.allUserDrafts) {
-        let isDifferentDate = filter.date && filter.date != post.dueDate;
-        let isNotIncludedAddress =
-          filter.address &&
-          post.address.toLowerCase().search(filter.address.toLowerCase()) == -1;
-        let isDifferentManPower =
-          filter.manPower && post.manPower != (filter.manPower === "true");
-        let isNotIncludedJob =
-          filter.jobs &&
-          filter.jobs.length &&
-          filter.jobs.every((job: any) => {
-            return job.id != post.job;
-          });
-
-        if (
-          isDifferentDate ||
-          isDifferentManPower ||
-          isNotIncludedAddress ||
-          isNotIncludedJob
-        ) {
-          continue;
+    if (filter == null ) { this.userDrafts = this.allUserDrafts }
+    else {
+      // Array qui contiendra les posts et leur valeur en distance Levenshtein pour une adresse demandée
+      let levenshteinDist: any = []; 
+      if ( filter.address ) { 
+        for (let post of this.allUserDrafts) {
+          levenshteinDist.push([post, getLevenshteinDistance(post.address.toLowerCase(), filter.address.toLowerCase())]);
         }
+        levenshteinDist.sort((a: any,b: any) => a[1] - b[1]);
+        let keys = levenshteinDist.map((key: any) => { return key[0] });    
+
+        // On trie les posts selon leur distance de levenshtein
+        this.allUserDrafts.sort((a: any,b: any)=>keys.indexOf(a) - keys.indexOf(b));
+      } else {
+        this.allUserDrafts.sort((a,b) => {return a['id'] - b['id']})
+      }
+
+      for (let post of this.allUserDrafts) {
+      
+        let isDifferentDate = (filter.date && filter.date != post.dueDate)
+        let isDifferentManPower = (filter.manPower && post.manPower != (filter.manPower === "true"))
+        let isNotIncludedJob = (filter.jobs && filter.jobs.length && filter.jobs.every((job: any) => {return job.id != post.job}))
+
+        if ( isDifferentDate || isDifferentManPower || isNotIncludedJob) { continue }
         this.userDrafts.push(post);
       }
     }
     this.cd.markForCheck();
   }
+  
 
   selectUserOnline(filter: any) {
     this.userOnlinePosts = [];
-    if (filter == null) {
-      this.userOnlinePosts = this.allUserOnlinePosts;
-    } else {
-      for (let post of this.allUserOnlinePosts) {
-        let isDifferentDate = filter.date && filter.date != post.dueDate;
-        let isNotIncludedAddress =
-          filter.address &&
-          post.address.toLowerCase().search(filter.address.toLowerCase()) == -1;
-        let isDifferentManPower =
-          filter.manPower && post.manPower != (filter.manPower === "true");
-        let isNotIncludedJob =
-          filter.jobs &&
-          filter.jobs.length &&
-          filter.jobs.every((job: any) => {
-            return job.id != post.job;
-          });
-
-        if (
-          isDifferentDate ||
-          isDifferentManPower ||
-          isNotIncludedAddress ||
-          isNotIncludedJob
-        ) {
-          continue;
+    if (filter == null ) { this.userOnlinePosts = this.allUserOnlinePosts }
+    else {
+      // Array qui contiendra les posts et leur valeur en distance Levenshtein pour une adresse demandée
+      let levenshteinDist: any = []; 
+      if ( filter.address ) { 
+        for (let post of this.allUserOnlinePosts) {
+          levenshteinDist.push([post, getLevenshteinDistance(post.address.toLowerCase(), filter.address.toLowerCase())]);
         }
-        this.userOnlinePosts.push(post);
+        levenshteinDist.sort((a: any,b: any) => a[1] - b[1]);
+        let keys = levenshteinDist.map((key: any) => { return key[0] });    
+
+        // On trie les posts selon leur distance de levenshtein
+        this.allUserOnlinePosts.sort((a: any,b: any)=>keys.indexOf(a) - keys.indexOf(b));
+      } else {
+        this.allUserOnlinePosts.sort((a,b) => {return a['id'] - b['id']})
       }
+
+      for (let post of this.allUserOnlinePosts) {
+      
+        let isDifferentDate = (filter.date && filter.date != post.dueDate)
+        let isDifferentManPower = (filter.manPower && post.manPower != (filter.manPower === "true"))
+        let isNotIncludedJob = (filter.jobs && filter.jobs.length && filter.jobs.every((job: any) => {return job.id != post.job}))
+
+        if ( isDifferentDate || isDifferentManPower || isNotIncludedJob) { continue }
+        this.userOnlinePosts.push(post)
+      }  
     }
     this.cd.markForCheck();
   }
 
   selectMission(filter: any) {
     this.missions = [];
-    if (filter == null) {
-      this.missions = this.allMissions;
-    } else {
-      for (let mission of this.allMissions) {
-        let isDifferentDate = filter.date && filter.date != mission.dueDate;
-        let isNotIncludedAddress =
-          filter.address &&
-          mission.address.toLowerCase().search(filter.address.toLowerCase()) ==
-            -1;
-        let isDifferentManPower =
-          filter.manPower && mission.manPower != (filter.manPower === "true");
-        let isNotIncludedJob =
-          filter.jobs &&
-          filter.jobs.length &&
-          filter.jobs.every((job: any) => {
-            return job.id != mission.job;
-          });
-
-        if (
-          isDifferentDate ||
-          isDifferentManPower ||
-          isNotIncludedAddress ||
-          isNotIncludedJob
-        ) {
-          continue;
+    if (filter == null ) { this.missions = this.allMissions }
+    else {
+      let levenshteinDist: any = []; 
+      if ( filter.address ) { 
+        for (let mission of this.allMissions) {
+          levenshteinDist.push([mission, getLevenshteinDistance(mission.address.toLowerCase(), filter.address.toLowerCase())]);
         }
-        this.missions.push(mission);
+        levenshteinDist.sort((a: any,b: any) => a[1] - b[1]);
+        let keys = levenshteinDist.map((key: any) => { return key[0] });    
+        this.allMissions.sort((a: any,b: any)=>keys.indexOf(a) - keys.indexOf(b));
+      } else {
+        this.allMissions.sort((a,b) => {return a['id'] - b['id']})
+      }
+
+      for (let mission of this.allMissions) {
+      
+        let isDifferentDate = (filter.date && filter.date != mission.dueDate)
+        let isDifferentManPower = (filter.manPower && mission.manPower != (filter.manPower === "true"))
+        let isNotIncludedJob = (filter.jobs && filter.jobs.length && filter.jobs.every((job: any) => {return job.id != mission.job}))
+
+        if ( isDifferentDate || isDifferentManPower || isNotIncludedJob) { continue }
+        this.missions.push(mission)
       }
     }
     this.cd.markForCheck();
@@ -345,6 +340,7 @@ export class HomeComponent extends Destroy$ {
 
   setFavorite(fav: any) {
     this.store.dispatch(new SetFavorite(!!fav, this.postMenu.post!.id));
+    console.log("setFavorite", this.postMenu.post);
   }
 
   openMission(mission: Mission | null) {
@@ -455,10 +451,10 @@ export class HomeComponent extends Destroy$ {
       .pipe(take(1))
       .subscribe(
         (success) => {
-          this.info.show("success", "Candidature envoyée", 2000);
-
           // Si la candidature est envoyée on quite la vue de la candidature
+          this.filters.filter("ST", this.allOnlinePosts);
           this.slideOnlinePostClose();
+          this.cd.markForCheck();
         },
         (error) =>
           this.info.show("error", "Echec de l'envoi de la candidature", 5000)
@@ -550,6 +546,7 @@ export class HomeComponent extends Destroy$ {
   slideOnlinePostClose() {
     // Close View
     this.slideOnlinePost.close();
+    console.log("slideOnlinePostClose", this.postMenu.post);
 
     // Update
     this.annonceResume.close();
