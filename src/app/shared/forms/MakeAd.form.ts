@@ -423,12 +423,12 @@ export class MakeAdForm {
     let daystates: DayState[] = [];
     if (typeof p.dates === "object" && !Array.isArray(p.dates)) {
       daystates = Object.values(p.dates).map((date) => {
-        const dateArray = date as unknown as any[]
+        const dateArray = date as any[];
         return {
           date: dateArray[0] as string,
           availability: "selected",
-        }
-    });
+        };
+      });
     } else {
       daystates = this.store
         .selectSnapshot(DataQueries.getMany("DatePost", p.dates))
