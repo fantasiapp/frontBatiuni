@@ -144,6 +144,8 @@ import { Mobile } from "../services/mobile-footer.service";
       display: block;
       width: 100%;
       height: 100%;    
+      height: max-content;
+      height: fit-content
     }
     .remuneration > * {
       max-width: 45%;

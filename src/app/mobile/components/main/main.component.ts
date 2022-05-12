@@ -30,15 +30,6 @@ export class MainPage {
     })
 
     this.mobile.init()
-
-    
-    // Sert pour les tests Clavier mobile ne pas supprimer
-    // setInterval(()=>{
-    //   this.mobile.test1()
-    //   setTimeout(()=>{
-    //     this.mobile.test2()
-    //   }, 1000)
-    // }, 2000)
   }
 
 
