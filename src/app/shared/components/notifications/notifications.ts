@@ -36,12 +36,7 @@ export class Notifications {
   @Input()
   notifications: Notification[] = [];
 
-  notification: NotificationDisplay[] = [];
-
-  today: any;
-  month: any;
-  timerToday: any[] = [];
-  timerMonth: any[] = [];
+  notificationsDisplay: NotificationDisplay[] = [];
 
   constructor(
     private store: Store,
@@ -61,70 +56,100 @@ export class Notifications {
       src: (src || "assets/arrow_left.svg") as string,
       text: notification.content,
     };
-    this.notification.unshift(notificationDisplay);
-    // console.log("notification", this.notification)
-    this.updateNotifications();
+    this.notificationsDisplay.unshift(notificationDisplay);
   }
 
-  updateNotifications() {
-    this.timerToday = [];
-    let today = new Date(Date.now());
-    this.month = this.notification.filter((notif) =>
-      moment(moment(today).format("L")).isAfter(moment(notif.date).format("L"))
+  get today(): NotificationDisplay[] {
+    let todayDate = new Date(Date.now());
+    const today: NotificationDisplay[] = this.notificationsDisplay.filter(
+      (notif) =>
+        moment(moment(todayDate).format("L")).isSame(
+          moment(notif.date).format("L")
+        )
     );
-    this.today = this.notification.filter((notif) =>
-      moment(moment(today).format("L")).isSame(moment(notif.date).format("L"))
-    );
+    return today;
+  }
 
+  get month(): NotificationDisplay[] {
+    let todayDate = new Date(Date.now());
+    const month: NotificationDisplay[] = this.notificationsDisplay.filter(
+      (notif) =>
+        moment(moment(todayDate).format("L")).isAfter(
+          moment(notif.date).format("L")
+        )
+    );
+    return month;
+  }
+
+  get timerToday(): any[] {
+    let timerToday = [];
     for (let i = 0; i < this.today.length; i++) {
-      this.timerToday.push(
+      timerToday.push(
         moment(moment(this.today[i].date)).startOf("minute").fromNow()
       );
     }
-    for (let i = 0; i < this.month.length; i++) {
-      this.timerMonth.push(
-        moment(moment(this.month[i].date)).startOf("day").fromNow()
+    return timerToday;
+  }
+
+  get timerMonth(): any[] {
+    let timerMonth = [];
+    for (let i = 0; i < this.today.length; i++) {
+      timerMonth.push(
+        moment(moment(this.timerMonth[i].date)).startOf("minute").fromNow()
       );
     }
-    // console.log("today", this.timerToday)
+    return timerMonth;
   }
 
   ngOnInit() {
+    console.log("ngOnInit");
+    this.notifications.sort(
+      (notification1: Notification, notification2: Notification) =>
+        notification1.timestamp > notification2.timestamp ? 1 : -1
+    );
     this.notifications.forEach((notificationAny, index) => {
       let notification = notificationAny as Notification;
       let src: SafeResourceUrl | string = "";
-      let company: Company;
+      let company: Company | null;
       this.notifications = [];
-      this.timerToday = [];
       switch (notification.nature) {
         case "PME":
           if (notification.missions) {
             let mission = this.store.selectSnapshot(
               DataQueries.getById("Mission", notification.missions)!
             ) as Mission;
-            company = this.store.selectSnapshot(
-              DataQueries.getById("Company", mission.company)
-            ) as Company;
+            company = mission
+              ? (this.store.selectSnapshot(
+                  DataQueries.getById("Company", mission.company)
+                ) as Company)
+              : null;
           } else {
             let post = this.store.selectSnapshot(
               DataQueries.getById("Post", notification.posts)!
             ) as Post;
-            company = this.store.selectSnapshot(
-              DataQueries.getById("Company", post.company)
-            ) as Company;
+            company = post
+              ? (this.store.selectSnapshot(
+                  DataQueries.getById("Company", post.company)
+                ) as Company)
+              : null;
           }
-          let logoPME = this.store.selectSnapshot(
-            DataQueries.getProfileImage(company.id)
-          );
-          if (!logoPME) {
-            const fullname = company.name[0].toUpperCase();
-            src = this.imageGenerator.generate(fullname);
-            this.addNotification(notification, index, src);
-          } else {
-            this.downloader.downloadFile(logoPME).subscribe((image) => {
-              src = this.downloader.toSecureBase64(image);
+          if (company) {
+            let logoPME = this.store.selectSnapshot(
+              DataQueries.getProfileImage(company.id)
+            );
+            if (!logoPME) {
+              const fullname = company.name[0].toUpperCase();
+              src = this.imageGenerator.generate(fullname);
               this.addNotification(notification, index, src);
-            });
+            } else {
+              this.downloader.downloadFile(logoPME).subscribe((image) => {
+                src = this.downloader.toSecureBase64(image);
+                this.addNotification(notification, index, src);
+              });
+            }
+          } else {
+            src = "assets/Icon_alert.svg";
+            this.addNotification(notification, index, src);
           }
           break;
         case "ST":
@@ -132,27 +157,36 @@ export class Notifications {
             let mission = this.store.selectSnapshot(
               DataQueries.getById("Mission", notification.missions)!
             ) as Mission;
-            company = this.store.selectSnapshot(
-              DataQueries.getById("Company", mission.subContractor)
-            ) as Company;
+            company = mission
+              ? (this.store.selectSnapshot(
+                  DataQueries.getById("Company", mission.subContractor)
+                ) as Company)
+              : null;
           } else {
-            company = this.store.selectSnapshot(
-              DataQueries.getById("Company", notification.subContractor)!
-            ) as Company;
+            company = notification.subContractor
+              ? (this.store.selectSnapshot(
+                  DataQueries.getById("Company", notification.subContractor)!
+                ) as Company)
+              : null;
           }
 
-          let logo = this.store.selectSnapshot(
-            DataQueries.getProfileImage(company.id)
-          );
-          if (!logo) {
-            const fullname = company ? company.name[0].toUpperCase() : "A";
-            src = this.imageGenerator.generate(fullname);
-            this.addNotification(notification, index, src);
-          } else {
-            this.downloader.downloadFile(logo).subscribe((image) => {
-              src = this.downloader.toSecureBase64(image);
+          if (company) {
+            let logo = this.store.selectSnapshot(
+              DataQueries.getProfileImage(company.id)
+            );
+            if (!logo) {
+              const fullname = company ? company.name[0].toUpperCase() : "A";
+              src = this.imageGenerator.generate(fullname);
               this.addNotification(notification, index, src);
-            });
+            } else {
+              this.downloader.downloadFile(logo).subscribe((image) => {
+                src = this.downloader.toSecureBase64(image);
+                this.addNotification(notification, index, src);
+              });
+            }
+          } else {
+            src = "assets/Icon_alert.svg";
+            this.addNotification(notification, index, src);
           }
           break;
         case "alert":
@@ -161,11 +195,5 @@ export class Notifications {
           break;
       }
     });
-    this.notifications.sort(
-      (notification1: Notification, notification2: Notification) =>
-        notification1.timestamp > notification2.timestamp ? 1 : -1
-    );
-    console.log("notification", this.notifications);
-    this.updateNotifications();
   }
 }
