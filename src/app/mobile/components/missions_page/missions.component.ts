@@ -8,7 +8,8 @@ import { MissionDetailedDay } from "src/app/shared/components/horizontalcalendar
 import { InfoService } from "src/app/shared/components/info/info.component";
 import { DateG, Mission, PostDate, PostDetail, PostMenu, Profile, Ref } from "src/models/new/data.interfaces";
 import { DataQueries, QueryAll } from "src/models/new/data.state";
-import { CloseMissionST } from "src/models/new/user/user.actions";
+import { CloseMissionST, MarkViewed} from "src/models/new/user/user.actions";
+import { UIAnnonceResume } from "../../ui/annonce-resume/annonce-resume.ui";
 import { getLevenshteinDistance } from "src/app/shared/services/levenshtein";
 
 import * as moment from 'moment';
@@ -132,15 +133,23 @@ export class MissionsComponent extends Destroy$ {
       } else {
         this.allMyMissions.sort((a,b) => {return a['id'] - b['id']})
       }
+
+      if (filter.sortMissionDate === true) {this.allMyMissions.sort((a: any, b: any) => Date.parse(a['startDate']) - Date.parse(b['startDate']))
+          console.log(this.allMyMissions)}
+
       for (let mission of this.allMyMissions) {
       
       let isDifferentValidationDate = (filter.validationDate && filter.validationDate != mission.dueDate)
-      let isNotInMissionDate = (filter.missionDate && mission.dates.every((date: number) => {console.log(date, filter.missionDate); return date != filter.missionDate}));        
+      let isNotInMissionDate = (filter.missionDate && mission.startDate != filter.missionDate);        
       let isDifferentManPower = (filter.manPower && mission.manPower != (filter.manPower === "true"))
       let isNotIncludedJob = (filter.jobs && filter.jobs.length && filter.jobs.every((job: any) => {return job.id != mission.job}))
-      let isUnread = filter.unread; // TODO check if unread button is on
+      const user = this.store.selectSnapshot(DataQueries.currentUser);
+      // console.log(user.viewedPosts)
+      // console.log(mission)
+      let isUnread = (filter.unread && user.viewedPosts.includes(mission.id) == filter.unread);
+      let isNotClosed = (filter.isClosed && mission.isClosed != filter.isClosed)
 
-      if ( isDifferentValidationDate || isNotInMissionDate || isDifferentManPower || isNotIncludedJob) { continue }
+      if ( isDifferentValidationDate || isNotInMissionDate || isDifferentManPower || isNotIncludedJob || isUnread || isNotClosed) { continue }
       this.myMissions.push(mission)
       }
   }
@@ -151,8 +160,9 @@ export class MissionsComponent extends Destroy$ {
     throw new Error("Method not implemented.");
   }
 
-  openMission(mission: Mission) {
+  openMission(mission: Mission | null) {
     this.missionMenu = assignCopy(this.missionMenu, {post: mission, open: !!mission, swipeup: false});
+    if ( mission ) this.store.dispatch(new MarkViewed(mission.id));
   }
 
   ngOnDestroy(): void {
