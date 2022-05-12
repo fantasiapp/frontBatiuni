@@ -334,10 +334,4 @@ export class UIAnnonceResume extends Destroy$ {
     else amount = null;
     this.form.get("amount")?.setValue(amount);
   }
-<<<<<<< HEAD
 }
-||||||| bb8637b0
-};
-=======
-}
->>>>>>> e96de808dc60d1cdb83f2328068917cd38515dba
