@@ -122,8 +122,6 @@ export class HomeComponent extends Destroy$ {
   missionMenu = new PostMenu<Mission>();
 
   showFooter: boolean = true;
-
-
   constructor(
     private cd: ChangeDetectorRef,
     private store: Store,
@@ -174,9 +172,12 @@ export class HomeComponent extends Destroy$ {
 
     this.mobile.footerStateSubject.subscribe((b) => {
       this.showFooter = b;
-      this.cd.detectChanges();
+      this.cd.markForCheck();
     });
   }
+
+  @HostBinding('class.footerHide')
+  get footerHide(){return !this.showFooter}
 
   ngOnDestroy(): void {
     this.info.alignWith("last");

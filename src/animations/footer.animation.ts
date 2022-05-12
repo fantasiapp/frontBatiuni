@@ -8,6 +8,6 @@ export const footerTranslate = [
       state('true', style({
         transform: 'translateY(0%)'
       })),
-      transition('* <=> *', [animate('0.2s')])
+      transition('* <=> *', [animate('0s')])
     ])
 ];
