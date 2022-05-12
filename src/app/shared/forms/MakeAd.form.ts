@@ -423,7 +423,7 @@ export class MakeAdForm {
     let daystates: DayState[] = [];
     if (typeof p.dates === "object" && !Array.isArray(p.dates)) {
       daystates = Object.values(p.dates).map((date) => {
-        console.log("daystates", date);
+        console.log("daystates in Object", date);
         const dateArray = date as any[];
         return {
           date: dateArray[0] as string,
