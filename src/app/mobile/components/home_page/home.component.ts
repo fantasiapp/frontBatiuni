@@ -122,9 +122,7 @@ export class HomeComponent extends Destroy$ {
   missionMenu = new PostMenu<Mission>();
 
   showFooter: boolean = true;
-  @HostBinding("class.footerHide") get footer() {
-    return this.showFooter;
-  }
+
 
   constructor(
     private cd: ChangeDetectorRef,
