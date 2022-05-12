@@ -11,6 +11,10 @@ import { DataQueries, DataState } from 'src/models/new/data.state';
 import { CreateDetailedPost, CreateSupervision, ModifyDetailedPost, UploadImageSupervision } from 'src/models/new/user/user.actions';
 import { SuiviPME } from '../suivi_pme/suivi-pme.page';
 
+export interface iterableTasksComment {
+  selectedTask: Task,
+  formGroup: FormGroup
+}
 
 @Component({
   selector: 'suivi-chantier-date-content',
@@ -36,12 +40,27 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
   tasks!: Task[];
   dates!: DateG[]
 
+  iterableTasksComment: iterableTasksComment[] = [];
+
+
+
   ngOnInit(){
     this.computeDates(this.mission!)
     this.popup.taskWithoutDouble.pipe(takeUntil(this.destroy$)).subscribe(tasks => {
       this.date.taskWithoutDouble = tasks;
       this.cd.markForCheck()
     })
+
+    this.computeIterable(this.date)
+  }
+
+  computeIterable(date: DateG){
+    this.iterableTasksComment = date.selectedTasks.map(task => (
+      {
+        selectedTask:task, 
+        formGroup: new FormGroup({comment: new FormControl()}) 
+      }
+    ))
   }
 
   constructor(
@@ -112,36 +131,32 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
   updatePageOnlyDate() {
     let [date, mission] = this.reloadMission(this.date)
     this.date = date as DateG
+    this.computeIterable(date as DateG)
     this.mission = mission as Mission
     this.cd.markForCheck()
   }
 
-  validate(task: Task) {
+  validate(task: Task, control: HTMLImageElement) {
     if (this.view == 'ST' && !task.refused && !this.mission!.isClosed) {
       task.validated = !task.validated
-      this.store.dispatch(new ModifyDetailedPost(task)).pipe(take(1)).subscribe(() => {
-        let control = document.getElementById("control_validate_"+task.id) as HTMLImageElement;
+      this.store.dispatch(new ModifyDetailedPost(task)).pipe(take(1)).subscribe((mis) => {
+        this.mission = this.store.selectSnapshot(DataQueries.getById('Mission', this.mission!.id))
         control.src = SuiviPME.computeTaskImage(task, "validated")
       })
     }
   }
 
-  refuse(task: Task) {
+  refuse(task: Task, control: HTMLImageElement) {
     if (this.view == 'ST' && !task.validated && !this.mission!.isClosed) {
       task.refused = !task.refused
       this.store.dispatch(new ModifyDetailedPost(task)).pipe(take(1)).subscribe(() => {
-        // this.mission = this.store.selectSnapshot(DataQueries.getById('Mission', this.mission!.id))
-        let control = document.getElementById("control_refuse_"+task.id) as HTMLImageElement;
+        this.mission = this.store.selectSnapshot(DataQueries.getById('Mission', this.mission!.id))
         control.src = SuiviPME.computeTaskImage(task, "refused")
       })
     }
   }
 
-  formTask = new FormGroup({
-    commentTask: new FormControl('', [
-      Validators.required,
-    ]),
-  });
+  
 
   formMain = new FormGroup({
     commentMain: new FormControl('', [
@@ -149,19 +164,19 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
     ]),
   });
 
-  detectKey( task: Task| null, inputEl: HTMLTextAreaElement | HTMLInputElement){
-    console.log('keyup');
-    this.mainComment(task, inputEl);
-    inputEl.value = '';
-  }
 
-  textareaSubmit(e: Event,input: HTMLFormElement){
-    console.log('object');
-    input.dispatchEvent(new Event("submit", {cancelable: true}));
-    e.preventDefault(); // Prevents the addition of a new line in the text field (not needed in a lot of cases)
+  onSubmit( task: Task| null, inputEl: HTMLTextAreaElement | HTMLInputElement){
+    this.mainComment(task, inputEl);
+    this.cd.markForCheck()
+  }
+  textareaSubmit(e: KeyboardEvent,input: HTMLFormElement){
+    if(e.key == 'Enter'){
+      input.dispatchEvent(new Event("submit", {cancelable: true}))
+      e.preventDefault(); // Prevents the addition of a new line in the text field (not needed in a lot of cases)
+    }
   }
   mainComment(task:Task | null, inputEl: HTMLTextAreaElement | HTMLInputElement) {
-    let idInput = task ? "input_"+task!.id : "input_general"
+    // let idInput = task ? "input_"+task!.id : "input_general"
     let input = inputEl
     this.currentTaskId = task ? task!.id : null
     if (input.value.trim() != '' && !this.mission!.isClosed) {
@@ -169,7 +184,6 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
       this.store.dispatch(new CreateSupervision(this.mission!.id, detailPostId, null, input.value, this.date.value)).pipe(take(1)).subscribe(() => {
         input.value = ''
         this.updatePageOnlyDate()
-        // this.cd.markForCheck()
       })
     }
   }
