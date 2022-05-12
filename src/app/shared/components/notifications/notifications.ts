@@ -102,10 +102,6 @@ export class Notifications {
   }
 
   ngOnInit() {
-    this.notifications.sort(
-      (notification1: Notification, notification2: Notification) =>
-        notification1.timestamp > notification2.timestamp ? 1 : -1
-    );
     this.notifications.forEach((notificationAny, index) => {
       let notification = notificationAny as Notification;
       let src: SafeResourceUrl | string = "";
