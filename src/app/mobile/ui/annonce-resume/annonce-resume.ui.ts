@@ -60,6 +60,7 @@ export type ApplyForm = {
           >
           <span>{{ this.amountOrigin || 0 }} {{ this.post.currency }} </span>
         </div>
+
         <div class="needs">
           <span class="title  ">Nous avons besoin de:</span>
           <ul>
@@ -74,6 +75,7 @@ export type ApplyForm = {
             ></span
           >
         </div>
+
         <div class="description">
           <span class="title  ">Description des missions</span>
           <p>{{ post.description }}</p>
@@ -81,6 +83,7 @@ export type ApplyForm = {
             <li *ngFor="let detail of details">{{ detail.content }}</li>
           </ul>
         </div>
+
         <div class="documents">
           <span class="title  ">Documents importants</span>
           <ul>
@@ -101,6 +104,7 @@ export type ApplyForm = {
           [style.transform]="'rotate(' + 180 * +!collapsed + 'deg)'"
         />
       </div>
+
       <rating
         [view]="'PME'"
         [profile]="{ company: company!, user: user }"
@@ -122,6 +126,7 @@ export type ApplyForm = {
           [formGroup]="form"
         >
           <h2>Pour postuler veuillez proposer votre devis</h2>
+
           <div class="form-input">
             <label>Montant</label>
             <div class="flex row space-between remuneration">
@@ -329,4 +334,10 @@ export class UIAnnonceResume extends Destroy$ {
     else amount = null;
     this.form.get("amount")?.setValue(amount);
   }
+<<<<<<< HEAD
 }
+||||||| bb8637b0
+};
+=======
+}
+>>>>>>> e96de808dc60d1cdb83f2328068917cd38515dba

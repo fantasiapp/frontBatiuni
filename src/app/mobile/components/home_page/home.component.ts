@@ -186,7 +186,6 @@ export class HomeComponent extends Destroy$ {
   }
 
   ngAfterViewInit() {
-    console.log("dans le ngAfterViewInit");
     this.filters.filter("ST", this.allOnlinePosts);
   }
 
@@ -456,9 +455,12 @@ export class HomeComponent extends Destroy$ {
       .pipe(take(1))
       .subscribe(
         (success) => {
-          this.info.show("success", "Candidature envoyée", 2000);
-
+          console.log("applyPostReceived");
           // Si la candidature est envoyée on quite la vue de la candidature
+          this.postMenu.post = this.store.selectSnapshot(
+            DataQueries.getById("Post", post.id)
+          );
+          this.cd.markForCheck();
           this.slideOnlinePostClose();
         },
         (error) =>
