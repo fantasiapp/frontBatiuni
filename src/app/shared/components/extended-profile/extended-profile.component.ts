@@ -26,6 +26,7 @@ import {
 import { Observable } from "rxjs";
 import { Destroy$ } from "src/app/shared/common/classes";
 import { getFileColor } from "../../common/functions";
+import { AppComponent } from "src/app/app.component";
 
 @Component({
   selector: "extended-profile",
@@ -64,7 +65,8 @@ export class ExtendedProfileComponent extends Destroy$ {
   constructor(
     private store: Store,
     private popup: PopupService,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    private appComponent: AppComponent
   ) {
     super();
   }
@@ -85,10 +87,17 @@ export class ExtendedProfileComponent extends Destroy$ {
     (this.profile$ as Observable<Profile>)
       .pipe(take(1))
       .subscribe((profile) => {
+        console.log('ngOnInit extended-profile, showView:', this.showView)
         this.files = profile.company.files as any;
         this.companyJobs = profile.company.jobs as any;
         this.jobs = this.companyJobs.map(({ job }) => job) as any;
       });
+    this.showView = "PME"
+    console.log('ngOnInit extended-profile, showView:', this.store.selectSnapshot(DataState.view))
+  }
+
+  ngAfterViewInit() {
+    this.appComponent.getUserData()
   }
 
   get attachedFiles(): any[] {
@@ -111,4 +120,5 @@ export class ExtendedProfileComponent extends Destroy$ {
 
   @Output()
   profileChanged = new EventEmitter<boolean>();
+
 }

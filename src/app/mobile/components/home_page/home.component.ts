@@ -59,6 +59,7 @@ import { getLevenshteinDistance } from "src/app/shared/services/levenshtein";
 import { AuthState } from "src/models/auth/auth.state";
 import { Logout } from "src/models/auth/auth.actions";
 import { analyzeAndValidateNgModules } from "@angular/compiler";
+import { AppComponent } from "src/app/app.component";
 
 @Component({
   selector: "home",
@@ -130,6 +131,7 @@ export class HomeComponent extends Destroy$ {
   showFooter: boolean = true;
   constructor(
     private cd: ChangeDetectorRef,
+    private appComponent: AppComponent,
     private store: Store,
     private info: InfoService,
     private popup: PopupService,
@@ -171,6 +173,7 @@ export class HomeComponent extends Destroy$ {
         this.selectDraft(null);
         this.selectUserOnline(null);
         this.selectMission(null);
+
       });
     // const view = this.store.selectSnapshot(DataState.view)
     // this._openCloseMission = view == 'ST' && this.missions.length != 0
@@ -190,6 +193,11 @@ export class HomeComponent extends Destroy$ {
   }
 
   ngAfterViewInit() {
+    this.updatePage()
+  }
+
+  updatePage() {
+    this.appComponent.getUserData();
     this.filters.filter("ST", this.allOnlinePosts);
   }
 
@@ -546,9 +554,9 @@ export class HomeComponent extends Destroy$ {
       .subscribe(
         (success) => {
           // Si la candidature est envoyée on quite la vue de la candidature
-          this.filters.filter("ST", this.allOnlinePosts);
+          this.updateAllOnlinePost(post)
+          this.filters.filter("ST", this.allOnlinePosts)
           this.slideOnlinePostClose();
-          this.cd.markForCheck();
         },
         (error) =>
           this.info.show("error", "Echec de l'envoi de la candidature", 5000)
@@ -635,6 +643,7 @@ export class HomeComponent extends Destroy$ {
   @ViewChild("slideOnlinePost") private slideOnlinePost!: UISlideMenuComponent;
 
   slideOnlinePostClose() {
+    this.updatePage()
     // Close View
     this.slideOnlinePost.close();
 
@@ -674,4 +683,19 @@ export class HomeComponent extends Destroy$ {
     });
   }
 
+  updateAllOnlinePost(post: Post) {
+    post = this.store.selectSnapshot(DataQueries.getById("Post", post.id))!
+    let temporaryAllOnlinePost: Post[] = []
+    let oldPost: Post | undefined = this.allOnlinePosts.pop()
+    let checkIf = true
+    this.allOnlinePosts.forEach((onlinePost: Post) => {
+      if (onlinePost.id > oldPost!.id && checkIf){
+        temporaryAllOnlinePost.push(post)
+        checkIf = false
+        console.log('applyPost, dans le if :', temporaryAllOnlinePost, post)
+      }
+      temporaryAllOnlinePost.push(onlinePost)
+    })
+    this.allOnlinePosts = temporaryAllOnlinePost
+  }
 }

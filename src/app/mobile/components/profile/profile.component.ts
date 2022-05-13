@@ -15,6 +15,7 @@ import { Destroy$ } from "src/app/shared/common/classes";
 import { Profile } from "src/models/new/data.interfaces";
 import { Notification } from "src/models/new/data.interfaces";
 import { NotificationViewed } from "src/models/new/user/user.actions";
+import { AppComponent } from "src/app/app.component";
 
 
 @Component({

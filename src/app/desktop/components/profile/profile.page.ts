@@ -13,6 +13,7 @@ import * as UserActions from "src/models/new/user/user.actions";
 import { InfoService } from "src/app/shared/components/info/info.component";
 import { take } from "rxjs/operators";
 import { animate, style, transition, trigger } from "@angular/animations";
+import { AppComponent } from "src/app/app.component";
 
 @Component({
   selector: "profile",
@@ -49,11 +50,13 @@ export class ProfilePageComponent {
   constructor(
     private store: Store,
     private cd: ChangeDetectorRef,
-    private info: InfoService
+    private info: InfoService,
+    private appComponent: AppComponent
   ) {}
   ngOnInit() {
     this.profile$.subscribe(console.log);
   }
+
   logout() {
     this.store.dispatch(new Logout());
   }

@@ -25,6 +25,7 @@ import { UIAnnonceResume } from "../../ui/annonce-resume/annonce-resume.ui";
 import { getLevenshteinDistance } from "src/app/shared/services/levenshtein";
 
 import * as moment from "moment";
+import { AppComponent } from "src/app/app.component";
 
 @Component({
   selector: "missions",
@@ -54,7 +55,8 @@ export class MissionsComponent extends Destroy$ {
   constructor(
     private store: Store,
     private info: InfoService,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    private appComponent: AppComponent
   ) {
     super();
   }
@@ -122,6 +124,10 @@ export class MissionsComponent extends Destroy$ {
     }
 
     this.selectMissions(null);
+  }
+
+  ngAfterViewInit() {
+    this.appComponent.getUserData()
   }
 
   callbackFilter = (filter: any): void => {
