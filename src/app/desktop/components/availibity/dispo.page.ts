@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, ViewChild } from "@angular/core";
 import { Select, Store } from "@ngxs/store";
 import { Observable } from "rxjs";
+import { AppComponent } from "src/app/app.component";
 import { Destroy$ } from "src/app/shared/common/classes";
 import { Availability, CalendarUI, DayState } from "src/app/shared/components/calendar/calendar.ui";
 import { TooltipDimension, UITooltipService } from "src/app/shared/components/tooltip/tooltip.component";
@@ -55,7 +56,7 @@ export class DispoPage extends Destroy$ {
     width: '300px', height: '150px' 
   };
 
-  constructor(private store: Store, private tooltipService: UITooltipService) {
+  constructor(private store: Store, private tooltipService: UITooltipService, private appComponent: AppComponent) {
     super(); 
   }
 
@@ -65,6 +66,10 @@ export class DispoPage extends Destroy$ {
         this.store.selectSnapshot(DataQueries.getMany('Disponibility', profile.company.availabilities))
           .map(availability => ({date: availability.date, availability: nameToAvailability(availability.nature as any)}));
     });
+  }
+  
+  ngAfterViewInit() {
+    this.appComponent.getUserData()
   }
 
   private getDimensionFromEvent(e: MouseEvent) {

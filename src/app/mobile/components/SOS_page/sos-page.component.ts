@@ -6,6 +6,7 @@ import {
 import { Store } from "@ngxs/store";
 import { Observable, of } from "rxjs";
 import { switchMap, takeUntil } from "rxjs/operators";
+import { AppComponent } from "src/app/app.component";
 import { Destroy$ } from "src/app/shared/common/classes";
 import { Availability } from "src/app/shared/components/calendar/calendar.ui";
 import { ExtendedProfileComponent } from "src/app/shared/components/extended-profile/extended-profile.component";
@@ -40,7 +41,7 @@ export class SOSPageComponent {
     availabilities: MarkerType[];
   }>;
 
-  constructor(private store: Store, private slides: SlidemenuService) {
+  constructor(private store: Store, private slides: SlidemenuService, private appComponent: AppComponent) {
     const now = new Date().toISOString().slice(0, 10);
     this.availableCompanies$ = this.companies$.pipe(
       switchMap((companies) => {

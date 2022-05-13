@@ -58,6 +58,7 @@ import { getLevenshteinDistance } from "src/app/shared/services/levenshtein";
 
 import { AuthState } from "src/models/auth/auth.state";
 import { Logout } from "src/models/auth/auth.actions";
+import { AppComponent } from "src/app/app.component";
 
 @Component({
   selector: "home",
@@ -126,6 +127,7 @@ export class HomeComponent extends Destroy$ {
   showFooter: boolean = true;
   constructor(
     private cd: ChangeDetectorRef,
+    private appComponent: AppComponent,
     private store: Store,
     private info: InfoService,
     private popup: PopupService,
@@ -167,6 +169,7 @@ export class HomeComponent extends Destroy$ {
         this.selectDraft(null);
         this.selectUserOnline(null);
         this.selectMission(null);
+
       });
     // const view = this.store.selectSnapshot(DataState.view)
     // this._openCloseMission = view == 'ST' && this.missions.length != 0
@@ -186,6 +189,11 @@ export class HomeComponent extends Destroy$ {
   }
 
   ngAfterViewInit() {
+    this.updatePage()
+  }
+
+  updatePage() {
+    this.appComponent.getUserData();
     this.filters.filter("ST", this.allOnlinePosts);
   }
 
@@ -598,6 +606,7 @@ export class HomeComponent extends Destroy$ {
   @ViewChild("slideOnlinePost") private slideOnlinePost!: UISlideMenuComponent;
 
   slideOnlinePostClose() {
+    this.updatePage()
     // Close View
     this.slideOnlinePost.close();
 
