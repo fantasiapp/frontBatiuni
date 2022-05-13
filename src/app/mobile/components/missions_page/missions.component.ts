@@ -80,7 +80,7 @@ export class MissionsComponent extends Destroy$ {
           const dateid = missionDatesId[i]
           let date = this.store.selectSnapshot(DataQueries.getById('DatePost', dateid))
   
-          console.log('date', date);
+          // console.log('date', date);
           dateAlreadyParsedFromMission.push(date!.date)
   
           this.detailedDays.push({
@@ -134,18 +134,18 @@ export class MissionsComponent extends Destroy$ {
         this.allMyMissions.sort((a,b) => {return a['id'] - b['id']})
       }
 
-      if (filter.sortMissionDate === true) {this.allMyMissions.sort((a: any, b: any) => Date.parse(a['startDate']) - Date.parse(b['startDate']))
-          console.log(this.allMyMissions)}
+      // Trie les missions par date plus proche
+      if (filter.sortMissionDate === true) {this.allMyMissions.sort((a: any, b: any) => Date.parse(a['startDate']) - Date.parse(b['startDate']))}
 
       for (let mission of this.allMyMissions) {
       
       let isDifferentValidationDate = (filter.validationDate && filter.validationDate != mission.dueDate)
-      let isNotInMissionDate = (filter.missionDate && mission.startDate != filter.missionDate);        
+      let datesMission = this.store.selectSnapshot(DataQueries.getMany("DatePost", mission.dates));
+      let dates = datesMission.map(date => date.date);
+      let isNotInMissionDate = (filter.missionDate && !dates.includes(filter.missionDate))       
       let isDifferentManPower = (filter.manPower && mission.manPower != (filter.manPower === "true"))
       let isNotIncludedJob = (filter.jobs && filter.jobs.length && filter.jobs.every((job: any) => {return job.id != mission.job}))
       const user = this.store.selectSnapshot(DataQueries.currentUser);
-      // console.log(user.viewedPosts)
-      // console.log(mission)
       let isUnread = (filter.unread && user.viewedPosts.includes(mission.id) == filter.unread);
       let isNotClosed = (filter.isClosed && mission.isClosed != filter.isClosed)
 
