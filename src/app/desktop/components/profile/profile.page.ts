@@ -57,11 +57,6 @@ export class ProfilePageComponent {
     this.profile$.subscribe(console.log);
   }
 
-  ngAfterViewInit() {
-    this.appComponent.getUserData()
-  }
-
-
   logout() {
     this.store.dispatch(new Logout());
   }

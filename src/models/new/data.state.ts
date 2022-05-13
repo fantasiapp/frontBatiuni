@@ -90,6 +90,7 @@ export class Clear {
 })
 @Injectable()
 export class DataState {
+  flagUpdate = true;
   constructor(
     private store: Store,
     private reader: DataReader,
@@ -209,15 +210,21 @@ export class DataState {
   @Action(GetUserData)
   getUserData(ctx: StateContext<DataModel>, action: GetUserData) {
     const req = this.http.get("data", { action: action.action });
-
+    if (this.flagUpdate){
+      this.flagUpdate = false
     return req.pipe(
       tap((response: any) => {
         const loadOperations = this.reader.readInitialData(response),
           sessionOperation = this.reader.readCurrentSession(response);
 
         ctx.setState(compose(...loadOperations, sessionOperation));
+        this.flagUpdate = true
       })
     );
+    }
+    else{
+      return 
+    }
   }
 
   @Action(Logout)

@@ -96,9 +96,9 @@ export class ExtendedProfileComponent extends Destroy$ {
     console.log('ngOnInit extended-profile, showView:', this.store.selectSnapshot(DataState.view))
   }
 
-  // ngAfterViewInit() {
-  //   this.appComponent.getUserData()
-  // }
+  ngAfterViewInit() {
+    this.appComponent.getUserData()
+  }
 
   get attachedFiles(): any[] {
     return this.files.filter(
