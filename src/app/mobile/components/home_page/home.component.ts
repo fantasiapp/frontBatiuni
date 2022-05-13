@@ -502,7 +502,6 @@ export class HomeComponent extends Destroy$ {
   }
 
   applyPost(post: Post, form: ApplyForm) {
-    console.log("applyPost", form)
     this.info.show("info", "Candidature en cours...", Infinity);
     this.store
       .dispatch(new ApplyPost(post.id, form))
@@ -510,9 +509,9 @@ export class HomeComponent extends Destroy$ {
       .subscribe(
         (success) => {
           // Si la candidature est envoyée on quite la vue de la candidature
-          this.filters.filter("ST", this.allOnlinePosts);
+          this.updateAllOnlinePost(post)
+          this.filters.filter("ST", this.allOnlinePosts)
           this.slideOnlinePostClose();
-          this.cd.markForCheck();
         },
         (error) =>
           this.info.show("error", "Echec de l'envoi de la candidature", 5000)
@@ -625,5 +624,21 @@ export class HomeComponent extends Destroy$ {
       });
     }
     return possibleCandidates;
+  }
+
+  updateAllOnlinePost(post: Post) {
+    post = this.store.selectSnapshot(DataQueries.getById("Post", post.id))!
+    let temporaryAllOnlinePost: Post[] = []
+    let oldPost: Post | undefined = this.allOnlinePosts.pop()
+    let checkIf = true
+    this.allOnlinePosts.forEach((onlinePost: Post) => {
+      if (onlinePost.id > oldPost!.id && checkIf){
+        temporaryAllOnlinePost.push(post)
+        checkIf = false
+        console.log('applyPost, dans le if :', temporaryAllOnlinePost, post)
+      }
+      temporaryAllOnlinePost.push(onlinePost)
+    })
+    this.allOnlinePosts = temporaryAllOnlinePost
   }
 }
