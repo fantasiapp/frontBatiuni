@@ -142,12 +142,12 @@
               class="notification"
             ></span>
           </li>
-          <li (click)="slideBooster()">
+          <li *ngIf="!postMenu.boosted" (click)="slideBooster()">
             <img src="assets/booster.svg" />Booster Mon annonce
           </li>
-          <!-- <li *ngIf="postMenu.post!.isBoosted" class="gray">
+          <li *ngIf="postMenu.boosted" class="boosted">
             <img src="assets/booster.svg" />Booster Mon annonce
-          </li> -->
+          </li>
           <li (click)="deletePost(postMenu.post!.id)">
             <img src="assets/cloturer.svg" />Supprimer l'annonce
           </li>

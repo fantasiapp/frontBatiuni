@@ -263,4 +263,6 @@ export class PostMenu<T extends Post | Mission = Post> {
   favorite: boolean = false;
 
   get candidates() { return this.post?.candidates || []; }
+
+  get boosted() { return this.post?.isBoosted || false; }
 };
