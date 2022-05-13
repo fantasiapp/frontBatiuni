@@ -74,7 +74,7 @@ export class AvailabilitiesComponent extends Destroy$ {
   }
 
   ngAfterViewInit() {
-    this.appComponent.getUserData()
+    // this.appComponent.getUserData()
   }
 
   submit(calendar: CalendarUI) {

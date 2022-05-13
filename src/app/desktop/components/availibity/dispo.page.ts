@@ -68,9 +68,6 @@ export class DispoPage extends Destroy$ {
     });
   }
   
-  ngAfterViewInit() {
-    this.appComponent.getUserData()
-  }
 
   private getDimensionFromEvent(e: MouseEvent) {
     const ev = e,

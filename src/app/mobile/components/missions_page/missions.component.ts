@@ -145,7 +145,7 @@ export class MissionsComponent extends Destroy$ {
   }
 
   ngAfterViewInit() {
-    this.appComponent.getUserData()
+    // this.appComponent.getUserData()
   }
 
   callbackFilter = (filter: any): void => {

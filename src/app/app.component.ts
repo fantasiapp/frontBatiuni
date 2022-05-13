@@ -66,7 +66,7 @@ export class AppComponent extends Destroy$ {
   async updateUserData() {
     while (false) {
       if (this.readyToUpdate) {
-        console.log("getUserData", this.getUserData());
+        this.getUserData()
         await delay(5000);
       }
       await delay(5000);
