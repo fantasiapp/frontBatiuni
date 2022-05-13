@@ -51,10 +51,11 @@ import { ComplexPassword, setErrors } from "src/validators/verify";
 
     :host{
       overflow: scroll;
-      padding-bottom: calc(env(safe-area-inset-bottom) + 2rem)
+      padding-bottom: calc(env(safe-area-inset-bottom) + 2rem);
     }
     form {
-      height: unset
+      height: fit-content;
+      min-height: 100%;
     }
 
   `],
@@ -83,11 +84,13 @@ export class ConnexionForm extends Destroy$ {
     let { email, password } = this.loginForm.value;
     this.store.dispatch(new Login(email, password))
     .pipe(take(1)).subscribe(
-      async (success) => {
-        const result = await this.router.navigate(['', 'home']);
-        if ( !result ) {
-          setErrors(this.loginForm, {all: 'Erreur inattendue. (500 ?)'});
-          this.cd.markForCheck();
+      (success) => {
+        if(success){
+          const result = this.router.navigate(['', 'home']);
+          // if ( !result ) {
+          //   setErrors(this.loginForm, {all: 'Erreur inattendue. (500 ?)'});
+          //   this.cd.markForCheck();
+          // }
         }
       },
       errors => {

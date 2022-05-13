@@ -17,7 +17,8 @@ export class Mobile {
   init() {
     if (Capacitor.getPlatform() !== "web") {
       Keyboard.setAccessoryBarVisible({ isVisible: true });
-      Keyboard.addListener("keyboardWillShow", (info: any) => {
+      Keyboard.addListener("keyboardDidShow", (info: any) => {
+        
         this.footerStateSubject.next(false);
       });
       Keyboard.addListener("keyboardDidHide", () => {
