@@ -193,7 +193,7 @@ export class HomeComponent extends Destroy$ {
   }
 
   updatePage() {
-    // this.appComponent.getUserData();
+    this.appComponent.getUserData();
     this.filters.filter("ST", this.allOnlinePosts);
   }
 
