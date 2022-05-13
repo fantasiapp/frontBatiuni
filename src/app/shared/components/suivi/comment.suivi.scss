@@ -55,9 +55,11 @@
   height: 10rem;
   width: 100%;
   overflow: hidden;
+  display: flex;
+  justify-content: center;
   img.main {
     height: 100%;
-    width: 100%;
+    width: 70%;
     object-fit: contain;
     position: relative;
   }
@@ -68,7 +70,6 @@
     object-fit: cover;
     filter: blur(3px);
     opacity: 0.2;
-    
   }
 
   .left, .right {
