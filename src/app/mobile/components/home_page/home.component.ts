@@ -219,7 +219,9 @@ export class HomeComponent extends Destroy$ {
 
       for (let post of this.allUserDrafts) {
       
-        let isDifferentDate = (filter.date && filter.date != post.dueDate)
+        let datesPost = this.store.selectSnapshot(DataQueries.getMany("DatePost", post.dates));
+        let dates = datesPost.map(date => date.date);
+        let isDifferentDate = (filter.date && !dates.includes(filter.date))
         let isDifferentManPower = (filter.manPower && post.manPower != (filter.manPower === "true"))
         let isNotIncludedJob = (filter.jobs && filter.jobs.length && filter.jobs.every((job: any) => {return job.id != post.job}))
 
@@ -251,8 +253,10 @@ export class HomeComponent extends Destroy$ {
       }
 
       for (let post of this.allUserOnlinePosts) {
-      
-        let isDifferentDate = (filter.date && filter.date != post.dueDate)
+        
+        let datesPost = this.store.selectSnapshot(DataQueries.getMany("DatePost", post.dates));
+        let dates = datesPost.map(date => date.date);
+        let isDifferentDate = (filter.date && !dates.includes(filter.date))
         let isDifferentManPower = (filter.manPower && post.manPower != (filter.manPower === "true"))
         let isNotIncludedJob = (filter.jobs && filter.jobs.length && filter.jobs.every((job: any) => {return job.id != post.job}))
 
@@ -281,7 +285,9 @@ export class HomeComponent extends Destroy$ {
 
       for (let mission of this.allMissions) {
       
-        let isDifferentDate = (filter.date && filter.date != mission.dueDate)
+        let datesPost = this.store.selectSnapshot(DataQueries.getMany("DatePost", mission.dates));
+        let dates = datesPost.map(date => date.date);
+        let isDifferentDate = (filter.date && !dates.includes(filter.date))
         let isDifferentManPower = (filter.manPower && mission.manPower != (filter.manPower === "true"))
         let isNotIncludedJob = (filter.jobs && filter.jobs.length && filter.jobs.every((job: any) => {return job.id != mission.job}))
 
