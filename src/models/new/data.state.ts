@@ -88,6 +88,7 @@ export class Clear {
     session: {
       currentUser: -1,
       view: "ST",
+      time: 0,
     },
   },
 })
@@ -140,6 +141,7 @@ export class DataState {
         session: {
           currentUser: -1,
           view: "ST",
+          time: 0,
         },
       });
   }
@@ -227,7 +229,7 @@ export class DataState {
 
   @Action(Logout)
   logout(ctx: StateContext<DataModel>) {
-    ctx.setState({ fields: {}, session: { view: "ST", currentUser: -1 } });
+    ctx.setState({ fields: {}, session: { view: "ST", currentUser: -1 , time: 0} });
     ctx.dispatch(new GetGeneralData()); // a sign to decouple this from DataModel
   }
 
