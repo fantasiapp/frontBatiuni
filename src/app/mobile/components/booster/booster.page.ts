@@ -1,4 +1,5 @@
-import { Component,} from "@angular/core";
+import { Component, Input,} from "@angular/core";
+import { Post } from "src/models/new/data.interfaces";
 
 @Component({
   selector: 'booster-page',
@@ -7,4 +8,14 @@ import { Component,} from "@angular/core";
   
 })
 export class BoosterPage {
+
+  @Input()
+  post!: Post;
+
+
+
+  ngOnInit() {
+    console.log('booster page');
+    console.log(this.post);
+  }
 };

@@ -145,6 +145,9 @@
           <li (click)="slideBooster()">
             <img src="assets/booster.svg" />Booster Mon annonce
           </li>
+          <!-- <li *ngIf="postMenu.post!.isBoosted" class="gray">
+            <img src="assets/booster.svg" />Booster Mon annonce
+          </li> -->
           <li (click)="deletePost(postMenu.post!.id)">
             <img src="assets/cloturer.svg" />Supprimer l'annonce
           </li>
@@ -247,8 +250,8 @@
   </footer>
 </ng-template>
 
-<ng-template #booster let-post="post">
-  <booster-page></booster-page>
+<ng-template #booster let-post>
+  <booster-page [post]="post"></booster-page>
 </ng-template>
 <!-- <swipeup [(open)]="missionMenu.swipeup">
   <li >Modifier les horaires / les dates de présence</li>

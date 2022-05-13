@@ -1,6 +1,9 @@
 <ng-container *ngIf="post">
   <!-- <app-banner *ngIf="(isClosed)" [post]="post"></app-banner> -->
-  <div class="container grow flex center-cross space-between" [ngClass]="{'offres-infos-closed': isClosed, 'offres-infos-postulated': hasPostulated && !isAppliedPage}">
+  <div class="container grow flex center-cross space-between" 
+      [ngClass]="{'offres-infos-closed': isClosed, 
+                  'offres-infos-postulated': hasPostulated && !isAppliedPage,
+                  'boosted': post.isBoosted}">
     <div class="offres-infos" >
       <ng-container *ngIf="view == 'PME';else stTemplate" #stTemplate>
         <span class="metier">{{metier?.name}}</span>
