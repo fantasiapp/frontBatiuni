@@ -20,6 +20,7 @@ import {
   TakePicture,
   InviteFriend,
   ValidateMissionDate,
+  BoostPost,
 } from "./user/user.actions";
 import {
   ApplyPost,
@@ -63,12 +64,14 @@ import { GetCompanies } from "./search/search.actions";
 import produce from "immer";
 import { SlidemenuService } from "src/app/shared/components/slidemenu/slidemenu.component";
 import { SwipeupService } from "src/app/shared/components/swipeup/swipeup.component";
+import { transformAll } from "@angular/compiler/src/render3/r3_ast";
 
 export interface DataModel {
   fields: Record<string[]>;
   session: {
     currentUser: number;
     view: "ST" | "PME";
+    time: number;
   };
   [key: string]: Record<any>;
 }
@@ -915,6 +918,15 @@ export class DataState {
         }
       })
     );
+  }
+
+  @Action(BoostPost)
+  boostPost(ctx: StateContext<DataModel>, boost: BoostPost) {
+    return this.http.post("data", boost).pipe(
+      tap((response: any) => {
+        console.log("boost post response:", response)
+      })
+    );        
   }
 }
 

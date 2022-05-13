@@ -85,6 +85,8 @@ export class UIRadioboxComponent {
   onChange(e: Event) {
     console.log('Radiobox TEST', this.value, this.onselect);
     if (this.value) {
+      console.log("emit undefined");
+      this.valueChange.emit(this.value = false);
       this.selection.emit(undefined);
     } else {
     this.valueChange.emit(this.value = true);
