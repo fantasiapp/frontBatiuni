@@ -43,7 +43,7 @@ export class AppComponent extends Destroy$ {
   }
 
   ready$ = new AsyncSubject<true>();
-  readyToUpdate: boolean = false;
+  readyToUpdate: boolean = true;
 
   async ngOnInit() {
     await this.store.dispatch(new Load()).toPromise();
@@ -65,11 +65,6 @@ export class AppComponent extends Destroy$ {
 
   async updateUserData() {
     while (false) {
-      console.log(
-        "changeReadyToUpdate",
-        this.changeReadyToUpdate(false),
-        this.readyToUpdate
-      );
       if (this.readyToUpdate) {
         console.log("getUserData", this.getUserData());
         await delay(5000);
@@ -92,15 +87,8 @@ export class AppComponent extends Destroy$ {
   }
 
   changeReadyToUpdate(bool?: boolean) {
-    if (bool !== null) {
+    if (bool !== undefined) {
       this.readyToUpdate = bool!;
-      console.log(
-        "changeReadyToUpdate",
-        "bool :",
-        bool,
-        "readyToUpdate",
-        this.readyToUpdate
-      );
     } else {
       this.readyToUpdate = !this.readyToUpdate;
     }
