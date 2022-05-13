@@ -20,6 +20,7 @@ import {
   TakePicture,
   InviteFriend,
   ValidateMissionDate,
+  BoostPost,
 } from "./user/user.actions";
 import {
   ApplyPost,
@@ -63,12 +64,14 @@ import { GetCompanies } from "./search/search.actions";
 import produce from "immer";
 import { SlidemenuService } from "src/app/shared/components/slidemenu/slidemenu.component";
 import { SwipeupService } from "src/app/shared/components/swipeup/swipeup.component";
+import { transformAll } from "@angular/compiler/src/render3/r3_ast";
 
 export interface DataModel {
   fields: Record<string[]>;
   session: {
     currentUser: number;
     view: "ST" | "PME";
+    time: number;
   };
   [key: string]: Record<any>;
 }
@@ -85,6 +88,7 @@ export class Clear {
     session: {
       currentUser: -1,
       view: "ST",
+      time: 0,
     },
   },
 })
@@ -137,6 +141,7 @@ export class DataState {
         session: {
           currentUser: -1,
           view: "ST",
+          time: 0,
         },
       });
   }
@@ -222,7 +227,7 @@ export class DataState {
 
   @Action(Logout)
   logout(ctx: StateContext<DataModel>) {
-    ctx.setState({ fields: {}, session: { view: "ST", currentUser: -1 } });
+    ctx.setState({ fields: {}, session: { view: "ST", currentUser: -1 , time: 0} });
     ctx.dispatch(new GetGeneralData()); // a sign to decouple this from DataModel
   }
 
@@ -897,6 +902,15 @@ export class DataState {
         }
       })
     );
+  }
+
+  @Action(BoostPost)
+  boostPost(ctx: StateContext<DataModel>, boost: BoostPost) {
+    return this.http.post("data", boost).pipe(
+      tap((response: any) => {
+        console.log("boost post response:", response)
+      })
+    );        
   }
 }
 

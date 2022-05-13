@@ -36,6 +36,7 @@
   <li>Appeler le 06 21 94 03 86</li>
   <li *ngIf="mission?.signedByCompany && mission?.signedBySubContractor && !mission?.isClosed" (click)="closeMission()">Clôturer la mission</li>
   <li (click)="duplicateMission()">Dupliquer l'annonce</li>
+  <li>Cloturer l'annonce</li>
 </swipeup>
 
 <swipeup [(open)]="missionMenu.swipeupCloseMission">
