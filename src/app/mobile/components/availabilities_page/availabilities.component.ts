@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, ViewChild } from "@angular/core";
 import { Select, Store } from "@ngxs/store";
 import { Observable } from "rxjs";
 import { takeUntil } from "rxjs/operators";
+import { AppComponent } from "src/app/app.component";
 import { Destroy$ } from "src/app/shared/common/classes";
 import { Availability, CalendarUI, DayState } from "src/app/shared/components/calendar/calendar.ui";
 import { SwipeupService, SwipeupView } from "src/app/shared/components/swipeup/swipeup.component";
@@ -55,7 +56,7 @@ export class AvailabilitiesComponent extends Destroy$ {
     },
   }]
 
-  constructor(private store: Store, private swipeupService: SwipeupService) {
+  constructor(private store: Store, private swipeupService: SwipeupService, private appComponent: AppComponent) {
     super();
   }
 
@@ -70,6 +71,10 @@ export class AvailabilitiesComponent extends Destroy$ {
         const now = (new Date).toISOString().slice(0, 10);
         this.currentAvailability = this.availabilities.find(day => day.date == now)?.availability || 'nothing';
     });
+  }
+
+  ngAfterViewInit() {
+    this.appComponent.getUserData()
   }
 
   submit(calendar: CalendarUI) {

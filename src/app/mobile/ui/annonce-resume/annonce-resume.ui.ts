@@ -325,6 +325,8 @@ export class UIAnnonceResume extends Destroy$ {
   }
 
   open() {
+    console.log("open");
+    console.log("post", this.post);
     let amount;
     if (this._post) amount = this.searchCandidate(this._post)?.amount;
     else amount = null;

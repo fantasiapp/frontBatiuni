@@ -126,8 +126,15 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
       source: CameraSource.Camera,
     });
     this.swipeMenuImage = false;
-    // this.store.dispatch(new ChangeProfilePicture(photo, 'image'));
-    // scr = photo.format, imageBase64 = photo.base64String,
+    this.store
+      .dispatch(
+        new UploadImageSupervision(photo, this.mission!.id, this.currentTaskId)
+      )
+      .pipe(take(1))
+      .subscribe(() => {
+        this.updatePageOnlyDate();
+        this.swipeMenuImage = false;
+      });
   }
 
   async selectPhoto() {

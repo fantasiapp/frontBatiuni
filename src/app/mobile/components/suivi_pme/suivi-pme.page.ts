@@ -152,7 +152,6 @@ export class SuiviPME {
         invalidationImage: SuiviPME.computeTaskImage(detail, "refused"),
       }));
     let dates = mission.dates;
-    console.log('dates', dates);
     if (typeof mission.dates === "object" && !Array.isArray(mission.dates))
       dates = Object.keys(mission.dates).map((key) => +key as number);
     this.dates = dates.map((value: number, id) => {
@@ -172,7 +171,8 @@ export class SuiviPME {
           supervisionsTaks
         ),
       } as DateG;
-    });
+    })
+    this.dates.sort((date1:DateG, date2:DateG) => {return date1.value > date2.value ? 1 : -1})
   }
 
   computeSupervisionsforTask(
