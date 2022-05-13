@@ -58,6 +58,7 @@ import { getLevenshteinDistance } from "src/app/shared/services/levenshtein";
 
 import { AuthState } from "src/models/auth/auth.state";
 import { Logout } from "src/models/auth/auth.actions";
+import { analyzeAndValidateNgModules } from "@angular/compiler";
 
 @Component({
   selector: "home",
@@ -211,10 +212,24 @@ export class HomeComponent extends Destroy$ {
         levenshteinDist.sort((a: any,b: any) => a[1] - b[1]);
         let keys = levenshteinDist.map((key: any) => { return key[0] });    
 
-        // On trie les posts selon leur distance de levenshtein
+        // Trie les posts selon leur distance de levenshtein
         this.allUserDrafts.sort((a: any,b: any)=>keys.indexOf(a) - keys.indexOf(b));
       } else {
         this.allUserDrafts.sort((a,b) => {return a['id'] - b['id']})
+      }
+
+      // Trie brouillons les plus anciens
+      if (filter.sortDraftDate === true) {this.allUserDrafts.sort((a: any, b: any) => a['id'] - b['id'])} 
+
+      // Trie les brouillons les plus complets (selon leurs details + nb de documents)
+      let detailPost: any = []; 
+      if (filter.sortDraftFull === true) {
+        for (let post of this.allUserDrafts){
+          detailPost.push([post, post.details.length + post.files.length]) ;
+          }
+        detailPost.sort((a: any, b: any) => b[1] - a[1]);
+        let detailKeys = detailPost.map((key: any) => {return key[0]});
+        this.allUserDrafts.sort((a: any, b: any) => detailKeys.indexOf(a) - detailKeys.indexOf(b));
       }
 
       for (let post of this.allUserDrafts) {
@@ -252,6 +267,23 @@ export class HomeComponent extends Destroy$ {
         this.allUserOnlinePosts.sort((a,b) => {return a['id'] - b['id']})
       }
 
+      // Trie Posts selon leurs réponses
+      if (filter.sortPostResponse === true) {
+        let responses = [];
+        for (let post of this.allUserOnlinePosts) {
+          const candidatesIds = post.candidates || [],
+          candidates = this.store.selectSnapshot(DataQueries.getMany("Candidate", candidatesIds));
+          let possCandidate = candidates.reduce((possibleCandidates: Candidate[], candidate: Candidate) => { 
+            if (!candidate.isRefused) {possibleCandidates.push(candidate);}
+            return possibleCandidates; }, []
+          );
+          responses.push([post, possCandidate.length])
+        }
+        responses.sort((a: any,b: any) => b[1] - a[1]);
+        let keys = responses.map((key: any) => { return key[0] });    
+        this.allUserOnlinePosts.sort((a: any,b: any)=>keys.indexOf(a) - keys.indexOf(b));
+      } 
+
       for (let post of this.allUserOnlinePosts) {
         
         let datesPost = this.store.selectSnapshot(DataQueries.getMany("DatePost", post.dates));
@@ -281,6 +313,21 @@ export class HomeComponent extends Destroy$ {
         this.allMissions.sort((a: any,b: any)=>keys.indexOf(a) - keys.indexOf(b));
       } else {
         this.allMissions.sort((a,b) => {return a['id'] - b['id']})
+      }
+
+      // Trie missions selon leurs notifications
+      if (filter.sortMissionNotifications === true) {
+        let allNotifications = this.store.selectSnapshot(DataQueries.getAll("Notification"));
+        let missionsNotifications = allNotifications.map(notification => notification.missions);
+        let missionArray = [];
+        for (let mission of this.allMissions){
+          let missionNotifications = missionsNotifications.map(missionId => missionId === mission.id)
+          const countTrue = missionNotifications.filter(value => value === true).length;
+          missionArray.push([mission, countTrue]);
+        }
+        missionArray.sort((a: any, b: any) => b[1] - a[1]);
+        let keys = missionArray.map((key: any) => {return key[0]});
+        this.allMissions.sort((a: any, b: any) => keys.indexOf(a) - keys.indexOf(b));
       }
 
       for (let mission of this.allMissions) {

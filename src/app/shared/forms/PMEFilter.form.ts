@@ -43,20 +43,24 @@ import { SnapshotAll } from "src/models/new/data.state";
           <label class="form-title">Réorganiser la liste selon</label>
           <ng-container *ngSwitchCase="0">
             <div class="switch-container flex center-cross">
-              <span class="">Les brouillons les plus anciens</span> <switch class="default"></switch>
+              <span class="criteria" (click)="sortDraftDate.onChangeCall()">Les brouillons les plus anciens</span> 
+              <switch class="default" formControlName="sortDraftDate" #sortDraftDate></switch>
             </div>
             <div class="switch-container flex center-cross">
-              <span class="">Les brouillons les plus complets</span> <switch class="default"></switch>
+              <span class="criteria" (click)="sortDraftFull.onChangeCall()">Les brouillons les plus complets</span> 
+              <switch class="default" formControlName="sortDraftFull" #sortDraftFull></switch>
             </div>
           </ng-container>
           <ng-container *ngSwitchCase="1">
             <div class="switch-container flex center-cross">
-              <span>Annonces contentant des réponses en premier</span> <switch class="default"></switch>
+              <span class="criteria" (click)="sortPostResponse.onChangeCall()">Annonces contentant des réponses en premier</span> 
+              <switch class="default" formControlName="sortPostResponse" #sortPostResponse></switch>
             </div>
           </ng-container>
           <ng-container *ngSwitchCase="2">
             <div class="switch-container flex center-cross">
-              <span>Annonces contentant des notifications en premier</span> <switch class="default"></switch>
+              <span class="criteria" (click)="sortMissionNotifications.onChangeCall()">Annonces contentant des notifications en premier</span> 
+              <switch class="default" formControlName="sortMissionNotifications" #sortMissionNotifications></switch>
             </div>
           </ng-container>
         </div>
@@ -99,6 +103,10 @@ export class PMEFilterForm implements OnInit {
     address: new FormControl(""),
     jobs: new FormControl([]),
     manPower: new FormControl(undefined),
+    sortDraftDate: new FormControl(false),
+    sortDraftFull: new FormControl(false),
+    sortPostResponse: new FormControl(false),
+    sortMissionNotifications: new FormControl(false),
   },
     {}
   );
