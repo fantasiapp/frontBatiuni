@@ -1,13 +1,23 @@
-<h3 *ngIf="card.change.deleted;else schedule">Suppresion de la date de chantier</h3>
+<div *ngIf="card.change.deleted || !card.change.validate" class="container">
+    <h3 *ngIf="card.change.deleted;else changeValidate">Suppresion de la date du chantier</h3>
+    <ng-template #changeValidate>
+        <h3>Valider la date pour ce chantier</h3>
+    </ng-template>
+</div>
+    
 <ng-template #schedule>
     <h3>Modification d'horaire</h3>
     <span class="value">{{card.mission.hourlyStartChange || card.mission.hourlyStart }} jusqu'à {{card.mission.hourlyEndChange || card.mission.hourlyEnd}}</span>
 </ng-template>
-<div class="btn-container" *ngIf="!card.change.deleted">
-    <img src="assets/suivi-valider-OK.svg" alt="valider" (click)="validate()">
-    <img src="assets/suivi-refuser-OK.svg" alt="refuser" (click)="refuse()">
+
+
+<div class="btn-container" *ngIf="card.change.schedule;else deletedValidate">
+    <img src="assets/suivi-valider-OK.svg" alt="valider" (click)="validateHour(true)">
+    <img src="assets/suivi-refuser-OK.svg" alt="refuser" (click)="validateHour(false)">
 </div>
-<div class="btn-container" *ngIf="card.change.deleted;else schedule">
-    <img src="assets/suivi-valider-OK.svg" alt="valider" (click)="deleted(true)">
-    <img src="assets/suivi-refuser-OK.svg" alt="refuser" (click)="deleted(false)">
-</div>
+<ng-template #deletedValidate>
+    <div class="btn-container" *ngIf="card.change.deleted || !card.change.validate">
+        <img src="assets/suivi-valider-OK.svg" alt="valider" (click)="deleted(true)">
+        <img src="assets/suivi-refuser-OK.svg" alt="refuser" (click)="deleted(false)">
+    </div>
+</ng-template>

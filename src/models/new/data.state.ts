@@ -20,6 +20,7 @@ import {
   TakePicture,
   InviteFriend,
   ValidateMissionDate,
+  BoostPost,
 } from "./user/user.actions";
 import {
   ApplyPost,
@@ -63,12 +64,14 @@ import { GetCompanies } from "./search/search.actions";
 import produce from "immer";
 import { SlidemenuService } from "src/app/shared/components/slidemenu/slidemenu.component";
 import { SwipeupService } from "src/app/shared/components/swipeup/swipeup.component";
+import { transformAll } from "@angular/compiler/src/render3/r3_ast";
 
 export interface DataModel {
   fields: Record<string[]>;
   session: {
     currentUser: number;
     view: "ST" | "PME";
+    time: number;
   };
   [key: string]: Record<any>;
 }
@@ -85,6 +88,7 @@ export class Clear {
     session: {
       currentUser: -1,
       view: "ST",
+      time: 0,
     },
   },
 })
@@ -137,6 +141,7 @@ export class DataState {
         session: {
           currentUser: -1,
           view: "ST",
+          time: 0,
         },
       });
   }
@@ -212,19 +217,17 @@ export class DataState {
 
     return req.pipe(
       tap((response: any) => {
-        console.log("$$", response);
         const loadOperations = this.reader.readInitialData(response),
           sessionOperation = this.reader.readCurrentSession(response);
 
         ctx.setState(compose(...loadOperations, sessionOperation));
-        console.log(ctx.getState());
       })
     );
   }
 
   @Action(Logout)
   logout(ctx: StateContext<DataModel>) {
-    ctx.setState({ fields: {}, session: { view: "ST", currentUser: -1 } });
+    ctx.setState({ fields: {}, session: { view: "ST", currentUser: -1 , time: 0} });
     ctx.dispatch(new GetGeneralData()); // a sign to decouple this from DataModel
   }
 
@@ -237,7 +240,6 @@ export class DataState {
 
     return req.pipe(
       tap((response: any) => {
-        console.log("ModifyUserProfile", response);
         if (response[modify.action] !== "OK") {
           this.inZone(() => this.info.show("error", response.messages, 3000));
           throw response.messages;
@@ -257,7 +259,6 @@ export class DataState {
             new UploadFile(adminFiles[name], "admin", name, "Company")
           )
         );
-        console.log(of(true));
         return of(true);
       })
     );
@@ -302,10 +303,8 @@ export class DataState {
     const profile = this.store.selectSnapshot(DataQueries.currentProfile),
       req = this.http.post("data", picture);
 
-    console.log("UploadImageSupervision", picture);
     return req.pipe(
       tap((response: any) => {
-        console.log("UploadImageSupervision response", response);
         if (response[picture.action] !== "OK") throw response["messages"];
 
         delete response[picture.action];
@@ -339,7 +338,6 @@ export class DataState {
 
   @Action(UploadFile)
   uploadFile(ctx: StateContext<DataModel>, upload: UploadFile) {
-    console.log("uploadFile", upload);
     const req = this.http.post("data", upload);
     return req.pipe(
       tap((response: any) => {
@@ -369,7 +367,6 @@ export class DataState {
 
   @Action(TakePicture)
   takePicture(ctx: StateContext<DataModel>, picture: TakePicture) {
-    // console.log("uploadFile", picture)
     // return this.http.post('data', picture).pipe(
     //   tap((response: any) => {
     //     if ( response[picture.action] !== 'OK' )
@@ -397,6 +394,7 @@ export class DataState {
 
   @Action(UploadPost)
   createPost(ctx: StateContext<DataModel>, post: UploadPost) {
+    console.log("createPost", post)
     const profile = this.store.selectSnapshot(DataQueries.currentProfile),
       { files, ...form } = post,
       uploads = Object.keys(files).map(
@@ -456,7 +454,6 @@ export class DataState {
     const profile = this.store.selectSnapshot(DataQueries.currentProfile)!;
     return this.http.get("data", application).pipe(
       tap((response: any) => {
-        console.log("DuplicatePost", response);
         if (response[application.action] !== "OK") {
           this.inZone(() => this.info.show("error", response.messages, 2000));
           throw response.messages;
@@ -493,14 +490,13 @@ export class DataState {
     this.registerPending(key, pending);
 
     if (download.notify)
-      console.log(`Téléchargement du fichier ${file[nameIndex] || ""}...`);
-    this.inZone(() => {
-      this.info.show(
-        "info",
-        `Téléchargement du fichier ${file[nameIndex] || ""}...`,
-        2000
-      );
-    });
+      this.inZone(() => {
+        this.info.show(
+          "info",
+          `Téléchargement du fichier ${file[nameIndex] || ""}...`,
+          2000
+        );
+      });
 
     return req.pipe(
       tap((response: any) => {
@@ -540,12 +536,6 @@ export class DataState {
         delete response[application.action];
         ctx.setState(
           addComplexChildren("Company", profile.company.id, "Post", response)
-        );
-        console.log(
-          "applyPost",
-          this.store.selectSnapshot(
-            DataQueries.getById("Post", +Object.keys(response)[0])
-          )
         );
       })
     );
@@ -596,7 +586,6 @@ export class DataState {
     const { post, ...data } = handle;
     return this.http.get("data", data).pipe(
       tap((response: any) => {
-        console.log("handleApplication start", response, response.length);
         if (response[handle.action] !== "OK") {
           this.inZone(() => this.info.show("error", response.messages, 3000));
           throw response.messages;
@@ -607,7 +596,6 @@ export class DataState {
         this.inZone(() => this.info.show("success", "Réponse envoyée.", 3000));
         this.slide.hide();
         if (data["response"]) {
-          console.log("handleApplication", response);
           ctx.setState(
             compose(
               deleteIds("Post", [handle.post.id]),
@@ -774,7 +762,6 @@ export class DataState {
     const profile = this.store.selectSnapshot(DataQueries.currentProfile)!;
     return this.http.post("data", application).pipe(
       tap((response: any) => {
-        console.log("CloseMissionST", response);
         if (response[application.action] !== "OK") {
           this.inZone(() => this.info.show("error", response.messages, 3000));
           throw response.messages;
@@ -916,6 +903,15 @@ export class DataState {
       })
     );
   }
+
+  @Action(BoostPost)
+  boostPost(ctx: StateContext<DataModel>, boost: BoostPost) {
+    return this.http.post("data", boost).pipe(
+      tap((response: any) => {
+        console.log("boost post response:", response)
+      })
+    );        
+  }
 }
 
 //make a deep version of toJSON
@@ -959,7 +955,6 @@ export class DataQueries {
     fields: Record<string[]>,
     id: number
   ) {
-    console.log("current user change");
     return DataQueries.toJson(fields, "UserProfile", id, profiles[id]);
   }
 
@@ -969,7 +964,6 @@ export class DataQueries {
     fields: Record<string[]>,
     id: number
   ) {
-    console.log("company change");
     return DataQueries.toJson(fields, "Company", id, companies[id]);
   }
 

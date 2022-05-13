@@ -1,4 +1,8 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+} from "@angular/core";
 import { Select, Store } from "@ngxs/store";
 import { combineLatest, Observable } from "rxjs";
 import { take, takeUntil } from "rxjs/operators";
@@ -6,43 +10,52 @@ import { Destroy$ } from "src/app/shared/common/classes";
 import { assignCopy } from "src/app/shared/common/functions";
 import { MissionDetailedDay } from "src/app/shared/components/horizontalcalendar/horizontal.component";
 import { InfoService } from "src/app/shared/components/info/info.component";
-import { DateG, Mission, PostDate, PostDetail, PostMenu, Profile, Ref } from "src/models/new/data.interfaces";
+import {
+  DateG,
+  Mission,
+  PostDate,
+  PostDetail,
+  PostMenu,
+  Profile,
+  Ref,
+} from "src/models/new/data.interfaces";
 import { DataQueries, QueryAll } from "src/models/new/data.state";
-import { CloseMissionST, MarkViewed} from "src/models/new/user/user.actions";
+import { CloseMissionST, MarkViewed } from "src/models/new/user/user.actions";
 import { UIAnnonceResume } from "../../ui/annonce-resume/annonce-resume.ui";
 import { getLevenshteinDistance } from "src/app/shared/services/levenshtein";
 
-import * as moment from 'moment';
-
-
+import * as moment from "moment";
 
 @Component({
-  selector: 'missions',
-  templateUrl: 'missions.component.html',
-  styleUrls: ['missions.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  selector: "missions",
+  templateUrl: "missions.component.html",
+  styleUrls: ["missions.component.scss"],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MissionsComponent extends Destroy$ {
   activeView: number = 0;
 
   openFilterMenu: boolean = false;
-  myMissions: Mission[] = []
-  allMyMissions: Mission[] = []
-  missionMenu = new PostMenu<Mission>()
+  myMissions: Mission[] = [];
+  allMyMissions: Mission[] = [];
+  missionMenu = new PostMenu<Mission>();
 
   detailedDays: MissionDetailedDay[] = [];
-  _openCloseMission = false
-  doClose:boolean = false
-  missionCompany:String = ""
-
+  _openCloseMission = false;
+  doClose: boolean = false;
+  missionCompany: String = "";
 
   @Select(DataQueries.currentProfile)
   profile$!: Observable<Profile>;
 
-  @QueryAll('Mission')
+  @QueryAll("Mission")
   missions$!: Observable<Mission[]>;
 
-  constructor(private store: Store, private info: InfoService, private cd: ChangeDetectorRef) {
+  constructor(
+    private store: Store,
+    private info: InfoService,
+    private cd: ChangeDetectorRef
+  ) {
     super();
   }
 
@@ -96,42 +109,55 @@ export class MissionsComponent extends Destroy$ {
             }
           }
         }
-      }
-    });
+    }});
     if (this.missionToClose) {
-      this._openCloseMission = this.missionToClose.securityST == 0
-      const company = this.store.selectSnapshot(DataQueries.getById('Company', this.missionToClose.company))
-      this.missionCompany = company!.name
-      this._openCloseMission = true
+      this._openCloseMission = this.missionToClose.securityST == 0;
+      const company = this.store.selectSnapshot(
+        DataQueries.getById("Company", this.missionToClose.company)
+      );
+      this.missionCompany = company!.name;
+      this._openCloseMission = true;
     } else {
-      this._openCloseMission = false
+      this._openCloseMission = false;
     }
 
     this.selectMissions(null);
   }
 
   callbackFilter = (filter: any): void => {
-    console.log("callbackFilter activeView", this.activeView)
     this.selectMissions(filter);
-  }
+  };
 
-  selectMissions(filter: any){
+  selectMissions(filter: any) {
     this.myMissions = [];
-    if (filter == null ) { this.myMissions = this.allMyMissions }
-    else {
+    if (filter == null) {
+      this.myMissions = this.allMyMissions;
+    } else {
       // Array qui contiendra les posts et leur valeur en distance Levenshtein pour une adresse demandée
-      let levenshteinDist: any = []; 
-      if ( filter.address ) { 
+      let levenshteinDist: any = [];
+      if (filter.address) {
         for (let mission of this.allMyMissions) {
-          levenshteinDist.push([mission, getLevenshteinDistance(mission.address.toLowerCase(), filter.address.toLowerCase())]);
+          levenshteinDist.push([
+            mission,
+            getLevenshteinDistance(
+              mission.address.toLowerCase(),
+              filter.address.toLowerCase()
+            ),
+          ]);
         }
-        levenshteinDist.sort((a: any,b: any) => a[1] - b[1]);
-        let keys = levenshteinDist.map((key: any) => { return key[0] });    
+        levenshteinDist.sort((a: any, b: any) => a[1] - b[1]);
+        let keys = levenshteinDist.map((key: any) => {
+          return key[0];
+        });
 
         // On trie les posts selon leur distance de levenshtein
-        this.allMyMissions.sort((a: any,b: any)=>keys.indexOf(a) - keys.indexOf(b));
+        this.allMyMissions.sort(
+          (a: any, b: any) => keys.indexOf(a) - keys.indexOf(b)
+        );
       } else {
-        this.allMyMissions.sort((a,b) => {return a['id'] - b['id']})
+        this.allMyMissions.sort((a, b) => {
+          return a["id"] - b["id"];
+        });
       }
 
       // Trie les missions par date plus proche
@@ -152,102 +178,140 @@ export class MissionsComponent extends Destroy$ {
       if ( isDifferentValidationDate || isNotInMissionDate || isDifferentManPower || isNotIncludedJob || isUnread || isNotClosed) { continue }
       this.myMissions.push(mission)
       }
-  }
+    }
     this.cd.markForCheck();
   }
 
-  computeSupervisionsforTask(supervisions: number[], supervisionsTaks: any): any {
+  computeSupervisionsforTask(
+    supervisions: number[],
+    supervisionsTaks: any
+  ): any {
     throw new Error("Method not implemented.");
   }
 
   openMission(mission: Mission | null) {
-    this.missionMenu = assignCopy(this.missionMenu, {post: mission, open: !!mission, swipeup: false});
-    if ( mission ) this.store.dispatch(new MarkViewed(mission.id));
+    this.missionMenu = assignCopy(this.missionMenu, {
+      post: mission,
+      open: !!mission,
+      swipeup: false,
+    });
+    if (mission) this.store.dispatch(new MarkViewed(mission.id));
   }
 
   ngOnDestroy(): void {
-    this.info.alignWith('last');
+    this.info.alignWith("last");
     super.ngOnDestroy();
   }
 
-  get missionToClose (): Mission | null {
-    const missionToClose = this.allMyMissions.filter(mission=>mission.isClosed && mission.vibeST == 0)
+  get missionToClose(): Mission | null {
+    const missionToClose = this.allMyMissions.filter(
+      (mission) => mission.isClosed && mission.vibeST == 0
+    );
     if (missionToClose.length != 0) {
-      return missionToClose[0]
+      return missionToClose[0];
     }
-    return null
+    return null;
   }
 
   get classSubmit() {
-    if (this.hasGeneralStarsST) {return "submitActivated"}
-    else {return "submitDisable"}
+    if (this.hasGeneralStarsST) {
+      return "submitActivated";
+    } else {
+      return "submitDisable";
+    }
   }
 
   get openCloseMission() {
-    return this._openCloseMission }
-  set openCloseMission(b:boolean) {
-    this._openCloseMission = b
+    return this._openCloseMission;
+  }
+  set openCloseMission(b: boolean) {
+    this._openCloseMission = b;
   }
 
-  get hasGeneralStarsST() { return this.getArrayStarST("generalST")[0] == true}
+  get hasGeneralStarsST() {
+    return this.getArrayStarST("generalST")[0] == true;
+  }
 
   submitStarST() {
     if (this.hasGeneralStarsST)
-      this.store.dispatch(new CloseMissionST(this.missionToClose!.id, this.missionToClose!.vibeST, this.missionToClose!.vibeCommentST, this.missionToClose!.securityST, this.missionToClose!.securityCommentST, this.missionToClose!.organisationST, this.missionToClose!.organisationCommentST)).pipe(take(1)).subscribe(() => {
-        this.doClose = true
-        this.openCloseMission = false
-        this.cd.markForCheck()
-      });
+      this.store
+        .dispatch(
+          new CloseMissionST(
+            this.missionToClose!.id,
+            this.missionToClose!.vibeST,
+            this.missionToClose!.vibeCommentST,
+            this.missionToClose!.securityST,
+            this.missionToClose!.securityCommentST,
+            this.missionToClose!.organisationST,
+            this.missionToClose!.organisationCommentST
+          )
+        )
+        .pipe(take(1))
+        .subscribe(() => {
+          this.doClose = true;
+          this.openCloseMission = false;
+          this.cd.markForCheck();
+        });
   }
 
-  starActionST(index:number, nature:string) {
-    if (nature == "vibeST")
-      this.missionToClose!.vibeST = index + 1
-    if (nature == "securityST")
-      this.missionToClose!.securityST = index + 1
+  starActionST(index: number, nature: string) {
+    if (nature == "vibeST") this.missionToClose!.vibeST = index + 1;
+    if (nature == "securityST") this.missionToClose!.securityST = index + 1;
     if (nature == "organisationST")
-      this.missionToClose!.organisationST = index + 1
-    this.cd.markForCheck()
+      this.missionToClose!.organisationST = index + 1;
+    this.cd.markForCheck();
   }
 
-  textStarActionST(nature:string) {
+  textStarActionST(nature: string) {
     if (nature == "vibeST") {
-      let content = document.getElementById("starTextVibeST") as HTMLTextAreaElement;
-      this.missionToClose!.vibeCommentST = content!.value
+      let content = document.getElementById(
+        "starTextVibeST"
+      ) as HTMLTextAreaElement;
+      this.missionToClose!.vibeCommentST = content!.value;
     } else if (nature == "securityST") {
-      let content = document.getElementById("starTextSecurityST") as HTMLTextAreaElement;
-      this.missionToClose!.securityCommentST = content!.value
+      let content = document.getElementById(
+        "starTextSecurityST"
+      ) as HTMLTextAreaElement;
+      this.missionToClose!.securityCommentST = content!.value;
     } else if (nature == "organisationST") {
-      let content = document.getElementById("starTextOrganisationST") as HTMLTextAreaElement;
-      this.missionToClose!.organisationCommentST = content!.value
+      let content = document.getElementById(
+        "starTextOrganisationST"
+      ) as HTMLTextAreaElement;
+      this.missionToClose!.organisationCommentST = content!.value;
     }
   }
 
-  getArrayStarST(nature:string) {
-    let array = new Array<boolean>(5)
+  getArrayStarST(nature: string) {
+    let array = new Array<boolean>(5);
     if (this.missionToClose) {
-      let lastStar = 0
+      let lastStar = 0;
       if (nature == "vibeST") {
-        lastStar = this.missionToClose!.vibeST
-      }
-      else if (nature == "securityST") {
-        lastStar = this.missionToClose!.securityST
-      }
-      else if (nature == "organisationST") {
-        lastStar = this.missionToClose!.organisationST
-      }
-      else if (nature == "generalST") {
-        if (this.missionToClose!.vibeST && this.missionToClose!.securityST && this.missionToClose!.organisationST) {
-          lastStar = Math.round((this.missionToClose!.vibeST + this.missionToClose!.securityST + this.missionToClose!.organisationST) / 3)
+        lastStar = this.missionToClose!.vibeST;
+      } else if (nature == "securityST") {
+        lastStar = this.missionToClose!.securityST;
+      } else if (nature == "organisationST") {
+        lastStar = this.missionToClose!.organisationST;
+      } else if (nature == "generalST") {
+        if (
+          this.missionToClose!.vibeST &&
+          this.missionToClose!.securityST &&
+          this.missionToClose!.organisationST
+        ) {
+          lastStar = Math.round(
+            (this.missionToClose!.vibeST +
+              this.missionToClose!.securityST +
+              this.missionToClose!.organisationST) /
+              3
+          );
         }
       }
-      for (let index=0; index < 5; index++) {
-        array[index] = (index < lastStar) ? true : false
+      for (let index = 0; index < 5; index++) {
+        array[index] = index < lastStar ? true : false;
       }
     }
-      return array
+    return array;
   }
-};
+}
 
 function supervisionsTaks(supervisions: number[], supervisionsTaks: any): any {
   throw new Error("Function not implemented.");

@@ -188,6 +188,8 @@ export class UploadPost {
     public files: any,
     public draft: boolean,
     public id?:number,
+    public isBoosted?:boolean,
+    public boostedTimestamp?:Date,
   ) {
     if ( this.id ) this.action = 'modifyPost';
     else delete this['id'];
@@ -200,7 +202,7 @@ export class UploadPost {
     documents.forEach(doc => {
       files[doc.name] = doc.fileData;
     });
-    console.log("fromPostForm", value.calendar)
+    console.log("fromPostForm", value.counterOffer, typeof(value.counterOffer))
     
     return new UploadPost(
       value.address,
@@ -357,6 +359,12 @@ export class MarkViewed {
   action = 'isViewed';
   constructor(public Post: number) {}
 };
+
+export class BoostPost {
+  static readonly type = '[Data] Boost Post';
+  action = 'boostPost';
+  constructor(public postId: number, public duration: number) {}
+}
 
 // export class ContractSignature {
 //   static readonly type = '[User] Contract Signature';

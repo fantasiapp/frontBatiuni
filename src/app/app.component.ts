@@ -16,6 +16,7 @@ import { Mobile } from "./shared/services/mobile-footer.service";
 import { AuthState } from "src/models/auth/auth.state";
 import { catchError } from "rxjs/operators";
 import { Logout } from "src/models/auth/auth.actions";
+import { delay } from "./shared/common/functions";
 
 @Component({
   selector: "app-root",
@@ -41,7 +42,8 @@ export class AppComponent extends Destroy$ {
     this.mobile.init();
   }
 
-  ready$ = new AsyncSubject<true>()
+  ready$ = new AsyncSubject<true>();
+  readyToUpdate: boolean = false;
 
   async ngOnInit() {
     await this.store.dispatch(new Load()).toPromise();
@@ -63,12 +65,20 @@ export class AppComponent extends Destroy$ {
 
   async updateUserData() {
     while (false) {
-      console.log(this.getUserdata());
-      await this.delay(10000);
+      console.log(
+        "changeReadyToUpdate",
+        this.changeReadyToUpdate(false),
+        this.readyToUpdate
+      );
+      if (this.readyToUpdate) {
+        console.log("getUserData", this.getUserData());
+        await delay(5000);
+      }
+      await delay(5000);
     }
   }
 
-  getUserdata() {
+  getUserData() {
     let token = this.store.selectSnapshot(AuthState.token);
 
     if (!token) return throwError("no token");
@@ -81,8 +91,19 @@ export class AppComponent extends Destroy$ {
     );
   }
 
-  delay(ms: number) {
-    return new Promise((resolve) => setTimeout(resolve, ms));
+  changeReadyToUpdate(bool?: boolean) {
+    if (bool !== null) {
+      this.readyToUpdate = bool!;
+      console.log(
+        "changeReadyToUpdate",
+        "bool :",
+        bool,
+        "readyToUpdate",
+        this.readyToUpdate
+      );
+    } else {
+      this.readyToUpdate = !this.readyToUpdate;
+    }
   }
 
   // mobileInit(){

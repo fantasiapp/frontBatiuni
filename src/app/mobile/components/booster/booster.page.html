@@ -1,40 +1,35 @@
-<header class="clear-margin full-width sticky-header flex center-cross white-header">
-    <img [routerLink]="['','annonce-enligne']" src="assets/arrowlblack.svg" />
-    <h1 class="grow center-text">Booster</h1>
-</header>
 <div class="hosted-page space-children-margin clear-margin full-width page-content-without-nav">
-<hr class="hr-line">
-<div class="center-text"> <span> 
-    Boost ton annonce et il apparaîtra dans le top des résultats de recherche
-</span>
-</div>
-<span> 1 annonce</span>
-<hr class="hr-line">
-<div class="flex space">
-<div class="grid space-children-margin">
-    <span>3 jours</span>
-    <span class="small">5 € en totalité</span>
-</div>
-<radiobox>
-</radiobox>
-</div>
-<div class="flex space">
-<div class="grid space-children-margin">
-    <span>7 jours</span>
-    <span class="small">10 € en totalité</span>
-</div>
-<radiobox>
-</radiobox>
-</div>
-<div class="flex space">
-<div class="grid space-children-margin">
-    <span>Jusqu’à la date d’échéance de l’annonce</span>
-    <span class="small">20 € en totalité</span>
-</div>
-<radiobox>
-</radiobox>
-</div>
+    <hr class="hr-line">
+    <div class="center-text"> <span>
+            Boost ton annonce et elle apparaîtra dans le top des résultats de recherche
+        </span>
+    </div>
+    <span> Booster cette annonce :</span>
+    <hr class="hr-line">
+    <form [formGroup]="boostForm">
+        <div class="flex space">
+            <div class="grid space-children-margin" (click)="boostDuration3.onChange($event)">
+                <span>3 jours</span>
+                <span class="small">5 € en totalité</span>
+            </div>
+            <radiobox name="boostDuration" onselect="3" formControlName="duration" #boostDuration3></radiobox>
+        </div>
+        <div class="flex space">
+            <div class="grid space-children-margin" (click)="boostDuration7.onChange($event)">
+                <span>7 jours</span>
+                <span class="small">10 € en totalité</span>
+            </div>
+            <radiobox name="boostDuration" onselect="7" formControlName="duration" #boostDuration7></radiobox>
+        </div>
+        <div class="flex space">
+            <div class="grid space-children-margin" (click)="boostDuration0.onChange($event)">
+                <span>Jusqu’à la date d’échéance de l’annonce</span>
+                <span class="small">20 € en totalité</span>
+            </div>
+            <radiobox name="boostDuration" onselect="0" formControlName="duration" #boostDuration0></radiobox>
+        </div>
+    </form>
 </div>
 <footer class="clear-margin full-width sticky-footer flex center-text center-cross">
-    <button class="footer-button">Valider</button>
+    <button class="button gradient font-Poppins full-width" (click)="boostPost()" [disabled]="!selected">Valider</button>
 </footer>

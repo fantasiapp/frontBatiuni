@@ -13,7 +13,7 @@
       <span tab_2>Validées</span>
     </page-header>
     
-      <div class="hosted-page space-children-margin page-content-with-tabs" [ngClass]="{'footerHideMobile': !showFooter}">
+      <div class="hosted-page space-children-margin page-content-with-tabs" [ngClass]="{'footerHide': !showFooter}">
           <!-- Page pour PME -->
           <ng-container *ngIf="view == 'PME'; else stview">
             <ng-container *ngIf="(posts$ | async) as posts" [ngSwitch]="activeView">
@@ -142,8 +142,11 @@
               class="notification"
             ></span>
           </li>
-          <li [routerLink]="['', 'booster']">
-            <img src="assets/booster.svg" />Booster Mon annonce
+          <li *ngIf="!postMenu.boosted" (click)="slideBooster()">
+            <img src="assets/booster.svg" />Booster mon annonce
+          </li>
+          <li *ngIf="postMenu.boosted" class="boosted">
+            <img src="assets/booster.svg" />Booster mon annonce
           </li>
           <li (click)="deletePost(postMenu.post!.id)">
             <img src="assets/cloturer.svg" />Supprimer l'annonce
@@ -158,6 +161,9 @@
       </ng-container>
     </slidemenu>
 
+    <!-- <slidemenu [(open)]="postMenu.openBooster()">
+
+    </slidemenu> -->
     <!-- Component Mission -->
     <slidemenu [(open)]="missionMenu.open" [header]="false" #slideMission>
       <header
@@ -244,6 +250,9 @@
   </footer>
 </ng-template>
 
+<ng-template #booster let-post>
+  <booster-page [post]="post"></booster-page>
+</ng-template>
 <!-- <swipeup [(open)]="missionMenu.swipeup">
   <li >Modifier les horaires / les dates de présence</li>
   <li>Appeler le 06 34 09 06 94</li>

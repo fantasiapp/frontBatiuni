@@ -115,6 +115,9 @@ export class HomeComponent extends Destroy$ {
   @ViewChild("suiviPME", { read: TemplateRef, static: true })
   suiviChantier!: TemplateRef<any>;
 
+  @ViewChild("booster", { read: TemplateRef, static: true })
+  boosterTemplate!: TemplateRef<any>;
+
   activeView: number = 0;
   _openCloseMission: boolean = false;
   openAdFilterMenu: boolean = false;
@@ -125,10 +128,6 @@ export class HomeComponent extends Destroy$ {
   missionMenu = new PostMenu<Mission>();
 
   showFooter: boolean = true;
-  @HostBinding("class.footerHide") get footer() {
-    return this.showFooter;
-  }
-
   constructor(
     private cd: ChangeDetectorRef,
     private store: Store,
@@ -175,13 +174,15 @@ export class HomeComponent extends Destroy$ {
       });
     // const view = this.store.selectSnapshot(DataState.view)
     // this._openCloseMission = view == 'ST' && this.missions.length != 0
-    // console.log("ngOnInit", view, this.missions, this._openCloseMission)
 
     this.mobile.footerStateSubject.subscribe((b) => {
       this.showFooter = b;
-      this.cd.detectChanges();
+      this.cd.markForCheck();
     });
   }
+
+  @HostBinding('class.footerHide')
+  get footerHide(){return !this.showFooter}
 
   ngOnDestroy(): void {
     this.info.alignWith("last");
@@ -201,21 +202,32 @@ export class HomeComponent extends Destroy$ {
 
   selectDraft(filter: any) {
     this.userDrafts = [];
-    if (filter == null ) { this.userDrafts = this.allUserDrafts }
-    else {
+    if (filter == null) {
+      this.userDrafts = this.allUserDrafts;
+    } else {
       // Array qui contiendra les posts et leur valeur en distance Levenshtein pour une adresse demandée
-      let levenshteinDist: any = []; 
-      if ( filter.address ) { 
+      let levenshteinDist: any = [];
+      if (filter.address) {
         for (let post of this.allUserDrafts) {
-          levenshteinDist.push([post, getLevenshteinDistance(post.address.toLowerCase(), filter.address.toLowerCase())]);
+          levenshteinDist.push([
+            post,
+            getLevenshteinDistance(
+              post.address.toLowerCase(),
+              filter.address.toLowerCase()
+            ),
+          ]);
         }
-        levenshteinDist.sort((a: any,b: any) => a[1] - b[1]);
-        let keys = levenshteinDist.map((key: any) => { return key[0] });    
+        levenshteinDist.sort((a: any, b: any) => a[1] - b[1]);
+        let keys = levenshteinDist.map((key: any) => {
+          return key[0];
+        });
 
         // Trie les posts selon leur distance de levenshtein
         this.allUserDrafts.sort((a: any,b: any)=>keys.indexOf(a) - keys.indexOf(b));
       } else {
-        this.allUserDrafts.sort((a,b) => {return a['id'] - b['id']})
+        this.allUserDrafts.sort((a, b) => {
+          return a["id"] - b["id"];
+        });
       }
 
       // Trie brouillons les plus anciens
@@ -240,31 +252,45 @@ export class HomeComponent extends Destroy$ {
         let isDifferentManPower = (filter.manPower && post.manPower != (filter.manPower === "true"))
         let isNotIncludedJob = (filter.jobs && filter.jobs.length && filter.jobs.every((job: any) => {return job.id != post.job}))
 
-        if ( isDifferentDate || isDifferentManPower || isNotIncludedJob) { continue }
+        if (isDifferentDate || isDifferentManPower || isNotIncludedJob) {
+          continue;
+        }
         this.userDrafts.push(post);
       }
     }
     this.cd.markForCheck();
   }
-  
 
   selectUserOnline(filter: any) {
     this.userOnlinePosts = [];
-    if (filter == null ) { this.userOnlinePosts = this.allUserOnlinePosts }
-    else {
+    if (filter == null) {
+      this.userOnlinePosts = this.allUserOnlinePosts;
+    } else {
       // Array qui contiendra les posts et leur valeur en distance Levenshtein pour une adresse demandée
-      let levenshteinDist: any = []; 
-      if ( filter.address ) { 
+      let levenshteinDist: any = [];
+      if (filter.address) {
         for (let post of this.allUserOnlinePosts) {
-          levenshteinDist.push([post, getLevenshteinDistance(post.address.toLowerCase(), filter.address.toLowerCase())]);
+          levenshteinDist.push([
+            post,
+            getLevenshteinDistance(
+              post.address.toLowerCase(),
+              filter.address.toLowerCase()
+            ),
+          ]);
         }
-        levenshteinDist.sort((a: any,b: any) => a[1] - b[1]);
-        let keys = levenshteinDist.map((key: any) => { return key[0] });    
+        levenshteinDist.sort((a: any, b: any) => a[1] - b[1]);
+        let keys = levenshteinDist.map((key: any) => {
+          return key[0];
+        });
 
         // On trie les posts selon leur distance de levenshtein
-        this.allUserOnlinePosts.sort((a: any,b: any)=>keys.indexOf(a) - keys.indexOf(b));
+        this.allUserOnlinePosts.sort(
+          (a: any, b: any) => keys.indexOf(a) - keys.indexOf(b)
+        );
       } else {
-        this.allUserOnlinePosts.sort((a,b) => {return a['id'] - b['id']})
+        this.allUserOnlinePosts.sort((a, b) => {
+          return a["id"] - b["id"];
+        });
       }
 
       // Trie Posts selon leurs réponses
@@ -301,18 +327,31 @@ export class HomeComponent extends Destroy$ {
 
   selectMission(filter: any) {
     this.missions = [];
-    if (filter == null ) { this.missions = this.allMissions }
-    else {
-      let levenshteinDist: any = []; 
-      if ( filter.address ) { 
+    if (filter == null) {
+      this.missions = this.allMissions;
+    } else {
+      let levenshteinDist: any = [];
+      if (filter.address) {
         for (let mission of this.allMissions) {
-          levenshteinDist.push([mission, getLevenshteinDistance(mission.address.toLowerCase(), filter.address.toLowerCase())]);
+          levenshteinDist.push([
+            mission,
+            getLevenshteinDistance(
+              mission.address.toLowerCase(),
+              filter.address.toLowerCase()
+            ),
+          ]);
         }
-        levenshteinDist.sort((a: any,b: any) => a[1] - b[1]);
-        let keys = levenshteinDist.map((key: any) => { return key[0] });    
-        this.allMissions.sort((a: any,b: any)=>keys.indexOf(a) - keys.indexOf(b));
+        levenshteinDist.sort((a: any, b: any) => a[1] - b[1]);
+        let keys = levenshteinDist.map((key: any) => {
+          return key[0];
+        });
+        this.allMissions.sort(
+          (a: any, b: any) => keys.indexOf(a) - keys.indexOf(b)
+        );
       } else {
-        this.allMissions.sort((a,b) => {return a['id'] - b['id']})
+        this.allMissions.sort((a, b) => {
+          return a["id"] - b["id"];
+        });
       }
 
       // Trie missions selon leurs notifications
@@ -338,8 +377,10 @@ export class HomeComponent extends Destroy$ {
         let isDifferentManPower = (filter.manPower && mission.manPower != (filter.manPower === "true"))
         let isNotIncludedJob = (filter.jobs && filter.jobs.length && filter.jobs.every((job: any) => {return job.id != mission.job}))
 
-        if ( isDifferentDate || isDifferentManPower || isNotIncludedJob) { continue }
-        this.missions.push(mission)
+        if (isDifferentDate || isDifferentManPower || isNotIncludedJob) {
+          continue;
+        }
+        this.missions.push(mission);
       }
     }
     this.cd.markForCheck();
@@ -504,13 +545,10 @@ export class HomeComponent extends Destroy$ {
       .pipe(take(1))
       .subscribe(
         (success) => {
-          console.log("applyPostReceived");
           // Si la candidature est envoyée on quite la vue de la candidature
-          this.postMenu.post = this.store.selectSnapshot(
-            DataQueries.getById("Post", post.id)
-          );
-          this.cd.markForCheck();
+          this.filters.filter("ST", this.allOnlinePosts);
           this.slideOnlinePostClose();
+          this.cd.markForCheck();
         },
         (error) =>
           this.info.show("error", "Echec de l'envoi de la candidature", 5000)
@@ -526,7 +564,6 @@ export class HomeComponent extends Destroy$ {
           name: "Valider la candidature",
           class: "validate application-response",
           click: () => {
-            console.log("valider la candidature");
             this.store
               .dispatch(new HandleApplication(application, post, true))
               .pipe(take(1))
@@ -545,7 +582,6 @@ export class HomeComponent extends Destroy$ {
               .dispatch(new HandleApplication(application, post, false))
               .pipe(take(1))
               .subscribe(() => {
-                console.log("refuser la candidature");
                 this.openPost(null);
                 this.cd.markForCheck();
               });
@@ -576,7 +612,6 @@ export class HomeComponent extends Destroy$ {
     this.amountSubContractor = candidate?.amount
       ? "Contre-Offre: " + candidate!.amount.toString() + " €"
       : null;
-    console.log("to declare viewed");
     this.store
       .dispatch(new CandidateViewed(application))
       .pipe(take(1))
@@ -627,4 +662,16 @@ export class HomeComponent extends Destroy$ {
     }
     return possibleCandidates;
   }
+
+  slideBooster(){
+    this.postMenu.swipeup = false;
+    this.slideService.show("Booster", {
+      type: "template",
+      template: this.boosterTemplate,
+      context: {
+        $implicit: this.postMenu.post,
+      },
+    });
+  }
+
 }

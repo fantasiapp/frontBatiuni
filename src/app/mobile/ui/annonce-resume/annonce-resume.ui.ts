@@ -198,7 +198,6 @@ export class UIAnnonceResume extends Destroy$ {
       );
       return candidate!.company;
     });
-    console.log("hasPostulated", companiesId, this.profile.company.id);
     return companiesId.includes(this.profile.company.id);
   }
 
@@ -214,7 +213,6 @@ export class UIAnnonceResume extends Destroy$ {
     }
     if (this._post?.counterOffer) {
       let candidate = this.searchCandidate(this._post!);
-      console.log("amount", candidate?.amount, typeof candidate?.amount);
       this.form
         .get("amount")
         ?.setValue(candidate?.amount ? candidate!.amount : null);
@@ -230,7 +228,6 @@ export class UIAnnonceResume extends Destroy$ {
   searchCandidate(post: Post): Candidate | null {
     const candidates = post.candidates;
     const companyId = this.profile.company.id;
-    console.log("search", candidates, companyId);
     let goodCandidate = null;
     candidates.forEach((candidateId) => {
       let candidate = this.store.selectSnapshot(
@@ -316,7 +313,6 @@ export class UIAnnonceResume extends Destroy$ {
       this.info.show("error", "Montant incorrect", 2000);
       return;
     }
-    console.log("onApply", this.hasPostulated);
     this.apply.emit({
       amount: formValue.amount,
       devis: formValue.devis[0].name,
@@ -329,6 +325,8 @@ export class UIAnnonceResume extends Destroy$ {
   }
 
   open() {
+    console.log("open");
+    console.log("post", this.post);
     let amount;
     if (this._post) amount = this.searchCandidate(this._post)?.amount;
     else amount = null;

@@ -186,19 +186,19 @@ import { Mobile } from "../services/mobile-footer.service";
               placeholder="Montant"
               formControlName="amount"
             />
-            <div class="option-container">
+            <!-- <div class="option-container">
               <options
                 [searchable]="false"
                 type="radio"
                 [options]="currencies"
                 formControlName="currency"
-              ></options>
-            </div>
+              ></options> 
+            </div> -->
           </div>
         </div>
 
         <div class="form-input flex row">
-          <checkbox formControlName="counterOffer"></checkbox>
+          <input type="checkbox" formControlName="counterOffer"/>
           <span>Autoriser une contre-offre</span>
         </div>
       </section>
@@ -234,7 +234,7 @@ import { Mobile } from "../services/mobile-footer.service";
     </form>
 
     <footer
-      [@footerTranslate]="showFooter"
+      [ngClass]="{'footerHide': !showFooter}"
       class="flex row space-between sticky-footer full-width submit-container"
       style="background-color: white;"
     >
@@ -254,19 +254,36 @@ import { Mobile } from "../services/mobile-footer.service";
       </button>
     </footer>
   `,
-  styles: [
-    `
-      @use "src/styles/variables" as *;
-      @use "src/styles/mixins" as *;
+  styles: [`
+    @use 'src/styles/variables' as *;
+    @use 'src/styles/mixins' as *;
 
-      :host {
-        display: block;
-        width: 100%;
-        height: 100%;
-      }
-      .remuneration > * {
-        max-width: 45%;
-      }
+    :host {
+      display: block;
+      width: 100%;
+      height: unset
+      /* height: 100%;    
+      height: max-content;
+      height: fit-content */
+    }
+    .remuneration > * {
+      max-width: 45%;
+    }
+    
+    textarea {
+      border: 1px dashed #ccc;
+      outline: none;
+      width: 100%;
+      min-height: 80px;
+      border: 2px solid #aaa;
+      outline: none;
+      border-radius: 3px;
+    }
+
+    .option-container {
+      margin-left: 30px;
+      width: 100px;
+    }
 
       textarea {
         border: 1px dashed #ccc;
@@ -332,10 +349,9 @@ import { Mobile } from "../services/mobile-footer.service";
       :host(.page) {
         footer {
           bottom: $navigation-height;
-          /* bottom: calc(env(safe-area-inset-bottom) +  #{$navigation-height}); */
-          /* bottom: calc(constant(safe-area-inset-bottom) +  #{$navigation-height}); */
-          /* bottom: calc(#{$navigation-height} + 10px); */
-          /* padding-bottom: env(safe-area-inset-bottom); */
+          &.footerHide {
+            transform: translateY(100%)
+          }
         }
       }
 
@@ -353,7 +369,6 @@ import { Mobile } from "../services/mobile-footer.service";
     `,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  animations: footerTranslate,
 })
 export class MakeAdForm {
   @HostBinding("class.page")
@@ -422,13 +437,13 @@ export class MakeAdForm {
     //heavens forgive me for this atrocy
     let daystates: DayState[] = [];
     if (typeof p.dates === "object" && !Array.isArray(p.dates)) {
-      daystates = Object.values(p.dates).map((date) => {
-        const dateArray = date as unknown as any[]
+      const ArrayDate: any = Object.values(p.dates);
+      daystates = ArrayDate.map((date: any[]) => {
         return {
-          date: dateArray[0] as string,
+          date: date[0] as string,
           availability: "selected",
-        }
-    });
+        };
+      });
     } else {
       daystates = this.store
         .selectSnapshot(DataQueries.getMany("DatePost", p.dates))
@@ -519,7 +534,7 @@ export class MakeAdForm {
     calendar: new FormControl([]),
   });
   get invalid() {
-    const calendar = this.makeAdForm.get("calendar");
+    const calendar = this.makeAdForm.get("calendar")
     return !this.makeAdForm.valid || calendar?.value.length == 0;
   }
 
@@ -567,12 +582,14 @@ export class MakeAdForm {
   }
 
   submit(draft: boolean) {
+    console.log("submit", this.makeAdForm.value)
     if (this.post) {
       if (!draft) {
         this.info.show("info", "Mise en ligne de l'annonce...", Infinity);
         const action = this.makeAdForm.touched
           ? UploadPost.fromPostForm(this.makeAdForm.value, draft, this.post.id)
           : new SwitchPostType(this.post.id);
+        console.log("submit", this.makeAdForm.value)
         this.store
           .dispatch(action)
           .pipe(take(1))
