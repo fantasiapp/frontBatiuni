@@ -8,12 +8,9 @@ import {
 } from "@angular/core";
 import { FormArray, FormGroup } from "@angular/forms";
 import { Store } from "@ngxs/store";
-import {
-  DistanceSliderConfig,
-  SalarySliderConfig,
-} from "src/app/shared/common/config";
-import { Post } from "src/models/new/data.interfaces";
-import { DataQueries } from "src/models/new/data.state";
+import { DistanceSliderConfig, SalarySliderConfig } from "src/app/shared/common/config";
+import { Job, Post } from "src/models/new/data.interfaces";
+import { DataQueries, SnapshotAll } from "src/models/new/data.state";
 import { UISwitchComponent } from "../components/switch/switch.component";
 import { Filter } from "../directives/filter.directive";
 import { FilterService } from "../services/filter.service";
@@ -41,23 +38,35 @@ import { FilterService } from "../services/filter.service";
         />
       </div>
 
-      <div class="form-input">
-        <label>Dans un rayon autour de:</label>
-        <ngx-slider
-          [options]="imports.DistanceSliderConfig"
-          formControlName="if_$radius"
-        ></ngx-slider>
-      </div>
+    <div class="form-input">
+      <label>Dans un rayon autour de:</label>
+      <ngx-slider [options]="imports.DistanceSliderConfig" [value]="0" [highValue]="100" formControlName="if_$radius"></ngx-slider>
+    </div>
 
-      <div class="form-input">
-        <label>Estimation de salaire:</label>
-        <ngx-slider
-          [options]="imports.SalarySliderConfig"
-          [value]="0"
-          [highValue]="100000"
-          formControlName="if_amount"
-        ></ngx-slider>
-      </div>
+    <div class="form-input form-spacer">
+      <label>Métier</label>
+      <options [options]="allJobs" formControlName="every_job"></options>
+    </div>
+
+    <div class="form-input form-spacer">
+      <label class="form-title">Type</label>
+        <div class="flex row radio-container">
+          <div class="radio-item">
+            <radiobox class="grow" onselect="true" name="job-type" formControlName="if_$manPower1" #manPower1></radiobox>
+            <span (click)="manPower1.onChange($event)">Main d'oeuvre</span>
+          </div>
+          <div class="radio-item">
+            <radiobox class="grow" onselect="false" name="job-type" formControlName="if_$manPower2" #manPower2></radiobox>
+            <span (click)="manPower2.onChange($event)">Fourniture et pose</span>
+          </div>
+        </div>
+    </div>
+
+
+    <div class="form-input">
+      <label>Estimation de salaire:</label>
+      <ngx-slider [options]="imports.SalarySliderConfig" [value]="0" [highValue]="100000" formControlName="if_amount"></ngx-slider>
+    </div>
 
       <div class="form-input space-children-margin">
         <label>Taille de l'entreprise</label>
@@ -173,6 +182,9 @@ export class STFilterForm extends Filter<Post> {
   @ViewChildren(UISwitchComponent)
   switches!: QueryList<UISwitchComponent>;
 
+  @SnapshotAll('Job')
+  allJobs!: Job[];
+
   //cancel other filters
   onSwitchClick(value: boolean, cancelIfTrue: UISwitchComponent[]) {
     if (!value) return;
@@ -194,20 +206,26 @@ export class STFilterForm extends Filter<Post> {
     //or evaluate during the function call
 
     this.create<{
+      $manPower1: boolean;
+      $manPower2: boolean;
       $favorite: boolean;
       $viewed: boolean;
       $candidate: boolean;
       $employeeCount: number;
       $radius: number;
     }>([
-      this.defineComputedProperty("$employeeCount", (post) => {
-        const company = this.store.selectSnapshot(
-            DataQueries.getById("Company", post.company)
-          )!,
-          jobsForCompany = this.store.selectSnapshot(
-            DataQueries.getMany("JobForCompany", company.jobs)
-          );
-        return jobsForCompany.reduce((acc, { number }) => acc + number, 0);
+      this.defineComputedProperty('$manPower1', (post) => {
+        console.log('computing manPower on', post, '=>', post.manPower)
+        return post.manPower;
+      }),
+      this.defineComputedProperty('$manPower2', (post) => {
+        console.log('computing manPower on', post, '=>', post.manPower)
+        return post.manPower;
+      }),
+      this.defineComputedProperty('$employeeCount', (post) => {
+        const company = this.store.selectSnapshot(DataQueries.getById('Company', post.company))!,
+        jobsForCompany = this.store.selectSnapshot(DataQueries.getMany('JobForCompany', company.jobs));
+        return jobsForCompany.reduce((acc, {number}) => acc + number, 0);
       }),
       this.defineComputedProperty("$favorite", (post) => {
         const user = this.store.selectSnapshot(DataQueries.currentUser);
@@ -217,8 +235,31 @@ export class STFilterForm extends Filter<Post> {
         const user = this.store.selectSnapshot(DataQueries.currentUser);
         return user.viewedPosts.includes(post.id);
       }),
-      this.match("dueDate"),
-      this.search("address"),
+      this.defineComputedProperty('$candidate', (post) => {
+        const user = this.store.selectSnapshot(DataQueries.currentUser);
+        let candidates = this.store.selectSnapshot(DataQueries.getMany("Candidate", post.candidates))
+        let companies = candidates.map(candidate => candidate.company)
+        console.log('computing candidate on', post, '=>', companies.includes(user.company))
+        return companies.includes(user.company);
+      }),
+      this.defineComputedProperty('$radius', (post) => {
+        const user = this.store.selectSnapshot(DataQueries.currentUser);
+        let userCompany: any = this.store.selectSnapshot(DataQueries.getById("Company", user.company));
+        let distance = Math.sqrt(Math.pow((userCompany.latitude - post.latitude),2) + Math.pow((userCompany.longitude - post.longitude ) , 2))
+        return distance;
+      }),
+
+      this.match('dueDate'),
+      this.search('address'),
+      // this.onlyIf('$radius', (radius, range) => {
+      //   return radius >= range[0] && radius <= range[1];
+      // }),
+      this.every('job'),
+      this.onlyIf('$manPower1', manPower1 => { return manPower1 }),
+      this.onlyIf('$manPower2', manPower2 => { return !manPower2 }),
+      this.onlyIf('amount', (amount, range) => {
+        return amount >= range[0] && amount <= range[1];
+      }),
       this.some(
         "employee",
         this.onlyIf(
@@ -247,19 +288,12 @@ export class STFilterForm extends Filter<Post> {
         ),
         this.onlyIf("$employeeCount", (count) => count > 100, [], true)
       ),
-      this.onlyIf("$viewed", (viewed) => {
-        return viewed;
-      }),
-      this.onlyIf("$favorite", (favorite) => {
-        return favorite;
-      }),
-      this.onlyIf("$candidate", (candidate) => candidate),
-      this.onlyIf("counterOffer", (counterOffer) => counterOffer),
-      this.onlyIf("$radius", (radius) => true),
-      this.onlyIf("amount", (amount, range) => {
-        return amount >= range[0] && amount <= range[1];
-      }),
-      this.sortBy("dueDate", (d1, d2) => {
+      this.onlyIf('$viewed', viewed => { return viewed }),
+      this.onlyIf('$favorite', favorite => { return favorite }),
+      this.onlyIf('$candidate', candidate => { return candidate }),
+      this.onlyIf('counterOffer', counterOffer => counterOffer),
+      this.sortBy('dueDate', (d1, d2) => {
+        console.log('sorting');
         return new Date(d1).getTime() - new Date(d2).getTime();
       }),
       this.sortBy("startDate", () => 1),

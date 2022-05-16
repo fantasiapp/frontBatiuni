@@ -25,6 +25,7 @@ import { UIAnnonceResume } from "../../ui/annonce-resume/annonce-resume.ui";
 import { getLevenshteinDistance } from "src/app/shared/services/levenshtein";
 
 import * as moment from "moment";
+import { AppComponent } from "src/app/app.component";
 
 @Component({
   selector: "missions",
@@ -54,80 +55,63 @@ export class MissionsComponent extends Destroy$ {
   constructor(
     private store: Store,
     private info: InfoService,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    private appComponent: AppComponent
   ) {
     super();
   }
 
   ngOnInit() {
-    this.info.alignWith("header_search");
+    this.info.alignWith('header_search');
 
-    combineLatest([this.profile$, this.missions$])
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(([profile, missions]) => {
-        //filter own missions
-        //for now accept all missions
+    combineLatest([this.profile$, this.missions$]).pipe(takeUntil(this.destroy$)).subscribe(([profile, missions]) => {
+      //filter own missions
+      //for now accept all missions
+      
+      this.allMyMissions = missions.filter(mission => mission.subContractor == profile.company.id);
+      //compute work days
 
-        this.allMyMissions = missions.filter(
-          (mission) => mission.subContractor == profile.company.id
-        );
-        //compute work days
+      this.detailedDays = [];
+      let usedDay: number[] = []
+      for ( let mission of this.allMyMissions ) {
+        mission = this.store.selectSnapshot(DataQueries.getById('Mission', mission.id)) as Mission
+        const availabilities = this.store.selectSnapshot(DataQueries.getMany('Disponibility', profile.company.availabilities))
+        const start = moment(mission.startDate),
+          end = moment(mission.endDate),
+          contractor = this.store.selectSnapshot(DataQueries.getById('Company', mission.company))!;
+        
+        const tasks: PostDetail[] = this.store.selectSnapshot(DataQueries.getMany('DetailedPost', mission.details))
+        
+        // const diffDays = end.diff(start, 'days', true);
+        // let day = start.clone();
+        let missionDatesId: Ref<PostDate>[];
+        if (typeof mission.dates === "object" && !Array.isArray(mission.dates)) {
+          missionDatesId = Object.keys(mission.dates).map(key => (+key as number))
+        }
+        else missionDatesId = mission.dates
+        let dateAlreadyParsedFromMission:string[] = []
 
-        this.detailedDays = [];
-        let usedDay: number[] = [];
-        for (let mission of this.allMyMissions) {
-          mission = this.store.selectSnapshot(
-            DataQueries.getById("Mission", mission.id)
-          ) as Mission;
-          const availabilities = this.store.selectSnapshot(
-            DataQueries.getMany("Disponibility", profile.company.availabilities)
-          );
-          const start = moment(mission.startDate),
-            end = moment(mission.endDate),
-            contractor = this.store.selectSnapshot(
-              DataQueries.getById("Company", mission.company)
-            )!;
-
-          const tasks: PostDetail[] = this.store.selectSnapshot(
-            DataQueries.getMany("DetailedPost", mission.details)
-          );
-
-          // const diffDays = end.diff(start, 'days', true);
-          // let day = start.clone();
-          let missionDatesId: Ref<PostDate>[];
-          if (
-            typeof mission.dates === "object" &&
-            !Array.isArray(mission.dates)
-          ) {
-            missionDatesId = Object.keys(mission.dates).map(
-              (key) => +key as number
-            );
-          } else missionDatesId = mission.dates;
-          let dateAlreadyParsedFromMission: string[] = [];
-
-          for (let i = 0; i < missionDatesId.length; i++) {
-            const dateid = missionDatesId[i];
-            let date = this.store.selectSnapshot(
-              DataQueries.getById("DatePost", dateid)
-            );
-
-            dateAlreadyParsedFromMission.push(date!.date);
-
-            this.detailedDays.push({
-              date: date!.date,
-              mission: mission,
-              title: "Chantier de " + contractor.name,
-              tasks: [],
-            });
-            for (const task of tasks) {
-              if (date!.date == task.date) {
-                let lenght = this.detailedDays.length;
-                if (lenght != 0) this.detailedDays[lenght - 1].tasks.push(task);
-              }
+        for(let i= 0; i < missionDatesId.length; i++){
+          const dateid = missionDatesId[i]
+          let date = this.store.selectSnapshot(DataQueries.getById('DatePost', dateid))
+  
+          // console.log('date', date);
+          dateAlreadyParsedFromMission.push(date!.date)
+  
+          this.detailedDays.push({
+            date: date!.date,
+            mission: mission,
+            title: 'Chantier de ' + contractor.name,
+            tasks: []
+          })
+          for (const task of tasks) {
+            if(date!.date == task.date){
+              let lenght = this.detailedDays.length
+              if (lenght != 0) this.detailedDays[lenght -1].tasks.push(task)  
             }
           }
         }
-      });
+    }});
     if (this.missionToClose) {
       this._openCloseMission = this.missionToClose.securityST == 0;
       const company = this.store.selectSnapshot(
@@ -140,6 +124,10 @@ export class MissionsComponent extends Destroy$ {
     }
 
     this.selectMissions(null);
+  }
+
+  ngAfterViewInit() {
+    this.appComponent.getUserData()
   }
 
   callbackFilter = (filter: any): void => {
@@ -178,44 +166,23 @@ export class MissionsComponent extends Destroy$ {
         });
       }
 
-      if (filter.sortMissionDate === true) {
-        this.allMyMissions.sort(
-          (a: any, b: any) =>
-            Date.parse(a["startDate"]) - Date.parse(b["startDate"])
-        );
-      }
+      // Trie les missions par date plus proche
+      if (filter.sortMissionDate === true) {this.allMyMissions.sort((a: any, b: any) => Date.parse(a['startDate']) - Date.parse(b['startDate']))}
 
       for (let mission of this.allMyMissions) {
-        let isDifferentValidationDate =
-          filter.validationDate && filter.validationDate != mission.dueDate;
-        let isNotInMissionDate =
-          filter.missionDate && mission.startDate != filter.missionDate;
-        let isDifferentManPower =
-          filter.manPower && mission.manPower != (filter.manPower === "true");
-        let isNotIncludedJob =
-          filter.jobs &&
-          filter.jobs.length &&
-          filter.jobs.every((job: any) => {
-            return job.id != mission.job;
-          });
-        const user = this.store.selectSnapshot(DataQueries.currentUser);
-        let isUnread =
-          filter.unread &&
-          user.viewedPosts.includes(mission.id) == filter.unread;
-        let isNotClosed =
-          filter.isClosed && mission.isClosed != filter.isClosed;
+      
+      let isDifferentValidationDate = (filter.validationDate && filter.validationDate != mission.dueDate)
+      let datesMission = this.store.selectSnapshot(DataQueries.getMany("DatePost", mission.dates));
+      let dates = datesMission.map(date => date.date);
+      let isNotInMissionDate = (filter.missionDate && !dates.includes(filter.missionDate))       
+      let isDifferentManPower = (filter.manPower && mission.manPower != (filter.manPower === "true"))
+      let isNotIncludedJob = (filter.jobs && filter.jobs.length && filter.jobs.every((job: any) => {return job.id != mission.job}))
+      const user = this.store.selectSnapshot(DataQueries.currentUser);
+      let isUnread = (filter.unread && user.viewedPosts.includes(mission.id) == filter.unread);
+      let isNotClosed = (filter.isClosed && mission.isClosed != filter.isClosed)
 
-        if (
-          isDifferentValidationDate ||
-          isNotInMissionDate ||
-          isDifferentManPower ||
-          isNotIncludedJob ||
-          isUnread ||
-          isNotClosed
-        ) {
-          continue;
-        }
-        this.myMissions.push(mission);
+      if ( isDifferentValidationDate || isNotInMissionDate || isDifferentManPower || isNotIncludedJob || isUnread || isNotClosed) { continue }
+      this.myMissions.push(mission)
       }
     }
     this.cd.markForCheck();

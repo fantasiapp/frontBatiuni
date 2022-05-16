@@ -12,6 +12,7 @@
   background-position: top 0 right 0;
   background-repeat: no-repeat;
   @extend %absolute-cover;
+  // top: env(safe-area-inset-top);
   flex-direction: column;
   align-items: center;
   font-family: 'Roboto', sans-serif;
@@ -38,8 +39,9 @@
 
 .action-call-container {
   position: absolute;
-  @include set-safe-area(bottom, bottom);
-  margin-bottom: 3rem;
+  // @include set-safe-area(bottom, bottom);
+  // margin-bottom: 3rem;
+  bottom: calc(3rem + env(safe-area-inset-bottom));
   flex-direction: column;
   align-items: center;
   row-gap: 3.5rem;

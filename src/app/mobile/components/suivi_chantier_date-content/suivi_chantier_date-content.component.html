@@ -30,6 +30,11 @@
           <h2>Communiquer avec votre partenaire de chantier</h2>
           <div *ngFor="let supervision of date.supervisions">
             <comment-suivi  [supervision]="supervision" #commentSuivi></comment-suivi>
+            
+          </div>
+          <div class="partenerComment-addPhoto" *ngIf="!!date.supervisions[0]">
+            <span (click)="swipeMenuImage = true">Ajouter un photo : </span>
+            <img class="partenerComment-icon"  (click)="swipeMenuImage = true" src="assets/camera-outline.svg" alt="camera"/>
           </div>
       </div>
       <div *ngIf="!mission!.isClosed" class="partenerComment">
@@ -37,7 +42,7 @@
           <form [formGroup]="formMain" (submit)="onSubmit( null, chantierMain)" #formMainTest>
             <textarea id="input_general" class="inputComment mainInputComment" (keyup)="textareaSubmit($event, formMainTest)" type="text" placeholder="Ajouter un commentaire" formControlName="commentMain" #chantierMain></textarea>
           </form>
-          <img (click)="swipeMenuImage = true" src="assets/camera.png"/>
+          <!-- <img (click)="swipeMenuImage = true" src="assets/camera.png"/> -->
         </div>
       </div>
     </div>

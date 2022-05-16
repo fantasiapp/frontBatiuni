@@ -58,6 +58,8 @@ import { getLevenshteinDistance } from "src/app/shared/services/levenshtein";
 
 import { AuthState } from "src/models/auth/auth.state";
 import { Logout } from "src/models/auth/auth.actions";
+import { analyzeAndValidateNgModules } from "@angular/compiler";
+import { AppComponent } from "src/app/app.component";
 
 @Component({
   selector: "home",
@@ -131,6 +133,7 @@ export class HomeComponent extends Destroy$ {
   showFooter: boolean = true;
   constructor(
     private cd: ChangeDetectorRef,
+    private appComponent: AppComponent,
     private store: Store,
     private info: InfoService,
     private popup: PopupService,
@@ -172,6 +175,7 @@ export class HomeComponent extends Destroy$ {
         this.selectDraft(null);
         this.selectUserOnline(null);
         this.selectMission(null);
+
       });
     // const view = this.store.selectSnapshot(DataState.view)
     // this._openCloseMission = view == 'ST' && this.missions.length != 0
@@ -193,6 +197,11 @@ export class HomeComponent extends Destroy$ {
   }
 
   ngAfterViewInit() {
+    this.updatePage()
+  }
+
+  updatePage() {
+    this.appComponent.getUserData();
     this.filters.filter("ST", this.allOnlinePosts);
   }
 
@@ -225,26 +234,35 @@ export class HomeComponent extends Destroy$ {
           return key[0];
         });
 
-        // On trie les posts selon leur distance de levenshtein
-        this.allUserDrafts.sort(
-          (a: any, b: any) => keys.indexOf(a) - keys.indexOf(b)
-        );
+        // Trie les posts selon leur distance de levenshtein
+        this.allUserDrafts.sort((a: any,b: any)=>keys.indexOf(a) - keys.indexOf(b));
       } else {
         this.allUserDrafts.sort((a, b) => {
           return a["id"] - b["id"];
         });
       }
 
+      // Trie brouillons les plus anciens
+      if (filter.sortDraftDate === true) {this.allUserDrafts.sort((a: any, b: any) => a['id'] - b['id'])} 
+
+      // Trie les brouillons les plus complets (selon leurs details + nb de documents)
+      let detailPost: any = []; 
+      if (filter.sortDraftFull === true) {
+        for (let post of this.allUserDrafts){
+          detailPost.push([post, post.details.length + post.files.length]) ;
+          }
+        detailPost.sort((a: any, b: any) => b[1] - a[1]);
+        let detailKeys = detailPost.map((key: any) => {return key[0]});
+        this.allUserDrafts.sort((a: any, b: any) => detailKeys.indexOf(a) - detailKeys.indexOf(b));
+      }
+
       for (let post of this.allUserDrafts) {
-        let isDifferentDate = filter.date && filter.date != post.dueDate;
-        let isDifferentManPower =
-          filter.manPower && post.manPower != (filter.manPower === "true");
-        let isNotIncludedJob =
-          filter.jobs &&
-          filter.jobs.length &&
-          filter.jobs.every((job: any) => {
-            return job.id != post.job;
-          });
+      
+        let datesPost = this.store.selectSnapshot(DataQueries.getMany("DatePost", post.dates));
+        let dates = datesPost.map(date => date.date);
+        let isDifferentDate = (filter.date && !dates.includes(filter.date))
+        let isDifferentManPower = (filter.manPower && post.manPower != (filter.manPower === "true"))
+        let isNotIncludedJob = (filter.jobs && filter.jobs.length && filter.jobs.every((job: any) => {return job.id != post.job}))
 
         if (isDifferentDate || isDifferentManPower || isNotIncludedJob) {
           continue;
@@ -287,22 +305,34 @@ export class HomeComponent extends Destroy$ {
         });
       }
 
-      for (let post of this.allUserOnlinePosts) {
-        let isDifferentDate = filter.date && filter.date != post.dueDate;
-        let isDifferentManPower =
-          filter.manPower && post.manPower != (filter.manPower === "true");
-        let isNotIncludedJob =
-          filter.jobs &&
-          filter.jobs.length &&
-          filter.jobs.every((job: any) => {
-            return job.id != post.job;
-          });
-
-        if (isDifferentDate || isDifferentManPower || isNotIncludedJob) {
-          continue;
+      // Trie Posts selon leurs réponses
+      if (filter.sortPostResponse === true) {
+        let responses = [];
+        for (let post of this.allUserOnlinePosts) {
+          const candidatesIds = post.candidates || [],
+          candidates = this.store.selectSnapshot(DataQueries.getMany("Candidate", candidatesIds));
+          let possCandidate = candidates.reduce((possibleCandidates: Candidate[], candidate: Candidate) => { 
+            if (!candidate.isRefused) {possibleCandidates.push(candidate);}
+            return possibleCandidates; }, []
+          );
+          responses.push([post, possCandidate.length])
         }
-        this.userOnlinePosts.push(post);
-      }
+        responses.sort((a: any,b: any) => b[1] - a[1]);
+        let keys = responses.map((key: any) => { return key[0] });    
+        this.allUserOnlinePosts.sort((a: any,b: any)=>keys.indexOf(a) - keys.indexOf(b));
+      } 
+
+      for (let post of this.allUserOnlinePosts) {
+        
+        let datesPost = this.store.selectSnapshot(DataQueries.getMany("DatePost", post.dates));
+        let dates = datesPost.map(date => date.date);
+        let isDifferentDate = (filter.date && !dates.includes(filter.date))
+        let isDifferentManPower = (filter.manPower && post.manPower != (filter.manPower === "true"))
+        let isNotIncludedJob = (filter.jobs && filter.jobs.length && filter.jobs.every((job: any) => {return job.id != post.job}))
+
+        if ( isDifferentDate || isDifferentManPower || isNotIncludedJob) { continue }
+        this.userOnlinePosts.push(post)
+      }  
     }
     this.cd.markForCheck();
   }
@@ -336,16 +366,28 @@ export class HomeComponent extends Destroy$ {
         });
       }
 
+      // Trie missions selon leurs notifications
+      if (filter.sortMissionNotifications === true) {
+        let allNotifications = this.store.selectSnapshot(DataQueries.getAll("Notification"));
+        let missionsNotifications = allNotifications.map(notification => notification.missions);
+        let missionArray = [];
+        for (let mission of this.allMissions){
+          let missionNotifications = missionsNotifications.map(missionId => missionId === mission.id)
+          const countTrue = missionNotifications.filter(value => value === true).length;
+          missionArray.push([mission, countTrue]);
+        }
+        missionArray.sort((a: any, b: any) => b[1] - a[1]);
+        let keys = missionArray.map((key: any) => {return key[0]});
+        this.allMissions.sort((a: any, b: any) => keys.indexOf(a) - keys.indexOf(b));
+      }
+
       for (let mission of this.allMissions) {
-        let isDifferentDate = filter.date && filter.date != mission.dueDate;
-        let isDifferentManPower =
-          filter.manPower && mission.manPower != (filter.manPower === "true");
-        let isNotIncludedJob =
-          filter.jobs &&
-          filter.jobs.length &&
-          filter.jobs.every((job: any) => {
-            return job.id != mission.job;
-          });
+      
+        let datesPost = this.store.selectSnapshot(DataQueries.getMany("DatePost", mission.dates));
+        let dates = datesPost.map(date => date.date);
+        let isDifferentDate = (filter.date && !dates.includes(filter.date))
+        let isDifferentManPower = (filter.manPower && mission.manPower != (filter.manPower === "true"))
+        let isNotIncludedJob = (filter.jobs && filter.jobs.length && filter.jobs.every((job: any) => {return job.id != mission.job}))
 
         if (isDifferentDate || isDifferentManPower || isNotIncludedJob) {
           continue;
@@ -516,9 +558,9 @@ export class HomeComponent extends Destroy$ {
       .subscribe(
         (success) => {
           // Si la candidature est envoyée on quite la vue de la candidature
-          this.filters.filter("ST", this.allOnlinePosts);
+          this.updateAllOnlinePost(post)
+          this.filters.filter("ST", this.allOnlinePosts)
           this.slideOnlinePostClose();
-          this.cd.markForCheck();
         },
         (error) =>
           this.info.show("error", "Echec de l'envoi de la candidature", 5000)
@@ -605,6 +647,7 @@ export class HomeComponent extends Destroy$ {
   @ViewChild("slideOnlinePost") private slideOnlinePost!: UISlideMenuComponent;
 
   slideOnlinePostClose() {
+    this.updatePage()
     // Close View
     this.slideOnlinePost.close();
 
@@ -644,4 +687,19 @@ export class HomeComponent extends Destroy$ {
     });
   }
 
+  updateAllOnlinePost(post: Post) {
+    post = this.store.selectSnapshot(DataQueries.getById("Post", post.id))!
+    let temporaryAllOnlinePost: Post[] = []
+    let oldPost: Post | undefined = this.allOnlinePosts.pop()
+    let checkIf = true
+    this.allOnlinePosts.forEach((onlinePost: Post) => {
+      if (onlinePost.id > oldPost!.id && checkIf){
+        temporaryAllOnlinePost.push(post)
+        checkIf = false
+        console.log('applyPost, dans le if :', temporaryAllOnlinePost, post)
+      }
+      temporaryAllOnlinePost.push(onlinePost)
+    })
+    this.allOnlinePosts = temporaryAllOnlinePost
+  }
 }
