@@ -272,14 +272,9 @@ export class DataState {
   }
 
   @Action(ChangeProfilePicture)
-  changeProfilePicture(
-    ctx: StateContext<DataModel>,
-    picture: ChangeProfilePicture
-  ) {
+  changeProfilePicture(ctx: StateContext<DataModel>, picture: ChangeProfilePicture) {
     const profile = this.store.selectSnapshot(DataQueries.currentProfile),
-      image = this.store.selectSnapshot(
-        DataQueries.getProfileImage(profile.company.id)
-      ),
+      image = this.store.selectSnapshot(DataQueries.getProfileImage(profile.company.id)),
       req = this.http.post("data", picture);
 
     return req.pipe(
@@ -287,26 +282,14 @@ export class DataState {
         if (response[picture.action] !== "OK") throw response["messages"];
 
         delete response[picture.action];
-        ctx.setState(
-          compose(
-            addSimpleChildren(
-              "Company",
-              profile.company.id,
-              "File",
-              response,
-              "nature"
-            )
-          )
-        );
+        console.log('response', response);
+        ctx.setState(compose(addSimpleChildren("Company", profile.company.id, "File", response, "nature")));
       })
     );
   }
 
   @Action(UploadImageSupervision)
-  uploadImageSupervision(
-    ctx: StateContext<DataModel>,
-    picture: UploadImageSupervision
-  ) {
+  uploadImageSupervision(ctx: StateContext<DataModel>, picture: UploadImageSupervision) {
     const profile = this.store.selectSnapshot(DataQueries.currentProfile),
       req = this.http.post("data", picture);
 
@@ -315,10 +298,9 @@ export class DataState {
         if (response[picture.action] !== "OK") throw response["messages"];
 
         delete response[picture.action];
-
-        // ctx.setState(compose(
-        //   addSimpleChildren('Company', profile.company.id, 'File', response, 'nature'),
-        // ));
+        let key = Object.keys(response)
+        response[parseInt(key[0])].push('')
+        ctx.setState(addSimpleChildren('Company', profile.company.id, 'File', response, 'nature'));
       })
     );
   }
