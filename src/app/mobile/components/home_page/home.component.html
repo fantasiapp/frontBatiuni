@@ -215,13 +215,16 @@
     <p class="font-Poppins" style="margin-bottom: 2rem">
       Vous avez : {{ possibleCandidates.length }} réponse(s)
     </p>
-    <profile-card
-      *ngFor="let candidate of possibleCandidates"
-      (click)="showCompany(candidate.company, candidate.id)"
-      [job]="job"
-      [profile]="candidate.company"
-      [candidate]="candidate"
-    ></profile-card>
+    <div class="wrapper" style="row-gap: 1rem; display: flex; flex-direction: column;">
+      <profile-card
+        *ngFor="let candidate of possibleCandidates"
+        (click)="showCompany(candidate.company, candidate.id)"
+        [job]="job"
+        [profile]="candidate.company"
+        [candidate]="candidate"
+        class="background-white"
+      ></profile-card>
+    </div>
   </div>
 </ng-template>
 
