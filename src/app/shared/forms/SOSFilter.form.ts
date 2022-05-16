@@ -25,7 +25,7 @@ import { FormArray, FormControl, FormGroup } from "@angular/forms";
 
     <div class="form-input">
       <label>Dans un rayon autour de:</label>
-      <ngx-slider [options]="imports.DistanceSliderConfig" [value]="0" [highValue]="100" formControlName="if_$radius"></ngx-slider>
+      <ngx-slider [options]="imports.DistanceSliderConfig" [value]="0" [highValue]="1000" formControlName="if_$radius"></ngx-slider>
     </div>
 
 

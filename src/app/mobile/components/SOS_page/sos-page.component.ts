@@ -25,7 +25,7 @@ import { DataQueries, Query, QueryAll } from "src/models/new/data.state";
   styleUrls: ["./sos-page.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SOSPageComponent {
+export class SOSPageComponent extends Destroy$ {
   activeView: number = 0;
   openSOSFilterMenu: boolean = false;
 
@@ -42,6 +42,7 @@ export class SOSPageComponent {
   }>;
 
   constructor(private store: Store, private slides: SlidemenuService, private appComponent: AppComponent) {
+    super();
     const now = new Date().toISOString().slice(0, 10);
     this.availableCompanies$ = this.companies$.pipe(
       switchMap((companies) => {
