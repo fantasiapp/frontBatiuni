@@ -197,7 +197,9 @@ export class HomeComponent extends Destroy$ {
   }
 
   updatePage() {
+    console.log('enter')
     this.appComponent.getUserData();
+    console.log('after')
     this.filters.filter("ST", this.allOnlinePosts);
   }
 
