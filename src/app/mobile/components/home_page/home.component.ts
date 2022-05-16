@@ -201,9 +201,7 @@ export class HomeComponent extends Destroy$ {
   }
 
   updatePage() {
-    console.log('enter')
     this.appComponent.getUserData();
-    console.log('after')
     this.filters.filter("ST", this.allOnlinePosts);
   }
 
@@ -698,7 +696,6 @@ export class HomeComponent extends Destroy$ {
       if (onlinePost.id > oldPost!.id && checkIf){
         temporaryAllOnlinePost.push(post)
         checkIf = false
-        console.log('applyPost, dans le if :', temporaryAllOnlinePost, post)
       }
       temporaryAllOnlinePost.push(onlinePost)
     })
@@ -714,7 +711,6 @@ export class HomeComponent extends Destroy$ {
       if (onlinePost.id > oldPost!.id && checkIf){
         temporaryallUserOnlinePosts.push(post)
         checkIf = false
-        console.log('applyPost, dans le if :', temporaryallUserOnlinePosts, post)
       }
       temporaryallUserOnlinePosts.push(onlinePost)
     })

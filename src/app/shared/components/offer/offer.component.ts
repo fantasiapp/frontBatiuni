@@ -132,9 +132,6 @@ export class OfferComponent {
   }
 
   ngOnInit() {
-    console.log("offer", this.post?.boostTimestamp);
-    console.log("time", this.time);
-    console.log(this.post!.boostTimestamp >= this.time || false)
     if (!this.src) {
       let logo = this.store.selectSnapshot(
         DataQueries.getProfileImage(this.company!.id)

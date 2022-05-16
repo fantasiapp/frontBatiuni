@@ -264,10 +264,7 @@ export class PostMenu<T extends Post | Mission = Post> {
   get candidates() { return this.post?.candidates || []; }
 
   isBoosted(time: number) { 
-    console.log("PostMenu isBoosted", this.post?.boostTimestamp, time)
     if (this.post?.boostTimestamp) {
-      console.log("isBoosted", this.post?.boostTimestamp)
-      console.log("isBoosted getTime", time)
       return this.post?.boostTimestamp >= time || false
     }
     return false;
