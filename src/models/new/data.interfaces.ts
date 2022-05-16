@@ -144,8 +144,7 @@ export interface Post {
   files: Ref<File>[];
   candidates: Ref<Candidate>[];
   dates: Ref<PostDate>[];
-  isBoosted: boolean;
-  boostedEndDate: Date;
+  boostTimestamp: number;
 };
 
 export interface Candidate {
@@ -264,5 +263,13 @@ export class PostMenu<T extends Post | Mission = Post> {
 
   get candidates() { return this.post?.candidates || []; }
 
-  get boosted() { return this.post?.isBoosted || false; }
+  isBoosted(time: number) { 
+    console.log("PostMenu isBoosted", this.post?.boostTimestamp, time)
+    if (this.post?.boostTimestamp) {
+      console.log("isBoosted", this.post?.boostTimestamp)
+      console.log("isBoosted getTime", time)
+      return this.post?.boostTimestamp >= time || false
+    }
+    return false;
+  }
 };

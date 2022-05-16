@@ -162,6 +162,11 @@ export class DataState {
     return state.session.view;
   }
 
+  @Selector()
+  static time(stage: DataModel) {
+    return stage.session.time;
+  }
+
   @Selector([DataState])
   static companies(state: DataModel) {
     return state["Company"] || {};

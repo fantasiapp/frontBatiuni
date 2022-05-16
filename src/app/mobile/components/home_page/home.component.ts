@@ -75,6 +75,8 @@ export class HomeComponent extends Destroy$ {
   @Select(DataState.view)
   view$!: Observable<"PME" | "ST">;
 
+  time: number = 0;
+
   @QueryAll("Post")
   posts$!: Observable<Post[]>;
 
@@ -178,6 +180,8 @@ export class HomeComponent extends Destroy$ {
       this.showFooter = b;
       this.cd.markForCheck();
     });
+    
+    this.time = this.store.selectSnapshot(DataState.time);
   }
 
   @HostBinding('class.footerHide')

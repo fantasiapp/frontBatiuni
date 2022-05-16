@@ -137,11 +137,12 @@ export class DataReader {
   readCurrentSession(data: any) {
     const companyId = this.readCurrentCompanyId(data),
       roles = this.getField(data, "Company", companyId, "Role");
-
+    const time = data.timestamp;
     return patch({
       session: {
         currentUser: data["currentUser"],
         view: roles == 1 ? "PME" : "ST",
+        time: time,
       },
     });
   }
