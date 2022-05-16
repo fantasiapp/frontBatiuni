@@ -9,7 +9,7 @@ import { DownloadFile } from "src/models/new/user/user.actions";
 import { Destroy$ } from "../../common/classes";
 import { FileDownloader } from "../../services/file-downloader.service";
 import { ImageGenerator } from "../../services/image-generator.service";
-import { SingleCache } from "../../services/SingleCache";
+import { SingleCache } from "src/app/shared/services/SingleCache";
 
 @Component({
   selector: 'profile-image',
