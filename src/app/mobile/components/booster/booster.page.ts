@@ -28,7 +28,6 @@ export class BoosterPage {
     ) {}
 
   ngOnInit() {
-    console.log(this.post);
   }
 
   boostPost(){

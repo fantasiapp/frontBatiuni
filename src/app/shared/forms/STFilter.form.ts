@@ -221,21 +221,17 @@ export class STFilterForm extends Filter<Post> {
       $radius: number;
     }>([
       this.defineComputedProperty('$job', (post) => {
-        console.log(post.job)
         let allJobs = this.allJobs;
         let idJobs = allJobs.map(job => job.id)
-        console.log(idJobs)
         // let jobs: any = this.store.selectSnapshot(DataQueries.getById("JobForCompany", post.job));
         // let includedJob = (jobs.every((job: any) => {return job.id === post.job}))
         // console.log('computing manPower on', post, '=>', post.job)
         return idJobs.includes(post.job);
       }),
       this.defineComputedProperty('$manPower1', (post) => {
-        console.log('computing manPower on', post, '=>', post.manPower)
         return post.manPower;
       }),
       this.defineComputedProperty('$manPower2', (post) => {
-        console.log('computing manPower on', post, '=>', post.manPower)
         return post.manPower;
       }),
       this.defineComputedProperty('$employeeCount', (post) => {
@@ -255,7 +251,6 @@ export class STFilterForm extends Filter<Post> {
         const user = this.store.selectSnapshot(DataQueries.currentUser);
         let candidates = this.store.selectSnapshot(DataQueries.getMany("Candidate", post.candidates))
         let companies = candidates.map(candidate => candidate.company)
-        console.log('computing candidate on', post, '=>', companies.includes(user.company))
         return companies.includes(user.company);
       }),
       this.defineComputedProperty('$radius', (post) => {
@@ -293,7 +288,6 @@ export class STFilterForm extends Filter<Post> {
       this.onlyIf('$candidate', candidate => { return candidate }),
       this.onlyIf('counterOffer', counterOffer => counterOffer),
       this.sortBy('dueDate', (d1, d2) => {
-        console.log('sorting');
         return new Date(d1).getTime() - new Date(d2).getTime();
       }),
       this.sortBy("startDate", () => 1),

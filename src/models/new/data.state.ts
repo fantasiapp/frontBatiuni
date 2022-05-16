@@ -406,7 +406,6 @@ export class DataState {
 
   @Action(UploadPost)
   createPost(ctx: StateContext<DataModel>, post: UploadPost) {
-    console.log("createPost", post)
     const profile = this.store.selectSnapshot(DataQueries.currentProfile),
       { files, ...form } = post,
       uploads = Object.keys(files).map(
@@ -920,7 +919,6 @@ export class DataState {
   boostPost(ctx: StateContext<DataModel>, boost: BoostPost) {
     return this.http.post("data", boost).pipe(
       tap((response: any) => {
-        console.log("boost post response:", response)
       })
     );        
   }

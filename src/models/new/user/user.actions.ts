@@ -202,7 +202,6 @@ export class UploadPost {
     documents.forEach(doc => {
       files[doc.name] = doc.fileData;
     });
-    console.log("fromPostForm", value.counterOffer, typeof(value.counterOffer))
     
     return new UploadPost(
       value.address,

@@ -82,11 +82,9 @@ export class SuiviComments {
   }
 
   modifySupervision() {
-    console.log("modifySupervision");
   }
 
   deleteSupervision() {
-    console.log("deleteSupervision");
   }
 
   ngAfterViewInit(): void {

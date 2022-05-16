@@ -62,7 +62,7 @@ export class SOSPageComponent {
         return of({ companies: availableCompanies, availabilities });
       })
     );
-    this.appComponent.getUserData()
+    this.appComponent.updateUserData()
   }
 
   checkCompanyProfile(company: Company) {
