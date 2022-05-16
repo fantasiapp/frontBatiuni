@@ -91,27 +91,35 @@ namespace mutable {
   //configure to only accept simple types
   //can create new items and add them to parent
   export function addSimpleChildren<K extends DataTypes>(draft: any, parent: DataTypes, parentId: number, child: K, values: Record<any>, uniqueBy?: keyof Interface<K>) {
+    console.log('test', child, values, uniqueBy)
+
     //Add children
     const ids = Object.keys(values).map(id => +id);
-
+    
     //add to parent
     const parentObject = draft[parent]?.[parentId],
       childIndex = draft.fields[parent].indexOf(child);
     if ( !parentObject || childIndex <= -1 ) return;
-
+    
     mutable.addValues(draft, child, values);
+
     //don't count overwritten ids
     const oldIds = parentObject[childIndex].filter((id: number) => !ids.includes(id));
-
+    
     if ( uniqueBy ) {
       const uniqueIndex = draft.fields[child].indexOf(uniqueBy);
-      if ( uniqueIndex !== void 0 )
+      console.log('uniqueIndex', uniqueIndex, draft, draft.fields[child][0]);
+      if ( uniqueIndex !== void 0 ){
         parentObject[childIndex] = removeDuplicates(draft, child, oldIds, ids, uniqueIndex);
+      }
     }
 
-    for ( const id of ids )
-      if ( !parentObject[childIndex].includes(id) )
+    for ( const id of ids ){
+      if ( !parentObject[childIndex].includes(id)){
         parentObject[childIndex].push(id);
+      }
+    }
+    console.log('draft', draft[parent]?.[parentId][childIndex]);
   }
 
   //configure to only accept complex data types
