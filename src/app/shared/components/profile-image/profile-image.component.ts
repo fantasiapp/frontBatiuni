@@ -37,29 +37,25 @@ export class UIProfileImageComponent extends Destroy$ {
   borders: boolean = true;
 
   ngOnChanges(changes: SimpleChanges) {
-    console.log('ngOnChanges in profile-image.components, changes["profile"] :', changes["profile"])
     if ( changes['profile']) {
       (this.profile as Observable<Profile>).pipe(take(1)).subscribe(profile => {
         this.setColor(profile.company)
-        if (!SingleCache.checkValueInCache("profile") || !SingleCache.compareValue("profile", this.src)){
+        if (!SingleCache.checkValueInCache("companyImage" + profile.company.id.toString())){
           this.image = this.store.selectSnapshot(DataQueries.getProfileImage(profile.company.id));
           if ( !this.image ) {
             const fullname = profile.company.name[0].toUpperCase();
             this.src = this.imageGenerator.generate(fullname);
-            console.log('ngOnChanges in profile-image.components, in if:', this.src)
-            SingleCache.setValueByName("profile", this.src)
-            this.src = SingleCache.getValueByName("profil")
+            SingleCache.setValueByName("companyImage" + profile.company.id.toString(), this.src)
             this.cd.markForCheck();
           } else {
             this.downloader.downloadFile(this.image).subscribe(image => {
               this.src = this.downloader.toSecureBase64(image);
-            console.log('ngOnChanges in profile-image.components, in else:', this.src)
-            SingleCache.setValueByName("profile", this.src)
+            SingleCache.setValueByName("companyImage" + profile.company.id.toString(), this.src)
             this.cd.markForCheck();
             });
           }}
         else {
-          this.src = SingleCache.getValueByName("profil")
+          this.src = SingleCache.getValueByName("companyImage" + profile.company.id.toString())
           this.cd.markForCheck()
         }
       });

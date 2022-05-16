@@ -28,19 +28,11 @@ export class BoosterPage {
     ) {}
 
   ngOnInit() {
-    console.log('booster page');
-    console.log(this.post);
   }
 
   boostPost(){
-    console.log('add boost');
-    console.log("boost duration", this.selected);
-    console.log(typeof(this.selected));
-    console.log(parseInt(this.selected));
     this.store.dispatch(new BoostPost(this.post.id, parseInt(this.selected))).subscribe(
       (response) => {
-        console.log('boost added');
-        console.log(response);
         this.slideService.hide();
       }
     )

@@ -22,6 +22,7 @@ import { DataQueries } from "src/models/new/data.state";
 import { DeletePost, SetFavorite } from "src/models/new/user/user.actions";
 import { FileDownloader } from "../../services/file-downloader.service";
 import { ImageGenerator } from "../../services/image-generator.service";
+import { SingleCache } from "../../services/SingleCache";
 import { PopupService } from "../popup/popup.component";
 
 @Component({
@@ -132,23 +133,25 @@ export class OfferComponent {
   }
 
   ngOnInit() {
-    console.log("offer", this.post?.boostTimestamp);
-    console.log("time", this.time);
-    console.log(this.post!.boostTimestamp >= this.time || false)
     if (!this.src) {
+      if (SingleCache.checkValueInCache("companyImage" + this.company!.id.toString())) {
+        this.src = SingleCache.getValueByName("companyImage" + this.company!.id.toString())
+      }
+      else {
       let logo = this.store.selectSnapshot(
         DataQueries.getProfileImage(this.company!.id)
       );
       if (!logo) {
-        const fullname = this.company!.name[0].toUpperCase();
+      const fullname = this.company!.name[0].toUpperCase();
         this.src = this.imageGenerator.generate(fullname);
         this.cd.markForCheck();
       } else {
-        this.downloader.downloadFile(logo).subscribe((image) => {
+      this.downloader.downloadFile(logo).subscribe((image) => {
           this.src = this.downloader.toSecureBase64(image);
+          SingleCache.setValueByName("companyImage" + this.company!.id.toString(), this.src)
           this.cd.markForCheck();
         });
-      }
+      }}
     }
 
     this.user$.pipe(take(1)).subscribe((usr) => {

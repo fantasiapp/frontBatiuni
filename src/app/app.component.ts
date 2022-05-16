@@ -17,6 +17,7 @@ import { AuthState } from "src/models/auth/auth.state";
 import { catchError } from "rxjs/operators";
 import { Logout } from "src/models/auth/auth.actions";
 import { delay } from "./shared/common/functions";
+import { waitForAsync } from "@angular/core/testing";
 
 @Component({
   selector: "app-root",
@@ -64,12 +65,11 @@ export class AppComponent extends Destroy$ {
   }
 
   async updateUserData() {
-    while (false) {
-      if (this.readyToUpdate) {
-        this.getUserData()
-        await delay(5000);
-      }
-      await delay(5000);
+    if (this.readyToUpdate) {
+      this.readyToUpdate = false
+      this.getUserData()
+      await delay(20000)
+      this.readyToUpdate = true
     }
   }
 
