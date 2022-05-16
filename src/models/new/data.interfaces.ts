@@ -144,6 +144,7 @@ export interface Post {
   files: Ref<File>[];
   candidates: Ref<Candidate>[];
   dates: Ref<PostDate>[];
+  boostTimestamp: number;
 };
 
 export interface Candidate {
@@ -186,7 +187,7 @@ export type Mission = Post & {
   signedByCompany: boolean;
   signedBySubContractor: boolean;
 
-  quality: number;
+  quality:            number;
   qualityComment: string;
   security: number;
   securityComment: string;
@@ -261,4 +262,11 @@ export class PostMenu<T extends Post | Mission = Post> {
   favorite: boolean = false;
 
   get candidates() { return this.post?.candidates || []; }
+
+  isBoosted(time: number) { 
+    if (this.post?.boostTimestamp) {
+      return this.post?.boostTimestamp >= time || false
+    }
+    return false;
+  }
 };

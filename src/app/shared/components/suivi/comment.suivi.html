@@ -13,9 +13,11 @@
 </div>
 
 <div class="comment-image position-relative" *ngIf="images.length">
+  <img class="background" [src]="images[nbImageSelected] || 'assets/unavailable.jpg'"/>
   <img class="main" [src]="images[nbImageSelected] || 'assets/unavailable.jpg'"/>
   <img *ngIf="imageHasNext" (click)="otherImage(1)" class="position-absolute right" src="assets/arrowright.svg"/>
   <img *ngIf="imageHasPrevious" (click)="otherImage(-1)" class="position-absolute left" src="assets/arrowleft.svg"/>
+
 </div>
 
 

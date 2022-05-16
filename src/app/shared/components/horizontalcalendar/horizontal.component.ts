@@ -138,7 +138,8 @@ export class HorizontaleCalendar implements OnInit {
         .locale("fr")
         .format("D,dddd,YYYY-MM-DD")
         .split(","),
-      weekStart = currentDate.clone().startOf("isoWeek");
+        // permet de voir un la veille sur le calendrier horizontal
+      weekStart = currentDate.clone().add( -1, "days");
     let days = [];
     for (let i = 0; i < HorizontaleCalendar.NUMBER_OF_DAYS_DISPLAYED; i++) {
       const dayFormated = moment(weekStart)
@@ -293,7 +294,6 @@ export class HorizontaleCalendar implements OnInit {
       isChange.schedule =
         !!mission.hourlyEndChange || !!mission.hourlyStartChange;
 
-    console.log('isChange;', isChange);
     return isChange;
   }
 

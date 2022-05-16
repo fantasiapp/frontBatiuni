@@ -20,6 +20,7 @@ import {
   TakePicture,
   InviteFriend,
   ValidateMissionDate,
+  BoostPost,
 } from "./user/user.actions";
 import {
   ApplyPost,
@@ -63,12 +64,14 @@ import { GetCompanies } from "./search/search.actions";
 import produce from "immer";
 import { SlidemenuService } from "src/app/shared/components/slidemenu/slidemenu.component";
 import { SwipeupService } from "src/app/shared/components/swipeup/swipeup.component";
+import { transformAll } from "@angular/compiler/src/render3/r3_ast";
 
 export interface DataModel {
   fields: Record<string[]>;
   session: {
     currentUser: number;
     view: "ST" | "PME";
+    time: number;
   };
   [key: string]: Record<any>;
 }
@@ -85,11 +88,13 @@ export class Clear {
     session: {
       currentUser: -1,
       view: "ST",
+      time: 0,
     },
   },
 })
 @Injectable()
 export class DataState {
+  flagUpdate = true;
   constructor(
     private store: Store,
     private reader: DataReader,
@@ -137,6 +142,7 @@ export class DataState {
         session: {
           currentUser: -1,
           view: "ST",
+          time: 0,
         },
       });
   }
@@ -155,6 +161,11 @@ export class DataState {
   @Selector()
   static view(state: DataModel) {
     return state.session.view;
+  }
+
+  @Selector()
+  static time(stage: DataModel) {
+    return stage.session.time;
   }
 
   @Selector([DataState])
@@ -209,20 +220,26 @@ export class DataState {
   @Action(GetUserData)
   getUserData(ctx: StateContext<DataModel>, action: GetUserData) {
     const req = this.http.get("data", { action: action.action });
-
+    if (this.flagUpdate){
+      this.flagUpdate = false
     return req.pipe(
       tap((response: any) => {
         const loadOperations = this.reader.readInitialData(response),
           sessionOperation = this.reader.readCurrentSession(response);
 
         ctx.setState(compose(...loadOperations, sessionOperation));
+        this.flagUpdate = true
       })
     );
+    }
+    else{
+      return 
+    }
   }
 
   @Action(Logout)
   logout(ctx: StateContext<DataModel>) {
-    ctx.setState({ fields: {}, session: { view: "ST", currentUser: -1 } });
+    ctx.setState({ fields: {}, session: { view: "ST", currentUser: -1 , time: 0} });
     ctx.dispatch(new GetGeneralData()); // a sign to decouple this from DataModel
   }
 
@@ -389,7 +406,6 @@ export class DataState {
 
   @Action(UploadPost)
   createPost(ctx: StateContext<DataModel>, post: UploadPost) {
-    console.log("createPost", post)
     const profile = this.store.selectSnapshot(DataQueries.currentProfile),
       { files, ...form } = post,
       uploads = Object.keys(files).map(
@@ -897,6 +913,14 @@ export class DataState {
         }
       })
     );
+  }
+
+  @Action(BoostPost)
+  boostPost(ctx: StateContext<DataModel>, boost: BoostPost) {
+    return this.http.post("data", boost).pipe(
+      tap((response: any) => {
+      })
+    );        
   }
 }
 

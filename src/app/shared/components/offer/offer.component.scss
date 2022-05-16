@@ -47,6 +47,12 @@
   position: relative;
 }
 
+.boosted {
+  border-color: rgb(255, 196, 37);
+  border-width: 3px;
+  border-style: solid;
+}
+
 .offres-infos {
   flex : 1;
   white-space: nowrap;
