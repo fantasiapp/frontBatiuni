@@ -21,12 +21,13 @@ export class SingleCache {
 
     private SingleCache() {}
 
-    public static checkImageInCache(name: string) {
-        console.log('getImageByName, ob:', this.instance.ob)
+    public static checkValueInCache(name: string) {
+        console.log('checkImageInCache, ob:', this.instance.ob)
+        console.log('checkImageInCache, bool:', this.instance.ob[name] !== undefined)
         return this.instance.ob[name] !== undefined
     }
 
-    public static getImageByName (name: string) {
+    public static getValueByName (name: string) {
         if (this.instance.ob[name] !== undefined) {
             return this.instance.ob[name]
         }
@@ -35,11 +36,14 @@ export class SingleCache {
         }
     }
 
-    public static setImageByName (name: string, value: any)  {
-        if (!this.checkImageInCache(name)) {
-            console.log('setImageByName, ob:', this.instance.ob)
+    public static setValueByName (name: string, value: any)  {
+        if (!this.checkValueInCache(name)) {
             this.instance.ob[name] = value
-            console.log('setImageByName, ob:', this.instance.ob)
         }
+    }
+
+    public static compareValue (name: string, valueToCompare: any) {
+        console.log('compareValue, bool :', this.instance.ob[name], valueToCompare, this.instance.ob[name] === valueToCompare)
+        return this.instance.ob[name] == valueToCompare
     }
 }
