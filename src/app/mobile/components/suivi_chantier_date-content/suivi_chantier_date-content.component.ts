@@ -210,7 +210,6 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
     this.cd.markForCheck()
   }
   textareaSubmit(e: KeyboardEvent,input: HTMLFormElement){
-    console.log(e.key);
     if(e.key == 'Enter'){
       input.dispatchEvent(new Event("submit", {cancelable: true}))
       e.preventDefault(); // Prevents the addition of a new line in the text field (not needed in a lot of cases)

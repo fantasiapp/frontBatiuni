@@ -201,7 +201,7 @@ export class HomeComponent extends Destroy$ {
   }
 
   updatePage() {
-    this.appComponent.getUserData();
+    this.appComponent.updateUserData();
     this.filters.filter("ST", this.allOnlinePosts);
   }
 
@@ -702,18 +702,4 @@ export class HomeComponent extends Destroy$ {
     this.allOnlinePosts = temporaryAllOnlinePost
   }
 
-  updateAllUserPost(post: Post) {
-    post = this.store.selectSnapshot(DataQueries.getById("Post", post.id))!
-    let temporaryallUserOnlinePosts: Post[] = []
-    let oldPost: Post | undefined = this.allUserOnlinePosts.pop()
-    let checkIf = true
-    this.allUserOnlinePosts.forEach((onlinePost: Post) => {
-      if (onlinePost.id > oldPost!.id && checkIf){
-        temporaryallUserOnlinePosts.push(post)
-        checkIf = false
-      }
-      temporaryallUserOnlinePosts.push(onlinePost)
-    })
-    this.allUserOnlinePosts = temporaryallUserOnlinePosts
-  }
 }

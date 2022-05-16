@@ -294,7 +294,6 @@ export class HorizontaleCalendar implements OnInit {
       isChange.schedule =
         !!mission.hourlyEndChange || !!mission.hourlyStartChange;
 
-    console.log('isChange;', isChange);
     return isChange;
   }
 
