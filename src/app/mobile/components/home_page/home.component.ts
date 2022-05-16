@@ -77,6 +77,8 @@ export class HomeComponent extends Destroy$ {
   @Select(DataState.view)
   view$!: Observable<"PME" | "ST">;
 
+  time: number = 0;
+
   @QueryAll("Post")
   posts$!: Observable<Post[]>;
 
@@ -182,6 +184,8 @@ export class HomeComponent extends Destroy$ {
       this.showFooter = b;
       this.cd.markForCheck();
     });
+    
+    this.time = this.store.selectSnapshot(DataState.time);
   }
 
   @HostBinding('class.footerHide')
@@ -197,7 +201,9 @@ export class HomeComponent extends Destroy$ {
   }
 
   updatePage() {
+    console.log('enter')
     this.appComponent.getUserData();
+    console.log('after')
     this.filters.filter("ST", this.allOnlinePosts);
   }
 
@@ -697,5 +703,21 @@ export class HomeComponent extends Destroy$ {
       temporaryAllOnlinePost.push(onlinePost)
     })
     this.allOnlinePosts = temporaryAllOnlinePost
+  }
+
+  updateAllUserPost(post: Post) {
+    post = this.store.selectSnapshot(DataQueries.getById("Post", post.id))!
+    let temporaryallUserOnlinePosts: Post[] = []
+    let oldPost: Post | undefined = this.allUserOnlinePosts.pop()
+    let checkIf = true
+    this.allUserOnlinePosts.forEach((onlinePost: Post) => {
+      if (onlinePost.id > oldPost!.id && checkIf){
+        temporaryallUserOnlinePosts.push(post)
+        checkIf = false
+        console.log('applyPost, dans le if :', temporaryallUserOnlinePosts, post)
+      }
+      temporaryallUserOnlinePosts.push(onlinePost)
+    })
+    this.allUserOnlinePosts = temporaryallUserOnlinePosts
   }
 }
