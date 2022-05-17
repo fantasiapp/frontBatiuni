@@ -5,6 +5,7 @@ import { BehaviorSubject, Observable } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { Destroy$ } from "src/app/shared/common/classes";
 import { DataState } from "src/models/new/data.state";
+import { NotifService } from "../../services/notif.service";
 import { InfoService } from "../info/info.component";
 
 const STMenu = [
@@ -33,9 +34,10 @@ export class NavigationMenu extends Destroy$ {
   mobileView = window.innerWidth <= 768;
 
   menu: BehaviorSubject<MenuItem[]>;
-
+  sub: any
   @Output()
   routeChange = new EventEmitter<string>();
+  notificationUnseen: number = 0;
 
   private changeRouteOnMenu(menu: MenuItem[], index: number) {
     let route = menu[index].route;
@@ -50,7 +52,7 @@ export class NavigationMenu extends Destroy$ {
     this.changeRouteOnMenu(menu, index);
   }
 
-  constructor(private router: Router, private store: Store, info: InfoService) {
+  constructor(private router: Router, private store: Store, info: InfoService, private notifService: NotifService, private cd: ChangeDetectorRef) {
     super();
     this.menu = new BehaviorSubject(this.store.selectSnapshot(DataState.view) == 'PME' ? PMEMenu : STMenu);
     this.router.events.pipe(takeUntil(this.destroy$)).subscribe((event) => {
@@ -92,11 +94,16 @@ export class NavigationMenu extends Destroy$ {
   navigationType$!: Observable<"ST" | "PME">;
 
   ngOnInit() {
+    this.notifService.checkNotif()
+    this.notificationUnseen = this.notifService.notificationsUnseen
     this.navigationType$.pipe(takeUntil(this.destroy$)).subscribe(type => {
       const nextMenu = type == 'PME' ? PMEMenu : STMenu;
       this.menu.next(nextMenu);
       this.getIndexFromUrl(this.router.url);
-      
+      this.sub = this.notifService.getNotifChangeEmitter().subscribe(value => {
+        this.notificationUnseen = value;
+        this.cd.markForCheck()
+      })
     });
 
   }

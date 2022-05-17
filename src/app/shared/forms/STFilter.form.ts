@@ -42,10 +42,10 @@ import { FilterService } from "../services/filter.service";
 
     <div class="form-input">
       <label>Dans un rayon autour de:</label>
-      <ngx-slider [options]="imports.DistanceSliderConfig" [value]="0" [highValue]="100" formControlName="if_$radius"></ngx-slider>
+      <ngx-slider [options]="imports.DistanceSliderConfig" [value]="0" [highValue]="1000" formControlName="if_$radius"></ngx-slider>
     </div>
-<!-- 
-    <div class="form-input form-spacer">
+
+    <!-- <div class="form-input form-spacer">
       <label>Métier</label>
       <options [options]="allJobs" formControlName="if_$job" #job></options>
     </div> -->
@@ -221,12 +221,8 @@ export class STFilterForm extends Filter<Post> {
       $radius: number;
     }>([
       this.defineComputedProperty('$job', (post) => {
-        let allJobs = this.allJobs;
-        let idJobs = allJobs.map(job => job.id)
-        // let jobs: any = this.store.selectSnapshot(DataQueries.getById("JobForCompany", post.job));
-        // let includedJob = (jobs.every((job: any) => {return job.id === post.job}))
-        // console.log('computing manPower on', post, '=>', post.job)
-        return idJobs.includes(post.job);
+        console.log(post.job)
+        return false;
       }),
       this.defineComputedProperty('$manPower1', (post) => {
         return post.manPower;
@@ -294,7 +290,6 @@ export class STFilterForm extends Filter<Post> {
     ]);
 
     //initialize
-    // console.log("initialize", (this.form.controls["some_employee"] as FormArray));
     (this.form.controls["some_employee"] as FormArray).controls[0].setValue(1);
   }
 }

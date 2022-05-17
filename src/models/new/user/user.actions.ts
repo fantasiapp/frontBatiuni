@@ -32,6 +32,7 @@ export class UploadImageSupervision {
   constructor(src: any, public missionId:number | null, public taskId:number | null) {
     this.ext = src.format;
     this.imageBase64 = src.base64String;
+    console.log('constructor, src:', src)
   }
   action = 'uploadImageSupervision';
 };
@@ -47,6 +48,11 @@ export class GetUserData {
   constructor(public token: string) {}
   readonly action = 'getUserData';
 };
+
+
+
+
+
 
 export class ModifyUserProfile {
   static readonly type = '[User] Change User Profile';

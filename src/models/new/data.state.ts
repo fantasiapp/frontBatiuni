@@ -65,6 +65,7 @@ import produce from "immer";
 import { SlidemenuService } from "src/app/shared/components/slidemenu/slidemenu.component";
 import { SwipeupService } from "src/app/shared/components/swipeup/swipeup.component";
 import { transformAll } from "@angular/compiler/src/render3/r3_ast";
+import { ClassGetter } from "@angular/compiler/src/output/output_ast";
 
 export interface DataModel {
   fields: Record<string[]>;
@@ -298,10 +299,13 @@ export class DataState {
         if (response[picture.action] !== "OK") throw response["messages"];
 
         delete response[picture.action];
+        console.log('response', response)
         let key = Object.keys(response)
         response[parseInt(key[0])].push('')
-        ctx.setState(compose(addSimpleChildren("Supervision", picture.missionId!, "File", response, 'id')))
-        // ctx.setState(addSimpleChildren('Company', profile.company.id, 'File', response, 'nature'));
+        let name = response[parseInt(key[0])][1]
+        console.log('name :', name)
+        let id: number = +name.split("_")[3]
+        ctx.setState(compose(addSimpleChildren("Supervision", id, "File", response, 'id')))
       })
     );
   }
@@ -673,9 +677,12 @@ export class DataState {
           throw response.messages;
         }
         delete response[application.action];
-        ctx.setState(
-          addComplexChildren("Company", profile.company.id, "Mission", response)
-        );
+        console.log('createSupervision', response)
+        let key = Object.keys(response)
+        ctx.setState(addComplexChildren("Company", profile.company.id, "Mission", response));
+        let supervision = response[parseInt(key[0])][42][response[parseInt(key[0])][42].length-1]
+        console.log('createSupervision', response[parseInt(key[0])][42][response[parseInt(key[0])][42].length-1])
+        ctx.setState(addComplexChildren("Mission", response, "Supervision", supervision))
       })
     );
   }

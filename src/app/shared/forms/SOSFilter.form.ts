@@ -13,10 +13,10 @@ import { FormArray, FormControl, FormGroup } from "@angular/forms";
   selector: 'sos-filter-form',
   template: `
   <form class="form-control full-width" [formGroup]="form!">
-  <div class="form-input">
+  <!-- <div class="form-input">
       <label>Métier</label>
       <options [options]="allJobs" formControlName="match_jobs"></options>
-    </div>
+  </div> -->
 
     <div class="form-input">
       <label>Adresse de chantier</label>
@@ -25,13 +25,13 @@ import { FormArray, FormControl, FormGroup } from "@angular/forms";
 
     <div class="form-input">
       <label>Dans un rayon autour de:</label>
-      <ngx-slider [options]="imports.DistanceSliderConfig" formControlName="if_$radius"></ngx-slider>
+      <ngx-slider [options]="imports.DistanceSliderConfig" [value]="0" [highValue]="100" formControlName="if_$radius"></ngx-slider>
     </div>
 
 
     <div class="form-input">
       <label>Estimation de salaire:</label>
-      <ngx-slider [options]="imports.SalarySliderConfig" [value]="0" [highValue]="10000" formControlName="if_amount"></ngx-slider>
+      <ngx-slider [options]="imports.SalarySliderConfig" [value]="0" [highValue]="100000" formControlName="if_amount"></ngx-slider>
     </div>
 
 
@@ -39,7 +39,7 @@ import { FormArray, FormControl, FormGroup } from "@angular/forms";
       <label>Réorganiser la liste selon</label>
       <div class="switch-container flex center-cross">
         <span class="criteria">La meilleur note à la moins bonne</span> 
-        <switch class="default" formControlName="if_$notation"></switch>
+        <switch class="default" formControlName="sort_$notation"></switch>
       </div>
       <div class="switch-container flex center-cross">
         <span class="criteria">Les profils les plus complets</span> 
@@ -92,7 +92,7 @@ export class SOSFilterForm extends Filter<Company> {
 
   ngOnInit(): void {
     super.ngOnInit();
-
+  
   this.create<{
     $radius: number;
     $notation: number;
@@ -107,20 +107,23 @@ export class SOSFilterForm extends Filter<Company> {
       let postLatitude = post.latitude*(Math.PI/180);
       let postLongitude = post.longitude*(Math.PI/180);
       let distance = 6371*Math.acos(Math.sin(userLatitude)*Math.sin(postLatitude) + Math.cos(userLatitude)*Math.cos(postLatitude)*Math.cos(postLongitude-userLongitude))
+      console.log(userLatitude, userLongitude, distance)
       return distance ;
     }),
     this.match('jobs'),
     this.search('address'),
     this.onlyIf('$radius', (radius, range) => {
+      console.log('coucou')
       return radius >= range[0] && radius <= range[1];
     }),
     this.onlyIf('amount', (amount, range) => {
+      console.log(amount)
       return amount >= range[0] && amount <= range[1];
     }),
-    // this.sortBy('$notation',  (a: any, b: any) => {
-    //   console.log('sorting');
-    //   return b['starsST'] - a['starsST'];
-    // }),
+    this.sortBy('$notation',  (a: any, b: any) => {
+      console.log('sorting', a);
+      return b['starsST'] - a['starsST'];
+    }),
     this.onlyIf('$fullProfils', fullProfils => true),
     this.onlyIf('$disponibleProfils', disponibleProfils => true),
 

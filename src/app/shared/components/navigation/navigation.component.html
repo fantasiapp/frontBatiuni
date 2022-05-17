@@ -4,7 +4,8 @@
       <a class="flex center">
         <img [src]="button.src" [alt]="button.name" [title]="button.name"/>
         {{ mobileView ? '' : button.name }} 
-      </a>
+        <span *ngIf="notificationUnseen && index === 3" [attr.data-notification-number]="notificationUnseen" class="notification"></span>
+    </a>
     </li>
   </ul>
 </nav> 

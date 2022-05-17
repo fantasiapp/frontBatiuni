@@ -65,6 +65,7 @@ import { SlideProfileComponent } from './components/slide-profile/slide-profile.
 import { Mobile } from "./services/mobile-footer.service";
 import { NotificationAgendaComponent } from './components/notification-agenda/notification-agenda.component';
 
+
 @NgModule({
   declarations: [
     UICheckboxComponent,
