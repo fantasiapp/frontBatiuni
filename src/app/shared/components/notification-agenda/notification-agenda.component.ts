@@ -30,7 +30,8 @@ export class NotificationAgendaComponent {
   ngOnInit(): void {
   }
 
-  validateHour(b: boolean) {
+  validateHour(b: boolean, e: Event) {
+    e.stopImmediatePropagation()
     this.store
       .dispatch(
         new ValidateMissionDate(this.card.mission.id, this.field, b, "")
@@ -42,7 +43,8 @@ export class NotificationAgendaComponent {
   }
 
 
-  deleted(b: boolean) {
+  deleted(b: boolean, e: Event) {
+    e.stopImmediatePropagation()
     this.field = "date";
 
     this.store
