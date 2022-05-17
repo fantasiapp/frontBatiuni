@@ -12,12 +12,12 @@
 
 
 <div class="btn-container" *ngIf="card.change.schedule;else deletedValidate">
-    <img src="assets/suivi-valider-OK.svg" alt="valider" (click)="validateHour(true)">
-    <img src="assets/suivi-refuser-OK.svg" alt="refuser" (click)="validateHour(false)">
+    <img src="assets/suivi-valider-OK.svg" alt="valider" (click)="validateHour(true, $event)">
+    <img src="assets/suivi-refuser-OK.svg" alt="refuser" (click)="validateHour(false, $event)">
 </div>
 <ng-template #deletedValidate>
     <div class="btn-container" *ngIf="card.change.deleted || !card.change.validate">
-        <img src="assets/suivi-valider-OK.svg" alt="valider" (click)="deleted(true)">
-        <img src="assets/suivi-refuser-OK.svg" alt="refuser" (click)="deleted(false)">
+        <img src="assets/suivi-valider-OK.svg" alt="valider" (click)="deleted(true, $event)">
+        <img src="assets/suivi-refuser-OK.svg" alt="refuser" (click)="deleted(false, $event)">
     </div>
 </ng-template>
