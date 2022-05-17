@@ -158,7 +158,6 @@ export class SuiviPME {
       let dateObject: PostDate = this.store.selectSnapshot(
         DataQueries.getById("DatePost", value)
       )!;
-      console.log('dateObject;', dateObject);
       return {
         id: id,
         value: dateObject.date,

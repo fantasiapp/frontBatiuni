@@ -4,6 +4,7 @@ import {
   Component,
   Input,
   QueryList,
+  ViewChild,
   ViewChildren,
 } from "@angular/core";
 import { FormArray, FormGroup } from "@angular/forms";
@@ -11,6 +12,7 @@ import { Store } from "@ngxs/store";
 import { DistanceSliderConfig, SalarySliderConfig } from "src/app/shared/common/config";
 import { Job, Post } from "src/models/new/data.interfaces";
 import { DataQueries, SnapshotAll } from "src/models/new/data.state";
+import { OptionsModel } from "../components/options/options";
 import { UISwitchComponent } from "../components/switch/switch.component";
 import { Filter } from "../directives/filter.directive";
 import { FilterService } from "../services/filter.service";
@@ -42,11 +44,11 @@ import { FilterService } from "../services/filter.service";
       <label>Dans un rayon autour de:</label>
       <ngx-slider [options]="imports.DistanceSliderConfig" [value]="0" [highValue]="100" formControlName="if_$radius"></ngx-slider>
     </div>
-
+<!-- 
     <div class="form-input form-spacer">
       <label>Métier</label>
-      <options [options]="allJobs" formControlName="every_job"></options>
-    </div>
+      <options [options]="allJobs" formControlName="if_$job" #job></options>
+    </div> -->
 
     <div class="form-input form-spacer">
       <label class="form-title">Type</label>
@@ -185,6 +187,9 @@ export class STFilterForm extends Filter<Post> {
   @SnapshotAll('Job')
   allJobs!: Job[];
 
+  @ViewChild('job')
+  options!: OptionsModel;
+
   //cancel other filters
   onSwitchClick(value: boolean, cancelIfTrue: UISwitchComponent[]) {
     if (!value) return;
@@ -206,6 +211,7 @@ export class STFilterForm extends Filter<Post> {
     //or evaluate during the function call
 
     this.create<{
+      $job: boolean;
       $manPower1: boolean;
       $manPower2: boolean;
       $favorite: boolean;
@@ -214,12 +220,18 @@ export class STFilterForm extends Filter<Post> {
       $employeeCount: number;
       $radius: number;
     }>([
+      this.defineComputedProperty('$job', (post) => {
+        let allJobs = this.allJobs;
+        let idJobs = allJobs.map(job => job.id)
+        // let jobs: any = this.store.selectSnapshot(DataQueries.getById("JobForCompany", post.job));
+        // let includedJob = (jobs.every((job: any) => {return job.id === post.job}))
+        // console.log('computing manPower on', post, '=>', post.job)
+        return idJobs.includes(post.job);
+      }),
       this.defineComputedProperty('$manPower1', (post) => {
-        console.log('computing manPower on', post, '=>', post.manPower)
         return post.manPower;
       }),
       this.defineComputedProperty('$manPower2', (post) => {
-        console.log('computing manPower on', post, '=>', post.manPower)
         return post.manPower;
       }),
       this.defineComputedProperty('$employeeCount', (post) => {
@@ -239,22 +251,25 @@ export class STFilterForm extends Filter<Post> {
         const user = this.store.selectSnapshot(DataQueries.currentUser);
         let candidates = this.store.selectSnapshot(DataQueries.getMany("Candidate", post.candidates))
         let companies = candidates.map(candidate => candidate.company)
-        console.log('computing candidate on', post, '=>', companies.includes(user.company))
         return companies.includes(user.company);
       }),
       this.defineComputedProperty('$radius', (post) => {
         const user = this.store.selectSnapshot(DataQueries.currentUser);
         let userCompany: any = this.store.selectSnapshot(DataQueries.getById("Company", user.company));
-        let distance = Math.sqrt(Math.pow((userCompany.latitude - post.latitude),2) + Math.pow((userCompany.longitude - post.longitude ) , 2))
-        return distance;
+        let userLatitude = userCompany.latitude*(Math.PI/180);
+        let userLongitude = userCompany.longitude*(Math.PI/180);
+        let postLatitude = post.latitude*(Math.PI/180);
+        let postLongitude = post.longitude*(Math.PI/180);
+        let distance = 6371*Math.acos(Math.sin(userLatitude)*Math.sin(postLatitude) + Math.cos(userLatitude)*Math.cos(postLatitude)*Math.cos(postLongitude-userLongitude))
+        return distance ;
       }),
 
-      this.match('dueDate'),
+      this.match('dueDate'),  
       this.search('address'),
-      // this.onlyIf('$radius', (radius, range) => {
-      //   return radius >= range[0] && radius <= range[1];
-      // }),
-      this.every('job'),
+      this.onlyIf('$radius', (radius, range) => {
+        return radius >= range[0] && radius <= range[1];
+      }),
+      this.onlyIf('$job', job => {return job}),
       this.onlyIf('$manPower1', manPower1 => { return manPower1 }),
       this.onlyIf('$manPower2', manPower2 => { return !manPower2 }),
       this.onlyIf('amount', (amount, range) => {
@@ -262,30 +277,10 @@ export class STFilterForm extends Filter<Post> {
       }),
       this.some(
         "employee",
-        this.onlyIf(
-          "$employeeCount",
-          (count) => 1 <= count && count <= 10,
-          [],
-          true
-        ),
-        this.onlyIf(
-          "$employeeCount",
-          (count) => count > 10 && count <= 25,
-          [],
-          true
-        ),
-        this.onlyIf(
-          "$employeeCount",
-          (count) => count > 25 && count <= 50,
-          [],
-          true
-        ),
-        this.onlyIf(
-          "$employeeCount",
-          (count) => count > 50 && count <= 100,
-          [],
-          true
-        ),
+        this.onlyIf("$employeeCount", (count) => 1 <= count && count <= 10, [], true),
+        this.onlyIf("$employeeCount", (count) => count > 10 && count <= 25, [], true),
+        this.onlyIf("$employeeCount", (count) => count > 25 && count <= 50, [], true),
+        this.onlyIf("$employeeCount", (count) => count > 50 && count <= 100, [], true),
         this.onlyIf("$employeeCount", (count) => count > 100, [], true)
       ),
       this.onlyIf('$viewed', viewed => { return viewed }),
@@ -293,13 +288,13 @@ export class STFilterForm extends Filter<Post> {
       this.onlyIf('$candidate', candidate => { return candidate }),
       this.onlyIf('counterOffer', counterOffer => counterOffer),
       this.sortBy('dueDate', (d1, d2) => {
-        console.log('sorting');
         return new Date(d1).getTime() - new Date(d2).getTime();
       }),
       this.sortBy("startDate", () => 1),
     ]);
 
     //initialize
+    // console.log("initialize", (this.form.controls["some_employee"] as FormArray));
     (this.form.controls["some_employee"] as FormArray).controls[0].setValue(1);
   }
 }

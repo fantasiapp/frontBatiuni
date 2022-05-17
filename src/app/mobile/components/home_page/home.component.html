@@ -25,6 +25,7 @@
                   [post]="draft"
                   (click)="openDraft(draft)"
                   [view]="'PME'"
+                  [time]="time"
                   ></offer> 
               </ng-container>
               <ng-container *ngSwitchCase="1">
@@ -36,6 +37,7 @@
                   [post]="onlinePost"
                   (click)="openPost(onlinePost); updateCurrentPost(onlinePost)"
                   [view]="'PME'"
+                  [time]="time"
                   ></offer>
               </ng-container>
               <ng-container *ngSwitchCase="2">
@@ -142,10 +144,10 @@
               class="notification"
             ></span>
           </li>
-          <li *ngIf="!postMenu.boosted" (click)="slideBooster()">
+          <li *ngIf="!postMenu.isBoosted(this.time)" (click)="slideBooster()">
             <img src="assets/booster.svg" />Booster mon annonce
           </li>
-          <li *ngIf="postMenu.boosted" class="boosted">
+          <li *ngIf="postMenu.isBoosted(this.time)" class="boosted">
             <img src="assets/booster.svg" />Booster mon annonce
           </li>
           <li (click)="deletePost(postMenu.post!.id)">

@@ -104,7 +104,6 @@ export class UIRadioboxComponent {
 
   onChange(e: Event) {
     if (this.value) {
-      console.log("emit undefined");
       this.valueChange.emit(this.value = false);
       this.selection.emit(undefined);
     } else {

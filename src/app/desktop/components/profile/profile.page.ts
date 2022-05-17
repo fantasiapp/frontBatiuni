@@ -54,7 +54,6 @@ export class ProfilePageComponent {
     private appComponent: AppComponent
   ) {}
   ngOnInit() {
-    this.profile$.subscribe(console.log);
   }
 
   logout() {

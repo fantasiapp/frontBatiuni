@@ -578,18 +578,15 @@ export class MakeAdForm {
   }
 
   eraseDateIfNecessary() {
-    console.log("eraseDateIfNecessary");
   }
 
   submit(draft: boolean) {
-    console.log("submit", this.makeAdForm.value)
     if (this.post) {
       if (!draft) {
         this.info.show("info", "Mise en ligne de l'annonce...", Infinity);
         const action = this.makeAdForm.touched
           ? UploadPost.fromPostForm(this.makeAdForm.value, draft, this.post.id)
           : new SwitchPostType(this.post.id);
-        console.log("submit", this.makeAdForm.value)
         this.store
           .dispatch(action)
           .pipe(take(1))

@@ -3,7 +3,7 @@ import { DistanceSliderConfig, SalarySliderConfig } from "src/app/shared/common/
 import { Company, Job, Post, Profile } from "src/models/new/data.interfaces";
 import { NgxSliderModule } from '@angular-slider/ngx-slider';
 import { Filter } from "../directives/filter.directive";
-import { SnapshotAll } from "src/models/new/data.state";
+import { DataQueries, SnapshotAll } from "src/models/new/data.state";
 import { UISwitchComponent } from "../components/switch/switch.component";
 import { FilterService } from "../services/filter.service";
 import { Store } from "@ngxs/store";
@@ -99,9 +99,21 @@ export class SOSFilterForm extends Filter<Company> {
     $fullProfils: number;
     $disponibleProfils: boolean;
   }>([
+    this.defineComputedProperty('$radius', (post) => {
+      const user = this.store.selectSnapshot(DataQueries.currentUser);
+      let userCompany: any = this.store.selectSnapshot(DataQueries.getById("Company", user.company));
+      let userLatitude = userCompany.latitude*(Math.PI/180);
+      let userLongitude = userCompany.longitude*(Math.PI/180);
+      let postLatitude = post.latitude*(Math.PI/180);
+      let postLongitude = post.longitude*(Math.PI/180);
+      let distance = 6371*Math.acos(Math.sin(userLatitude)*Math.sin(postLatitude) + Math.cos(userLatitude)*Math.cos(postLatitude)*Math.cos(postLongitude-userLongitude))
+      return distance ;
+    }),
     this.match('jobs'),
     this.search('address'),
-    this.onlyIf('$radius', radius => true),
+    this.onlyIf('$radius', (radius, range) => {
+      return radius >= range[0] && radius <= range[1];
+    }),
     this.onlyIf('amount', (amount, range) => {
       return amount >= range[0] && amount <= range[1];
     }),

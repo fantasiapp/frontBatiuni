@@ -18,6 +18,7 @@ import { DataQueries } from "src/models/new/data.state";
 import { ImageGenerator } from "../../services/image-generator.service";
 import { SafeResourceUrl } from "@angular/platform-browser";
 import { update } from "src/models/new/state.operators";
+import { SingleCache } from "../../services/SingleCache";
 
 export interface NotificationDisplay {
   id: number;
@@ -129,19 +130,25 @@ export class Notifications {
               : null;
           }
           if (company) {
+            if (SingleCache.checkValueInCache("companyImage" + company!.id.toString())) {
+              src = SingleCache.getValueByName("companyImage" + company!.id.toString())
+            }
+            else {
             let logoPME = this.store.selectSnapshot(
               DataQueries.getProfileImage(company.id)
             );
             if (!logoPME) {
               const fullname = company.name[0].toUpperCase();
               src = this.imageGenerator.generate(fullname);
-              this.addNotification(notification, index, src);
+          SingleCache.setValueByName("companyImage" + company!.id.toString(), src)
+          this.addNotification(notification, index, src);
             } else {
               this.downloader.downloadFile(logoPME).subscribe((image) => {
                 src = this.downloader.toSecureBase64(image);
-                this.addNotification(notification, index, src);
+          SingleCache.setValueByName("companyImage" + company!.id.toString(), src)
+          this.addNotification(notification, index, src);
               });
-            }
+            }}
           } else {
             src = "assets/Icon_alert.svg";
             this.addNotification(notification, index, src);

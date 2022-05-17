@@ -68,7 +68,7 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
       this.date.taskWithoutDouble = tasks;
       this.cd.markForCheck()
     })
-
+    console.log('ngOnInit, dates', this.dates)
     this.computeIterable(this.date)
   }
 
@@ -204,7 +204,6 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
     this.cd.markForCheck()
   }
   textareaSubmit(e: KeyboardEvent,input: HTMLFormElement){
-    console.log(e.key);
     if(e.key == 'Enter'){
       input.dispatchEvent(new Event("submit", {cancelable: true}))
       e.preventDefault(); // Prevents the addition of a new line in the text field (not needed in a lot of cases)
@@ -231,12 +230,13 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
     let dateResult = dateOld;
     let mission = this.store.selectSnapshot(DataQueries.getById("Mission", this.mission!.id));
     this.mission = mission;
-
     this.computeDates(mission!);
+    console.log('reloadMission, date.supervision :', this.dates)
     this.dates?.forEach((dateNew) => {
       if (dateNew.value == dateOld.value) {
         dateResult = dateNew;
       }
+    console.log('reloadMission, date.supervision :', this.dates)
     });
 
     return [dateResult, this.mission!];

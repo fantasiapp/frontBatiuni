@@ -77,6 +77,8 @@ export class HomeComponent extends Destroy$ {
   @Select(DataState.view)
   view$!: Observable<"PME" | "ST">;
 
+  time: number = 0;
+
   @QueryAll("Post")
   posts$!: Observable<Post[]>;
 
@@ -182,6 +184,8 @@ export class HomeComponent extends Destroy$ {
       this.showFooter = b;
       this.cd.markForCheck();
     });
+    
+    this.time = this.store.selectSnapshot(DataState.time);
   }
 
   @HostBinding('class.footerHide')
@@ -197,7 +201,7 @@ export class HomeComponent extends Destroy$ {
   }
 
   updatePage() {
-    this.appComponent.getUserData();
+    this.appComponent.updateUserData();
     this.filters.filter("ST", this.allOnlinePosts);
   }
 
@@ -692,10 +696,10 @@ export class HomeComponent extends Destroy$ {
       if (onlinePost.id > oldPost!.id && checkIf){
         temporaryAllOnlinePost.push(post)
         checkIf = false
-        console.log('applyPost, dans le if :', temporaryAllOnlinePost, post)
       }
       temporaryAllOnlinePost.push(onlinePost)
     })
     this.allOnlinePosts = temporaryAllOnlinePost
   }
+
 }

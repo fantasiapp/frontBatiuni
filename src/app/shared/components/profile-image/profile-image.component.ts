@@ -2,13 +2,14 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostBinding, Inp
 import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser";
 import { Store } from "@ngxs/store";
 import { Observable } from "rxjs";
-import { take } from "rxjs/operators";
+import { single, take } from "rxjs/operators";
 import { File, Company, Profile, User } from "src/models/new/data.interfaces";
 import { DataQueries, QueryProfile } from "src/models/new/data.state";
 import { DownloadFile } from "src/models/new/user/user.actions";
 import { Destroy$ } from "../../common/classes";
 import { FileDownloader } from "../../services/file-downloader.service";
 import { ImageGenerator } from "../../services/image-generator.service";
+import { SingleCache } from "src/app/shared/services/SingleCache";
 
 @Component({
   selector: 'profile-image',
@@ -36,19 +37,26 @@ export class UIProfileImageComponent extends Destroy$ {
   borders: boolean = true;
 
   ngOnChanges(changes: SimpleChanges) {
-    if ( changes['profile'] ) {
+    if ( changes['profile']) {
       (this.profile as Observable<Profile>).pipe(take(1)).subscribe(profile => {
         this.setColor(profile.company)
-        this.image = this.store.selectSnapshot(DataQueries.getProfileImage(profile.company.id));
-        if ( !this.image ) {
-          const fullname = profile.company.name[0].toUpperCase();
-          this.src = this.imageGenerator.generate(fullname);
-          this.cd.markForCheck();
-        } else {
-          this.downloader.downloadFile(this.image).subscribe(image => {
-            this.src = this.downloader.toSecureBase64(image);
+        if (!SingleCache.checkValueInCache("companyImage" + profile.company.id.toString())){
+          this.image = this.store.selectSnapshot(DataQueries.getProfileImage(profile.company.id));
+          if ( !this.image ) {
+            const fullname = profile.company.name[0].toUpperCase();
+            this.src = this.imageGenerator.generate(fullname);
+            SingleCache.setValueByName("companyImage" + profile.company.id.toString(), this.src)
             this.cd.markForCheck();
-          });
+          } else {
+            this.downloader.downloadFile(this.image).subscribe(image => {
+              this.src = this.downloader.toSecureBase64(image);
+            SingleCache.setValueByName("companyImage" + profile.company.id.toString(), this.src)
+            this.cd.markForCheck();
+            });
+          }}
+        else {
+          this.src = SingleCache.getValueByName("companyImage" + profile.company.id.toString())
+          this.cd.markForCheck()
         }
       });
     }

@@ -163,6 +163,11 @@ export class DataState {
     return state.session.view;
   }
 
+  @Selector()
+  static time(stage: DataModel) {
+    return stage.session.time;
+  }
+
   @Selector([DataState])
   static companies(state: DataModel) {
     return state["Company"] || {};
@@ -275,6 +280,7 @@ export class DataState {
       tap((response: any) => {
         if (response[picture.action] !== "OK") throw response["messages"];
 
+        console.log('changeProfilePicture, response', response)
         delete response[picture.action];
         console.log('response', response);
         ctx.setState(compose(addSimpleChildren("Company", profile.company.id, "File", response, "nature")));
@@ -378,7 +384,6 @@ export class DataState {
 
   @Action(UploadPost)
   createPost(ctx: StateContext<DataModel>, post: UploadPost) {
-    console.log("createPost", post)
     const profile = this.store.selectSnapshot(DataQueries.currentProfile),
       { files, ...form } = post,
       uploads = Object.keys(files).map(
@@ -892,7 +897,6 @@ export class DataState {
   boostPost(ctx: StateContext<DataModel>, boost: BoostPost) {
     return this.http.post("data", boost).pipe(
       tap((response: any) => {
-        console.log("boost post response:", response)
       })
     );        
   }
