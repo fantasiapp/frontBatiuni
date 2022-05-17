@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, ViewChild } from "@angular/core";
 import { Select, Store } from "@ngxs/store";
-import { Observable } from "rxjs";
+import { Observable, Subscriber } from "rxjs";
 import * as UserActions from "src/models/new/user/user.actions";
 import { Camera, CameraResultType, CameraSource } from "@capacitor/camera";
 import { UISlideMenuComponent } from "../../../shared/components/slidemenu/slidemenu.component";
@@ -177,7 +177,7 @@ export class ProfileComponent extends Destroy$ {
       resultType: CameraResultType.Base64,
       source: CameraSource.Camera
     });
-    this.store.dispatch(new UserActions.ChangeProfilePicture(photo, 'image'));
+    this.store.dispatch(new UserActions.ChangeProfilePicture(photo, 'image'))
   }
 
   async selectPhoto() {
@@ -188,7 +188,7 @@ export class ProfileComponent extends Destroy$ {
     });
 
 
-    this.store.dispatch(new UserActions.ChangeProfilePicture(photo, 'image'));
+    this.store.dispatch(new UserActions.ChangeProfilePicture(photo, 'image'))
   }
 
   openApplicationsMenu(){

@@ -144,7 +144,8 @@ export class OfferComponent {
       if (!logo) {
       const fullname = this.company!.name[0].toUpperCase();
         this.src = this.imageGenerator.generate(fullname);
-        this.cd.markForCheck();
+          SingleCache.setValueByName("companyImage" + this.company!.id.toString(), this.src)
+          this.cd.markForCheck();
       } else {
       this.downloader.downloadFile(logo).subscribe((image) => {
           this.src = this.downloader.toSecureBase64(image);

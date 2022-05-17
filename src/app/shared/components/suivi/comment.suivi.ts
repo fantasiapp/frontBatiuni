@@ -87,11 +87,10 @@ export class SuiviComments {
   deleteSupervision() {
   }
 
-  ngAfterViewInit(): void {
+  ngAfterContentInit(): void {
+    this.images = []
     for (let file in this.supervision.files) {
-      this.downloader
-        .downloadFile(this.supervision.files[file])
-        .subscribe((image) => {
+      this.downloader.downloadFile(this.supervision.files[file]).subscribe((image) => {
           this.images.push(this.downloader.toSecureBase64(image));
           this.cd.markForCheck();
         });

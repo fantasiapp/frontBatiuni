@@ -48,11 +48,19 @@ import { DataQueries, QueryProfile, Snapshot } from "src/models/new/data.state";
         position: relative;
         display: block;
         border-radius: 12px;
-        padding: $profile-card-padding;
-        box-shadow: 10px 24px 54px #33333340;
+        
         font-family: "Roboto", sans-serif;
+        box-shadow: 10px 24px 54px #33333340;
         font-size: 0.875rem;
       }
+
+      /* :host::before{
+        content: "";
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        box-shadow: 10px 24px 54px #33333340;
+        border-radius: 12px;
+      } */
 
       profile-image {
         /* transform: scale(0.5) translate(-10px, -30px); */
@@ -61,6 +69,7 @@ import { DataQueries, QueryProfile, Snapshot } from "src/models/new/data.state";
       }
 
       .description {
+        padding: $profile-card-padding;
         row-gap: 0.375rem;
         span:nth-child(2) {
           color: #999999;
