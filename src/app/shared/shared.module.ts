@@ -7,7 +7,7 @@ import { SOSFilterForm } from "./forms/SOSFilter.form";
 import { STFilterForm } from "./forms/STFilter.form";
 import { NgxSliderModule } from "@angular-slider/ngx-slider";
 import { OptionsModel } from "./components/options/options";
-import { UICheckboxComponent } from "./components/box/checkbox.component";
+import { UICheckboxAccessor, UICheckboxComponent } from "./components/box/checkbox.component";
 import { UIMapComponent } from "./components/map/map.component";
 import { UINumberComponent } from "./components/number/number.component";
 import { UIProfileImageComponent } from "./components/profile-image/profile-image.component";
@@ -67,6 +67,7 @@ import { NotificationAgendaComponent } from './components/notification-agenda/no
 
 @NgModule({
   declarations: [
+    UICheckboxAccessor,
     UICheckboxComponent,
     UIRadioboxComponent,
     UIRadioboxAccessor,

@@ -22,8 +22,6 @@ export class SingleCache {
     private SingleCache() {}
 
     public static checkValueInCache(name: string) {
-        console.log('checkImageInCache, ob:', this.instance.ob)
-        console.log('checkImageInCache, bool:', this.instance.ob[name] !== undefined)
         return this.instance.ob[name] !== undefined
     }
 
