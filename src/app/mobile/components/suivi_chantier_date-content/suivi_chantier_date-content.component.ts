@@ -63,13 +63,17 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
 
 
   ngOnInit(){
+    console.log('ngOnInit début, date', this.date)
+    this.mission = this.store.selectSnapshot(DataQueries.getById("Mission", this.mission!.id))
     this.computeDates(this.mission!)
+    console.log('ngOnInit finito mais pas tout a fait en fait , date', this.date)
     this.popup.taskWithoutDouble.pipe(takeUntil(this.destroy$)).subscribe(tasks => {
       this.date.taskWithoutDouble = tasks;
       this.cd.markForCheck()
     })
-    console.log('ngOnInit, dates', this.dates)
+    this.date = this.dates[this.date.id]
     this.computeIterable(this.date)
+    console.log('ngOnInit finito, date', this.date)
   }
 
   computeIterable(date: DateG){
@@ -259,7 +263,7 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
         validationImage: SuiviPME.computeTaskImage(detail, "validated"),
         invalidationImage: SuiviPME.computeTaskImage(detail, "refused"),
       }));
-
+      console.log("computesDates", this.tasks)
     let dates = mission.dates;
     if (typeof mission.dates === "object" && !Array.isArray(mission.dates))
       dates = Object.keys(mission.dates).map((key) => +key as number);
@@ -276,12 +280,13 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
         supervisions: this.computeSupervisionsForMission(date as string,supervisionsTaks),
       } as DateG;
     });
-    this.dates.sort((date1, date2) => (date1.value > date2.value ? 1 : -1));
+      console.log("dates", this.dates)
+      this.dates.sort((date1, date2) => (date1.value > date2.value ? 1 : -1));
+      console.log("dates 2 ", this.dates)
   }
 
   computeSupervisionsforTask(supervisionsId: number[], supervisionsTask: number[]) {
     let supervisions: Supervision[] = [];
-
     // let supervisionId = this.distToArray(supervisionsId)
     supervisionsId.forEach((id) => {
       let supervision = this.store.selectSnapshot(
