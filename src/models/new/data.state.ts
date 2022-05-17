@@ -258,14 +258,8 @@ export class DataState {
         );
       }),
       concatMap(() => {
-        labelFiles.forEach((file) =>
-          ctx.dispatch(new UploadFile(file, "labels", file.nature, "Company"))
-        );
-        Object.keys(adminFiles).forEach((name) =>
-          ctx.dispatch(
-            new UploadFile(adminFiles[name], "admin", name, "Company")
-          )
-        );
+        labelFiles.forEach((file) => ctx.dispatch(new UploadFile(file, "labels", file.nature, "Company")));
+        Object.keys(adminFiles).forEach((name) => ctx.dispatch(new UploadFile(adminFiles[name], "admin", name, "Company")));
         return of(true);
       })
     );
@@ -300,7 +294,8 @@ export class DataState {
         delete response[picture.action];
         let key = Object.keys(response)
         response[parseInt(key[0])].push('')
-        ctx.setState(addSimpleChildren('Company', profile.company.id, 'File', response, 'nature'));
+        ctx.setState(compose(addSimpleChildren("Supervision", picture.missionId!, "File", response, 'id')))
+        // ctx.setState(addSimpleChildren('Company', profile.company.id, 'File', response, 'nature'));
       })
     );
   }
