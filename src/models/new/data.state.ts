@@ -291,6 +291,7 @@ export class DataState {
       tap((response: any) => {
         if (response[picture.action] !== "OK") throw response["messages"];
 
+        console.log('changeProfilePicture, response', response)
         delete response[picture.action];
         ctx.setState(
           compose(
@@ -320,10 +321,10 @@ export class DataState {
         if (response[picture.action] !== "OK") throw response["messages"];
 
         delete response[picture.action];
-
-        // ctx.setState(compose(
-        //   addSimpleChildren('Company', profile.company.id, 'File', response, 'nature'),
-        // ));
+        console.log('uploadImageSupervision, response', response)
+        ctx.setState(compose(
+          addSimpleChildren('Company', profile.company.id, 'File', response, 'nature'),
+        ));
       })
     );
   }

@@ -69,7 +69,7 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
       this.date.taskWithoutDouble = tasks;
       this.cd.markForCheck()
     })
-
+    console.log('ngOnInit, dates', this.dates)
     this.computeIterable(this.date)
   }
 
@@ -238,12 +238,13 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
       DataQueries.getById("Mission", this.mission!.id)
     );
     this.mission = mission;
-
     this.computeDates(mission!);
+    console.log('reloadMission, date.supervision :', this.dates)
     this.dates?.forEach((dateNew) => {
       if (dateNew.value == dateOld.value) {
         dateResult = dateNew;
       }
+    console.log('reloadMission, date.supervision :', this.dates)
     });
 
     return [dateResult, this.mission!];
