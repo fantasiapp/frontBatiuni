@@ -149,6 +149,17 @@
         }
     }
 }
+
+.today {
+    background-color: white!important;
+    border: 3px solid $primary!important;
+    color: $primary!important;
+
+    &.selected {
+        background-color: rgb(155, 153, 153)!important;
+        color: white!important;
+    }
+}
 .agenda {
     margin: 1em 0;
     position: relative;

@@ -6,6 +6,7 @@
             <div class="flex center-cross center-main" 
             (click)="showAgenda(i.day[2])" 
             (click)="showgrey(i)"
+            [ngClass]="{'today': i.today, 'selected' : i.selected }"
             [style.background]="i.status == 'occupe' && i.selected ? 'grey' : i.status == 'occupe' && !i.selected ? '#0D6191' : i.status != 'occupe' && i.selected ? 'grey' : '#FFFFFF' "
                 [style.color]="i.status == 'occupe' && i.selected ? '#FFFFFF' : i.status == 'occupe' && !i.selected ? '#FFFFFF' : i.status != 'occupe' && i.selected ? '#FFFFFF' : i.status != 'occupe' && !i.selected ? '#0D6191' : '' "
             >
