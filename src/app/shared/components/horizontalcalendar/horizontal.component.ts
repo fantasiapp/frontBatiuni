@@ -148,10 +148,12 @@ export class HorizontaleCalendar implements OnInit {
         .format("D,dddd,YYYY-MM-DD")
         .split(",");
       const selected = dayFormated[2] == currentDateFormated[2];
+        // status = selected ? 'aujourdhui' : ''
       days.push({
         day: dayFormated,
-        status: "",
+        status: '',
         selected: selected,
+        today: selected
       });
     }
     this.selectedDay = days;
