@@ -2,9 +2,7 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
-  EventEmitter,
   Input,
-  Output,
 } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { Camera, CameraResultType, CameraSource } from "@capacitor/camera";
@@ -16,6 +14,7 @@ import { PopupService } from "src/app/shared/components/popup/popup.component";
 import {
   DateG,
   Mission,
+  Ref,
   Supervision,
   Task,
 } from "src/models/new/data.interfaces";
@@ -64,13 +63,17 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
 
 
   ngOnInit(){
+    console.log('ngOnInit début, date', this.date)
+    this.mission = this.store.selectSnapshot(DataQueries.getById("Mission", this.mission!.id))
     this.computeDates(this.mission!)
+    console.log('ngOnInit finito mais pas tout a fait en fait , date', this.date)
     this.popup.taskWithoutDouble.pipe(takeUntil(this.destroy$)).subscribe(tasks => {
       this.date.taskWithoutDouble = tasks;
       this.cd.markForCheck()
     })
-
+    this.date = this.dates[this.date.id]
     this.computeIterable(this.date)
+    console.log('ngOnInit finito, date', this.date)
   }
 
   computeIterable(date: DateG){
@@ -119,39 +122,34 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
     this._mission = mission;
   }
 
-  async takePhoto() {
+  async takePhoto(taskId: Ref<Task> | null) {
     const photo = await Camera.getPhoto({
       allowEditing: false,
       resultType: CameraResultType.Base64,
       source: CameraSource.Camera,
     });
-    this.swipeMenuImage = false;
-    this.store
-      .dispatch(
-        new UploadImageSupervision(photo, this.mission!.id, this.currentTaskId)
-      )
-      .pipe(take(1))
-      .subscribe(() => {
-        this.updatePageOnlyDate();
-        this.swipeMenuImage = false;
-      });
+    this.store.dispatch(new UploadImageSupervision(photo, this.mission!.id, this.currentTaskId)).pipe(take(1)).subscribe(() => {
+      // this.date.supervisions
+      let mission = this.store.selectSnapshot(DataQueries.getById('Mission', this.mission!.id))
+      console.log('mission', mission);
+      this.updatePageOnlyDate();
+      this.swipeMenuImage = false;
+    });
   }
 
-  async selectPhoto() {
+  async selectPhoto(taskId: Ref<Task> | null) {
     const photo = await Camera.getPhoto({
       allowEditing: false,
       resultType: CameraResultType.Base64,
       source: CameraSource.Photos,
     });
-    this.store
-      .dispatch(
-        new UploadImageSupervision(photo, this.mission!.id, this.currentTaskId)
-      )
-      .pipe(take(1))
-      .subscribe(() => {
-        this.updatePageOnlyDate();
-        this.swipeMenuImage = false;
-      });
+    this.store.dispatch(new UploadImageSupervision(photo, this.mission!.id, taskId)).pipe(take(1)).subscribe(() => {
+      let mission = this.store.selectSnapshot(DataQueries.getById('Mission', this.mission!.id))
+      let supervisions = this.store.selectSnapshot(DataQueries.getMany('Supervision', this.mission!.supervisions))
+      console.log('mission', mission, supervisions);
+      this.updatePageOnlyDate();
+      this.swipeMenuImage = false;
+    });
   }
 
   addDateToPost() {
@@ -234,16 +232,15 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
 
   reloadMission = (dateOld: DateG): (DateG | Mission)[] => {
     let dateResult = dateOld;
-    let mission = this.store.selectSnapshot(
-      DataQueries.getById("Mission", this.mission!.id)
-    );
+    let mission = this.store.selectSnapshot(DataQueries.getById("Mission", this.mission!.id));
     this.mission = mission;
-
     this.computeDates(mission!);
+    console.log('reloadMission, date.supervision :', this.dates)
     this.dates?.forEach((dateNew) => {
       if (dateNew.value == dateOld.value) {
         dateResult = dateNew;
       }
+    console.log('reloadMission, date.supervision :', this.dates)
     });
 
     return [dateResult, this.mission!];
@@ -262,25 +259,17 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
         validated: detail.validated,
         refused: detail.refused,
         supervisions: detail.supervisions,
-        supervisionsObject: this.computeSupervisionsforTask(
-          detail.supervisions,
-          supervisionsTaks
-        ),
+        supervisionsObject: this.computeSupervisionsforTask(detail.supervisions, supervisionsTaks),
         validationImage: SuiviPME.computeTaskImage(detail, "validated"),
         invalidationImage: SuiviPME.computeTaskImage(detail, "refused"),
       }));
-
+      console.log("computesDates", this.tasks)
     let dates = mission.dates;
     if (typeof mission.dates === "object" && !Array.isArray(mission.dates))
       dates = Object.keys(mission.dates).map((key) => +key as number);
 
     this.dates = dates.map((value: unknown, id) => {
-      let date =
-        typeof value == "number"
-          ? this.store.selectSnapshot(
-              DataQueries.getById("DatePost", value as number)
-            )!.date
-          : value;
+      let date = typeof value == "number"? this.store.selectSnapshot(DataQueries.getById("DatePost", value as number))!.date : value;
       return {
         id: id,
         value: date as string,
@@ -288,21 +277,16 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
         selectedTasks: this.computeSelectedTask(date as string),
         taskWithoutDouble: this.dateWithoutDouble(),
         view: this.view,
-        supervisions: this.computeSupervisionsForMission(
-          date as string,
-          supervisionsTaks
-        ),
+        supervisions: this.computeSupervisionsForMission(date as string,supervisionsTaks),
       } as DateG;
     });
-    this.dates.sort((date1, date2) => (date1.value > date2.value ? 1 : -1));
+      console.log("dates", this.dates)
+      this.dates.sort((date1, date2) => (date1.value > date2.value ? 1 : -1));
+      console.log("dates 2 ", this.dates)
   }
 
-  computeSupervisionsforTask(
-    supervisionsId: number[],
-    supervisionsTask: number[]
-  ) {
+  computeSupervisionsforTask(supervisionsId: number[], supervisionsTask: number[]) {
     let supervisions: Supervision[] = [];
-
     // let supervisionId = this.distToArray(supervisionsId)
     supervisionsId.forEach((id) => {
       let supervision = this.store.selectSnapshot(
@@ -354,21 +338,12 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
     return arr;
   }
 
-  computeSupervisionsForMission(
-    date: string,
-    supervisionsTask: number[]
-  ): Supervision[] {
+  computeSupervisionsForMission(date: string, supervisionsTask: number[]): Supervision[] {
     let supervisions: Supervision[] = [];
     let supervisionId = this.distToArray(this.mission!.supervisions);
     let allSupervisions: (Supervision | null)[] = supervisionId.map((id) => {
-      let supervision = this.store.selectSnapshot(
-        DataQueries.getById("Supervision", id)
-      );
-      if (
-        supervision &&
-        supervision.date == date &&
-        !supervisionsTask.includes(supervision.id)
-      ) {
+      let supervision = this.store.selectSnapshot(DataQueries.getById("Supervision", id));
+      if (supervision && supervision.date == date && !supervisionsTask.includes(supervision.id)) {
         return supervision;
       }
       return null;

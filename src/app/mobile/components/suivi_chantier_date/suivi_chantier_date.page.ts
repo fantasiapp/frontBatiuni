@@ -1,15 +1,8 @@
 import { Select, Store } from "@ngxs/store";
 import { ChangeDetectionStrategy, Component, ChangeDetectorRef, Input, ViewChild, EventEmitter, Output, ViewEncapsulation} from "@angular/core";
 import { Destroy$ } from "src/app/shared/common/classes";
-import { Mission, DateG, Task } from "src/models/new/data.interfaces";
+import { Mission, DateG } from "src/models/new/data.interfaces";
 import { PopupService } from "src/app/shared/components/popup/popup.component";
-import { DataQueries, DataState } from "src/models/new/data.state";
-import { take } from "rxjs/operators";
-import { ModifyDetailedPost, CreateSupervision, CreateDetailedPost, UploadImageSupervision } from "src/models/new/user/user.actions";
-import { SuiviPME } from "../suivi_pme/suivi-pme.page";
-import { Camera, CameraResultType, CameraSource } from "@capacitor/camera";
-import { i18nMetaToJSDoc } from "@angular/compiler/src/render3/view/i18n/meta";
-import { SuiviComments } from "src/app/shared/components/suivi/comment.suivi";
 import { UIAccordion } from "src/app/shared/components/accordion/accordion.ui";
 
 
