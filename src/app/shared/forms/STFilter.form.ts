@@ -281,7 +281,6 @@ export class STFilterForm extends Filter<Post> {
       this.onlyIf('$manPower1', manPower1 => { return manPower1 }),
       this.onlyIf('$manPower2', manPower2 => { return !manPower2 }),
       this.onlyIf('amount', (amount, range) => {
-        console.log('amount',range)
         return amount >= range[0] && amount <= range[1];
       }),
       this.some('employee',

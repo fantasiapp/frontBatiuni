@@ -7,9 +7,15 @@
   <div class="hosted-page space-children-margin page-content-with-tabs">
     <ng-container [ngSwitch]="activeView">
       <ng-container *ngSwitchCase="0">
-        <sos-card (click)="checkCompanyProfile(company)" *ngFor="let company of couple.companies; let i = index" [profile]="{company}" [availability]="couple.availabilities[i]"></sos-card>
+        <sos-card 
+          (click)="checkCompanyProfile(company)" 
+          *ngFor="let company of userAvailableCompanies; 
+          let i = index" [
+          [profile]="{company}" 
+          [availability]="couple.availabilities[i]"
+        ></sos-card>
       </ng-container>
-      <mapbox-batiuni [companies]="couple.companies" [availabilities]="couple.availabilities"
+      <mapbox-batiuni [companies]="userAvailableCompanies" [availabilities]="couple.availabilities"
         (companyClick)="checkCompanyProfile($event)"
         class="space-children-margin" *ngSwitchCase="1"></mapbox-batiuni>
     </ng-container>
