@@ -14,7 +14,7 @@
       </offer>
     </ng-container>
     <ng-container *ngSwitchCase="1">
-      <horizontal-calendar [detailedDays]="detailedDays" class="space-children-margin"></horizontal-calendar>
+      <horizontal-calendar (open)="openMission($event)" [detailedDays]="detailedDays" class="space-children-margin"></horizontal-calendar>
     </ng-container>
   </ng-container>
 </div>
