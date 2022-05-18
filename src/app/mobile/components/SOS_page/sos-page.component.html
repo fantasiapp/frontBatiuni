@@ -3,24 +3,24 @@
   <span tab_1>Carte</span>
 </page-header>
 
-<ng-container *ngIf="(availableCompanies$ | async) as couple">
-  <div class="hosted-page space-children-margin page-content-with-tabs">
-    <ng-container [ngSwitch]="activeView">
-      <ng-container *ngSwitchCase="0">
-        <sos-card 
-          (click)="checkCompanyProfile(company)" 
-          *ngFor="let company of userAvailableCompanies; 
-          let i = index" [
-          [profile]="{company}" 
-          [availability]="couple.availabilities[i]"
-        ></sos-card>
-      </ng-container>
-      <mapbox-batiuni [companies]="userAvailableCompanies" [availabilities]="couple.availabilities"
-        (companyClick)="checkCompanyProfile($event)"
-        class="space-children-margin" *ngSwitchCase="1"></mapbox-batiuni>
+<div class="hosted-page space-children-margin page-content-with-tabs">
+  <ng-container [ngSwitch]="activeView">
+    <ng-container *ngSwitchCase="0">
+      <sos-card 
+        (click)="checkCompanyProfile(company)" 
+        *ngFor="let company of userAvailableCompanies; 
+        let i = index" 
+        [profile]="{company}" 
+        [availability]="availabilities[i]">
+      </sos-card>
     </ng-container>
-  </div>
-</ng-container>
+    <mapbox-batiuni [companies]="userAvailableCompanies" [availabilities]="availabilities"
+        (companyClick)="checkCompanyProfile($event)"
+        class="space-children-margin" *ngSwitchCase="1">
+    </mapbox-batiuni>
+  </ng-container>
+</div>
+
 
 <swipeup [(open)]="openSOSFilterMenu" type="view">
   <sos-filter-form view></sos-filter-form>

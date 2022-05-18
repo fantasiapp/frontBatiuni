@@ -14,10 +14,10 @@ import { FormArray, FormControl, FormGroup } from "@angular/forms";
   template: `
   <ng-container [ngSwitch]="activeView">
   <form class="form-control full-width" [formGroup]="filterForm">
-  <!-- <div class="form-input">
+  <div class="form-input">
       <label>Métier</label>
       <options [options]="allJobs" formControlName="jobs"></options>
-  </div> -->
+  </div>
 
     <div class="form-input">
       <label>Adresse de chantier</label>
@@ -79,8 +79,8 @@ export class SOSFilterForm implements OnInit {
   filterForm = new FormGroup({
     address: new FormControl(""),
     jobs: new FormControl([]),
-    radius: new FormControl([]),
-    amount: new FormControl([]),
+    radius: new FormControl(),
+    amount: new FormControl(),
     sortNotation: new FormControl(false),
     sortFullProfils: new FormControl(false),
     sortDisponibleProfils: new FormControl(false),
@@ -94,8 +94,10 @@ export class SOSFilterForm implements OnInit {
   allJobs!: Job[];
 
   ngOnInit(){
+    console.log("filterForm",this.filterForm.value)
     this.callbackFilter(this.filterForm.value);
     this.filterForm.valueChanges.subscribe(value => {
+      console.log("value change", value)
       this.callbackFilter(value);
     })
   }

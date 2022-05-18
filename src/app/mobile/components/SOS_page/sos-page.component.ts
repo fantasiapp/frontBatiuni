@@ -32,8 +32,12 @@ import { DataQueries, Query, QueryAll } from "src/models/new/data.state";
 })
 export class SOSPageComponent extends Destroy$ {
   imports = { DistanceSliderConfig, SalarySliderConfig };
+
   activeView: number = 0;
   openSOSFilterMenu: boolean = false;
+  userAvailableCompanies: Company[] = [];
+  allAvailableCompanies: Company[] = [];
+  availabilities: MarkerType[] = [];
 
   @QueryAll("Company")
   companies$!: Observable<Company[]>;
@@ -41,58 +45,85 @@ export class SOSPageComponent extends Destroy$ {
   @Select(DataQueries.currentProfile)
   profile$!: Observable<Profile>;
 
-  getAvailableCompanies(companies: Company[]) {
-    return companies;
-  }
-
-  availableCompanies$: Observable<{
-    companies: Company[];
-    availabilities: MarkerType[];
-  }>;
-
-  userAvailableCompanies: Company[] = [];
-  allAvailableCompanies: Company[] = [];
-
-  constructor(private store: Store, private slides: SlidemenuService, private info: InfoService, private appComponent: AppComponent, private cd: ChangeDetectorRef) {
+  constructor(
+    private store: Store, 
+    private slides: SlidemenuService, 
+    private info: InfoService, 
+    private appComponent: AppComponent, 
+    private cd: ChangeDetectorRef
+  ) {
     super();
-    const now = new Date().toISOString().slice(0, 10);
-    this.availableCompanies$ = this.companies$.pipe(
-      switchMap((companies) => {
-        let availableCompanies: Company[] = [],
-          availabilities: MarkerType[] = [];
-        companyLoop: for (const company of companies) {
-          const ownAvailabilities = this.store.selectSnapshot(
-            DataQueries.getMany("Disponibility", company.availabilities)
-          );
-          for (const day of ownAvailabilities)
-            if (day.date == now) {
-              availableCompanies.push(company);
-              availabilities.push(nameToAvailability(day.nature as any));
-              continue companyLoop;
-            }
-        }
-        this.allAvailableCompanies = availableCompanies;
-        return of({ companies: availableCompanies, availabilities });
-        
-      })
-    );
-    this.appComponent.updateUserData()
   }
 
   ngOnInit() {
-    // this.info.alignWith("header_search");
-    // const now = new Date().toISOString().slice(0, 10);
-    // companyLoop: for (const company of this.companies$) {
-    //   const ownAvailabilities = this.store.selectSnapshot(DataQueries.getMany("Disponibility", company.availabilities));
-    //   for (const day of ownAvailabilities){
-    //     if (day.date == now) {
-    //       this.allAvailableCompanies.push(company);
-    //       continue companyLoop;
-    //     }
-    //   }
-    // }  
-    // this.cd.markForCheck();
+    this.info.alignWith('header_search');
+    const now = new Date().toISOString().slice(0, 10);
+    this.companies$.subscribe((companies) => {
+      for (const company of companies) {
+        const ownAvailabilities = this.store.selectSnapshot(DataQueries.getMany("Disponibility", company.availabilities));
+        for (const day of ownAvailabilities) {
+          if (day.date == now) {
+            this.allAvailableCompanies.push(company);
+            this.availabilities.push(nameToAvailability(day.nature as any));
+            continue;
+          }
+        } 
+      }
+    })      
+    this.cd.markForCheck;
     this.selectPost(null);
+  }
+
+  ngAfterViewInit() {
+    this.appComponent.updateUserData()
+  }
+
+  callbackFilter = (filter: any): void => {
+    this.selectPost(filter);
+  };
+
+  selectPost(filter: any) {
+    console.log("filterBefore", filter)
+    this.userAvailableCompanies = [];
+    if (filter == null) { 
+      this.userAvailableCompanies = this.allAvailableCompanies;
+    } else {
+      // Trie les posts selon leur distance de levenshtein
+      let levenshteinDist: any = [];
+      if (filter.address) {
+        for (let company of this.allAvailableCompanies) {
+          levenshteinDist.push([company,getLevenshteinDistance(company.address.toLowerCase(), filter.address.toLowerCase())]);
+        }
+        levenshteinDist.sort((a: any, b: any) => a[1] - b[1]);
+        let keys = levenshteinDist.map((key: any) => {
+          return key[0];
+        });
+        this.allAvailableCompanies.sort((a: any,b: any)=>keys.indexOf(a) - keys.indexOf(b));
+      } 
+
+      // Trie les company selon leurs notes
+      if (filter.sortNotation === true) {this.allAvailableCompanies.sort((a: any, b: any) => b['starsST'] - a['starsST'])} 
+
+      for (let company of this.allAvailableCompanies) {
+        console.log("filter",filter)
+        let isNotIncludedJob = (filter.jobs && filter.jobs.length && filter.jobs.every((job: any) => {return job.id != company.jobs}))
+        let isNotRightAmount = (filter.amount && (company.amount < filter.amount[0] || company.amount > filter.amount[1]))
+        
+        const user = this.store.selectSnapshot(DataQueries.currentUser);
+        let userCompany: any = this.store.selectSnapshot(DataQueries.getById("Company", user.company));
+        let userLatitude = userCompany.latitude*(Math.PI/180);
+        let userLongitude = userCompany.longitude*(Math.PI/180);
+        let postLatitude = company.latitude*(Math.PI/180);
+        let postLongitude = company.longitude*(Math.PI/180);
+        let distance = 6371*Math.acos(Math.sin(userLatitude)*Math.sin(postLatitude) + Math.cos(userLatitude)*Math.cos(postLatitude)*Math.cos(postLongitude-userLongitude))
+        let isNotRightRadius = (filter.radius && (distance < filter.radius[0] || distance > filter.radius[1]))
+
+        if (isNotRightAmount || isNotRightRadius || isNotIncludedJob) {continue}
+        this.userAvailableCompanies.push(company);
+      }
+    }
+    console.log("user", this.userAvailableCompanies)
+    this.cd.markForCheck();
   }
 
   checkCompanyProfile(company: Company) {
@@ -109,45 +140,9 @@ export class SOSPageComponent extends Destroy$ {
     });
   }
 
-  selectPost(filter: any) {
-    this.userAvailableCompanies = [];
-    console.log("all", this.allAvailableCompanies)
-    if (filter == null) { this.userAvailableCompanies == this.allAvailableCompanies;
-    } else {
-      // Array qui contiendra les posts et leur valeur en distance Levenshtein pour une adresse demandée
-      let levenshteinDist: any = [];
-      if (filter.address) {
-        for (let company of this.allAvailableCompanies) {
-          levenshteinDist.push([company,getLevenshteinDistance(company.address.toLowerCase(), filter.address.toLowerCase())]);
-        }
-        levenshteinDist.sort((a: any, b: any) => a[1] - b[1]);
-        let keys = levenshteinDist.map((key: any) => {
-          return key[0];
-        });
 
-        // Trie les posts selon leur distance de levenshtein
-        this.allAvailableCompanies.sort((a: any,b: any)=>keys.indexOf(a) - keys.indexOf(b));
-      } else {
-        this.allAvailableCompanies.sort((a, b) => {
-          return a["id"] - b["id"];
-        });
-      }
-
-      // Trie les company selon leurs notes
-      if (filter.sortNotation === true) {this.allAvailableCompanies.sort((a: any, b: any) => b['starsST'] - a['starsST'])} 
-
-      for (let company of this.allAvailableCompanies) {
-
-        console.log(filter)
-        let isNotIncludedJob = (filter.jobs && filter.jobs.length && filter.jobs.every((job: any) => {return job.id != company.jobs}))
-
-        if (isNotIncludedJob) {
-          continue;
-        }
-        this.userAvailableCompanies.push(company);
-      }
-    }
-    console.log(this.userAvailableCompanies)
-    this.cd.markForCheck();
+  ngOnDestroy(): void {
+    this.info.alignWith("last");
+    super.ngOnDestroy();
   }
 }
