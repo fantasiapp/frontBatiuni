@@ -29,7 +29,7 @@ export class UploadImageSupervision {
   static readonly type = '[User] Upload Supervision Picture';
   ext: string = '';
   imageBase64: string = '';
-  constructor(src: any, public missionId:number | null, public supervisionId: number | null) {
+  constructor(src: any, public supervisionId: number | null) {
     this.ext = src.format;
     this.imageBase64 = src.base64String;
     console.log('constructor, src:', src)

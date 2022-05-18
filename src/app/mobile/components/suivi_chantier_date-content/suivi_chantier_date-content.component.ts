@@ -123,7 +123,7 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
       resultType: CameraResultType.Base64,
       source: CameraSource.Camera,
     });
-    this.store.dispatch(new UploadImageSupervision(photo, this.mission!.id, this.currentSupervisionId)).pipe(take(1)).subscribe(() => {
+    this.store.dispatch(new UploadImageSupervision(photo, this.currentSupervisionId)).pipe(take(1)).subscribe(() => {
       // this.date.supervisions
       let mission = this.store.selectSnapshot(DataQueries.getById('Mission', this.mission!.id))
       this.updatePageOnlyDate();
@@ -139,7 +139,7 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
     });
 
 
-    this.store.dispatch(new UploadImageSupervision(photo, this.mission!.id, this.currentSupervisionId)).pipe(take(1)).subscribe(() => {
+    this.store.dispatch(new UploadImageSupervision(photo, this.currentSupervisionId)).pipe(take(1)).subscribe(() => {
       let mission = this.store.selectSnapshot(DataQueries.getById('Mission', this.mission!.id))
       let supervisions = this.store.selectSnapshot(DataQueries.getMany('Supervision', this.mission!.supervisions))
       this.updatePageOnlyDate();
@@ -202,9 +202,10 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
     this.mainComment(task, inputEl);
     this.cd.markForCheck()
   }
-  textareaSubmit(e: KeyboardEvent,input: HTMLFormElement){
-    console.log(e.key);
-    if(e.key == 'Enter'){
+  textareaSubmit(e: any,input: HTMLFormElement){
+    // console.log(e.key, e.code, 'abricot')
+    console.log('input', e.keyCode, e.type);
+    if(e.keyCode == 13){
       input.dispatchEvent(new Event("submit", {cancelable: true}))
       e.preventDefault(); // Prevents the addition of a new line in the text field (not needed in a lot of cases)
     }

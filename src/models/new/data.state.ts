@@ -300,8 +300,8 @@ export class DataState {
 
         delete response[picture.action];
         let key = Object.keys(response)
-        let id = response[parseInt(key[0])][5]
-        response[parseInt(key[0])].pop(5)
+        let id = response.supervisionId
+        // response[parseInt(key[0])].pop(5)
         response[parseInt(key[0])].push('')
         response[parseInt(key[0])].push(id)
         // let name = response[parseInt(key[0])][1]
