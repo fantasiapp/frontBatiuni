@@ -63,17 +63,14 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
 
 
   ngOnInit(){
-    console.log('ngOnInit début, date', this.date)
     this.mission = this.store.selectSnapshot(DataQueries.getById("Mission", this.mission!.id))
     this.computeDates(this.mission!)
-    console.log('ngOnInit finito mais pas tout a fait en fait , date', this.date)
     this.popup.taskWithoutDouble.pipe(takeUntil(this.destroy$)).subscribe(tasks => {
       this.date.taskWithoutDouble = tasks;
       this.cd.markForCheck()
     })
     this.date = this.dates[this.date.id]
     this.computeIterable(this.date)
-    console.log('ngOnInit finito, date', this.date)
   }
 
   computeIterable(date: DateG){
@@ -131,7 +128,6 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
     this.store.dispatch(new UploadImageSupervision(photo, this.mission!.id, this.currentTaskId)).pipe(take(1)).subscribe(() => {
       // this.date.supervisions
       let mission = this.store.selectSnapshot(DataQueries.getById('Mission', this.mission!.id))
-      console.log('mission', mission);
       this.updatePageOnlyDate();
       this.swipeMenuImage = false;
     });
@@ -146,7 +142,6 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
     this.store.dispatch(new UploadImageSupervision(photo, this.mission!.id, taskId)).pipe(take(1)).subscribe(() => {
       let mission = this.store.selectSnapshot(DataQueries.getById('Mission', this.mission!.id))
       let supervisions = this.store.selectSnapshot(DataQueries.getMany('Supervision', this.mission!.supervisions))
-      console.log('mission', mission, supervisions);
       this.updatePageOnlyDate();
       this.swipeMenuImage = false;
     });
@@ -235,12 +230,10 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
     let mission = this.store.selectSnapshot(DataQueries.getById("Mission", this.mission!.id));
     this.mission = mission;
     this.computeDates(mission!);
-    console.log('reloadMission, date.supervision :', this.dates)
     this.dates?.forEach((dateNew) => {
       if (dateNew.value == dateOld.value) {
         dateResult = dateNew;
       }
-    console.log('reloadMission, date.supervision :', this.dates)
     });
 
     return [dateResult, this.mission!];
@@ -263,7 +256,6 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
         validationImage: SuiviPME.computeTaskImage(detail, "validated"),
         invalidationImage: SuiviPME.computeTaskImage(detail, "refused"),
       }));
-      console.log("computesDates", this.tasks)
     let dates = mission.dates;
     if (typeof mission.dates === "object" && !Array.isArray(mission.dates))
       dates = Object.keys(mission.dates).map((key) => +key as number);
@@ -280,9 +272,7 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
         supervisions: this.computeSupervisionsForMission(date as string,supervisionsTaks),
       } as DateG;
     });
-      console.log("dates", this.dates)
       this.dates.sort((date1, date2) => (date1.value > date2.value ? 1 : -1));
-      console.log("dates 2 ", this.dates)
   }
 
   computeSupervisionsforTask(supervisionsId: number[], supervisionsTask: number[]) {
