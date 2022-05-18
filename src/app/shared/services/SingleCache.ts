@@ -41,7 +41,6 @@ export class SingleCache {
     }
 
     public static compareValue (name: string, valueToCompare: any) {
-        console.log('compareValue, bool :', this.instance.ob[name], valueToCompare, this.instance.ob[name] === valueToCompare)
         return this.instance.ob[name] == valueToCompare
     }
 }

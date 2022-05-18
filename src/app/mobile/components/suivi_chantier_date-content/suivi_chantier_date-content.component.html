@@ -33,7 +33,7 @@
             
           </div>
           <div class="partenerComment-addPhoto" *ngIf="!!date.supervisions[0]">
-            <span (click)="swipeMenuImage = true">Ajouter un photo : </span>
+            <span (click)="swipeMenuImage = true">Ajouter une photo : </span>
             <img class="partenerComment-icon"  (click)="swipeMenuImage = true" src="assets/camera-outline.svg" alt="camera"/>
           </div>
       </div>
@@ -54,6 +54,6 @@
 </swipeup>
 
 <swipeup [(open)]="swipeMenuImage" #modifyPicture>
-    <li (click)="takePhoto()">Accédez à l'appareil photo</li>
-    <li (click)="selectPhoto()">Télécharger une image</li>
+    <li (click)="takePhoto(null)">Accédez à l'appareil photo</li>
+    <li (click)="selectPhoto(null)">Télécharger une image</li>
 </swipeup>

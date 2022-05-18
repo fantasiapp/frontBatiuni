@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, ViewChild } from "@angular/core";
 import { Select, Store } from "@ngxs/store";
-import { Observable } from "rxjs";
+import { Observable, Subscriber } from "rxjs";
 import * as UserActions from "src/models/new/user/user.actions";
 import { Camera, CameraResultType, CameraSource } from "@capacitor/camera";
 import { UISlideMenuComponent } from "../../../shared/components/slidemenu/slidemenu.component";
@@ -16,6 +16,7 @@ import { Profile } from "src/models/new/data.interfaces";
 import { Notification } from "src/models/new/data.interfaces";
 import { NotificationViewed } from "src/models/new/user/user.actions";
 import { AppComponent } from "src/app/app.component";
+import { NotifService } from "src/app/shared/services/notif.service";
 
 
 @Component({
@@ -49,7 +50,7 @@ export class ProfileComponent extends Destroy$ {
 
 
   set openNotifications(b: boolean) {
-    this._openNotifications = !this._openNotifications
+
     if (b) {
       const view = this.store.selectSnapshot(DataState.view)
       this.store.dispatch(new NotificationViewed(this.companyId, view)).pipe(take(1)).subscribe(() => {
@@ -61,12 +62,14 @@ export class ProfileComponent extends Destroy$ {
       this.notificationsUnseen = 0
       this.cd.markForCheck()
     }
+    this.notifService.emitNotifChangeEvent(0)
+    this._openNotifications = !this._openNotifications
   }
   
   @Select(DataQueries.currentProfile)
   profile$!: Observable<Profile>;
 
-  constructor(private store: Store, private cd: ChangeDetectorRef, private info: InfoService, private popup: PopupService) {
+  constructor(private store: Store, private cd: ChangeDetectorRef, private info: InfoService, private popup: PopupService, private notifService: NotifService) {
     super();
     this.profile$.subscribe((profile) => {
       this.updateProfile(profile)
@@ -177,7 +180,7 @@ export class ProfileComponent extends Destroy$ {
       resultType: CameraResultType.Base64,
       source: CameraSource.Camera
     });
-    this.store.dispatch(new UserActions.ChangeProfilePicture(photo, 'image'));
+    this.store.dispatch(new UserActions.ChangeProfilePicture(photo, 'image'))
   }
 
   async selectPhoto() {
@@ -188,7 +191,7 @@ export class ProfileComponent extends Destroy$ {
     });
 
 
-    this.store.dispatch(new UserActions.ChangeProfilePicture(photo, 'image'));
+    this.store.dispatch(new UserActions.ChangeProfilePicture(photo, 'image'))
   }
 
   openApplicationsMenu(){
