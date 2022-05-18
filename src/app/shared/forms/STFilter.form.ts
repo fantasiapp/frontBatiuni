@@ -77,50 +77,40 @@ import { FilterService } from "../services/filter.service";
           <div class="radio-item">
             <checkbox
               class="grow"
-              name="employee-count"
-              onselect="true"
-              [formControlName]="'0'"
-              id="checkbox1"
+              [value]="true"
+              formControlName="0"
             ></checkbox>
             <span>Moins de 10 salariés</span>
           </div>
           <div class="radio-item">
             <checkbox
               class="grow"
-              name="job-type"
-              onselect="true"
+              [value]="true"
               [formControlName]="'1'"
-              checked = "true"
             ></checkbox>
             <span>Entre 11 et 20 salariés</span>
           </div>
           <div class="radio-item">
             <checkbox
               class="grow"
-              name="job-type"
-              onselect="true"
+              [value]="true"
               [formControlName]="'2'"
-              checked = "true"
             ></checkbox>
             <span>Entre 20 et 50 salariées</span>
           </div>
           <div class="radio-item">
             <checkbox
               class="grow"
-              name="job-type"
-              onselect="true"
+              [value]="true"
               [formControlName]="'3'"
-              checked = "true"
             ></checkbox>
             <span>Entre 50 et 100 salariés</span>
           </div>
           <div class="radio-item">
             <checkbox
               class="grow"
-              name="job-type"
-              onselect="true"
+              [value]="true"
               [formControlName]="'4'"
-              checked = "true"
             ></checkbox>
             <span>Plus de 100 salariés</span>
           </div>
@@ -273,7 +263,7 @@ export class STFilterForm extends Filter<Post> {
       this.onlyIf('$radius', (radius, range) => {
         return radius >= range[0] && radius <= range[1];
       }),
-      this.inList('job', (job) => { console.log("transform in list", job); return job.id }),
+      this.inList('job', (job) => { return job.id }),
       this.onlyIf('$manPower1', manPower1 => { return manPower1 }),
       this.onlyIf('$manPower2', manPower2 => { return !manPower2 }),
       this.onlyIf('amount', (amount, range) => {

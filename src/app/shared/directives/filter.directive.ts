@@ -275,7 +275,6 @@ export abstract class Filter<T extends {id: number}> extends Destroy$ {
       const name = step.type + '_' + (step.name as string);
       // console.log(name);
       input = this.evaluateStep(input, controls[name], step);
-      console.log(name, input);
     }
     this.updateEvent.emit(input);
     return input;
