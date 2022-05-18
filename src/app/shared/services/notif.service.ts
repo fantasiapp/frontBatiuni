@@ -28,6 +28,7 @@ export class NotifService {
   }
 
   checkNotif() {
+    this.notificationsUnseen = 0
     const view = this.store.selectSnapshot(DataState.view)
     let profile = this.store.selectSnapshot(DataQueries.currentProfile)!
     let companyId = profile.user?.company!

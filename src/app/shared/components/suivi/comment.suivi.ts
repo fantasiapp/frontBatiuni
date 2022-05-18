@@ -19,6 +19,7 @@ import { SlideTemplate } from "../../directives/slideTemplate.directive";
 import { FileDownloader } from "../../services/file-downloader.service";
 import { DataQueries } from "src/models/new/data.state";
 import { ImageGenerator } from "../../services/image-generator.service";
+import { SingleCache } from "../../services/SingleCache";
 
 @Component({
   selector: "comment-suivi",
@@ -89,11 +90,20 @@ export class SuiviComments {
 
   ngAfterContentInit(): void {
     this.images = []
-    for (let file in this.supervision.files) {
-      this.downloader.downloadFile(this.supervision.files[file]).subscribe((image) => {
+    let num = 0
+          for (let file in this.supervision.files) {
+      if (SingleCache.checkValueInCache("supervisionImage" + this.supervision.files[0].toString())) {
+        console.log("yooooooooooooooooooo")
+        this.images.push(SingleCache.getValueByName("supervisionImage" + this.supervision.files[0].toString()))
+      }
+      else {
+        this.downloader.downloadFile(this.supervision.files[file]).subscribe((image) => {
           this.images.push(this.downloader.toSecureBase64(image));
+          console.log("ngAfterContentInit, file", this.supervision.files[0])
+          SingleCache.setValueByName("supervisionImage" + this.supervision.files[0].toString(), this.downloader.toSecureBase64(image))
           this.cd.markForCheck();
-        });
+          });
+      }
     }
   }
 }

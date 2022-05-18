@@ -299,12 +299,11 @@ export class DataState {
         if (response[picture.action] !== "OK") throw response["messages"];
 
         delete response[picture.action];
-        console.log('response', response)
         let key = Object.keys(response)
         response[parseInt(key[0])].push('')
         let name = response[parseInt(key[0])][1]
-        console.log('name :', name)
         let id: number = +name.split("_")[3]
+        // let name = response[parseInt(key[0])][5] (ajouter un champ de la supervision id dans response)
         ctx.setState(compose(addSimpleChildren("Supervision", id, "File", response, 'id')))
       })
     );
@@ -677,11 +676,9 @@ export class DataState {
           throw response.messages;
         }
         delete response[application.action];
-        console.log('createSupervision', response)
         let key = Object.keys(response)
         ctx.setState(addComplexChildren("Company", profile.company.id, "Mission", response));
         let supervision = response[parseInt(key[0])][42][response[parseInt(key[0])][42].length-1]
-        console.log('createSupervision', response[parseInt(key[0])][42][response[parseInt(key[0])][42].length-1])
         ctx.setState(addComplexChildren("Mission", response, "Supervision", supervision))
       })
     );
