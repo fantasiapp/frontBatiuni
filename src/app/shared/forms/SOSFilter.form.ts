@@ -94,10 +94,8 @@ export class SOSFilterForm implements OnInit {
   allJobs!: Job[];
 
   ngOnInit(){
-    console.log("filterForm",this.filterForm.value)
     this.callbackFilter(this.filterForm.value);
     this.filterForm.valueChanges.subscribe(value => {
-      console.log("value change", value)
       this.callbackFilter(value);
     })
   }
