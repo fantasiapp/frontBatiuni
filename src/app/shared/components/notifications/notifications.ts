@@ -63,7 +63,6 @@ export class Notifications {
 
   get today(): NotificationDisplay[] {
     let todayDate = new Date(Date.now());
-    // console.log("yoooooooooooooooooooo ")
     const todayConst: NotificationDisplay[] = this.notificationsDisplay.filter(
       (notif) =>
         moment(moment(todayDate).format("L")).isSame(
@@ -71,50 +70,39 @@ export class Notifications {
         )
 
     );
-    console.log("result of today ", todayConst.sort((not1:NotificationDisplay, not2:NotificationDisplay) => not1.date < not2.date ? 1 : -1))
     return todayConst.sort((not1:NotificationDisplay, not2:NotificationDisplay) => not1.date < not2.date ? 1 : -1)
   }
 
   get month(): NotificationDisplay[] {
     let monthDate = new Date(Date.now());
-    console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
     const monthConst: NotificationDisplay[] = this.notificationsDisplay.filter(
       (notif) =>
         moment(moment(monthDate).format("L")).isAfter(
           moment(notif.date).format("L")
         )
     );
-    console.log("result of month ", monthConst.sort((not1:NotificationDisplay, not2:NotificationDisplay) => not1.date < not2.date ? 1 : -1))
     return monthConst.sort((not1:NotificationDisplay, not2:NotificationDisplay) => not1.date < not2.date ? 1 : -1)
   }
 
   get timerToday(): any[] {
     let Today = [];
-    console.log("timerToday")
     let max = this.today.length
-    console.log("max", max)
     for (let i = 0; i < max; i++) {
       Today.push(
         moment(moment(this.today[i].date)).startOf("minute").fromNow()
       );
-      console.log("i", i)
     }
-    console.log("Today", Today)
     return Today;
   }
 
   get timerMonth(): any[] {
     let Month = [];
-    console.log("timerMonth")
     let max = this.month.length
-    console.log("max_month", max)
     for (let j = 0; j < max; j++) {
       Month.push(
         moment(moment(this.month[j].date)).startOf("minute").fromNow()
       );
-      console.log("i_month", j)
     }
-    console.log("Month", Month)
     return Month;
   }
 
