@@ -24,12 +24,13 @@ export class FilterService {
     items: any[],
     providers?: { [key: string]: (t: any) => any }
   ) {
+    console.log("filter", this);
     const filter = this.mapping.get(name);
     if (!filter) {
       console.warn(`Unknown filter ${name}.`);
       return items;
     }
-
+    console.log("providers", providers);
     return filter.filter(items, providers);
   }
 }

@@ -46,10 +46,10 @@ import { FilterService } from "../services/filter.service";
       <ngx-slider [options]="imports.DistanceSliderConfig" [value]="0" [highValue]="1000" formControlName="if_$radius"></ngx-slider>
     </div>
 
-    <!-- <div class="form-input form-spacer">
+    <div class="form-input form-spacer">
       <label>Métier</label>
-      <options [options]="allJobs" formControlName="if_job" #job></options>
-    </div> -->
+      <options [options]="allJobs" formControlName="inList_job"></options>
+    </div>
 
     <div class="form-input form-spacer">
       <label class="form-title">Type</label>
@@ -223,6 +223,7 @@ export class STFilterForm extends Filter<Post> {
     
     this.create<{
       // $job: boolean;
+      $jobId: number;
       $manPower1: boolean;
       $manPower2: boolean;
       $favorite: boolean;
@@ -231,10 +232,6 @@ export class STFilterForm extends Filter<Post> {
       $employeeCount: number;
       $radius: number;
     }>([
-      // this.defineComputedProperty('$job', (post) => {
-      //   console.log(post.job)
-      //   return 
-      // }),
       this.defineComputedProperty('$manPower1', (post) => {
         return post.manPower;
       }),
@@ -276,12 +273,10 @@ export class STFilterForm extends Filter<Post> {
       this.onlyIf('$radius', (radius, range) => {
         return radius >= range[0] && radius <= range[1];
       }),
-      this.onlyIf('job', (job, selectedJobs) => {console.log('job',job);
-      console.log(selectedJobs); return true}),
+      this.inList('job', ),
       this.onlyIf('$manPower1', manPower1 => { return manPower1 }),
       this.onlyIf('$manPower2', manPower2 => { return !manPower2 }),
       this.onlyIf('amount', (amount, range) => {
-        console.log('amount',range)
         return amount >= range[0] && amount <= range[1];
       }),
       this.some('employee',
@@ -301,7 +296,7 @@ export class STFilterForm extends Filter<Post> {
       this.sortBy("startDate", () => 1),
     ]);
 
-   
+   console.log(this);
   }
 
 }
