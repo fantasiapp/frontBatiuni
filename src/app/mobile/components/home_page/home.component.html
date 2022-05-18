@@ -135,7 +135,7 @@
         ></annonce-resume>
 
         <swipeup [(open)]="postMenu.swipeup">
-          <li *ngIf="possibleCandidates.length" (click)="showCandidates()">
+          <li (click)="showCandidates()">
             <img src="assets/responses.svg" /> Afficher les réponses
             <span
               *ngIf="currentCandidates && view == 'PME'"

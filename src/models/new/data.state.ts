@@ -299,7 +299,6 @@ export class DataState {
         if (response[picture.action] !== "OK") throw response["messages"];
 
         delete response[picture.action];
-        console.log('response', response)
         let key = Object.keys(response)
         let id = response[parseInt(key[0])][5]
         response[parseInt(key[0])].pop(5)
@@ -684,11 +683,9 @@ export class DataState {
           throw response.messages;
         }
         delete response[application.action];
-        console.log('createSupervision', response)
         let key = Object.keys(response)
         ctx.setState(addComplexChildren("Company", profile.company.id, "Mission", response));
         let supervision = response[parseInt(key[0])][42][response[parseInt(key[0])][42].length-1]
-        console.log('createSupervision', response[parseInt(key[0])][42][response[parseInt(key[0])][42].length-1])
         ctx.setState(addComplexChildren("Mission", response, "Supervision", supervision))
       })
     );

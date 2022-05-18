@@ -619,6 +619,7 @@ export class HomeComponent extends Destroy$ {
       user: user as User,
       company: company!,
     } as Profile;
+    console.log("showCompany , candidate :", candidate)
     this.amountSubContractor = candidate?.amount
       ? "Contre-Offre: " + candidate!.amount.toString() + " €"
       : null;
