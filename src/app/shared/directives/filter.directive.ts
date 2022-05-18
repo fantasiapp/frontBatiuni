@@ -53,10 +53,10 @@ interface Every<T, ComputedProperties> {
   items: Step<T, ComputedProperties>[];
 };
 
-interface InList<T, ComputedProperties> {
-  name: string;
+interface InList<T, ComputedProperties, Key extends KeyOf<T, ComputedProperties> = KeyOf<T, ComputedProperties>> {
+  name: Key;
   type: 'inList';
-  items: Step<T, ComputedProperties>[];
+  transform: (t: any, ...args: any[]) => any;
 };
 
 export type Step<T = any, ComputedProperties = any> =
@@ -150,12 +150,11 @@ export abstract class Filter<T extends {id: number}> extends Destroy$ {
     }
   }
 
-  protected inList<ComputedProperties>(name: string, ...args: Step<T, ComputedProperties>[]): InList<T, ComputedProperties> {
-    return {
-      name,
-      type: 'inList',
-      items: args
-    }
+  protected inList<ComputedProperties, K extends KeyOf<T, ComputedProperties>>(name: K, transform: (u: any) => any): InList<T, ComputedProperties> {
+    return { 
+      name, 
+      type: 'inList', 
+      transform};
   }
 
 
@@ -248,9 +247,10 @@ export abstract class Filter<T extends {id: number}> extends Destroy$ {
         if (controlValue == null || controlValue == "") {
           return input;
         }
+
         return input.filter(item => {
           return controlValue.some((value: any) => {
-            return this.type.getValue(item, step) == value.id;
+            return this.type.getValue(item, step) == step.transform(value);
           })
         });
 
