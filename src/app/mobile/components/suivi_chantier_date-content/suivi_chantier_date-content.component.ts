@@ -126,7 +126,7 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
       resultType: CameraResultType.Base64,
       source: CameraSource.Camera,
     });
-    this.store.dispatch(new UploadImageSupervision(photo, this.mission!.id, this.currentTaskId)).pipe(take(1)).subscribe(() => {
+    this.store.dispatch(new UploadImageSupervision(photo, this.mission!.id, this.currentSupervisionId)).pipe(take(1)).subscribe(() => {
       // this.date.supervisions
       let mission = this.store.selectSnapshot(DataQueries.getById('Mission', this.mission!.id))
       console.log('mission', mission);
@@ -141,7 +141,9 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
       resultType: CameraResultType.Base64,
       source: CameraSource.Photos,
     });
-    this.store.dispatch(new UploadImageSupervision(photo, this.mission!.id, this.currentTaskId)).pipe(take(1)).subscribe(() => {
+
+
+    this.store.dispatch(new UploadImageSupervision(photo, this.mission!.id, this.currentSupervisionId)).pipe(take(1)).subscribe(() => {
       let mission = this.store.selectSnapshot(DataQueries.getById('Mission', this.mission!.id))
       let supervisions = this.store.selectSnapshot(DataQueries.getMany('Supervision', this.mission!.supervisions))
       console.log('mission', mission, supervisions);
@@ -225,9 +227,11 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
     }
   }
 
-  cameraSwipe(task: Task | null){
+  currentSupervisionId: Ref<Supervision> | null = null
+  cameraSwipe(supervsionId: Ref<Supervision> | null){
+    this.currentSupervisionId = supervsionId
     this.swipeMenuImage = true; 
-    this.currentTaskId = task ? task!.id : null
+    // this.currentTaskId = task ? task!.id : null
     this.cd.markForCheck()
   }
 

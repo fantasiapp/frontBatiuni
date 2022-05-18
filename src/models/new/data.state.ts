@@ -301,11 +301,18 @@ export class DataState {
         delete response[picture.action];
         console.log('response', response)
         let key = Object.keys(response)
+        let id = response[parseInt(key[0])][5]
+        response[parseInt(key[0])].pop(5)
         response[parseInt(key[0])].push('')
-        let name = response[parseInt(key[0])][1]
-        console.log('name :', name)
-        let id: number = +name.split("_")[3]
-        ctx.setState(compose(addSimpleChildren("Supervision", id, "File", response, 'id')))
+        response[parseInt(key[0])].push(id)
+        // let name = response[parseInt(key[0])][1]
+        // console.log('name :', name)
+
+
+        // let id = response[parseInt(key[0])][6]
+
+
+        ctx.setState(compose(addSimpleChildren("Supervision", id, "FileSupervision", response, 'id')))
       })
     );
   }
