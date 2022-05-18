@@ -301,9 +301,10 @@ export class DataState {
         delete response[picture.action];
         let key = Object.keys(response)
         let id = response.supervisionId
+        delete response.supervisionId;
+        console.log("response", response)
         // response[parseInt(key[0])].pop(5)
         response[parseInt(key[0])].push('')
-        response[parseInt(key[0])].push(id)
         // let name = response[parseInt(key[0])][1]
         // console.log('name :', name)
 
@@ -311,7 +312,7 @@ export class DataState {
         // let id = response[parseInt(key[0])][6]
 
 
-        ctx.setState(compose(addSimpleChildren("Supervision", id, "FileSupervision", response, 'id')))
+        ctx.setState(compose(addSimpleChildren("Supervision", id, "File", response, 'id')))
       })
     );
   }
