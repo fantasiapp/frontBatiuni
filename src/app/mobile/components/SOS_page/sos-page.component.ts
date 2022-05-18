@@ -164,7 +164,6 @@ export class SOSPageComponent extends Destroy$ {
         this.userAvailableCompanies.push(company);
       }
     }
-    console.log("user", this.userAvailableCompanies)
     this.cd.markForCheck();
   }
 
