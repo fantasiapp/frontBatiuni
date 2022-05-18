@@ -9,6 +9,7 @@ import {
 } from "@angular/core";
 import { FormArray, FormGroup } from "@angular/forms";
 import { Store } from "@ngxs/store";
+import { Control } from "mapbox-gl";
 import { DistanceSliderConfig, SalarySliderConfig } from "src/app/shared/common/config";
 import { Job, Post } from "src/models/new/data.interfaces";
 import { DataQueries, SnapshotAll } from "src/models/new/data.state";
@@ -45,10 +46,10 @@ import { FilterService } from "../services/filter.service";
       <ngx-slider [options]="imports.DistanceSliderConfig" [value]="0" [highValue]="1000" formControlName="if_$radius"></ngx-slider>
     </div>
 
-    <!-- <div class="form-input form-spacer">
+    <div class="form-input form-spacer">
       <label>Métier</label>
-      <options [options]="allJobs" formControlName="if_$job" #job></options>
-    </div> -->
+      <options [options]="allJobs" formControlName="inList_job"></options>
+    </div>
 
     <div class="form-input form-spacer">
       <label class="form-title">Type</label>
@@ -71,45 +72,45 @@ import { FilterService } from "../services/filter.service";
     </div>
 
       <div class="form-input space-children-margin">
-        <label>Taille de l'entreprise</label>
         <ng-container formArrayName="some_employee">
+        <label class="form-title">Taille de l'entreprise</label>
           <div class="radio-item">
             <checkbox
               class="grow"
-              name="job-type"
-              [formControlName]="0"
+              [value]="true"
+              formControlName="0"
             ></checkbox>
             <span>Moins de 10 salariés</span>
           </div>
           <div class="radio-item">
             <checkbox
               class="grow"
-              name="job-type"
-              [formControlName]="1"
+              [value]="true"
+              [formControlName]="'1'"
             ></checkbox>
             <span>Entre 11 et 20 salariés</span>
           </div>
           <div class="radio-item">
             <checkbox
               class="grow"
-              name="job-type"
-              [formControlName]="2"
+              [value]="true"
+              [formControlName]="'2'"
             ></checkbox>
-            <span>Entre 20 et 25 salariées</span>
+            <span>Entre 20 et 50 salariées</span>
           </div>
           <div class="radio-item">
             <checkbox
               class="grow"
-              name="job-type"
-              [formControlName]="3"
+              [value]="true"
+              [formControlName]="'3'"
             ></checkbox>
             <span>Entre 50 et 100 salariés</span>
           </div>
           <div class="radio-item">
             <checkbox
               class="grow"
-              name="job-type"
-              [formControlName]="4"
+              [value]="true"
+              [formControlName]="'4'"
             ></checkbox>
             <span>Plus de 100 salariés</span>
           </div>
@@ -209,9 +210,10 @@ export class STFilterForm extends Filter<Post> {
 
     //either precompute with defineComputedProperty
     //or evaluate during the function call
-
+    
     this.create<{
-      $job: boolean;
+      // $job: boolean;
+      $jobId: number;
       $manPower1: boolean;
       $manPower2: boolean;
       $favorite: boolean;
@@ -220,10 +222,6 @@ export class STFilterForm extends Filter<Post> {
       $employeeCount: number;
       $radius: number;
     }>([
-      this.defineComputedProperty('$job', (post) => {
-        console.log(post.job)
-        return false;
-      }),
       this.defineComputedProperty('$manPower1', (post) => {
         return post.manPower;
       }),
@@ -265,19 +263,18 @@ export class STFilterForm extends Filter<Post> {
       this.onlyIf('$radius', (radius, range) => {
         return radius >= range[0] && radius <= range[1];
       }),
-      this.onlyIf('$job', job => {return job}),
+      this.inList('job', (job) => { return job.id }),
       this.onlyIf('$manPower1', manPower1 => { return manPower1 }),
       this.onlyIf('$manPower2', manPower2 => { return !manPower2 }),
       this.onlyIf('amount', (amount, range) => {
         return amount >= range[0] && amount <= range[1];
       }),
-      this.some(
-        "employee",
-        this.onlyIf("$employeeCount", (count) => 1 <= count && count <= 10, [], true),
-        this.onlyIf("$employeeCount", (count) => count > 10 && count <= 25, [], true),
-        this.onlyIf("$employeeCount", (count) => count > 25 && count <= 50, [], true),
-        this.onlyIf("$employeeCount", (count) => count > 50 && count <= 100, [], true),
-        this.onlyIf("$employeeCount", (count) => count > 100, [], true)
+      this.some('employee',
+      this.onlyIf("$employeeCount", (count) => 1 <= count && count <= 10, [], true),
+      this.onlyIf("$employeeCount", (count) => count > 10 && count <= 25, [], true),
+      this.onlyIf("$employeeCount", (count) => count > 25 && count <= 50, [], true),
+      this.onlyIf("$employeeCount", (count) => count > 50 && count <= 100, [], true),
+      this.onlyIf("$employeeCount", (count) => count > 100, [], true)
       ),
       this.onlyIf('$viewed', viewed => { return viewed }),
       this.onlyIf('$favorite', favorite => { return favorite }),
@@ -289,7 +286,6 @@ export class STFilterForm extends Filter<Post> {
       this.sortBy("startDate", () => 1),
     ]);
 
-    //initialize
-    (this.form.controls["some_employee"] as FormArray).controls[0].setValue(1);
   }
+
 }

@@ -227,7 +227,8 @@ import { SpacingPipe } from "../pipes/spacing.pipe";
               <input
                 class="form-element"
                 type="text"
-                formControlName="UserProfile.Company.capital"
+                maxlength="11"
+                formControlName="UserProfile.Company.revenue"
               />
             </div>
 
@@ -236,7 +237,8 @@ import { SpacingPipe } from "../pipes/spacing.pipe";
               <input
                 class="form-element"
                 type="text"
-                formControlName="UserProfile.Company.revenue"
+                maxlength="11"
+                formControlName="UserProfile.Company.capital"
               />
             </div>
 

@@ -3,66 +3,168 @@ import {
   ChangeDetectorRef,
   Component,
 } from "@angular/core";
-import { Store } from "@ngxs/store";
-import { Observable, of } from "rxjs";
+import { Select, Store } from "@ngxs/store";
+import { combineLatest, Observable, of } from "rxjs";
 import { switchMap, takeUntil } from "rxjs/operators";
 import { AppComponent } from "src/app/app.component";
 import { Destroy$ } from "src/app/shared/common/classes";
+import { DistanceSliderConfig, SalarySliderConfig } from "src/app/shared/common/config";
+import { splitByOutput } from "src/app/shared/common/functions";
 import { Availability } from "src/app/shared/components/calendar/calendar.ui";
 import { ExtendedProfileComponent } from "src/app/shared/components/extended-profile/extended-profile.component";
+import { InfoService } from "src/app/shared/components/info/info.component";
 import { MarkerType } from "src/app/shared/components/map/map.component";
 import { SlidemenuService } from "src/app/shared/components/slidemenu/slidemenu.component";
-import { Company } from "src/models/new/data.interfaces";
+import { FilterService } from "src/app/shared/services/filter.service";
+import { getLevenshteinDistance } from "src/app/shared/services/levenshtein";
+import { File, Company, Profile } from "src/models/new/data.interfaces";
 import {
   availabilityToName,
   nameToAvailability,
 } from "src/models/new/data.mapper";
 import { DataQueries, Query, QueryAll } from "src/models/new/data.state";
 
+
 @Component({
   selector: "sos-page",
-  templateUrl: "./sos-page.component.html",
-  styleUrls: ["./sos-page.component.scss"],
+  templateUrl: "sos-page.component.html",
+  styleUrls: ["sos-page.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SOSPageComponent {
+export class SOSPageComponent extends Destroy$ {
+  imports = { DistanceSliderConfig, SalarySliderConfig };
+
   activeView: number = 0;
   openSOSFilterMenu: boolean = false;
+  userAvailableCompanies: Company[] = [];
+  allAvailableCompanies: Company[] = [];
+  availabilities: MarkerType[] = [];
 
   @QueryAll("Company")
-  private companies$!: Observable<Company[]>;
+  companies$!: Observable<Company[]>;
 
-  private getAvailableCompanies(companies: Company[]) {
-    return companies;
+  @Select(DataQueries.currentProfile)
+  profile$!: Observable<Profile>;
+
+  constructor(
+    private store: Store, 
+    private slides: SlidemenuService, 
+    private info: InfoService, 
+    private appComponent: AppComponent, 
+    private cd: ChangeDetectorRef
+  ) {
+    super();
   }
 
-  availableCompanies$: Observable<{
-    companies: Company[];
-    availabilities: MarkerType[];
-  }>;
-
-  constructor(private store: Store, private slides: SlidemenuService, private appComponent: AppComponent) {
+  ngOnInit() {
+    this.info.alignWith('header_search');
     const now = new Date().toISOString().slice(0, 10);
-    this.availableCompanies$ = this.companies$.pipe(
-      switchMap((companies) => {
-        let availableCompanies: Company[] = [],
-          availabilities: MarkerType[] = [];
-        companyLoop: for (const company of companies) {
-          const ownAvailabilities = this.store.selectSnapshot(
-            DataQueries.getMany("Disponibility", company.availabilities)
-          );
-          for (const day of ownAvailabilities)
-            if (day.date == now) {
-              availableCompanies.push(company);
-              availabilities.push(nameToAvailability(day.nature as any));
-              continue companyLoop;
-            }
-        }
+    this.companies$.subscribe((companies) => {
+      for (const company of companies) {
+        const ownAvailabilities = this.store.selectSnapshot(DataQueries.getMany("Disponibility", company.availabilities));
+        for (const day of ownAvailabilities) {
+          if (day.date == now) {
+            this.allAvailableCompanies.push(company);
+            this.availabilities.push(nameToAvailability(day.nature as any));
+            continue;
+          }
+        } 
+      }
+    })      
+    this.cd.markForCheck;
+    this.selectCompany(null);
+  }
 
-        return of({ companies: availableCompanies, availabilities });
-      })
-    );
+  ngAfterViewInit() {
     this.appComponent.updateUserData()
+  }
+
+  callbackFilter = (filter: any): void => {
+    this.selectCompany(filter);
+  };
+
+  selectCompany(filter: any) {
+    this.userAvailableCompanies = [];
+    if (filter == null) { 
+      this.userAvailableCompanies = this.allAvailableCompanies;
+    } else {
+      // Trie les posts selon leur distance de levenshtein
+      let levenshteinDist: any = [];
+      if (filter.address) {
+        for (let company of this.allAvailableCompanies) {
+          levenshteinDist.push([company,getLevenshteinDistance(company.address.toLowerCase(), filter.address.toLowerCase())]);
+        }
+        levenshteinDist.sort((a: any, b: any) => a[1] - b[1]);
+        let keys = levenshteinDist.map((key: any) => {
+          return key[0];
+        });
+        this.allAvailableCompanies.sort((a: any,b: any)=>keys.indexOf(a) - keys.indexOf(b));
+      } else {
+        this.allAvailableCompanies.sort((a, b) => { return a["id"] - b["id"]; });
+      }
+
+      // Trie les companies selon leurs notes
+      if (filter.sortNotation === true) {this.allAvailableCompanies.sort((a: any, b: any) => b['starsST'] - a['starsST'])} 
+
+
+      // Trie les companies les plus complètes
+      if (filter.sortFullProfils === true) {
+        let completedCompanies: any = []; 
+        for (let company of this.allAvailableCompanies){
+          const files: (File | null)[] = company.files?.map(fileId => this.store.selectSnapshot(DataQueries.getById('File', fileId)))
+          const filesName = files.map(file => {if (file) { return file.name} return null })
+          const checkFile = ["URSSAF", "Kbis", "Trav. Dis", "Impôts", "Congés Payés"].map(name => filesName.includes(name))
+          const filesNature = files.map(file => { if (file) { return file.nature } return null })
+          const levelStart = company.amount && company.address && company.companyPhone && company.siret && company.jobs
+          let step = 0
+          if (levelStart) { step = 1 }
+          if (filesNature.includes("labels")) { step = 2 }
+          if (levelStart && filesNature.includes("labels")) { step = 3}
+          if (levelStart && !checkFile.includes(false)) { step = 4 }
+          if (levelStart && !checkFile.includes(false) && filesNature.includes("labels")) { step = 5 }
+          completedCompanies.push([company, step])
+        }
+        completedCompanies.sort((a: number[], b: number[]) => b[1] - a[1]);
+        let companyKeys = completedCompanies.map((key: any) => {return key[0]});
+        this.allAvailableCompanies.sort((a: any, b: any) => companyKeys.indexOf(a) - companyKeys.indexOf(b));
+      }      
+
+      for (let company of this.allAvailableCompanies) {
+
+        let includedJob = false;
+        if (filter.jobs){
+          let Jobs = this.store.selectSnapshot(DataQueries.getMany("JobForCompany", company.jobs));
+          let companyJob = Jobs.map(job => job.job);
+          let filterJobs = filter.jobs.map((job: { id: any; }) => job.id);
+          for (let id of companyJob) { if (filterJobs.includes(id)){ includedJob = true}}
+        }
+        let isNotIncludedJob = (filter.jobs && filter.jobs.length && !includedJob)
+
+        let isNotRightAmount = (filter.amount && company.amount && (company.amount < filter.amount[0] || company.amount > filter.amount[1]))
+        
+        const user = this.store.selectSnapshot(DataQueries.currentUser);
+        let userCompany: any = this.store.selectSnapshot(DataQueries.getById("Company", user.company));
+        let userLatitude = userCompany.latitude*(Math.PI/180);
+        let userLongitude = userCompany.longitude*(Math.PI/180);
+        let postLatitude = company.latitude*(Math.PI/180);
+        let postLongitude = company.longitude*(Math.PI/180);
+        let distance = 6371*Math.acos(Math.sin(userLatitude)*Math.sin(postLatitude) + Math.cos(userLatitude)*Math.cos(postLatitude)*Math.cos(postLongitude-userLongitude))
+        let isNotRightRadius = (filter.radius && (distance < filter.radius[0] || distance > filter.radius[1]))
+
+        let available = false;
+        let today = new Date().toISOString().slice(0, 10)
+        let disponibility = this.store.selectSnapshot(DataQueries.getMany("Disponibility", company.availabilities));
+        let disponibilityToday = disponibility.filter(dispo => dispo.date == today)
+        let availableToday =  disponibilityToday.map(dispo => dispo.nature)
+        if (availableToday[0] === "Disponible") { available = true}
+        let isNotDisponible = (filter.sortDisponibleProfils && !available)
+      
+
+        if (isNotRightAmount || isNotRightRadius || isNotIncludedJob || isNotDisponible) {continue}
+        this.userAvailableCompanies.push(company);
+      }
+    }
+    this.cd.markForCheck();
   }
 
   checkCompanyProfile(company: Company) {
@@ -79,5 +181,11 @@ export class SOSPageComponent {
         component.showStar = true
       },
     });
+  }
+
+
+  ngOnDestroy(): void {
+    this.info.alignWith("last");
+    super.ngOnDestroy();
   }
 }
