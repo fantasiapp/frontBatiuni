@@ -269,8 +269,6 @@ export abstract class Filter<T extends {id: number}> extends Destroy$ {
     const controls = this.form.controls;
     let input = this.input;
     if ( !input.length ) return [];
-    console.log("update")
-    console.log("form", controls);
     for ( const step of this.pipeline ) {
       const name = step.type + '_' + (step.name as string);
       // console.log(name);

@@ -18,7 +18,6 @@ export class UICheckboxAccessor extends UIDefaultAccessor<
   }
 
   writeValue(value: any): void {
-    console.log("value", value)
     if (value == null || value == undefined) return;
     this.onChange(value);
     this.cd.markForCheck();
@@ -57,11 +56,8 @@ export class UICheckboxComponent{
   @Output() selection = new EventEmitter<string | boolean | number>();
 
   ngOnInit() {
-    console.log("ngOnInit", this);
   }
   onChange(e: Event) {
-    console.log("checkbox change", e);
-    console.log("checkbox value", this.getInput(e));
     this.value = this.getInput(e);
     this.valueChange.emit(this.value);
     this.cd.markForCheck()

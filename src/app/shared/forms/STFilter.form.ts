@@ -286,7 +286,6 @@ export class STFilterForm extends Filter<Post> {
       this.sortBy("startDate", () => 1),
     ]);
 
-   console.log(this);
   }
 
 }
