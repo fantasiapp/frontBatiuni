@@ -167,9 +167,7 @@ export class HomeComponent extends Destroy$ {
         this.allUserOnlinePosts =
           mapping.get(this.symbols.userOnlinePost) || [];
         this.allOnlinePosts = [...otherOnlinePost, ...this.userOnlinePosts];
-        this.allMissions = this.store.selectSnapshot(
-          DataQueries.getMany("Mission", profile.company.missions)
-        );
+        this.allMissions = this.store.selectSnapshot(DataQueries.getMany("Mission", profile.company.missions));
         this.cd.markForCheck();
 
         this.selectDraft(null);

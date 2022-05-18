@@ -60,8 +60,6 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
 
   iterableTasksComment: iterableTasksComment[] = [];
 
-
-
   ngOnInit(){
     this.mission = this.store.selectSnapshot(DataQueries.getById("Mission", this.mission!.id))
     this.computeDates(this.mission!)
@@ -119,13 +117,13 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
     this._mission = mission;
   }
 
-  async takePhoto(taskId: Ref<Task> | null) {
+  async takePhoto() {
     const photo = await Camera.getPhoto({
       allowEditing: false,
       resultType: CameraResultType.Base64,
       source: CameraSource.Camera,
     });
-    this.store.dispatch(new UploadImageSupervision(photo, this.mission!.id, this.currentTaskId)).pipe(take(1)).subscribe(() => {
+    this.store.dispatch(new UploadImageSupervision(photo, this.currentSupervisionId)).pipe(take(1)).subscribe(() => {
       // this.date.supervisions
       let mission = this.store.selectSnapshot(DataQueries.getById('Mission', this.mission!.id))
       this.updatePageOnlyDate();
@@ -133,13 +131,15 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
     });
   }
 
-  async selectPhoto(taskId: Ref<Task> | null) {
+  async selectPhoto() {
     const photo = await Camera.getPhoto({
       allowEditing: false,
       resultType: CameraResultType.Base64,
       source: CameraSource.Photos,
     });
-    this.store.dispatch(new UploadImageSupervision(photo, this.mission!.id, taskId)).pipe(take(1)).subscribe(() => {
+
+
+    this.store.dispatch(new UploadImageSupervision(photo, this.currentSupervisionId)).pipe(take(1)).subscribe(() => {
       let mission = this.store.selectSnapshot(DataQueries.getById('Mission', this.mission!.id))
       let supervisions = this.store.selectSnapshot(DataQueries.getMany('Supervision', this.mission!.supervisions))
       this.updatePageOnlyDate();
@@ -202,8 +202,10 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
     this.mainComment(task, inputEl);
     this.cd.markForCheck()
   }
-  textareaSubmit(e: KeyboardEvent,input: HTMLFormElement){
-    if(e.key == 'Enter'){
+  textareaSubmit(e: any,input: HTMLFormElement){
+    // console.log(e.key, e.code, 'abricot')
+    console.log('input', e.keyCode, e.type);
+    if(e.keyCode == 13){
       input.dispatchEvent(new Event("submit", {cancelable: true}))
       e.preventDefault(); // Prevents the addition of a new line in the text field (not needed in a lot of cases)
     }
@@ -219,6 +221,14 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
         this.updatePageOnlyDate()
       })
     }
+  }
+
+  currentSupervisionId: Ref<Supervision> | null = null
+  cameraSwipe(supervsionId: Ref<Supervision> | null){
+    this.currentSupervisionId = supervsionId
+    this.swipeMenuImage = true; 
+    // this.currentTaskId = task ? task!.id : null
+    this.cd.markForCheck()
   }
 
   //// DOUBLON

@@ -50,7 +50,7 @@
                     <span>- {{ task.content }}</span>
                 </div>
             </div>
-            <notification-agenda *ngIf="card.change.deleted || card.change.schedule || !card.change.validate" [card]="card" [field]="fieldValidation(card)" [date]="card.date" (cardUpdate)="onCardUpdate($event, card)"></notification-agenda>
+            <notification-agenda (click)="$event.stopPropagation()" *ngIf="card.change.deleted || card.change.schedule || !card.change.validate" [card]="card" [field]="fieldValidation(card)" [date]="card.date" (cardUpdate)="onCardUpdate($event, card)"></notification-agenda>
     
         </div>
     </div>

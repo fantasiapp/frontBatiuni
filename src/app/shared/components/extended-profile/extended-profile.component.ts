@@ -62,6 +62,9 @@ export class ExtendedProfileComponent extends Destroy$ {
   @Input()
   showView: "ST" | "PME" = this.store.selectSnapshot(DataState.view);
 
+  @Input()
+  showStar: boolean = true;
+
   constructor(
     private store: Store,
     private popup: PopupService,
@@ -72,6 +75,7 @@ export class ExtendedProfileComponent extends Destroy$ {
   }
 
   ngOnChanges(changes: SimpleChanges) {
+
     if (changes["profile$"] && !changes["profile$"].isFirstChange()) {
       (this.profile$ as Observable<Profile>)
         .pipe(take(1))
@@ -91,7 +95,7 @@ export class ExtendedProfileComponent extends Destroy$ {
         this.companyJobs = profile.company.jobs as any;
         this.jobs = this.companyJobs.map(({ job }) => job) as any;
       });
-    this.showView = "PME"
+    // this.showView = "PME"
   }
 
   ngAfterViewInit() {

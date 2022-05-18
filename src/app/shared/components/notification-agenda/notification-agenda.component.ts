@@ -31,29 +31,17 @@ export class NotificationAgendaComponent {
   }
 
   validateHour(b: boolean, e: Event) {
-    e.stopImmediatePropagation()
-    this.store
-      .dispatch(
-        new ValidateMissionDate(this.card.mission.id, this.field, b, "")
-      )
-      .pipe()
-      .subscribe(() => {
-        this.cardUpdate.emit();
-      });
+    this.store.dispatch(new ValidateMissionDate(this.card.mission.id, this.field, b, "")).pipe().subscribe(() => {
+      this.cardUpdate.emit();
+     });
   }
 
 
   deleted(b: boolean, e: Event) {
-    e.stopImmediatePropagation()
     this.field = "date";
 
-    this.store
-      .dispatch(
-        new ValidateMissionDate(this.card.mission.id, this.field, b, this.date)
-      )
-      .pipe()
-      .subscribe(() => {
-        this.cardUpdate.emit([b, this.card.change]);
-      });
+    this.store.dispatch(new ValidateMissionDate(this.card.mission.id, this.field, b, this.date)).pipe().subscribe(() => {
+      this.cardUpdate.emit([b, this.card.change]);
+    });
   }
 }

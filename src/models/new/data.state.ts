@@ -300,11 +300,18 @@ export class DataState {
 
         delete response[picture.action];
         let key = Object.keys(response)
+        let id = response.supervisionId
+        // response[parseInt(key[0])].pop(5)
         response[parseInt(key[0])].push('')
-        let name = response[parseInt(key[0])][1]
-        let id: number = +name.split("_")[3]
-        // let name = response[parseInt(key[0])][5] (ajouter un champ de la supervision id dans response)
-        ctx.setState(compose(addSimpleChildren("Supervision", id, "File", response, 'id')))
+        response[parseInt(key[0])].push(id)
+        // let name = response[parseInt(key[0])][1]
+        // console.log('name :', name)
+
+
+        // let id = response[parseInt(key[0])][6]
+
+
+        ctx.setState(compose(addSimpleChildren("Supervision", id, "FileSupervision", response, 'id')))
       })
     );
   }

@@ -13,14 +13,14 @@
             <img (click)="refuse(iterable.selectedTask, refuseImg)" id="control_refuse_{{iterable.selectedTask.id}}" [src]= "iterable.selectedTask.invalidationImage" #refuseImg/>
           </div>
         </div>
-        <div class="comment-container" *ngFor="let supervision of iterable.selectedTask.supervisionsObject">
+        <div class="comment-container" *ngFor="let supervision of iterable.selectedTask.supervisionsObject; let isLast = last">
             <comment-suivi  [supervision]="supervision"></comment-suivi>
-        </div>
-        <div *ngIf="iterable.selectedTask.refused && !mission!.isClosed" class="divComment">
-          <form [formGroup]="iterable.formGroup" (ngSubmit)="onSubmit(iterable.selectedTask, comment)">
-            <input id="input_{{iterable.selectedTask.id}}" class="inputComment" type="text" placeholder="Ajouter un commentaire" formControlName="comment" #comment>
-          </form>
-          <img (click)="swipeMenuImage = true" src="assets/camera-outline.svg"/>
+            <div *ngIf="iterable.selectedTask.refused && !mission!.isClosed && isLast" class="divComment">
+              <form [formGroup]="iterable.formGroup" (ngSubmit)="onSubmit(iterable.selectedTask, comment)">
+                <input id="input_{{iterable.selectedTask.id}}" class="inputComment" type="text" placeholder="Ajouter un commentaire" formControlName="comment" #comment>
+              </form>
+              <img (click)="cameraSwipe(supervision.id)" src="assets/camera-outline.svg"/>
+            </div>
         </div>
     </div>
     
@@ -28,19 +28,19 @@
     <div class="partenerComment-container">
       <div *ngIf="!mission!.isClosed">
           <h2>Communiquer avec votre partenaire de chantier</h2>
-          <div *ngFor="let supervision of date.supervisions">
+          <div *ngFor="let supervision of date.supervisions; let isLast = last">
             <comment-suivi  [supervision]="supervision" #commentSuivi></comment-suivi>
             
-          </div>
-          <div class="partenerComment-addPhoto" *ngIf="!!date.supervisions[0]">
-            <span (click)="swipeMenuImage = true">Ajouter une photo : </span>
-            <img class="partenerComment-icon"  (click)="swipeMenuImage = true" src="assets/camera-outline.svg" alt="camera"/>
+            <div class="partenerComment-addPhoto" *ngIf="!!date.supervisions[0] && isLast">
+              <span (click)="swipeMenuImage = true">Ajouter une photo : </span>
+              <img class="partenerComment-icon"  (click)="cameraSwipe(supervision.id)" src="assets/camera-outline.svg" alt="camera"/>
+            </div>
           </div>
       </div>
       <div *ngIf="!mission!.isClosed" class="partenerComment">
         <div  class="divComment">
           <form [formGroup]="formMain" (submit)="onSubmit( null, chantierMain)" #formMainTest>
-            <textarea id="input_general" class="inputComment mainInputComment" (keyup)="textareaSubmit($event, formMainTest)" type="text" placeholder="Ajouter un commentaire" formControlName="commentMain" #chantierMain></textarea>
+            <textarea id="input_general" class="inputComment mainInputComment" (keypress)="textareaSubmit($event, formMainTest)" type="text" placeholder="Ajouter un commentaire" formControlName="commentMain" #chantierMain></textarea>
           </form>
           <!-- <img (click)="swipeMenuImage = true" src="assets/camera.png"/> -->
         </div>
@@ -54,6 +54,6 @@
 </swipeup>
 
 <swipeup [(open)]="swipeMenuImage" #modifyPicture>
-    <li (click)="takePhoto(null)">Accédez à l'appareil photo</li>
-    <li (click)="selectPhoto(null)">Télécharger une image</li>
+    <li (click)="takePhoto()">Accédez à l'appareil photo</li>
+    <li (click)="selectPhoto()">Télécharger une image</li>
 </swipeup>

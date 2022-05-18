@@ -168,6 +168,7 @@ export class SOSPageComponent extends Destroy$ {
   }
 
   checkCompanyProfile(company: Company) {
+    console.log('company', company);
     this.slides.show(company.name, {
       type: "component",
       component: ExtendedProfileComponent,
@@ -177,6 +178,7 @@ export class SOSPageComponent extends Destroy$ {
         component.showView = "ST";
         component.showSwitch = false;
         component.showRecomandation = false;
+        component.showStar = true
       },
     });
   }
