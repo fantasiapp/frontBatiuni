@@ -42,7 +42,7 @@ import { FilterService } from "../services/filter.service";
       </div>
 
     <div class="form-input">
-      <label>Dans un rayon autour de:</label>
+      <label>Dans un rayon autour de</label>
       <ngx-slider [options]="imports.DistanceSliderConfig" [value]="0" [highValue]="1000" formControlName="if_$radius"></ngx-slider>
     </div>
 
@@ -96,7 +96,7 @@ import { FilterService } from "../services/filter.service";
               [value]="true"
               [formControlName]="'2'"
             ></checkbox>
-            <span>Entre 20 et 50 salariées</span>
+            <span>Entre 20 et 50 salariés</span>
           </div>
           <div class="radio-item">
             <checkbox
@@ -118,13 +118,13 @@ import { FilterService } from "../services/filter.service";
       </div>
 
       <div class="form-input space-children-margin">
-        <label>Réorganiser la liste selon</label>
+        <label class="form-title">Réorganiser la liste selon</label>
         <div class="switch-container flex center-cross">
-          <span class="criteria">Annonces déjà vus uniquement</span>
+          <span class="criteria">Annonces déjà vues uniquement</span>
           <switch class="default" formControlName="if_$viewed"></switch>
         </div>
         <div class="switch-container flex center-cross">
-          <span class="criteria">Annonces favoristes uniquement</span>
+          <span class="criteria">Annonces favorites uniquement</span>
           <switch class="default" formControlName="if_$favorite"></switch>
         </div>
         <div class="switch-container flex center-cross">
@@ -132,7 +132,7 @@ import { FilterService } from "../services/filter.service";
           <switch class="default" formControlName="if_$candidate"></switch>
         </div>
         <div class="switch-container flex center-cross">
-          <span class="criteria">Annonces ouverte à contre-proposition</span>
+          <span class="criteria">Annonces ouvertes à une contre-proposition</span>
           <switch class="default" formControlName="if_counterOffer"></switch>
         </div>
         <div class="switch-container flex center-cross">
@@ -149,7 +149,7 @@ import { FilterService } from "../services/filter.service";
         </div>
         <div class="switch-container flex center-cross">
           <span class="criteria"
-            >Date de publication la plus récente à la plus anciennce</span
+            >Date de publication de la plus récente à la plus ancienne</span
           >
           <switch
             class="default"
