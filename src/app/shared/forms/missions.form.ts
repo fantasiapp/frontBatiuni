@@ -69,7 +69,7 @@ import { FilterService } from "../services/filter.service";
         </div>
       </div>
 
-      <label>Réorganiser la liste selon</label>
+      <label class="form-title">Réorganiser la liste selon</label>
       <div class="switch-container flex center-cross">
         <span class="criteria" (click)="isClosed.onChangeCall()"
           >Mission clôturer</span
