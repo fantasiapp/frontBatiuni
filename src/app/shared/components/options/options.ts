@@ -129,6 +129,8 @@ export class OptionsModel extends UIDefaultAccessor<Option[]> {
   }
 
   writeValue(value: Option[]) {
+    if (value == null || value == undefined)
+      value = [];
     const ids = value.map(({id}) => id);
     this.value = filterMap(this.options, (option) => {
       return ids.includes(option.id) ? option : null;

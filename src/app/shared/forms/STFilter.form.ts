@@ -46,10 +46,10 @@ import { FilterService } from "../services/filter.service";
       <ngx-slider [options]="imports.DistanceSliderConfig" [value]="0" [highValue]="1000" formControlName="if_$radius"></ngx-slider>
     </div>
 
-    <!-- <div class="form-input form-spacer">
+    <div class="form-input form-spacer">
       <label>Métier</label>
-      <options [options]="allJobs" formControlName="if_job" #job></options>
-    </div> -->
+      <options [options]="allJobs" formControlName="inList_job"></options>
+    </div>
 
     <div class="form-input form-spacer">
       <label class="form-title">Type</label>
@@ -77,50 +77,40 @@ import { FilterService } from "../services/filter.service";
           <div class="radio-item">
             <checkbox
               class="grow"
-              name="employee-count"
-              onselect="true"
-              [formControlName]="'0'"
-              id="checkbox1"
+              [value]="true"
+              formControlName="0"
             ></checkbox>
             <span>Moins de 10 salariés</span>
           </div>
           <div class="radio-item">
             <checkbox
               class="grow"
-              name="job-type"
-              onselect="true"
+              [value]="true"
               [formControlName]="'1'"
-              checked = "true"
             ></checkbox>
             <span>Entre 11 et 20 salariés</span>
           </div>
           <div class="radio-item">
             <checkbox
               class="grow"
-              name="job-type"
-              onselect="true"
+              [value]="true"
               [formControlName]="'2'"
-              checked = "true"
             ></checkbox>
             <span>Entre 20 et 50 salariées</span>
           </div>
           <div class="radio-item">
             <checkbox
               class="grow"
-              name="job-type"
-              onselect="true"
+              [value]="true"
               [formControlName]="'3'"
-              checked = "true"
             ></checkbox>
             <span>Entre 50 et 100 salariés</span>
           </div>
           <div class="radio-item">
             <checkbox
               class="grow"
-              name="job-type"
-              onselect="true"
+              [value]="true"
               [formControlName]="'4'"
-              checked = "true"
             ></checkbox>
             <span>Plus de 100 salariés</span>
           </div>
@@ -223,6 +213,7 @@ export class STFilterForm extends Filter<Post> {
     
     this.create<{
       // $job: boolean;
+      $jobId: number;
       $manPower1: boolean;
       $manPower2: boolean;
       $favorite: boolean;
@@ -231,10 +222,6 @@ export class STFilterForm extends Filter<Post> {
       $employeeCount: number;
       $radius: number;
     }>([
-      // this.defineComputedProperty('$job', (post) => {
-      //   console.log(post.job)
-      //   return 
-      // }),
       this.defineComputedProperty('$manPower1', (post) => {
         return post.manPower;
       }),
@@ -276,8 +263,7 @@ export class STFilterForm extends Filter<Post> {
       this.onlyIf('$radius', (radius, range) => {
         return radius >= range[0] && radius <= range[1];
       }),
-      this.onlyIf('job', (job, selectedJobs) => {console.log('job',job);
-      console.log(selectedJobs); return true}),
+      this.inList('job', (job) => { return job.id }),
       this.onlyIf('$manPower1', manPower1 => { return manPower1 }),
       this.onlyIf('$manPower2', manPower2 => { return !manPower2 }),
       this.onlyIf('amount', (amount, range) => {
@@ -300,7 +286,7 @@ export class STFilterForm extends Filter<Post> {
       this.sortBy("startDate", () => 1),
     ]);
 
-   
+   console.log(this);
   }
 
 }
