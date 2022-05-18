@@ -2,8 +2,10 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  EventEmitter,
   Input,
   OnInit,
+  Output,
   ViewChild,
 } from "@angular/core";
 import * as moment from "moment";
@@ -148,10 +150,12 @@ export class HorizontaleCalendar implements OnInit {
         .format("D,dddd,YYYY-MM-DD")
         .split(",");
       const selected = dayFormated[2] == currentDateFormated[2];
+        // status = selected ? 'aujourdhui' : ''
       days.push({
         day: dayFormated,
-        status: "",
+        status: '',
         selected: selected,
+        today: selected
       });
     }
     this.selectedDay = days;
@@ -367,5 +371,11 @@ export class HorizontaleCalendar implements OnInit {
         item.status = "";
       }
     });
+  }
+
+  @Output() open: EventEmitter<any> = new EventEmitter();
+
+  openMission(mission: Mission){
+    this.open.emit(mission)
   }
 }
