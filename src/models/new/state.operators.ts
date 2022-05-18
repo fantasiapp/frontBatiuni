@@ -95,6 +95,7 @@ namespace mutable {
 
     //Add children
     const ids = Object.keys(values).map(id => +id);
+    console.log('ids :', ids)
     
     //add to parent
     const parentObject = draft[parent]?.[parentId],

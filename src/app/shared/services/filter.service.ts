@@ -29,7 +29,6 @@ export class FilterService {
       console.warn(`Unknown filter ${name}.`);
       return items;
     }
-
     return filter.filter(items, providers);
   }
 }

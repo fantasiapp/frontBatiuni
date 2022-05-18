@@ -53,8 +53,14 @@ interface Every<T, ComputedProperties> {
   items: Step<T, ComputedProperties>[];
 };
 
+interface InList<T, ComputedProperties, Key extends KeyOf<T, ComputedProperties> = KeyOf<T, ComputedProperties>> {
+  name: Key;
+  type: 'inList';
+  transform: (t: any, ...args: any[]) => any;
+};
+
 export type Step<T = any, ComputedProperties = any> =
-  Compute<T, ComputedProperties> | Match<T, ComputedProperties> | If<T, ComputedProperties> | Sort<T, ComputedProperties> | Some<T, ComputedProperties> | Every<T, ComputedProperties> | Search<T, ComputedProperties>;
+  Compute<T, ComputedProperties> | Match<T, ComputedProperties> | If<T, ComputedProperties> | Sort<T, ComputedProperties> | Some<T, ComputedProperties> | Every<T, ComputedProperties> | Search<T, ComputedProperties> | InList<T, ComputedProperties>;
 
 export class AugmentedType<T extends {id: number}, ComputedProperties> {
   private cache: Record<Partial<ComputedProperties>> = {};
@@ -144,6 +150,14 @@ export abstract class Filter<T extends {id: number}> extends Destroy$ {
     }
   }
 
+  protected inList<ComputedProperties, K extends KeyOf<T, ComputedProperties>>(name: K, transform: (u: any) => any): InList<T, ComputedProperties> {
+    return { 
+      name, 
+      type: 'inList', 
+      transform};
+  }
+
+
   private createControl<ComputedProperties>(step: Step<T, ComputedProperties>) {
     if ( step.type == 'every' || step.type == 'some' ) {
       const array =  new FormArray([]);
@@ -163,7 +177,7 @@ export abstract class Filter<T extends {id: number}> extends Destroy$ {
   }
 
   ngAfterViewInit() {
-    this.form.valueChanges.pipe(debounceTime(0), takeUntil(this.destroy$)).subscribe(() => {
+    this.form.valueChanges.pipe(debounceTime(0), takeUntil(this.destroy$)).subscribe((value) => {
       this.update();
     });
   }
@@ -228,7 +242,18 @@ export abstract class Filter<T extends {id: number}> extends Destroy$ {
         }
 
         return [...lastValue];
-              
+
+      case 'inList':
+        if (controlValue == null || controlValue == "") {
+          return input;
+        }
+
+        return input.filter(item => {
+          return controlValue.some((value: any) => {
+            return this.type.getValue(item, step) == step.transform(value);
+          })
+        });
+
       default:
         break;
     }
@@ -244,9 +269,9 @@ export abstract class Filter<T extends {id: number}> extends Destroy$ {
     const controls = this.form.controls;
     let input = this.input;
     if ( !input.length ) return [];
-    
     for ( const step of this.pipeline ) {
       const name = step.type + '_' + (step.name as string);
+      // console.log(name);
       input = this.evaluateStep(input, controls[name], step);
     }
     this.updateEvent.emit(input);

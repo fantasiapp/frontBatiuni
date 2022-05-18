@@ -14,7 +14,7 @@ import { SlidemenuService } from "../slidemenu/slidemenu.component";
     <div *ngIf="(profile$ | cast | async) as profile" class="container flex row center-cross space-around">
       <div class="presentation">
         <profile-image [profile]="profile"></profile-image>
-        <stars value="4" disabled></stars>
+        <stars [value]="profile.company.starsST" disabled></stars>
       </div>
       <div class="description grow flex column space-between">
         <span>{{profile.company.name}}</span>
