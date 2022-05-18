@@ -19,6 +19,7 @@ import { ImageGenerator } from "../../services/image-generator.service";
 import { SafeResourceUrl } from "@angular/platform-browser";
 import { update } from "src/models/new/state.operators";
 import { SingleCache } from "../../services/SingleCache";
+import { delay } from "../../common/functions";
 
 export interface NotificationDisplay {
   id: number;
@@ -62,44 +63,59 @@ export class Notifications {
 
   get today(): NotificationDisplay[] {
     let todayDate = new Date(Date.now());
-    const today: NotificationDisplay[] = this.notificationsDisplay.filter(
+    // console.log("yoooooooooooooooooooo ")
+    const todayConst: NotificationDisplay[] = this.notificationsDisplay.filter(
       (notif) =>
         moment(moment(todayDate).format("L")).isSame(
           moment(notif.date).format("L")
         )
+
     );
-    return today.sort((not1:NotificationDisplay, not2:NotificationDisplay) => not1.date < not2.date ? 1 : -1)
+    console.log("result of today ", todayConst.sort((not1:NotificationDisplay, not2:NotificationDisplay) => not1.date < not2.date ? 1 : -1))
+    return todayConst.sort((not1:NotificationDisplay, not2:NotificationDisplay) => not1.date < not2.date ? 1 : -1)
   }
 
   get month(): NotificationDisplay[] {
-    let todayDate = new Date(Date.now());
-    const month: NotificationDisplay[] = this.notificationsDisplay.filter(
+    let monthDate = new Date(Date.now());
+    console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+    const monthConst: NotificationDisplay[] = this.notificationsDisplay.filter(
       (notif) =>
-        moment(moment(todayDate).format("L")).isAfter(
+        moment(moment(monthDate).format("L")).isAfter(
           moment(notif.date).format("L")
         )
     );
-    return month.sort((not1:NotificationDisplay, not2:NotificationDisplay) => not1.date < not2.date ? 1 : -1)
+    console.log("result of month ", monthConst.sort((not1:NotificationDisplay, not2:NotificationDisplay) => not1.date < not2.date ? 1 : -1))
+    return monthConst.sort((not1:NotificationDisplay, not2:NotificationDisplay) => not1.date < not2.date ? 1 : -1)
   }
 
   get timerToday(): any[] {
-    let timerToday = [];
-    for (let i = 0; i < this.today.length; i++) {
-      timerToday.push(
+    let Today = [];
+    console.log("timerToday")
+    let max = this.today.length
+    console.log("max", max)
+    for (let i = 0; i < max; i++) {
+      Today.push(
         moment(moment(this.today[i].date)).startOf("minute").fromNow()
       );
+      console.log("i", i)
     }
-    return timerToday;
+    console.log("Today", Today)
+    return Today;
   }
 
   get timerMonth(): any[] {
-    let timerMonth = [];
-    for (let i = 0; i < this.today.length; i++) {
-      timerMonth.push(
-        moment(moment(this.timerMonth[i].date)).startOf("minute").fromNow()
+    let Month = [];
+    console.log("timerMonth")
+    let max = this.month.length
+    console.log("max_month", max)
+    for (let j = 0; j < max; j++) {
+      Month.push(
+        moment(moment(this.month[j].date)).startOf("minute").fromNow()
       );
+      console.log("i_month", j)
     }
-    return timerMonth;
+    console.log("Month", Month)
+    return Month;
   }
 
   ngOnInit() {

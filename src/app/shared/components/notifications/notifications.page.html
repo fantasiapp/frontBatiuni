@@ -1,23 +1,23 @@
 <section>
-  <span class="text-emphasis">Aujourd'hui</span>
-  <div *ngFor="let notification of today;let index = index" class="todays-notifications flex">
+  <span *ngIf="today.length" class="text-emphasis">Aujourd'hui</span>
+  <div *ngFor="let notification of today;let indexToday = index" class="todays-notifications flex">
     <div class="offer-logo flex center">
       <img [src]="notification.src" />
     </div>
     <span class="infos">
-      {{notification.text}} <span class="timer">{{timerToday[index]}}</span>
+      {{notification.text}} <span class="timer">{{timerToday[indexToday]}}</span>
     </span>
   </div>
 </section>
 
 <section>
   <span *ngIf="month.length" class="text-emphasis">Ce mois</span>
-  <div *ngFor="let notification of month; let index = index" class="monthly-notifications flex">
+  <div *ngFor="let notification of month; let indexHtml = index" class="monthly-notifications flex">
     <div class="offer-logo flex center">
       <img [src]="notification.src" />
     </div>
     <span class="infos">
-      {{notification.text}} <span class="timer">{{timerMonth[index]}}</span>
+      {{notification.text}} <span class="timer">{{timerMonth[indexHtml]}}</span>
     </span>
   </div>
 </section>

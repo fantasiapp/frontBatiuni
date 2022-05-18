@@ -18,6 +18,7 @@ import { catchError } from "rxjs/operators";
 import { Logout } from "src/models/auth/auth.actions";
 import { delay } from "./shared/common/functions";
 import { waitForAsync } from "@angular/core/testing";
+import { NotifService } from "./shared/services/notif.service";
 
 @Component({
   selector: "app-root",
@@ -38,7 +39,7 @@ import { waitForAsync } from "@angular/core/testing";
   ],
 })
 export class AppComponent extends Destroy$ {
-  constructor(private store: Store, private mobile: Mobile) {
+  constructor(private store: Store, private mobile: Mobile, private notifService: NotifService) {
     super();
     this.mobile.init();
   }
@@ -69,7 +70,9 @@ export class AppComponent extends Destroy$ {
       this.readyToUpdate = false
       this.getUserData()
       await delay(20000)
-      this.readyToUpdate = true
+    this.notifService.checkNotif()
+    this.notifService.emitNotifChangeEvent()
+    this.readyToUpdate = true
     }
   }
 
