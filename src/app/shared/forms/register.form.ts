@@ -159,7 +159,7 @@ import { GetCompanies } from "src/models/new/search/search.actions";
         <div class="form-input parrain">
           <label>Code parrain ?</label>
           <input
-            type="password"
+            type="text"
             class="form-element"
             formControlName="proposer"
           />
@@ -306,6 +306,7 @@ export class RegisterForm extends Destroy$ {
   );
 
   onSubmit(f: any) {
+    console.log("onSubmit", !this.pending, this.registerForm)
     if (!this.pending) {
       this.pending = true;
       this.store
