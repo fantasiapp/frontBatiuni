@@ -55,11 +55,11 @@ import { FilterService } from "../services/filter.service";
       <label class="form-title">Type</label>
         <div class="flex row radio-container">
           <div class="radio-item">
-            <radiobox class="grow" onselect="true" name="job-type" formControlName="if_$manPower1" #manPower1></radiobox>
+            <radiobox class="grow" hostName=manPower onselect="true" name="job-type" formControlName="if_$manPower" #manPower1></radiobox>
             <span (click)="manPower1.onChange($event)">Main d'oeuvre</span>
           </div>
           <div class="radio-item">
-            <radiobox class="grow" onselect="false" name="job-type" formControlName="if_$manPower2" #manPower2></radiobox>
+            <radiobox class="grow" hostName=manPower onselect="false" name="job-type" formControlName="if_$manPower" #manPower2></radiobox>
             <span (click)="manPower2.onChange($event)">Fourniture et pose</span>
           </div>
         </div>
@@ -217,8 +217,7 @@ export class STFilterForm extends Filter<Post> {
     this.create<{
       // $job: boolean;
       $jobId: number;
-      $manPower1: boolean;
-      $manPower2: boolean;
+      $manPower: boolean;
       $favorite: boolean;
       $viewed: boolean;
       $candidate: boolean;
@@ -226,10 +225,7 @@ export class STFilterForm extends Filter<Post> {
       $radius: number;
       $isBoosted: boolean;
     }>([
-      this.defineComputedProperty('$manPower1', (post) => {
-        return post.manPower;
-      }),
-      this.defineComputedProperty('$manPower2', (post) => {
+      this.defineComputedProperty('$manPower', (post) => {
         return post.manPower;
       }),
       this.defineComputedProperty('$employeeCount', (post) => {
@@ -277,8 +273,7 @@ export class STFilterForm extends Filter<Post> {
         return radius >= range[0] && radius <= range[1];
       }),
       this.inList('job', (job) => { return job.id }),
-      this.onlyIf('$manPower1', manPower1 => { return manPower1 }),
-      this.onlyIf('$manPower2', manPower2 => { return !manPower2 }),
+      this.onlyIf('$manPower', manPower => { console.log(manPower); return manPower }),
       this.onlyIf('amount', (amount, range) => {
         return amount >= range[0] && amount <= range[1];
       }),
