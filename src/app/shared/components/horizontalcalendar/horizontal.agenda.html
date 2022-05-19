@@ -35,7 +35,7 @@
         </li>
     </ol>
     <div class="topthing position-absolute">
-        <div *ngFor="let card of currentCardCalendars" class="card-container" 
+        <div *ngFor="let card of currentCardCalendars"  class="card-container" 
         [style.height.px]="card.cardHeight" 
         [style.top.px]="card.cardFromTop" [@inOutAnimation]="{params: {currHeight: card.cardHeight}}"
         (click)="openMission(card.mission)">

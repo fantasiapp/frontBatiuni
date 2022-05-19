@@ -37,10 +37,23 @@ export class NotificationAgendaComponent {
   }
 
 
-  deleted(b: boolean, e: Event) {
+  deleted(b: boolean, deleting: boolean) {
     this.field = "date";
 
     this.store.dispatch(new ValidateMissionDate(this.card.mission.id, this.field, b, this.date)).pipe().subscribe(() => {
+      if(deleting){
+        this.card.change = { 
+          validate: this.card.change.validate,
+          deleted: b,
+          schedule: this.card.change.schedule
+        }
+      } else {
+        this.card.change = { 
+          validate: b,
+          deleted: false,
+          schedule: this.card.change.schedule
+        }
+      }
       this.cardUpdate.emit([b, this.card.change]);
     });
   }
