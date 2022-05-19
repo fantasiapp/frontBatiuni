@@ -40,7 +40,8 @@
       <div *ngIf="!mission!.isClosed" class="partenerComment">
         <div  class="divComment">
           <form [formGroup]="formMain" (submit)="onSubmit( null, chantierMain)" #formMainTest>
-            <textarea id="input_general" class="inputComment mainInputComment" (keypress)="textareaSubmit($event, formMainTest)" type="text" placeholder="Ajouter un commentaire" formControlName="commentMain" #chantierMain></textarea>
+            <textarea id="input_general" class="inputComment mainInputComment" (keyup)="textareaSubmit($event, formMainTest)" type="text" placeholder="Ajouter un commentaire" formControlName="commentMain" #chantierMain></textarea>
+            <input type="image" src="assets/send-outline.svg" (click)="textareaSubmit(13, formMainTest)" style="height: 1.5rem; width: 1.5rem;">
           </form>
           <!-- <img (click)="swipeMenuImage = true" src="assets/camera.png"/> -->
         </div>

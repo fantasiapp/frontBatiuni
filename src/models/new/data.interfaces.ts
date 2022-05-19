@@ -5,7 +5,7 @@ export type Record<T = any> = {
 export type DataTypes = 'Job' | 'Label' | 'Role' | 'UserProfile' | 'Company' |
   'Post' | 'DetailedPost' | 'Supervision' | 'Disponibility' | 'File' |
   'JobForCompany' | 'LabelForCompany' | 'Candidate' | 'Mission' |
-  'Establishments'| 'DatePost' | 'Notification' | 'FileSupervision'; //..
+  'Establishments'| 'DatePost' | 'Notification' ; //..
 
 //just to indicate
 export type Ref<T> = number;
@@ -85,7 +85,7 @@ export interface Supervision {
   companyId: number;
   date: string;
   comment: string;
-  files: Ref<FileSupervision>[];
+  files: Ref<File>[];
   Supervisions: Ref<Supervision>[];
 }
 
@@ -104,10 +104,6 @@ export interface File {
   timestamp: number;
   content: string;
 };
-
-export type FileSupervision = File & {
-  supervisionParent: Ref<Supervision>
-}
 
 export interface JobForCompany {
   id: Ref<JobForCompany>;
@@ -251,7 +247,6 @@ export type Interface<K extends DataTypes> =
   K extends 'DatePost' ? PostDate :
   K extends 'Establishments' ? Establishement :
   K extends 'Notification' ? Notification :
-  K extends 'FileSupervision' ? FileSupervision :
   K;
 
 export type Profile = {
