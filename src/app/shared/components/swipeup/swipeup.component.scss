@@ -74,12 +74,11 @@ $swipeup-height: 80vh;
   }
 }
 
-.list::ng-deep li{
-  background-color: #F4F4F4;
+ul::ng-deep > li{
+  // background-color: #F4F4F4;
   padding-bottom: 0.5rem;
   padding-top: 0.5rem;
   padding-inline: 2rem;
-
 }
 
 .content {

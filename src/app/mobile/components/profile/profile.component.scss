@@ -43,7 +43,14 @@ header {
 
 }
 
-li.spacer {
+swipeup li.spacer {
   height: 2rem;
   background-color: white;
+}
+
+swipeup li{
+  background-color: #F4F4F4;
+  // padding-bottom: 0.5rem;
+  // padding-top: 0.5rem;
+  // padding-inline: 2rem;
 }

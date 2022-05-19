@@ -285,9 +285,7 @@ export class HorizontaleCalendar implements OnInit {
       datesId = Object.keys(mission.dates).map((key) => +key as number);
     else datesId = mission.dates;
 
-    let dates = this.store.selectSnapshot(
-      DataQueries.getMany("DatePost", datesId)
-    );
+    let dates = this.store.selectSnapshot(DataQueries.getMany("DatePost", datesId));
     for (const datePost of dates) {
       if (datePost.date == date) {
         isChange.validate = datePost.validated;
@@ -295,37 +293,33 @@ export class HorizontaleCalendar implements OnInit {
       }
     }
     if (!isChange.deleted)
-      isChange.schedule =
-        !!mission.hourlyEndChange || !!mission.hourlyStartChange;
+      isChange.schedule = !!mission.hourlyEndChange || !!mission.hourlyStartChange;
 
     return isChange;
   }
 
   onCardUpdate(state: any, card: calendarItem) {
-    let mission = this.store.selectSnapshot(
-      DataQueries.getById("Mission", card.mission.id)
-    );
+    const choice = state[0], cardChange = state[1]
+    let mission = this.store.selectSnapshot(DataQueries.getById("Mission", card.mission.id));
     let heightTop = this.calculator(mission!.hourlyStart, mission!.hourlyEnd);
 
     card.mission = mission!;
     card.cardFromTop = heightTop[0];
     card.cardHeight = heightTop[1];
-    card.change = this.dateChange(mission!, card.date);
+    card.change = cardChange
 
-    if (state[0] && state[1].deleted) {
+    if (cardChange.deleted || (!card.change.deleted && !card.change.validate)) {
       let newCardCalendars: calendarItem[] = [];
-      for (let curCard of this.currentCardCalendars) {
+      for (const curCard of this.currentCardCalendars) {
         if (curCard.mission.id != card.mission.id || curCard.date != card.date)
           newCardCalendars.push(curCard);
       }
       this.currentCardCalendars = newCardCalendars;
-    } else if (state[0] == false && state[1].deleted) {
-      card.change.deleted = false;
     }
 
-    if(state[0] && !state[1].validate){
-      card.change.validate = true
-    }
+    // if(choice && !cardChange.validate){
+    //   card.change.validate = true
+    // }
 
     this.cd.markForCheck();
   }
