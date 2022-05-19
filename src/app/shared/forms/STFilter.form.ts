@@ -182,6 +182,9 @@ export class STFilterForm extends Filter<Post> {
 
   @Input("filter") name: string = "ST";
 
+  @Input()
+  time: number = 0;
+
   @ViewChildren(UISwitchComponent)
   switches!: QueryList<UISwitchComponent>;
 
@@ -221,6 +224,7 @@ export class STFilterForm extends Filter<Post> {
       $candidate: boolean;
       $employeeCount: number;
       $radius: number;
+      $isBoosted: boolean;
     }>([
       this.defineComputedProperty('$manPower1', (post) => {
         return post.manPower;
@@ -257,7 +261,16 @@ export class STFilterForm extends Filter<Post> {
         let distance = 6371*Math.acos(Math.sin(userLatitude)*Math.sin(postLatitude) + Math.cos(userLatitude)*Math.cos(postLatitude)*Math.cos(postLongitude-userLongitude))
         return distance ;
       }),
-
+      this.defineComputedProperty('$isBoosted', (post) => {
+        console.log(post, this.time)
+        console.log(post.boostTimestamp > this.time)
+        return post.boostTimestamp > this.time;
+      }),
+      this.sortBy("$isBoosted", (boosted1, boosted2) => {
+        let v1 = boosted1 ? 1 : 0;
+        let v2 = boosted2 ? 1 : 0; 
+        return v2 - v1
+      }, true),
       this.match('dueDate'),  
       this.search('address'),
       this.onlyIf('$radius', (radius, range) => {
