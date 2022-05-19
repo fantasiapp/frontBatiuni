@@ -1,4 +1,4 @@
-<page-header name="SOS" [(activeView)]="activeView" (filterClicked)="openSOSFilterMenu = true">
+<page-header name="SOS" [(activeView)]="activeView" (filterClicked)="openSOSFilterMenu = true" [filterOpen]="openSOSFilterMenu">
   <span tab_0>Vue liste</span>
   <span tab_1>Carte</span>
 </page-header>
@@ -7,15 +7,14 @@
   <ng-container [ngSwitch]="activeView">
     <ng-container *ngSwitchCase="0">
       <sos-card 
-        (click)="checkCompanyProfile(company)" 
-        *ngFor="let company of userAvailableCompanies; 
-        let i = index" 
-        [profile]="{company}" 
-        [availability]="availabilities[i]">
+        (click)="checkCompanyProfile(companyAvailable.company)" 
+        *ngFor="let companyAvailable of availableCompanies" 
+        [profile]="{company: companyAvailable.company}" 
+        [availability]="companyAvailable.availability">
       </sos-card>
     </ng-container>
     <mapbox-batiuni 
-      [companies]="userAvailableCompanies" 
+      [companies]="companies" 
       [availabilities]="availabilities"
       (companyClick)="checkCompanyProfile($event)"
       class="space-children-margin" 

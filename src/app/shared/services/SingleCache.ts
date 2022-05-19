@@ -8,7 +8,7 @@ export class SingleCache {
     public ob: CacheObject = {}
 
     public static getInstance(): SingleCache {
-        return this.instance
+      return this.instance
     }
 
     public static setCache(object: Object): void {

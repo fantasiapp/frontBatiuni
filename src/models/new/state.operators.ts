@@ -91,11 +91,9 @@ namespace mutable {
   //configure to only accept simple types
   //can create new items and add them to parent
   export function addSimpleChildren<K extends DataTypes>(draft: any, parent: DataTypes, parentId: number, child: K, values: Record<any>, uniqueBy?: keyof Interface<K>) {
-    console.log('test', child, values, uniqueBy)
 
     //Add children
     const ids = Object.keys(values).map(id => +id);
-    console.log('ids :', ids)
     
     //add to parent
     const parentObject = draft[parent]?.[parentId],

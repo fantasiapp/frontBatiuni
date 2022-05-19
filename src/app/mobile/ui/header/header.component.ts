@@ -7,7 +7,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from 
     <h1 *ngIf="!customHeader">{{name}}</h1>
     <div *ngIf="!customHeader; else headerBar" class="pick flex row">
       <searchbar class="grow"></searchbar>
-      <img src="assets/filterWhite.svg" (click)="filterClicked.emit()"/>
+      <img [src]="filterOpen ? 'assets/filterBlue.svg':'assets/filterWhite.svg'" (click)="filterClicked.emit(); filterOpen = true;" id ='filterButton'/>
     </div>
     <ng-template #headerBar>
       <ng-content select="[headerBar]"></ng-content>
@@ -37,9 +37,12 @@ export class HeaderComponent {
   @Input()
   customHeader: boolean = false;
 
+  @Input()
+  filterOpen: boolean = false;
 
   @Output()
   filterClicked = new EventEmitter<never>();
+
 
   @Input()
   name: string = '';
