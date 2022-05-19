@@ -24,6 +24,10 @@ import {
 } from "src/models/new/data.mapper";
 import { DataQueries, Query, QueryAll } from "src/models/new/data.state";
 
+interface companyAvailability {
+  company: Company,
+  availability: MarkerType
+}
 
 @Component({
   selector: "sos-page",
@@ -39,6 +43,8 @@ export class SOSPageComponent extends Destroy$ {
   userAvailableCompanies: Company[] = [];
   allAvailableCompanies: Company[] = [];
   availabilities: MarkerType[] = [];
+
+  companyAvailability: companyAvailability[] = []
 
   @QueryAll("Company")
   companies$!: Observable<Company[]>;
@@ -65,7 +71,7 @@ export class SOSPageComponent extends Destroy$ {
         for (const day of ownAvailabilities) {
           if (day.date == now) {
             this.allAvailableCompanies.push(company);
-            this.availabilities.push(nameToAvailability(day.nature as any));
+            // this.availabilities.push(nameToAvailability(day.nature as any));
             continue;
           }
         } 
@@ -83,10 +89,29 @@ export class SOSPageComponent extends Destroy$ {
     this.selectCompany(filter);
   };
 
+  isAvailableCompany(company: Company){
+    const now = new Date().toISOString().slice(0, 10);
+    const ownAvailabilities = this.store.selectSnapshot(DataQueries.getMany("Disponibility", company.availabilities));
+        for (const day of ownAvailabilities) {
+          if (day.date == now) {
+            // this.availabilities.push(nameToAvailability(day.nature as any));
+            this.companyAvailability.push({
+              availability: nameToAvailability(day.nature as any),
+              company: company
+            })
+            continue;
+          }
+        } 
+  }
+
   selectCompany(filter: any) {
     this.userAvailableCompanies = [];
+    this.companyAvailability = []
     if (filter == null) { 
       this.userAvailableCompanies = this.allAvailableCompanies;
+      for (const availablecomp of this.allAvailableCompanies) {
+        this.isAvailableCompany(availablecomp)
+      }
     } else {
       // Trie les posts selon leur distance de levenshtein
       let levenshteinDist: any = [];
@@ -162,6 +187,7 @@ export class SOSPageComponent extends Destroy$ {
 
         if (isNotRightAmount || isNotRightRadius || isNotIncludedJob || isNotDisponible) {continue}
         this.userAvailableCompanies.push(company);
+        this.isAvailableCompany(company)
       }
     }
     this.cd.markForCheck();
