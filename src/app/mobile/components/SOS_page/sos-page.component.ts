@@ -24,6 +24,10 @@ import {
 } from "src/models/new/data.mapper";
 import { DataQueries, Query, QueryAll } from "src/models/new/data.state";
 
+interface availableCompanies {
+  company: Company,
+  availability: MarkerType
+}
 
 @Component({
   selector: "sos-page",
@@ -36,8 +40,9 @@ export class SOSPageComponent extends Destroy$ {
 
   activeView: number = 0;
   openSOSFilterMenu: boolean = false;
-  userAvailableCompanies: Company[] = [];
   allAvailableCompanies: Company[] = [];
+  availableCompanies: availableCompanies[] = []
+  companies: Company[] = [];
   availabilities: MarkerType[] = [];
 
   @QueryAll("Company")
@@ -65,7 +70,6 @@ export class SOSPageComponent extends Destroy$ {
         for (const day of ownAvailabilities) {
           if (day.date == now) {
             this.allAvailableCompanies.push(company);
-            this.availabilities.push(nameToAvailability(day.nature as any));
             continue;
           }
         } 
@@ -83,10 +87,26 @@ export class SOSPageComponent extends Destroy$ {
     this.selectCompany(filter);
   };
 
+  isCompanyAvailable(company: Company){
+    const now = new Date().toISOString().slice(0, 10);
+    const ownAvailabilities = this.store.selectSnapshot(DataQueries.getMany("Disponibility", company.availabilities));
+    for (const day of ownAvailabilities) {
+      if (day.date == now) {
+        this.availableCompanies.push({
+          company: company,
+          availability: nameToAvailability(day.nature as any)
+        })
+        continue;
+      }
+    } 
+  }
+
   selectCompany(filter: any) {
-    this.userAvailableCompanies = [];
+    this.availableCompanies = []
     if (filter == null) { 
-      this.userAvailableCompanies = this.allAvailableCompanies;
+      for (const company of this.allAvailableCompanies) {
+        this.isCompanyAvailable(company)
+      }
     } else {
       // Trie les posts selon leur distance de levenshtein
       let levenshteinDist: any = [];
@@ -105,7 +125,6 @@ export class SOSPageComponent extends Destroy$ {
 
       // Trie les companies selon leurs notes
       if (filter.sortNotation === true) {this.allAvailableCompanies.sort((a: any, b: any) => b['starsST'] - a['starsST'])} 
-
 
       // Trie les companies les plus complètes
       if (filter.sortFullProfils === true) {
@@ -161,9 +180,11 @@ export class SOSPageComponent extends Destroy$ {
       
 
         if (isNotRightAmount || isNotRightRadius || isNotIncludedJob || isNotDisponible) {continue}
-        this.userAvailableCompanies.push(company);
+        this.isCompanyAvailable(company)
       }
     }
+    this.companies = this.availableCompanies.map(companyAvailable => companyAvailable.company);
+    this.availabilities = this.availableCompanies.map(companyAvailable => companyAvailable.availability);
     this.cd.markForCheck();
   }
 
