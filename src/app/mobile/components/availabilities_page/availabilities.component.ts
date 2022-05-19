@@ -41,13 +41,6 @@ export class AvailabilitiesComponent extends Destroy$ {
       this.submit(this.calendar);
     }
   }, {
-    name: 'Pas disponible',
-    class: 'pas-disponible',
-    click: () => {
-      this.setCalendarDayState('unavailable');
-      this.submit(this.calendar);
-    }
-  }, {
     name: 'Non renseigné',
     class: 'non-renseigne',
     click: () => {
