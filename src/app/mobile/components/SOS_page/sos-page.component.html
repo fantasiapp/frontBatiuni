@@ -7,11 +7,10 @@
   <ng-container [ngSwitch]="activeView">
     <ng-container *ngSwitchCase="0">
       <sos-card 
-        (click)="checkCompanyProfile(company)" 
-        *ngFor="let company of userAvailableCompanies; 
-        let i = index" 
-        [profile]="{company}" 
-        [availability]="availabilities[i]">
+        (click)="checkCompanyProfile(companyAvailable.company)" 
+        *ngFor="let companyAvailable of companyAvailability" 
+        [profile]="{company: companyAvailable.company}" 
+        [availability]="companyAvailable.availability">
       </sos-card>
     </ng-container>
     <mapbox-batiuni 
