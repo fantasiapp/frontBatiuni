@@ -31,9 +31,9 @@
           <div *ngFor="let supervision of date.supervisions; let isLast = last">
             <comment-suivi  [supervision]="supervision" #commentSuivi></comment-suivi>
             
-            <div class="partenerComment-addPhoto" *ngIf="!!date.supervisions[0] && isLast">
-              <span (click)="swipeMenuImage = true">Ajouter une photo : </span>
-              <img class="partenerComment-icon"  (click)="cameraSwipe(supervision.id)" src="assets/camera-outline.svg" alt="camera"/>
+            <div class="partenerComment-addPhoto" *ngIf="!!date.supervisions[0] && isLast" (click)="cameraSwipe(supervision.id)">
+              <span>Ajouter une photo : </span>
+              <img class="partenerComment-icon"   src="assets/camera-outline.svg" alt="camera"/>
             </div>
           </div>
       </div>
@@ -41,7 +41,7 @@
         <div  class="divComment">
           <form [formGroup]="formMain" (submit)="onSubmit( null, chantierMain)" #formMainTest>
             <textarea id="input_general" class="inputComment mainInputComment" (keyup)="textareaSubmit($event, formMainTest)" type="text" placeholder="Ajouter un commentaire" formControlName="commentMain" #chantierMain></textarea>
-            <input type="image" src="assets/send-outline.svg" (click)="textareaSubmit(13, formMainTest)" style="height: 1.5rem; width: 1.5rem;">
+            <input type="image" src="assets/send-outline.svg" (click)="textareaSubmit(13, formMainTest)" style="height: 1.5rem; width: 1.5rem">
           </form>
           <!-- <img (click)="swipeMenuImage = true" src="assets/camera.png"/> -->
         </div>

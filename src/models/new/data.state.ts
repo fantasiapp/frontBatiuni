@@ -303,16 +303,9 @@ export class DataState {
         let id = response.supervisionId
         delete response.supervisionId;
         console.log("response", response)
-        // response[parseInt(key[0])].pop(5)
-        response[parseInt(key[0])].push('')
-        // let name = response[parseInt(key[0])][1]
-        // console.log('name :', name)
+        response[parseInt(key[0])].push(picture.imageBase64)
 
-
-        // let id = response[parseInt(key[0])][6]
-
-
-        ctx.setState(compose(addSimpleChildren("Supervision", id, "File", response, 'id')))
+        ctx.setState(compose(addComplexChildren("Supervision", id, "File", response)))
       })
     );
   }

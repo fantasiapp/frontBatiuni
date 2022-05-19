@@ -90,14 +90,14 @@ export class SuiviComments {
 
   ngAfterContentInit(): void {
     this.images = []
-    for (let file in this.supervision.files) {
-      if (SingleCache.checkValueInCache("supervisionImage" + this.supervision.files[0].toString())) {
-        this.images.push(SingleCache.getValueByName("supervisionImage" + this.supervision.files[0].toString()))
+    for (let file of this.supervision.files) {
+      if (SingleCache.checkValueInCache("supervisionImage" + file.toString())) {
+        this.images.push(SingleCache.getValueByName("supervisionImage" + file.toString()))
       }
       else {
-        this.downloader.downloadFile(this.supervision.files[file]).subscribe((image) => {
+        this.downloader.downloadFile(file).subscribe((image) => {
           this.images.push(this.downloader.toSecureBase64(image));
-          SingleCache.setValueByName("supervisionImage" + this.supervision.files[0].toString(), this.downloader.toSecureBase64(image))
+          SingleCache.setValueByName("supervisionImage" + file.toString(), this.downloader.toSecureBase64(image))
           this.cd.markForCheck();
           });
       }
