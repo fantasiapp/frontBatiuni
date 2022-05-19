@@ -7,7 +7,7 @@
       [tabs]="view == 'PME' ? 3 : 2"
       [(activeView)]="activeView"
       (filterClicked)="openAdFilterMenu = true"
-      [filterOpen]="openAdFilterMenu"
+      [filterOpen]="filterOn"
     >
       <span tab_0>{{ view == "PME" ? "Brouillon" : "Vue liste" }}</span>
       <span tab_1>{{ view == "PME" ? "En ligne" : "Carte" }}</span>
