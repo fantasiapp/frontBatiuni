@@ -62,16 +62,16 @@ details summary::-webkit-details-marker {
   color: $secondaryBackground;
 }
 
-.list {
-
-}
-
 .red {
   filter: invert(24%) sepia(89%) saturate(7468%) hue-rotate(360deg) brightness(104%) contrast(123%);
 }
 
 .green {
   filter: invert(74%) sepia(69%) saturate(5734%) hue-rotate(85deg) brightness(116%) contrast(131%);
+}
+
+form {
+  padding-inline: 2rem;
 }
 
 .form-input > textarea {
