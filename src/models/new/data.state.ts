@@ -721,14 +721,8 @@ export class DataState {
             this.info.show("info", "La mission est mise à jour", 3000)
           );
           delete response[application.action];
-          ctx.setState(
-            addComplexChildren(
-              "Company",
-              profile.company.id,
-              "Mission",
-              response
-            )
-          );
+
+          ctx.setState(addComplexChildren("Company",profile.company.id,"Mission",response));
         }
       })
     );
