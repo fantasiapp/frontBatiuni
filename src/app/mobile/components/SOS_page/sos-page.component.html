@@ -8,13 +8,13 @@
     <ng-container *ngSwitchCase="0">
       <sos-card 
         (click)="checkCompanyProfile(companyAvailable.company)" 
-        *ngFor="let companyAvailable of companyAvailability" 
+        *ngFor="let companyAvailable of availableCompanies" 
         [profile]="{company: companyAvailable.company}" 
         [availability]="companyAvailable.availability">
       </sos-card>
     </ng-container>
     <mapbox-batiuni 
-      [companies]="userAvailableCompanies" 
+      [companies]="companies" 
       [availabilities]="availabilities"
       (companyClick)="checkCompanyProfile($event)"
       class="space-children-margin" 
