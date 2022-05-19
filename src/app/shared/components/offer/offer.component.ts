@@ -42,7 +42,7 @@ export class OfferComponent {
 
   @Input() view: "ST" | "PME" = "PME";
 
-  @Input() time: number = 0;
+  @Input() time: number = 8640000000000000;
 
   @Select(DataQueries.currentUser)
   user$!: Observable<User>;
