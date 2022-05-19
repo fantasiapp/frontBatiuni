@@ -47,7 +47,6 @@ export class FileDownloader {
     if (typeof file == "number") id = file;
     else if (file.content) return of(file);
     else id = file.id;
-    console.log("id", id)
     return this.store.dispatch(new DownloadFile(id, notify)).pipe(
       take(1), //will unsubscribe
       map((_) => {
