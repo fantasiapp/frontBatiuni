@@ -109,7 +109,7 @@ export class Notifications {
   ngOnInit() {
     this.notifications.forEach((notificationAny, index) => {
       let notification = notificationAny as Notification;
-      let src: SafeResourceUrl | string = "";
+      let src: SafeResourceUrl | string = "assets/profile.png";
       let company: Company | null;
       this.notifications = [];
       switch (notification.nature) {
@@ -118,8 +118,7 @@ export class Notifications {
             let mission = this.store.selectSnapshot(
               DataQueries.getById("Mission", notification.missions)!
             ) as Mission;
-            company = mission
-              ? (this.store.selectSnapshot(
+            company = mission? (this.store.selectSnapshot(
                   DataQueries.getById("Company", mission.company)
                 ) as Company)
               : null;
@@ -135,24 +134,23 @@ export class Notifications {
           }
           if (company) {
             if (SingleCache.checkValueInCache("companyImage" + company!.id.toString())) {
-              src = SingleCache.getValueByName("companyImage" + company!.id.toString())
+              src = <SafeResourceUrl>SingleCache.getValueByName("companyImage" + company!.id.toString())
             }
             else {
-            let logoPME = this.store.selectSnapshot(
+              let logoPME = this.store.selectSnapshot(
               DataQueries.getProfileImage(company.id)
             );
             if (!logoPME) {
               const fullname = company.name[0].toUpperCase();
               src = this.imageGenerator.generate(fullname);
-          SingleCache.setValueByName("companyImage" + company!.id.toString(), src)
-          this.addNotification(notification, index, src);
+              SingleCache.setValueByName("companyImage" + company!.id.toString(), src)
             } else {
               this.downloader.downloadFile(logoPME).subscribe((image) => {
-                src = this.downloader.toSecureBase64(image);
-          SingleCache.setValueByName("companyImage" + company!.id.toString(), src)
-          this.addNotification(notification, index, src);
+              src = this.downloader.toSecureBase64(image);
+              SingleCache.setValueByName("companyImage" + company!.id.toString(), src)
               });
             }}
+            this.addNotification(notification, index, src);
           } else {
             src = "assets/Icon_alert.svg";
             this.addNotification(notification, index, src);
@@ -177,20 +175,25 @@ export class Notifications {
           }
 
           if (company) {
-            let logo = this.store.selectSnapshot(
-              DataQueries.getProfileImage(company.id)
-            );
-            if (!logo) {
-              const fullname = company ? company.name[0].toUpperCase() : "A";
-              src = this.imageGenerator.generate(fullname);
+            if (SingleCache.checkValueInCache("companyImage" + company!.id.toString())) {
+              src = <SafeResourceUrl>SingleCache.getValueByName("companyImage" + company!.id.toString())
+            }
+            else {
+              let logo = this.store.selectSnapshot(
+                DataQueries.getProfileImage(company.id)
+              );
+              if (!logo) {
+                const fullname = company ? company.name[0].toUpperCase() : "A";
+                src = this.imageGenerator.generate(fullname);
+              SingleCache.setValueByName("companyImage" + company!.id.toString(), src)
+            } else {
+                this.downloader.downloadFile(logo).subscribe((image) => {
+                  src = this.downloader.toSecureBase64(image);
+              SingleCache.setValueByName("companyImage" + company!.id.toString(), src)
+            });
+              }}
               this.addNotification(notification, index, src);
             } else {
-              this.downloader.downloadFile(logo).subscribe((image) => {
-                src = this.downloader.toSecureBase64(image);
-                this.addNotification(notification, index, src);
-              });
-            }
-          } else {
             src = "assets/Icon_alert.svg";
             this.addNotification(notification, index, src);
           }
