@@ -1,11 +1,8 @@
-import { Options } from "@angular-slider/ngx-slider";
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
-  EventEmitter,
   Input,
-  Output,
   QueryList,
   ViewChild,
   ViewChildren,
@@ -22,9 +19,9 @@ import { Filter } from "../directives/filter.directive";
 import { FilterService } from "../services/filter.service";
 
 @Component({
-  selector: "st-filter-form",
+  selector: "st-filter-form-old",
   template: `
-    <form class="form-control full-width" [formGroup]="filterForm">
+    <form class="form-control full-width" [formGroup]="form!">
       <div class="form-input">
         <label>Date de mission</label>
         <input
@@ -46,7 +43,7 @@ import { FilterService } from "../services/filter.service";
 
     <div class="form-input">
       <label>Dans un rayon autour de</label>
-      <ngx-slider [(value)]=valueDistance [options]="imports.DistanceSliderConfig" formControlName="if_$radius"></ngx-slider>
+      <ngx-slider [options]="imports.DistanceSliderConfig" [value]="0" [highValue]="1000" formControlName="if_$radius"></ngx-slider>
     </div>
 
     <div class="form-input form-spacer">
@@ -70,8 +67,8 @@ import { FilterService } from "../services/filter.service";
 
 
     <div class="form-input">
-      <label>Estimation de salaire</label>
-      <ngx-slider [options]="imports.SalarySliderConfig" [highValue]="400" formControlName="if_amount"></ngx-slider>
+      <label>Estimation de salaire:</label>
+      <ngx-slider [options]="imports.SalarySliderConfig" [value]="0" [highValue]="100000" formControlName="if_amount"></ngx-slider>
     </div>
 
       <div class="form-input space-children-margin">
@@ -180,22 +177,13 @@ import { FilterService } from "../services/filter.service";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 //save computed properties
-export class STFilterForm<T extends {id: number}> {
+export class STFilterFormOld extends Filter<Post> {
   imports = { DistanceSliderConfig, SalarySliderConfig };
-
-  valueDistance: number=1000;
 
   @Input("filter") name: string = "ST";
 
   @Input()
   time: number = 0;
-
-  filterForm = new FormGroup({
-
-  })
-
-  @Output('update')
-  updateEvent = new EventEmitter();
 
   @ViewChildren(UISwitchComponent)
   switches!: QueryList<UISwitchComponent>;
@@ -216,10 +204,95 @@ export class STFilterForm<T extends {id: number}> {
     });
   }
 
-  constructor(service: FilterService, private store: Store) {}
+  constructor(service: FilterService, private store: Store) {
+    super(service);
+  }
 
-  ngOnInit() {
+  ngOnInit(): void {
+    super.ngOnInit();
 
+    //either precompute with defineComputedProperty
+    //or evaluate during the function call
+    
+    this.create<{
+      // $job: boolean;
+      $jobId: number;
+      $manPower: boolean;
+      $favorite: boolean;
+      $viewed: boolean;
+      $candidate: boolean;
+      $employeeCount: number;
+      $radius: number;
+      $isBoosted: boolean;
+    }>([
+      this.defineComputedProperty('$manPower', (post) => {
+        return post.manPower;
+      }),
+      this.defineComputedProperty('$employeeCount', (post) => {
+        const company = this.store.selectSnapshot(DataQueries.getById('Company', post.company))!,
+        jobsForCompany = this.store.selectSnapshot(DataQueries.getMany('JobForCompany', company.jobs));
+        return jobsForCompany.reduce((acc, {number}) => acc + number, 0);
+      }),
+      this.defineComputedProperty("$favorite", (post) => {
+        const user = this.store.selectSnapshot(DataQueries.currentUser);
+        return user.favoritePosts.includes(post.id);
+      }),
+      this.defineComputedProperty("$viewed", (post) => {
+        const user = this.store.selectSnapshot(DataQueries.currentUser);
+        return user.viewedPosts.includes(post.id);
+      }),
+      this.defineComputedProperty('$candidate', (post) => {
+        const user = this.store.selectSnapshot(DataQueries.currentUser);
+        let candidates = this.store.selectSnapshot(DataQueries.getMany("Candidate", post.candidates))
+        let companies = candidates.map(candidate => candidate.company)
+        return companies.includes(user.company);
+      }),
+      this.defineComputedProperty('$radius', (post) => {
+        const user = this.store.selectSnapshot(DataQueries.currentUser);
+        let userCompany: any = this.store.selectSnapshot(DataQueries.getById("Company", user.company));
+        let userLatitude = userCompany.latitude*(Math.PI/180);
+        let userLongitude = userCompany.longitude*(Math.PI/180);
+        let postLatitude = post.latitude*(Math.PI/180);
+        let postLongitude = post.longitude*(Math.PI/180);
+        let distance = 6371*Math.acos(Math.sin(userLatitude)*Math.sin(postLatitude) + Math.cos(userLatitude)*Math.cos(postLatitude)*Math.cos(postLongitude-userLongitude))
+        return distance ;
+      }),
+      this.defineComputedProperty('$isBoosted', (post) => {
+        console.log(post, this.time)
+        console.log(post.boostTimestamp > this.time)
+        return post.boostTimestamp > this.time;
+      }),
+      this.sortBy("$isBoosted", (boosted1, boosted2) => {
+        let v1 = boosted1 ? 1 : 0;
+        let v2 = boosted2 ? 1 : 0; 
+        return v2 - v1
+      }, true),
+      this.match('dueDate'),  
+      this.search('address'),
+      this.onlyIf('$radius', (radius, range) => {
+        return radius >= range[0] && radius <= range[1];
+      }),
+      this.inList('job', (job) => { return job.id }),
+      this.onlyIf('$manPower', manPower => { console.log(manPower); return manPower }),
+      this.onlyIf('amount', (amount, range) => {
+        return amount >= range[0] && amount <= range[1];
+      }),
+      this.some('employee',
+      this.onlyIf("$employeeCount", (count) => 1 <= count && count <= 10, [], true),
+      this.onlyIf("$employeeCount", (count) => count > 10 && count <= 25, [], true),
+      this.onlyIf("$employeeCount", (count) => count > 25 && count <= 50, [], true),
+      this.onlyIf("$employeeCount", (count) => count > 50 && count <= 100, [], true),
+      this.onlyIf("$employeeCount", (count) => count > 100, [], true)
+      ),
+      this.onlyIf('$viewed', viewed => { return viewed }),
+      this.onlyIf('$favorite', favorite => { return favorite }),
+      this.onlyIf('$candidate', candidate => { return candidate }),
+      this.onlyIf('counterOffer', counterOffer => counterOffer),
+      this.sortBy('dueDate', (d1, d2) => {
+        return new Date(d1).getTime() - new Date(d2).getTime();
+      }),
+      this.sortBy("startDate", () => 1),
+    ]);
 
   }
 
