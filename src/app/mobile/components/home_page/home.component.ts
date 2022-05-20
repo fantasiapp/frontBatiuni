@@ -122,7 +122,6 @@ export class HomeComponent extends Destroy$ {
   @ViewChild("booster", { read: TemplateRef, static: true })
   boosterTemplate!: TemplateRef<any>;
 
-  activeView: number = 0;
   _openCloseMission: boolean = false;
   openAdFilterMenu: boolean = false;
   toogle: boolean = false;
@@ -386,44 +385,66 @@ export class HomeComponent extends Destroy$ {
     }
   };
 
-  isFilterOnDrafts(filter: any){
-    if (filter.address == "" && filter.date == "" && filter.jobs.length == 0 && filter.manPower == null && filter.sortDraftDate == false && filter.sortDraftFull == false){
+  isFilterOn(filter: any){
+    if (filter.address == "" && filter.date == "" && filter.jobs.length == 0 && filter.manPower == null && filter.sortDraftDate == false && filter.sortDraftFull == false && filter.sortPostResponse == false && filter.sortMissionNotifications == false){
       this.filterOn = false;
     } else {
       this.filterOn = true;
     }
+    this.cd.markForCheck;
   }
 
-  isFilterOnUserOnline(filter: any){
-    console.log(filter)
-    if (filter.address == "" && filter.date == "" && filter.jobs.length == 0 && filter.manPower == null && filter.sortPostResponse == false){
-      this.filterOn = false;
-    } else {
-      this.filterOn = true;
-    }
+  resetFilter(filter: any){
+    filter.address = "";
+    filter.date = "";
+    filter.jobs = [];
+    filter.manPower = null;
+    filter.sortDraftDate = false;
+    filter.sortDraftFull = false;
+    filter.sortPostResponse = false;
+    filter.sortMissionNotifications = false;
   }
 
-  isFilterOnMission(filter: any){
-    if (filter.address == "" && filter.date == "" && filter.jobs.length == 0 && filter.manPower == null && filter.sortMissionNotifications == false){
-      this.filterOn = false;
-    } else {
-      this.filterOn = true;
+  get activeView(){
+    return 0
+  }
+
+  set activeView(num:number){
+  }
+
+  changeView = (filter: any): void => {
+    switch (this.activeView) {
+      case 0:
+        console.log('change draft')
+        this.resetFilter(filter)
+        break;
+      case 1:
+        console.log("change online")
+        this.resetFilter(filter)
+        break;
+      case 2:
+        console.log("change mission")
+        this.resetFilter(filter)
     }
+
   }
 
   callbackFilter = (filter: any): void => {
     switch (this.activeView) {
       case 0:
+        console.log("Draft")
         this.selectDraft(filter);
-        this.isFilterOnDrafts(filter);
+        this.isFilterOn(filter);
         break;
       case 1:
+        console.log("Online")
         this.selectUserOnline(filter);
-        this.isFilterOnUserOnline(filter);
+        this.isFilterOn(filter);
         break;
       case 2:
+        console.log("Mission")
         this.selectMission(filter);
-        this.isFilterOnMission(filter);
+        this.isFilterOn(filter);
     }
   };
 
