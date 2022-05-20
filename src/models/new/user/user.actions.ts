@@ -9,7 +9,9 @@ import { ApplyForm } from "src/app/mobile/ui/annonce-resume/annonce-resume.ui";
 
 export class ChangeProfileType {
   static readonly type = '[User] Change Profile Type';
-  constructor(public type: boolean) {};
+  constructor(public type: boolean) {
+    console.log("constructor change ", type)
+  };
 };
 
 export class ChangeProfilePicture {
@@ -32,7 +34,6 @@ export class UploadImageSupervision {
   constructor(src: any, public supervisionId: number | null) {
     this.ext = src.format;
     this.imageBase64 = src.base64String;
-    console.log('constructor, src:', src)
   }
   action = 'uploadImageSupervision';
 };

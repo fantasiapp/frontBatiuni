@@ -107,7 +107,6 @@ namespace mutable {
     
     if ( uniqueBy ) {
       const uniqueIndex = draft.fields[child].indexOf(uniqueBy);
-      console.log('uniqueIndex', uniqueIndex, draft, draft.fields[child][0]);
       if ( uniqueIndex !== void 0 ){
         parentObject[childIndex] = removeDuplicates(draft, child, oldIds, ids, uniqueIndex);
       }
@@ -118,7 +117,6 @@ namespace mutable {
         parentObject[childIndex].push(id);
       }
     }
-    console.log('draft', draft[parent]?.[parentId][childIndex]);
   }
 
   //configure to only accept complex data types

@@ -399,7 +399,6 @@ export class HomeComponent extends Destroy$ {
   }
 
   isFilterOnUserOnline(filter: any){
-    console.log(filter)
     if (filter.address == "" && filter.date == "" && filter.jobs.length == 0 && filter.manPower == null && filter.sortPostResponse == false){
       this.filterOn = false;
     } else {
@@ -627,7 +626,6 @@ export class HomeComponent extends Destroy$ {
       user: user as User,
       company: company!,
     } as Profile;
-    console.log("showCompany , candidate :", candidate)
     this.amountSubContractor = candidate?.amount
       ? "Contre-Offre: " + candidate!.amount.toString() + " €"
       : null;

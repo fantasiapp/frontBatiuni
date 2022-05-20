@@ -66,13 +66,10 @@ export class AppComponent extends Destroy$ {
   }
 
   async updateUserData() {
-    console.log("je suis dans le update")
     if (!this.firstAttemptAlreadyTried) {
-      console.log("je suis dans le if")
       this.firstAttemptAlreadyTried = true
     }
     else if (this.readyToUpdate) {
-      console.log("je suis dans le else wtf ?!")
       this.readyToUpdate = false
       this.getUserData()
       await delay(20000)
