@@ -32,6 +32,8 @@
     </ng-container>
 </slidemenu>
 
-<swipeup [(open)]="openAdFilterMenu" type="view">
-    <application-filter-form [callbackFilter]="callbackFilter" view></application-filter-form>
+<swipeup [(open)]="openAdFilterMenu">
+    <ng-container content>
+        <st-filter-form ></st-filter-form>
+    </ng-container>
 </swipeup>

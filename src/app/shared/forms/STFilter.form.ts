@@ -3,32 +3,35 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  EventEmitter,
   Input,
+  Output,
   QueryList,
   ViewChild,
   ViewChildren,
 } from "@angular/core";
-import { FormArray, FormGroup } from "@angular/forms";
+import { FormArray, FormControl, FormGroup } from "@angular/forms";
 import { Store } from "@ngxs/store";
 import { Control } from "mapbox-gl";
 import { DistanceSliderConfig, SalarySliderConfig } from "src/app/shared/common/config";
-import { Job, Post } from "src/models/new/data.interfaces";
+import { Candidate, Job, Post } from "src/models/new/data.interfaces";
 import { DataQueries, SnapshotAll } from "src/models/new/data.state";
 import { OptionsModel } from "../components/options/options";
 import { UISwitchComponent } from "../components/switch/switch.component";
 import { Filter } from "../directives/filter.directive";
 import { FilterService } from "../services/filter.service";
+import { getLevenshteinDistance } from "src/app/shared/services/levenshtein";
 
 @Component({
   selector: "st-filter-form",
   template: `
-    <form class="form-control full-width" [formGroup]="form!">
+    <form class="form-control full-width" [formGroup]="filterForm">
       <div class="form-input">
         <label>Date de mission</label>
         <input
           type="date"
           class="form-element"
-          formControlName="match_dueDate"
+          formControlName="date"
         />
         <img src="assets/calendar.png" />
       </div>
@@ -38,29 +41,29 @@ import { FilterService } from "../services/filter.service";
         <input
           type="text"
           class="form-element"
-          formControlName="search_address"
+          formControlName="address"
         />
       </div>
 
     <div class="form-input">
       <label>Dans un rayon autour de</label>
-      <ngx-slider [(value)]=valueDistance [options]="imports.DistanceSliderConfig" [highValue]="1000" formControlName="if_$radius"></ngx-slider>
+      <ngx-slider [(value)]=valueDistance [options]="imports.DistanceSliderConfig" formControlName="radius"></ngx-slider>
     </div>
 
     <div class="form-input form-spacer">
       <label>Métier</label>
-      <options [options]="allJobs" formControlName="inList_job"></options>
+      <options [options]="allJobs" formControlName="jobs"></options>
     </div>
 
     <div class="form-input form-spacer">
       <label class="form-title">Type</label>
         <div class="flex row radio-container">
           <div class="radio-item">
-            <radiobox class="grow" hostName=manPower onselect="true" name="job-type" formControlName="if_$manPower" #manPower1></radiobox>
+            <radiobox class="grow" hostName=manPower onselect="true" name="job-type" formControlName="manPower" #manPower1></radiobox>
             <span (click)="manPower1.onChange($event)">Main d'oeuvre</span>
           </div>
           <div class="radio-item">
-            <radiobox class="grow" hostName=manPower onselect="false" name="job-type" formControlName="if_$manPower" #manPower2></radiobox>
+            <radiobox class="grow" hostName=manPower onselect="false" name="job-type" formControlName="manPower" #manPower2></radiobox>
             <span (click)="manPower2.onChange($event)">Fourniture et pose</span>
           </div>
         </div>
@@ -69,11 +72,11 @@ import { FilterService } from "../services/filter.service";
 
     <div class="form-input">
       <label>Estimation de salaire</label>
-      <ngx-slider [options]="imports.SalarySliderConfig" [highValue]="400" formControlName="if_amount"></ngx-slider>
+      <ngx-slider [options]="imports.SalarySliderConfig" [highValue]="40000" formControlName="salary"></ngx-slider>
     </div>
 
       <div class="form-input space-children-margin">
-        <ng-container formArrayName="some_employee">
+        <ng-container formArrayName="employees">
         <label class="form-title">Taille de l'entreprise</label>
           <div class="radio-item">
             <checkbox
@@ -122,19 +125,19 @@ import { FilterService } from "../services/filter.service";
         <label class="form-title">Réorganiser la liste selon</label>
         <div class="switch-container flex center-cross">
           <span class="criteria">Annonces déjà vues uniquement</span>
-          <switch class="default" formControlName="if_$viewed"></switch>
+          <switch class="default" formControlName="viewed"></switch>
         </div>
         <div class="switch-container flex center-cross">
           <span class="criteria">Annonces favorites uniquement</span>
-          <switch class="default" formControlName="if_$favorite"></switch>
+          <switch class="default" formControlName="favorite"></switch>
         </div>
         <div class="switch-container flex center-cross">
           <span class="criteria">Annonces déjà postulées uniquement</span>
-          <switch class="default" formControlName="if_$candidate"></switch>
+          <switch class="default" formControlName="candidate"></switch>
         </div>
         <div class="switch-container flex center-cross">
           <span class="criteria">Annonces ouvertes à une contre-proposition</span>
-          <switch class="default" formControlName="if_counterOffer"></switch>
+          <switch class="default" formControlName="counterOffer"></switch>
         </div>
         <div class="switch-container flex center-cross">
           <span class="criteria"
@@ -144,7 +147,7 @@ import { FilterService } from "../services/filter.service";
           <switch
             class="default"
             (valueChange)="onSwitchClick($event, [switch2])"
-            formControlName="sort_dueDate"
+            formControlName="dueDateSort"
             #switch1
           ></switch>
         </div>
@@ -155,7 +158,7 @@ import { FilterService } from "../services/filter.service";
           <switch
             class="default"
             (valueChange)="onSwitchClick($event, [switch1])"
-            formControlName="sort_startDate"
+            formControlName="startDateSort"
             #switch2
           ></switch>
         </div>
@@ -178,7 +181,7 @@ import { FilterService } from "../services/filter.service";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 //save computed properties
-export class STFilterForm extends Filter<Post> {
+export class STFilterForm {
   imports = { DistanceSliderConfig, SalarySliderConfig };
 
   valueDistance: number=1000;
@@ -187,6 +190,36 @@ export class STFilterForm extends Filter<Post> {
 
   @Input()
   time: number = 0;
+
+  @Input()
+  posts: Post[] = [];
+
+  filteredPosts: Post[] = [];
+
+  filterForm = new FormGroup({
+    date: new FormControl(""),
+    address: new FormControl(""),
+    radius: new FormControl(1000),
+    jobs: new FormControl([]),
+    salary: new FormControl(0),
+    manPower: new FormControl(null),
+    employees: new FormArray([
+      new FormControl(true),
+      new FormControl(true),
+      new FormControl(true),
+      new FormControl(true),
+      new FormControl(true),
+    ]),
+    viewed: new FormControl(false),
+    favorite: new FormControl(false),
+    candidate: new FormControl(false),
+    counterOffer: new FormControl(false),
+    dueDateSort: new FormControl(false),
+    startDateSort: new FormControl(false),
+  });
+
+  @Output('update')
+  updateEvent = new EventEmitter();
 
   @ViewChildren(UISwitchComponent)
   switches!: QueryList<UISwitchComponent>;
@@ -202,99 +235,142 @@ export class STFilterForm extends Filter<Post> {
     if (!value) return;
     this.switches.forEach((item) => {
       if (cancelIfTrue.includes(item)) {
-        item.value = false;
+        cancelIfTrue[0].value = false;
+        this.cd.markForCheck();
       }
     });
   }
 
-  constructor(service: FilterService, private store: Store) {
-    super(service);
+  constructor(service: FilterService, private store: Store, private cd: ChangeDetectorRef) {}
+
+  ngOnInit() {
+
+    this.filterForm.valueChanges.subscribe((value) => {
+      this.updateFilteredPosts(value);
+      this.updateEvent.emit(this.filteredPosts);
+    });
+
   }
 
-  ngOnInit(): void {
-    super.ngOnInit();
-
-    //either precompute with defineComputedProperty
-    //or evaluate during the function call
+  updateFilteredPosts(filter: any) {
+    this.filteredPosts = [];
     
-    this.create<{
-      // $job: boolean;
-      $jobId: number;
-      $manPower: boolean;
-      $favorite: boolean;
-      $viewed: boolean;
-      $candidate: boolean;
-      $employeeCount: number;
-      $radius: number;
-      $isBoosted: boolean;
-    }>([
-      this.defineComputedProperty('$manPower', (post) => {
-        return post.manPower;
-      }),
-      this.defineComputedProperty('$employeeCount', (post) => {
-        const company = this.store.selectSnapshot(DataQueries.getById('Company', post.company))!,
-        jobsForCompany = this.store.selectSnapshot(DataQueries.getMany('JobForCompany', company.jobs));
-        return jobsForCompany.reduce((acc, {number}) => acc + number, 0);
-      }),
-      this.defineComputedProperty("$favorite", (post) => {
-        const user = this.store.selectSnapshot(DataQueries.currentUser);
-        return user.favoritePosts.includes(post.id);
-      }),
-      this.defineComputedProperty("$viewed", (post) => {
-        const user = this.store.selectSnapshot(DataQueries.currentUser);
-        return user.viewedPosts.includes(post.id);
-      }),
-      this.defineComputedProperty('$candidate', (post) => {
-        const user = this.store.selectSnapshot(DataQueries.currentUser);
-        let candidates = this.store.selectSnapshot(DataQueries.getMany("Candidate", post.candidates))
-        let companies = candidates.map(candidate => candidate.company)
-        return companies.includes(user.company);
-      }),
-      this.defineComputedProperty('$radius', (post) => {
-        const user = this.store.selectSnapshot(DataQueries.currentUser);
-        let userCompany: any = this.store.selectSnapshot(DataQueries.getById("Company", user.company));
-        let userLatitude = userCompany.latitude*(Math.PI/180);
-        let userLongitude = userCompany.longitude*(Math.PI/180);
-        let postLatitude = post.latitude*(Math.PI/180);
-        let postLongitude = post.longitude*(Math.PI/180);
-        let distance = 6371*Math.acos(Math.sin(userLatitude)*Math.sin(postLatitude) + Math.cos(userLatitude)*Math.cos(postLatitude)*Math.cos(postLongitude-userLongitude))
-        return distance ;
-      }),
-      this.defineComputedProperty('$isBoosted', (post) => {
-        return post.boostTimestamp > this.time;
-      }),
-      this.sortBy("$isBoosted", (boosted1, boosted2) => {
-        let v1 = boosted1 ? 1 : 0;
-        let v2 = boosted2 ? 1 : 0; 
-        return v2 - v1
-      }, true),
-      this.match('dueDate'),  
-      this.search('address'),
-      this.onlyIf('$radius', (radius, range) => {
-        return radius >= range[0] && radius <= range[1];
-      }),
-      this.inList('job', (job) => { return job.id }),
-      this.onlyIf('$manPower', manPower => { return manPower }),
-      this.onlyIf('amount', (amount, range) => {
-        return amount >= range[0] && amount <= range[1];
-      }),
-      this.some('employee',
-      this.onlyIf("$employeeCount", (count) => 1 <= count && count <= 10, [], true),
-      this.onlyIf("$employeeCount", (count) => count > 10 && count <= 25, [], true),
-      this.onlyIf("$employeeCount", (count) => count > 25 && count <= 50, [], true),
-      this.onlyIf("$employeeCount", (count) => count > 50 && count <= 100, [], true),
-      this.onlyIf("$employeeCount", (count) => count > 100, [], true)
-      ),
-      this.onlyIf('$viewed', viewed => { return viewed }),
-      this.onlyIf('$favorite', favorite => { return favorite }),
-      this.onlyIf('$candidate', candidate => { return candidate }),
-      this.onlyIf('counterOffer', counterOffer => counterOffer),
-      this.sortBy('dueDate', (d1, d2) => {
-        return new Date(d1).getTime() - new Date(d2).getTime();
-      }),
-      this.sortBy("startDate", () => 1),
-    ]);
+    const user = this.store.selectSnapshot(DataQueries.currentUser);
 
+    // Filter
+    for (let post of this.posts) {
+
+
+      //Date
+      let datesPost = this.store.selectSnapshot(DataQueries.getMany("DatePost", post.dates));
+      let dates = datesPost.map(date => date.date);
+      let isDifferentDate = (filter.date && !dates.includes(filter.date))
+
+      //Radius
+      let userCompany: any = this.store.selectSnapshot(DataQueries.getById("Company", user.company));
+      let userLatitude = userCompany.latitude*(Math.PI/180);
+      let userLongitude = userCompany.longitude*(Math.PI/180);
+      let postLatitude = post.latitude*(Math.PI/180);
+      let postLongitude = post.longitude*(Math.PI/180);
+      let distance = 6371*Math.acos(Math.sin(userLatitude)*Math.sin(postLatitude) + Math.cos(userLatitude)*Math.cos(postLatitude)*Math.cos(postLongitude-userLongitude))
+
+      let isNotInRadius = (filter.radius && distance > filter.radius)
+
+      //Manpower
+      let isDifferentManPower = (filter.manPower && post.manPower != (filter.manPower === "true"))
+
+      //Job
+      let isNotIncludedJob = (filter.jobs && filter.jobs.length && filter.jobs.every((job: any) => {return job.id != post.job}))
+      
+      //Salary
+      let isNotInRangeSalary = (filter.salary && (post.amount < filter.salary[0] || post.amount > filter.salary[1]))
+
+      //Employees
+      const company = this.store.selectSnapshot(DataQueries.getById('Company', post.company))!,
+      jobsForCompany = this.store.selectSnapshot(DataQueries.getMany('JobForCompany', company.jobs));
+      let count = jobsForCompany.reduce((acc, {number}) => acc + number, 0);
+      let isNotBetween1And10 = (!filter.employees[0] && (count >= 1 && count <= 10))
+      let isNotBetween11And20 = (!filter.employees[1] && (count >= 11 && count <= 20))
+      let isNotBetween21And50 = (!filter.employees[2] && (count >= 21 && count <= 50))
+      let isNotBetween51And100 = (!filter.employees[3] && (count >= 51 && count <= 100))
+      let isNotMoreThan100 = (!filter.employees[4] && count > 100)
+
+      //Viewed
+      let isNotViewed = (filter.viewed && !user.viewedPosts.includes(post.id));
+
+      //Favorite
+      let isNotFavorite = (filter.favorite && !user.favoritePosts.includes(post.id));
+
+      //Candidate
+      let candidates = this.store.selectSnapshot(DataQueries.getMany("Candidate", post.candidates))
+      let companies = candidates.map(candidate => candidate.company)
+      let isNotCandidate = (filter.candidate && !companies.includes(user.company));
+
+      //CounterOffer
+      let isNotCounterOffer = (filter.counterOffer && !post.counterOffer);
+      
+      if ( isDifferentDate || 
+          isDifferentManPower || 
+          isNotIncludedJob || 
+          isNotInRadius || 
+          isNotInRangeSalary || 
+          isNotViewed ||
+          isNotFavorite ||
+          isNotCandidate ||
+          isNotCounterOffer ||
+          isNotBetween1And10 ||
+          isNotBetween11And20 ||
+          isNotBetween21And50 ||
+          isNotBetween51And100 ||
+          isNotMoreThan100
+          ) { continue }
+
+      this.filteredPosts.push(post)
+    }
+
+    // Sort
+
+    //Address
+    // Array qui contiendra les posts et leur valeur en distance Levenshtein pour une adresse demandée
+    let levenshteinDist: any = [];
+    if (filter.address) {
+      for (let post of this.filteredPosts) {levenshteinDist.push([post,getLevenshteinDistance(post.address.toLowerCase(),filter.address.toLowerCase()),]);}
+      levenshteinDist.sort((a: any, b: any) => a[1] - b[1]);
+      let keys = levenshteinDist.map((key: any) => {
+        return key[0];
+      });
+      console.log("levenshteinDist", levenshteinDist);
+      // On trie les posts selon leur distance de levenshtein
+      this.filteredPosts.sort(
+        (a: any, b: any) => keys.indexOf(a) - keys.indexOf(b)
+      );
+    } 
+    
+    //dueDate
+    if (filter.dueDateSort) {
+      this.filteredPosts.sort((a: any, b: any) => {
+        let aDate = a.dueDate;
+        let bDate = b.dueDate;
+        if (aDate < bDate) {
+          return -1;
+        } else if (aDate > bDate) {
+          return 1;
+        } else {
+          return 0;
+        }
+      });
+    }
+
+
+    //startDate
+    if (filter.startDateSort) {
+      this.filteredPosts.sort((a, b) => {
+        return a["id"] - b["id"];
+      });
+    }
+
+    
+    this.cd.markForCheck();
   }
-
 }
+

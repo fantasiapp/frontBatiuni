@@ -12,7 +12,7 @@ export const DistanceSliderConfig: Options = {
 
 export const SalarySliderConfig: Options = {
   floor: 1,
-  ceil: 400,
+  ceil: 40000,
   
   showSelectionBar: true,
   translate(value: number): string {
