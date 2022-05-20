@@ -44,7 +44,7 @@ import { FilterService } from "../services/filter.service";
 
     <div class="form-input">
       <label>Dans un rayon autour de</label>
-      <ngx-slider [(value)]=valueDistance [options]="imports.DistanceSliderConfig" formControlName="if_$radius"></ngx-slider>
+      <ngx-slider [(value)]=valueDistance [options]="imports.DistanceSliderConfig" [highValue]="1000" formControlName="if_$radius"></ngx-slider>
     </div>
 
     <div class="form-input form-spacer">
