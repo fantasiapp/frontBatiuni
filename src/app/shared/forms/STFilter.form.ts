@@ -71,8 +71,8 @@ import { getLevenshteinDistance } from "src/app/shared/services/levenshtein";
 
 
     <div class="form-input">
-      <label>Estimation de salaire</label>
-      <ngx-slider [options]="imports.SalarySliderConfig" [highValue]="40000" formControlName="salary"></ngx-slider>
+      <label>Estimation de la rémunération horaire</label>
+      <ngx-slider [options]="imports.SalarySliderConfig" [highValue]="400" formControlName="salary"></ngx-slider>
     </div>
 
       <div class="form-input space-children-margin">
@@ -260,6 +260,7 @@ export class STFilterForm {
     // Filter
     for (let post of this.posts) {
 
+      const company = this.store.selectSnapshot(DataQueries.getById('Company', post.company))!;
 
       //Date
       let datesPost = this.store.selectSnapshot(DataQueries.getMany("DatePost", post.dates));
@@ -274,7 +275,7 @@ export class STFilterForm {
       let postLongitude = post.longitude*(Math.PI/180);
       let distance = 6371*Math.acos(Math.sin(userLatitude)*Math.sin(postLatitude) + Math.cos(userLatitude)*Math.cos(postLatitude)*Math.cos(postLongitude-userLongitude))
 
-      let isNotInRadius = (filter.radius && distance > filter.radius)
+      let isNotInRadius = (distance > filter.radius)
 
       //Manpower
       let isDifferentManPower = (filter.manPower && post.manPower != (filter.manPower === "true"))
@@ -283,11 +284,10 @@ export class STFilterForm {
       let isNotIncludedJob = (filter.jobs && filter.jobs.length && filter.jobs.every((job: any) => {return job.id != post.job}))
       
       //Salary
-      let isNotInRangeSalary = (filter.salary && (post.amount < filter.salary[0] || post.amount > filter.salary[1]))
+      let isNotInRangeSalary = (filter.salary && (company.amount < filter.salary[0] || company.amount > filter.salary[1]))
 
       //Employees
-      const company = this.store.selectSnapshot(DataQueries.getById('Company', post.company))!,
-      jobsForCompany = this.store.selectSnapshot(DataQueries.getMany('JobForCompany', company.jobs));
+      const jobsForCompany = this.store.selectSnapshot(DataQueries.getMany('JobForCompany', company.jobs));
       let count = jobsForCompany.reduce((acc, {number}) => acc + number, 0);
       let isNotBetween1And10 = (!filter.employees[0] && (count >= 1 && count <= 10))
       let isNotBetween11And20 = (!filter.employees[1] && (count >= 11 && count <= 20))
@@ -329,6 +329,8 @@ export class STFilterForm {
     }
 
     // Sort
+
+    //Boosted post
 
     //Address
     // Array qui contiendra les posts et leur valeur en distance Levenshtein pour une adresse demandée
