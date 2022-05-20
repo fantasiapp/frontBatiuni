@@ -331,7 +331,11 @@ export class STFilterForm {
     // Sort
 
     //Boosted post
-
+    this.filteredPosts.sort((post1, post2) => {
+      let b1 = post1.boostTimestamp > this.time ? 1 : 0;
+      let b2 = post2.boostTimestamp > this.time ? 1 : 0;
+      return b2 - b1
+    })
     //Address
     // Array qui contiendra les posts et leur valeur en distance Levenshtein pour une adresse demandée
     let levenshteinDist: any = [];
