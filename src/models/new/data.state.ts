@@ -230,6 +230,7 @@ export class DataState {
 
         ctx.setState(compose(...loadOperations, sessionOperation));
         this.flagUpdate = true
+         
       })
     );
     }
