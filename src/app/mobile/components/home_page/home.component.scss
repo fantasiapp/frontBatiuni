@@ -73,3 +73,13 @@ header > div > img ~ span::after {
 .boosted {
   color: lightgray !important;
 }
+
+.loadingScreen{
+  position: absolute;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: gray;
+  opacity: 0.5;
+  z-index: 100;
+}

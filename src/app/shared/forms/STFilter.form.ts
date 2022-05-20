@@ -1,3 +1,4 @@
+import { Options } from "@angular-slider/ngx-slider";
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -43,7 +44,7 @@ import { FilterService } from "../services/filter.service";
 
     <div class="form-input">
       <label>Dans un rayon autour de</label>
-      <ngx-slider [options]="imports.DistanceSliderConfig" [value]="0" [highValue]="1000" formControlName="if_$radius"></ngx-slider>
+      <ngx-slider [(value)]=valueDistance [options]="imports.DistanceSliderConfig" formControlName="if_$radius"></ngx-slider>
     </div>
 
     <div class="form-input form-spacer">
@@ -67,8 +68,8 @@ import { FilterService } from "../services/filter.service";
 
 
     <div class="form-input">
-      <label>Estimation de salaire:</label>
-      <ngx-slider [options]="imports.SalarySliderConfig" [value]="0" [highValue]="100000" formControlName="if_amount"></ngx-slider>
+      <label>Estimation de salaire</label>
+      <ngx-slider [options]="imports.SalarySliderConfig" [highValue]="400" formControlName="if_amount"></ngx-slider>
     </div>
 
       <div class="form-input space-children-margin">
@@ -179,6 +180,8 @@ import { FilterService } from "../services/filter.service";
 //save computed properties
 export class STFilterForm extends Filter<Post> {
   imports = { DistanceSliderConfig, SalarySliderConfig };
+
+  valueDistance: number=1000;
 
   @Input("filter") name: string = "ST";
 

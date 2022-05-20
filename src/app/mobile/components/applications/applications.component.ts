@@ -38,7 +38,6 @@ export class ApplicationsComponent extends Destroy$ implements OnInit {
     discard: -1,
   };
 
-  time: number = 0;
 
   openAdFilterMenu: boolean = false;
 
@@ -72,7 +71,6 @@ export class ApplicationsComponent extends Destroy$ implements OnInit {
         this.userOnlinePosts = mapping.get(this.symbols.userOnlinePost) || [];
         this.allOnlinePosts = [...otherOnlinePost, ...this.userOnlinePosts];
       });
-    this.time = this.store.selectSnapshot(DataState.time);
   }
 
   hasPostulated(post: Post) {
