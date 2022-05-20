@@ -96,6 +96,7 @@ export class Clear {
 @Injectable()
 export class DataState {
   flagUpdate = true;
+  isFirstTime = true
   constructor(
     private store: Store,
     private reader: DataReader,
@@ -104,9 +105,7 @@ export class DataState {
     private slide: SlidemenuService,
     private swipeup: SwipeupService,
     private zone: NgZone
-  ) {
-    console.log("constructor :", this.store.selectSnapshot(DataState.view))
-  }
+  ) {}
 
   private pending$: Record<Subject<any>> = {};
 
@@ -232,6 +231,7 @@ export class DataState {
       tap((response: any) => {
         const loadOperations = this.reader.readInitialData(response),
           sessionOperation = this.reader.readCurrentSession(response);
+      if (!this.isFirstTime) {
         let oldView = this.store.selectSnapshot(DataState.view)
         console.log("olview", oldView)
         ctx.setState(compose(...loadOperations, sessionOperation));
@@ -242,6 +242,11 @@ export class DataState {
             view: oldView,
           },
         })
+      }
+      else {
+        ctx.setState(compose(...loadOperations, sessionOperation));
+        this.isFirstTime = false
+      }
         console.log("new view", this.store.selectSnapshot(DataState.view))
         this.flagUpdate = true
       })
