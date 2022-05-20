@@ -3,6 +3,7 @@ import { FormControl, FormGroup } from "@angular/forms";
 import { Store } from "@ngxs/store";
 import { Job } from "src/models/new/data.interfaces";
 import { SnapshotAll } from "src/models/new/data.state";
+import { PMEView } from "../services/pmeView.service";
 
 @Component({
   selector: 'pme-filter-form',
@@ -98,6 +99,9 @@ export class PMEFilterForm implements OnInit {
   @Input()
   callbackFilter: Function = () => {};
 
+  @Input()
+  changeView: Function = () => {};
+
   filterForm = new FormGroup({
     date: new FormControl(""),
     address: new FormControl(""),
@@ -111,7 +115,9 @@ export class PMEFilterForm implements OnInit {
     {}
   );
 
-  constructor(private store: Store){}
+  constructor(private store: Store, private pmeView: PMEView){
+
+  }
 
   @SnapshotAll('Job')
   allJobs!: Job[];
@@ -119,8 +125,25 @@ export class PMEFilterForm implements OnInit {
   ngOnInit(){
     this.callbackFilter(this.filterForm.value);
     this.filterForm.valueChanges.subscribe(value => {
+      console.log("value", value)
       this.callbackFilter(value);
     })
+    this.pmeView.getChangeEmitter().subscribe(value => {
+      console.log("value", value)
+      this.changeView(this.filterForm.value)
+    })
+  }
+
+  resetFilter(){
+    let filter = this.filterForm.value;
+    filter.address = "";
+    filter.date = "";
+    filter.jobs = [];
+    filter.manPower = null;
+    filter.sortDraftDate = false;
+    filter.sortDraftFull = false;
+    filter.sortPostResponse = false;
+    filter.sortMissionNotifications = false;
   }
   
 }

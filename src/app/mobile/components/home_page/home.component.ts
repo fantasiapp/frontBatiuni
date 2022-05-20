@@ -98,6 +98,7 @@ export class HomeComponent extends Destroy$ {
   allOnlinePosts: Post[] = [];
   missions: Mission[] = [];
   allMissions: Mission[] = [];
+  filterOn: boolean = false;
 
   get missionToClose() {
     return this.missions[0];
@@ -121,10 +122,10 @@ export class HomeComponent extends Destroy$ {
   @ViewChild("booster", { read: TemplateRef, static: true })
   boosterTemplate!: TemplateRef<any>;
 
-  activeView: number = 0;
   _openCloseMission: boolean = false;
   openAdFilterMenu: boolean = false;
   toogle: boolean = false;
+  isLoading: boolean = false;
   imports = { DistanceSliderConfig, SalarySliderConfig };
   draftMenu = new PostMenu();
   postMenu = new PostMenu();
@@ -146,44 +147,47 @@ export class HomeComponent extends Destroy$ {
   }
 
   ngOnInit() {
-    this.info.alignWith("header_search");
-    combineLatest([this.profile$, this.posts$])
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(([profile, posts]) => {
-        const mapping = splitByOutput(posts, (post) => {
-          //0 -> userOnlinePosts | 1 -> userDrafts
-          if (profile.company.posts.includes(post.id))
+    if (!this.isLoading) {
+      this.info.alignWith("header_search");
+      combineLatest([this.profile$, this.posts$])
+        .pipe(takeUntil(this.destroy$))
+        .subscribe(([profile, posts]) => {
+          const mapping = splitByOutput(posts, (post) => {
+            //0 -> userOnlinePosts | 1 -> userDrafts
+            if (profile.company.posts.includes(post.id))
+              return post.draft
+                ? this.symbols.userDraft
+                : this.symbols.userOnlinePost;
+  
             return post.draft
-              ? this.symbols.userDraft
-              : this.symbols.userOnlinePost;
-
-          return post.draft
-            ? this.symbols.discard
-            : this.symbols.otherOnlinePost;
+              ? this.symbols.discard
+              : this.symbols.otherOnlinePost;
+          });
+  
+          const otherOnlinePost = mapping.get(this.symbols.otherOnlinePost) || [];
+          this.allUserDrafts = mapping.get(this.symbols.userDraft) || [];
+          this.allUserOnlinePosts =
+            mapping.get(this.symbols.userOnlinePost) || [];
+          this.allOnlinePosts = [...otherOnlinePost, ...this.userOnlinePosts];
+          this.allMissions = this.store.selectSnapshot(DataQueries.getMany("Mission", profile.company.missions));
+          this.cd.markForCheck();
+  
+          this.selectDraft(null);
+          this.selectUserOnline(null);
+          this.selectMission(null);
+  
         });
-
-        const otherOnlinePost = mapping.get(this.symbols.otherOnlinePost) || [];
-        this.allUserDrafts = mapping.get(this.symbols.userDraft) || [];
-        this.allUserOnlinePosts =
-          mapping.get(this.symbols.userOnlinePost) || [];
-        this.allOnlinePosts = [...otherOnlinePost, ...this.userOnlinePosts];
-        this.allMissions = this.store.selectSnapshot(DataQueries.getMany("Mission", profile.company.missions));
+      // const view = this.store.selectSnapshot(DataState.view)
+      // this._openCloseMission = view == 'ST' && this.missions.length != 0
+  
+      this.mobile.footerStateSubject.subscribe((b) => {
+        this.showFooter = b;
         this.cd.markForCheck();
-
-        this.selectDraft(null);
-        this.selectUserOnline(null);
-        this.selectMission(null);
-
       });
-    // const view = this.store.selectSnapshot(DataState.view)
-    // this._openCloseMission = view == 'ST' && this.missions.length != 0
-
-    this.mobile.footerStateSubject.subscribe((b) => {
-      this.showFooter = b;
-      this.cd.markForCheck();
-    });
+      
+      this.time = this.store.selectSnapshot(DataState.time);
+    }
     
-    this.time = this.store.selectSnapshot(DataState.time);
   }
 
   @HostBinding('class.footerHide')
@@ -218,20 +222,11 @@ export class HomeComponent extends Destroy$ {
       // Array qui contiendra les posts et leur valeur en distance Levenshtein pour une adresse demandée
       let levenshteinDist: any = [];
       if (filter.address) {
-        for (let post of this.allUserDrafts) {
-          levenshteinDist.push([
-            post,
-            getLevenshteinDistance(
-              post.address.toLowerCase(),
-              filter.address.toLowerCase()
-            ),
-          ]);
-        }
+        for (let post of this.allUserDrafts) {levenshteinDist.push([post,getLevenshteinDistance(post.address.toLowerCase(),filter.address.toLowerCase()),]);}
         levenshteinDist.sort((a: any, b: any) => a[1] - b[1]);
         let keys = levenshteinDist.map((key: any) => {
           return key[0];
         });
-
         // Trie les posts selon leur distance de levenshtein
         this.allUserDrafts.sort((a: any,b: any)=>keys.indexOf(a) - keys.indexOf(b));
       } else {
@@ -279,15 +274,7 @@ export class HomeComponent extends Destroy$ {
       // Array qui contiendra les posts et leur valeur en distance Levenshtein pour une adresse demandée
       let levenshteinDist: any = [];
       if (filter.address) {
-        for (let post of this.allUserOnlinePosts) {
-          levenshteinDist.push([
-            post,
-            getLevenshteinDistance(
-              post.address.toLowerCase(),
-              filter.address.toLowerCase()
-            ),
-          ]);
-        }
+        for (let post of this.allUserOnlinePosts) {levenshteinDist.push([post,getLevenshteinDistance(post.address.toLowerCase(),filter.address.toLowerCase()),]);}
         levenshteinDist.sort((a: any, b: any) => a[1] - b[1]);
         let keys = levenshteinDist.map((key: any) => {
           return key[0];
@@ -342,15 +329,7 @@ export class HomeComponent extends Destroy$ {
     } else {
       let levenshteinDist: any = [];
       if (filter.address) {
-        for (let mission of this.allMissions) {
-          levenshteinDist.push([
-            mission,
-            getLevenshteinDistance(
-              mission.address.toLowerCase(),
-              filter.address.toLowerCase()
-            ),
-          ]);
-        }
+        for (let mission of this.allMissions) {levenshteinDist.push([mission,getLevenshteinDistance(mission.address.toLowerCase(),filter.address.toLowerCase()),]);}
         levenshteinDist.sort((a: any, b: any) => a[1] - b[1]);
         let keys = levenshteinDist.map((key: any) => {
           return key[0];
@@ -410,16 +389,66 @@ export class HomeComponent extends Destroy$ {
     }
   };
 
+  isFilterOn(filter: any){
+    if (filter.address == "" && filter.date == "" && filter.jobs.length == 0 && filter.manPower == null && filter.sortDraftDate == false && filter.sortDraftFull == false && filter.sortPostResponse == false && filter.sortMissionNotifications == false){
+      this.filterOn = false;
+    } else {
+      this.filterOn = true;
+    }
+    this.cd.markForCheck;
+  }
+
+  resetFilter(filter: any){
+    filter.address = "";
+    filter.date = "";
+    filter.jobs = [];
+    filter.manPower = null;
+    filter.sortDraftDate = false;
+    filter.sortDraftFull = false;
+    filter.sortPostResponse = false;
+    filter.sortMissionNotifications = false;
+  }
+
+  get activeView(){
+    return 0
+  }
+
+  set activeView(num:number){
+  }
+
+  changeView = (filter: any): void => {
+    switch (this.activeView) {
+      case 0:
+        console.log('change draft')
+        this.resetFilter(filter)
+        break;
+      case 1:
+        console.log("change online")
+        this.resetFilter(filter)
+        break;
+      case 2:
+        console.log("change mission")
+        this.resetFilter(filter)
+    }
+
+  }
+
   callbackFilter = (filter: any): void => {
     switch (this.activeView) {
       case 0:
+        console.log("Draft")
         this.selectDraft(filter);
+        this.isFilterOn(filter);
         break;
       case 1:
+        console.log("Online")
         this.selectUserOnline(filter);
+        this.isFilterOn(filter);
         break;
       case 2:
+        console.log("Mission")
         this.selectMission(filter);
+        this.isFilterOn(filter);
     }
   };
 
@@ -619,7 +648,6 @@ export class HomeComponent extends Destroy$ {
       user: user as User,
       company: company!,
     } as Profile;
-    console.log("showCompany , candidate :", candidate)
     this.amountSubContractor = candidate?.amount
       ? "Contre-Offre: " + candidate!.amount.toString() + " €"
       : null;

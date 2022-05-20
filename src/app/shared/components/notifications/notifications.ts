@@ -52,7 +52,6 @@ export class Notifications {
     index: number,
     src: SafeResourceUrl | string
   ) {
-    console.log("yo", src)
     let notificationDisplay = {
       id: index,
       date: new Date(notification.timestamp * 1000),
@@ -175,7 +174,6 @@ export class Notifications {
                 ) as Company)
               : null;
           }
-          console.log("company, ", company)
           if (company) {
             if (SingleCache.checkValueInCache("companyImage" + company!.id.toString())) {
               src = <SafeResourceUrl>SingleCache.getValueByName("companyImage" + company!.id.toString())
@@ -184,7 +182,6 @@ export class Notifications {
               let logo = this.store.selectSnapshot(
                 DataQueries.getProfileImage(company.id)
               );
-            console.log("logo, ", logo)
             if (!logo) {
                 const fullname = company ? company.name[0].toUpperCase() : "A";
                 src = this.imageGenerator.generate(fullname);
@@ -194,7 +191,6 @@ export class Notifications {
                 this.downloader.downloadFile(logo).subscribe((image) => {
                 src = this.downloader.toSecureBase64(image);
                 SingleCache.setValueByName("companyImage" + company!.id.toString(), src)
-                console.log("src has changed ", src)
           });
               }}
               this.addNotification(notification, index, src);

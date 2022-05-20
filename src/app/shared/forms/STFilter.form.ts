@@ -1,3 +1,4 @@
+import { Options } from "@angular-slider/ngx-slider";
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -43,7 +44,7 @@ import { FilterService } from "../services/filter.service";
 
     <div class="form-input">
       <label>Dans un rayon autour de</label>
-      <ngx-slider [options]="imports.DistanceSliderConfig" [value]="0" [highValue]="1000" formControlName="if_$radius"></ngx-slider>
+      <ngx-slider [(value)]=valueDistance [options]="imports.DistanceSliderConfig" formControlName="if_$radius"></ngx-slider>
     </div>
 
     <div class="form-input form-spacer">
@@ -55,11 +56,11 @@ import { FilterService } from "../services/filter.service";
       <label class="form-title">Type</label>
         <div class="flex row radio-container">
           <div class="radio-item">
-            <radiobox class="grow" onselect="true" name="job-type" formControlName="if_$manPower1" #manPower1></radiobox>
+            <radiobox class="grow" hostName=manPower onselect="true" name="job-type" formControlName="if_$manPower" #manPower1></radiobox>
             <span (click)="manPower1.onChange($event)">Main d'oeuvre</span>
           </div>
           <div class="radio-item">
-            <radiobox class="grow" onselect="false" name="job-type" formControlName="if_$manPower2" #manPower2></radiobox>
+            <radiobox class="grow" hostName=manPower onselect="false" name="job-type" formControlName="if_$manPower" #manPower2></radiobox>
             <span (click)="manPower2.onChange($event)">Fourniture et pose</span>
           </div>
         </div>
@@ -67,8 +68,8 @@ import { FilterService } from "../services/filter.service";
 
 
     <div class="form-input">
-      <label>Estimation de salaire:</label>
-      <ngx-slider [options]="imports.SalarySliderConfig" [value]="0" [highValue]="100000" formControlName="if_amount"></ngx-slider>
+      <label>Estimation de salaire</label>
+      <ngx-slider [options]="imports.SalarySliderConfig" [highValue]="400" formControlName="if_amount"></ngx-slider>
     </div>
 
       <div class="form-input space-children-margin">
@@ -180,6 +181,8 @@ import { FilterService } from "../services/filter.service";
 export class STFilterForm extends Filter<Post> {
   imports = { DistanceSliderConfig, SalarySliderConfig };
 
+  valueDistance: number=1000;
+
   @Input("filter") name: string = "ST";
 
   @Input()
@@ -217,8 +220,7 @@ export class STFilterForm extends Filter<Post> {
     this.create<{
       // $job: boolean;
       $jobId: number;
-      $manPower1: boolean;
-      $manPower2: boolean;
+      $manPower: boolean;
       $favorite: boolean;
       $viewed: boolean;
       $candidate: boolean;
@@ -226,10 +228,7 @@ export class STFilterForm extends Filter<Post> {
       $radius: number;
       $isBoosted: boolean;
     }>([
-      this.defineComputedProperty('$manPower1', (post) => {
-        return post.manPower;
-      }),
-      this.defineComputedProperty('$manPower2', (post) => {
+      this.defineComputedProperty('$manPower', (post) => {
         return post.manPower;
       }),
       this.defineComputedProperty('$employeeCount', (post) => {
@@ -262,8 +261,6 @@ export class STFilterForm extends Filter<Post> {
         return distance ;
       }),
       this.defineComputedProperty('$isBoosted', (post) => {
-        console.log(post, this.time)
-        console.log(post.boostTimestamp > this.time)
         return post.boostTimestamp > this.time;
       }),
       this.sortBy("$isBoosted", (boosted1, boosted2) => {
@@ -277,8 +274,7 @@ export class STFilterForm extends Filter<Post> {
         return radius >= range[0] && radius <= range[1];
       }),
       this.inList('job', (job) => { return job.id }),
-      this.onlyIf('$manPower1', manPower1 => { return manPower1 }),
-      this.onlyIf('$manPower2', manPower2 => { return !manPower2 }),
+      this.onlyIf('$manPower', manPower => { return manPower }),
       this.onlyIf('amount', (amount, range) => {
         return amount >= range[0] && amount <= range[1];
       }),

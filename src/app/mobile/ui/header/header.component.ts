@@ -7,7 +7,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from 
     <h1 *ngIf="!customHeader">{{name}}</h1>
     <div *ngIf="!customHeader; else headerBar" class="pick flex row">
       <searchbar class="grow"></searchbar>
-      <img [src]="filterOpen ? 'assets/filterBlue.svg':'assets/filterWhite.svg'" (click)="filterClicked.emit(); filterOpen = true;" id ='filterButton'/>
+      <img [src]="filterOpen ? 'assets/filterBlue.svg':'assets/filterWhite.svg'" (click)="filterClicked.emit()"/>
     </div>
     <ng-template #headerBar>
       <ng-content select="[headerBar]"></ng-content>

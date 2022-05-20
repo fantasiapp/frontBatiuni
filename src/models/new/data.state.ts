@@ -97,6 +97,7 @@ export class Clear {
 @Injectable()
 export class DataState {
   flagUpdate = true;
+  isFirstTime = true
   constructor(
     private store: Store,
     private reader: DataReader,
@@ -133,12 +134,14 @@ export class DataState {
   @Action(Clear)
   clear(ctx: StateContext<DataModel>, clear: Clear) {
     const current = ctx.getState();
-    if (clear.data)
+    if (clear.data) {
+      console.log("clear, showView", current.session.view);
       ctx.patchState({
         [clear.data]: {},
         fields: { ...current.fields, [clear.data]: [] },
-      });
+      });}
     else
+    console.log("clear, showView", current.session.view)
       ctx.setState({
         fields: {},
         session: {
@@ -162,6 +165,7 @@ export class DataState {
 
   @Selector()
   static view(state: DataModel) {
+    console.log("view le get : ", state.session.view)
     return state.session.view;
   }
 
@@ -228,9 +232,26 @@ export class DataState {
       tap((response: any) => {
         const loadOperations = this.reader.readInitialData(response),
           sessionOperation = this.reader.readCurrentSession(response);
-
+      // if (!this.isFirstTime) {
+      //   let oldView = this.store.selectSnapshot(DataState.view)
+      //   console.log("olview", oldView)
+      //   ctx.setState(compose(...loadOperations, sessionOperation));
+      //   const state = ctx.getState();
+      //   ctx.patchState({
+      //     session: {
+      //       ...state.session,
+      //       view: oldView,
+      //     },
+      //   })
+      //   console.log("new view in if", this.store.selectSnapshot(DataState.view))
+      // }
+      // else {
         ctx.setState(compose(...loadOperations, sessionOperation));
+        // this.isFirstTime = false
+      // }
+        console.log("new view", this.store.selectSnapshot(DataState.view))
         this.flagUpdate = true
+         
       })
     );
     }
@@ -241,6 +262,8 @@ export class DataState {
 
   @Action(Logout)
   logout(ctx: StateContext<DataModel>) {
+    console.log("logout")
+    // this.isFirstTime = true
     ctx.setState({ fields: {}, session: { view: "ST", currentUser: -1 , time: 0} });
     ctx.dispatch(new GetGeneralData()); // a sign to decouple this from DataModel
   }
@@ -282,9 +305,7 @@ export class DataState {
       tap((response: any) => {
         if (response[picture.action] !== "OK") throw response["messages"];
 
-        console.log('changeProfilePicture, response', response)
         delete response[picture.action];
-        console.log('response', response);
         ctx.setState(compose(addSimpleChildren("Company", profile.company.id, "File", response, "nature")));
       })
     );
@@ -303,7 +324,6 @@ export class DataState {
         let key = Object.keys(response)
         let id = response.supervisionId
         delete response.supervisionId;
-        console.log("response", response)
         response[parseInt(key[0])].push(picture.imageBase64)
 
         ctx.setState(compose(addComplexChildren("Supervision", id, "File", response)))

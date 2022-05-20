@@ -5,20 +5,20 @@
     </div>
     <div class="pick flex center-cross">
         <searchbar class="grow"></searchbar>
-        <img src="assets/filterBlue.svg" (click)="openAdFilterMenu = true"/>
+        <img src="assets/filterDarkBlue.svg" (click)="openAdFilterMenu = true"/>
     </div>
 </header>
 
 <div class="hosted-page space-children-margin page-content-with-tabs">
-    <div *ngFor="let onlinePost of allOnlinePosts">
-        <offer *ngIf="hasPostulated(onlinePost)" 
-            [deletable]="false"
-            [post]="onlinePost"
-            (click)="openPost(onlinePost)"
-            [view]="'PME'"
-            [isAppliedPage]="true"
-        ></offer>
-    </div>
+    <offer 
+        *ngFor="let onlinePost of userOnlinePosts"    
+        [deletable]="false"
+        [post]="onlinePost"
+        (click)="openPost(onlinePost)"
+        [isAppliedPage]="true"
+        [time]="time">
+    </offer>
+
 </div>
 
 
@@ -33,11 +33,5 @@
 </slidemenu>
 
 <swipeup [(open)]="openAdFilterMenu" type="view">
-    <!-- <ng-container content>
-        <st-filter-form style="padding-inline: 2rem;" (update)="allOnlinePosts = $event"></st-filter-form>
-    </ng-container> -->
-    <ng-container view>
-        <st-filter-form (update)="allOnlinePosts = $event"></st-filter-form>
-    </ng-container>
+    <application-filter-form [callbackFilter]="callbackFilter" view></application-filter-form>
 </swipeup>
-

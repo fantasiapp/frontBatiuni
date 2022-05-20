@@ -25,14 +25,14 @@ import { FormArray, FormControl, FormGroup } from "@angular/forms";
     </div>
 
     <div class="form-input">
-      <label>Dans un rayon autour de:</label>
-      <ngx-slider [options]="imports.DistanceSliderConfig" [value]="0" [highValue]="1000" formControlName="radius"></ngx-slider>
+      <label>Dans un rayon autour de</label>
+      <ngx-slider [options]="imports.DistanceSliderConfig" [value]="0" [highValue]="1000"formControlName="radius"></ngx-slider>
     </div>
 
 
     <div class="form-input">
-      <label>Estimation de salaire:</label>
-      <ngx-slider [options]="imports.SalarySliderConfig" [value]="0" [highValue]="100000" formControlName="amount"></ngx-slider>
+      <label>Estimation de salaire</label>
+      <ngx-slider [options]="imports.SalarySliderConfig" [value]="0" [highValue]="400" formControlName="amount"></ngx-slider>
     </div>
 
 
@@ -67,8 +67,11 @@ import { FormArray, FormControl, FormGroup } from "@angular/forms";
   `],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
+
 export class SOSFilterForm implements OnInit {
   imports = { DistanceSliderConfig, SalarySliderConfig };
+
+  valueDistance: number = 1000;
 
   @Input()
   activeView: number = 0;

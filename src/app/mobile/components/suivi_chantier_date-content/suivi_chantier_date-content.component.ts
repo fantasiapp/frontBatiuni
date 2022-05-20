@@ -141,9 +141,9 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
     this.store.dispatch(new UploadImageSupervision(photo, this.currentSupervisionId)).pipe(take(1)).subscribe(() => {
       let mission = this.store.selectSnapshot(DataQueries.getById('Mission', this.mission!.id))
       let supervisions = this.store.selectSnapshot(DataQueries.getMany('Supervision', this.mission!.supervisions))
-      for (const sup of supervisions) {
-        console.log('supervisions', sup, this.store.selectSnapshot(DataQueries.getMany("File", sup.files)))
-      }
+      // for (const sup of supervisions) {
+      //   console.log('supervisions', sup, this.store.selectSnapshot(DataQueries.getMany("File", sup.files)))
+      // }
       this.updatePageOnlyDate();
       this.swipeMenuImage = false;
     });
@@ -206,7 +206,7 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
   }
   textareaSubmit(e: any,input: HTMLFormElement){
     // console.log(e.key, e.code, 'abricot')
-    console.log('input', e.keyCode, e.type);
+    // console.log('input', e.keyCode, e.type);
     if(e.keyCode == 13){
       input.dispatchEvent(new Event("submit", {cancelable: true}))
       e.preventDefault(); // Prevents the addition of a new line in the text field (not needed in a lot of cases)
