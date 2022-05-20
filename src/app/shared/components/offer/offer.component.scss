@@ -106,7 +106,7 @@
 
 .offer-logo {
   width: 5rem;
-  height: 5rem;
+  // height: 5rem;
 
   span {
     position: absolute;
@@ -130,7 +130,10 @@
   
   .imageProfile {
     border-radius: 50%;
-    width: 100%;
+    width: 4.5rem;
+    height: 4.5rem;
+    object-fit: cover;
+    
   }
 }
 
