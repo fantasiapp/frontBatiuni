@@ -229,6 +229,9 @@ export class DataState {
       this.flagUpdate = false
     return req.pipe(
       tap((response: any) => {
+        console.log("response : ", response)
+        console.log("DataSate : ", ctx.getState())
+        console.log("response : ", response)
         const loadOperations = this.reader.readInitialData(response),
           sessionOperation = this.reader.readCurrentSession(response);
       if (!this.isFirstTime) {
