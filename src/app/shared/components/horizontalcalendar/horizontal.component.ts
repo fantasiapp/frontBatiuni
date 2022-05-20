@@ -127,10 +127,9 @@ export class HorizontaleCalendar implements OnInit {
 
   toCalendarDays(workDays: MissionDetailedDay[]): DayState[] {
     this.detailedDays = workDays;
-    console.log('object,', this.detailedDays);
     return workDays.map((workDay) => ({
       date: workDay.date,
-      availability: this.getNotification(workDay.date) ? 'notification' : "selected",
+      availability: this.getNotification(workDay.date, workDay.mission) ? 'notification' : "selected",
     }));
   }
 
@@ -159,14 +158,20 @@ export class HorizontaleCalendar implements OnInit {
         notification: this.getNotification(dayFormated[2])
       });
     }
+    console.log('day', days);
     this.selectedDay = days;
   }
 
-  getNotification(day: string){
-    for (const detail of this.detailedDays) {
-      if(detail.date == day){
-        let change = this.dateChange(detail.mission, day)
-        return change.deleted || change.schedule || !change.validate
+  getNotification(day: string, mission: Mission | null = null){
+    if(mission){
+      let change = this.dateChange(mission, day)
+      return change.deleted || change.schedule || !change.validate
+    } else {
+      for (const detail of this.detailedDays) {
+        if(detail.date == day){
+          let change = this.dateChange(detail.mission, day)
+          return change.deleted || change.schedule || !change.validate
+        }
       }
     }
     return false
@@ -296,12 +301,22 @@ export class HorizontaleCalendar implements OnInit {
     else datesId = mission.dates;
 
     let dates = this.store.selectSnapshot(DataQueries.getMany("DatePost", datesId));
-    for (const datePost of dates) {
-      if (datePost.date == date) {
-        isChange.validate = datePost.validated;
-        isChange.deleted = datePost.deleted;
-      }
-    }
+    dates.filter(datePost => datePost.date == date).map(datePost => {
+      console.log('datesPost;', datePost);  
+      isChange.validate = datePost.validated;
+      isChange.deleted = datePost.deleted
+    })
+
+    // let notification = false
+    // for (const curCard of this.currentCardCalendars) {
+    //   // console.log('day', day, curCard.date);
+    //   if(date == curCard.date){
+    //     if(!notification) {
+    //       notification = curCard.change.deleted || curCard.change.schedule || !curCard.change.validate
+    //     }
+    //   }
+    // }
+
     if (!isChange.deleted)
       isChange.schedule = !!mission.hourlyEndChange || !!mission.hourlyStartChange;
 
@@ -309,7 +324,10 @@ export class HorizontaleCalendar implements OnInit {
   }
 
   onCardUpdate(state: any, card: calendarItem) {
-    const choice = state[0], cardChange = state[1]
+    const cardChange = state
+
+
+    console.log('cardChange', cardChange);
     let mission = this.store.selectSnapshot(DataQueries.getById("Mission", card.mission.id));
     let heightTop = this.calculator(mission!.hourlyStart, mission!.hourlyEnd);
 
@@ -318,19 +336,47 @@ export class HorizontaleCalendar implements OnInit {
     card.cardFromTop = heightTop[0];
     card.cardHeight = heightTop[1];
     card.change = cardChange
+    
+    console.log('selecteddays', this.selectedDay);
+    for (const day of this.selectedDay) {
+      let notification = false
+      for (const curCard of this.currentCardCalendars) {
+        // console.log('day', day, curCard.date);
+        if(day.day[2] == curCard.date){
+          console.log('DAAYSYSs');
+          if(!notification) {
+            notification = curCard.change.deleted || curCard.change.schedule || !curCard.change.validate
+          }
+          console.log('notification;', notification);
+          day.notification = notification
+        }
+      }
+    }
 
+    console.log('traceur onCardupdate');
     if (cardChange.deleted || (!card.change.deleted && !card.change.validate)) {
       let newCardCalendars: calendarItem[] = [];
       for (const curCard of this.currentCardCalendars) {
-        if (curCard.mission.id != card.mission.id || curCard.date != card.date)
+        if (curCard.mission.id != card.mission.id || curCard.date != card.date){
           newCardCalendars.push(curCard);
+        }
       }
+
       this.currentCardCalendars = newCardCalendars;
     }
+    
+
+    // for (const detailDay of this.detailedDays) {
+    //   if(detailDay.date == this.currentCardCalendars[0].date){
+        
+    //   }
+    // }
 
     // if(choice && !cardChange.validate){
     //   card.change.validate = true
     // }
+    // this.toCalendarDays(this.detailedDays)
+
 
     this.cd.markForCheck();
   }

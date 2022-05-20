@@ -188,7 +188,7 @@ export type Mission = Post & {
   signedByCompany: boolean;
   signedBySubContractor: boolean;
 
-  quality:            number;
+  quality: number;
   qualityComment: string;
   security: number;
   securityComment: string;

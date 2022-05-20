@@ -57,6 +57,7 @@ import {
   transformField,
   addComplexChildren,
   replaceChildren,
+  update,
 } from "./state.operators";
 import { Logout } from "../auth/auth.actions";
 import { InfoService } from "src/app/shared/components/info/info.component";
@@ -713,6 +714,7 @@ export class DataState {
     const profile = this.store.selectSnapshot(DataQueries.currentProfile)!;
     return this.http.post("data", application).pipe(
       tap((response: any) => {
+        console.log('response;', response);
         if (response[application.action] !== "OK") {
           this.inZone(() => this.info.show("error", response.messages, 3000));
           throw response.messages;
@@ -721,8 +723,9 @@ export class DataState {
             this.info.show("info", "La mission est mise à jour", 3000)
           );
           delete response[application.action];
-
-          ctx.setState(addComplexChildren("Company",profile.company.id,"Mission",response));
+          
+          ctx.setState(update('DatePost', response.datePost))
+          ctx.setState(addComplexChildren("Company",profile.company.id,"Mission",response.mission));
         }
       })
     );

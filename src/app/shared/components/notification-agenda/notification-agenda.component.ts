@@ -40,21 +40,15 @@ export class NotificationAgendaComponent {
   deleted(b: boolean, deleting: boolean) {
     this.field = "date";
 
+    console.log('validate');
     this.store.dispatch(new ValidateMissionDate(this.card.mission.id, this.field, b, this.date)).pipe().subscribe(() => {
-      if(deleting){
-        this.card.change = { 
-          validate: !b,
-          deleted: b,
-          schedule: this.card.change.schedule
-        }
-      } else {
-        this.card.change = { 
-          validate: b,
-          deleted: false,
-          schedule: this.card.change.schedule
-        }
+      console.log('validate 2 ', this.card, b);
+      this.card.change = { 
+        validate: deleting ? !b : b,
+        deleted: deleting && b,
+        schedule: this.card.change.schedule
       }
-      this.cardUpdate.emit([b, this.card.change]);
+      this.cardUpdate.emit(this.card.change);
     });
   }
 }
