@@ -115,22 +115,22 @@ export class HorizontaleCalendar implements OnInit {
 
     let now = new Date(Date.now());
     this.getDaysFromDate(now.getMonth() + 1, now.getFullYear());
+    this.showAgenda(moment(now).format("YYYY-MM-DD"));
     this.setSelectedDays();
     this.someFunction();
     this.spanShowToday = moment(now)
       .locale("fr")
       .format("dddd D - MMMM - YYYY");
 
-    this.showAgenda(moment(now).format("YYYY-MM-DD"));
     this.showColors();
   }
 
   toCalendarDays(workDays: MissionDetailedDay[]): DayState[] {
     this.detailedDays = workDays;
-
+    console.log('object,', this.detailedDays);
     return workDays.map((workDay) => ({
       date: workDay.date,
-      availability: "selected",
+      availability: this.getNotification(workDay.date) ? 'notification' : "selected",
     }));
   }
 
@@ -140,7 +140,6 @@ export class HorizontaleCalendar implements OnInit {
         .locale("fr")
         .format("D,dddd,YYYY-MM-DD")
         .split(","),
-        // permet de voir un la veille sur le calendrier horizontal
       weekStart = currentDate.clone().add( -1, "days");
     let days = [];
     for (let i = 0; i < HorizontaleCalendar.NUMBER_OF_DAYS_DISPLAYED; i++) {
@@ -151,14 +150,26 @@ export class HorizontaleCalendar implements OnInit {
         .split(",");
       const selected = dayFormated[2] == currentDateFormated[2];
         // status = selected ? 'aujourdhui' : ''
+
       days.push({
         day: dayFormated,
         status: '',
         selected: selected,
-        today: selected
+        today: selected,
+        notification: this.getNotification(dayFormated[2])
       });
     }
     this.selectedDay = days;
+  }
+
+  getNotification(day: string){
+    for (const detail of this.detailedDays) {
+      if(detail.date == day){
+        let change = this.dateChange(detail.mission, day)
+        return change.deleted || change.schedule || !change.validate
+      }
+    }
+    return false
   }
 
   getDaysFromDate(month: any, year: any) {
@@ -266,7 +277,6 @@ export class HorizontaleCalendar implements OnInit {
         change: this.dateChange(today.mission, today.date),
       });
     }
-
     this.cd.markForCheck();
   }
 
@@ -303,6 +313,7 @@ export class HorizontaleCalendar implements OnInit {
     let mission = this.store.selectSnapshot(DataQueries.getById("Mission", card.mission.id));
     let heightTop = this.calculator(mission!.hourlyStart, mission!.hourlyEnd);
 
+    console.log('card', card, state);
     card.mission = mission!;
     card.cardFromTop = heightTop[0];
     card.cardHeight = heightTop[1];

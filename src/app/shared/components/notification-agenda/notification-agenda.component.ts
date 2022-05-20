@@ -43,7 +43,7 @@ export class NotificationAgendaComponent {
     this.store.dispatch(new ValidateMissionDate(this.card.mission.id, this.field, b, this.date)).pipe().subscribe(() => {
       if(deleting){
         this.card.change = { 
-          validate: this.card.change.validate,
+          validate: !b,
           deleted: b,
           schedule: this.card.change.schedule
         }

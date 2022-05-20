@@ -103,6 +103,11 @@ ol {
     background-color: $primary;
     @extend %bgcolor;
   }
+
+  .notification {
+    background-color: red;
+    @extend %bgcolor
+  }
   
   .nothing {
     background-color: $bg-white;
