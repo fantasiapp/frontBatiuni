@@ -12,10 +12,11 @@
 <div class="hosted-page space-children-margin page-content-with-tabs">
     <div *ngFor="let onlinePost of allOnlinePosts">
         <offer *ngIf="hasPostulated(onlinePost)" 
-                [deletable]="false"
-        [post]="onlinePost"
-        (click)="openPost(onlinePost)"
-        [isAppliedPage]="true"
+            [deletable]="false"
+            [post]="onlinePost"
+            (click)="openPost(onlinePost)"
+            [view]="'PME'"
+            [isAppliedPage]="true"
         ></offer>
     </div>
 </div>
@@ -31,8 +32,12 @@
     </ng-container>
 </slidemenu>
 
-<swipeup [(open)]="openAdFilterMenu">
-    <ng-container content>
+<swipeup [(open)]="openAdFilterMenu" type="view">
+    <!-- <ng-container content>
+        <st-filter-form style="padding-inline: 2rem;" (update)="allOnlinePosts = $event"></st-filter-form>
+    </ng-container> -->
+    <ng-container view>
         <st-filter-form (update)="allOnlinePosts = $event"></st-filter-form>
     </ng-container>
 </swipeup>
+
