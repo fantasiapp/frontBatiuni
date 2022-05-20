@@ -40,6 +40,7 @@ export class MissionsComponent extends Destroy$ {
   myMissions: Mission[] = [];
   allMyMissions: Mission[] = [];
   missionMenu = new PostMenu<Mission>();
+  filterOn: boolean = false;
 
   detailedDays: MissionDetailedDay[] = [];
   _openCloseMission = false;
@@ -132,7 +133,16 @@ export class MissionsComponent extends Destroy$ {
 
   callbackFilter = (filter: any): void => {
     this.selectMissions(filter);
+    this.isFilterOn(filter);
   };
+
+  isFilterOn(filter: any){
+    if (filter.address == "" && filter.isClosed == false && filter.jobs.length == 0 && filter.manPower == null && filter.missionDate == "" && filter.sortMissionDate == false && filter.unread == false && filter.validationDate == ""){
+      this.filterOn = false;
+    } else {
+      this.filterOn = true;
+    }
+  }
 
   selectMissions(filter: any) {
     this.myMissions = [];

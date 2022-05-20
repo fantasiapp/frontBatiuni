@@ -39,6 +39,7 @@ interface Sort<T, ComputedProperties, Key extends KeyOf<T, ComputedProperties> =
   type: 'sort';
   name: Key;
   comparaison: (u: any, v: any) => number;
+  initialValue: boolean;
 };
 
 interface Some<T, ComputedProperties> {
@@ -130,8 +131,8 @@ export abstract class Filter<T extends {id: number}> extends Destroy$ {
     return { type: 'if', name, condition, otherwise, initialValue }
   }
 
-  protected sortBy<ComputedProperties, K extends KeyOf<T, ComputedProperties>>(name: K, comparaison: (u: ValueOf<T, ComputedProperties, K>, v: ValueOf<T, ComputedProperties, K>) => number): Sort<T, ComputedProperties> {
-    return { type: 'sort', name, comparaison};
+  protected sortBy<ComputedProperties, K extends KeyOf<T, ComputedProperties>>(name: K, comparaison: (u: ValueOf<T, ComputedProperties, K>, v: ValueOf<T, ComputedProperties, K>) => number, initialValue: boolean = false): Sort<T, ComputedProperties> {
+    return { type: 'sort', name, comparaison, initialValue};
   }
 
   protected every<ComputedProperties>(name: string, ...args: Step<T, ComputedProperties>[]): Every<T, ComputedProperties> {
@@ -166,7 +167,7 @@ export abstract class Filter<T extends {id: number}> extends Destroy$ {
       
       return array;
     } else {
-      if ( step.type == 'if' )
+      if ( step.type == 'if' || step.type == "sort")
         return new FormControl(step.initialValue || false);
       return new FormControl();
     }

@@ -72,13 +72,13 @@ import { FilterService } from "../services/filter.service";
       <label class="form-title">Réorganiser la liste selon</label>
       <div class="switch-container flex center-cross">
         <span class="criteria" (click)="isClosed.onChangeCall()"
-          >Mission clôturer</span
+          >Missions clôturées</span
         >
         <switch class="default" formControlName="isClosed" #isClosed></switch>
       </div>
       <div class="switch-container flex center-cross">
         <span class="criteria" (click)="sortMissionDate.onChangeCall()"
-          >Date de mission la plus proche à la plus lointaine</span
+          >Date de mission de la plus proche à la plus lointaine</span
         >
         <switch
           class="default"

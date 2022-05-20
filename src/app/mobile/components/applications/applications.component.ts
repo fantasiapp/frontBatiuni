@@ -10,11 +10,12 @@ import { Select, Store } from "@ngxs/store";
 import { combineLatest, Observable } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { Post, PostMenu, Profile } from "src/models/new/data.interfaces";
-import { DataQueries, QueryAll } from "src/models/new/data.state";
+import { DataQueries, DataState, QueryAll } from "src/models/new/data.state";
 import { Destroy$ } from "src/app/shared/common/classes";
 import { assignCopy, splitByOutput } from "../../../shared/common/functions";
 import { MarkViewed } from "src/models/new/user/user.actions";
 import { UIAnnonceResume } from "src/app/mobile/ui/annonce-resume/annonce-resume.ui";
+import { Input } from "hammerjs";
 // import { UISlideMenuComponent } from 'src/app/shared/components/slidemenu/slidemenu.component';
 
 @Component({
@@ -36,6 +37,7 @@ export class ApplicationsComponent extends Destroy$ implements OnInit {
     otherOnlinePost: 2,
     discard: -1,
   };
+
 
   openAdFilterMenu: boolean = false;
 

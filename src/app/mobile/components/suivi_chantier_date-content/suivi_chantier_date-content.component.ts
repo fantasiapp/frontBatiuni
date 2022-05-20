@@ -138,10 +138,12 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
       source: CameraSource.Photos,
     });
 
-
     this.store.dispatch(new UploadImageSupervision(photo, this.currentSupervisionId)).pipe(take(1)).subscribe(() => {
       let mission = this.store.selectSnapshot(DataQueries.getById('Mission', this.mission!.id))
       let supervisions = this.store.selectSnapshot(DataQueries.getMany('Supervision', this.mission!.supervisions))
+      for (const sup of supervisions) {
+        console.log('supervisions', sup, this.store.selectSnapshot(DataQueries.getMany("File", sup.files)))
+      }
       this.updatePageOnlyDate();
       this.swipeMenuImage = false;
     });
@@ -225,7 +227,8 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
 
   currentSupervisionId: Ref<Supervision> | null = null
   cameraSwipe(supervsionId: Ref<Supervision> | null){
-    this.currentSupervisionId = supervsionId
+    this.currentSupervisionId = supervsionId;
+    console.log(this.currentSupervisionId);
     this.swipeMenuImage = true; 
     // this.currentTaskId = task ? task!.id : null
     this.cd.markForCheck()
@@ -282,6 +285,7 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
         supervisions: this.computeSupervisionsForMission(date as string,supervisionsTaks),
       } as DateG;
     });
+    console.log('dates', this.dates);
       this.dates.sort((date1, date2) => (date1.value > date2.value ? 1 : -1));
   }
 

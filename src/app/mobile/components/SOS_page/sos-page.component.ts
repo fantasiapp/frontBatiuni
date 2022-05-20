@@ -44,6 +44,7 @@ export class SOSPageComponent extends Destroy$ {
   availableCompanies: availableCompanies[] = []
   companies: Company[] = [];
   availabilities: MarkerType[] = [];
+  filterOn: boolean = false;
 
   @QueryAll("Company")
   companies$!: Observable<Company[]>;
@@ -85,6 +86,7 @@ export class SOSPageComponent extends Destroy$ {
 
   callbackFilter = (filter: any): void => {
     this.selectCompany(filter);
+    this.isFilterOn(filter);
   };
 
   isCompanyAvailable(company: Company){
@@ -99,6 +101,21 @@ export class SOSPageComponent extends Destroy$ {
         continue;
       }
     } 
+  }
+
+  arrayEquals(a: any[], b: any[]) {
+    return Array.isArray(a) &&
+      Array.isArray(b) &&
+      a.length === b.length &&
+      a.every((val, index) => val === b[index]);
+  }
+
+  isFilterOn(filter: any){
+    if (filter.address == "" && this.arrayEquals(filter.amount, [1, 400]) && filter.jobs.length == 0 && this.arrayEquals(filter.radius, [0, 1000]) && filter.sortDisponibleProfils == false && filter.sortFullProfils == false && filter.sortNotation == false){
+      this.filterOn = false;
+    } else {
+      this.filterOn = true;
+    }
   }
 
   selectCompany(filter: any) {
