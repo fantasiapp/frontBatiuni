@@ -245,7 +245,7 @@ export class DataState {
       }
       else {
         ctx.setState(compose(...loadOperations, sessionOperation));
-        this.isFirstTime = false
+        this.isFirstTime = true
       }
         console.log("new view", this.store.selectSnapshot(DataState.view))
         this.flagUpdate = true
