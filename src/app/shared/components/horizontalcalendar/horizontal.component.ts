@@ -340,6 +340,7 @@ export class HorizontaleCalendar implements OnInit {
     console.log('selecteddays', this.selectedDay);
     for (const day of this.selectedDay) {
       let notification = false
+      let status = false
       for (const curCard of this.currentCardCalendars) {
         // console.log('day', day, curCard.date);
         if(day.day[2] == curCard.date){
@@ -347,9 +348,14 @@ export class HorizontaleCalendar implements OnInit {
           if(!notification) {
             notification = curCard.change.deleted || curCard.change.schedule || !curCard.change.validate
           }
+          if(!status) status = curCard.change.deleted && curCard.change.schedule && curCard.change.validate
           console.log('notification;', notification);
+          day.status = status ? 'occupe' : ''
           day.notification = notification
         }
+      }
+      if(!status){
+        day.notification = false
       }
     }
 
@@ -357,27 +363,13 @@ export class HorizontaleCalendar implements OnInit {
     if (cardChange.deleted || (!card.change.deleted && !card.change.validate)) {
       let newCardCalendars: calendarItem[] = [];
       for (const curCard of this.currentCardCalendars) {
-        if (curCard.mission.id != card.mission.id || curCard.date != card.date){
+        if (curCard.mission.id != card.mission.id){
           newCardCalendars.push(curCard);
         }
       }
 
       this.currentCardCalendars = newCardCalendars;
     }
-    
-
-    // for (const detailDay of this.detailedDays) {
-    //   if(detailDay.date == this.currentCardCalendars[0].date){
-        
-    //   }
-    // }
-
-    // if(choice && !cardChange.validate){
-    //   card.change.validate = true
-    // }
-    // this.toCalendarDays(this.detailedDays)
-
-
     this.cd.markForCheck();
   }
 
