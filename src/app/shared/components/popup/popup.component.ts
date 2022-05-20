@@ -54,6 +54,7 @@ import { SuiviPME } from "src/app/mobile/components/suivi_pme/suivi-pme.page";
 import { SuiviChantierDateContentComponent } from "src/app/mobile/components/suivi_chantier_date-content/suivi_chantier_date-content.component";
 import { UICheckboxComponent } from "../box/checkbox.component";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
+import { SingleCache } from "../../services/SingleCache";
 
 const TRANSITION_DURATION = 200;
 
@@ -335,12 +336,23 @@ export class PopupService {
   }
 
   openFile(file: BasicFile | File) {
-    if (!file.content) {
-      this.downloader
-        .downloadFile((file as File).id!, true)
-        .subscribe((file) => this.openFile(file));
-      return;
+    if (SingleCache.checkValueInCache("File" + (file as File).id!.toString()) && !file.content) {
+
     }
+      if (!file.content) {
+        if (SingleCache.checkValueInCache("File" + (file as File).id!.toString())) {
+          this.openFile(SingleCache.getValueByName("File" + (file as File).id!.toString()))
+          return;
+        }
+        else {
+        this.downloader
+          .downloadFile((file as File).id!, true)
+          .subscribe((file) => {
+            SingleCache.setValueByName("File" + (file as File).id!.toString(), file)
+            this.openFile(file)
+          });
+        return;}
+      }
 
     let context = this.downloader.createFileContext(file);
     this.popups$.next({

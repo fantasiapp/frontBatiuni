@@ -414,7 +414,6 @@ export class MakeAdForm {
     this.makeAdForm.get("address")?.setValue(p.address);
     this.makeAdForm.get("numberOfPeople")?.setValue(p.numberOfPeople);
     this.makeAdForm.get("counterOffer")?.setValue(p.counterOffer);
-    console.log(p.counterOffer)
     this.makeAdForm.get("hourlyStart")?.setValue(p.hourlyStart);
     this.makeAdForm.get("hourlyEnd")?.setValue(p.hourlyEnd);
     this.makeAdForm
@@ -583,7 +582,6 @@ export class MakeAdForm {
 
   submit(draft: boolean) {
     if (this.post) {
-      console.log('submit, post', this.post)
       if (!draft) {
         this.info.show("info", "Mise en ligne de l'annonce...", Infinity);
         const action = this.makeAdForm.touched

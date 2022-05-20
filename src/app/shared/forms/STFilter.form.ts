@@ -261,8 +261,6 @@ export class STFilterForm extends Filter<Post> {
         return distance ;
       }),
       this.defineComputedProperty('$isBoosted', (post) => {
-        console.log(post, this.time)
-        console.log(post.boostTimestamp > this.time)
         return post.boostTimestamp > this.time;
       }),
       this.sortBy("$isBoosted", (boosted1, boosted2) => {
@@ -276,7 +274,7 @@ export class STFilterForm extends Filter<Post> {
         return radius >= range[0] && radius <= range[1];
       }),
       this.inList('job', (job) => { return job.id }),
-      this.onlyIf('$manPower', manPower => { console.log(manPower); return manPower }),
+      this.onlyIf('$manPower', manPower => { return manPower }),
       this.onlyIf('amount', (amount, range) => {
         return amount >= range[0] && amount <= range[1];
       }),

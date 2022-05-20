@@ -42,7 +42,6 @@ export class ApplicationsComponent extends Destroy$ {
     discard: -1,
   };
 
-  time: number = 0;
 
   openAdFilterMenu: boolean = false;
 
@@ -52,6 +51,7 @@ export class ApplicationsComponent extends Destroy$ {
   userOnlinePosts: Post[] = [];
   allOnlinePosts: Post[] = [];
   allCandidatedPost: Post[] = [];
+  time: number = 0;
 
   constructor(private cd: ChangeDetectorRef, private store: Store) {
     super();
@@ -131,7 +131,7 @@ export class ApplicationsComponent extends Destroy$ {
         let datesPost = this.store.selectSnapshot(DataQueries.getMany("DatePost", post.dates));
         let dates = datesPost.map(date => date.date);
         let isDifferentDate = (filter.missionDate && !dates.includes(filter.missionDate))
-        
+
         let isDifferentManPower = (filter.manPower && post.manPower != (filter.manPower === "true"))
         let isNotIncludedJob = (filter.jobs && filter.jobs.length && filter.jobs.every((job: any) => {return job.id != post.job}))
 

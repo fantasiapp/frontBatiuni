@@ -125,6 +125,7 @@ export class HomeComponent extends Destroy$ {
   _openCloseMission: boolean = false;
   openAdFilterMenu: boolean = false;
   toogle: boolean = false;
+  isLoading: boolean = false;
   imports = { DistanceSliderConfig, SalarySliderConfig };
   draftMenu = new PostMenu();
   postMenu = new PostMenu();
@@ -146,44 +147,47 @@ export class HomeComponent extends Destroy$ {
   }
 
   ngOnInit() {
-    this.info.alignWith("header_search");
-    combineLatest([this.profile$, this.posts$])
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(([profile, posts]) => {
-        const mapping = splitByOutput(posts, (post) => {
-          //0 -> userOnlinePosts | 1 -> userDrafts
-          if (profile.company.posts.includes(post.id))
+    if (!this.isLoading) {
+      this.info.alignWith("header_search");
+      combineLatest([this.profile$, this.posts$])
+        .pipe(takeUntil(this.destroy$))
+        .subscribe(([profile, posts]) => {
+          const mapping = splitByOutput(posts, (post) => {
+            //0 -> userOnlinePosts | 1 -> userDrafts
+            if (profile.company.posts.includes(post.id))
+              return post.draft
+                ? this.symbols.userDraft
+                : this.symbols.userOnlinePost;
+  
             return post.draft
-              ? this.symbols.userDraft
-              : this.symbols.userOnlinePost;
-
-          return post.draft
-            ? this.symbols.discard
-            : this.symbols.otherOnlinePost;
+              ? this.symbols.discard
+              : this.symbols.otherOnlinePost;
+          });
+  
+          const otherOnlinePost = mapping.get(this.symbols.otherOnlinePost) || [];
+          this.allUserDrafts = mapping.get(this.symbols.userDraft) || [];
+          this.allUserOnlinePosts =
+            mapping.get(this.symbols.userOnlinePost) || [];
+          this.allOnlinePosts = [...otherOnlinePost, ...this.userOnlinePosts];
+          this.allMissions = this.store.selectSnapshot(DataQueries.getMany("Mission", profile.company.missions));
+          this.cd.markForCheck();
+  
+          this.selectDraft(null);
+          this.selectUserOnline(null);
+          this.selectMission(null);
+  
         });
-
-        const otherOnlinePost = mapping.get(this.symbols.otherOnlinePost) || [];
-        this.allUserDrafts = mapping.get(this.symbols.userDraft) || [];
-        this.allUserOnlinePosts =
-          mapping.get(this.symbols.userOnlinePost) || [];
-        this.allOnlinePosts = [...otherOnlinePost, ...this.userOnlinePosts];
-        this.allMissions = this.store.selectSnapshot(DataQueries.getMany("Mission", profile.company.missions));
+      // const view = this.store.selectSnapshot(DataState.view)
+      // this._openCloseMission = view == 'ST' && this.missions.length != 0
+  
+      this.mobile.footerStateSubject.subscribe((b) => {
+        this.showFooter = b;
         this.cd.markForCheck();
-
-        this.selectDraft(null);
-        this.selectUserOnline(null);
-        this.selectMission(null);
-
       });
-    // const view = this.store.selectSnapshot(DataState.view)
-    // this._openCloseMission = view == 'ST' && this.missions.length != 0
-
-    this.mobile.footerStateSubject.subscribe((b) => {
-      this.showFooter = b;
-      this.cd.markForCheck();
-    });
+      
+      this.time = this.store.selectSnapshot(DataState.time);
+    }
     
-    this.time = this.store.selectSnapshot(DataState.time);
   }
 
   @HostBinding('class.footerHide')
@@ -644,7 +648,6 @@ export class HomeComponent extends Destroy$ {
       user: user as User,
       company: company!,
     } as Profile;
-    console.log("showCompany , candidate :", candidate)
     this.amountSubContractor = candidate?.amount
       ? "Contre-Offre: " + candidate!.amount.toString() + " €"
       : null;

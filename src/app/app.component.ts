@@ -46,11 +46,11 @@ export class AppComponent extends Destroy$ {
 
   ready$ = new AsyncSubject<true>();
   readyToUpdate: boolean = true;
+  firstAttemptAlreadyTried: boolean = false; 
 
   async ngOnInit() {
     await this.store.dispatch(new Load()).toPromise();
     await SplashScreen.hide();
-    this.updateUserData();
     try {
       await this.store.dispatch(new GetGeneralData()).toPromise();
     } catch (e) {
@@ -66,7 +66,10 @@ export class AppComponent extends Destroy$ {
   }
 
   async updateUserData() {
-    if (this.readyToUpdate) {
+    if (!this.firstAttemptAlreadyTried) {
+      this.firstAttemptAlreadyTried = true
+    }
+    else if (this.readyToUpdate) {
       this.readyToUpdate = false
       this.getUserData()
       await delay(20000)

@@ -100,12 +100,11 @@ export class NavigationMenu extends Destroy$ {
       const nextMenu = type == 'PME' ? PMEMenu : STMenu;
       this.menu.next(nextMenu);
       this.getIndexFromUrl(this.router.url);
-      this.sub = this.notifService.getNotifChangeEmitter().subscribe(value => {
-        this.notificationUnseen = value;
-        this.cd.markForCheck()
-      })
     });
-
+    this.sub = this.notifService.getNotifChangeEmitter().subscribe(value => {
+      this.notificationUnseen = value;
+      this.cd.markForCheck()
+    })
   }
 
   redirectHome() {
