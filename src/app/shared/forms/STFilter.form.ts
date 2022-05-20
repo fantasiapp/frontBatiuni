@@ -235,10 +235,7 @@ export class STFilterForm {
     if (!value) return;
     this.switches.forEach((item) => {
       if (cancelIfTrue.includes(item)) {
-
-        console.log("cancel", cancelIfTrue[0].value);
         cancelIfTrue[0].value = false;
-        console.log(cancelIfTrue[0].value);
         this.cd.markForCheck();
       }
     });
@@ -249,9 +246,7 @@ export class STFilterForm {
   ngOnInit() {
 
     this.filterForm.valueChanges.subscribe((value) => {
-      console.log(value);
       this.updateFilteredPosts(value);
-      console.log(this.filteredPosts);
       this.updateEvent.emit(this.filteredPosts);
     });
 
@@ -264,8 +259,7 @@ export class STFilterForm {
 
     // Filter
     for (let post of this.posts) {
-      // console.log("Filtre sur le poste", post);
-      // console.log(filter);
+
 
       //Date
       let datesPost = this.store.selectSnapshot(DataQueries.getMany("DatePost", post.dates));
@@ -314,17 +308,6 @@ export class STFilterForm {
 
       //CounterOffer
       let isNotCounterOffer = (filter.counterOffer && !post.counterOffer);
-
-      // console.log("isDifferentDate", isDifferentDate);
-      // console.log("isDifferentManPower", isDifferentManPower);
-      // console.log("isNotIncludedJob", isNotIncludedJob);
-      // console.log("isNotInRadius", isNotInRadius);
-      // console.log("isNotInRangeSalary", isNotInRangeSalary);
-      // console.log("isNotViewed", isNotViewed);
-      // console.log("isNotFavorite", isNotFavorite);
-      // console.log("isNotCandidate", isNotCandidate);
-      // console.log("isNotCounterOffer", isNotCounterOffer);
-
       
       if ( isDifferentDate || 
           isDifferentManPower || 
@@ -363,9 +346,8 @@ export class STFilterForm {
       );
     } 
     
-    //DueDate
+    //dueDate
     if (filter.dueDateSort) {
-      console.log("dieDate")
       this.filteredPosts.sort((a: any, b: any) => {
         let aDate = a.dueDate;
         let bDate = b.dueDate;
@@ -382,7 +364,6 @@ export class STFilterForm {
 
     //startDate
     if (filter.startDateSort) {
-      console.log("startDate")
       this.filteredPosts.sort((a, b) => {
         return a["id"] - b["id"];
       });
