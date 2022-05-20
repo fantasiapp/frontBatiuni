@@ -232,13 +232,14 @@ export class STFilterForm {
 
   //cancel other filters
   onSwitchClick(value: boolean, cancelIfTrue: UISwitchComponent[]) {
-    console.log("switch clicked");
-    console.log(value);
-    console.log(cancelIfTrue);
     if (!value) return;
     this.switches.forEach((item) => {
       if (cancelIfTrue.includes(item)) {
+
+        console.log("cancel", cancelIfTrue[0].value);
         cancelIfTrue[0].value = false;
+        console.log(cancelIfTrue[0].value);
+        this.cd.markForCheck();
       }
     });
   }
@@ -291,7 +292,14 @@ export class STFilterForm {
       let isNotInRangeSalary = (filter.salary && (post.amount < filter.salary[0] || post.amount > filter.salary[1]))
 
       //Employees
-      //TODO
+      const company = this.store.selectSnapshot(DataQueries.getById('Company', post.company))!,
+      jobsForCompany = this.store.selectSnapshot(DataQueries.getMany('JobForCompany', company.jobs));
+      let count = jobsForCompany.reduce((acc, {number}) => acc + number, 0);
+      let isNotBetween1And10 = (!filter.employees[0] && (count >= 1 && count <= 10))
+      let isNotBetween11And20 = (!filter.employees[1] && (count >= 11 && count <= 20))
+      let isNotBetween21And50 = (!filter.employees[2] && (count >= 21 && count <= 50))
+      let isNotBetween51And100 = (!filter.employees[3] && (count >= 51 && count <= 100))
+      let isNotMoreThan100 = (!filter.employees[4] && count > 100)
 
       //Viewed
       let isNotViewed = (filter.viewed && !user.viewedPosts.includes(post.id));
@@ -326,7 +334,12 @@ export class STFilterForm {
           isNotViewed ||
           isNotFavorite ||
           isNotCandidate ||
-          isNotCounterOffer
+          isNotCounterOffer ||
+          isNotBetween1And10 ||
+          isNotBetween11And20 ||
+          isNotBetween21And50 ||
+          isNotBetween51And100 ||
+          isNotMoreThan100
           ) { continue }
 
       this.filteredPosts.push(post)
@@ -352,6 +365,7 @@ export class STFilterForm {
     
     //DueDate
     if (filter.dueDateSort) {
+      console.log("dieDate")
       this.filteredPosts.sort((a: any, b: any) => {
         let aDate = a.dueDate;
         let bDate = b.dueDate;
@@ -368,6 +382,7 @@ export class STFilterForm {
 
     //startDate
     if (filter.startDateSort) {
+      console.log("startDate")
       this.filteredPosts.sort((a, b) => {
         return a["id"] - b["id"];
       });
