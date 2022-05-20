@@ -19,6 +19,8 @@ import { MarkViewed } from "src/models/new/user/user.actions";
 import { UIAnnonceResume } from "src/app/mobile/ui/annonce-resume/annonce-resume.ui";
 import { Input } from "hammerjs";
 import { getLevenshteinDistance } from "src/app/shared/services/levenshtein";
+import { AppComponent } from "src/app/app.component";
+import { InfoService } from "src/app/shared/components/info/info.component";
 // import { UISlideMenuComponent } from 'src/app/shared/components/slidemenu/slidemenu.component';
 
 @Component({
@@ -53,11 +55,12 @@ export class ApplicationsComponent extends Destroy$ {
   allCandidatedPost: Post[] = [];
   time: number = 0;
 
-  constructor(private cd: ChangeDetectorRef, private store: Store) {
+  constructor(private cd: ChangeDetectorRef, private info: InfoService, private store: Store, private appComponent: AppComponent) {
     super();
   }
 
   ngOnInit(): void {
+    this.info.alignWith('header_search');
     combineLatest([this.profile$, this.posts$])
       .pipe(takeUntil(this.destroy$))
       .subscribe(([profile, posts]) => {
@@ -95,11 +98,15 @@ export class ApplicationsComponent extends Destroy$ {
         this.allCandidatedPost.push(post)
       }
     }
+    this.cd.markForCheck;
     this.selectPost(null);
   }
 
+  ngAfterViewInit() {
+    this.appComponent.updateUserData()
+  }
+
   selectPost(filter: any) {
-    console.log(filter)
     this.userOnlinePosts = [];
     if (filter == null) {  
       this.userOnlinePosts = this.allCandidatedPost;
@@ -142,7 +149,6 @@ export class ApplicationsComponent extends Destroy$ {
       }
     }
     this.cd.markForCheck();
-    console.log("posts",this.userOnlinePosts)
   }
 
   callbackFilter = (filter: any): void => {
@@ -157,12 +163,13 @@ export class ApplicationsComponent extends Destroy$ {
       swipeup: false,
     });
     if (post) this.store.dispatch(new MarkViewed(post.id));
-    setTimeout(() => {
-      // this.annonceResume.open()
-    }, 20);
+    // setTimeout(() => {
+    //   // this.annonceResume.open()
+    // }, 20);
   }
 
   ngOnDestroy(): void {
+    this.info.alignWith("last");
     super.ngOnDestroy();
   }
 

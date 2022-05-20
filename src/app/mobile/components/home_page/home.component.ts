@@ -122,6 +122,7 @@ export class HomeComponent extends Destroy$ {
   @ViewChild("booster", { read: TemplateRef, static: true })
   boosterTemplate!: TemplateRef<any>;
 
+  activeView: number = 0;
   _openCloseMission: boolean = false;
   openAdFilterMenu: boolean = false;
   toogle: boolean = false;
@@ -409,12 +410,12 @@ export class HomeComponent extends Destroy$ {
     filter.sortMissionNotifications = false;
   }
 
-  get activeView(){
-    return 0
-  }
+  // get activeView(){
+  //   return 0
+  // }
 
-  set activeView(num:number){
-  }
+  // set activeView(num:number){
+  // }
 
   changeView = (filter: any): void => {
     switch (this.activeView) {
