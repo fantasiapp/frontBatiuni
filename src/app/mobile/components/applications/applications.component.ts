@@ -98,6 +98,7 @@ export class ApplicationsComponent extends Destroy$ {
         this.allCandidatedPost.push(post)
       }
     }
+    this.cd.markForCheck;
     this.selectPost(null);
   }
 
