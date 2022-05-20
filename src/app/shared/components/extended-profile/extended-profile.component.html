@@ -47,7 +47,7 @@
         <ul class="contact list flex space-around">
           <li><a [href]="'tel:+33' + profile.company.companyPhone"><img src="assets/missions/call.svg"/></a></li>
           <li><a [href]="'sms:+33' + profile.company.companyPhone"><img src="assets/missions/envoyer-un-message.svg"/></a></li>
-          <li><a [href]="'mailto:' + profile.company" disabled><img src="assets/missions/envoyer-un-mail.svg"/></a></li>
+          <li><a [href]="'mailto:' + profile.company.email" disabled><img src="assets/missions/envoyer-un-mail.svg"/></a></li>
         </ul>
       </section>
     </ng-container>
