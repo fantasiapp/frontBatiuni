@@ -260,6 +260,7 @@ export class DataState {
   @Action(Logout)
   logout(ctx: StateContext<DataModel>) {
     console.log("logout")
+    this.isFirstTime = true
     ctx.setState({ fields: {}, session: { view: "ST", currentUser: -1 , time: 0} });
     ctx.dispatch(new GetGeneralData()); // a sign to decouple this from DataModel
   }
