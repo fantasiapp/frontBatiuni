@@ -1,4 +1,6 @@
 import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   EventEmitter,
   OnDestroy,
@@ -16,14 +18,18 @@ import { assignCopy, splitByOutput } from "../../../shared/common/functions";
 import { MarkViewed } from "src/models/new/user/user.actions";
 import { UIAnnonceResume } from "src/app/mobile/ui/annonce-resume/annonce-resume.ui";
 import { Input } from "hammerjs";
+import { getLevenshteinDistance } from "src/app/shared/services/levenshtein";
+import { AppComponent } from "src/app/app.component";
+import { InfoService } from "src/app/shared/components/info/info.component";
 // import { UISlideMenuComponent } from 'src/app/shared/components/slidemenu/slidemenu.component';
 
 @Component({
   selector: "applications",
   templateUrl: "./applications.component.html",
   styleUrls: ["./applications.component.scss"],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ApplicationsComponent extends Destroy$ implements OnInit {
+export class ApplicationsComponent extends Destroy$ {
   @Select(DataQueries.currentProfile)
   profile$!: Observable<Profile>;
 
@@ -46,11 +52,15 @@ export class ApplicationsComponent extends Destroy$ implements OnInit {
   userDrafts: Post[] = [];
   userOnlinePosts: Post[] = [];
   allOnlinePosts: Post[] = [];
-  constructor(private store: Store) {
+  allCandidatedPost: Post[] = [];
+  time: number = 0;
+
+  constructor(private cd: ChangeDetectorRef, private info: InfoService, private store: Store, private appComponent: AppComponent) {
     super();
   }
 
   ngOnInit(): void {
+    this.info.alignWith('header_search');
     combineLatest([this.profile$, this.posts$])
       .pipe(takeUntil(this.destroy$))
       .subscribe(([profile, posts]) => {
@@ -71,21 +81,79 @@ export class ApplicationsComponent extends Destroy$ implements OnInit {
         this.userOnlinePosts = mapping.get(this.symbols.userOnlinePost) || [];
         this.allOnlinePosts = [...otherOnlinePost, ...this.userOnlinePosts];
       });
+    this.time = this.store.selectSnapshot(DataState.time);
+
+    for (let post of this.allOnlinePosts){
+      const profile = this.store.selectSnapshot(DataQueries.currentProfile);
+      let companiesId;
+      if (post) {
+        companiesId = post.candidates?.map((id: number) => {
+          let candidate = this.store.selectSnapshot(
+            DataQueries.getById("Candidate", id)
+         );
+          return candidate!.company;
+        });
+      }
+      if (companiesId?.includes(profile.company.id)) {
+        this.allCandidatedPost.push(post)
+      }
+    }
+    this.cd.markForCheck;
+    this.selectPost(null);
   }
 
-  hasPostulated(post: Post) {
-    const profile = this.store.selectSnapshot(DataQueries.currentProfile);
-    let companiesId;
-    if (post) {
-      companiesId = post.candidates?.map((id: number) => {
-        let candidate = this.store.selectSnapshot(
-          DataQueries.getById("Candidate", id)
-        );
-        return candidate!.company;
-      });
-    }
-    return companiesId?.includes(profile.company.id);
+  ngAfterViewInit() {
+    this.appComponent.updateUserData()
   }
+
+  selectPost(filter: any) {
+    this.userOnlinePosts = [];
+    if (filter == null) {  
+      this.userOnlinePosts = this.allCandidatedPost;
+    } else {
+      // Array qui contiendra les posts et leur valeur en distance Levenshtein pour une adresse demandée
+      let levenshteinDist: any = [];
+      if (filter.address) {
+        for (let post of this.allCandidatedPost) {levenshteinDist.push([post,getLevenshteinDistance(post.address.toLowerCase(),filter.address.toLowerCase()),]);}
+        levenshteinDist.sort((a: any, b: any) => a[1] - b[1]);
+        let keys = levenshteinDist.map((key: any) => {
+          return key[0];
+        });
+        // Trie les posts selon leur distance de levenshtein
+        this.allCandidatedPost.sort((a: any,b: any)=>keys.indexOf(a) - keys.indexOf(b));
+      } else {
+        this.allCandidatedPost.sort((a, b) => {
+          return a["id"] - b["id"];
+        });
+      }
+
+      // Trie les posts par date de mission la plus proche
+      if (filter.sortPostDate === true) {this.allCandidatedPost.sort((a: any, b: any) => Date.parse(a['dueDate']) - Date.parse(b['dueDate']))}
+
+      // Trie les posts par date de mission la plus proche
+      if (filter.sortMissionDate === true) {this.allCandidatedPost.sort((a: any, b: any) => Date.parse(a['startDate']) - Date.parse(b['startDate']))}
+    
+      for (let post of this.allCandidatedPost) {
+      
+        let datesPost = this.store.selectSnapshot(DataQueries.getMany("DatePost", post.dates));
+        let dates = datesPost.map(date => date.date);
+        let isDifferentDate = (filter.missionDate && !dates.includes(filter.missionDate))
+
+        let isDifferentManPower = (filter.manPower && post.manPower != (filter.manPower === "true"))
+        let isNotIncludedJob = (filter.jobs && filter.jobs.length && filter.jobs.every((job: any) => {return job.id != post.job}))
+
+        if (isDifferentDate || isDifferentManPower || isNotIncludedJob) {
+          continue;
+        }
+        this.userOnlinePosts.push(post);
+      }
+    }
+    this.cd.markForCheck();
+  }
+
+  callbackFilter = (filter: any): void => {
+    this.selectPost(filter);
+  };
 
   openPost(post: Post | null) {
     //mark as viewed
@@ -95,12 +163,13 @@ export class ApplicationsComponent extends Destroy$ implements OnInit {
       swipeup: false,
     });
     if (post) this.store.dispatch(new MarkViewed(post.id));
-    setTimeout(() => {
-      // this.annonceResume.open()
-    }, 20);
+    // setTimeout(() => {
+    //   // this.annonceResume.open()
+    // }, 20);
   }
 
   ngOnDestroy(): void {
+    this.info.alignWith("last");
     super.ngOnDestroy();
   }
 

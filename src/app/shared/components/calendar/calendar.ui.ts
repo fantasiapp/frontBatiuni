@@ -16,7 +16,8 @@ export type Availability =
   | "availablelimits"
   | "unavailable"
   | "selected"
-  | "nothing";
+  | "nothing"
+  | "notification";
 export interface DayState {
   date: string;
   availability: Availability;

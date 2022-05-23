@@ -82,10 +82,15 @@
         <pme-filter-form
           [activeView]="activeView"
           [callbackFilter]="callbackFilter"
+          [changeView]="changeView"
         ></pme-filter-form>
       </ng-container>
       <ng-template #stfilter>
-        <st-filter-form (update)="displayOnlinePosts = $event" [time]="time"></st-filter-form>
+        <st-filter-form 
+          (update)="displayOnlinePosts = $event"
+          [time]="time"
+          [posts]="allOnlinePosts"
+          ></st-filter-form>
       </ng-template>
     </swipeup>
 

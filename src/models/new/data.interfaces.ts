@@ -56,6 +56,7 @@ export interface Company {
   latitude: number;
   longitude: number;
   companyPhone: string;
+  email: string;
   webSite: string;
   jobs: Ref<JobForCompany>[];
   labels: Ref<LabelForCompany>[];
@@ -187,7 +188,7 @@ export type Mission = Post & {
   signedByCompany: boolean;
   signedBySubContractor: boolean;
 
-  quality:            number;
+  quality: number;
   qualityComment: string;
   security: number;
   securityComment: string;

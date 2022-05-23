@@ -57,6 +57,7 @@ import {
   transformField,
   addComplexChildren,
   replaceChildren,
+  update,
 } from "./state.operators";
 import { Logout } from "../auth/auth.actions";
 import { InfoService } from "src/app/shared/components/info/info.component";
@@ -234,24 +235,26 @@ export class DataState {
         console.log("response : ", response)
         const loadOperations = this.reader.readInitialData(response),
           sessionOperation = this.reader.readCurrentSession(response);
-      if (!this.isFirstTime) {
-        let oldView = this.store.selectSnapshot(DataState.view)
-        console.log("olview", oldView)
+      // if (!this.isFirstTime) {
+      //   let oldView = this.store.selectSnapshot(DataState.view)
+      //   console.log("olview", oldView)
+      //   ctx.setState(compose(...loadOperations, sessionOperation));
+      //   const state = ctx.getState();
+      //   ctx.patchState({
+      //     session: {
+      //       ...state.session,
+      //       view: oldView,
+      //     },
+      //   })
+      //   console.log("new view in if", this.store.selectSnapshot(DataState.view))
+      // }
+      // else {
         ctx.setState(compose(...loadOperations, sessionOperation));
-        const state = ctx.getState();
-        ctx.patchState({
-          session: {
-            ...state.session,
-            view: oldView,
-          },
-        })
-      }
-      else {
-        ctx.setState(compose(...loadOperations, sessionOperation));
-        this.isFirstTime = false
-      }
+        // this.isFirstTime = false
+      // }
         console.log("new view", this.store.selectSnapshot(DataState.view))
         this.flagUpdate = true
+         
       })
     );
     }
@@ -263,7 +266,7 @@ export class DataState {
   @Action(Logout)
   logout(ctx: StateContext<DataModel>) {
     console.log("logout")
-    this.isFirstTime = true
+    // this.isFirstTime = true
     ctx.setState({ fields: {}, session: { view: "ST", currentUser: -1 , time: 0} });
     ctx.dispatch(new GetGeneralData()); // a sign to decouple this from DataModel
   }
@@ -734,6 +737,7 @@ export class DataState {
     const profile = this.store.selectSnapshot(DataQueries.currentProfile)!;
     return this.http.post("data", application).pipe(
       tap((response: any) => {
+        console.log('response;', response);
         if (response[application.action] !== "OK") {
           this.inZone(() => this.info.show("error", response.messages, 3000));
           throw response.messages;
@@ -742,8 +746,9 @@ export class DataState {
             this.info.show("info", "La mission est mise à jour", 3000)
           );
           delete response[application.action];
-
-          ctx.setState(addComplexChildren("Company",profile.company.id,"Mission",response));
+          
+          ctx.setState(update('DatePost', response.datePost))
+          ctx.setState(addComplexChildren("Company",profile.company.id,"Mission",response.mission));
         }
       })
     );
