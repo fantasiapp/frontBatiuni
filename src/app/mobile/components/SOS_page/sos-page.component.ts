@@ -111,7 +111,7 @@ export class SOSPageComponent extends Destroy$ {
   }
 
   isFilterOn(filter: any){
-    if (filter.address == "" && this.arrayEquals(filter.amount, [1, 400]) && filter.jobs.length == 0 && this.arrayEquals(filter.radius, [0, 1000]) && filter.sortDisponibleProfils == false && filter.sortFullProfils == false && filter.sortNotation == false){
+    if (filter.address == "" && this.arrayEquals(filter.amount, [1, 400]) && filter.jobs.length == 0 && filter.radius == 1000 && filter.sortDisponibleProfils == false && filter.sortFullProfils == false && filter.sortNotation == false){
       this.filterOn = false;
     } else {
       this.filterOn = true;
@@ -185,7 +185,7 @@ export class SOSPageComponent extends Destroy$ {
         let postLatitude = company.latitude*(Math.PI/180);
         let postLongitude = company.longitude*(Math.PI/180);
         let distance = 6371*Math.acos(Math.sin(userLatitude)*Math.sin(postLatitude) + Math.cos(userLatitude)*Math.cos(postLatitude)*Math.cos(postLongitude-userLongitude))
-        let isNotRightRadius = (filter.radius && (distance < filter.radius[0] || distance > filter.radius[1]))
+        let isNotRightRadius = (filter.radius && distance > filter.radius)
 
         let available = false;
         let today = new Date().toISOString().slice(0, 10)
