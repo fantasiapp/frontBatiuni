@@ -256,6 +256,11 @@ export class HomeComponent extends Destroy$ {
 
   selectDraft(filter: any) {
     this.userDrafts = [];
+    this.allUserDrafts.sort((post1, post2) => {
+      let b1 = post1.boostTimestamp > this.time ? 1 : 0;
+      let b2 = post2.boostTimestamp > this.time ? 1 : 0;
+      return b2 - b1
+    })
     if (filter == null) {
       this.userDrafts = this.allUserDrafts;
     } else {
@@ -269,11 +274,7 @@ export class HomeComponent extends Destroy$ {
         });
         // Trie les posts selon leur distance de levenshtein
         this.allUserDrafts.sort((a: any,b: any)=>keys.indexOf(a) - keys.indexOf(b));
-      } else {
-        this.allUserDrafts.sort((a, b) => {
-          return a["id"] - b["id"];
-        });
-      }
+      } 
 
       // Trie brouillons les plus anciens
       if (filter.sortDraftDate === true) {this.allUserDrafts.sort((a: any, b: any) => a['id'] - b['id'])} 
@@ -308,6 +309,11 @@ export class HomeComponent extends Destroy$ {
 
   selectUserOnline(filter: any) {
     this.userOnlinePosts = [];
+    this.allUserOnlinePosts.sort((post1, post2) => {
+      let b1 = post1.boostTimestamp > this.time ? 1 : 0;
+      let b2 = post2.boostTimestamp > this.time ? 1 : 0;
+      return b2 - b1
+    });
     if (filter == null) {
       this.userOnlinePosts = this.allUserOnlinePosts;
     } else {
@@ -324,12 +330,7 @@ export class HomeComponent extends Destroy$ {
         this.allUserOnlinePosts.sort(
           (a: any, b: any) => keys.indexOf(a) - keys.indexOf(b)
         );
-      } else {
-        this.allUserOnlinePosts.sort((a, b) => {
-          return a["id"] - b["id"];
-        });
-      }
-
+      } 
       // Trie Posts selon leurs réponses
       if (filter.sortPostResponse === true) {
         let responses = [];
