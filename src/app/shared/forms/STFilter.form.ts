@@ -241,13 +241,16 @@ export class STFilterForm {
     });
   }
 
-  constructor(service: FilterService, private store: Store, private cd: ChangeDetectorRef) {}
+  constructor(private store: Store, private cd: ChangeDetectorRef, private filterService: FilterService) {}
 
   ngOnInit() {
 
     this.filterForm.valueChanges.subscribe((value) => {
+      console.log("value change, value before :", this.filteredPosts)
       this.updateFilteredPosts(value);
       this.updateEvent.emit(this.filteredPosts);
+      this.filterService.emitFilterChangeEvent(this.filteredPosts)
+      console.log("value change, value afters :", this.filteredPosts)
     });
 
   }
@@ -373,6 +376,12 @@ export class STFilterForm {
 
     
     this.cd.markForCheck();
+  }
+
+  updatePosts(posts: Post[]) {
+    this.posts = posts
+    this.updateFilteredPosts(this.filterForm.value);
+    this.updateEvent.emit(this.filteredPosts);
   }
 }
 
