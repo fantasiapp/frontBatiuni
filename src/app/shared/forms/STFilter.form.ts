@@ -82,12 +82,8 @@ import { getLevenshteinDistance } from "src/app/shared/services/levenshtein";
         <ng-container formArrayName="employees">
         <label class="form-title">Taille de l'entreprise</label>
           <div class="radio-item">
-            <checkbox
-              class="grow"
-              [value]="true"
-              formControlName="0"
-            ></checkbox>
-            <span>Moins de 10 salariés</span>
+            <checkbox class="grow"  [value]="true" formControlName="0"></checkbox>
+            <span >Moins de 10 salariés</span>
           </div>
           <div class="radio-item">
             <checkbox
@@ -185,6 +181,8 @@ import { getLevenshteinDistance } from "src/app/shared/services/levenshtein";
 })
 //save computed properties
 export class STFilterForm {
+  checkboxValues = [true]
+
   imports = { DistanceSliderConfig, SalarySliderConfig };
 
   valueDistance: number=2000;
