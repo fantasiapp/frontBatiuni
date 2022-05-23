@@ -52,11 +52,7 @@ import { Mobile } from "../services/mobile-footer.service";
 
         <div class="form-input">
           <label>Métier</label>
-          <options
-            type="radio"
-            [options]="allJobs"
-            formControlName="job"
-          ></options>
+          <options type="radio" [options]="allJobs" formControlName="job"></options>
         </div>
 
         <div class="form-input">
@@ -145,6 +141,7 @@ import { Mobile } from "../services/mobile-footer.service";
             ></switch>
           </div>
           <calendar
+            [disableBeforeToday]="true"
             [useEvents]="false"
             formControlName="calendar"
             [mode]="switch.value ? 'range' : 'single'"
@@ -198,7 +195,7 @@ import { Mobile } from "../services/mobile-footer.service";
         </div>
 
         <div class="form-input flex row">
-          <input type="checkbox" formControlName="counterOffer"/>
+          <checkbox type="checkbox" [value]="true" formControlName="counterOffer"></checkbox>
           <span>Autoriser une contre-offre</span>
         </div>
       </section>

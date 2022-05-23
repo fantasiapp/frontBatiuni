@@ -49,6 +49,9 @@ export class CalendarUI extends UIDefaultAccessor<DayState[]> {
   @Input()
   mode: CalendarMode = "single";
 
+  @Input()
+  disableBeforeToday: boolean = false;
+
   rangeMomentStart: moment.Moment | null = null;
 
   @Output()
@@ -88,15 +91,43 @@ export class CalendarUI extends UIDefaultAccessor<DayState[]> {
   constructor(cd: ChangeDetectorRef) {
     super(cd);
     // this.blockedDays = this.computeBlockedDate()
-    let now = new Date(Date.now());
-    this.currentMonth = now.getMonth() + 1;
-    this.currentYear = now.getFullYear();
-    this.value = [];
     
-    console.log('blocked', this.blockedDate);
+    
   }
   
   ngOnInit(){
+    let now = new Date(Date.now());
+    
+    this.currentMonth = now.getMonth() + 1;
+    this.currentYear = now.getFullYear();
+    this.value = [];
+    this.blockThePast(now)
+    console.log('blocked', this.blockedDate);
+    this.viewCurrentDate()
+  }
+
+  blockThePast(now: any){
+    if(this.disableBeforeToday){
+      //  console.log('today', now, moment(now));
+      console.log('today', moment(now).format('YYYY-MM-DD'));
+      const today = moment(now).format('YYYY-MM-DD')
+      let day = Number(today.substring(8,10))
+      let month = Number(today.substring(5,7))
+      let year = Number(today.substring(0, 4))
+      console.log('currentMonth', this.currentMonth);
+      // console.log('DJAFA', day, month, year);
+
+      if (this.currentYear > year) return
+      else if (this.currentYear == year && this.currentMonth > month) return
+      else if (this.currentYear == year && this.currentMonth == month) {}
+      else day = 32
+
+      for (let i = 1; i < day; i++) {
+        this.blockedDate.push(this.fillZero(this.currentYear) + '-' + this.fillZero(this.currentMonth) + '-' + this.fillZero(i))
+      }
+
+    }
+    console.log('blockedDay/', this.blockedDate);
   }
 
 
@@ -156,11 +187,10 @@ export class CalendarUI extends UIDefaultAccessor<DayState[]> {
 
   changeMonth(flag: any) {
     const nextDate =
-      flag < 0
-        ? this.dateSelect.clone().subtract(1, "month")
-        : this.dateSelect.clone().add(1, "month");
+      flag < 0 ? this.dateSelect.clone().subtract(1, "month") : this.dateSelect.clone().add(1, "month");
     this.currentMonth = nextDate.get("M") + 1;
     this.currentYear = nextDate.get("Y");
+    this.blockThePast(new Date(Date.now()))
     this.getDaysFromDate(this.fillZero(this.currentMonth), this.currentYear);
   }
 
