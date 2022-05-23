@@ -10,6 +10,9 @@ import { UIDefaultAccessor } from "../../common/classes";
 import * as moment from "moment";
 import { NG_VALUE_ACCESSOR } from "@angular/forms";
 import { filterSplit } from "../../common/functions";
+import { DataQueries } from "src/models/new/data.state";
+import { Mission } from "src/models/new/data.interfaces";
+import { Observable, Subscription } from "rxjs";
 
 export type Availability =
   | "available"
@@ -67,20 +70,35 @@ export class CalendarUI extends UIDefaultAccessor<DayState[]> {
     date: any;
     indexWeek: number;
     availability: Availability;
+    blockedDay: boolean
   }[] = [];
 
   dateSelect: any;
   selection: string[] = [];
   currentMonth: number = 0;
   currentYear: number = 0;
+  store: any;
+  
+  @Input()
+  mission: Mission | null= null;
+
+  @Input()
+  blockedDate: string[] = []
 
   constructor(cd: ChangeDetectorRef) {
     super(cd);
+    // this.blockedDays = this.computeBlockedDate()
     let now = new Date(Date.now());
     this.currentMonth = now.getMonth() + 1;
     this.currentYear = now.getFullYear();
     this.value = [];
+    
+    console.log('blocked', this.blockedDate);
   }
+  
+  ngOnInit(){
+  }
+
 
   private fillZero(month: number) {
     if (month < 10) return "0" + month;
@@ -106,14 +124,17 @@ export class CalendarUI extends UIDefaultAccessor<DayState[]> {
       const compareDate = moment(`${year}-${month}-${a}`, "YYYY-MM-DD");
       let flow: any = compareDate;
       let item = this._value!.filter((item) => item.date == flow._i);
+      console.log('flow', flow._i, flow, dayObject);
       return {
         name: dayObject.format("dddd"),
         value: a,
         date: flow._i,
         indexWeek: dayObject.isoWeekday(),
         availability: item[0]?.availability,
+        blockedDay: !!this.blockedDate.filter(date => date == flow._i)?.length
       };
     });
+    console.log('arrayDays', arrayDays);
     this.monthSelect = arrayDays;
   }
 

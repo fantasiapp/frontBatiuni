@@ -7,7 +7,7 @@ import {
 } from "@angular/core";
 import { FormArray, FormControl, FormGroup, Validators } from "@angular/forms";
 import { Select, Store } from "@ngxs/store";
-import { Observable } from "rxjs";
+import { Observable, Subject } from "rxjs";
 import { take } from "rxjs/operators";
 import { PopupService } from "src/app/shared/components/popup/popup.component";
 import {
@@ -385,8 +385,11 @@ export class SuiviPME {
   modifyTimeTable() {
     this.missionMenu.swipeup = false;
     this.swipeupModifyDate = true;
+    this.eventsSubject.next();
     this.cd.markForCheck();
   }
+
+  eventsSubject: Subject<void> = new Subject<void>();
 
   duplicateMission() {
     this.missionMenu.swipeup = false;
@@ -475,6 +478,7 @@ export class SuiviPME {
       if (detailDate && !listBlockedDate.includes(detailDate))
         listBlockedDate.push(detailDate);
     });
+    console.log('listBlockedDAte', listBlockedDate);
     return listBlockedDate;
   }
 }
