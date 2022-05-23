@@ -336,15 +336,13 @@ export class PopupService {
   }
 
   openFile(file: BasicFile | File) {
-    if (SingleCache.checkValueInCache("File" + (file as File).id!.toString()) && !file.content) {
-
-    }
+    if (!file.content && SingleCache.checkValueInCache("File" + (file as File).id!.toString())) {
       if (!file.content) {
-        if (SingleCache.checkValueInCache("File" + (file as File).id!.toString())) {
           this.openFile(SingleCache.getValueByName("File" + (file as File).id!.toString()))
           return;
         }
-        else {
+      }
+    else {
         this.downloader
           .downloadFile((file as File).id!, true)
           .subscribe((file) => {
@@ -352,7 +350,6 @@ export class PopupService {
             this.openFile(file)
           });
         return;}
-      }
 
     let context = this.downloader.createFileContext(file);
     this.popups$.next({
