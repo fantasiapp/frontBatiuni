@@ -466,6 +466,9 @@ export class SuiviPME {
   }
 
   computeBlockedDate(): string[] {
+    if(!this.mission){
+      return []
+    }
     let listBlockedDate: string[] = [];
     let listDetailedPost = this.mission!.details;
     listDetailedPost.forEach((detailId) => {
