@@ -60,6 +60,7 @@ import { AuthState } from "src/models/auth/auth.state";
 import { Logout } from "src/models/auth/auth.actions";
 import { analyzeAndValidateNgModules } from "@angular/compiler";
 import { AppComponent } from "src/app/app.component";
+import { PMEFilterForm } from "src/app/shared/forms/PMEFilter.form";
 
 @Component({
   selector: "home",
@@ -122,6 +123,9 @@ export class HomeComponent extends Destroy$ {
 
   @ViewChild("booster", { read: TemplateRef, static: true })
   boosterTemplate!: TemplateRef<any>;
+
+  @ViewChild(PMEFilterForm)
+  filterPME!: PMEFilterForm;
 
   activeView: number = 0;
   _openCloseMission: boolean = false;
@@ -402,55 +406,32 @@ export class HomeComponent extends Destroy$ {
     this.cd.markForCheck;
   }
 
-  resetFilter(filter: any){
-    filter.address = "";
-    filter.date = "";
-    filter.jobs = [];
-    filter.manPower = null;
-    filter.sortDraftDate = false;
-    filter.sortDraftFull = false;
-    filter.sortPostResponse = false;
-    filter.sortMissionNotifications = false;
-  }
-
-  // get activeView(){
-  //   return 0
-  // }
-
-  // set activeView(num:number){
-  // }
-
-  changeView = (filter: any): void => {
-    switch (this.activeView) {
-      case 0:
-        console.log('change draft')
-        this.resetFilter(filter)
-        break;
-      case 1:
-        console.log("change online")
-        this.resetFilter(filter)
-        break;
-      case 2:
-        console.log("change mission")
-        this.resetFilter(filter)
+  changeView(headerActiveView: number) {
+    if (headerActiveView == 0){
+      this.filterPME.resetFilter()
+      this.filterOn =false;
+    }  
+    if (headerActiveView == 1) {
+      this.filterPME.resetFilter()
+      this.filterOn =false;
+    }    
+    if (headerActiveView == 2) {
+      this.filterPME.resetFilter()
+      this.filterOn =false;
     }
-
   }
 
   callbackFilter = (filter: any): void => {
     switch (this.activeView) {
       case 0:
-        console.log("Draft")
         this.selectDraft(filter);
         this.isFilterOn(filter);
         break;
       case 1:
-        console.log("Online")
         this.selectUserOnline(filter);
         this.isFilterOn(filter);
         break;
       case 2:
-        console.log("Mission")
         this.selectMission(filter);
         this.isFilterOn(filter);
     }
