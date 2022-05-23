@@ -184,7 +184,7 @@ import { getLevenshteinDistance } from "src/app/shared/services/levenshtein";
 export class STFilterForm {
   imports = { DistanceSliderConfig, SalarySliderConfig };
 
-  valueDistance: number=1000;
+  valueDistance: number=2000;
 
   @Input("filter") name: string = "ST";
 
@@ -196,10 +196,13 @@ export class STFilterForm {
 
   filteredPosts: Post[] = [];
 
+  @Output()
+  filterOnST = new EventEmitter<boolean>();
+
   filterForm = new FormGroup({
     date: new FormControl(""),
     address: new FormControl(""),
-    radius: new FormControl(1000),
+    radius: new FormControl(2000),
     jobs: new FormControl([]),
     salary: new FormControl(0),
     manPower: new FormControl(null),
@@ -248,6 +251,7 @@ export class STFilterForm {
     this.filterForm.valueChanges.subscribe((value) => {
       console.log("value change, value before :", this.filteredPosts)
       this.updateFilteredPosts(value);
+      this.isFilterOn(value);
       this.updateEvent.emit(this.filteredPosts);
       this.filterService.emitFilterChangeEvent(this.filteredPosts)
       console.log("value change, value afters :", this.filteredPosts)
@@ -278,7 +282,7 @@ export class STFilterForm {
       let postLongitude = post.longitude*(Math.PI/180);
       let distance = 6371*Math.acos(Math.sin(userLatitude)*Math.sin(postLatitude) + Math.cos(userLatitude)*Math.cos(postLatitude)*Math.cos(postLongitude-userLongitude))
 
-      let isNotInRadius = (distance > filter.radius)
+      let isNotInRadius = (filter.radius  && distance > filter.radius)
 
       //Manpower
       let isDifferentManPower = (filter.manPower && post.manPower != (filter.manPower === "true"))
@@ -334,7 +338,11 @@ export class STFilterForm {
     // Sort
 
     //Boosted post
-
+    this.filteredPosts.sort((post1, post2) => {
+      let b1 = post1.boostTimestamp > this.time ? 1 : 0;
+      let b2 = post2.boostTimestamp > this.time ? 1 : 0;
+      return b2 - b1
+    })
     //Address
     // Array qui contiendra les posts et leur valeur en distance Levenshtein pour une adresse demandée
     let levenshteinDist: any = [];
@@ -382,6 +390,22 @@ export class STFilterForm {
     this.posts = posts
     this.updateFilteredPosts(this.filterForm.value);
     this.updateEvent.emit(this.filteredPosts);
+  }
+  
+  arrayEquals(a: any[], b: any[]) {
+    return Array.isArray(a) &&
+      Array.isArray(b) &&
+      a.length === b.length &&
+      a.every((val, index) => val === b[index]);
+  }
+
+  isFilterOn(filter: any){
+    if (filter.address == "" && filter.date == "" && filter.jobs.length == 0 && filter.manPower == null && filter.candidate == false && filter.counterOffer == false &&  filter.dueDateSort == false && this.arrayEquals(filter.employees, [true, true, true, true, true]) && this.arrayEquals(filter.salary, [1, 400]) && filter.favorite == false && filter.radius == 2000 && filter.startDateSort == false && filter.viewed == false){
+      this.filterOnST.emit(false)
+    } else {
+      this.filterOnST.emit(true);
+    }
+    this.cd.markForCheck;
   }
 }
 

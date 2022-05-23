@@ -62,6 +62,7 @@ import { analyzeAndValidateNgModules } from "@angular/compiler";
 import { AppComponent } from "src/app/app.component";
 import { isLoadingService } from "src/app/shared/services/isLoading.service";
 import { STFilterForm } from "src/app/shared/forms/STFilter.form";
+import { PMEFilterForm } from "src/app/shared/forms/PMEFilter.form";
 
 @Component({
   selector: "home",
@@ -101,6 +102,7 @@ export class HomeComponent extends Destroy$ {
   missions: Mission[] = [];
   allMissions: Mission[] = [];
   filterOn: boolean = false;
+  filterOnST: boolean = false;
 
   get missionToClose() {
     return this.missions[0];
@@ -123,6 +125,9 @@ export class HomeComponent extends Destroy$ {
 
   @ViewChild("booster", { read: TemplateRef, static: true })
   boosterTemplate!: TemplateRef<any>;
+
+  @ViewChild(PMEFilterForm)
+  filterPME!: PMEFilterForm;
 
   activeView: number = 0;
   _openCloseMission: boolean = false;
@@ -406,6 +411,8 @@ export class HomeComponent extends Destroy$ {
         }
         this.missions.push(mission);
       }
+      // Trie les missions pour que celles clôturées soient en derniers
+      this.missions.sort((a, b) => {return Number(a["isClosed"]) - Number(b["isClosed"]);});
     }
     this.cd.markForCheck();
   }
@@ -433,59 +440,40 @@ export class HomeComponent extends Destroy$ {
     this.cd.markForCheck;
   }
 
-  resetFilter(filter: any){
-    filter.address = "";
-    filter.date = "";
-    filter.jobs = [];
-    filter.manPower = null;
-    filter.sortDraftDate = false;
-    filter.sortDraftFull = false;
-    filter.sortPostResponse = false;
-    filter.sortMissionNotifications = false;
-  }
-
-  // get activeView(){
-  //   return 0
-  // }
-
-  // set activeView(num:number){
-  // }
-
-  changeView = (filter: any): void => {
-    switch (this.activeView) {
-      case 0:
-        console.log('change draft')
-        this.resetFilter(filter)
-        break;
-      case 1:
-        console.log("change online")
-        this.resetFilter(filter)
-        break;
-      case 2:
-        console.log("change mission")
-        this.resetFilter(filter)
+  changeView(headerActiveView: number) {
+    if (headerActiveView == 0){
+      this.filterPME.resetFilter()
+      this.filterOn =false;
+    }  
+    if (headerActiveView == 1) {
+      this.filterPME.resetFilter()
+      this.filterOn =false;
+    }    
+    if (headerActiveView == 2) {
+      this.filterPME.resetFilter()
+      this.filterOn =false;
     }
-
   }
 
   callbackFilter = (filter: any): void => {
     switch (this.activeView) {
       case 0:
-        console.log("Draft")
         this.selectDraft(filter);
         this.isFilterOn(filter);
         break;
       case 1:
-        console.log("Online")
         this.selectUserOnline(filter);
         this.isFilterOn(filter);
         break;
       case 2:
-        console.log("Mission")
         this.selectMission(filter);
         this.isFilterOn(filter);
     }
   };
+
+  updateFilterOnST(filterOnST: boolean){
+    this.filterOnST = filterOnST;
+  }
 
   //factor two menu into objects
   openDraft(post: Post | null) {

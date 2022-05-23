@@ -123,3 +123,8 @@ ol {
     height: 21px;
   }
 }
+
+.blocked-date {
+  background: $light;
+  pointer-events: none;
+}

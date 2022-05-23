@@ -6,8 +6,9 @@
       "
       [tabs]="view == 'PME' ? 3 : 2"
       [(activeView)]="activeView"
+      (activeViewChange)="changeView($event)"
       (filterClicked)="openAdFilterMenu = true"
-      [filterOpen]="filterOn"
+      [filterOpen]="view == 'PME' ? filterOn : filterOnST"
     >
       <span tab_0>{{ view == "PME" ? "Brouillon" : "Vue liste" }}</span>
       <span tab_1>{{ view == "PME" ? "En ligne" : "Carte" }}</span>
@@ -82,7 +83,6 @@
         <pme-filter-form
           [activeView]="activeView"
           [callbackFilter]="callbackFilter"
-          [changeView]="changeView"
         ></pme-filter-form>
       </ng-container>
       <ng-template #stfilter>
@@ -90,6 +90,7 @@
           (update)="displayOnlinePosts = $event"
           [time]="time"
           [posts]="allOnlinePosts"
+          (filterOnST)="updateFilterOnST($event)"
           ></st-filter-form>
       </ng-template>
     </swipeup>
