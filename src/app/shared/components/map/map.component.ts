@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, Input, ViewChild, ElementRef, Output, EventEmitter, NgZone } from '@angular/core';
+import { Component, ChangeDetectionStrategy, Input, ViewChild, ElementRef, Output, EventEmitter, NgZone, asNativeElements } from '@angular/core';
 import { Store } from '@ngxs/store';
 import * as mapboxgl from 'mapbox-gl';
 import { Company, Post } from 'src/models/new/data.interfaces';
@@ -67,6 +67,10 @@ export class UIMapComponent {
   constructor(private store: Store) {}
 
   popupContent!: HTMLElement;
+
+  @ViewChild('popupContainer', {read: ElementRef, static: true})
+  popupContainer!: ElementRef
+
   createPopup() {
     let span = document.createElement('span');
     span.classList.add('mapbox-popup-content');
@@ -85,7 +89,8 @@ export class UIMapComponent {
         this.companyClick.emit(company);
     };
 
-    return new mapboxgl.Popup().setDOMContent(this.popupContent);
+    this.popupContainer.nativeElement.style.display = 'block'
+    return new mapboxgl.Popup().setDOMContent(this.popupContainer.nativeElement);
   }
 
   createMarker(icon: MarkerType = 'selected') {
@@ -102,6 +107,8 @@ export class UIMapComponent {
 
   private initialized: boolean = false;
   ngOnInit() {
+
+    console.log('test', this.popupContainer.nativeElement);
     this.mapbox = new mapboxgl.Map({
       accessToken: 'pk.eyJ1IjoiemV1c2NoYXRvdWkiLCJhIjoiY2t3c2h0Yjk0MGo2NDJvcWh3azNwNnF6ZSJ9.ZBbZHpP2RFSzCUPkjfEvMQ',
       container: this.view.nativeElement,
