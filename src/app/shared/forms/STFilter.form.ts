@@ -71,8 +71,8 @@ import { getLevenshteinDistance } from "src/app/shared/services/levenshtein";
 
 
     <div class="form-input">
-      <label>Estimation de salaire</label>
-      <ngx-slider [options]="imports.SalarySliderConfig" [highValue]="40000" formControlName="salary"></ngx-slider>
+      <label>Estimation de la rémunération horaire</label>
+      <ngx-slider [options]="imports.SalarySliderConfig" [highValue]="400" formControlName="salary"></ngx-slider>
     </div>
 
       <div class="form-input space-children-margin">
@@ -184,7 +184,7 @@ import { getLevenshteinDistance } from "src/app/shared/services/levenshtein";
 export class STFilterForm {
   imports = { DistanceSliderConfig, SalarySliderConfig };
 
-  valueDistance: number=1000;
+  valueDistance: number=2000;
 
   @Input("filter") name: string = "ST";
 
@@ -196,10 +196,13 @@ export class STFilterForm {
 
   filteredPosts: Post[] = [];
 
+  @Output()
+  filterOnST = new EventEmitter<boolean>();
+
   filterForm = new FormGroup({
     date: new FormControl(""),
     address: new FormControl(""),
-    radius: new FormControl(1000),
+    radius: new FormControl(2000),
     jobs: new FormControl([]),
     salary: new FormControl(0),
     manPower: new FormControl(null),
@@ -247,6 +250,7 @@ export class STFilterForm {
 
     this.filterForm.valueChanges.subscribe((value) => {
       this.updateFilteredPosts(value);
+      this.isFilterOn(value);
       this.updateEvent.emit(this.filteredPosts);
     });
 
@@ -260,6 +264,7 @@ export class STFilterForm {
     // Filter
     for (let post of this.posts) {
 
+      const company = this.store.selectSnapshot(DataQueries.getById('Company', post.company))!;
 
       //Date
       let datesPost = this.store.selectSnapshot(DataQueries.getMany("DatePost", post.dates));
@@ -274,7 +279,7 @@ export class STFilterForm {
       let postLongitude = post.longitude*(Math.PI/180);
       let distance = 6371*Math.acos(Math.sin(userLatitude)*Math.sin(postLatitude) + Math.cos(userLatitude)*Math.cos(postLatitude)*Math.cos(postLongitude-userLongitude))
 
-      let isNotInRadius = (filter.radius && distance > filter.radius)
+      let isNotInRadius = (filter.radius  && distance > filter.radius)
 
       //Manpower
       let isDifferentManPower = (filter.manPower && post.manPower != (filter.manPower === "true"))
@@ -283,11 +288,10 @@ export class STFilterForm {
       let isNotIncludedJob = (filter.jobs && filter.jobs.length && filter.jobs.every((job: any) => {return job.id != post.job}))
       
       //Salary
-      let isNotInRangeSalary = (filter.salary && (post.amount < filter.salary[0] || post.amount > filter.salary[1]))
+      let isNotInRangeSalary = (filter.salary && (company.amount < filter.salary[0] || company.amount > filter.salary[1]))
 
       //Employees
-      const company = this.store.selectSnapshot(DataQueries.getById('Company', post.company))!,
-      jobsForCompany = this.store.selectSnapshot(DataQueries.getMany('JobForCompany', company.jobs));
+      const jobsForCompany = this.store.selectSnapshot(DataQueries.getMany('JobForCompany', company.jobs));
       let count = jobsForCompany.reduce((acc, {number}) => acc + number, 0);
       let isNotBetween1And10 = (!filter.employees[0] && (count >= 1 && count <= 10))
       let isNotBetween11And20 = (!filter.employees[1] && (count >= 11 && count <= 20))
@@ -330,6 +334,12 @@ export class STFilterForm {
 
     // Sort
 
+    //Boosted post
+    this.filteredPosts.sort((post1, post2) => {
+      let b1 = post1.boostTimestamp > this.time ? 1 : 0;
+      let b2 = post2.boostTimestamp > this.time ? 1 : 0;
+      return b2 - b1
+    })
     //Address
     // Array qui contiendra les posts et leur valeur en distance Levenshtein pour une adresse demandée
     let levenshteinDist: any = [];
@@ -371,6 +381,22 @@ export class STFilterForm {
 
     
     this.cd.markForCheck();
+  }
+
+  arrayEquals(a: any[], b: any[]) {
+    return Array.isArray(a) &&
+      Array.isArray(b) &&
+      a.length === b.length &&
+      a.every((val, index) => val === b[index]);
+  }
+
+  isFilterOn(filter: any){
+    if (filter.address == "" && filter.date == "" && filter.jobs.length == 0 && filter.manPower == null && filter.candidate == false && filter.counterOffer == false &&  filter.dueDateSort == false && this.arrayEquals(filter.employees, [true, true, true, true, true]) && this.arrayEquals(filter.salary, [1, 400]) && filter.favorite == false && filter.radius == 2000 && filter.startDateSort == false && filter.viewed == false){
+      this.filterOnST.emit(false)
+    } else {
+      this.filterOnST.emit(true);
+    }
+    this.cd.markForCheck;
   }
 }
 
