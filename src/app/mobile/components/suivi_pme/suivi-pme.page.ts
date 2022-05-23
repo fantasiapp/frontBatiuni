@@ -94,9 +94,9 @@ export class SuiviPME {
         (!mission.signedBySubContractor && this.view == "ST");
       this.computeDates(mission);
       this.companyName =
-        this.view == "ST" ? this.subContractor!.name : this.company!.name;
+        this.view == "ST" ? this.company!.name : this.subContractor!.name;
       this.contactName =
-        this.view == "ST" ? this.mission!.subContractorContact : "";
+        this.view == "ST" ? "" : this.mission!.subContractorContact ;
     }
     if (mission) this.updateDate(mission!);
   }
