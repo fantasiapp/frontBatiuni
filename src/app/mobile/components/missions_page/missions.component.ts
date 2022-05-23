@@ -182,9 +182,7 @@ export class MissionsComponent extends Destroy$ {
       for (let mission of this.allMyMissions) {
       
       let isDifferentValidationDate = (filter.validationDate && filter.validationDate != mission.dueDate)
-      let datesMission = this.store.selectSnapshot(DataQueries.getMany("DatePost", mission.dates));
-      let dates = datesMission.map(date => date.date);
-      let isNotInMissionDate = (filter.missionDate && !dates.includes(filter.missionDate))       
+      let isNotInMissionDate = (filter.missionDate && mission.startDate < filter.date)       
       let isDifferentManPower = (filter.manPower && mission.manPower != (filter.manPower === "true"))
       let isNotIncludedJob = (filter.jobs && filter.jobs.length && filter.jobs.every((job: any) => {return job.id != mission.job}))
       const user = this.store.selectSnapshot(DataQueries.currentUser);

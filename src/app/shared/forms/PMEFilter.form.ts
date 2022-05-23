@@ -11,8 +11,11 @@ import { SnapshotAll } from "src/models/new/data.state";
       <form class="form-control full-width" [formGroup]="filterForm">
         <div class="form-input">
           <label>Date de mission</label>
-          <input type="date" class="form-element" formControlName="date"/>
-          <img src="assets/calendar.png"/>
+          <div class="flex row space-between">
+            <label>À partir de : </label>
+            <input type="date" class="form-element" formControlName="date"/>
+            <img src="assets/calendar.png"/>
+          </div>
         </div>
 
         <div class="form-input">

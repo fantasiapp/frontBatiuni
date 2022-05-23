@@ -256,10 +256,8 @@ export class HomeComponent extends Destroy$ {
       }
 
       for (let post of this.allUserDrafts) {
-      
-        let datesPost = this.store.selectSnapshot(DataQueries.getMany("DatePost", post.dates));
-        let dates = datesPost.map(date => date.date);
-        let isDifferentDate = (filter.date && !dates.includes(filter.date))
+
+        let isDifferentDate = (filter.date && post.startDate < filter.date)
         let isDifferentManPower = (filter.manPower && post.manPower != (filter.manPower === "true"))
         let isNotIncludedJob = (filter.jobs && filter.jobs.length && filter.jobs.every((job: any) => {return job.id != post.job}))
 
@@ -314,10 +312,8 @@ export class HomeComponent extends Destroy$ {
       } 
 
       for (let post of this.allUserOnlinePosts) {
-        
-        let datesPost = this.store.selectSnapshot(DataQueries.getMany("DatePost", post.dates));
-        let dates = datesPost.map(date => date.date);
-        let isDifferentDate = (filter.date && !dates.includes(filter.date))
+
+        let isDifferentDate = (filter.date &&  post.startDate < filter.date)
         let isDifferentManPower = (filter.manPower && post.manPower != (filter.manPower === "true"))
         let isNotIncludedJob = (filter.jobs && filter.jobs.length && filter.jobs.every((job: any) => {return job.id != post.job}))
 
@@ -365,10 +361,8 @@ export class HomeComponent extends Destroy$ {
       }
 
       for (let mission of this.allMissions) {
-      
-        let datesPost = this.store.selectSnapshot(DataQueries.getMany("DatePost", mission.dates));
-        let dates = datesPost.map(date => date.date);
-        let isDifferentDate = (filter.date && !dates.includes(filter.date))
+
+        let isDifferentDate = (filter.date && mission.startDate < filter.date)
         let isDifferentManPower = (filter.manPower && mission.manPower != (filter.manPower === "true"))
         let isNotIncludedJob = (filter.jobs && filter.jobs.length && filter.jobs.every((job: any) => {return job.id != mission.job}))
 
