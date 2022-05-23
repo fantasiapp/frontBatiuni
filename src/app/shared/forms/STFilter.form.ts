@@ -28,12 +28,15 @@ import { getLevenshteinDistance } from "src/app/shared/services/levenshtein";
     <form class="form-control full-width" [formGroup]="filterForm">
       <div class="form-input">
         <label>Date de mission</label>
+        <div class="flex row space-between">
+            <label>À partir de : </label>
         <input
           type="date"
           class="form-element"
           formControlName="date"
         />
         <img src="assets/calendar.png" />
+        </div>
       </div>
 
       <div class="form-input">
@@ -137,7 +140,7 @@ import { getLevenshteinDistance } from "src/app/shared/services/levenshtein";
         </div>
         <div class="switch-container flex center-cross">
           <span class="criteria"
-            >Date d'échéance de l'annonce de la plus proche à la plus
+            >Date de validation de l'annonce de la plus proche à la plus
             lointaine</span
           >
           <switch
@@ -242,7 +245,7 @@ export class STFilterForm {
     });
   }
 
-  constructor(service: FilterService, private store: Store, private cd: ChangeDetectorRef) {}
+  constructor(private store: Store, private cd: ChangeDetectorRef, private filterService: FilterService) {}
 
   ngOnInit() {
 
@@ -250,6 +253,7 @@ export class STFilterForm {
       this.updateFilteredPosts(value);
       this.isFilterOn(value);
       this.updateEvent.emit(this.filteredPosts);
+      this.filterService.emitFilterChangeEvent(this.filteredPosts)
     });
 
   }
@@ -265,9 +269,7 @@ export class STFilterForm {
       const company = this.store.selectSnapshot(DataQueries.getById('Company', post.company))!;
 
       //Date
-      let datesPost = this.store.selectSnapshot(DataQueries.getMany("DatePost", post.dates));
-      let dates = datesPost.map(date => date.date);
-      let isDifferentDate = (filter.date && !dates.includes(filter.date))
+      let isDifferentDate = (filter.date && post.startDate < filter.date)
 
       //Radius
       let userCompany: any = this.store.selectSnapshot(DataQueries.getById("Company", user.company));
@@ -347,7 +349,6 @@ export class STFilterForm {
       let keys = levenshteinDist.map((key: any) => {
         return key[0];
       });
-      console.log("levenshteinDist", levenshteinDist);
       // On trie les posts selon leur distance de levenshtein
       this.filteredPosts.sort(
         (a: any, b: any) => keys.indexOf(a) - keys.indexOf(b)
@@ -381,6 +382,12 @@ export class STFilterForm {
     this.cd.markForCheck();
   }
 
+  updatePosts(posts: Post[]) {
+    this.posts = posts
+    this.updateFilteredPosts(this.filterForm.value);
+    this.updateEvent.emit(this.filteredPosts);
+  }
+  
   arrayEquals(a: any[], b: any[]) {
     return Array.isArray(a) &&
       Array.isArray(b) &&

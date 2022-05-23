@@ -91,6 +91,7 @@ export class ExtendedProfileComponent extends Destroy$ {
     (this.profile$ as Observable<Profile>)
       .pipe(take(1))
       .subscribe((profile) => {
+        console.log("avant avant")
         this.files = profile.company.files as any;
         this.companyJobs = profile.company.jobs as any;
         this.jobs = this.companyJobs.map(({ job }) => job) as any;
@@ -99,9 +100,6 @@ export class ExtendedProfileComponent extends Destroy$ {
     // this.showView = "PME"
   }
 
-  ngAfterViewInit() {
-    this.appComponent.updateUserData()
-  }
 
   get attachedFiles(): any[] {
     return this.files.filter(

@@ -6,6 +6,7 @@
       "
       [tabs]="view == 'PME' ? 3 : 2"
       [(activeView)]="activeView"
+      (activeViewChange)="changeView($event)"
       (filterClicked)="openAdFilterMenu = true"
       [filterOpen]="view == 'PME' ? filterOn : filterOnST"
     >
@@ -82,7 +83,6 @@
         <pme-filter-form
           [activeView]="activeView"
           [callbackFilter]="callbackFilter"
-          [changeView]="changeView"
         ></pme-filter-form>
       </ng-container>
       <ng-template #stfilter>
@@ -274,4 +274,6 @@
 </swipeup> -->
 
 
-<div *ngIf="false" class="loadingScreen" ></div>
+<div *ngIf="isLoading" class="loadingScreen" >
+  <div class="custom-loading-spinner"></div>
+</div>

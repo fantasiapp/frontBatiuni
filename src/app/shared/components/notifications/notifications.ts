@@ -61,7 +61,8 @@ export class Notifications {
     this.notificationsDisplay.unshift(notificationDisplay);
   }
 
-  get today(): NotificationDisplay[] {
+  today: NotificationDisplay[] = [];
+  updateToday() {
     let todayDate = new Date(Date.now());
     const todayConst: NotificationDisplay[] = this.notificationsDisplay.filter(
       (notif) =>
@@ -70,10 +71,12 @@ export class Notifications {
         )
 
     );
-    return todayConst.sort((not1:NotificationDisplay, not2:NotificationDisplay) => not1.date < not2.date ? 1 : -1)
+    this.today = todayConst.sort((not1:NotificationDisplay, not2:NotificationDisplay) => not1.date < not2.date ? 1 : -1)
   }
 
-  get month(): NotificationDisplay[] {
+  month: NotificationDisplay[] = [];
+
+  updateMonth() {
     let monthDate = new Date(Date.now());
     const monthConst: NotificationDisplay[] = this.notificationsDisplay.filter(
       (notif) =>
@@ -81,15 +84,16 @@ export class Notifications {
           moment(notif.date).format("L")
         )
     );
-    return monthConst.sort((not1:NotificationDisplay, not2:NotificationDisplay) => not1.date < not2.date ? 1 : -1)
+    this.month = monthConst.sort((not1:NotificationDisplay, not2:NotificationDisplay) => not1.date < not2.date ? 1 : -1)
   }
 
   get timerToday(): any[] {
     let Today = [];
     let max = this.today.length
+    let today = this.today;
     for (let i = 0; i < max; i++) {
       Today.push(
-        moment(moment(this.today[i].date)).startOf("minute").fromNow()
+        moment(moment(today[i].date)).startOf("minute").fromNow()
       );
     }
     return Today;
@@ -98,9 +102,10 @@ export class Notifications {
   get timerMonth(): any[] {
     let Month = [];
     let max = this.month.length
+    let month = this.month
     for (let j = 0; j < max; j++) {
       Month.push(
-        moment(moment(this.month[j].date)).startOf("minute").fromNow()
+        moment(moment(month[j].date)).startOf("minute").fromNow()
       );
     }
     return Month;
@@ -205,5 +210,7 @@ export class Notifications {
           break;
       }
     });
+    this.updateToday();
+    this.updateMonth();
   }
 }

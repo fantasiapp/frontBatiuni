@@ -258,8 +258,6 @@ export class STFilterFormOld extends Filter<Post> {
         return distance ;
       }),
       this.defineComputedProperty('$isBoosted', (post) => {
-        console.log(post, this.time)
-        console.log(post.boostTimestamp > this.time)
         return post.boostTimestamp > this.time;
       }),
       this.sortBy("$isBoosted", (boosted1, boosted2) => {

@@ -19,7 +19,7 @@ import {
   DistanceSliderConfig,
   SalarySliderConfig,
 } from "src/app/shared/common/config";
-import { assignCopy, splitByOutput } from "src/app/shared/common/functions";
+import { assignCopy, delay, splitByOutput } from "src/app/shared/common/functions";
 import { InfoService } from "src/app/shared/components/info/info.component";
 import { PopupService } from "src/app/shared/components/popup/popup.component";
 import {
@@ -60,6 +60,9 @@ import { AuthState } from "src/models/auth/auth.state";
 import { Logout } from "src/models/auth/auth.actions";
 import { analyzeAndValidateNgModules } from "@angular/compiler";
 import { AppComponent } from "src/app/app.component";
+import { isLoadingService } from "src/app/shared/services/isLoading.service";
+import { STFilterForm } from "src/app/shared/forms/STFilter.form";
+import { PMEFilterForm } from "src/app/shared/forms/PMEFilter.form";
 
 @Component({
   selector: "home",
@@ -123,11 +126,14 @@ export class HomeComponent extends Destroy$ {
   @ViewChild("booster", { read: TemplateRef, static: true })
   boosterTemplate!: TemplateRef<any>;
 
+  @ViewChild(PMEFilterForm)
+  filterPME!: PMEFilterForm;
+
   activeView: number = 0;
   _openCloseMission: boolean = false;
   openAdFilterMenu: boolean = false;
   toogle: boolean = false;
-  isLoading: boolean = false;
+  isLoading: boolean;
   imports = { DistanceSliderConfig, SalarySliderConfig };
   draftMenu = new PostMenu();
   postMenu = new PostMenu();
@@ -143,13 +149,41 @@ export class HomeComponent extends Destroy$ {
     private swipeupService: SwipeupService,
     private slideService: SlidemenuService,
     private filters: FilterService,
-    private mobile: Mobile
+    private mobile: Mobile,
+    private loadingService: isLoadingService,
+    private filterService: FilterService
   ) {
     super();
+    this.isLoading = this.loadingService.isLoading
   }
 
   ngOnInit() {
+    this.appComponent.updateUserData();
+    this.loadingService.getLoadingChangeEmitter().subscribe((bool : boolean) => {
+      this.isLoading = bool
+      console.log("isLoading", this.isLoading)
+      this.cd.markForCheck()
+    })
+    this.filterService.getFilterChangeEmitter().subscribe((posts: Post[]) => {
+      this.displayOnlinePosts = posts
+      this.cd.markForCheck()
+      console.log(this.displayOnlinePosts)
+    })
+    this.lateInit()
+  }
+
+  async lateInit() {
+    // console.log("is loading", this.isLoading)
+    // console.log("avant")
+    // this.isLoading = true
+    // this.cd.markForCheck()
+    // await delay(5000)
+    // this.isLoading = false
+    // this.cd.markForCheck()
+    // console.log("yoooo")
+    // console.log("isLoading", this.isLoading)
     if (!this.isLoading) {
+      console.log("coucou")
       this.info.alignWith("header_search");
       combineLatest([this.profile$, this.posts$])
         .pipe(takeUntil(this.destroy$))
@@ -172,7 +206,6 @@ export class HomeComponent extends Destroy$ {
             mapping.get(this.symbols.userOnlinePost) || [];
           this.allOnlinePosts = [...otherOnlinePost, ...this.userOnlinePosts];
           this.allMissions = this.store.selectSnapshot(DataQueries.getMany("Mission", profile.company.missions));
-          this.cd.markForCheck();
   
           this.selectDraft(null);
           this.selectUserOnline(null);
@@ -188,8 +221,14 @@ export class HomeComponent extends Destroy$ {
       });
       
       this.time = this.store.selectSnapshot(DataState.time);
+      console.log("yo", this.allOnlinePosts)
+      this.updatePage()
+      console.log("yo", this.displayOnlinePosts)
     }
-    
+    else {
+      await delay(10000)
+      this.lateInit()
+    }
   }
 
   @HostBinding('class.footerHide')
@@ -205,8 +244,7 @@ export class HomeComponent extends Destroy$ {
   }
 
   updatePage() {
-    this.appComponent.updateUserData();
-    this.filters.filter("ST", this.allOnlinePosts);
+    this.cd.markForCheck()
   }
 
   get openCloseMission() {
@@ -218,6 +256,11 @@ export class HomeComponent extends Destroy$ {
 
   selectDraft(filter: any) {
     this.userDrafts = [];
+    this.allUserDrafts.sort((post1, post2) => {
+      let b1 = post1.boostTimestamp > this.time ? 1 : 0;
+      let b2 = post2.boostTimestamp > this.time ? 1 : 0;
+      return b2 - b1
+    })
     if (filter == null) {
       this.userDrafts = this.allUserDrafts;
     } else {
@@ -231,11 +274,7 @@ export class HomeComponent extends Destroy$ {
         });
         // Trie les posts selon leur distance de levenshtein
         this.allUserDrafts.sort((a: any,b: any)=>keys.indexOf(a) - keys.indexOf(b));
-      } else {
-        this.allUserDrafts.sort((a, b) => {
-          return a["id"] - b["id"];
-        });
-      }
+      } 
 
       // Trie brouillons les plus anciens
       if (filter.sortDraftDate === true) {this.allUserDrafts.sort((a: any, b: any) => a['id'] - b['id'])} 
@@ -252,10 +291,8 @@ export class HomeComponent extends Destroy$ {
       }
 
       for (let post of this.allUserDrafts) {
-      
-        let datesPost = this.store.selectSnapshot(DataQueries.getMany("DatePost", post.dates));
-        let dates = datesPost.map(date => date.date);
-        let isDifferentDate = (filter.date && !dates.includes(filter.date))
+
+        let isDifferentDate = (filter.date && post.startDate < filter.date)
         let isDifferentManPower = (filter.manPower && post.manPower != (filter.manPower === "true"))
         let isNotIncludedJob = (filter.jobs && filter.jobs.length && filter.jobs.every((job: any) => {return job.id != post.job}))
 
@@ -270,6 +307,11 @@ export class HomeComponent extends Destroy$ {
 
   selectUserOnline(filter: any) {
     this.userOnlinePosts = [];
+    this.allUserOnlinePosts.sort((post1, post2) => {
+      let b1 = post1.boostTimestamp > this.time ? 1 : 0;
+      let b2 = post2.boostTimestamp > this.time ? 1 : 0;
+      return b2 - b1
+    });
     if (filter == null) {
       this.userOnlinePosts = this.allUserOnlinePosts;
     } else {
@@ -286,12 +328,7 @@ export class HomeComponent extends Destroy$ {
         this.allUserOnlinePosts.sort(
           (a: any, b: any) => keys.indexOf(a) - keys.indexOf(b)
         );
-      } else {
-        this.allUserOnlinePosts.sort((a, b) => {
-          return a["id"] - b["id"];
-        });
-      }
-
+      } 
       // Trie Posts selon leurs réponses
       if (filter.sortPostResponse === true) {
         let responses = [];
@@ -310,10 +347,8 @@ export class HomeComponent extends Destroy$ {
       } 
 
       for (let post of this.allUserOnlinePosts) {
-        
-        let datesPost = this.store.selectSnapshot(DataQueries.getMany("DatePost", post.dates));
-        let dates = datesPost.map(date => date.date);
-        let isDifferentDate = (filter.date && !dates.includes(filter.date))
+
+        let isDifferentDate = (filter.date &&  post.startDate < filter.date)
         let isDifferentManPower = (filter.manPower && post.manPower != (filter.manPower === "true"))
         let isNotIncludedJob = (filter.jobs && filter.jobs.length && filter.jobs.every((job: any) => {return job.id != post.job}))
 
@@ -329,6 +364,8 @@ export class HomeComponent extends Destroy$ {
     if (filter == null) {
       this.missions = this.allMissions;
     } else {
+      this.allMissions.sort((a, b) => {return Number(a["isClosed"]) - Number(b["isClosed"]);});
+      
       let levenshteinDist: any = [];
       if (filter.address) {
         for (let mission of this.allMissions) {levenshteinDist.push([mission,getLevenshteinDistance(mission.address.toLowerCase(),filter.address.toLowerCase()),]);}
@@ -343,6 +380,7 @@ export class HomeComponent extends Destroy$ {
         this.allMissions.sort((a, b) => {
           return a["id"] - b["id"];
         });
+        this.allMissions.sort((a, b) => {return Number(a["isClosed"]) - Number(b["isClosed"]);});
       }
 
       // Trie missions selon leurs notifications
@@ -361,10 +399,8 @@ export class HomeComponent extends Destroy$ {
       }
 
       for (let mission of this.allMissions) {
-      
-        let datesPost = this.store.selectSnapshot(DataQueries.getMany("DatePost", mission.dates));
-        let dates = datesPost.map(date => date.date);
-        let isDifferentDate = (filter.date && !dates.includes(filter.date))
+
+        let isDifferentDate = (filter.date && mission.startDate < filter.date)
         let isDifferentManPower = (filter.manPower && mission.manPower != (filter.manPower === "true"))
         let isNotIncludedJob = (filter.jobs && filter.jobs.length && filter.jobs.every((job: any) => {return job.id != mission.job}))
 
@@ -373,6 +409,7 @@ export class HomeComponent extends Destroy$ {
         }
         this.missions.push(mission);
       }
+      // Trie les missions pour que celles clôturées soient en derniers
     }
     this.cd.markForCheck();
   }
@@ -392,7 +429,7 @@ export class HomeComponent extends Destroy$ {
   };
 
   isFilterOn(filter: any){
-    if (filter.address == "" && filter.date == "" && filter.jobs.length == 0 && filter.manPower == null && filter.sortDraftDate == false && filter.sortDraftFull == false && filter.sortPostResponse == false && filter.sortMissionNotifications == false){
+    if ((filter.address == "" || filter.address == null) && (filter.date == "" || filter.date == null)&& (filter.jobs == null || filter.jobs.length == 0) && filter.manPower == null && (filter.sortDraftDate == false ||filter.sortDraftDate ==  null) && (filter.sortDraftFull == false ||filter.sortDraftFull == null) && (filter.sortPostResponse == false || filter.sortPostResponse == null) && (filter.sortMissionNotifications == false || filter.sortMissionNotifications == null)){
       this.filterOn = false;
     } else {
       this.filterOn = true;
@@ -400,55 +437,32 @@ export class HomeComponent extends Destroy$ {
     this.cd.markForCheck;
   }
 
-  resetFilter(filter: any){
-    filter.address = "";
-    filter.date = "";
-    filter.jobs = [];
-    filter.manPower = null;
-    filter.sortDraftDate = false;
-    filter.sortDraftFull = false;
-    filter.sortPostResponse = false;
-    filter.sortMissionNotifications = false;
-  }
-
-  // get activeView(){
-  //   return 0
-  // }
-
-  // set activeView(num:number){
-  // }
-
-  changeView = (filter: any): void => {
-    switch (this.activeView) {
-      case 0:
-        console.log('change draft')
-        this.resetFilter(filter)
-        break;
-      case 1:
-        console.log("change online")
-        this.resetFilter(filter)
-        break;
-      case 2:
-        console.log("change mission")
-        this.resetFilter(filter)
+  changeView(headerActiveView: number) {
+    if (headerActiveView == 0){
+      this.filterPME.resetFilter()
+      this.filterOn = false;
+    }  
+    if (headerActiveView == 1) {
+      this.filterPME.resetFilter()
+      this.filterOn = false;
+    }    
+    if (headerActiveView == 2) {
+      this.filterPME.resetFilter()
+      this.filterOn = false;
     }
-
   }
 
   callbackFilter = (filter: any): void => {
     switch (this.activeView) {
       case 0:
-        console.log("Draft")
         this.selectDraft(filter);
         this.isFilterOn(filter);
         break;
       case 1:
-        console.log("Online")
         this.selectUserOnline(filter);
         this.isFilterOn(filter);
         break;
       case 2:
-        console.log("Mission")
         this.selectMission(filter);
         this.isFilterOn(filter);
     }
@@ -592,7 +606,6 @@ export class HomeComponent extends Destroy$ {
         (success) => {
           // Si la candidature est envoyée on quite la vue de la candidature
           this.updateAllOnlinePost(post)
-          this.filters.filter("ST", this.allOnlinePosts)
           this.slideOnlinePostClose();
         },
         (error) =>

@@ -29,8 +29,11 @@ import { FilterService } from "../services/filter.service";
 
       <div class="form-input">
         <label>Date de mission</label>
-        <input type="date" formControlName="missionDate" />
-        <img src="assets/calendar.png" />
+        <div class="flex row space-between">
+          <label>À partir de : </label>
+          <input type="date" formControlName="missionDate" />
+          <img src="assets/calendar.png" />
+        </div>  
       </div>
 
       <div class="form-input">

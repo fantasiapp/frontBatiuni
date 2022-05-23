@@ -149,6 +149,7 @@ export class MissionsComponent extends Destroy$ {
     if (filter == null) {
       this.myMissions = this.allMyMissions;
     } else {
+      this.allMyMissions.sort((a, b) => {return Number(a["isClosed"]) - Number(b["isClosed"]);});
       // Array qui contiendra les posts et leur valeur en distance Levenshtein pour une adresse demandée
       let levenshteinDist: any = [];
       if (filter.address) {
@@ -174,6 +175,7 @@ export class MissionsComponent extends Destroy$ {
         this.allMyMissions.sort((a, b) => {
           return a["id"] - b["id"];
         });
+        this.allMyMissions.sort((a, b) => {return Number(a["isClosed"]) - Number(b["isClosed"]);});
       }
 
       // Trie les missions par date plus proche
@@ -182,9 +184,7 @@ export class MissionsComponent extends Destroy$ {
       for (let mission of this.allMyMissions) {
       
       let isDifferentValidationDate = (filter.validationDate && filter.validationDate != mission.dueDate)
-      let datesMission = this.store.selectSnapshot(DataQueries.getMany("DatePost", mission.dates));
-      let dates = datesMission.map(date => date.date);
-      let isNotInMissionDate = (filter.missionDate && !dates.includes(filter.missionDate))       
+      let isNotInMissionDate = (filter.missionDate && mission.startDate < filter.date)       
       let isDifferentManPower = (filter.manPower && mission.manPower != (filter.manPower === "true"))
       let isNotIncludedJob = (filter.jobs && filter.jobs.length && filter.jobs.every((job: any) => {return job.id != mission.job}))
       const user = this.store.selectSnapshot(DataQueries.currentUser);
@@ -194,6 +194,8 @@ export class MissionsComponent extends Destroy$ {
       if ( isDifferentValidationDate || isNotInMissionDate || isDifferentManPower || isNotIncludedJob || isUnread || isNotClosed) { continue }
       this.myMissions.push(mission)
       }
+      // Trie les missions pour que celles clôturées soient en derniers
+
     }
     this.cd.markForCheck();
   }

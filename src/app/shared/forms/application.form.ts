@@ -18,9 +18,12 @@ import { Filter } from "../directives/filter.directive";
         </div>
 
         <div class="form-input">
-          <label>Date de mission</label>
-          <input type="date" class="form-element" formControlName="missionDate"/>
-          <img src="assets/calendar.png"/>
+          <label>Date de début de mission</label>
+          <div class="flex row space-between">
+            <label>À partir de : </label>
+            <input type="date" class="form-element" formControlName="missionDate"/>
+            <img src="assets/calendar.png"/>
+          </div>
         </div>
 
         <div class="form-input">
@@ -50,7 +53,7 @@ import { Filter } from "../directives/filter.directive";
         <div class="form-input">
           <label class="form-title">Réorganiser la liste selon</label>
             <div class="switch-container flex center-cross">
-              <span class="criteria" (click)="sortPostDate.onChangeCall()">Date d'échéance de la plus proche à la plus lointaine</span> 
+              <span class="criteria" (click)="sortPostDate.onChangeCall()">Date de validation de la plus proche à la plus lointaine</span> 
               <switch class="default" formControlName="sortPostDate" #sortPostDate></switch>
             </div>
             <div class="switch-container flex center-cross">

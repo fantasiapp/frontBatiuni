@@ -228,7 +228,6 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
   currentSupervisionId: Ref<Supervision> | null = null
   cameraSwipe(supervsionId: Ref<Supervision> | null){
     this.currentSupervisionId = supervsionId;
-    console.log(this.currentSupervisionId);
     this.swipeMenuImage = true; 
     // this.currentTaskId = task ? task!.id : null
     this.cd.markForCheck()
@@ -285,7 +284,6 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
         supervisions: this.computeSupervisionsForMission(date as string,supervisionsTaks),
       } as DateG;
     });
-    console.log('dates', this.dates);
       this.dates.sort((date1, date2) => (date1.value > date2.value ? 1 : -1));
   }
 
