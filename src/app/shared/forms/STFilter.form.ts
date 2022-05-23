@@ -184,7 +184,7 @@ import { getLevenshteinDistance } from "src/app/shared/services/levenshtein";
 export class STFilterForm {
   imports = { DistanceSliderConfig, SalarySliderConfig };
 
-  valueDistance: number=1000;
+  valueDistance: number=2000;
 
   @Input("filter") name: string = "ST";
 
@@ -196,10 +196,13 @@ export class STFilterForm {
 
   filteredPosts: Post[] = [];
 
+  @Output()
+  filterOnST = new EventEmitter<boolean>();
+
   filterForm = new FormGroup({
     date: new FormControl(""),
     address: new FormControl(""),
-    radius: new FormControl(1000),
+    radius: new FormControl(2000),
     jobs: new FormControl([]),
     salary: new FormControl(0),
     manPower: new FormControl(null),
@@ -247,6 +250,7 @@ export class STFilterForm {
 
     this.filterForm.valueChanges.subscribe((value) => {
       this.updateFilteredPosts(value);
+      this.isFilterOn(value);
       this.updateEvent.emit(this.filteredPosts);
     });
 
@@ -275,7 +279,7 @@ export class STFilterForm {
       let postLongitude = post.longitude*(Math.PI/180);
       let distance = 6371*Math.acos(Math.sin(userLatitude)*Math.sin(postLatitude) + Math.cos(userLatitude)*Math.cos(postLatitude)*Math.cos(postLongitude-userLongitude))
 
-      let isNotInRadius = (distance > filter.radius)
+      let isNotInRadius = (filter.radius  && distance > filter.radius)
 
       //Manpower
       let isDifferentManPower = (filter.manPower && post.manPower != (filter.manPower === "true"))
@@ -373,6 +377,22 @@ export class STFilterForm {
 
     
     this.cd.markForCheck();
+  }
+
+  arrayEquals(a: any[], b: any[]) {
+    return Array.isArray(a) &&
+      Array.isArray(b) &&
+      a.length === b.length &&
+      a.every((val, index) => val === b[index]);
+  }
+
+  isFilterOn(filter: any){
+    if (filter.address == "" && filter.date == "" && filter.jobs.length == 0 && filter.manPower == null && filter.candidate == false && filter.counterOffer == false &&  filter.dueDateSort == false && this.arrayEquals(filter.employees, [true, true, true, true, true]) && this.arrayEquals(filter.salary, [1, 400]) && filter.favorite == false && filter.radius == 2000 && filter.startDateSort == false && filter.viewed == false){
+      this.filterOnST.emit(false)
+    } else {
+      this.filterOnST.emit(true);
+    }
+    this.cd.markForCheck;
   }
 }
 

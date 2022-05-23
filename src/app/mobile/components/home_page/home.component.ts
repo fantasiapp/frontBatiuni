@@ -99,6 +99,7 @@ export class HomeComponent extends Destroy$ {
   missions: Mission[] = [];
   allMissions: Mission[] = [];
   filterOn: boolean = false;
+  filterOnST: boolean = false;
 
   get missionToClose() {
     return this.missions[0];
@@ -452,6 +453,10 @@ export class HomeComponent extends Destroy$ {
         this.isFilterOn(filter);
     }
   };
+
+  updateFilterOnST(filterOnST: boolean){
+    this.filterOnST = filterOnST;
+  }
 
   //factor two menu into objects
   openDraft(post: Post | null) {

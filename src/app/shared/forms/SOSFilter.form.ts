@@ -71,7 +71,7 @@ import { FormArray, FormControl, FormGroup } from "@angular/forms";
 export class SOSFilterForm implements OnInit {
   imports = { DistanceSliderConfig, SalarySliderConfig };
 
-  valueDistance: number = 1000;
+  valueDistance: number = 2000;
 
   @Input()
   activeView: number = 0;
@@ -82,7 +82,7 @@ export class SOSFilterForm implements OnInit {
   filterForm = new FormGroup({
     address: new FormControl(""),
     jobs: new FormControl([]),
-    radius: new FormControl(1000),
+    radius: new FormControl(2000),
     amount: new FormControl(),
     sortNotation: new FormControl(false),
     sortFullProfils: new FormControl(false),
