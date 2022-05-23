@@ -194,6 +194,9 @@ export class MissionsComponent extends Destroy$ {
       if ( isDifferentValidationDate || isNotInMissionDate || isDifferentManPower || isNotIncludedJob || isUnread || isNotClosed) { continue }
       this.myMissions.push(mission)
       }
+      // Trie les missions pour que celles clôturées soient en derniers
+      this.myMissions.sort((a, b) => {return Number(a["isClosed"]) - Number(b["isClosed"]);});
+
     }
     this.cd.markForCheck();
   }

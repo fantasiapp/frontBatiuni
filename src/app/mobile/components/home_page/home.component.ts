@@ -373,6 +373,8 @@ export class HomeComponent extends Destroy$ {
         }
         this.missions.push(mission);
       }
+      // Trie les missions pour que celles clôturées soient en derniers
+      this.missions.sort((a, b) => {return Number(a["isClosed"]) - Number(b["isClosed"]);});
     }
     this.cd.markForCheck();
   }
