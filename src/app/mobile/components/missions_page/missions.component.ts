@@ -175,6 +175,7 @@ export class MissionsComponent extends Destroy$ {
         this.allMyMissions.sort((a, b) => {
           return a["id"] - b["id"];
         });
+        this.allMyMissions.sort((a, b) => {return Number(a["isClosed"]) - Number(b["isClosed"]);});
       }
 
       // Trie les missions par date plus proche
