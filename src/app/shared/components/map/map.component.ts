@@ -1,7 +1,7 @@
-import { Component, ChangeDetectionStrategy, Input, ViewChild, ElementRef, Output, EventEmitter, NgZone, asNativeElements } from '@angular/core';
+import { Component, ChangeDetectionStrategy, Input, ViewChild, ElementRef, Output, EventEmitter, NgZone, asNativeElements, ChangeDetectorRef } from '@angular/core';
 import { Store } from '@ngxs/store';
 import * as mapboxgl from 'mapbox-gl';
-import { Company, Post } from 'src/models/new/data.interfaces';
+import { Company, Mission, Post } from 'src/models/new/data.interfaces';
 import { DataQueries } from 'src/models/new/data.state';
 import { Availability } from '../calendar/calendar.ui';
 
@@ -64,12 +64,16 @@ export class UIMapComponent {
   mapbox: any;
   mapboxStyles = 'mapbox://styles/zeuschatoui/ckxj0zqovi9lf15p5gysrfax4';
 
-  constructor(private store: Store) {}
+  constructor(private store: Store, private cd: ChangeDetectorRef) {}
 
   popupContent!: HTMLElement;
 
   @ViewChild('popupContainer', {read: ElementRef, static: true})
   popupContainer!: ElementRef
+
+
+  currentCompany: Company | null = null
+  currentAvailability: MarkerType = 'unavailable';
 
   createPopup() {
     let span = document.createElement('span');
@@ -80,7 +84,7 @@ export class UIMapComponent {
     this.popupContent = span;
   }
 
-  loadPopup(company: Company, post?: Post) {
+  loadPopup(company: Company, post?: Post, availability?: MarkerType) {
     this.popupContent.innerHTML = `${company.name}`;
     this.popupContent.onclick = () => {
       if ( this.mode == 'post' )
@@ -89,7 +93,12 @@ export class UIMapComponent {
         this.companyClick.emit(company);
     };
 
+    this.currentCompany = company
+    if (!availability) availability = 'unavailable';
+    this.currentAvailability = availability
     this.popupContainer.nativeElement.style.display = 'block'
+    this.cd.markForCheck()
+
     return new mapboxgl.Popup().setDOMContent(this.popupContainer.nativeElement);
   }
 
@@ -159,7 +168,7 @@ export class UIMapComponent {
         .addTo(this.mapbox);
       
       marker.getElement().onclick = () => {
-        marker.setPopup(this.loadPopup(company));
+        marker.setPopup(this.loadPopup(company, undefined, this.availabilities[i]));
       }
 
       this.aliveMarkers.push(marker);

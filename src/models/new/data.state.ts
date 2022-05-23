@@ -717,8 +717,10 @@ export class DataState {
         }
         delete response[application.action];
         console.log('response', response);
-        // ctx.setState(addComplexChildren('Mission', response.mission.id,'DatePost', response.datePost))
-        ctx.setState(addComplexChildren("Company",profile.company.id,"Mission", response));
+        // for (const date of response.datePost) {
+        //   ctx.setState(addComplexChildren('Mission', response.mission.id,'DatePost', date))
+        // }
+        ctx.setState(addComplexChildren("Company",profile.company.id,"Mission", response.mission));
       })
     );
   }
