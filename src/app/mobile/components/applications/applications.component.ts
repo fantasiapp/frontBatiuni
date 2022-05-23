@@ -179,6 +179,14 @@ export class ApplicationsComponent extends Destroy$ {
     this.annonceResume.close();
   }
 
+  isRefused(onlinePost: Post) {
+    const profile = this.store.selectSnapshot(DataQueries.currentProfile);
+    return onlinePost.candidates.some((id) => {
+      let candidate = this.store.selectSnapshot(DataQueries.getById("Candidate", id));
+      return candidate!.company == profile.company.id && candidate!.isRefused;
+    });
+  }
+  
   @ViewChild(UIAnnonceResume, { static: false })
   private annonceResume!: UIAnnonceResume;
 }
