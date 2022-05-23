@@ -232,10 +232,10 @@ export class DataState {
       this.flagUpdate = false
     return req.pipe(
       tap((response: any) => {
+        console.log("getuserdata :", response)
         const loadOperations = this.reader.readInitialData(response),
           sessionOperation = this.reader.readCurrentSession(response);
       if (!this.isFirstTime) {
-      this.loadingService.emitLoadingChangeEvent(true)
       let oldView = this.store.selectSnapshot(DataState.view)
         console.log("olview", oldView)
         ctx.setState(compose(...loadOperations, sessionOperation));
@@ -249,6 +249,7 @@ export class DataState {
         console.log("new view in if", this.store.selectSnapshot(DataState.view))
       }
       else {
+      this.loadingService.emitLoadingChangeEvent(true)
       ctx.setState(compose(...loadOperations, sessionOperation));
       this.isFirstTime = false
       this.loadingService.emitLoadingChangeEvent(false)

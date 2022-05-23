@@ -93,7 +93,6 @@ export class CalendarUI extends UIDefaultAccessor<DayState[]> {
     this.currentYear = now.getFullYear();
     this.value = [];
     
-    console.log('blocked', this.blockedDate);
   }
   
   ngOnInit(){
@@ -124,7 +123,6 @@ export class CalendarUI extends UIDefaultAccessor<DayState[]> {
       const compareDate = moment(`${year}-${month}-${a}`, "YYYY-MM-DD");
       let flow: any = compareDate;
       let item = this._value!.filter((item) => item.date == flow._i);
-      console.log('flow', flow._i, flow, dayObject);
       return {
         name: dayObject.format("dddd"),
         value: a,
@@ -134,7 +132,6 @@ export class CalendarUI extends UIDefaultAccessor<DayState[]> {
         blockedDay: !!this.blockedDate.filter(date => date == flow._i)?.length
       };
     });
-    console.log('arrayDays', arrayDays);
     this.monthSelect = arrayDays;
   }
 

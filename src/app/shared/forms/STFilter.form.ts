@@ -249,12 +249,10 @@ export class STFilterForm {
   ngOnInit() {
 
     this.filterForm.valueChanges.subscribe((value) => {
-      console.log("value change, value before :", this.filteredPosts)
       this.updateFilteredPosts(value);
       this.isFilterOn(value);
       this.updateEvent.emit(this.filteredPosts);
       this.filterService.emitFilterChangeEvent(this.filteredPosts)
-      console.log("value change, value afters :", this.filteredPosts)
     });
 
   }
@@ -352,7 +350,6 @@ export class STFilterForm {
       let keys = levenshteinDist.map((key: any) => {
         return key[0];
       });
-      console.log("levenshteinDist", levenshteinDist);
       // On trie les posts selon leur distance de levenshtein
       this.filteredPosts.sort(
         (a: any, b: any) => keys.indexOf(a) - keys.indexOf(b)

@@ -133,7 +133,7 @@ export class HomeComponent extends Destroy$ {
   _openCloseMission: boolean = false;
   openAdFilterMenu: boolean = false;
   toogle: boolean = false;
-  isLoading: boolean = false;
+  isLoading: boolean;
   imports = { DistanceSliderConfig, SalarySliderConfig };
   draftMenu = new PostMenu();
   postMenu = new PostMenu();
@@ -154,7 +154,7 @@ export class HomeComponent extends Destroy$ {
     private filterService: FilterService
   ) {
     super();
-    // this.isLoading = this.loadingService.isLoading
+    this.isLoading = this.loadingService.isLoading
   }
 
   ngOnInit() {

@@ -135,7 +135,6 @@ export class SuiviPME {
 
   computeDates(mission: Mission) {
     let supervisionsTaks: number[] = [];
-    console.log("mission.details", mission.details)
     this.tasks = this.store
       .selectSnapshot(DataQueries.getMany("DetailedPost", mission.details))
       ?.map((detail) => ({
