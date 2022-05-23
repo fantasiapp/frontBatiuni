@@ -329,6 +329,8 @@ export class HomeComponent extends Destroy$ {
     if (filter == null) {
       this.missions = this.allMissions;
     } else {
+      this.allMissions.sort((a, b) => {return Number(a["isClosed"]) - Number(b["isClosed"]);});
+
       let levenshteinDist: any = [];
       if (filter.address) {
         for (let mission of this.allMissions) {levenshteinDist.push([mission,getLevenshteinDistance(mission.address.toLowerCase(),filter.address.toLowerCase()),]);}
@@ -372,7 +374,6 @@ export class HomeComponent extends Destroy$ {
         this.missions.push(mission);
       }
       // Trie les missions pour que celles clôturées soient en derniers
-      this.missions.sort((a, b) => {return Number(a["isClosed"]) - Number(b["isClosed"]);});
     }
     this.cd.markForCheck();
   }

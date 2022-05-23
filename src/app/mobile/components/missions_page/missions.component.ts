@@ -149,6 +149,7 @@ export class MissionsComponent extends Destroy$ {
     if (filter == null) {
       this.myMissions = this.allMyMissions;
     } else {
+      this.allMyMissions.sort((a, b) => {return Number(a["isClosed"]) - Number(b["isClosed"]);});
       // Array qui contiendra les posts et leur valeur en distance Levenshtein pour une adresse demandée
       let levenshteinDist: any = [];
       if (filter.address) {
@@ -193,7 +194,6 @@ export class MissionsComponent extends Destroy$ {
       this.myMissions.push(mission)
       }
       // Trie les missions pour que celles clôturées soient en derniers
-      this.myMissions.sort((a, b) => {return Number(a["isClosed"]) - Number(b["isClosed"]);});
 
     }
     this.cd.markForCheck();
