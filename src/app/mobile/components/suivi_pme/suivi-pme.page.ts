@@ -75,11 +75,7 @@ export class SuiviPME {
     const mission = mM.post;
     this.view = this.store.selectSnapshot(DataState.view);
     this.mission = mission;
-    this.company = mission
-      ? this.store.selectSnapshot(
-          DataQueries.getById("Company", mission.company)
-        )
-      : null;
+    this.company = mission ? this.store.selectSnapshot(DataQueries.getById("Company", mission.company)) : null;
     this.subContractor = mission
       ? this.store.selectSnapshot(
           DataQueries.getById("Company", mission.subContractor)
@@ -192,16 +188,11 @@ export class SuiviPME {
     return supervisions;
   }
 
-  computeSupervisionsForMission(
-    date: string,
-    supervisionsTask: number[]
-  ): Supervision[] {
+  computeSupervisionsForMission(date: string, supervisionsTask: number[]): Supervision[] {
     let supervisions: Supervision[] = [];
     let allSupervisions: (Supervision | null)[] =
       this.mission!.supervisions.map((id) => {
-        let supervision = this.store.selectSnapshot(
-          DataQueries.getById("Supervision", id)
-        );
+        let supervision = this.store.selectSnapshot(DataQueries.getById("Supervision", id));
         if (
           supervision &&
           supervision.date == date &&
@@ -443,26 +434,16 @@ export class SuiviPME {
         return dayState.date;
       }
     );
-    this.store
-      .dispatch(
-        new ModifyMissionDate(
-          this.mission!.id,
-          this.AdFormDate.get("hourlyStart")!.value,
-          this.AdFormDate.get("hourlyEnd")!.value,
-          selectedDate
-        )
-      )
-      .pipe(take(1))
-      .subscribe(() => {
-        if (!this.alert) this.swipeupModifyDate = false;
+    this.store.dispatch(new ModifyMissionDate(this.mission!.id, this.AdFormDate.get("hourlyStart")!.value, this.AdFormDate.get("hourlyEnd")!.value, selectedDate)).pipe(take(1)).subscribe(() => {
+      if (!this.alert) this.swipeupModifyDate = false;
 
-        // Update de mission et accordionData puis update la vue
-        this.mission = this.store.selectSnapshot(
-          DataQueries.getById("Mission", this.mission!.id)
-        );
-        this.computeDates(this.mission!);
-        this.cd.markForCheck();
-      });
+      // Update de mission et accordionData puis update la vue
+      this.mission = this.store.selectSnapshot(
+        DataQueries.getById("Mission", this.mission!.id)
+      );
+      this.computeDates(this.mission!);
+      this.cd.markForCheck();
+    });
   }
 
   computeBlockedDate(): string[] {
