@@ -392,7 +392,7 @@ export class HomeComponent extends Destroy$ {
   };
 
   isFilterOn(filter: any){
-    if (filter.address == "" && filter.date == "" && filter.jobs.length == 0 && filter.manPower == null && filter.sortDraftDate == false && filter.sortDraftFull == false && filter.sortPostResponse == false && filter.sortMissionNotifications == false){
+    if ((filter.address == "" || filter.address == null) && (filter.date == "" || filter.date == null)&& (filter.jobs == null || filter.jobs.length == 0) && filter.manPower == null && (filter.sortDraftDate == false ||filter.sortDraftDate ==  null) && (filter.sortDraftFull == false ||filter.sortDraftFull == null) && (filter.sortPostResponse == false || filter.sortPostResponse == null) && (filter.sortMissionNotifications == false || filter.sortMissionNotifications == null)){
       this.filterOn = false;
     } else {
       this.filterOn = true;
@@ -403,15 +403,15 @@ export class HomeComponent extends Destroy$ {
   changeView(headerActiveView: number) {
     if (headerActiveView == 0){
       this.filterPME.resetFilter()
-      this.filterOn =false;
+      this.filterOn = false;
     }  
     if (headerActiveView == 1) {
       this.filterPME.resetFilter()
-      this.filterOn =false;
+      this.filterOn = false;
     }    
     if (headerActiveView == 2) {
       this.filterPME.resetFilter()
-      this.filterOn =false;
+      this.filterOn = false;
     }
   }
 

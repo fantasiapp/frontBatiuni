@@ -122,7 +122,6 @@ export class PMEFilterForm implements OnInit {
   ngOnInit(){
     this.callbackFilter(this.filterForm.value);
     this.filterForm.valueChanges.subscribe(value => {
-      console.log("valueFilter", value)
       this.callbackFilter(value);
     })
   }
