@@ -69,7 +69,7 @@ export class AppComponent extends Destroy$ {
     if (!this.firstAttemptAlreadyTried) {
       this.firstAttemptAlreadyTried = true
     }
-    else if (this.readyToUpdate) {
+    else if (false) { // supposed to be this.readyToUpdate
       this.readyToUpdate = false
       console.log("avant getUserData")
       this.getUserData()

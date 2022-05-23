@@ -100,11 +100,6 @@ export class ExtendedProfileComponent extends Destroy$ {
     // this.showView = "PME"
   }
 
-  ngAfterViewInit() {
-    console.log("avant")
-    this.appComponent.updateUserData()
-    console.log("après")
-  }
 
   get attachedFiles(): any[] {
     return this.files.filter(

@@ -257,7 +257,7 @@ export class DataState {
       console.log("new view", this.store.selectSnapshot(DataState.view))
       this.flagUpdate = true
     })
-    );
+      );
     }
     else{
       return 

@@ -103,7 +103,6 @@ export class ApplicationsComponent extends Destroy$ {
   }
 
   ngAfterViewInit() {
-    this.appComponent.updateUserData()
   }
 
   selectPost(filter: any) {
