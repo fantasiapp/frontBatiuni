@@ -1,34 +1,21 @@
-import { Injectable } from "@angular/core";
+import { EventEmitter, Injectable } from "@angular/core";
+import { Store } from "@ngxs/store";
+import { Post } from "src/models/new/data.interfaces";
 import { Filter } from "../directives/filter.directive";
 
 @Injectable({
   providedIn: "root",
 })
 export class FilterService {
-  private mapping = new Map<string, Filter<any>>();
+  navchange: EventEmitter<Post[]> = new EventEmitter();
 
-  add(name: string, component: Filter<any>) {
-    this.mapping.set(name, component);
+
+  constructor(private store: Store) {}
+  emitFilterChangeEvent(posts: Post[]) {
+    this.navchange.emit(posts);
   }
 
-  remove(name: string) {
-    this.mapping.delete(name);
-  }
-
-  has(name: string) {
-    return this.mapping.has(name);
-  }
-
-  filter(
-    name: string,
-    items: any[],
-    providers?: { [key: string]: (t: any) => any }
-  ) {
-    const filter = this.mapping.get(name);
-    if (!filter) {
-      console.warn(`Unknown filter ${name}.`);
-      return items;
-    }
-    return filter.filter(items, providers);
+  getFilterChangeEmitter() {
+    return this.navchange;
   }
 }

@@ -158,7 +158,6 @@ export class HorizontaleCalendar implements OnInit {
         notification: this.getNotification(dayFormated[2])
       });
     }
-    console.log('day', days);
     this.selectedDay = days;
   }
 
@@ -302,14 +301,12 @@ export class HorizontaleCalendar implements OnInit {
 
     let dates = this.store.selectSnapshot(DataQueries.getMany("DatePost", datesId));
     dates.filter(datePost => datePost.date == date).map(datePost => {
-      console.log('datesPost;', datePost);  
       isChange.validate = datePost.validated;
       isChange.deleted = datePost.deleted
     })
 
     // let notification = false
     // for (const curCard of this.currentCardCalendars) {
-    //   // console.log('day', day, curCard.date);
     //   if(date == curCard.date){
     //     if(!notification) {
     //       notification = curCard.change.deleted || curCard.change.schedule || !curCard.change.validate
@@ -327,28 +324,22 @@ export class HorizontaleCalendar implements OnInit {
     const cardChange = state
 
 
-    console.log('cardChange', cardChange);
     let mission = this.store.selectSnapshot(DataQueries.getById("Mission", card.mission.id));
     let heightTop = this.calculator(mission!.hourlyStart, mission!.hourlyEnd);
 
-    console.log('card', card, state);
     card.mission = mission!;
     card.cardFromTop = heightTop[0];
     card.cardHeight = heightTop[1];
     card.change = cardChange
     
-    console.log('selecteddays', this.selectedDay);
     for (const day of this.selectedDay) {
       let notification = false
       let status = false
       for (const curCard of this.currentCardCalendars) {
-        // console.log('day', day, curCard.date);
         if(day.day[2] == curCard.date){
-          console.log('DAAYSYSs');
           if(!notification) {
             notification = curCard.change.deleted || curCard.change.schedule || !curCard.change.validate
           }
-          console.log('notification;', notification);
           day.notification = notification
 
           if(!status) status = curCard.change.validate
@@ -360,7 +351,6 @@ export class HorizontaleCalendar implements OnInit {
       }
     }
 
-    console.log('traceur onCardupdate');
     if (cardChange.deleted || (!card.change.deleted && !card.change.validate)) {
       let newCardCalendars: calendarItem[] = [];
       for (const curCard of this.currentCardCalendars) {

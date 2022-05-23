@@ -245,7 +245,7 @@ export class STFilterForm {
     });
   }
 
-  constructor(service: FilterService, private store: Store, private cd: ChangeDetectorRef) {}
+  constructor(private store: Store, private cd: ChangeDetectorRef, private filterService: FilterService) {}
 
   ngOnInit() {
 
@@ -253,6 +253,7 @@ export class STFilterForm {
       this.updateFilteredPosts(value);
       this.isFilterOn(value);
       this.updateEvent.emit(this.filteredPosts);
+      this.filterService.emitFilterChangeEvent(this.filteredPosts)
     });
 
   }
@@ -348,7 +349,6 @@ export class STFilterForm {
       let keys = levenshteinDist.map((key: any) => {
         return key[0];
       });
-      console.log("levenshteinDist", levenshteinDist);
       // On trie les posts selon leur distance de levenshtein
       this.filteredPosts.sort(
         (a: any, b: any) => keys.indexOf(a) - keys.indexOf(b)
@@ -382,6 +382,12 @@ export class STFilterForm {
     this.cd.markForCheck();
   }
 
+  updatePosts(posts: Post[]) {
+    this.posts = posts
+    this.updateFilteredPosts(this.filterForm.value);
+    this.updateEvent.emit(this.filteredPosts);
+  }
+  
   arrayEquals(a: any[], b: any[]) {
     return Array.isArray(a) &&
       Array.isArray(b) &&

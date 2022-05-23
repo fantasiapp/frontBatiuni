@@ -19,7 +19,7 @@ import {
   DistanceSliderConfig,
   SalarySliderConfig,
 } from "src/app/shared/common/config";
-import { assignCopy, splitByOutput } from "src/app/shared/common/functions";
+import { assignCopy, delay, splitByOutput } from "src/app/shared/common/functions";
 import { InfoService } from "src/app/shared/components/info/info.component";
 import { PopupService } from "src/app/shared/components/popup/popup.component";
 import {
@@ -60,6 +60,8 @@ import { AuthState } from "src/models/auth/auth.state";
 import { Logout } from "src/models/auth/auth.actions";
 import { analyzeAndValidateNgModules } from "@angular/compiler";
 import { AppComponent } from "src/app/app.component";
+import { isLoadingService } from "src/app/shared/services/isLoading.service";
+import { STFilterForm } from "src/app/shared/forms/STFilter.form";
 import { PMEFilterForm } from "src/app/shared/forms/PMEFilter.form";
 
 @Component({
@@ -131,7 +133,7 @@ export class HomeComponent extends Destroy$ {
   _openCloseMission: boolean = false;
   openAdFilterMenu: boolean = false;
   toogle: boolean = false;
-  isLoading: boolean = false;
+  isLoading: boolean;
   imports = { DistanceSliderConfig, SalarySliderConfig };
   draftMenu = new PostMenu();
   postMenu = new PostMenu();
@@ -147,13 +149,41 @@ export class HomeComponent extends Destroy$ {
     private swipeupService: SwipeupService,
     private slideService: SlidemenuService,
     private filters: FilterService,
-    private mobile: Mobile
+    private mobile: Mobile,
+    private loadingService: isLoadingService,
+    private filterService: FilterService
   ) {
     super();
+    this.isLoading = this.loadingService.isLoading
   }
 
   ngOnInit() {
+    this.appComponent.updateUserData();
+    this.loadingService.getLoadingChangeEmitter().subscribe((bool : boolean) => {
+      this.isLoading = bool
+      console.log("isLoading", this.isLoading)
+      this.cd.markForCheck()
+    })
+    this.filterService.getFilterChangeEmitter().subscribe((posts: Post[]) => {
+      this.displayOnlinePosts = posts
+      this.cd.markForCheck()
+      console.log(this.displayOnlinePosts)
+    })
+    this.lateInit()
+  }
+
+  async lateInit() {
+    // console.log("is loading", this.isLoading)
+    // console.log("avant")
+    // this.isLoading = true
+    // this.cd.markForCheck()
+    // await delay(5000)
+    // this.isLoading = false
+    // this.cd.markForCheck()
+    // console.log("yoooo")
+    // console.log("isLoading", this.isLoading)
     if (!this.isLoading) {
+      console.log("coucou")
       this.info.alignWith("header_search");
       combineLatest([this.profile$, this.posts$])
         .pipe(takeUntil(this.destroy$))
@@ -176,7 +206,6 @@ export class HomeComponent extends Destroy$ {
             mapping.get(this.symbols.userOnlinePost) || [];
           this.allOnlinePosts = [...otherOnlinePost, ...this.userOnlinePosts];
           this.allMissions = this.store.selectSnapshot(DataQueries.getMany("Mission", profile.company.missions));
-          this.cd.markForCheck();
   
           this.selectDraft(null);
           this.selectUserOnline(null);
@@ -192,8 +221,14 @@ export class HomeComponent extends Destroy$ {
       });
       
       this.time = this.store.selectSnapshot(DataState.time);
+      console.log("yo", this.allOnlinePosts)
+      this.updatePage()
+      console.log("yo", this.displayOnlinePosts)
     }
-    
+    else {
+      await delay(10000)
+      this.lateInit()
+    }
   }
 
   @HostBinding('class.footerHide')
@@ -209,8 +244,7 @@ export class HomeComponent extends Destroy$ {
   }
 
   updatePage() {
-    this.appComponent.updateUserData();
-    this.filters.filter("ST", this.allOnlinePosts);
+    this.cd.markForCheck()
   }
 
   get openCloseMission() {
@@ -222,6 +256,11 @@ export class HomeComponent extends Destroy$ {
 
   selectDraft(filter: any) {
     this.userDrafts = [];
+    this.allUserDrafts.sort((post1, post2) => {
+      let b1 = post1.boostTimestamp > this.time ? 1 : 0;
+      let b2 = post2.boostTimestamp > this.time ? 1 : 0;
+      return b2 - b1
+    })
     if (filter == null) {
       this.userDrafts = this.allUserDrafts;
     } else {
@@ -235,11 +274,7 @@ export class HomeComponent extends Destroy$ {
         });
         // Trie les posts selon leur distance de levenshtein
         this.allUserDrafts.sort((a: any,b: any)=>keys.indexOf(a) - keys.indexOf(b));
-      } else {
-        this.allUserDrafts.sort((a, b) => {
-          return a["id"] - b["id"];
-        });
-      }
+      } 
 
       // Trie brouillons les plus anciens
       if (filter.sortDraftDate === true) {this.allUserDrafts.sort((a: any, b: any) => a['id'] - b['id'])} 
@@ -272,6 +307,11 @@ export class HomeComponent extends Destroy$ {
 
   selectUserOnline(filter: any) {
     this.userOnlinePosts = [];
+    this.allUserOnlinePosts.sort((post1, post2) => {
+      let b1 = post1.boostTimestamp > this.time ? 1 : 0;
+      let b2 = post2.boostTimestamp > this.time ? 1 : 0;
+      return b2 - b1
+    });
     if (filter == null) {
       this.userOnlinePosts = this.allUserOnlinePosts;
     } else {
@@ -288,12 +328,7 @@ export class HomeComponent extends Destroy$ {
         this.allUserOnlinePosts.sort(
           (a: any, b: any) => keys.indexOf(a) - keys.indexOf(b)
         );
-      } else {
-        this.allUserOnlinePosts.sort((a, b) => {
-          return a["id"] - b["id"];
-        });
-      }
-
+      } 
       // Trie Posts selon leurs réponses
       if (filter.sortPostResponse === true) {
         let responses = [];
@@ -571,7 +606,6 @@ export class HomeComponent extends Destroy$ {
         (success) => {
           // Si la candidature est envoyée on quite la vue de la candidature
           this.updateAllOnlinePost(post)
-          this.filters.filter("ST", this.allOnlinePosts)
           this.slideOnlinePostClose();
         },
         (error) =>

@@ -174,7 +174,6 @@ export abstract class Filter<T extends {id: number}> extends Destroy$ {
   }
 
   ngOnInit() {
-    this.service.add(this.name, this);
   }
 
   ngAfterViewInit() {
@@ -184,7 +183,6 @@ export abstract class Filter<T extends {id: number}> extends Destroy$ {
   }
 
   ngOnDestroy() {
-    this.service.remove(this.name);
     super.ngOnDestroy();
   }
 
