@@ -144,7 +144,7 @@ import { getLevenshteinDistance } from "src/app/shared/services/levenshtein";
         </div>
         <div class="switch-container flex center-cross">
           <span class="criteria"
-            >Date d'échéance de l'annonce de la plus proche à la plus
+            >Date de validation de l'annonce de la plus proche à la plus
             lointaine</span
           >
           <switch

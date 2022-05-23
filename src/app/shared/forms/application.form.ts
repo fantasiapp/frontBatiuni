@@ -53,7 +53,7 @@ import { Filter } from "../directives/filter.directive";
         <div class="form-input">
           <label class="form-title">Réorganiser la liste selon</label>
             <div class="switch-container flex center-cross">
-              <span class="criteria" (click)="sortPostDate.onChangeCall()">Date d'échéance de la plus proche à la plus lointaine</span> 
+              <span class="criteria" (click)="sortPostDate.onChangeCall()">Date de validation de la plus proche à la plus lointaine</span> 
               <switch class="default" formControlName="sortPostDate" #sortPostDate></switch>
             </div>
             <div class="switch-container flex center-cross">
