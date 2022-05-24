@@ -151,9 +151,7 @@ export class SuiviPME {
     if (typeof mission.dates === "object" && !Array.isArray(mission.dates))
       dates = Object.keys(mission.dates).map((key) => +key as number);
     this.dates = dates.map((value: number, id) => {
-      console.log('0');
       let dateObject: PostDate = this.store.selectSnapshot(DataQueries.getById("DatePost", value))!;
-      console.log('1');
       return {
         id: id,
         value: dateObject.date,
@@ -189,11 +187,11 @@ export class SuiviPME {
 
   computeSupervisionsForMission(date: string, supervisionsTask: number[]): Supervision[] {
     let supervisions: Supervision[] = [];
-    console.log('supervision', this.mission);
+    // console.log('supervision', this.mission);
     let allSupervisions: (Supervision | null)[] = this.mission!.supervisions.map((id) => {
-        console.log('supervision', id);
+        // console.log('supervision', id);
         let supervision = this.store.selectSnapshot(DataQueries.getById("Supervision", id));
-        console.log('apresDAtaqiurei');
+        // console.log('apresDAtaqiurei');
         if (
           supervision &&
           supervision.date == date &&
@@ -228,7 +226,6 @@ export class SuiviPME {
   }
 
   dateWithoutDouble(): Task[] {
-    console.log('1');
     return this.tasks!.filter((task) => !task.date);
   }
 
@@ -237,7 +234,6 @@ export class SuiviPME {
     this.tasks?.forEach((task) =>
       this.computeSelectedTaskAction(selectedTask, date, task)
     );
-    console.log('0');
     return selectedTask;
   }
 

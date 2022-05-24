@@ -1,6 +1,7 @@
 import { Component, ChangeDetectionStrategy, Input, ViewChild, ElementRef, Output, EventEmitter, NgZone, asNativeElements, ChangeDetectorRef } from '@angular/core';
 import { Store } from '@ngxs/store';
 import * as mapboxgl from 'mapbox-gl';
+import { availableCompanies } from 'src/app/mobile/components/SOS_page/sos-page.component';
 import { Company, Mission, Post } from 'src/models/new/data.interfaces';
 import { DataQueries } from 'src/models/new/data.state';
 import { Availability } from '../calendar/calendar.ui';
@@ -45,6 +46,8 @@ export class UIMapComponent {
   }
 
   @Input() availabilities: MarkerType[] = [];
+
+  @Input() availableCompanies: availableCompanies[] = []
   
   @Input()
   center: MarkerData = {

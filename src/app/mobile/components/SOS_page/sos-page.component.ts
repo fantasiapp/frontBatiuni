@@ -24,7 +24,7 @@ import {
 } from "src/models/new/data.mapper";
 import { DataQueries, Query, QueryAll } from "src/models/new/data.state";
 
-interface availableCompanies {
+export interface availableCompanies {
   company: Company,
   availability: MarkerType
 }

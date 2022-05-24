@@ -14,6 +14,7 @@
       </sos-card>
     </ng-container>
     <mapbox-batiuni 
+      [availableCompanies]="availableCompanies"
       [companies]="companies" 
       [availabilities]="availabilities"
       (companyClick)="checkCompanyProfile($event)"

@@ -151,7 +151,6 @@ export class CalendarUI extends UIDefaultAccessor<DayState[]> {
     this.dateSelect = startDate.locale("fr");
     const diffDays = endDate.diff(startDate, "days", true);
     const numberDays = Math.round(diffDays);
-    console.log('test', startDate, numberDays, diffDays);
     const arrayDays = Object.keys([...Array(numberDays)]).map((a: any, i) => {
       a = this.fillZero(parseInt(a) + 1);
       const dayObject = moment(`${year}/${month}/${a}`, "YYYY-MM-DD");
