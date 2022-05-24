@@ -113,7 +113,9 @@ export class SOSPageComponent extends Destroy$ {
       levenshteinDist.sort((a: any, b: any) => a[1] - b[1]);
       let keys = levenshteinDist.map((key: any) => { return key[0]; });
       this.allAvailableCompanies.sort((a: any,b: any)=>keys.indexOf(a) - keys.indexOf(b));
-      
+      for (let company of this.allAvailableCompanies){
+        this.isCompanyAvailable(company)
+      }
     }
     this.companies = this.availableCompanies.map(companyAvailable => companyAvailable.company);
     this.availabilities = this.availableCompanies.map(companyAvailable => companyAvailable.availability);
@@ -122,7 +124,7 @@ export class SOSPageComponent extends Destroy$ {
 
 
   callbackSearch = (search: any): void => {
-    console.log("bientôt")
+    this.selectSearchDraft(search)
   };
 
   isCompanyAvailable(company: Company){
