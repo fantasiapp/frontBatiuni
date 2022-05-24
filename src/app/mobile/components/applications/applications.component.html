@@ -4,7 +4,7 @@
         <h1 class="grow center-text">Candidatures en cours</h1>
     </div>
     <div class="pick flex center-cross">
-        <searchbar class="grow"></searchbar>
+        <searchbar class="grow" [callbackSearch]="callbackSearch"></searchbar>
         <img src="assets/filterDarkBlue.svg" (click)="openAdFilterMenu = true" style="margin-left: 1rem"/>
     </div>
 </header>
@@ -22,7 +22,6 @@
 
 </div>
 
-
 <slidemenu [(open)]="postMenu.open" title="Candidatures en cours"> 
     <!-- <header>
         <img (click)="slideOnlinePostClose()" src="assets/arrowlblack.svg" />
@@ -35,4 +34,4 @@
 
 <swipeup [(open)]="openAdFilterMenu" type="view">
         <application-filter-form [callbackFilter]="callbackFilter" view></application-filter-form>
-</swipeup>
+    </swipeup>

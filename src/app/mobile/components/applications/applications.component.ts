@@ -152,6 +152,37 @@ export class ApplicationsComponent extends Destroy$ {
     this.selectPost(filter);
   };
 
+  adToString(ad: any){
+    let company = this.store.selectSnapshot(DataQueries.getById("Company", ad.company));
+    let job = this.store.selectSnapshot(DataQueries.getById("Job", ad.job));
+    let manPower = ad.manPower ? "Main d'oeuvre" : "Fourniture et Pose"
+    let adString = ad.id.toString() + " " + ad.address + " " + company?.name + " " + job?.name + " " + ad.contactName + " " + ad.description + " " + manPower + " " + ad.dueDate + " " + ad.startDate + " " + ad.endDate 
+    return adString
+  }
+
+  selectSearch(searchForm:  string){
+    this.userOnlinePosts = [];
+    if (searchForm == "" || searchForm == null)  {
+      this.userOnlinePosts = this.allCandidatedPost
+    } else {
+      let levenshteinDist: any = [];
+      for (let post of this.allCandidatedPost) {
+        let postString = this.adToString(post)
+        console.log(postString)
+        levenshteinDist.push([post,getLevenshteinDistance(postString.toLowerCase(),searchForm.toLowerCase()),]);
+      }
+      levenshteinDist.sort((a: any, b: any) => a[1] - b[1]);
+      let keys = levenshteinDist.map((key: any) => { return key[0]; });
+      this.allCandidatedPost.sort((a: any,b: any)=>keys.indexOf(a) - keys.indexOf(b));
+      this.userOnlinePosts = this.allCandidatedPost
+    }
+    this.cd.markForCheck();
+  }
+
+  callbackSearch = (search: any): void => {
+    this.selectSearch(search)
+  };
+
   openPost(post: Post | null) {
     //mark as viewed
     this.postMenu = assignCopy(this.postMenu, {

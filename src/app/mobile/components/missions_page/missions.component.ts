@@ -131,11 +131,6 @@ export class MissionsComponent extends Destroy$ {
     this.appComponent.updateUserData()
   }
 
-  callbackFilter = (filter: any): void => {
-    this.selectMissions(filter);
-    this.isFilterOn(filter);
-  };
-
   isFilterOn(filter: any){
     if (filter.address == "" && filter.isClosed == false && filter.jobs.length == 0 && filter.manPower == null && filter.missionDate == "" && filter.sortMissionDate == false && filter.unread == false && filter.validationDate == ""){
       this.filterOn = false;
@@ -143,6 +138,44 @@ export class MissionsComponent extends Destroy$ {
       this.filterOn = true;
     }
   }
+
+  callbackFilter = (filter: any): void => {
+    this.selectMissions(filter);
+    this.isFilterOn(filter);
+  };
+
+  adToString(ad: any){
+    let company = this.store.selectSnapshot(DataQueries.getById("Company", ad.company));
+    let job = this.store.selectSnapshot(DataQueries.getById("Job", ad.job));
+    let manPower = ad.manPower ? "Main d'oeuvre" : "Fourniture et Pose"
+    let supervisions = this.store.selectSnapshot(DataQueries.getMany("Supervision", ad.supervisions));
+    let supervisionsContent = supervisions.map((supervision: { comment: any; }) => supervision.comment).toString();
+    let adString = ad.id.toString() + " " + ad.address + " " + company?.name + " " + job?.name + " " + ad.contactName + " " + ad.description + " " + manPower + " " + ad.dueDate + " " + ad.startDate + " " + ad.endDate + " " + ad.organisationComment + " " + ad.organisationCommentST + " " + ad.qualityComment + " " + ad.securityComment + " " + ad.securityCommentST + " " + ad.subContractorContact + " " + ad.subContractorName + " " + supervisionsContent
+    return adString
+  }
+
+
+  selectSearchMission(searchForm:  string){
+    this.myMissions = [];
+    if (searchForm == "" || searchForm == null)  {
+      this.myMissions = this.allMyMissions
+    } else {
+      let levenshteinDist: any = [];
+      for (let mission of this.allMyMissions) {
+        let postString = this.adToString(mission)
+        levenshteinDist.push([mission,getLevenshteinDistance(postString.toLowerCase(),searchForm.toLowerCase()),]);
+      }
+      levenshteinDist.sort((a: any, b: any) => a[1] - b[1]);
+      let keys = levenshteinDist.map((key: any) => { return key[0]; });
+      this.allMyMissions.sort((a: any,b: any)=>keys.indexOf(a) - keys.indexOf(b));
+      this.myMissions = this.allMyMissions
+    }
+    this.cd.markForCheck();
+  }
+
+  callbackSearch = (search: any): void => {
+    this.selectSearchMission(search)
+  };
 
   selectMissions(filter: any) {
     this.myMissions = [];
