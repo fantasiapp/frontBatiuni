@@ -249,6 +249,7 @@ export class HomeComponent extends Destroy$ {
       for (let post of this.allUserDrafts) {
       
         let datesPost = this.store.selectSnapshot(DataQueries.getMany("DatePost", post.dates));
+        console.log("datesPost", datesPost)
         let dates = datesPost.map(date => date.date);
         let isDifferentDate = (filter.date && !dates.includes(filter.date))
         let isDifferentManPower = (filter.manPower && post.manPower != (filter.manPower === "true"))

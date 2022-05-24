@@ -65,7 +65,6 @@ export class SuiviComments {
 
   _supervision: Supervision = {
     id: -1,
-    Supervisions: [],
     author: "Gabriel Dubois", //maybe this should be a UserProfile ?
     companyId: 1,
     date: "13-11-2021",

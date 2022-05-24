@@ -304,7 +304,6 @@ export class DataState {
         delete response.supervisionId;
         console.log("response", response)
         response[parseInt(key[0])].push(picture.imageBase64)
-
         ctx.setState(compose(addComplexChildren("Supervision", id, "File", response)))
       })
     );
@@ -678,9 +677,10 @@ export class DataState {
         }
         delete response[application.action];
         let key = Object.keys(response)
+        console.log("response", response)
         ctx.setState(addComplexChildren("Company", profile.company.id, "Mission", response));
-        let supervision = response[parseInt(key[0])][42][response[parseInt(key[0])][42].length-1]
-        ctx.setState(addComplexChildren("Mission", response, "Supervision", supervision))
+        // let supervision = response[parseInt(key[0])][42][response[parseInt(key[0])][42].length-1]
+        // ctx.setState(addComplexChildren("Mission", response, "Supervision", supervision))
       })
     );
   }
