@@ -38,32 +38,39 @@ export class SearchbarComponent  implements OnInit{
   }
 
   resetSearch(){
+    console.log(this.searchForm.value)
     this.searchForm.reset();
   }
 
-  adToString(ad: any, adString: string){
-    adString += ad.id.toString() + " " + ad.address;
-    if (ad === 'Post' || ad === 'Mission'){
-      let company = this.store.selectSnapshot(DataQueries.getById("Company", ad.company));
-      let job = this.store.selectSnapshot(DataQueries.getById("Job", ad.job));
-      // let details = this.store.selectSnapshot(DataQueries.getMany("DetailedPost", ad.detail));
-      // let detailContent = details.map((detail: { content: any; }) => detail.content).toString();
-      let manPower = ad.manPower ? "Main d'oeuvre" : "Fourniture et Pose"
-      adString += company?.name + " " + job?.name + " " + ad.contactName + " " + ad.description + " " + manPower + " " + ad.dueDate + " " + ad.startDate + " " + ad.endDate 
-      if (ad === 'Mission'){
-        let supervisions = this.store.selectSnapshot(DataQueries.getMany("Supervision", ad.supervisions));
-        let supervisionsContent = supervisions.map((supervision: { comment: any; }) => supervision.comment).toString();
-        adString += ad.organisationComment + " " + ad.organisationCommentST + " " + ad.qualityComment + " " + ad.securityComment + " " + ad.securityCommentST + " " + ad.subContractorContact + " " + ad.subContractorName + " " + supervisionsContent
-      }
-    }
-    if (ad === 'Company'){
-      let companiesJobs = this.store.selectSnapshot(DataQueries.getMany("JobForCompany", ad.jobs));
-      let companyJob = companiesJobs.map(job => job.job);
-      let jobs = this.store.selectSnapshot(DataQueries.getMany("Job", companyJob));
-      let jobsNames = jobs.map(job => job.name).toString();
+  postToString(ad: any){
+    let company = this.store.selectSnapshot(DataQueries.getById("Company", ad.company));
+    let job = this.store.selectSnapshot(DataQueries.getById("Job", ad.job));
+    let details = this.store.selectSnapshot(DataQueries.getMany("DetailedPost", ad.details));
+      let detailContent = details.map((detail: { content: any; }) => detail.content);
+    let manPower = ad.manPower ? "Main d'oeuvre" : "Fourniture et Pose"
+    let adString = ad.id.toString() + " " + ad.address + " " + company?.name + " " + job?.name + " " + detailContent +  " " + ad.contactName + " " + ad.description + " " + manPower + " " + ad.dueDate + " " + ad.startDate + " " + ad.endDate 
+    return adString
+  }
 
-      adString += ad.activity + " " + ad.name + " " + jobsNames + " " + ad.ntva + " " + ad.siret + " " + ad.webSite
-    }
+  companyToString(ad: any){
+    let companiesJobs = this.store.selectSnapshot(DataQueries.getMany("JobForCompany", ad.jobs));
+    let companyJob = companiesJobs.map(job => job.job);
+    let jobs = this.store.selectSnapshot(DataQueries.getMany("Job", companyJob));
+    let jobsNames = jobs.map(job => job.name).toString();
+    let adString = ad.id.toString() + " " + ad.address + " " + ad.activity + " " + ad.name + " " + jobsNames + " " + ad.ntva + " " + ad.siret + " " + ad.webSite
+    return adString
+  }
+
+  missionToString(ad: any){
+    let company = this.store.selectSnapshot(DataQueries.getById("Company", ad.company));
+    let job = this.store.selectSnapshot(DataQueries.getById("Job", ad.job));
+    let details = this.store.selectSnapshot(DataQueries.getMany("DetailedPost", ad.details));
+    let detailContent = details.map((detail: { content: any; }) => detail.content);
+    let manPower = ad.manPower ? "Main d'oeuvre" : "Fourniture et Pose"
+    let supervisions = this.store.selectSnapshot(DataQueries.getMany("Supervision", ad.supervisions));
+    let supervisionsContent = supervisions.map((supervision: { comment: any; }) => supervision.comment).toString();
+    let adString = ad.id.toString() + " " + ad.address + " " + company?.name + " " + detailContent + " " + job?.name + " " + ad.contactName + " " + ad.description + " " + manPower + " " + ad.dueDate + " " + ad.startDate + " " + ad.endDate + " " + ad.organisationComment + " " + ad.organisationCommentST + " " + ad.qualityComment + " " + ad.securityComment + " " + ad.securityCommentST + " " + ad.subContractorContact + " " + ad.subContractorName + " " + supervisionsContent
+    return adString
   }
 
 };

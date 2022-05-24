@@ -14,6 +14,7 @@ import { Availability } from "src/app/shared/components/calendar/calendar.ui";
 import { ExtendedProfileComponent } from "src/app/shared/components/extended-profile/extended-profile.component";
 import { InfoService } from "src/app/shared/components/info/info.component";
 import { MarkerType } from "src/app/shared/components/map/map.component";
+import { SearchbarComponent } from "src/app/shared/components/searchbar/searchbar.component";
 import { SlidemenuService } from "src/app/shared/components/slidemenu/slidemenu.component";
 import { FilterService } from "src/app/shared/services/filter.service";
 import { getLevenshteinDistance } from "src/app/shared/services/levenshtein";
@@ -46,6 +47,8 @@ export class SOSPageComponent extends Destroy$ {
   availabilities: MarkerType[] = [];
   filterOn: boolean = false;
 
+  searchbar!: SearchbarComponent;
+
   @QueryAll("Company")
   companies$!: Observable<Company[]>;
 
@@ -60,6 +63,7 @@ export class SOSPageComponent extends Destroy$ {
     private cd: ChangeDetectorRef
   ) {
     super();
+    this.searchbar = new SearchbarComponent(store);
   }
 
   ngOnInit() {
@@ -89,15 +93,6 @@ export class SOSPageComponent extends Destroy$ {
     this.isFilterOn(filter);
   };
 
-  adToString(ad: any){
-    let companiesJobs = this.store.selectSnapshot(DataQueries.getMany("JobForCompany", ad.jobs));
-    let companyJob = companiesJobs.map(job => job.job);
-    let jobs = this.store.selectSnapshot(DataQueries.getMany("Job", companyJob));
-    let jobsNames = jobs.map(job => job.name).toString();
-    let adString = ad.id.toString() + " " + ad.address + " " + ad.activity + " " + ad.name + " " + jobsNames + " " + ad.ntva + " " + ad.siret + " " + ad.webSite
-    return adString
-  }
-
   selectSearchDraft(searchForm:  string){
     this.availableCompanies = [];
     if (searchForm == "" || searchForm == null)  {
@@ -107,7 +102,7 @@ export class SOSPageComponent extends Destroy$ {
     } else {
       let levenshteinDist: any = [];
       for (let company of this.allAvailableCompanies) {
-        let postString = this.adToString(company)
+        let postString = this.searchbar.companyToString(company)
         levenshteinDist.push([company,getLevenshteinDistance(postString.toLowerCase(),searchForm.toLowerCase()),]);
       }
       levenshteinDist.sort((a: any, b: any) => a[1] - b[1]);

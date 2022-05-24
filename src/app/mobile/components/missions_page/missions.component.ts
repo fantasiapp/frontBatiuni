@@ -26,6 +26,7 @@ import { getLevenshteinDistance } from "src/app/shared/services/levenshtein";
 
 import * as moment from "moment";
 import { AppComponent } from "src/app/app.component";
+import { SearchbarComponent } from "src/app/shared/components/searchbar/searchbar.component";
 
 @Component({
   selector: "missions",
@@ -47,6 +48,8 @@ export class MissionsComponent extends Destroy$ {
   doClose: boolean = false;
   missionCompany: String = "";
 
+  searchbar!: SearchbarComponent;
+
   @Select(DataQueries.currentProfile)
   profile$!: Observable<Profile>;
 
@@ -60,6 +63,7 @@ export class MissionsComponent extends Destroy$ {
     private appComponent: AppComponent
   ) {
     super();
+    this.searchbar = new SearchbarComponent(store);
   }
 
   ngOnInit() {
@@ -144,17 +148,6 @@ export class MissionsComponent extends Destroy$ {
     this.isFilterOn(filter);
   };
 
-  adToString(ad: any){
-    let company = this.store.selectSnapshot(DataQueries.getById("Company", ad.company));
-    let job = this.store.selectSnapshot(DataQueries.getById("Job", ad.job));
-    let manPower = ad.manPower ? "Main d'oeuvre" : "Fourniture et Pose"
-    let supervisions = this.store.selectSnapshot(DataQueries.getMany("Supervision", ad.supervisions));
-    let supervisionsContent = supervisions.map((supervision: { comment: any; }) => supervision.comment).toString();
-    let adString = ad.id.toString() + " " + ad.address + " " + company?.name + " " + job?.name + " " + ad.contactName + " " + ad.description + " " + manPower + " " + ad.dueDate + " " + ad.startDate + " " + ad.endDate + " " + ad.organisationComment + " " + ad.organisationCommentST + " " + ad.qualityComment + " " + ad.securityComment + " " + ad.securityCommentST + " " + ad.subContractorContact + " " + ad.subContractorName + " " + supervisionsContent
-    return adString
-  }
-
-
   selectSearchMission(searchForm:  string){
     this.myMissions = [];
     if (searchForm == "" || searchForm == null)  {
@@ -162,7 +155,7 @@ export class MissionsComponent extends Destroy$ {
     } else {
       let levenshteinDist: any = [];
       for (let mission of this.allMyMissions) {
-        let postString = this.adToString(mission)
+        let postString = this.searchbar.missionToString(mission)
         levenshteinDist.push([mission,getLevenshteinDistance(postString.toLowerCase(),searchForm.toLowerCase()),]);
       }
       levenshteinDist.sort((a: any, b: any) => a[1] - b[1]);

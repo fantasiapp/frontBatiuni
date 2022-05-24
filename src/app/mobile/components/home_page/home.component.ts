@@ -133,7 +133,6 @@ export class HomeComponent extends Destroy$ {
   @ViewChild(STFilterForm)
   filterST!: STFilterForm;
 
-  @ViewChild(SearchbarComponent)
   searchbar!: SearchbarComponent;
 
   activeView: number = 0;
@@ -162,6 +161,7 @@ export class HomeComponent extends Destroy$ {
   ) {
     super();
     this.isLoading = this.loadingService.isLoading
+    this.searchbar = new SearchbarComponent(store);
   }
 
   ngOnInit() {
@@ -476,16 +476,6 @@ export class HomeComponent extends Destroy$ {
     }
   };
 
-  adToString(ad: any){
-    let company = this.store.selectSnapshot(DataQueries.getById("Company", ad.company));
-    let job = this.store.selectSnapshot(DataQueries.getById("Job", ad.job));
-    // let details = this.store.selectSnapshot(DataQueries.getMany("DetailedPost", ad.detail));
-    // let detailContent = details.map((detail: { content: any; }) => detail.content);
-    let manPower = ad.manPower ? "Main d'oeuvre" : "Fourniture et Pose"
-    let adString = ad.id.toString() + " " + ad.address + " " + company?.name + " " + job?.name + " " + ad.contactName + " " + ad.description + " " + manPower + " " + ad.dueDate + " " + ad.startDate + " " + ad.endDate 
-    return adString
-  }
-
   selectSearchDraft(searchForm:  string){
     this.userDrafts = [];
     if (searchForm == "" || searchForm == null)  {
@@ -493,7 +483,7 @@ export class HomeComponent extends Destroy$ {
     } else {
       let levenshteinDist: any = [];
       for (let post of this.allUserDrafts) {
-        let postString = this.adToString(post)
+        let postString = this.searchbar.postToString(post)
         levenshteinDist.push([post,getLevenshteinDistance(postString.toLowerCase(),searchForm.toLowerCase()),]);
       }
       levenshteinDist.sort((a: any, b: any) => a[1] - b[1]);
@@ -511,7 +501,7 @@ export class HomeComponent extends Destroy$ {
     } else {
       let levenshteinDist: any = [];
       for (let post of this.allUserOnlinePosts) {
-        let postString = this.adToString(post)
+        let postString = this.searchbar.postToString(post)
         levenshteinDist.push([post,getLevenshteinDistance(postString.toLowerCase(),searchForm.toLowerCase()),]);
       }
       levenshteinDist.sort((a: any, b: any) => a[1] - b[1]);
@@ -528,9 +518,9 @@ export class HomeComponent extends Destroy$ {
       this.missions = this.allMissions
     } else {
       let levenshteinDist: any = [];
-      for (let post of this.allMissions) {
-        let postString = this.adToString(post)
-        levenshteinDist.push([post,getLevenshteinDistance(postString.toLowerCase(),searchForm.toLowerCase()),]);
+      for (let mission of this.allMissions) {
+        let missionString = this.searchbar.missionToString(mission)
+        levenshteinDist.push([mission,getLevenshteinDistance(missionString.toLowerCase(),searchForm.toLowerCase()),]);
       }
       levenshteinDist.sort((a: any, b: any) => a[1] - b[1]);
       let keys = levenshteinDist.map((key: any) => { return key[0]; });
@@ -547,7 +537,7 @@ export class HomeComponent extends Destroy$ {
     } else {
       let levenshteinDist: any = [];
       for (let post of this.allOnlinePosts) {
-        let postString = this.adToString(post)
+        let postString = this.searchbar.postToString(post)
         levenshteinDist.push([post,getLevenshteinDistance(postString.toLowerCase(),searchForm.toLowerCase()),]);
       }
       levenshteinDist.sort((a: any, b: any) => a[1] - b[1]);
