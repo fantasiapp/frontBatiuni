@@ -706,12 +706,7 @@ export class DataState {
         }
         delete response[application.action];
         let key = Object.keys(response)
-<<<<<<< HEAD
-        console.log("response", response)
-||||||| d5bad5d9
-=======
         console.log('createSupervision', response);
->>>>>>> eeafa3d7865b04758f72baedcfdf1d288dc1bbbc
         ctx.setState(addComplexChildren("Company", profile.company.id, "Mission", response));
         // let supervision = response[parseInt(key[0])][42][response[parseInt(key[0])][42].length-1]
         // ctx.setState(addComplexChildren("Mission", response, "Supervision", supervision))
