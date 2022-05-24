@@ -167,7 +167,6 @@ export class HomeComponent extends Destroy$ {
     this.filterService.getFilterChangeEmitter().subscribe((posts: Post[]) => {
       this.displayOnlinePosts = posts
       this.cd.markForCheck()
-      console.log(this.displayOnlinePosts)
     })
     this.lateInit()
   }
