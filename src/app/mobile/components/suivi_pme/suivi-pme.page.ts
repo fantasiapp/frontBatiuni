@@ -191,8 +191,9 @@ export class SuiviPME {
     let supervisions: Supervision[] = [];
     console.log('supervision', this.mission);
     let allSupervisions: (Supervision | null)[] = this.mission!.supervisions.map((id) => {
-        console.log('supervision', this.mission?.supervisions);
+        console.log('supervision', id);
         let supervision = this.store.selectSnapshot(DataQueries.getById("Supervision", id));
+        console.log('apresDAtaqiurei');
         if (
           supervision &&
           supervision.date == date &&
