@@ -129,6 +129,8 @@
   }
   
   .imageProfile {
+    position: absolute;
+    top: $item-padding * 2;
     border-radius: 50%;
     width: 4.5rem;
     height: 4.5rem;
