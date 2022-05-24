@@ -78,8 +78,8 @@ export class CalendarUI extends UIDefaultAccessor<DayState[]> {
 
   dateSelect: any;
   selection: string[] = [];
-  currentMonth: number = 0;
-  currentYear: number = 0;
+  currentMonth: number = 1;
+  currentYear: number = 1;
   store: any;
   
   @Input()
