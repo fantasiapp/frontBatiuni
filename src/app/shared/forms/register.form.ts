@@ -105,11 +105,12 @@ import { GetCompanies } from "src/models/new/search/search.actions";
 
     <ng-template #page2>
     <form
-      [formGroup]="registerForm">
+      [formGroup]="registerForm"
+      (ngSubmit)="onSubmit($event)">
       <form
         class="full-width grow form-control curved-border"
         formGroupName="secondPage"
-        (ngSubmit)="onSubmit($event)"
+        
       >
         <h3 class="form-title">Créer un compte !</h3>
         <h4 class="form-subtitle">Informations contact</h4>
@@ -360,6 +361,9 @@ export class RegisterForm extends Destroy$ {
     });
 
     console.log(this.registerForm.get("secondPage")?.valid)
+    this.registerForm.valueChanges.subscribe((value) => {
+      console.log(value)
+    })
   }
 
   onNavigate(dx: number, done?: Function) {
@@ -376,19 +380,19 @@ export class RegisterForm extends Destroy$ {
     if (!value) this.suggestionBox?.hideSuggestions();
 
     this.searchEvent.next(e);
-    this.registerForm.get("company")?.setValue(value);
+    this.registerForm.get("secondPage")?.get("company")?.setValue(value);
   }
 
   actions = { GetCompanies };
 
   onChoice(establishment: Establishement) {
-    this.registerForm.get("company")?.setValue(establishment);
-    this.registerForm.get("companyName")?.setValue(establishment.name);
+    this.registerForm.get("secondPage")?.get("company")?.setValue(establishment);
+    this.registerForm.get("secondPage")?.get("companyName")?.setValue(establishment.name);
   }
 
   cancelCompany() {
-    this.registerForm.get("company")?.setValue("");
-    this.registerForm.get("companyName")?.setValue("");
+    this.registerForm.get("secondPage")?.get("company")?.setValue("");
+    this.registerForm.get("secondPage")?.get("companyName")?.setValue("");
     if (this.suggestionBox) this.suggestionBox!.cancel();
     return true;
   }
