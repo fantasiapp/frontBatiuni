@@ -130,6 +130,9 @@ export class HomeComponent extends Destroy$ {
   @ViewChild(PMEFilterForm)
   filterPME!: PMEFilterForm;
 
+  @ViewChild(STFilterForm)
+  filterST!: STFilterForm;
+
   @ViewChild(SearchbarComponent)
   searchbar!: SearchbarComponent;
 
@@ -537,6 +540,24 @@ export class HomeComponent extends Destroy$ {
     this.cd.markForCheck();
   }
 
+  selectSearchST(searchForm:  string){
+    this.displayOnlinePosts = [];
+    if (searchForm == "" || searchForm == null)  {
+      this.displayOnlinePosts = this.allOnlinePosts
+    } else {
+      let levenshteinDist: any = [];
+      for (let post of this.allOnlinePosts) {
+        let postString = this.adToString(post)
+        levenshteinDist.push([post,getLevenshteinDistance(postString.toLowerCase(),searchForm.toLowerCase()),]);
+      }
+      levenshteinDist.sort((a: any, b: any) => a[1] - b[1]);
+      let keys = levenshteinDist.map((key: any) => { return key[0]; });
+      this.allOnlinePosts.sort((a: any,b: any)=>keys.indexOf(a) - keys.indexOf(b));
+      this.displayOnlinePosts = this.allOnlinePosts
+    }
+    this.cd.markForCheck();
+  }
+
   callbackSearch = (searchForm: string): void => {
     switch (this.activeView) {
       case 0:
@@ -550,6 +571,10 @@ export class HomeComponent extends Destroy$ {
         this.selectSearchMission(searchForm)
     }
   };
+
+  callbackSearchST = (search: string): void => {
+    this.selectSearchST(search)
+}
 
   updateFilterOnST(filterOnST: boolean){
     this.filterOnST = filterOnST;
