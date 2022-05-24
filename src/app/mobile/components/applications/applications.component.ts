@@ -21,6 +21,7 @@ import { Input } from "hammerjs";
 import { getLevenshteinDistance } from "src/app/shared/services/levenshtein";
 import { AppComponent } from "src/app/app.component";
 import { InfoService } from "src/app/shared/components/info/info.component";
+import { SearchbarComponent } from "src/app/shared/components/searchbar/searchbar.component";
 // import { UISlideMenuComponent } from 'src/app/shared/components/slidemenu/slidemenu.component';
 
 @Component({
@@ -54,9 +55,11 @@ export class ApplicationsComponent extends Destroy$ {
   allOnlinePosts: Post[] = [];
   allCandidatedPost: Post[] = [];
   time: number = 0;
+  searchbar!: SearchbarComponent;
 
   constructor(private cd: ChangeDetectorRef, private info: InfoService, private store: Store, private appComponent: AppComponent) {
     super();
+    this.searchbar = new SearchbarComponent(store);
   }
 
   ngOnInit(): void {
@@ -150,6 +153,29 @@ export class ApplicationsComponent extends Destroy$ {
 
   callbackFilter = (filter: any): void => {
     this.selectPost(filter);
+  };
+
+  selectSearch(searchForm:  string){
+    this.userOnlinePosts = [];
+    if (searchForm == "" || searchForm == null)  {
+      this.userOnlinePosts = this.allCandidatedPost
+    } else {
+      let levenshteinDist: any = [];
+      for (let post of this.allCandidatedPost) {
+        let postString = this.searchbar.postToString(post)
+        console.log(postString)
+        levenshteinDist.push([post,getLevenshteinDistance(postString.toLowerCase(),searchForm.toLowerCase()),]);
+      }
+      levenshteinDist.sort((a: any, b: any) => a[1] - b[1]);
+      let keys = levenshteinDist.map((key: any) => { return key[0]; });
+      this.allCandidatedPost.sort((a: any,b: any)=>keys.indexOf(a) - keys.indexOf(b));
+      this.userOnlinePosts = this.allCandidatedPost
+    }
+    this.cd.markForCheck();
+  }
+
+  callbackSearch = (search: any): void => {
+    this.selectSearch(search)
   };
 
   openPost(post: Post | null) {

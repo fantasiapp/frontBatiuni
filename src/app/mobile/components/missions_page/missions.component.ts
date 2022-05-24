@@ -26,6 +26,7 @@ import { getLevenshteinDistance } from "src/app/shared/services/levenshtein";
 
 import * as moment from "moment";
 import { AppComponent } from "src/app/app.component";
+import { SearchbarComponent } from "src/app/shared/components/searchbar/searchbar.component";
 
 @Component({
   selector: "missions",
@@ -47,6 +48,8 @@ export class MissionsComponent extends Destroy$ {
   doClose: boolean = false;
   missionCompany: String = "";
 
+  searchbar!: SearchbarComponent;
+
   @Select(DataQueries.currentProfile)
   profile$!: Observable<Profile>;
 
@@ -60,6 +63,7 @@ export class MissionsComponent extends Destroy$ {
     private appComponent: AppComponent
   ) {
     super();
+    this.searchbar = new SearchbarComponent(store);
   }
 
   ngOnInit() {
@@ -131,11 +135,6 @@ export class MissionsComponent extends Destroy$ {
     this.appComponent.updateUserData()
   }
 
-  callbackFilter = (filter: any): void => {
-    this.selectMissions(filter);
-    this.isFilterOn(filter);
-  };
-
   isFilterOn(filter: any){
     if (filter.address == "" && filter.isClosed == false && filter.jobs.length == 0 && filter.manPower == null && filter.missionDate == "" && filter.sortMissionDate == false && filter.unread == false && filter.validationDate == ""){
       this.filterOn = false;
@@ -143,6 +142,33 @@ export class MissionsComponent extends Destroy$ {
       this.filterOn = true;
     }
   }
+
+  callbackFilter = (filter: any): void => {
+    this.selectMissions(filter);
+    this.isFilterOn(filter);
+  };
+
+  selectSearchMission(searchForm:  string){
+    this.myMissions = [];
+    if (searchForm == "" || searchForm == null)  {
+      this.myMissions = this.allMyMissions
+    } else {
+      let levenshteinDist: any = [];
+      for (let mission of this.allMyMissions) {
+        let postString = this.searchbar.missionToString(mission)
+        levenshteinDist.push([mission,getLevenshteinDistance(postString.toLowerCase(),searchForm.toLowerCase()),]);
+      }
+      levenshteinDist.sort((a: any, b: any) => a[1] - b[1]);
+      let keys = levenshteinDist.map((key: any) => { return key[0]; });
+      this.allMyMissions.sort((a: any,b: any)=>keys.indexOf(a) - keys.indexOf(b));
+      this.myMissions = this.allMyMissions
+    }
+    this.cd.markForCheck();
+  }
+
+  callbackSearch = (search: any): void => {
+    this.selectSearchMission(search)
+  };
 
   selectMissions(filter: any) {
     this.myMissions = [];

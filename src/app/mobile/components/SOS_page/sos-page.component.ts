@@ -14,6 +14,7 @@ import { Availability } from "src/app/shared/components/calendar/calendar.ui";
 import { ExtendedProfileComponent } from "src/app/shared/components/extended-profile/extended-profile.component";
 import { InfoService } from "src/app/shared/components/info/info.component";
 import { MarkerType } from "src/app/shared/components/map/map.component";
+import { SearchbarComponent } from "src/app/shared/components/searchbar/searchbar.component";
 import { SlidemenuService } from "src/app/shared/components/slidemenu/slidemenu.component";
 import { FilterService } from "src/app/shared/services/filter.service";
 import { getLevenshteinDistance } from "src/app/shared/services/levenshtein";
@@ -46,6 +47,8 @@ export class SOSPageComponent extends Destroy$ {
   availabilities: MarkerType[] = [];
   filterOn: boolean = false;
 
+  searchbar!: SearchbarComponent;
+
   @QueryAll("Company")
   companies$!: Observable<Company[]>;
 
@@ -60,6 +63,7 @@ export class SOSPageComponent extends Destroy$ {
     private cd: ChangeDetectorRef
   ) {
     super();
+    this.searchbar = new SearchbarComponent(store);
   }
 
   ngOnInit() {
@@ -87,6 +91,35 @@ export class SOSPageComponent extends Destroy$ {
   callbackFilter = (filter: any): void => {
     this.selectCompany(filter);
     this.isFilterOn(filter);
+  };
+
+  selectSearchDraft(searchForm:  string){
+    this.availableCompanies = [];
+    if (searchForm == "" || searchForm == null)  {
+      for (const company of this.allAvailableCompanies) {
+        this.isCompanyAvailable(company)
+      }
+    } else {
+      let levenshteinDist: any = [];
+      for (let company of this.allAvailableCompanies) {
+        let postString = this.searchbar.companyToString(company)
+        levenshteinDist.push([company,getLevenshteinDistance(postString.toLowerCase(),searchForm.toLowerCase()),]);
+      }
+      levenshteinDist.sort((a: any, b: any) => a[1] - b[1]);
+      let keys = levenshteinDist.map((key: any) => { return key[0]; });
+      this.allAvailableCompanies.sort((a: any,b: any)=>keys.indexOf(a) - keys.indexOf(b));
+      for (let company of this.allAvailableCompanies){
+        this.isCompanyAvailable(company)
+      }
+    }
+    this.companies = this.availableCompanies.map(companyAvailable => companyAvailable.company);
+    this.availabilities = this.availableCompanies.map(companyAvailable => companyAvailable.availability);
+    this.cd.markForCheck();
+  }
+
+
+  callbackSearch = (search: any): void => {
+    this.selectSearchDraft(search)
   };
 
   isCompanyAvailable(company: Company){
@@ -166,7 +199,6 @@ export class SOSPageComponent extends Destroy$ {
       }      
 
       for (let company of this.allAvailableCompanies) {
-
         let includedJob = false;
         if (filter.jobs){
           let Jobs = this.store.selectSnapshot(DataQueries.getMany("JobForCompany", company.jobs));

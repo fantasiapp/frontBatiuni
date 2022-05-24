@@ -227,6 +227,7 @@ export class DataState {
 
   @Action(GetUserData)
   getUserData(ctx: StateContext<DataModel>, action: GetUserData) {
+    console.log("GetUserData mais qu'est ce que tu fais là !")
     const req = this.http.get("data", { action: action.action });
     if (this.flagUpdate){
       this.flagUpdate = false
@@ -359,6 +360,7 @@ export class DataState {
 
   @Action(UploadFile)
   uploadFile(ctx: StateContext<DataModel>, upload: UploadFile) {
+    console.log("upload", upload)
     const req = this.http.post("data", upload);
     return req.pipe(
       tap((response: any) => {

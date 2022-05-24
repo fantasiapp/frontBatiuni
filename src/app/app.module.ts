@@ -1,5 +1,5 @@
 import { environment } from 'src/environments/environment';
-import { Injectable, NgModule } from '@angular/core';
+import { Injectable, LOCALE_ID, NgModule } from '@angular/core';
 import { BrowserModule, HammerGestureConfig, HammerModule, HAMMER_GESTURE_CONFIG, } from '@angular/platform-browser';
 import { NgxsModule } from '@ngxs/store';
 import { NgxsRouterPluginModule } from '@ngxs/router-plugin';
@@ -17,6 +17,10 @@ import { SharedModule } from './shared/shared.module';
 
 import { DataReader } from 'src/models/new/data.mapper';
 import { DataState } from 'src/models/new/data.state';
+
+import { registerLocaleData } from '@angular/common';
+import localeFr from '@angular/common/locales/fr';
+registerLocaleData(localeFr);
 
 @Injectable()
 export class CustomConfig extends HammerGestureConfig {
@@ -60,6 +64,9 @@ export class CustomConfig extends HammerGestureConfig {
     provide: HTTP_INTERCEPTORS,
     useClass: HttpService,
     multi: true
+  }, {
+    provide: LOCALE_ID,
+    useValue: 'fr-FR'
   }],
   bootstrap: [AppComponent]
 })

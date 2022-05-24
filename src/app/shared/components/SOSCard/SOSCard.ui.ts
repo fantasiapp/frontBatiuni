@@ -44,12 +44,12 @@ export class UISOSCard {
 
   ngOnInit() {
     (this.profile$ as Observable<Profile>).subscribe(profile => {
+      console.log("profile", profile)
       if ( !profile ) return;
-      const jobsForCompany = this.store.selectSnapshot(DataQueries.getMany('JobForCompany', profile.company?.jobs));
-      this.jobs = this.store.selectSnapshot(DataQueries.getMany('Job', jobsForCompany?.map(({job}) => job)))
-      this.starsST = profile.company?.starsST
+      const jobsForCompany = this.store.selectSnapshot(DataQueries.getMany('JobForCompany', profile.company.jobs));
+      this.jobs = this.store.selectSnapshot(DataQueries.getMany('Job', jobsForCompany.map(({job}) => job)))
+      this.starsST = profile.company.starsST
     });
-
   }
 
   //add a way to display a selected job

@@ -5,6 +5,6 @@
   </header>
   
   <div class="hosted-page flex column center-cross space-children-margin page-content">
-    <calendar [value]="availabilities" (dayClick)="onDayClicked($event)" #calendar></calendar>
+    <calendar [disableBeforeToday]="true" [value]="availabilities" (dayClick)="onDayClicked($event)" #calendar></calendar>
   </div>
 </ng-container>
