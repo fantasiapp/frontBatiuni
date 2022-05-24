@@ -16,6 +16,7 @@ import {
   FormGroup,
   Validators,
 } from "@angular/forms";
+import { Router } from "@angular/router";
 import { Store } from "@ngxs/store";
 import * as moment from "moment";
 import { take, takeLast } from "rxjs/operators";
@@ -477,7 +478,8 @@ export class MakeAdForm {
     private store: Store,
     private info: InfoService,
     public mobile: Mobile,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    private router: Router,
   ) {
     // setInterval(()=>{
     //   this.mobile.test1()
@@ -578,6 +580,8 @@ export class MakeAdForm {
   }
 
   submit(draft: boolean) {
+    console.log("submit", draft)
+    console.log(this.post)
     if (this.post) {
       if (!draft) {
         this.info.show("info", "Mise en ligne de l'annonce...", Infinity);
@@ -625,6 +629,7 @@ export class MakeAdForm {
           () => {
             this.info.show("success", "Annonce Envoyée", 2000);
             this.done.emit();
+            this.router.navigate(["", "home"]);
           },
           () => {
             this.info.show("error", "Echec de l'envoi", 5000);
