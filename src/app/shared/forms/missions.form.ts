@@ -29,8 +29,11 @@ import { FilterService } from "../services/filter.service";
 
       <div class="form-input">
         <label>Date de mission</label>
-        <input type="date" formControlName="missionDate" />
-        <img src="assets/calendar.png" />
+        <div class="flex row space-between">
+          <label>À partir de : </label>
+          <input type="date" formControlName="missionDate" />
+          <img src="assets/calendar.png" />
+        </div>  
       </div>
 
       <div class="form-input">
@@ -71,15 +74,11 @@ import { FilterService } from "../services/filter.service";
 
       <label class="form-title">Réorganiser la liste selon</label>
       <div class="switch-container flex center-cross">
-        <span class="criteria" (click)="isClosed.onChangeCall()"
-          >Missions clôturées</span
-        >
+        <span class="criteria" (click)="isClosed.onChangeCall()">Missions clôturées</span>
         <switch class="default" formControlName="isClosed" #isClosed></switch>
       </div>
       <div class="switch-container flex center-cross">
-        <span class="criteria" (click)="sortMissionDate.onChangeCall()"
-          >Date de mission de la plus proche à la plus lointaine</span
-        >
+        <span class="criteria" (click)="sortMissionDate.onChangeCall()">Date de mission de la plus proche à la plus lointaine</span>
         <switch
           class="default"
           formControlName="sortMissionDate"
@@ -90,9 +89,7 @@ import { FilterService } from "../services/filter.service";
 
       <div class="form-input space-children-margin">
         <div class="switch-container flex center-cross">
-          <span class="criteria" (click)="unRead.onChangeCall()"
-            >Notifications suivi de chantier non lu</span
-          >
+          <span class="criteria" (click)="unRead.onChangeCall()">Notifications suivi de chantier non lu</span>
           <switch class="default" formControlName="unread" #unRead></switch>
         </div>
       </div>

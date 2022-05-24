@@ -6,8 +6,10 @@
       "
       [tabs]="view == 'PME' ? 3 : 2"
       [(activeView)]="activeView"
+      (activeViewChange)="changeView($event)"
       (filterClicked)="openAdFilterMenu = true"
-      [filterOpen]="filterOn"
+      [filterOpen]="view == 'PME' ? filterOn : filterOnST"
+      [callbackSearch]="view == 'PME' ? callbackSearch : callbackSearchST"
     >
       <span tab_0>{{ view == "PME" ? "Brouillon" : "Vue liste" }}</span>
       <span tab_1>{{ view == "PME" ? "En ligne" : "Carte" }}</span>
@@ -85,7 +87,12 @@
         ></pme-filter-form>
       </ng-container>
       <ng-template #stfilter>
-        <st-filter-form (update)="displayOnlinePosts = $event" [time]="time"></st-filter-form>
+        <st-filter-form 
+          (update)="displayOnlinePosts = $event"
+          [time]="time"
+          [posts]="allOnlinePosts"
+          (filterOnST)="updateFilterOnST($event)"
+          ></st-filter-form>
       </ng-template>
     </swipeup>
 
@@ -268,4 +275,6 @@
 </swipeup> -->
 
 
-<div *ngIf="false" class="loadingScreen" ></div>
+<div *ngIf="isLoading" class="loadingScreen" >
+  <div class="custom-loading-spinner"></div>
+</div>

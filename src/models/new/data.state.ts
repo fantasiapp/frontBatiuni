@@ -57,6 +57,7 @@ import {
   transformField,
   addComplexChildren,
   replaceChildren,
+  update,
 } from "./state.operators";
 import { Logout } from "../auth/auth.actions";
 import { InfoService } from "src/app/shared/components/info/info.component";
@@ -66,6 +67,7 @@ import { SlidemenuService } from "src/app/shared/components/slidemenu/slidemenu.
 import { SwipeupService } from "src/app/shared/components/swipeup/swipeup.component";
 import { transformAll } from "@angular/compiler/src/render3/r3_ast";
 import { ClassGetter } from "@angular/compiler/src/output/output_ast";
+import { isLoadingService } from "src/app/shared/services/isLoading.service";
 
 export interface DataModel {
   fields: Record<string[]>;
@@ -96,6 +98,7 @@ export class Clear {
 @Injectable()
 export class DataState {
   flagUpdate = true;
+  isFirstTime = true
   constructor(
     private store: Store,
     private reader: DataReader,
@@ -103,7 +106,8 @@ export class DataState {
     private info: InfoService,
     private slide: SlidemenuService,
     private swipeup: SwipeupService,
-    private zone: NgZone
+    private zone: NgZone,
+    private loadingService: isLoadingService
   ) {}
 
   private pending$: Record<Subject<any>> = {};
@@ -132,12 +136,14 @@ export class DataState {
   @Action(Clear)
   clear(ctx: StateContext<DataModel>, clear: Clear) {
     const current = ctx.getState();
-    if (clear.data)
+    if (clear.data) {
+      console.log("clear, showView", current.session.view);
       ctx.patchState({
         [clear.data]: {},
         fields: { ...current.fields, [clear.data]: [] },
-      });
+      });}
     else
+    console.log("clear, showView", current.session.view)
       ctx.setState({
         fields: {},
         session: {
@@ -161,6 +167,7 @@ export class DataState {
 
   @Selector()
   static view(state: DataModel) {
+    console.log("view le get : ", state.session.view)
     return state.session.view;
   }
 
@@ -220,18 +227,38 @@ export class DataState {
 
   @Action(GetUserData)
   getUserData(ctx: StateContext<DataModel>, action: GetUserData) {
+    console.log("GetUserData mais qu'est ce que tu fais là !")
     const req = this.http.get("data", { action: action.action });
     if (this.flagUpdate){
       this.flagUpdate = false
     return req.pipe(
       tap((response: any) => {
+        console.log("getuserdata :", response)
         const loadOperations = this.reader.readInitialData(response),
           sessionOperation = this.reader.readCurrentSession(response);
-
+      if (!this.isFirstTime) {
+      let oldView = this.store.selectSnapshot(DataState.view)
+        console.log("olview", oldView)
         ctx.setState(compose(...loadOperations, sessionOperation));
-        this.flagUpdate = true
-      })
-    );
+        const state = ctx.getState();
+        ctx.patchState({
+          session: {
+            ...state.session,
+            view: oldView,
+          },
+        })
+        console.log("new view in if", this.store.selectSnapshot(DataState.view))
+      }
+      else {
+      this.loadingService.emitLoadingChangeEvent(true)
+      ctx.setState(compose(...loadOperations, sessionOperation));
+      this.isFirstTime = false
+      this.loadingService.emitLoadingChangeEvent(false)
+    }
+      console.log("new view", this.store.selectSnapshot(DataState.view))
+      this.flagUpdate = true
+    })
+      );
     }
     else{
       return 
@@ -240,6 +267,9 @@ export class DataState {
 
   @Action(Logout)
   logout(ctx: StateContext<DataModel>) {
+    this.flagUpdate = true
+    console.log("logout")
+    this.isFirstTime = true
     ctx.setState({ fields: {}, session: { view: "ST", currentUser: -1 , time: 0} });
     ctx.dispatch(new GetGeneralData()); // a sign to decouple this from DataModel
   }
@@ -281,9 +311,7 @@ export class DataState {
       tap((response: any) => {
         if (response[picture.action] !== "OK") throw response["messages"];
 
-        console.log('changeProfilePicture, response', response)
         delete response[picture.action];
-        console.log('response', response);
         ctx.setState(compose(addSimpleChildren("Company", profile.company.id, "File", response, "nature")));
       })
     );
@@ -302,7 +330,6 @@ export class DataState {
         let key = Object.keys(response)
         let id = response.supervisionId
         delete response.supervisionId;
-        console.log("response", response)
         response[parseInt(key[0])].push(picture.imageBase64)
         ctx.setState(compose(addComplexChildren("Supervision", id, "File", response)))
       })
@@ -331,6 +358,7 @@ export class DataState {
 
   @Action(UploadFile)
   uploadFile(ctx: StateContext<DataModel>, upload: UploadFile) {
+    console.log("upload", upload)
     const req = this.http.post("data", upload);
     return req.pipe(
       tap((response: any) => {
@@ -686,10 +714,7 @@ export class DataState {
   }
 
   @Action(ModifyMissionDate)
-  modifyMissionDate(
-    ctx: StateContext<DataModel>,
-    application: ModifyMissionDate
-  ) {
+  modifyMissionDate(ctx: StateContext<DataModel>, application: ModifyMissionDate) {
     const profile = this.store.selectSnapshot(DataQueries.currentProfile)!;
     return this.http.post("data", application).pipe(
       tap((response: any) => {
@@ -698,9 +723,11 @@ export class DataState {
           throw response.messages;
         }
         delete response[application.action];
-        ctx.setState(
-          addComplexChildren("Company", profile.company.id, "Mission", response)
-        );
+        console.log('response', response);
+        // for (const date of response.datePost) {
+        //   ctx.setState(addComplexChildren('Mission', response.mission.id,'DatePost', date))
+        // }
+        ctx.setState(addComplexChildren("Company",profile.company.id,"Mission", response.mission));
       })
     );
   }
@@ -713,6 +740,7 @@ export class DataState {
     const profile = this.store.selectSnapshot(DataQueries.currentProfile)!;
     return this.http.post("data", application).pipe(
       tap((response: any) => {
+        console.log('response;', response);
         if (response[application.action] !== "OK") {
           this.inZone(() => this.info.show("error", response.messages, 3000));
           throw response.messages;
@@ -721,8 +749,9 @@ export class DataState {
             this.info.show("info", "La mission est mise à jour", 3000)
           );
           delete response[application.action];
-
-          ctx.setState(addComplexChildren("Company",profile.company.id,"Mission",response));
+          
+          ctx.setState(update('DatePost', response.datePost))
+          ctx.setState(addComplexChildren("Company",profile.company.id,"Mission",response.mission));
         }
       })
     );

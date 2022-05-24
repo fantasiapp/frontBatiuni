@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { Store } from "@ngxs/store";
 import { Job } from "src/models/new/data.interfaces";
@@ -11,8 +11,11 @@ import { SnapshotAll } from "src/models/new/data.state";
       <form class="form-control full-width" [formGroup]="filterForm">
         <div class="form-input">
           <label>Date de mission</label>
-          <input type="date" class="form-element" formControlName="date"/>
-          <img src="assets/calendar.png"/>
+          <div class="flex row space-between">
+            <label>À partir de : </label>
+            <input type="date" class="form-element" formControlName="date"/>
+            <img src="assets/calendar.png"/>
+          </div>
         </div>
 
         <div class="form-input">
@@ -122,5 +125,8 @@ export class PMEFilterForm implements OnInit {
       this.callbackFilter(value);
     })
   }
-  
+
+  resetFilter(){
+    this.filterForm.reset();
+  }
 }

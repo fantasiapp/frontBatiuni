@@ -37,16 +37,19 @@ import { GetCompanies } from "src/models/new/search/search.actions";
 @Component({
   selector: "register-form",
   template: `
-    <div
+    
+      <div
       class="content"
       type="template"
       [slides]="[page1, page2]"
       [animate]="onMobile"
     ></div>
     <ng-template #page1>
+    <form
+      [formGroup]="registerForm">
       <form
         class="full-width form-control curved-border"
-        [formGroup]="registerForm"
+        formGroupName="firstPage"
       >
         <h3 class="form-title">Créer un compte !</h3>
         <h4 class="form-subtitle">Informations contact</h4>
@@ -96,13 +99,18 @@ import { GetCompanies } from "src/models/new/search/search.actions";
           <div (click)="slider.left()"></div>
         </div>
       </form>
+      </form>
+
     </ng-template>
 
     <ng-template #page2>
+    <form
+      [formGroup]="registerForm"
+      (ngSubmit)="onSubmit($event)">
       <form
         class="full-width grow form-control curved-border"
-        [formGroup]="registerForm"
-        (ngSubmit)="onSubmit($event)"
+        formGroupName="secondPage"
+        
       >
         <h3 class="form-title">Créer un compte !</h3>
         <h4 class="form-subtitle">Informations contact</h4>
@@ -190,6 +198,7 @@ import { GetCompanies } from "src/models/new/search/search.actions";
           <div (click)="slider.right()"></div>
           <div class="active"></div>
         </div>
+      </form>
       </form>
     </ng-template>
   `,
@@ -280,27 +289,32 @@ export class RegisterForm extends Destroy$ {
 
   registerForm = new FormGroup(
     {
-      lastname: new FormControl("", [Validators.required]),
-      firstname: new FormControl("", [Validators.required]),
-      email: new FormControl("", [Validators.required, Email()]),
-      emailVerification: new FormControl("", [
-        Validators.required,
-        MatchField("email", "email", true),
-      ]),
-      password: new FormControl("", [ComplexPassword()]),
-      proposer: new FormControl(""),
-      role: new FormControl([], [Validators.required]),
-      company: new FormControl("", [
-        Validators.required,
-        RequiredType(
-          "object",
-          "MESSAGE",
-          "Veuillez choisir une entreprise de la liste."
-        ),
-        TransferError("companyName"),
-      ]),
-      companyName: new FormControl(""),
-      jobs: new FormControl([], [Validators.required]),
+      firstPage: new FormGroup(
+        {
+          lastname: new FormControl("", [Validators.required]),
+          firstname: new FormControl("", [Validators.required]),
+          email: new FormControl("", [Validators.required, Email()]),
+          emailVerification: new FormControl("", [
+            Validators.required,
+            MatchField("email", "email", true),
+          ]),
+          password: new FormControl("", [ComplexPassword()])
+        }),
+      secondPage: new FormGroup({
+        proposer: new FormControl(""),
+        role: new FormControl([], [Validators.required]),
+        company: new FormControl("", [
+          Validators.required,
+          RequiredType(
+            "object",
+            "MESSAGE",
+            "Veuillez choisir une entreprise de la liste."
+          ),
+          TransferError("companyName"),
+        ]),
+        companyName: new FormControl(""),
+        jobs: new FormControl([], [Validators.required])
+      }),
     },
     {}
   );
@@ -345,10 +359,15 @@ export class RegisterForm extends Destroy$ {
         this.searchQuery.next(value);
       }
     });
+
+    console.log(this.registerForm.get("secondPage")?.valid)
+    this.registerForm.valueChanges.subscribe((value) => {
+      console.log(value)
+    })
   }
 
   onNavigate(dx: number, done?: Function) {
-    if (dx > 0) this.slider.left();
+    if (dx > 0 && this.registerForm.get("firstPage")?.valid) this.slider.left();
     else this.slider.right();
   }
 
@@ -361,19 +380,19 @@ export class RegisterForm extends Destroy$ {
     if (!value) this.suggestionBox?.hideSuggestions();
 
     this.searchEvent.next(e);
-    this.registerForm.get("company")?.setValue(value);
+    this.registerForm.get("secondPage")?.get("company")?.setValue(value);
   }
 
   actions = { GetCompanies };
 
   onChoice(establishment: Establishement) {
-    this.registerForm.get("company")?.setValue(establishment);
-    this.registerForm.get("companyName")?.setValue(establishment.name);
+    this.registerForm.get("secondPage")?.get("company")?.setValue(establishment);
+    this.registerForm.get("secondPage")?.get("companyName")?.setValue(establishment.name);
   }
 
   cancelCompany() {
-    this.registerForm.get("company")?.setValue("");
-    this.registerForm.get("companyName")?.setValue("");
+    this.registerForm.get("secondPage")?.get("company")?.setValue("");
+    this.registerForm.get("secondPage")?.get("companyName")?.setValue("");
     if (this.suggestionBox) this.suggestionBox!.cancel();
     return true;
   }

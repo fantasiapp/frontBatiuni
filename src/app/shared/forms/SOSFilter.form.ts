@@ -26,7 +26,7 @@ import { FormArray, FormControl, FormGroup } from "@angular/forms";
 
     <div class="form-input">
       <label>Dans un rayon autour de</label>
-      <ngx-slider [options]="imports.DistanceSliderConfig" [value]="0" [highValue]="1000"formControlName="radius"></ngx-slider>
+      <ngx-slider [(value)]=valueDistance [options]="imports.DistanceSliderConfig" formControlName="radius"></ngx-slider>
     </div>
 
 
@@ -71,7 +71,7 @@ import { FormArray, FormControl, FormGroup } from "@angular/forms";
 export class SOSFilterForm implements OnInit {
   imports = { DistanceSliderConfig, SalarySliderConfig };
 
-  valueDistance: number = 1000;
+  valueDistance: number = 2000;
 
   @Input()
   activeView: number = 0;
@@ -82,7 +82,7 @@ export class SOSFilterForm implements OnInit {
   filterForm = new FormGroup({
     address: new FormControl(""),
     jobs: new FormControl([]),
-    radius: new FormControl(),
+    radius: new FormControl(2000),
     amount: new FormControl(),
     sortNotation: new FormControl(false),
     sortFullProfils: new FormControl(false),

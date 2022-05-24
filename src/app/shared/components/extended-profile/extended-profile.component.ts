@@ -60,7 +60,7 @@ export class ExtendedProfileComponent extends Destroy$ {
   showRecomandation: boolean = true;
 
   @Input()
-  showView: "ST" | "PME" = this.store.selectSnapshot(DataState.view);
+  showView: "ST" | "PME" = this.store.selectSnapshot(DataState.view)
 
   @Input()
   showStar: boolean = true;
@@ -91,16 +91,15 @@ export class ExtendedProfileComponent extends Destroy$ {
     (this.profile$ as Observable<Profile>)
       .pipe(take(1))
       .subscribe((profile) => {
+        console.log("avant avant")
         this.files = profile.company.files as any;
         this.companyJobs = profile.company.jobs as any;
         this.jobs = this.companyJobs.map(({ job }) => job) as any;
+        console.log('email', profile.user?.email);
       });
     // this.showView = "PME"
   }
 
-  ngAfterViewInit() {
-    this.appComponent.updateUserData()
-  }
 
   get attachedFiles(): any[] {
     return this.files.filter(

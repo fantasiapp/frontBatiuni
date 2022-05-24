@@ -6,9 +6,11 @@
             <div class="flex center-cross center-main" 
             (click)="showAgenda(i.day[2])" 
             (click)="showgrey(i)"
+            [class]="i.notification"
+            [class]="i.status"
             [ngClass]="{'today': i.today, 'selected' : i.selected }"
-            [style.background]="i.status == 'occupe' && i.selected ? 'grey' : i.status == 'occupe' && !i.selected ? '#0D6191' : i.status != 'occupe' && i.selected ? 'grey' : '#FFFFFF' "
-                [style.color]="i.status == 'occupe' && i.selected ? '#FFFFFF' : i.status == 'occupe' && !i.selected ? '#FFFFFF' : i.status != 'occupe' && i.selected ? '#FFFFFF' : i.status != 'occupe' && !i.selected ? '#0D6191' : '' "
+            [style.background]="i.status == 'occupe' && i.selected ? 'grey' : i.notification ? 'red' : i.status == 'occupe' && !i.selected ? '#0D6191' : i.status != 'occupe' && i.selected ? 'grey' : '#FFFFFF' "
+            [style.color]="i.status == 'occupe' && i.selected ? '#FFFFFF' : i.status == 'occupe' && !i.selected ? '#FFFFFF' : i.status != 'occupe' && i.selected ? '#FFFFFF' : i.status != 'occupe' && !i.selected ? '#0D6191' : '' "
             >
                 <span class="nameofday"> {{i.day[1].slice(0,1).toUpperCase()+i.day[1].slice(1,2)}}</span>
                 <span class="daynumber">{{i.day[0]}} </span>

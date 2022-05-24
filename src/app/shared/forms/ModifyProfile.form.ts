@@ -446,6 +446,7 @@ export class ModifyProfileForm {
 
   //outputs
   onSubmit() {
+    console.log("form", this.form)
     this.submit.emit(this.form);
   }
   @Output() submit = new EventEmitter<FormGroup>();
@@ -545,9 +546,11 @@ export class ModifyProfileForm {
     this.companyFiles = this.store.selectSnapshot(
       DataQueries.getMany("File", this.profile.company.files)
     );
+    console.log("this.profile.company.labels before", typeof this.profile.company.labels, this.profile.company.labels)
     this.companyLabels = this.store.selectSnapshot(
       DataQueries.getMany("LabelForCompany", this.profile.company.labels)
     );
+    console.log("this.profile.company.labels after", typeof this.profile.company.labels, this.profile.company.labels)
     this.companyJobs = this.store.selectSnapshot(
       DataQueries.getMany("JobForCompany", this.profile.company.jobs)
     );
@@ -568,9 +571,14 @@ export class ModifyProfileForm {
 
     this.selectedLabels = [];
     this.allLabels.forEach((label) => {
+      console.log("companyLabels", this.companyLabels)
       const used = this.companyLabels.find(
-        (labelForCompany) => labelForCompany.label == label.id
+        (labelForCompany) => {
+          console.log("labelForCompany.label", labelForCompany.label, "label.id", label.id)
+          return labelForCompany.label == label.id
+        }
       );
+      console.log("used", used)
       if (used) {
         labelMapping.set(used.id, label);
         this.selectedLabels.push(label);
@@ -615,8 +623,9 @@ export class ModifyProfileForm {
       "UserProfile.Company.JobForCompany"
     ] as FormArray;
     jobControl.clear();
-    for (let jobForCompany of this.companyJobs) {
+      for (let jobForCompany of this.companyJobs) {
       const jobObject = jobMapping.get(jobForCompany.id)!;
+      console.log("jobObject", jobObject)
       jobControl.push(
         new FormGroup({
           job: new FormControl(jobObject),

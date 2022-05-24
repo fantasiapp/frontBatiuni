@@ -19,7 +19,7 @@ import {
   DistanceSliderConfig,
   SalarySliderConfig,
 } from "src/app/shared/common/config";
-import { assignCopy, splitByOutput } from "src/app/shared/common/functions";
+import { assignCopy, delay, splitByOutput } from "src/app/shared/common/functions";
 import { InfoService } from "src/app/shared/components/info/info.component";
 import { PopupService } from "src/app/shared/components/popup/popup.component";
 import {
@@ -60,6 +60,10 @@ import { AuthState } from "src/models/auth/auth.state";
 import { Logout } from "src/models/auth/auth.actions";
 import { analyzeAndValidateNgModules } from "@angular/compiler";
 import { AppComponent } from "src/app/app.component";
+import { isLoadingService } from "src/app/shared/services/isLoading.service";
+import { STFilterForm } from "src/app/shared/forms/STFilter.form";
+import { PMEFilterForm } from "src/app/shared/forms/PMEFilter.form";
+import { SearchbarComponent } from "src/app/shared/components/searchbar/searchbar.component";
 
 @Component({
   selector: "home",
@@ -99,6 +103,7 @@ export class HomeComponent extends Destroy$ {
   missions: Mission[] = [];
   allMissions: Mission[] = [];
   filterOn: boolean = false;
+  filterOnST: boolean = false;
 
   get missionToClose() {
     return this.missions[0];
@@ -122,10 +127,19 @@ export class HomeComponent extends Destroy$ {
   @ViewChild("booster", { read: TemplateRef, static: true })
   boosterTemplate!: TemplateRef<any>;
 
+  @ViewChild(PMEFilterForm)
+  filterPME!: PMEFilterForm;
+
+  @ViewChild(STFilterForm)
+  filterST!: STFilterForm;
+
+  searchbar!: SearchbarComponent;
+
   activeView: number = 0;
   _openCloseMission: boolean = false;
   openAdFilterMenu: boolean = false;
   toogle: boolean = false;
+  isLoading: boolean;
   imports = { DistanceSliderConfig, SalarySliderConfig };
   draftMenu = new PostMenu();
   postMenu = new PostMenu();
@@ -141,50 +155,87 @@ export class HomeComponent extends Destroy$ {
     private swipeupService: SwipeupService,
     private slideService: SlidemenuService,
     private filters: FilterService,
-    private mobile: Mobile
+    private mobile: Mobile,
+    private loadingService: isLoadingService,
+    private filterService: FilterService
   ) {
     super();
+    this.isLoading = this.loadingService.isLoading
+    this.searchbar = new SearchbarComponent(store);
   }
 
   ngOnInit() {
-    this.info.alignWith("header_search");
-    combineLatest([this.profile$, this.posts$])
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(([profile, posts]) => {
-        const mapping = splitByOutput(posts, (post) => {
-          //0 -> userOnlinePosts | 1 -> userDrafts
-          if (profile.company.posts.includes(post.id))
+    this.appComponent.updateUserData();
+    this.loadingService.getLoadingChangeEmitter().subscribe((bool : boolean) => {
+      this.isLoading = bool
+      console.log("isLoading", this.isLoading)
+      this.cd.markForCheck()
+    })
+    this.filterService.getFilterChangeEmitter().subscribe((posts: Post[]) => {
+      this.displayOnlinePosts = posts
+      this.cd.markForCheck()
+      console.log(this.displayOnlinePosts)
+    })
+    this.lateInit()
+  }
+
+  async lateInit() {
+    // console.log("is loading", this.isLoading)
+    // console.log("avant")
+    // this.isLoading = true
+    // this.cd.markForCheck()
+    // await delay(5000)
+    // this.isLoading = false
+    // this.cd.markForCheck()
+    // console.log("yoooo")
+    // console.log("isLoading", this.isLoading)
+    if (!this.isLoading) {
+      this.info.alignWith("header_search");
+      combineLatest([this.profile$, this.posts$])
+        .pipe(takeUntil(this.destroy$))
+        .subscribe(([profile, posts]) => {
+          const mapping = splitByOutput(posts, (post) => {
+            //0 -> userOnlinePosts | 1 -> userDrafts
+            if (profile.company.posts.includes(post.id))
+              return post.draft
+                ? this.symbols.userDraft
+                : this.symbols.userOnlinePost;
+  
             return post.draft
-              ? this.symbols.userDraft
-              : this.symbols.userOnlinePost;
-
-          return post.draft
-            ? this.symbols.discard
-            : this.symbols.otherOnlinePost;
+              ? this.symbols.discard
+              : this.symbols.otherOnlinePost;
+          });
+  
+          const otherOnlinePost = mapping.get(this.symbols.otherOnlinePost) || [];
+          this.allUserDrafts = mapping.get(this.symbols.userDraft) || [];
+          this.allUserOnlinePosts =
+            mapping.get(this.symbols.userOnlinePost) || [];
+          this.allOnlinePosts = [...otherOnlinePost, ...this.userOnlinePosts];
+          this.allMissions = this.store.selectSnapshot(DataQueries.getMany("Mission", profile.company.missions));
+  
+          this.selectDraft(null);
+          this.selectUserOnline(null);
+          this.selectMission(null);
+          this.selectSearchDraft("");
+          this.selectSearchOnline("");
+          this.selectSearchMission("");
+  
         });
-
-        const otherOnlinePost = mapping.get(this.symbols.otherOnlinePost) || [];
-        this.allUserDrafts = mapping.get(this.symbols.userDraft) || [];
-        this.allUserOnlinePosts =
-          mapping.get(this.symbols.userOnlinePost) || [];
-        this.allOnlinePosts = [...otherOnlinePost, ...this.userOnlinePosts];
-        this.allMissions = this.store.selectSnapshot(DataQueries.getMany("Mission", profile.company.missions));
+      // const view = this.store.selectSnapshot(DataState.view)
+      // this._openCloseMission = view == 'ST' && this.missions.length != 0
+  
+      this.mobile.footerStateSubject.subscribe((b) => {
+        this.showFooter = b;
         this.cd.markForCheck();
-
-        this.selectDraft(null);
-        this.selectUserOnline(null);
-        this.selectMission(null);
-
       });
-    // const view = this.store.selectSnapshot(DataState.view)
-    // this._openCloseMission = view == 'ST' && this.missions.length != 0
-
-    this.mobile.footerStateSubject.subscribe((b) => {
-      this.showFooter = b;
-      this.cd.markForCheck();
-    });
-    
-    this.time = this.store.selectSnapshot(DataState.time);
+      
+      this.time = this.store.selectSnapshot(DataState.time);
+      this.updatePage()
+    }
+    else {
+      await delay(10000)
+      this.lateInit()
+    }
   }
 
   @HostBinding('class.footerHide')
@@ -200,8 +251,7 @@ export class HomeComponent extends Destroy$ {
   }
 
   updatePage() {
-    this.appComponent.updateUserData();
-    this.filters.filter("ST", this.allOnlinePosts);
+    this.cd.markForCheck()
   }
 
   get openCloseMission() {
@@ -213,6 +263,11 @@ export class HomeComponent extends Destroy$ {
 
   selectDraft(filter: any) {
     this.userDrafts = [];
+    this.allUserDrafts.sort((post1, post2) => {
+      let b1 = post1.boostTimestamp > this.time ? 1 : 0;
+      let b2 = post2.boostTimestamp > this.time ? 1 : 0;
+      return b2 - b1
+    })
     if (filter == null) {
       this.userDrafts = this.allUserDrafts;
     } else {
@@ -226,11 +281,7 @@ export class HomeComponent extends Destroy$ {
         });
         // Trie les posts selon leur distance de levenshtein
         this.allUserDrafts.sort((a: any,b: any)=>keys.indexOf(a) - keys.indexOf(b));
-      } else {
-        this.allUserDrafts.sort((a, b) => {
-          return a["id"] - b["id"];
-        });
-      }
+      } 
 
       // Trie brouillons les plus anciens
       if (filter.sortDraftDate === true) {this.allUserDrafts.sort((a: any, b: any) => a['id'] - b['id'])} 
@@ -247,11 +298,7 @@ export class HomeComponent extends Destroy$ {
       }
 
       for (let post of this.allUserDrafts) {
-      
-        let datesPost = this.store.selectSnapshot(DataQueries.getMany("DatePost", post.dates));
-        console.log("datesPost", datesPost)
-        let dates = datesPost.map(date => date.date);
-        let isDifferentDate = (filter.date && !dates.includes(filter.date))
+        let isDifferentDate = (filter.date && post.startDate < filter.date)
         let isDifferentManPower = (filter.manPower && post.manPower != (filter.manPower === "true"))
         let isNotIncludedJob = (filter.jobs && filter.jobs.length && filter.jobs.every((job: any) => {return job.id != post.job}))
 
@@ -266,6 +313,11 @@ export class HomeComponent extends Destroy$ {
 
   selectUserOnline(filter: any) {
     this.userOnlinePosts = [];
+    this.allUserOnlinePosts.sort((post1, post2) => {
+      let b1 = post1.boostTimestamp > this.time ? 1 : 0;
+      let b2 = post2.boostTimestamp > this.time ? 1 : 0;
+      return b2 - b1
+    });
     if (filter == null) {
       this.userOnlinePosts = this.allUserOnlinePosts;
     } else {
@@ -282,12 +334,7 @@ export class HomeComponent extends Destroy$ {
         this.allUserOnlinePosts.sort(
           (a: any, b: any) => keys.indexOf(a) - keys.indexOf(b)
         );
-      } else {
-        this.allUserOnlinePosts.sort((a, b) => {
-          return a["id"] - b["id"];
-        });
-      }
-
+      } 
       // Trie Posts selon leurs réponses
       if (filter.sortPostResponse === true) {
         let responses = [];
@@ -306,10 +353,8 @@ export class HomeComponent extends Destroy$ {
       } 
 
       for (let post of this.allUserOnlinePosts) {
-        
-        let datesPost = this.store.selectSnapshot(DataQueries.getMany("DatePost", post.dates));
-        let dates = datesPost.map(date => date.date);
-        let isDifferentDate = (filter.date && !dates.includes(filter.date))
+
+        let isDifferentDate = (filter.date &&  post.startDate < filter.date)
         let isDifferentManPower = (filter.manPower && post.manPower != (filter.manPower === "true"))
         let isNotIncludedJob = (filter.jobs && filter.jobs.length && filter.jobs.every((job: any) => {return job.id != post.job}))
 
@@ -325,6 +370,8 @@ export class HomeComponent extends Destroy$ {
     if (filter == null) {
       this.missions = this.allMissions;
     } else {
+      this.allMissions.sort((a, b) => {return Number(a["isClosed"]) - Number(b["isClosed"]);});
+      
       let levenshteinDist: any = [];
       if (filter.address) {
         for (let mission of this.allMissions) {levenshteinDist.push([mission,getLevenshteinDistance(mission.address.toLowerCase(),filter.address.toLowerCase()),]);}
@@ -339,6 +386,7 @@ export class HomeComponent extends Destroy$ {
         this.allMissions.sort((a, b) => {
           return a["id"] - b["id"];
         });
+        this.allMissions.sort((a, b) => {return Number(a["isClosed"]) - Number(b["isClosed"]);});
       }
 
       // Trie missions selon leurs notifications
@@ -357,10 +405,7 @@ export class HomeComponent extends Destroy$ {
       }
 
       for (let mission of this.allMissions) {
-      
-        let datesPost = this.store.selectSnapshot(DataQueries.getMany("DatePost", mission.dates));
-        let dates = datesPost.map(date => date.date);
-        let isDifferentDate = (filter.date && !dates.includes(filter.date))
+        let isDifferentDate = (filter.date && mission.startDate < filter.date)
         let isDifferentManPower = (filter.manPower && mission.manPower != (filter.manPower === "true"))
         let isNotIncludedJob = (filter.jobs && filter.jobs.length && filter.jobs.every((job: any) => {return job.id != mission.job}))
 
@@ -369,6 +414,7 @@ export class HomeComponent extends Destroy$ {
         }
         this.missions.push(mission);
       }
+      // Trie les missions pour que celles clôturées soient en derniers
     }
     this.cd.markForCheck();
   }
@@ -387,46 +433,145 @@ export class HomeComponent extends Destroy$ {
     }
   };
 
-  isFilterOnDrafts(filter: any){
-    if (filter.address == "" && filter.date == "" && filter.jobs.length == 0 && filter.manPower == null && filter.sortDraftDate == false && filter.sortDraftFull == false){
+  isFilterOn(filter: any){
+    if ((filter.address == "" || filter.address == null) && (filter.date == "" || filter.date == null)&& (filter.jobs == null || filter.jobs.length == 0) && filter.manPower == null && (filter.sortDraftDate == false ||filter.sortDraftDate ==  null) && (filter.sortDraftFull == false ||filter.sortDraftFull == null) && (filter.sortPostResponse == false || filter.sortPostResponse == null) && (filter.sortMissionNotifications == false || filter.sortMissionNotifications == null)){
       this.filterOn = false;
     } else {
       this.filterOn = true;
     }
+    this.cd.markForCheck;
   }
 
-  isFilterOnUserOnline(filter: any){
-    console.log(filter)
-    if (filter.address == "" && filter.date == "" && filter.jobs.length == 0 && filter.manPower == null && filter.sortPostResponse == false){
-      this.filterOn = false;
-    } else {
-      this.filterOn = true;
+  changeView(headerActiveView: number) {
+    this.view$.subscribe((view)=>{ if(view=='PME'){
+      if (headerActiveView == 0){
+        this.filterPME.resetFilter()
+        this.searchbar.resetSearch()
+        this.filterOn = false;
+      }  
+      if (headerActiveView == 1) {
+        this.filterPME.resetFilter()
+        this.searchbar.resetSearch()
+        this.filterOn = false;
+      }    
+      if (headerActiveView == 2) {
+        this.filterPME.resetFilter()
+        this.searchbar.resetSearch()
+        this.filterOn = false;
+      }
     }
-  }
-
-  isFilterOnMission(filter: any){
-    if (filter.address == "" && filter.date == "" && filter.jobs.length == 0 && filter.manPower == null && filter.sortMissionNotifications == false){
-      this.filterOn = false;
-    } else {
-      this.filterOn = true;
-    }
+  })  
   }
 
   callbackFilter = (filter: any): void => {
     switch (this.activeView) {
       case 0:
         this.selectDraft(filter);
-        this.isFilterOnDrafts(filter);
+        this.isFilterOn(filter);
         break;
       case 1:
         this.selectUserOnline(filter);
-        this.isFilterOnUserOnline(filter);
+        this.isFilterOn(filter);
         break;
       case 2:
         this.selectMission(filter);
-        this.isFilterOnMission(filter);
+        this.isFilterOn(filter);
     }
   };
+
+  selectSearchDraft(searchForm:  string){
+    this.userDrafts = [];
+    if (searchForm == "" || searchForm == null)  {
+      this.userDrafts = this.allUserDrafts
+    } else {
+      let levenshteinDist: any = [];
+      for (let post of this.allUserDrafts) {
+        let postString = this.searchbar.postToString(post)
+        levenshteinDist.push([post,getLevenshteinDistance(postString.toLowerCase(),searchForm.toLowerCase()),]);
+      }
+      levenshteinDist.sort((a: any, b: any) => a[1] - b[1]);
+      let keys = levenshteinDist.map((key: any) => { return key[0]; });
+      this.allUserDrafts.sort((a: any,b: any)=>keys.indexOf(a) - keys.indexOf(b));
+      this.userDrafts = this.allUserDrafts
+    }
+    this.cd.markForCheck();
+  }
+
+  selectSearchOnline(searchForm:  string){
+    this.userOnlinePosts = [];
+    if (searchForm == "" || searchForm == null)  {
+      this.userOnlinePosts = this.allUserOnlinePosts
+    } else {
+      let levenshteinDist: any = [];
+      for (let post of this.allUserOnlinePosts) {
+        let postString = this.searchbar.postToString(post)
+        levenshteinDist.push([post,getLevenshteinDistance(postString.toLowerCase(),searchForm.toLowerCase()),]);
+      }
+      levenshteinDist.sort((a: any, b: any) => a[1] - b[1]);
+      let keys = levenshteinDist.map((key: any) => { return key[0]; });
+      this.allUserOnlinePosts.sort((a: any,b: any)=>keys.indexOf(a) - keys.indexOf(b));
+      this.userOnlinePosts = this.allUserOnlinePosts
+    }
+    this.cd.markForCheck();
+  }
+
+  selectSearchMission(searchForm:  string){
+    this.missions = [];
+    if (searchForm == "" || searchForm == null)  {
+      this.missions = this.allMissions
+    } else {
+      let levenshteinDist: any = [];
+      for (let mission of this.allMissions) {
+        let missionString = this.searchbar.missionToString(mission)
+        levenshteinDist.push([mission,getLevenshteinDistance(missionString.toLowerCase(),searchForm.toLowerCase()),]);
+      }
+      levenshteinDist.sort((a: any, b: any) => a[1] - b[1]);
+      let keys = levenshteinDist.map((key: any) => { return key[0]; });
+      this.allMissions.sort((a: any,b: any)=>keys.indexOf(a) - keys.indexOf(b));
+      this.missions = this.allMissions
+    }
+    this.cd.markForCheck();
+  }
+
+  selectSearchST(searchForm:  string){
+    this.displayOnlinePosts = [];
+    if (searchForm == "" || searchForm == null)  {
+      this.displayOnlinePosts = this.allOnlinePosts
+    } else {
+      let levenshteinDist: any = [];
+      for (let post of this.allOnlinePosts) {
+        let postString = this.searchbar.postToString(post)
+        levenshteinDist.push([post,getLevenshteinDistance(postString.toLowerCase(),searchForm.toLowerCase()),]);
+      }
+      levenshteinDist.sort((a: any, b: any) => a[1] - b[1]);
+      let keys = levenshteinDist.map((key: any) => { return key[0]; });
+      this.allOnlinePosts.sort((a: any,b: any)=>keys.indexOf(a) - keys.indexOf(b));
+      this.displayOnlinePosts = this.allOnlinePosts
+    }
+    this.cd.markForCheck();
+  }
+
+  callbackSearch = (searchForm: string): void => {
+    switch (this.activeView) {
+      case 0:
+        this.selectSearchDraft(searchForm)
+        break;
+      case 1:
+        this.selectSearchOnline(searchForm)
+        break;
+      case 2:
+        console.log("mission")
+        this.selectSearchMission(searchForm)
+    }
+  };
+
+  callbackSearchST = (search: string): void => {
+    this.selectSearchST(search)
+}
+
+  updateFilterOnST(filterOnST: boolean){
+    this.filterOnST = filterOnST;
+  }
 
   //factor two menu into objects
   openDraft(post: Post | null) {
@@ -562,7 +707,7 @@ export class HomeComponent extends Destroy$ {
         (success) => {
           // Si la candidature est envoyée on quite la vue de la candidature
           this.updateAllOnlinePost(post)
-          this.filters.filter("ST", this.allOnlinePosts)
+          console.log("posts dans apply post", this.allOnlinePosts)
           this.slideOnlinePostClose();
         },
         (error) =>
@@ -624,7 +769,6 @@ export class HomeComponent extends Destroy$ {
       user: user as User,
       company: company!,
     } as Profile;
-    console.log("showCompany , candidate :", candidate)
     this.amountSubContractor = candidate?.amount
       ? "Contre-Offre: " + candidate!.amount.toString() + " €"
       : null;

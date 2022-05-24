@@ -10,13 +10,17 @@ import { UIDefaultAccessor } from "../../common/classes";
 import * as moment from "moment";
 import { NG_VALUE_ACCESSOR } from "@angular/forms";
 import { filterSplit } from "../../common/functions";
+import { DataQueries } from "src/models/new/data.state";
+import { Mission } from "src/models/new/data.interfaces";
+import { Observable, Subscription } from "rxjs";
 
 export type Availability =
   | "available"
   | "availablelimits"
   | "unavailable"
   | "selected"
-  | "nothing";
+  | "nothing"
+  | "notification";
 export interface DayState {
   date: string;
   availability: Availability;
@@ -45,6 +49,9 @@ export class CalendarUI extends UIDefaultAccessor<DayState[]> {
   @Input()
   mode: CalendarMode = "single";
 
+  @Input()
+  disableBeforeToday: boolean = false;
+
   rangeMomentStart: moment.Moment | null = null;
 
   @Output()
@@ -66,20 +73,61 @@ export class CalendarUI extends UIDefaultAccessor<DayState[]> {
     date: any;
     indexWeek: number;
     availability: Availability;
+    blockedDay: boolean
   }[] = [];
 
   dateSelect: any;
   selection: string[] = [];
-  currentMonth: number = 0;
-  currentYear: number = 0;
+  currentMonth: number = 1;
+  currentYear: number = 1;
+  store: any;
+  
+  @Input()
+  mission: Mission | null= null;
+
+  @Input()
+  blockedDate: string[] = []
 
   constructor(cd: ChangeDetectorRef) {
     super(cd);
+    // this.blockedDays = this.computeBlockedDate()
+    
+    
+  }
+  
+  ngOnInit(){
     let now = new Date(Date.now());
+    
     this.currentMonth = now.getMonth() + 1;
     this.currentYear = now.getFullYear();
     this.value = [];
+    this.blockThePast(now)
+    this.viewCurrentDate()
   }
+
+  blockThePast(now: any){
+    if(this.disableBeforeToday){
+      //  console.log('today', now, moment(now));
+      console.log('today', moment(now).format('YYYY-MM-DD'));
+      const today = moment(now).format('YYYY-MM-DD')
+      let day = Number(today.substring(8,10))
+      let month = Number(today.substring(5,7))
+      let year = Number(today.substring(0, 4))
+      console.log('currentMonth', this.currentMonth);
+      // console.log('DJAFA', day, month, year);
+
+      if (this.currentYear > year) return
+      else if (this.currentYear == year && this.currentMonth > month) return
+      else if (this.currentYear == year && this.currentMonth == month) {}
+      else day = 32
+
+      for (let i = 1; i < day; i++) {
+        this.blockedDate.push(this.fillZero(this.currentYear) + '-' + this.fillZero(this.currentMonth) + '-' + this.fillZero(i))
+      }
+
+    }
+  }
+
 
   private fillZero(month: number) {
     if (month < 10) return "0" + month;
@@ -111,6 +159,7 @@ export class CalendarUI extends UIDefaultAccessor<DayState[]> {
         date: flow._i,
         indexWeek: dayObject.isoWeekday(),
         availability: item[0]?.availability,
+        blockedDay: !!this.blockedDate.filter(date => date == flow._i)?.length
       };
     });
     this.monthSelect = arrayDays;
@@ -136,11 +185,10 @@ export class CalendarUI extends UIDefaultAccessor<DayState[]> {
 
   changeMonth(flag: any) {
     const nextDate =
-      flag < 0
-        ? this.dateSelect.clone().subtract(1, "month")
-        : this.dateSelect.clone().add(1, "month");
+      flag < 0 ? this.dateSelect.clone().subtract(1, "month") : this.dateSelect.clone().add(1, "month");
     this.currentMonth = nextDate.get("M") + 1;
     this.currentYear = nextDate.get("Y");
+    this.blockThePast(new Date(Date.now()))
     this.getDaysFromDate(this.fillZero(this.currentMonth), this.currentYear);
   }
 

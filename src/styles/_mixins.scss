@@ -242,11 +242,13 @@
   pointer-events: none;
   &::after {
     content: attr(data-notification-number);
-    min-width: $notification-size;
-    height: $notification-size;
+    min-width: calc(#{$notification-size} - 8px);
+    width: auto;
+    padding: 4px;
+    border-radius: calc(#{$notification-size} / 2 + 4px);
+    height: calc(#{$notification-size} - 8px);
     background-color: $danger;
-    border-radius: math.div($notification-size, 2 ) ;
-    display: flex;
+    display: inline-flex;
     justify-content: center;
     align-items: center;
     font-size: $notification-size*0.6;

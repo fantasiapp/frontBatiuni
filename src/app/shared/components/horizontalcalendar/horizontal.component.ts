@@ -115,22 +115,21 @@ export class HorizontaleCalendar implements OnInit {
 
     let now = new Date(Date.now());
     this.getDaysFromDate(now.getMonth() + 1, now.getFullYear());
+    this.showAgenda(moment(now).format("YYYY-MM-DD"));
     this.setSelectedDays();
     this.someFunction();
     this.spanShowToday = moment(now)
       .locale("fr")
       .format("dddd D - MMMM - YYYY");
 
-    this.showAgenda(moment(now).format("YYYY-MM-DD"));
     this.showColors();
   }
 
   toCalendarDays(workDays: MissionDetailedDay[]): DayState[] {
     this.detailedDays = workDays;
-
     return workDays.map((workDay) => ({
       date: workDay.date,
-      availability: "selected",
+      availability: this.getNotification(workDay.date, workDay.mission) ? 'notification' : "selected",
     }));
   }
 
@@ -140,7 +139,6 @@ export class HorizontaleCalendar implements OnInit {
         .locale("fr")
         .format("D,dddd,YYYY-MM-DD")
         .split(","),
-        // permet de voir un la veille sur le calendrier horizontal
       weekStart = currentDate.clone().add( -1, "days");
     let days = [];
     for (let i = 0; i < HorizontaleCalendar.NUMBER_OF_DAYS_DISPLAYED; i++) {
@@ -151,14 +149,31 @@ export class HorizontaleCalendar implements OnInit {
         .split(",");
       const selected = dayFormated[2] == currentDateFormated[2];
         // status = selected ? 'aujourdhui' : ''
+
       days.push({
         day: dayFormated,
         status: '',
         selected: selected,
-        today: selected
+        today: selected,
+        notification: this.getNotification(dayFormated[2])
       });
     }
     this.selectedDay = days;
+  }
+
+  getNotification(day: string, mission: Mission | null = null){
+    if(mission){
+      let change = this.dateChange(mission, day)
+      return change.deleted || change.schedule || !change.validate
+    } else {
+      for (const detail of this.detailedDays) {
+        if(detail.date == day){
+          let change = this.dateChange(detail.mission, day)
+          return change.deleted || change.schedule || !change.validate
+        }
+      }
+    }
+    return false
   }
 
   getDaysFromDate(month: any, year: any) {
@@ -266,7 +281,6 @@ export class HorizontaleCalendar implements OnInit {
         change: this.dateChange(today.mission, today.date),
       });
     }
-
     this.cd.markForCheck();
   }
 
@@ -286,12 +300,20 @@ export class HorizontaleCalendar implements OnInit {
     else datesId = mission.dates;
 
     let dates = this.store.selectSnapshot(DataQueries.getMany("DatePost", datesId));
-    for (const datePost of dates) {
-      if (datePost.date == date) {
-        isChange.validate = datePost.validated;
-        isChange.deleted = datePost.deleted;
-      }
-    }
+    dates.filter(datePost => datePost.date == date).map(datePost => {
+      isChange.validate = datePost.validated;
+      isChange.deleted = datePost.deleted
+    })
+
+    // let notification = false
+    // for (const curCard of this.currentCardCalendars) {
+    //   if(date == curCard.date){
+    //     if(!notification) {
+    //       notification = curCard.change.deleted || curCard.change.schedule || !curCard.change.validate
+    //     }
+    //   }
+    // }
+
     if (!isChange.deleted)
       isChange.schedule = !!mission.hourlyEndChange || !!mission.hourlyStartChange;
 
@@ -299,7 +321,9 @@ export class HorizontaleCalendar implements OnInit {
   }
 
   onCardUpdate(state: any, card: calendarItem) {
-    const choice = state[0], cardChange = state[1]
+    const cardChange = state
+
+
     let mission = this.store.selectSnapshot(DataQueries.getById("Mission", card.mission.id));
     let heightTop = this.calculator(mission!.hourlyStart, mission!.hourlyEnd);
 
@@ -307,20 +331,36 @@ export class HorizontaleCalendar implements OnInit {
     card.cardFromTop = heightTop[0];
     card.cardHeight = heightTop[1];
     card.change = cardChange
+    
+    for (const day of this.selectedDay) {
+      let notification = false
+      let status = false
+      for (const curCard of this.currentCardCalendars) {
+        if(day.day[2] == curCard.date){
+          if(!notification) {
+            notification = curCard.change.deleted || curCard.change.schedule || !curCard.change.validate
+          }
+          day.notification = notification
+
+          if(!status) status = curCard.change.validate
+          day.status = status ? 'occupe' : ''
+          if(!status){
+            day.notification = false
+          }
+        }
+      }
+    }
 
     if (cardChange.deleted || (!card.change.deleted && !card.change.validate)) {
       let newCardCalendars: calendarItem[] = [];
       for (const curCard of this.currentCardCalendars) {
-        if (curCard.mission.id != card.mission.id || curCard.date != card.date)
+        if (curCard.mission.id != card.mission.id){
           newCardCalendars.push(curCard);
+        }
       }
+
       this.currentCardCalendars = newCardCalendars;
     }
-
-    // if(choice && !cardChange.validate){
-    //   card.change.validate = true
-    // }
-
     this.cd.markForCheck();
   }
 

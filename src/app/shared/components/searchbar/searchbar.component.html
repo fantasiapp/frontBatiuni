@@ -1,2 +1,6 @@
-<img src="assets/Rechercher.svg">
-<input (input)="onChange($event)" inputmode="search" [placeholder]="placeholder"/>
+<ng-container [ngSwitch]="activeView">
+<form [formGroup]="searchForm" id="form">
+    <img src="assets/Rechercher.svg">
+    <input inputmode="search" [placeholder]="placeholder" formControlName="search" id="searchb"/>
+</form>
+</ng-container>

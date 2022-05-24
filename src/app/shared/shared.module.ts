@@ -64,7 +64,7 @@ import { RatingComponent } from "./components/rating/rating.component";
 import { SlideProfileComponent } from './components/slide-profile/slide-profile.component';
 import { Mobile } from "./services/mobile-footer.service";
 import { NotificationAgendaComponent } from './components/notification-agenda/notification-agenda.component';
-
+import { ApplicationForm } from "./forms/application.form";
 
 @NgModule({
   declarations: [
@@ -81,6 +81,7 @@ import { NotificationAgendaComponent } from './components/notification-agenda/no
     UISwitchComponent,
     FileUI,
     MakeAdForm,
+    ApplicationForm,
     STFilterForm,
     PMEFilterForm,
     SOSFilterForm,
@@ -140,6 +141,7 @@ import { NotificationAgendaComponent } from './components/notification-agenda/no
   exports: [
     OptionsModel,
     MakeAdForm,
+    ApplicationForm,
     STFilterForm,
     PMEFilterForm,
     SOSFilterForm,

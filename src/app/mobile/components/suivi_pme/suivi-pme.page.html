@@ -92,7 +92,7 @@
 
     <div class="form-input">
       <label>Dates du chantier</label>
-      <calendar [useEvents]="false" formControlName="calendar" [mode]="'single'"></calendar>
+      <calendar [blockedDate]="computeBlockedDate()" [mission]="mission" [useEvents]="false" formControlName="calendar" [mode]="'single'"></calendar>
     </div>
     <div style="height:150px">
       <p>{{ alert }}</p>

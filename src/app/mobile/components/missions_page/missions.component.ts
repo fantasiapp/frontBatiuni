@@ -26,6 +26,7 @@ import { getLevenshteinDistance } from "src/app/shared/services/levenshtein";
 
 import * as moment from "moment";
 import { AppComponent } from "src/app/app.component";
+import { SearchbarComponent } from "src/app/shared/components/searchbar/searchbar.component";
 
 @Component({
   selector: "missions",
@@ -47,6 +48,8 @@ export class MissionsComponent extends Destroy$ {
   doClose: boolean = false;
   missionCompany: String = "";
 
+  searchbar!: SearchbarComponent;
+
   @Select(DataQueries.currentProfile)
   profile$!: Observable<Profile>;
 
@@ -60,6 +63,7 @@ export class MissionsComponent extends Destroy$ {
     private appComponent: AppComponent
   ) {
     super();
+    this.searchbar = new SearchbarComponent(store);
   }
 
   ngOnInit() {
@@ -131,11 +135,6 @@ export class MissionsComponent extends Destroy$ {
     this.appComponent.updateUserData()
   }
 
-  callbackFilter = (filter: any): void => {
-    this.selectMissions(filter);
-    this.isFilterOn(filter);
-  };
-
   isFilterOn(filter: any){
     if (filter.address == "" && filter.isClosed == false && filter.jobs.length == 0 && filter.manPower == null && filter.missionDate == "" && filter.sortMissionDate == false && filter.unread == false && filter.validationDate == ""){
       this.filterOn = false;
@@ -144,11 +143,39 @@ export class MissionsComponent extends Destroy$ {
     }
   }
 
+  callbackFilter = (filter: any): void => {
+    this.selectMissions(filter);
+    this.isFilterOn(filter);
+  };
+
+  selectSearchMission(searchForm:  string){
+    this.myMissions = [];
+    if (searchForm == "" || searchForm == null)  {
+      this.myMissions = this.allMyMissions
+    } else {
+      let levenshteinDist: any = [];
+      for (let mission of this.allMyMissions) {
+        let postString = this.searchbar.missionToString(mission)
+        levenshteinDist.push([mission,getLevenshteinDistance(postString.toLowerCase(),searchForm.toLowerCase()),]);
+      }
+      levenshteinDist.sort((a: any, b: any) => a[1] - b[1]);
+      let keys = levenshteinDist.map((key: any) => { return key[0]; });
+      this.allMyMissions.sort((a: any,b: any)=>keys.indexOf(a) - keys.indexOf(b));
+      this.myMissions = this.allMyMissions
+    }
+    this.cd.markForCheck();
+  }
+
+  callbackSearch = (search: any): void => {
+    this.selectSearchMission(search)
+  };
+
   selectMissions(filter: any) {
     this.myMissions = [];
     if (filter == null) {
       this.myMissions = this.allMyMissions;
     } else {
+      this.allMyMissions.sort((a, b) => {return Number(a["isClosed"]) - Number(b["isClosed"]);});
       // Array qui contiendra les posts et leur valeur en distance Levenshtein pour une adresse demandée
       let levenshteinDist: any = [];
       if (filter.address) {
@@ -174,6 +201,7 @@ export class MissionsComponent extends Destroy$ {
         this.allMyMissions.sort((a, b) => {
           return a["id"] - b["id"];
         });
+        this.allMyMissions.sort((a, b) => {return Number(a["isClosed"]) - Number(b["isClosed"]);});
       }
 
       // Trie les missions par date plus proche
@@ -182,9 +210,7 @@ export class MissionsComponent extends Destroy$ {
       for (let mission of this.allMyMissions) {
       
       let isDifferentValidationDate = (filter.validationDate && filter.validationDate != mission.dueDate)
-      let datesMission = this.store.selectSnapshot(DataQueries.getMany("DatePost", mission.dates));
-      let dates = datesMission.map(date => date.date);
-      let isNotInMissionDate = (filter.missionDate && !dates.includes(filter.missionDate))       
+      let isNotInMissionDate = (filter.missionDate && mission.startDate < filter.date)       
       let isDifferentManPower = (filter.manPower && mission.manPower != (filter.manPower === "true"))
       let isNotIncludedJob = (filter.jobs && filter.jobs.length && filter.jobs.every((job: any) => {return job.id != mission.job}))
       const user = this.store.selectSnapshot(DataQueries.currentUser);
@@ -194,6 +220,8 @@ export class MissionsComponent extends Destroy$ {
       if ( isDifferentValidationDate || isNotInMissionDate || isDifferentManPower || isNotIncludedJob || isUnread || isNotClosed) { continue }
       this.myMissions.push(mission)
       }
+      // Trie les missions pour que celles clôturées soient en derniers
+
     }
     this.cd.markForCheck();
   }

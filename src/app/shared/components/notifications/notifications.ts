@@ -52,7 +52,6 @@ export class Notifications {
     index: number,
     src: SafeResourceUrl | string
   ) {
-    console.log("yo", src)
     let notificationDisplay = {
       id: index,
       date: new Date(notification.timestamp * 1000),
@@ -62,7 +61,8 @@ export class Notifications {
     this.notificationsDisplay.unshift(notificationDisplay);
   }
 
-  get today(): NotificationDisplay[] {
+  today: NotificationDisplay[] = [];
+  updateToday() {
     let todayDate = new Date(Date.now());
     const todayConst: NotificationDisplay[] = this.notificationsDisplay.filter(
       (notif) =>
@@ -71,10 +71,12 @@ export class Notifications {
         )
 
     );
-    return todayConst.sort((not1:NotificationDisplay, not2:NotificationDisplay) => not1.date < not2.date ? 1 : -1)
+    this.today = todayConst.sort((not1:NotificationDisplay, not2:NotificationDisplay) => not1.date < not2.date ? 1 : -1)
   }
 
-  get month(): NotificationDisplay[] {
+  month: NotificationDisplay[] = [];
+
+  updateMonth() {
     let monthDate = new Date(Date.now());
     const monthConst: NotificationDisplay[] = this.notificationsDisplay.filter(
       (notif) =>
@@ -82,15 +84,16 @@ export class Notifications {
           moment(notif.date).format("L")
         )
     );
-    return monthConst.sort((not1:NotificationDisplay, not2:NotificationDisplay) => not1.date < not2.date ? 1 : -1)
+    this.month = monthConst.sort((not1:NotificationDisplay, not2:NotificationDisplay) => not1.date < not2.date ? 1 : -1)
   }
 
   get timerToday(): any[] {
     let Today = [];
     let max = this.today.length
+    let today = this.today;
     for (let i = 0; i < max; i++) {
       Today.push(
-        moment(moment(this.today[i].date)).startOf("minute").fromNow()
+        moment(moment(today[i].date)).startOf("minute").fromNow()
       );
     }
     return Today;
@@ -99,9 +102,10 @@ export class Notifications {
   get timerMonth(): any[] {
     let Month = [];
     let max = this.month.length
+    let month = this.month
     for (let j = 0; j < max; j++) {
       Month.push(
-        moment(moment(this.month[j].date)).startOf("minute").fromNow()
+        moment(moment(month[j].date)).startOf("minute").fromNow()
       );
     }
     return Month;
@@ -175,7 +179,6 @@ export class Notifications {
                 ) as Company)
               : null;
           }
-          console.log("company, ", company)
           if (company) {
             if (SingleCache.checkValueInCache("companyImage" + company!.id.toString())) {
               src = <SafeResourceUrl>SingleCache.getValueByName("companyImage" + company!.id.toString())
@@ -184,7 +187,6 @@ export class Notifications {
               let logo = this.store.selectSnapshot(
                 DataQueries.getProfileImage(company.id)
               );
-            console.log("logo, ", logo)
             if (!logo) {
                 const fullname = company ? company.name[0].toUpperCase() : "A";
                 src = this.imageGenerator.generate(fullname);
@@ -194,7 +196,6 @@ export class Notifications {
                 this.downloader.downloadFile(logo).subscribe((image) => {
                 src = this.downloader.toSecureBase64(image);
                 SingleCache.setValueByName("companyImage" + company!.id.toString(), src)
-                console.log("src has changed ", src)
           });
               }}
               this.addNotification(notification, index, src);
@@ -209,5 +210,7 @@ export class Notifications {
           break;
       }
     });
+    this.updateToday();
+    this.updateMonth();
   }
 }

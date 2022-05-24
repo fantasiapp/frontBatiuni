@@ -1,7 +1,7 @@
 @use 'src/styles/variables' as *;
 @use 'src/styles/responsive' as *;
 
-:host {
+form {
   position: relative;
   display: flex;
   align-items: center;

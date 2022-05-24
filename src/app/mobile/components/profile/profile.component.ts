@@ -45,6 +45,8 @@ export class ProfileComponent extends Destroy$ {
   notifications: Notification[] = []
   companyId:number = -1
 
+  view = this.store.selectSnapshot(DataState.view)
+
   get openNotifications() {
     return this._openNotifications}
 
@@ -52,8 +54,7 @@ export class ProfileComponent extends Destroy$ {
   set openNotifications(b: boolean) {
 
     if (b) {
-      const view = this.store.selectSnapshot(DataState.view)
-      this.store.dispatch(new NotificationViewed(this.companyId, view)).pipe(take(1)).subscribe(() => {
+      this.store.dispatch(new NotificationViewed(this.companyId, this.view)).pipe(take(1)).subscribe(() => {
         const profile = this.store.selectSnapshot(DataQueries.currentProfile)
         this.updateProfile(profile)
         this.cd.markForCheck()
@@ -79,13 +80,12 @@ export class ProfileComponent extends Destroy$ {
   updateProfile(profile:Profile) {
     this.notifications = []
     this.notificationsUnseen = 0
-    const view = this.store.selectSnapshot(DataState.view)
       // Arnaque du bug
       this.companyId = profile.user?.company!
       profile.company = this.store.selectSnapshot(DataQueries.getById('Company', this.companyId))!
       if (profile.company?.Notification) {
         for (const notification of this.store.selectSnapshot(DataQueries.getMany('Notification', profile.company!.Notification)))
-          if (view == notification!.role) {
+          if (this.view == notification!.role) {
             this.notifications.push(notification!)
             if (!notification!.hasBeenViewed) {
               this.notificationsUnseen++

@@ -16,6 +16,7 @@ import {
   FormGroup,
   Validators,
 } from "@angular/forms";
+import { Router } from "@angular/router";
 import { Store } from "@ngxs/store";
 import * as moment from "moment";
 import { take, takeLast } from "rxjs/operators";
@@ -52,11 +53,7 @@ import { Mobile } from "../services/mobile-footer.service";
 
         <div class="form-input">
           <label>Métier</label>
-          <options
-            type="radio"
-            [options]="allJobs"
-            formControlName="job"
-          ></options>
+          <options type="radio" [options]="allJobs" formControlName="job"></options>
         </div>
 
         <div class="form-input">
@@ -81,7 +78,7 @@ import { Mobile } from "../services/mobile-footer.service";
           </div>
         </div>
         <div class="form-input">
-          <label>Date d'échéance de l'annonce</label>
+          <label>Date de validation de l'annonce</label>
           <input class="form-element" type="date" formControlName="dueDate" />
           <img src="assets/calendar.png" />
         </div>
@@ -145,6 +142,7 @@ import { Mobile } from "../services/mobile-footer.service";
             ></switch>
           </div>
           <calendar
+            [disableBeforeToday]="true"
             [useEvents]="false"
             formControlName="calendar"
             [mode]="switch.value ? 'range' : 'single'"
@@ -198,7 +196,7 @@ import { Mobile } from "../services/mobile-footer.service";
         </div>
 
         <div class="form-input flex row">
-          <input type="checkbox" formControlName="counterOffer"/>
+          <checkbox type="checkbox" [value]="true" formControlName="counterOffer"></checkbox>
           <span>Autoriser une contre-offre</span>
         </div>
       </section>
@@ -414,7 +412,6 @@ export class MakeAdForm {
     this.makeAdForm.get("address")?.setValue(p.address);
     this.makeAdForm.get("numberOfPeople")?.setValue(p.numberOfPeople);
     this.makeAdForm.get("counterOffer")?.setValue(p.counterOffer);
-    console.log(p.counterOffer)
     this.makeAdForm.get("hourlyStart")?.setValue(p.hourlyStart);
     this.makeAdForm.get("hourlyEnd")?.setValue(p.hourlyEnd);
     this.makeAdForm
@@ -481,7 +478,8 @@ export class MakeAdForm {
     private store: Store,
     private info: InfoService,
     public mobile: Mobile,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    private router: Router,
   ) {
     // setInterval(()=>{
     //   this.mobile.test1()
@@ -582,8 +580,9 @@ export class MakeAdForm {
   }
 
   submit(draft: boolean) {
+    console.log("submit", draft)
+    console.log(this.post)
     if (this.post) {
-      console.log('submit, post', this.post)
       if (!draft) {
         this.info.show("info", "Mise en ligne de l'annonce...", Infinity);
         const action = this.makeAdForm.touched
@@ -630,6 +629,7 @@ export class MakeAdForm {
           () => {
             this.info.show("success", "Annonce Envoyée", 2000);
             this.done.emit();
+            this.router.navigate(["", "home"]);
           },
           () => {
             this.info.show("error", "Echec de l'envoi", 5000);

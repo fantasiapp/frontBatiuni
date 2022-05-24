@@ -103,6 +103,11 @@ ol {
     background-color: $primary;
     @extend %bgcolor;
   }
+
+  .notification {
+    background-color: red;
+    @extend %bgcolor
+  }
   
   .nothing {
     background-color: $bg-white;
@@ -117,4 +122,10 @@ ol {
     width: 21px;
     height: 21px;
   }
+}
+
+.blocked-date {
+  background: $light;
+  pointer-events: none;
+  @extend %bgcolor;
 }
