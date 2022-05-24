@@ -443,21 +443,24 @@ export class HomeComponent extends Destroy$ {
   }
 
   changeView(headerActiveView: number) {
-    if (headerActiveView == 0){
-      this.filterPME.resetFilter()
-      this.searchbar.resetSearch()
-      this.filterOn = false;
-    }  
-    if (headerActiveView == 1) {
-      this.filterPME.resetFilter()
-      this.searchbar.resetSearch()
-      this.filterOn = false;
-    }    
-    if (headerActiveView == 2) {
-      this.filterPME.resetFilter()
-      this.searchbar.resetSearch()
-      this.filterOn = false;
+    this.view$.subscribe((view)=>{ if(view=='PME'){
+      if (headerActiveView == 0){
+        this.filterPME.resetFilter()
+        this.searchbar.resetSearch()
+        this.filterOn = false;
+      }  
+      if (headerActiveView == 1) {
+        this.filterPME.resetFilter()
+        this.searchbar.resetSearch()
+        this.filterOn = false;
+      }    
+      if (headerActiveView == 2) {
+        this.filterPME.resetFilter()
+        this.searchbar.resetSearch()
+        this.filterOn = false;
+      }
     }
+  })  
   }
 
   callbackFilter = (filter: any): void => {
