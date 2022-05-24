@@ -50,8 +50,8 @@ export class UIProfileImageComponent extends Destroy$ {
           } else {
             this.downloader.downloadFile(this.image).subscribe(image => {
               this.src = this.downloader.toSecureBase64(image);
-            SingleCache.setValueByName("companyImage" + profile.company.id.toString(), this.src)
-            this.cd.markForCheck();
+              SingleCache.setValueByName("companyImage" + profile.company.id.toString(), this.src)
+              this.cd.markForCheck();
             });
           }}
         else {

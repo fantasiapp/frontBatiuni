@@ -49,7 +49,6 @@ export class UISOSCard {
       const jobsForCompany = this.store.selectSnapshot(DataQueries.getMany('JobForCompany', profile.company.jobs));
       this.jobs = this.store.selectSnapshot(DataQueries.getMany('Job', jobsForCompany.map(({job}) => job)))
       this.starsST = profile.company.starsST
-      console.log("profile.company", profile.company)
     });
   }
 

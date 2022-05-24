@@ -125,7 +125,8 @@ ol {
 }
 
 .blocked-date {
-  background: $light;
+  background: unset;
   pointer-events: none;
-  @extend %bgcolor;
+  color: $light!important;
+  // @extend %bgcolor;
 }

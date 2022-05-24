@@ -127,6 +127,7 @@ export class HorizontaleCalendar implements OnInit {
 
   toCalendarDays(workDays: MissionDetailedDay[]): DayState[] {
     this.detailedDays = workDays;
+    console.log('workDays', workDays);
     return workDays.map((workDay) => ({
       date: workDay.date,
       availability: this.getNotification(workDay.date, workDay.mission) ? 'notification' : "selected",
@@ -300,6 +301,7 @@ export class HorizontaleCalendar implements OnInit {
     else datesId = mission.dates;
 
     let dates = this.store.selectSnapshot(DataQueries.getMany("DatePost", datesId));
+    // console.log('date', dates);
     dates.filter(datePost => datePost.date == date).map(datePost => {
       isChange.validate = datePost.validated;
       isChange.deleted = datePost.deleted

@@ -80,11 +80,7 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
     ))
   }
 
-  constructor(
-    private cd: ChangeDetectorRef,
-    private store: Store,
-    private popup: PopupService
-  ) {
+  constructor(private cd: ChangeDetectorRef, private store: Store, private popup: PopupService) {
     super();
   }
 

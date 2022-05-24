@@ -40,6 +40,12 @@ export class UIComment {
     id: -1,
     author: "Gabriel Dubois",
     companyId: 1,
+<<<<<<< HEAD
+||||||| d5bad5d9
+    Supervisions: [],
+=======
+    // Supervisions: [],
+>>>>>>> eeafa3d7865b04758f72baedcfdf1d288dc1bbbc
     comment: "Lorem ipsum dolor sit amet",
     date: '11-11-2022',
     files: []

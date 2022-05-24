@@ -174,7 +174,6 @@ export class HomeComponent extends Destroy$ {
     this.filterService.getFilterChangeEmitter().subscribe((posts: Post[]) => {
       this.displayOnlinePosts = posts
       this.cd.markForCheck()
-      console.log(this.displayOnlinePosts)
     })
     this.lateInit()
   }
@@ -443,24 +442,22 @@ export class HomeComponent extends Destroy$ {
   }
 
   changeView(headerActiveView: number) {
-    this.view$.subscribe((view)=>{ if(view=='PME'){
-      if (headerActiveView == 0){
-        this.filterPME.resetFilter()
-        this.searchbar.resetSearch()
-        this.filterOn = false;
-      }  
-      if (headerActiveView == 1) {
-        this.filterPME.resetFilter()
-        this.searchbar.resetSearch()
-        this.filterOn = false;
-      }    
-      if (headerActiveView == 2) {
-        this.filterPME.resetFilter()
-        this.searchbar.resetSearch()
-        this.filterOn = false;
+    this.view$.subscribe((view)=>{
+      if(view=='PME'){
+        if (headerActiveView == 0){
+          this.filterPME.resetFilter()
+          this.filterOn = false;
+        }  
+        if (headerActiveView == 1) {
+          this.filterPME.resetFilter()
+          this.filterOn = false;
+        }    
+        if (headerActiveView == 2) {
+          this.filterPME.resetFilter()
+          this.filterOn = false;
+        }
       }
-    }
-  })  
+    })
   }
 
   callbackFilter = (filter: any): void => {

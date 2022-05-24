@@ -87,6 +87,7 @@ export interface Supervision {
   date: string;
   comment: string;
   files: Ref<File>[];
+  // Supervisions: Ref<Supervision>[];
 }
 
 export interface Disponibility {

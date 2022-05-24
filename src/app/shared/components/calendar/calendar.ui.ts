@@ -90,48 +90,49 @@ export class CalendarUI extends UIDefaultAccessor<DayState[]> {
 
   constructor(cd: ChangeDetectorRef) {
     super(cd);
+    console.log('constructor');
     // this.blockedDays = this.computeBlockedDate()
-    
-    
-  }
-  
-  ngOnInit(){
     let now = new Date(Date.now());
     
     this.currentMonth = now.getMonth() + 1;
     this.currentYear = now.getFullYear();
     this.value = [];
-    this.blockThePast(now)
+  }
+  
+  ngOnInit(){
+    console.log('INIT');
+    let now = new Date(Date.now());
+
+    if(this.disableBeforeToday){
+      this.blockThePast(now)
+    }
+    console.log('blocked', this.blockedDate);
     this.viewCurrentDate()
   }
 
   blockThePast(now: any){
     if(this.disableBeforeToday){
-      //  console.log('today', now, moment(now));
-      console.log('today', moment(now).format('YYYY-MM-DD'));
       const today = moment(now).format('YYYY-MM-DD')
       let day = Number(today.substring(8,10))
       let month = Number(today.substring(5,7))
       let year = Number(today.substring(0, 4))
-      console.log('currentMonth', this.currentMonth);
-      // console.log('DJAFA', day, month, year);
-
       if (this.currentYear > year) return
       else if (this.currentYear == year && this.currentMonth > month) return
       else if (this.currentYear == year && this.currentMonth == month) {}
       else day = 32
 
       for (let i = 1; i < day; i++) {
-        this.blockedDate.push(this.fillZero(this.currentYear) + '-' + this.fillZero(this.currentMonth) + '-' + this.fillZero(i))
+        this.blockedDate.push(this.currentYear + '-' + this.fillZero(this.currentMonth) + '-' + this.fillZero(i))
       }
-
+      console.log('blockedthepast', this.currentMonth);
     }
   }
 
 
   private fillZero(month: number) {
-    if (month < 10) return "0" + month;
-    return month;
+    let m = ''+month
+    if (month < 10) m = "0" + month;
+    return m;
   }
 
   viewCurrentDate() {
@@ -168,6 +169,8 @@ export class CalendarUI extends UIDefaultAccessor<DayState[]> {
   get value() {
     return this._value;
   }
+
+  @Input()
   set value(v: DayState[] | undefined) {
     this._value = v || [];
     this.getDaysFromDate(this.fillZero(this.currentMonth), this.currentYear);
@@ -188,7 +191,8 @@ export class CalendarUI extends UIDefaultAccessor<DayState[]> {
       flag < 0 ? this.dateSelect.clone().subtract(1, "month") : this.dateSelect.clone().add(1, "month");
     this.currentMonth = nextDate.get("M") + 1;
     this.currentYear = nextDate.get("Y");
-    this.blockThePast(new Date(Date.now()))
+    if(this.disableBeforeToday) this.blockThePast(new Date(Date.now()))
+
     this.getDaysFromDate(this.fillZero(this.currentMonth), this.currentYear);
   }
 
@@ -218,15 +222,11 @@ export class CalendarUI extends UIDefaultAccessor<DayState[]> {
     this.selection = days;
 
     if (!this.useEvents)
-      this.mode == "single"
-        ? this.toggleDayState(this.selection[0], "selected")
-        : this.addValues(this.selection, "selected");
+      this.mode == "single" ? this.toggleDayState(this.selection[0], "selected") : this.addValues(this.selection, "selected");
   }
 
   setCurrentDayState(state: Availability) {
-    const remaining = this.value!.filter(
-      (item) => item.date !== this.selection[0]
-    );
+    const remaining = this.value!.filter((item) => item.date !== this.selection[0]);
     let next;
     if (state != "nothing") {
       next = [
@@ -271,9 +271,7 @@ export class CalendarUI extends UIDefaultAccessor<DayState[]> {
   addValues(days: string[], targetState: Availability) {
     //delete the overlap, it should take the new value
     const currentDates = this.value!.map((day) => day.date),
-      remaining1 = currentDates.filter(
-        (knownDate) => !days.includes(knownDate)
-      ),
+      remaining1 = currentDates.filter((knownDate) => !days.includes(knownDate)),
       remaining2 = days.filter((day) => !currentDates.includes(day));
 
     this.onChange(

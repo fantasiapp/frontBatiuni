@@ -65,6 +65,12 @@ export class SuiviComments {
 
   _supervision: Supervision = {
     id: -1,
+<<<<<<< HEAD
+||||||| d5bad5d9
+    Supervisions: [],
+=======
+    // Supervisions: [],
+>>>>>>> eeafa3d7865b04758f72baedcfdf1d288dc1bbbc
     author: "Gabriel Dubois", //maybe this should be a UserProfile ?
     companyId: 1,
     date: "13-11-2021",
