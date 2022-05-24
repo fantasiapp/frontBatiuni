@@ -301,6 +301,7 @@ export class HorizontaleCalendar implements OnInit {
     else datesId = mission.dates;
 
     let dates = this.store.selectSnapshot(DataQueries.getMany("DatePost", datesId));
+    // console.log('date', dates);
     dates.filter(datePost => datePost.date == date).map(datePost => {
       isChange.validate = datePost.validated;
       isChange.deleted = datePost.deleted
