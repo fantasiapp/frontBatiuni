@@ -116,7 +116,7 @@ export class CalendarUI extends UIDefaultAccessor<DayState[]> {
       let day = Number(today.substring(8,10))
       let month = Number(today.substring(5,7))
       let year = Number(today.substring(0, 4))
-      console.log('currentMonth', this.currentMonth);
+      console.log('currentMonth blockThePast', this.currentMonth);
       // console.log('DJAFA', day, month, year);
 
       if (this.currentYear > year) return
@@ -134,13 +134,15 @@ export class CalendarUI extends UIDefaultAccessor<DayState[]> {
 
 
   private fillZero(month: number) {
-    if (month < 10) return "0" + month;
-    return month;
+    let m = ''
+    if (month < 10) m = "0" + month;
+    return m;
   }
 
   viewCurrentDate() {
     let now = new Date(Date.now());
     this.currentMonth = now.getMonth() + 1;
+    console.log('viewCurrentDate currentMonth', this.currentMonth);
     this.currentYear = now.getFullYear();
     this.getDaysFromDate(this.fillZero(this.currentMonth), this.currentYear);
   }
@@ -151,6 +153,7 @@ export class CalendarUI extends UIDefaultAccessor<DayState[]> {
     this.dateSelect = startDate.locale("fr");
     const diffDays = endDate.diff(startDate, "days", true);
     const numberDays = Math.round(diffDays);
+    console.log('getDaysFromDate', startDate, endDate, diffDays, numberDays);
     const arrayDays = Object.keys([...Array(numberDays)]).map((a: any, i) => {
       a = this.fillZero(parseInt(a) + 1);
       const dayObject = moment(`${year}/${month}/${a}`, "YYYY-MM-DD");
@@ -172,9 +175,15 @@ export class CalendarUI extends UIDefaultAccessor<DayState[]> {
   get value() {
     return this._value;
   }
+
+  // @Input()
   set value(v: DayState[] | undefined) {
     this._value = v || [];
-    console.log('cur', this.currentMonth, this.currentYear);
+    // console.log('value', this.currentMonth, this.currentYear);
+    // let now = new Date(Date.now());
+    // this.currentMonth = now.getMonth() + 1;
+    // this.currentYear = now.getFullYear();
+
     this.getDaysFromDate(this.fillZero(this.currentMonth), this.currentYear);
   }
 
@@ -192,6 +201,7 @@ export class CalendarUI extends UIDefaultAccessor<DayState[]> {
     const nextDate =
       flag < 0 ? this.dateSelect.clone().subtract(1, "month") : this.dateSelect.clone().add(1, "month");
     this.currentMonth = nextDate.get("M") + 1;
+    console.log('changeMonth', this.currentMonth);
     this.currentYear = nextDate.get("Y");
     if(this.disableBeforeToday) this.blockThePast(new Date(Date.now()))
 
