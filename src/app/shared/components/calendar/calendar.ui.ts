@@ -102,7 +102,6 @@ export class CalendarUI extends UIDefaultAccessor<DayState[]> {
     this.currentYear = now.getFullYear();
     this.value = [];
     this.blockThePast(now)
-    console.log('blocked', this.blockedDate);
     this.viewCurrentDate()
   }
 
@@ -127,7 +126,6 @@ export class CalendarUI extends UIDefaultAccessor<DayState[]> {
       }
 
     }
-    console.log('blockedDay/', this.blockedDate);
   }
 
 

@@ -89,6 +89,42 @@ export class SOSPageComponent extends Destroy$ {
     this.isFilterOn(filter);
   };
 
+  adToString(ad: any){
+    let companiesJobs = this.store.selectSnapshot(DataQueries.getMany("JobForCompany", ad.jobs));
+    let companyJob = companiesJobs.map(job => job.job);
+    let jobs = this.store.selectSnapshot(DataQueries.getMany("Job", companyJob));
+    let jobsNames = jobs.map(job => job.name).toString();
+    let adString = ad.id.toString() + " " + ad.address + " " + ad.activity + " " + ad.name + " " + jobsNames + " " + ad.ntva + " " + ad.siret + " " + ad.webSite
+    return adString
+  }
+
+  selectSearchDraft(searchForm:  string){
+    this.availableCompanies = [];
+    if (searchForm == "" || searchForm == null)  {
+      for (const company of this.allAvailableCompanies) {
+        this.isCompanyAvailable(company)
+      }
+    } else {
+      let levenshteinDist: any = [];
+      for (let company of this.allAvailableCompanies) {
+        let postString = this.adToString(company)
+        levenshteinDist.push([company,getLevenshteinDistance(postString.toLowerCase(),searchForm.toLowerCase()),]);
+      }
+      levenshteinDist.sort((a: any, b: any) => a[1] - b[1]);
+      let keys = levenshteinDist.map((key: any) => { return key[0]; });
+      this.allAvailableCompanies.sort((a: any,b: any)=>keys.indexOf(a) - keys.indexOf(b));
+      
+    }
+    this.companies = this.availableCompanies.map(companyAvailable => companyAvailable.company);
+    this.availabilities = this.availableCompanies.map(companyAvailable => companyAvailable.availability);
+    this.cd.markForCheck();
+  }
+
+
+  callbackSearch = (search: any): void => {
+    console.log("bientôt")
+  };
+
   isCompanyAvailable(company: Company){
     const now = new Date().toISOString().slice(0, 10);
     const ownAvailabilities = this.store.selectSnapshot(DataQueries.getMany("Disponibility", company.availabilities));
@@ -166,7 +202,6 @@ export class SOSPageComponent extends Destroy$ {
       }      
 
       for (let company of this.allAvailableCompanies) {
-
         let includedJob = false;
         if (filter.jobs){
           let Jobs = this.store.selectSnapshot(DataQueries.getMany("JobForCompany", company.jobs));

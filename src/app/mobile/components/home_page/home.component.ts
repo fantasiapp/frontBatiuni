@@ -63,6 +63,7 @@ import { AppComponent } from "src/app/app.component";
 import { isLoadingService } from "src/app/shared/services/isLoading.service";
 import { STFilterForm } from "src/app/shared/forms/STFilter.form";
 import { PMEFilterForm } from "src/app/shared/forms/PMEFilter.form";
+import { SearchbarComponent } from "src/app/shared/components/searchbar/searchbar.component";
 
 @Component({
   selector: "home",
@@ -129,6 +130,9 @@ export class HomeComponent extends Destroy$ {
   @ViewChild(PMEFilterForm)
   filterPME!: PMEFilterForm;
 
+  @ViewChild(SearchbarComponent)
+  searchbar!: SearchbarComponent;
+
   activeView: number = 0;
   _openCloseMission: boolean = false;
   openAdFilterMenu: boolean = false;
@@ -183,7 +187,6 @@ export class HomeComponent extends Destroy$ {
     // console.log("yoooo")
     // console.log("isLoading", this.isLoading)
     if (!this.isLoading) {
-      console.log("coucou")
       this.info.alignWith("header_search");
       combineLatest([this.profile$, this.posts$])
         .pipe(takeUntil(this.destroy$))
@@ -210,6 +213,9 @@ export class HomeComponent extends Destroy$ {
           this.selectDraft(null);
           this.selectUserOnline(null);
           this.selectMission(null);
+          this.selectSearchDraft("");
+          this.selectSearchOnline("");
+          this.selectSearchMission("");
   
         });
       // const view = this.store.selectSnapshot(DataState.view)
@@ -221,9 +227,7 @@ export class HomeComponent extends Destroy$ {
       });
       
       this.time = this.store.selectSnapshot(DataState.time);
-      console.log("yo", this.allOnlinePosts)
       this.updatePage()
-      console.log("yo", this.displayOnlinePosts)
     }
     else {
       await delay(10000)
@@ -291,7 +295,6 @@ export class HomeComponent extends Destroy$ {
       }
 
       for (let post of this.allUserDrafts) {
-
         let isDifferentDate = (filter.date && post.startDate < filter.date)
         let isDifferentManPower = (filter.manPower && post.manPower != (filter.manPower === "true"))
         let isNotIncludedJob = (filter.jobs && filter.jobs.length && filter.jobs.every((job: any) => {return job.id != post.job}))
@@ -399,7 +402,6 @@ export class HomeComponent extends Destroy$ {
       }
 
       for (let mission of this.allMissions) {
-
         let isDifferentDate = (filter.date && mission.startDate < filter.date)
         let isDifferentManPower = (filter.manPower && mission.manPower != (filter.manPower === "true"))
         let isNotIncludedJob = (filter.jobs && filter.jobs.length && filter.jobs.every((job: any) => {return job.id != mission.job}))
@@ -440,14 +442,17 @@ export class HomeComponent extends Destroy$ {
   changeView(headerActiveView: number) {
     if (headerActiveView == 0){
       this.filterPME.resetFilter()
+      this.searchbar.resetSearch()
       this.filterOn = false;
     }  
     if (headerActiveView == 1) {
       this.filterPME.resetFilter()
+      this.searchbar.resetSearch()
       this.filterOn = false;
     }    
     if (headerActiveView == 2) {
       this.filterPME.resetFilter()
+      this.searchbar.resetSearch()
       this.filterOn = false;
     }
   }
@@ -465,6 +470,84 @@ export class HomeComponent extends Destroy$ {
       case 2:
         this.selectMission(filter);
         this.isFilterOn(filter);
+    }
+  };
+
+  adToString(ad: any){
+    let company = this.store.selectSnapshot(DataQueries.getById("Company", ad.company));
+    let job = this.store.selectSnapshot(DataQueries.getById("Job", ad.job));
+    // let details = this.store.selectSnapshot(DataQueries.getMany("DetailedPost", ad.detail));
+    // let detailContent = details.map((detail: { content: any; }) => detail.content);
+    let manPower = ad.manPower ? "Main d'oeuvre" : "Fourniture et Pose"
+    let adString = ad.id.toString() + " " + ad.address + " " + company?.name + " " + job?.name + " " + ad.contactName + " " + ad.description + " " + manPower + " " + ad.dueDate + " " + ad.startDate + " " + ad.endDate 
+    return adString
+  }
+
+  selectSearchDraft(searchForm:  string){
+    this.userDrafts = [];
+    if (searchForm == "" || searchForm == null)  {
+      this.userDrafts = this.allUserDrafts
+    } else {
+      let levenshteinDist: any = [];
+      for (let post of this.allUserDrafts) {
+        let postString = this.adToString(post)
+        levenshteinDist.push([post,getLevenshteinDistance(postString.toLowerCase(),searchForm.toLowerCase()),]);
+      }
+      levenshteinDist.sort((a: any, b: any) => a[1] - b[1]);
+      let keys = levenshteinDist.map((key: any) => { return key[0]; });
+      this.allUserDrafts.sort((a: any,b: any)=>keys.indexOf(a) - keys.indexOf(b));
+      this.userDrafts = this.allUserDrafts
+    }
+    this.cd.markForCheck();
+  }
+
+  selectSearchOnline(searchForm:  string){
+    this.userOnlinePosts = [];
+    if (searchForm == "" || searchForm == null)  {
+      this.userOnlinePosts = this.allUserOnlinePosts
+    } else {
+      let levenshteinDist: any = [];
+      for (let post of this.allUserOnlinePosts) {
+        let postString = this.adToString(post)
+        levenshteinDist.push([post,getLevenshteinDistance(postString.toLowerCase(),searchForm.toLowerCase()),]);
+      }
+      levenshteinDist.sort((a: any, b: any) => a[1] - b[1]);
+      let keys = levenshteinDist.map((key: any) => { return key[0]; });
+      this.allUserOnlinePosts.sort((a: any,b: any)=>keys.indexOf(a) - keys.indexOf(b));
+      this.userOnlinePosts = this.allUserOnlinePosts
+    }
+    this.cd.markForCheck();
+  }
+
+  selectSearchMission(searchForm:  string){
+    this.missions = [];
+    if (searchForm == "" || searchForm == null)  {
+      this.missions = this.allMissions
+    } else {
+      let levenshteinDist: any = [];
+      for (let post of this.allMissions) {
+        let postString = this.adToString(post)
+        levenshteinDist.push([post,getLevenshteinDistance(postString.toLowerCase(),searchForm.toLowerCase()),]);
+      }
+      levenshteinDist.sort((a: any, b: any) => a[1] - b[1]);
+      let keys = levenshteinDist.map((key: any) => { return key[0]; });
+      this.allMissions.sort((a: any,b: any)=>keys.indexOf(a) - keys.indexOf(b));
+      this.missions = this.allMissions
+    }
+    this.cd.markForCheck();
+  }
+
+  callbackSearch = (searchForm: string): void => {
+    switch (this.activeView) {
+      case 0:
+        this.selectSearchDraft(searchForm)
+        break;
+      case 1:
+        this.selectSearchOnline(searchForm)
+        break;
+      case 2:
+        console.log("mission")
+        this.selectSearchMission(searchForm)
     }
   };
 

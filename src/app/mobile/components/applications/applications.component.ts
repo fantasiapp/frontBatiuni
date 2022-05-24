@@ -152,6 +152,10 @@ export class ApplicationsComponent extends Destroy$ {
     this.selectPost(filter);
   };
 
+  callbackSearch = (search: any): void => {
+    console.log(search)
+  };
+
   openPost(post: Post | null) {
     //mark as viewed
     this.postMenu = assignCopy(this.postMenu, {

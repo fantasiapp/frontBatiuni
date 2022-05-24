@@ -22,6 +22,7 @@
 
 </div>
 
+<searchbar [callbackSearch]="callbackSearch" view></searchbar>
 
 <slidemenu [(open)]="postMenu.open" title="Candidatures en cours"> 
     <!-- <header>
@@ -35,4 +36,4 @@
 
 <swipeup [(open)]="openAdFilterMenu" type="view">
         <application-filter-form [callbackFilter]="callbackFilter" view></application-filter-form>
-</swipeup>
+    </swipeup>
