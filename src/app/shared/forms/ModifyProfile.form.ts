@@ -446,6 +446,11 @@ export class ModifyProfileForm {
 
   //outputs
   onSubmit() {
+    console.log(this.form.controls["UserProfile.Company.companyPhone"]);
+
+    this.form.controls["UserProfile.Company.companyPhone"].setValue(this.form.controls["UserProfile.Company.companyPhone"].value.replace(/\s/g, ""));
+    this.form.controls["UserProfile.cellPhone"].setValue(this.form.controls["UserProfile.cellPhone"].value.replace(/\s/g, ""));
+    console.log(this.form.value)
     this.submit.emit(this.form);
   }
   @Output() submit = new EventEmitter<FormGroup>();
