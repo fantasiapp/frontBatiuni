@@ -329,6 +329,7 @@ export class DataState {
         let key = Object.keys(response)
         let id = response.supervisionId
         delete response.supervisionId;
+        console.log('uploadImageSupervison', response);
         response[parseInt(key[0])].push(picture.imageBase64)
 
         ctx.setState(compose(addComplexChildren("Supervision", id, "File", response)))
@@ -704,6 +705,7 @@ export class DataState {
         }
         delete response[application.action];
         let key = Object.keys(response)
+        console.log('createSupervision', response);
         ctx.setState(addComplexChildren("Company", profile.company.id, "Mission", response));
         let supervision = response[parseInt(key[0])][42][response[parseInt(key[0])][42].length-1]
         ctx.setState(addComplexChildren("Mission", response, "Supervision", supervision))
@@ -721,11 +723,11 @@ export class DataState {
           throw response.messages;
         }
         delete response[application.action];
-        console.log('response', response);
-        // for (const date of response.datePost) {
-        //   ctx.setState(addComplexChildren('Mission', response.mission.id,'DatePost', date))
+        console.log('modifyMissionDate', response);
+        // for (const key in response.datePost) {
+        //   ctx.setState(addComplexChildren('Mission', response.mission.id,'DatePost', response.datePost[key]))
         // }
-        ctx.setState(addComplexChildren("Company",profile.company.id,"Mission", response.mission));
+        ctx.setState(addComplexChildren("Company", profile.company.id, "Mission", response));
       })
     );
   }
@@ -939,6 +941,7 @@ export class DataQueries {
   ): Interface<K> {
     const fields = allFields[target];
 
+    console.log('dataquerie', values, fields);
     const output: any = {};
     if (Array.isArray(values)) {
       if (fields.length != values.length)

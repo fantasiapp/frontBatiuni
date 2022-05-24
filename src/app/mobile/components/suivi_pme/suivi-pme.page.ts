@@ -151,9 +151,9 @@ export class SuiviPME {
     if (typeof mission.dates === "object" && !Array.isArray(mission.dates))
       dates = Object.keys(mission.dates).map((key) => +key as number);
     this.dates = dates.map((value: number, id) => {
-      let dateObject: PostDate = this.store.selectSnapshot(
-        DataQueries.getById("DatePost", value)
-      )!;
+      console.log('0');
+      let dateObject: PostDate = this.store.selectSnapshot(DataQueries.getById("DatePost", value))!;
+      console.log('1');
       return {
         id: id,
         value: dateObject.date,
@@ -189,8 +189,9 @@ export class SuiviPME {
 
   computeSupervisionsForMission(date: string, supervisionsTask: number[]): Supervision[] {
     let supervisions: Supervision[] = [];
-    let allSupervisions: (Supervision | null)[] =
-      this.mission!.supervisions.map((id) => {
+    console.log('supervision', this.mission);
+    let allSupervisions: (Supervision | null)[] = this.mission!.supervisions.map((id) => {
+        console.log('supervision', this.mission?.supervisions);
         let supervision = this.store.selectSnapshot(DataQueries.getById("Supervision", id));
         if (
           supervision &&
@@ -226,6 +227,7 @@ export class SuiviPME {
   }
 
   dateWithoutDouble(): Task[] {
+    console.log('1');
     return this.tasks!.filter((task) => !task.date);
   }
 
@@ -234,6 +236,7 @@ export class SuiviPME {
     this.tasks?.forEach((task) =>
       this.computeSelectedTaskAction(selectedTask, date, task)
     );
+    console.log('0');
     return selectedTask;
   }
 
@@ -381,10 +384,7 @@ export class SuiviPME {
   duplicateMission() {
     this.missionMenu.swipeup = false;
     // this.info.show("info", "Duplication en cours...", Infinity);
-    this.store
-      .dispatch(new DuplicatePost(this.mission!.id))
-      .pipe(take(1))
-      .subscribe(
+    this.store.dispatch(new DuplicatePost(this.mission!.id)).pipe(take(1)).subscribe(
         () => {},
         () => {
           // this.info.show("error", "Erreur lors de la duplication de l'annonce");
@@ -435,11 +435,8 @@ export class SuiviPME {
     );
     this.store.dispatch(new ModifyMissionDate(this.mission!.id, this.AdFormDate.get("hourlyStart")!.value, this.AdFormDate.get("hourlyEnd")!.value, selectedDate)).pipe(take(1)).subscribe(() => {
       if (!this.alert) this.swipeupModifyDate = false;
-
       // Update de mission et accordionData puis update la vue
-      this.mission = this.store.selectSnapshot(
-        DataQueries.getById("Mission", this.mission!.id)
-      );
+      this.mission = this.store.selectSnapshot(DataQueries.getById("Mission", this.mission!.id));
       this.computeDates(this.mission!);
       this.cd.markForCheck();
     });

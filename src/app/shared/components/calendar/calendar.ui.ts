@@ -101,7 +101,9 @@ export class CalendarUI extends UIDefaultAccessor<DayState[]> {
     this.currentMonth = now.getMonth() + 1;
     this.currentYear = now.getFullYear();
     this.value = [];
-    this.blockThePast(now)
+    if(this.disableBeforeToday){
+      this.blockThePast(now)
+    }
     console.log('blocked', this.blockedDate);
     this.viewCurrentDate()
   }
@@ -123,7 +125,7 @@ export class CalendarUI extends UIDefaultAccessor<DayState[]> {
       else day = 32
 
       for (let i = 1; i < day; i++) {
-        this.blockedDate.push(this.fillZero(this.currentYear) + '-' + this.fillZero(this.currentMonth) + '-' + this.fillZero(i))
+        this.blockedDate.push(this.currentYear + '-' + this.fillZero(this.currentMonth) + '-' + this.fillZero(i))
       }
 
     }
@@ -149,6 +151,7 @@ export class CalendarUI extends UIDefaultAccessor<DayState[]> {
     this.dateSelect = startDate.locale("fr");
     const diffDays = endDate.diff(startDate, "days", true);
     const numberDays = Math.round(diffDays);
+    console.log('test', startDate, numberDays, diffDays);
     const arrayDays = Object.keys([...Array(numberDays)]).map((a: any, i) => {
       a = this.fillZero(parseInt(a) + 1);
       const dayObject = moment(`${year}/${month}/${a}`, "YYYY-MM-DD");
@@ -172,6 +175,7 @@ export class CalendarUI extends UIDefaultAccessor<DayState[]> {
   }
   set value(v: DayState[] | undefined) {
     this._value = v || [];
+    console.log('cur', this.currentMonth, this.currentYear);
     this.getDaysFromDate(this.fillZero(this.currentMonth), this.currentYear);
   }
 
@@ -190,7 +194,8 @@ export class CalendarUI extends UIDefaultAccessor<DayState[]> {
       flag < 0 ? this.dateSelect.clone().subtract(1, "month") : this.dateSelect.clone().add(1, "month");
     this.currentMonth = nextDate.get("M") + 1;
     this.currentYear = nextDate.get("Y");
-    this.blockThePast(new Date(Date.now()))
+    if(this.disableBeforeToday) this.blockThePast(new Date(Date.now()))
+
     this.getDaysFromDate(this.fillZero(this.currentMonth), this.currentYear);
   }
 
