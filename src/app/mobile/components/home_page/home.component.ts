@@ -707,6 +707,7 @@ export class HomeComponent extends Destroy$ {
         (success) => {
           // Si la candidature est envoyée on quite la vue de la candidature
           this.updateAllOnlinePost(post)
+          console.log("posts dans apply post", this.allOnlinePosts)
           this.slideOnlinePostClose();
         },
         (error) =>

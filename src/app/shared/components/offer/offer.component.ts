@@ -114,6 +114,7 @@ export class OfferComponent {
         return candidate!.company;
       });
     }
+    console.log("coucou", companiesId?.includes(profile.company.id))
     return companiesId?.includes(profile.company.id);
   }
 
