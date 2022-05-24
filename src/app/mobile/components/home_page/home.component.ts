@@ -438,18 +438,25 @@ export class HomeComponent extends Destroy$ {
   }
 
   changeView(headerActiveView: number) {
-    if (headerActiveView == 0){
-      this.filterPME.resetFilter()
-      this.filterOn = false;
-    }  
-    if (headerActiveView == 1) {
-      this.filterPME.resetFilter()
-      this.filterOn = false;
-    }    
-    if (headerActiveView == 2) {
-      this.filterPME.resetFilter()
-      this.filterOn = false;
-    }
+    this.view$.subscribe((view)=>{
+      console.log('view', view);
+      if(view=='PME'){
+        if (headerActiveView == 0){
+          this.filterPME.resetFilter()
+          this.filterOn = false;
+        }  
+        if (headerActiveView == 1) {
+          this.filterPME.resetFilter()
+          this.filterOn = false;
+        }    
+        if (headerActiveView == 2) {
+          this.filterPME.resetFilter()
+          this.filterOn = false;
+        }
+      }
+    })
+    // if(this.view == 'PME'){
+    // }
   }
 
   callbackFilter = (filter: any): void => {
