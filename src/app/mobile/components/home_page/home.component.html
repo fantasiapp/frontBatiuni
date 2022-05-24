@@ -68,7 +68,7 @@
                   ></offer>
               </ng-container>
     
-              <mapbox-batiuni [posts]="allOnlinePosts" class="space-children-margin" *ngSwitchCase="1" (postClick)="openPost($event)"></mapbox-batiuni>
+              <mapbox-batiuni [posts]="allOnlinePosts" class="space-children-margin" (postClick)="openPost($event)" *ngSwitchCase="1" (postClick)="openPost($event)"></mapbox-batiuni>
             </ng-container>
           </ng-template>
     </div>

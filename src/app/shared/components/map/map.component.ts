@@ -97,12 +97,7 @@ export class UIMapComponent {
 
   loadPopup(company: Company, post?: Post, availability?: MarkerType) {
     this.popupContent.innerHTML = `${company.name}`;
-    this.popupContent.onclick = () => {
-      if ( this.mode == 'post' )
-        this.postClick.emit(post);
-      else
-        this.companyClick.emit(company);
-    };
+
 
     this.currentCompany = company
     if(post) this.currentPost = post
@@ -160,9 +155,7 @@ export class UIMapComponent {
   private aliveMarkers: mapboxgl.Marker[] = [];
 
   private showPosts() {
-    console.log('posts', this.posts);
     this.posts.forEach((post, i) => {
-      console.log('post', post);
       if ( post.latitude == null || post.longitude == null ) return;
 
       let marker = new mapboxgl.Marker(this.createMarker())
