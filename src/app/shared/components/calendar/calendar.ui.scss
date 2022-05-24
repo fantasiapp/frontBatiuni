@@ -124,9 +124,14 @@ ol {
   }
 }
 
-.blocked-date {
+.past-date {
   background: unset;
   pointer-events: none;
   color: $light!important;
   // @extend %bgcolor;
+}
+.blocked-date {
+  background: $light;
+  pointer-events: none;
+  @extend %bgcolor;
 }
