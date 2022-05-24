@@ -439,7 +439,6 @@ export class HomeComponent extends Destroy$ {
 
   changeView(headerActiveView: number) {
     this.view$.subscribe((view)=>{
-      console.log('view', view);
       if(view=='PME'){
         if (headerActiveView == 0){
           this.filterPME.resetFilter()
@@ -455,8 +454,6 @@ export class HomeComponent extends Destroy$ {
         }
       }
     })
-    // if(this.view == 'PME'){
-    // }
   }
 
   callbackFilter = (filter: any): void => {

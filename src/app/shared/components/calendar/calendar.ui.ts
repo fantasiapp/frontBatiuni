@@ -90,6 +90,7 @@ export class CalendarUI extends UIDefaultAccessor<DayState[]> {
 
   constructor(cd: ChangeDetectorRef) {
     super(cd);
+    console.log('constructor');
     // this.blockedDays = this.computeBlockedDate()
     let now = new Date(Date.now());
     
@@ -99,6 +100,7 @@ export class CalendarUI extends UIDefaultAccessor<DayState[]> {
   }
   
   ngOnInit(){
+    console.log('INIT');
     let now = new Date(Date.now());
 
     if(this.disableBeforeToday){
