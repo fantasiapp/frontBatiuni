@@ -291,10 +291,8 @@ export class HomeComponent extends Destroy$ {
       }
 
       for (let post of this.allUserDrafts) {
-      
-        let datesPost = this.store.selectSnapshot(DataQueries.getMany("DatePost", post.dates));
-        let dates = datesPost.map(date => date.date);
-        let isDifferentDate = (filter.date && !dates.includes(filter.date))
+
+        let isDifferentDate = (filter.date && post.startDate < filter.date)
         let isDifferentManPower = (filter.manPower && post.manPower != (filter.manPower === "true"))
         let isNotIncludedJob = (filter.jobs && filter.jobs.length && filter.jobs.every((job: any) => {return job.id != post.job}))
 
@@ -349,10 +347,8 @@ export class HomeComponent extends Destroy$ {
       } 
 
       for (let post of this.allUserOnlinePosts) {
-        
-        let datesPost = this.store.selectSnapshot(DataQueries.getMany("DatePost", post.dates));
-        let dates = datesPost.map(date => date.date);
-        let isDifferentDate = (filter.date && !dates.includes(filter.date))
+
+        let isDifferentDate = (filter.date &&  post.startDate < filter.date)
         let isDifferentManPower = (filter.manPower && post.manPower != (filter.manPower === "true"))
         let isNotIncludedJob = (filter.jobs && filter.jobs.length && filter.jobs.every((job: any) => {return job.id != post.job}))
 
@@ -368,6 +364,8 @@ export class HomeComponent extends Destroy$ {
     if (filter == null) {
       this.missions = this.allMissions;
     } else {
+      this.allMissions.sort((a, b) => {return Number(a["isClosed"]) - Number(b["isClosed"]);});
+      
       let levenshteinDist: any = [];
       if (filter.address) {
         for (let mission of this.allMissions) {levenshteinDist.push([mission,getLevenshteinDistance(mission.address.toLowerCase(),filter.address.toLowerCase()),]);}
@@ -382,6 +380,7 @@ export class HomeComponent extends Destroy$ {
         this.allMissions.sort((a, b) => {
           return a["id"] - b["id"];
         });
+        this.allMissions.sort((a, b) => {return Number(a["isClosed"]) - Number(b["isClosed"]);});
       }
 
       // Trie missions selon leurs notifications
@@ -400,10 +399,8 @@ export class HomeComponent extends Destroy$ {
       }
 
       for (let mission of this.allMissions) {
-      
-        let datesPost = this.store.selectSnapshot(DataQueries.getMany("DatePost", mission.dates));
-        let dates = datesPost.map(date => date.date);
-        let isDifferentDate = (filter.date && !dates.includes(filter.date))
+
+        let isDifferentDate = (filter.date && mission.startDate < filter.date)
         let isDifferentManPower = (filter.manPower && mission.manPower != (filter.manPower === "true"))
         let isNotIncludedJob = (filter.jobs && filter.jobs.length && filter.jobs.every((job: any) => {return job.id != mission.job}))
 
@@ -413,7 +410,6 @@ export class HomeComponent extends Destroy$ {
         this.missions.push(mission);
       }
       // Trie les missions pour que celles clôturées soient en derniers
-      this.missions.sort((a, b) => {return Number(a["isClosed"]) - Number(b["isClosed"]);});
     }
     this.cd.markForCheck();
   }
@@ -433,7 +429,7 @@ export class HomeComponent extends Destroy$ {
   };
 
   isFilterOn(filter: any){
-    if (filter.address == "" && filter.date == "" && filter.jobs.length == 0 && filter.manPower == null && filter.sortDraftDate == false && filter.sortDraftFull == false && filter.sortPostResponse == false && filter.sortMissionNotifications == false){
+    if ((filter.address == "" || filter.address == null) && (filter.date == "" || filter.date == null)&& (filter.jobs == null || filter.jobs.length == 0) && filter.manPower == null && (filter.sortDraftDate == false ||filter.sortDraftDate ==  null) && (filter.sortDraftFull == false ||filter.sortDraftFull == null) && (filter.sortPostResponse == false || filter.sortPostResponse == null) && (filter.sortMissionNotifications == false || filter.sortMissionNotifications == null)){
       this.filterOn = false;
     } else {
       this.filterOn = true;
@@ -444,15 +440,15 @@ export class HomeComponent extends Destroy$ {
   changeView(headerActiveView: number) {
     if (headerActiveView == 0){
       this.filterPME.resetFilter()
-      this.filterOn =false;
+      this.filterOn = false;
     }  
     if (headerActiveView == 1) {
       this.filterPME.resetFilter()
-      this.filterOn =false;
+      this.filterOn = false;
     }    
     if (headerActiveView == 2) {
       this.filterPME.resetFilter()
-      this.filterOn =false;
+      this.filterOn = false;
     }
   }
 

@@ -712,10 +712,7 @@ export class DataState {
   }
 
   @Action(ModifyMissionDate)
-  modifyMissionDate(
-    ctx: StateContext<DataModel>,
-    application: ModifyMissionDate
-  ) {
+  modifyMissionDate(ctx: StateContext<DataModel>, application: ModifyMissionDate) {
     const profile = this.store.selectSnapshot(DataQueries.currentProfile)!;
     return this.http.post("data", application).pipe(
       tap((response: any) => {
@@ -724,9 +721,11 @@ export class DataState {
           throw response.messages;
         }
         delete response[application.action];
-        ctx.setState(
-          addComplexChildren("Company", profile.company.id, "Mission", response)
-        );
+        console.log('response', response);
+        // for (const date of response.datePost) {
+        //   ctx.setState(addComplexChildren('Mission', response.mission.id,'DatePost', date))
+        // }
+        ctx.setState(addComplexChildren("Company",profile.company.id,"Mission", response.mission));
       })
     );
   }

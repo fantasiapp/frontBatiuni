@@ -134,9 +134,7 @@ export class ApplicationsComponent extends Destroy$ {
     
       for (let post of this.allCandidatedPost) {
       
-        let datesPost = this.store.selectSnapshot(DataQueries.getMany("DatePost", post.dates));
-        let dates = datesPost.map(date => date.date);
-        let isDifferentDate = (filter.missionDate && !dates.includes(filter.missionDate))
+        let isDifferentDate = (filter.missionDate && post.startDate < filter.date)
 
         let isDifferentManPower = (filter.manPower && post.manPower != (filter.manPower === "true"))
         let isNotIncludedJob = (filter.jobs && filter.jobs.length && filter.jobs.every((job: any) => {return job.id != post.job}))
@@ -178,6 +176,14 @@ export class ApplicationsComponent extends Destroy$ {
     this.annonceResume.close();
   }
 
+  isRefused(onlinePost: Post) {
+    const profile = this.store.selectSnapshot(DataQueries.currentProfile);
+    return onlinePost.candidates.some((id) => {
+      let candidate = this.store.selectSnapshot(DataQueries.getById("Candidate", id));
+      return candidate!.company == profile.company.id && candidate!.isRefused;
+    });
+  }
+  
   @ViewChild(UIAnnonceResume, { static: false })
   private annonceResume!: UIAnnonceResume;
 }

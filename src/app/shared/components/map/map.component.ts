@@ -1,7 +1,7 @@
-import { Component, ChangeDetectionStrategy, Input, ViewChild, ElementRef, Output, EventEmitter, NgZone } from '@angular/core';
+import { Component, ChangeDetectionStrategy, Input, ViewChild, ElementRef, Output, EventEmitter, NgZone, asNativeElements, ChangeDetectorRef } from '@angular/core';
 import { Store } from '@ngxs/store';
 import * as mapboxgl from 'mapbox-gl';
-import { Company, Post } from 'src/models/new/data.interfaces';
+import { Company, Mission, Post } from 'src/models/new/data.interfaces';
 import { DataQueries } from 'src/models/new/data.state';
 import { Availability } from '../calendar/calendar.ui';
 
@@ -64,9 +64,17 @@ export class UIMapComponent {
   mapbox: any;
   mapboxStyles = 'mapbox://styles/zeuschatoui/ckxj0zqovi9lf15p5gysrfax4';
 
-  constructor(private store: Store) {}
+  constructor(private store: Store, private cd: ChangeDetectorRef) {}
 
   popupContent!: HTMLElement;
+
+  @ViewChild('popupContainer', {read: ElementRef, static: true})
+  popupContainer!: ElementRef
+
+
+  currentCompany: Company | null = null
+  currentAvailability: MarkerType = 'unavailable';
+
   createPopup() {
     let span = document.createElement('span');
     span.classList.add('mapbox-popup-content');
@@ -76,7 +84,7 @@ export class UIMapComponent {
     this.popupContent = span;
   }
 
-  loadPopup(company: Company, post?: Post) {
+  loadPopup(company: Company, post?: Post, availability?: MarkerType) {
     this.popupContent.innerHTML = `${company.name}`;
     this.popupContent.onclick = () => {
       if ( this.mode == 'post' )
@@ -85,7 +93,13 @@ export class UIMapComponent {
         this.companyClick.emit(company);
     };
 
-    return new mapboxgl.Popup().setDOMContent(this.popupContent);
+    this.currentCompany = company
+    if (!availability) availability = 'unavailable';
+    this.currentAvailability = availability
+    this.popupContainer.nativeElement.style.display = 'block'
+    this.cd.markForCheck()
+
+    return new mapboxgl.Popup().setDOMContent(this.popupContainer.nativeElement);
   }
 
   createMarker(icon: MarkerType = 'selected') {
@@ -102,6 +116,8 @@ export class UIMapComponent {
 
   private initialized: boolean = false;
   ngOnInit() {
+
+    console.log('test', this.popupContainer.nativeElement);
     this.mapbox = new mapboxgl.Map({
       accessToken: 'pk.eyJ1IjoiemV1c2NoYXRvdWkiLCJhIjoiY2t3c2h0Yjk0MGo2NDJvcWh3azNwNnF6ZSJ9.ZBbZHpP2RFSzCUPkjfEvMQ',
       container: this.view.nativeElement,
@@ -152,7 +168,7 @@ export class UIMapComponent {
         .addTo(this.mapbox);
       
       marker.getElement().onclick = () => {
-        marker.setPopup(this.loadPopup(company));
+        marker.setPopup(this.loadPopup(company, undefined, this.availabilities[i]));
       }
 
       this.aliveMarkers.push(marker);

@@ -14,7 +14,7 @@ import { SlidemenuService } from "../slidemenu/slidemenu.component";
     <div *ngIf="(profile$ | cast | async) as profile" class="container flex row center-cross space-around">
       <div class="presentation">
         <profile-image [profile]="profile"></profile-image>
-        <stars [value]="profile.company.starsST" disabled></stars>
+        <stars *ngIf="starsST" [value]="starsST" disabled></stars>
       </div>
       <div class="description grow flex column space-between">
         <span>{{profile.company.name}}</span>
@@ -38,6 +38,8 @@ export class UISOSCard {
   @Input()
   availability: Availability = 'unavailable';
 
+  starsST: string = ''
+
   constructor(private store: Store) {}
 
   ngOnInit() {
@@ -45,7 +47,9 @@ export class UISOSCard {
       if ( !profile ) return;
       const jobsForCompany = this.store.selectSnapshot(DataQueries.getMany('JobForCompany', profile.company.jobs));
       this.jobs = this.store.selectSnapshot(DataQueries.getMany('Job', jobsForCompany.map(({job}) => job)))
+      this.starsST = profile.company.starsST
     });
+
   }
 
   //add a way to display a selected job
