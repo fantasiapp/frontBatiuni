@@ -110,7 +110,7 @@
 
   span {
     position: absolute;
-    bottom: $item-padding * 2;
+    bottom: $item-padding*1.5 ;
     // opacity: .6;
 
     
@@ -129,8 +129,6 @@
   }
   
   .imageProfile {
-    position: absolute;
-    top: $item-padding * 2;
     border-radius: 50%;
     width: 4.5rem;
     height: 4.5rem;
