@@ -275,9 +275,7 @@ export class HomeComponent extends Destroy$ {
       if (filter.address) {
         for (let post of this.allUserDrafts) {levenshteinDist.push([post,getLevenshteinDistance(post.address.toLowerCase(),filter.address.toLowerCase()),]);}
         levenshteinDist.sort((a: any, b: any) => a[1] - b[1]);
-        let keys = levenshteinDist.map((key: any) => {
-          return key[0];
-        });
+        let keys = levenshteinDist.map((key: any) => {return key[0];});
         this.allUserDrafts.sort((a: any,b: any)=>keys.indexOf(a) - keys.indexOf(b));
       } 
 
