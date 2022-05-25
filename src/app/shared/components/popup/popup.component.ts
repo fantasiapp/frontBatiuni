@@ -201,7 +201,7 @@ export class UIPopup extends DimensionMenu {
         new CreateDetailedPost(
           assignDate.missionId,
           input.value,
-          assignDate.date.value
+          assignDate.date.date.date
         )
       )
       .pipe(take(1))
@@ -278,14 +278,14 @@ export class UIPopup extends DimensionMenu {
       .forEach((detail) => {
         if (
           unset &&
-          detail.date == date.value &&
+          detail.date == date.date.date &&
           detail.content == task.content
         )
           taskWithId = detail as Task;
         else if (!unset && !detail.date && detail.content == task.content)
           taskWithId = detail as Task;
       });
-    taskWithId.date = date.value;
+    taskWithId.date = date.date.date;
     return taskWithId;
   }
 

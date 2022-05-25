@@ -14,6 +14,7 @@ import { PopupService } from "src/app/shared/components/popup/popup.component";
 import {
   DateG,
   Mission,
+  PostDate,
   Ref,
   Supervision,
   Task,
@@ -55,6 +56,7 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
   // _accordionOpen: boolean = false;
   // get accordionOpen(){  return this._accordionOpen}
 
+  datePost: PostDate | null = null
   tasks!: Task[];
   dates!: DateG[]
 
@@ -68,6 +70,7 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
       this.cd.markForCheck()
     })
     this.date = this.dates[this.date.id]
+    this.datePost = this.date.date
     this.computeIterable(this.date)
   }
 
@@ -86,7 +89,7 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
 
   _date: DateG = {
     id: 0,
-    value: "1970:01:01",
+    date: {id:-1, date:'', validated: false, deleted:false, supervisions: []},
     tasks: [],
     selectedTasks: [],
     taskWithoutDouble: [],
@@ -197,26 +200,30 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
   });
 
 
-  onSubmit( task: Task| null, inputEl: HTMLTextAreaElement | HTMLInputElement){
-    this.mainComment(task, inputEl);
+  onSubmit( task: Task| null, formGroup: FormGroup, formControlName: string){
+    this.mainComment(task, formGroup, formControlName);
     this.cd.markForCheck()
   }
-  textareaSubmit(e: any,input: HTMLFormElement){
-    // console.log(e.key, e.code, 'abricot')
-    // console.log('input', e.keyCode, e.type);
+  textareaSubmit(e: any, input: HTMLFormElement){
     if(e.keyCode == 13){
       input.dispatchEvent(new Event("submit", {cancelable: true}))
       e.preventDefault(); // Prevents the addition of a new line in the text field (not needed in a lot of cases)
     }
   }
-  mainComment(task:Task | null, inputEl: HTMLTextAreaElement | HTMLInputElement) {
-    // let idInput = task ? "input_"+task!.id : "input_general"
-    let input = inputEl
+  mainComment(task:Task | null, formGroup: FormGroup, formControlName: string) {
+    
+    let formControl = formGroup.get(formControlName)!
+    let comment = formControl.value
+    
     this.currentTaskId = task ? task!.id : null
-    if (input.value.trim() != '' && !this.mission!.isClosed) {
+    if (!this.mission!.isClosed) {
       let detailPostId: number | null = task ? task.id : null
-      this.store.dispatch(new CreateSupervision(this.mission!.id, detailPostId, null, input.value, this.date.value)).pipe(take(1)).subscribe(() => {
-        input.value = ''
+      let datePostId: number | null = null;
+      if (!detailPostId) {
+        datePostId = this.datePost ? this.datePost.id : null
+      }
+      this.store.dispatch(new CreateSupervision(detailPostId, datePostId, comment)).pipe(take(1)).subscribe(() => {
+        formControl.reset()
         this.updatePageOnlyDate()
       })
     }
@@ -240,7 +247,7 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
     this.mission = mission;
     this.computeDates(mission!);
     this.dates?.forEach((dateNew) => {
-      if (dateNew.value == dateOld.value) {
+      if (dateNew.date.date == dateOld.date.date) {
         dateResult = dateNew;
       }
     });
@@ -269,19 +276,28 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
     if (typeof mission.dates === "object" && !Array.isArray(mission.dates))
       dates = Object.keys(mission.dates).map((key) => +key as number);
 
-    this.dates = dates.map((value: unknown, id) => {
-      let date = typeof value == "number"? this.store.selectSnapshot(DataQueries.getById("DatePost", value as number))!.date : value;
-      return {
-        id: id,
-        value: date as string,
-        tasks: this.tasks,
-        selectedTasks: this.computeSelectedTask(date as string),
-        taskWithoutDouble: this.dateWithoutDouble(),
-        view: this.view,
-        supervisions: this.computeSupervisionsForMission(date as string,supervisionsTaks),
-      } as DateG;
-    });
-      this.dates.sort((date1, date2) => (date1.value > date2.value ? 1 : -1));
+    this.dates = dates.map((value: any, id) => {
+
+      let dates = value;
+      if (typeof value === "object" && !Array.isArray(value))
+        dates = Object.keys(value).map((key) => +key as number);
+      let date = this.store.selectSnapshot(DataQueries.getById("DatePost", dates))!;
+      let supervisionId = date.supervisions;
+      if (typeof supervisionId === "object" && !Array.isArray(supervisionId))
+        supervisionId = Object.keys(supervisionId).map((key) => +key as number);
+
+      let supervision = this.store.selectSnapshot(DataQueries.getMany("Supervision", supervisionId))
+      let dateG = {
+          id: id,
+          date: date!,
+          tasks: this.tasks,
+          selectedTasks: this.computeSelectedTask(date!.date as string),
+          taskWithoutDouble: this.dateWithoutDouble(),
+          view: this.view,
+          supervisions: supervision,
+        } as DateG;
+      return dateG});
+      this.dates.sort((date1, date2) => (date1.date.date > date2.date.date ? 1 : -1));
   }
 
   computeSupervisionsforTask(supervisionsId: number[], supervisionsTask: number[]) {

@@ -70,17 +70,15 @@ details summary::-webkit-details-marker {
   filter: invert(74%) sepia(69%) saturate(5734%) hue-rotate(85deg) brightness(116%) contrast(131%);
 }
 
-form {
-  padding-inline: 2rem;
-}
-
 .form-input > textarea {
   resize: vertical;
   width: 100%;
   font-size: 1rem;
 }
 
-
+.button {
+  height: 2.5rem;
+}
 
 .submitActivated {
   background-color: #0D6191;

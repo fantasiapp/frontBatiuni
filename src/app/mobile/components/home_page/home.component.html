@@ -69,7 +69,7 @@
                   ></offer>
               </ng-container>
     
-              <mapbox-batiuni [posts]="allOnlinePosts" class="space-children-margin" (postClick)="openPost($event)" *ngSwitchCase="1" (postClick)="openPost($event)"></mapbox-batiuni>
+              <mapbox-batiuni [posts]="displayOnlinePosts" class="space-children-margin" (postClick)="openPost($event)" *ngSwitchCase="1" (postClick)="openPost($event)"></mapbox-batiuni>
             </ng-container>
           </ng-template>
     </div>
@@ -79,7 +79,7 @@
       <ng-template #stfilter><st-filter-form (update)="allOnlinePosts = $event"></st-filter-form></ng-template>
     </swipeup> -->
 
-    <swipeup [(open)]="openAdFilterMenu" type="view">
+    <swipeup [open]="openAdFilterMenu" (openChange)="closeAdFilterMenu($event)" type="view">
       <ng-container *ngIf="view == 'PME'; else stfilter" view>
         <pme-filter-form
           [activeView]="activeView"
@@ -184,8 +184,9 @@
         <img (click)="slideMission.close()" src="assets/arrowlblack.svg" />
         <h1 class="grow center-text">Annonce(s) validée</h1>
         <img
-          (click)="swipeupMenu()"
+          (click)="swipeupMenu(); view == 'PME' && suiviChantier.submitAdFormDate(true)"
           [src]="view == 'PME' ? 'assets/Option.svg' : 'assets/phone.png'"
+
         />
       </header>
 
@@ -194,6 +195,7 @@
         [callBackParent]="callBackSwipeup"
         [toogle]="toogle"
         content
+        #suiviChantier
       ></suivi-chantier>
     </slidemenu>
   </ng-container>

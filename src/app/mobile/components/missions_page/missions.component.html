@@ -1,4 +1,9 @@
-<page-header name="Mes missions" [(activeView)]="activeView" (filterClicked)="openFilterMenu = true" [filterOpen]="filterOn" [callbackSearch]="callbackSearch">
+<page-header name="Mes missions" 
+  [(activeView)]="activeView" 
+  (activeViewChange)="changeView($event)"
+  (filterClicked)="viewList ? openFilterMenu = true : openFilterMenu = false" 
+  [filterOpen]="filterOn" 
+  [callbackSearch]="callbackSearch">
   <span tab_0>Vue liste</span>
   <span tab_1>Calendrier</span>
 </page-header>
