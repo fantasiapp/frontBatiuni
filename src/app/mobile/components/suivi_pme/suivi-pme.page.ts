@@ -363,6 +363,7 @@ export class SuiviPME {
     this.mission = this.store.selectSnapshot(
       DataQueries.getById("Mission", this.mission!.id)
     );
+    console.log("reloadMission", this.mission!.dates)
     this.computeDates(this.mission!);
     this.dates.forEach((dateNew) => {
       if (dateNew.date.date == dateOld.date.date) {

@@ -169,7 +169,6 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
     this.date = date as DateG
     this.computeIterable(date as DateG)
     this.mission = mission as Mission
-    console.log("mission", mission)
     this.cd.markForCheck()
   }
 
@@ -251,7 +250,6 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
         dateResult = dateNew;
       }
     });
-
     return [dateResult, this.mission!];
   };
 

@@ -701,14 +701,8 @@ export class DataState {
         }
         delete response[application.action];
         let key = Object.keys(response)
-        console.log('createSupervision', response);
-        ctx.setState(addComplexChildren("Company", profile.company.id, "Mission", response));
-        // let supervision = response[parseInt(key[0])][42][response[parseInt(key[0])][42].length-1]
-        // ctx.setState(addComplexChildren("Mission", response, "Supervision", supervision))
-
-
-        // changement supervision to DAtes Post
-        // ctx.setState(addComplexChildren("Mission", response.mission, "DatePost", response.datePost))
+        if ("datePostId" in response) {ctx.setState(addComplexChildren("DatePost",response["datePostId"], "Supervision", response["supervision"]))}
+        if ("detailedPostId" in response) {ctx.setState(addComplexChildren("DetailedPost",response["detailedPostId"], "Supervision", response["supervision"]))}
       })
     );
   }
