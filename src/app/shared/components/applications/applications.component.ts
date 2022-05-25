@@ -7,6 +7,7 @@ import { DataQueries, QueryAll } from "src/models/new/data.state";
 import { Destroy$ } from "src/app/shared/common/classes";
 import { assignCopy, splitByOutput } from "../../common/functions";
 import { MarkViewed } from "src/models/new/user/user.actions";
+import { getUserDataService } from "../../services/getUserData.service";
 
 @Component({
   selector: "applications",
@@ -14,10 +15,10 @@ import { MarkViewed } from "src/models/new/user/user.actions";
   styleUrls: ["./applications.component.scss"],
 })
 export class ApplicationsComponent extends Destroy$ implements OnInit {
-  @Select(DataQueries.currentProfile)
+  // @Select(DataQueries.currentProfile)
   profile$!: Observable<Profile>;
 
-  @QueryAll("Post")
+  // @QueryAll("Post")
   posts$!: Observable<Post[]>;
 
   //split the set all of posts into these (what we need)
@@ -33,12 +34,29 @@ export class ApplicationsComponent extends Destroy$ implements OnInit {
   userDrafts: Post[] = [];
   userOnlinePosts: Post[] = [];
   allOnlinePosts: Post[] = [];
-  constructor(private store: Store) {
+  hasCombinedLatest: boolean = false;
+  constructor(private store: Store, private getUserDataService: getUserDataService) {
     super();
+    this.profile$ = store.select(DataQueries.currentProfile)
+    this.posts$ = store.select(DataQueries.getAll("Post"))
   }
 
   ngOnInit(): void {
-    combineLatest([this.profile$, this.posts$])
+    this.getUserDataService.getDataChangeEmitter().subscribe((value) => {
+      this.profile$ = this.store.select(DataQueries.currentProfile)
+      this.posts$ = this.store.select(DataQueries.getAll("Post"))
+      this.initAll()
+  })
+    this.initAll()
+  }
+
+  initAll() {
+    this.initCombinedLatest()
+  }
+
+  initCombinedLatest() {
+    if(!this.hasCombinedLatest) {
+      combineLatest([this.profile$, this.posts$])
       .pipe(takeUntil(this.destroy$))
       .subscribe(([profile, posts]) => {
         const mapping = splitByOutput(posts, (post) => {
@@ -58,6 +76,8 @@ export class ApplicationsComponent extends Destroy$ implements OnInit {
         this.userOnlinePosts = mapping.get(this.symbols.userOnlinePost) || [];
         this.allOnlinePosts = [...otherOnlinePost, ...this.userOnlinePosts];
       });
+      this.hasCombinedLatest = true
+    }
   }
 
   openPost(post: Post | null) {

@@ -11,11 +11,11 @@ export class getUserDataService {
 
   constructor(private store: Store) {}
 
-  emitDataChangeEvent() {
+  emitLoadingChangeEvent() {
     this.navchange.emit(true);
   }
 
-  getDataChangeEmitter() {
+  getLoadingChangeEmitter() {
     return this.navchange;
   }
 }

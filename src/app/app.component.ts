@@ -65,11 +65,11 @@ export class AppComponent extends Destroy$ {
       this.executeGetGeneralData()
       this.firstAttemptAlreadyTried = true
     }
-    else if (this.readyToUpdate) { // supposed to be this.readyToUpdate
+    else if (false) { // supposed to be this.readyToUpdate
       this.readyToUpdate = false
       console.log("avant getUserData")
       this.getUserData()
-      await delay(5000)
+      await delay(20000)
       this.notifService.checkNotif()
       this.notifService.emitNotifChangeEvent()
       this.readyToUpdate = true

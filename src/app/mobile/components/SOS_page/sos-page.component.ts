@@ -17,7 +17,6 @@ import { MarkerType } from "src/app/shared/components/map/map.component";
 import { SearchbarComponent } from "src/app/shared/components/searchbar/searchbar.component";
 import { SlidemenuService } from "src/app/shared/components/slidemenu/slidemenu.component";
 import { FilterService } from "src/app/shared/services/filter.service";
-import { getUserDataService } from "src/app/shared/services/getUserData.service";
 import { getLevenshteinDistance } from "src/app/shared/services/levenshtein";
 import { File, Company, Profile } from "src/models/new/data.interfaces";
 import {
@@ -47,14 +46,13 @@ export class SOSPageComponent extends Destroy$ {
   companies: Company[] = [];
   availabilities: MarkerType[] = [];
   filterOn: boolean = false;
-  hasSubscribedCompanies: boolean = false;
 
   searchbar!: SearchbarComponent;
 
-  // @QueryAll("Company")
+  @QueryAll("Company")
   companies$!: Observable<Company[]>;
 
-  // @Select(DataQueries.currentProfile)
+  @Select(DataQueries.currentProfile)
   profile$!: Observable<Profile>;
 
   constructor(
@@ -62,51 +60,32 @@ export class SOSPageComponent extends Destroy$ {
     private slides: SlidemenuService, 
     private info: InfoService, 
     private appComponent: AppComponent, 
-    private cd: ChangeDetectorRef,
-    private getUserDataService: getUserDataService
+    private cd: ChangeDetectorRef
   ) {
     super();
     this.searchbar = new SearchbarComponent(store);
-    this.companies$ = store.select(DataQueries.getAll("Company"))
-    this.profile$ = store.select(DataQueries.currentProfile)
   }
 
   ngOnInit() {
-    this.getUserDataService.getDataChangeEmitter().subscribe((value) => {
-      this.companies$ = this.store.select(DataQueries.getAll("Company"))
-      this.profile$ = this.store.select(DataQueries.currentProfile)
-      this.initAll()
-    })
     this.info.alignWith('header_search');
-    this.initAll()
-  }
-
-  ngAfterViewInit() {
-    this.appComponent.updateUserData()
-  }
-
-  initAll() {
-    this.initSubscribeCompanies()
+    const now = new Date().toISOString().slice(0, 10);
+    this.companies$.subscribe((companies) => {
+      for (const company of companies) {
+        const ownAvailabilities = this.store.selectSnapshot(DataQueries.getMany("Disponibility", company.availabilities));
+        for (const day of ownAvailabilities) {
+          if (day.date == now) {
+            this.allAvailableCompanies.push(company);
+            continue;
+          }
+        } 
+      }
+    })      
     this.cd.markForCheck;
     this.selectCompany(null);
   }
 
-  initSubscribeCompanies() {
-    if (!this.hasSubscribedCompanies) {
-      const now = new Date().toISOString().slice(0, 10);
-      this.companies$.subscribe((companies) => {
-        for (const company of companies) {
-          const ownAvailabilities = this.store.selectSnapshot(DataQueries.getMany("Disponibility", company.availabilities));
-          for (const day of ownAvailabilities) {
-            if (day.date == now) {
-              this.allAvailableCompanies.push(company);
-              continue;
-            }
-          }
-        }
-      })
-      this.hasSubscribedCompanies = false
-    }
+  ngAfterViewInit() {
+    this.appComponent.updateUserData()
   }
 
   callbackFilter = (filter: any): void => {

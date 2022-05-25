@@ -27,8 +27,6 @@ import { getLevenshteinDistance } from "src/app/shared/services/levenshtein";
 import * as moment from "moment";
 import { AppComponent } from "src/app/app.component";
 import { SearchbarComponent } from "src/app/shared/components/searchbar/searchbar.component";
-import { THIS_EXPR } from "@angular/compiler/src/output/output_ast";
-import { getUserDataService } from "src/app/shared/services/getUserData.service";
 
 @Component({
   selector: "missions",
@@ -44,7 +42,7 @@ export class MissionsComponent extends Destroy$ {
   allMyMissions: Mission[] = [];
   missionMenu = new PostMenu<Mission>();
   filterOn: boolean = false;
-  hasCombined: boolean = false;
+
   detailedDays: MissionDetailedDay[] = [];
   _openCloseMission = false;
   doClose: boolean = false;
@@ -52,44 +50,73 @@ export class MissionsComponent extends Destroy$ {
 
   searchbar!: SearchbarComponent;
 
-  // @Select(DataQueries.currentProfile)
+  @Select(DataQueries.currentProfile)
   profile$!: Observable<Profile>;
 
-  // @QueryAll("Mission")
+  @QueryAll("Mission")
   missions$!: Observable<Mission[]>;
 
   constructor(
     private store: Store,
     private info: InfoService,
     private cd: ChangeDetectorRef,
-    private appComponent: AppComponent,
-    private getUserDataService: getUserDataService
+    private appComponent: AppComponent
   ) {
     super();
     this.searchbar = new SearchbarComponent(store);
-    this.profile$ = this.store.select(DataQueries.currentProfile)
-    this.missions$ = this.store.select(DataQueries.getAll("Mission"))
   }
 
   ngOnInit() {
-    this.getUserDataService.getDataChangeEmitter().subscribe((value) => {
-      this.profile$ = this.store.select(DataQueries.currentProfile)
-      this.missions$ = this.store.select(DataQueries.getAll("Mission"))
-      this.initCombinedLatest()
-      this.initMissionToClose()
-  })
-
     this.info.alignWith('header_search');
-    this.initCombinedLatest()
-    this.initMissionToClose()
-    this.selectMissions(null);
-  }
 
-  ngAfterViewInit() {
-    this.appComponent.updateUserData()
-  }
+    combineLatest([this.profile$, this.missions$]).pipe(takeUntil(this.destroy$)).subscribe(([profile, missions]) => {
+      //filter own missions
+      //for now accept all missions
+      
+      this.allMyMissions = missions.filter(mission => mission.subContractor == profile.company.id);
+      //compute work days
 
-  initMissionToClose() {
+      this.detailedDays = [];
+      let usedDay: number[] = []
+      for ( let mission of this.allMyMissions ) {
+        mission = this.store.selectSnapshot(DataQueries.getById('Mission', mission.id)) as Mission
+        const availabilities = this.store.selectSnapshot(DataQueries.getMany('Disponibility', profile.company.availabilities))
+        const start = moment(mission.startDate),
+          end = moment(mission.endDate),
+          contractor = this.store.selectSnapshot(DataQueries.getById('Company', mission.company))!;
+        
+        const tasks: PostDetail[] = this.store.selectSnapshot(DataQueries.getMany('DetailedPost', mission.details))
+        
+        // const diffDays = end.diff(start, 'days', true);
+        // let day = start.clone();
+        let missionDatesId: Ref<PostDate>[];
+        if (typeof mission.dates === "object" && !Array.isArray(mission.dates)) {
+          missionDatesId = Object.keys(mission.dates).map(key => (+key as number))
+        }
+        else missionDatesId = mission.dates
+        let dateAlreadyParsedFromMission:string[] = []
+
+        for(let i= 0; i < missionDatesId.length; i++){
+          const dateid = missionDatesId[i]
+          let date = this.store.selectSnapshot(DataQueries.getById('DatePost', dateid))
+  
+          // console.log('date', date);
+          dateAlreadyParsedFromMission.push(date!.date)
+  
+          this.detailedDays.push({
+            date: date!.date,
+            mission: mission,
+            title: 'Chantier de ' + contractor.name,
+            tasks: []
+          })
+          for (const task of tasks) {
+            if(date!.date == task.date){
+              let lenght = this.detailedDays.length
+              if (lenght != 0) this.detailedDays[lenght -1].tasks.push(task)  
+            }
+          }
+        }
+    }});
     if (this.missionToClose) {
       this._openCloseMission = this.missionToClose.securityST == 0;
       const company = this.store.selectSnapshot(
@@ -100,60 +127,12 @@ export class MissionsComponent extends Destroy$ {
     } else {
       this._openCloseMission = false;
     }
+
+    this.selectMissions(null);
   }
 
-  initCombinedLatest() {
-    if(!this.hasCombined){
-      combineLatest([this.profile$, this.missions$]).pipe(takeUntil(this.destroy$)).subscribe(([profile, missions]) => {
-        //filter own missions
-        //for now accept all missions
-        
-        this.allMyMissions = missions.filter(mission => mission.subContractor == profile.company.id);
-        //compute work days
-  
-        this.detailedDays = []
-        let usedDay: number[] = []
-        for ( let mission of this.allMyMissions ) {
-          mission = this.store.selectSnapshot(DataQueries.getById('Mission', mission.id)) as Mission
-          const availabilities = this.store.selectSnapshot(DataQueries.getMany('Disponibility', profile.company.availabilities))
-          const start = moment(mission.startDate),
-            end = moment(mission.endDate),
-            contractor = this.store.selectSnapshot(DataQueries.getById('Company', mission.company))!;
-          
-          const tasks: PostDetail[] = this.store.selectSnapshot(DataQueries.getMany('DetailedPost', mission.details))
-          
-          // const diffDays = end.diff(start, 'days', true);
-          // let day = start.clone();
-          let missionDatesId: Ref<PostDate>[];
-          if (typeof mission.dates === "object" && !Array.isArray(mission.dates)) {
-            missionDatesId = Object.keys(mission.dates).map(key => (+key as number))
-          }
-          else missionDatesId = mission.dates
-          let dateAlreadyParsedFromMission:string[] = []
-  
-          for(let i= 0; i < missionDatesId.length; i++){
-            const dateid = missionDatesId[i]
-            let date = this.store.selectSnapshot(DataQueries.getById('DatePost', dateid))
-    
-            // console.log('date', date);
-            dateAlreadyParsedFromMission.push(date!.date)
-    
-            this.detailedDays.push({
-              date: date!.date,
-              mission: mission,
-              title: 'Chantier de ' + contractor.name,
-              tasks: []
-            })
-            for (const task of tasks) {
-              if(date!.date == task.date){
-                let lenght = this.detailedDays.length
-                if (lenght != 0) this.detailedDays[lenght -1].tasks.push(task)  
-              }
-            }
-          }
-      }});
-      this.hasCombined = false
-    }
+  ngAfterViewInit() {
+    this.appComponent.updateUserData()
   }
 
   isFilterOn(filter: any){
