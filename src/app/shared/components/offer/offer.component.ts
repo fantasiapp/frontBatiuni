@@ -107,7 +107,6 @@ export class OfferComponent {
     const profile = this.store.selectSnapshot(DataQueries.currentProfile);
     let companiesId;
     if (this._post) {
-      console.log(this._post, this._post.candidates)
       companiesId = this._post.candidates?.map((id: number) => {
         let candidate = this.store.selectSnapshot(
           DataQueries.getById("Candidate", id)
@@ -115,7 +114,6 @@ export class OfferComponent {
         return candidate!.company;
       });
     }
-    console.log("coucou", companiesId?.includes(profile.company.id))
     return companiesId?.includes(profile.company.id);
   }
 

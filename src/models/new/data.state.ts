@@ -167,7 +167,6 @@ export class DataState {
 
   @Selector()
   static view(state: DataModel) {
-    console.log("view le get : ", state.session.view)
     return state.session.view;
   }
 
@@ -227,18 +226,15 @@ export class DataState {
 
   @Action(GetUserData)
   getUserData(ctx: StateContext<DataModel>, action: GetUserData) {
-    console.log("GetUserData mais qu'est ce que tu fais là !")
     const req = this.http.get("data", { action: action.action });
     if (this.flagUpdate){
       this.flagUpdate = false
     return req.pipe(
       tap((response: any) => {
-        console.log("getuserdata :", response)
         const loadOperations = this.reader.readInitialData(response),
           sessionOperation = this.reader.readCurrentSession(response);
       if (!this.isFirstTime) {
-      let oldView = this.store.selectSnapshot(DataState.view)
-        console.log("olview", oldView)
+        let oldView = this.store.selectSnapshot(DataState.view)
         ctx.setState(compose(...loadOperations, sessionOperation));
         const state = ctx.getState();
         ctx.patchState({
@@ -247,15 +243,12 @@ export class DataState {
             view: oldView,
           },
         })
-        console.log("new view in if", this.store.selectSnapshot(DataState.view))
+      } else {
+        this.loadingService.emitLoadingChangeEvent(true)
+        ctx.setState(compose(...loadOperations, sessionOperation));
+        this.isFirstTime = false
+        this.loadingService.emitLoadingChangeEvent(false)
       }
-      else {
-      this.loadingService.emitLoadingChangeEvent(true)
-      ctx.setState(compose(...loadOperations, sessionOperation));
-      this.isFirstTime = false
-      this.loadingService.emitLoadingChangeEvent(false)
-    }
-      console.log("new view", this.store.selectSnapshot(DataState.view))
       this.flagUpdate = true
     })
       );

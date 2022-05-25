@@ -180,7 +180,7 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
           },
         },
         {
-          name: "Accéder au caméra",
+          name: "Accéder à l'appareil photo",
           click: async () => {
             let permissions = await Camera.checkPermissions();
             if (permissions.camera != "granted") {

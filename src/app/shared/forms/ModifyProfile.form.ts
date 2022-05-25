@@ -575,14 +575,11 @@ export class ModifyProfileForm {
 
     this.selectedLabels = [];
     this.allLabels.forEach((label) => {
-      console.log("companyLabels", this.companyLabels)
       const used = this.companyLabels.find(
         (labelForCompany) => {
-          console.log("labelForCompany.label", labelForCompany.label, "label.id", label.id)
           return labelForCompany.label == label.id
         }
       );
-      console.log("used", used)
       if (used) {
         labelMapping.set(used.id, label);
         this.selectedLabels.push(label);

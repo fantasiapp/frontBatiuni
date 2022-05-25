@@ -259,6 +259,7 @@ export class STFilterForm {
   }
 
   updateFilteredPosts(filter: any) {
+    console.log("updateFilteredPosts", this.posts.length)
     this.filteredPosts = [];
     
     const user = this.store.selectSnapshot(DataQueries.currentUser);
@@ -370,7 +371,7 @@ export class STFilterForm {
       });
     }
 
-
+    console.log("updateFilteredPosts", this.filteredPosts.length)
     //startDate
     if (filter.startDateSort) {
       this.filteredPosts.sort((a, b) => {

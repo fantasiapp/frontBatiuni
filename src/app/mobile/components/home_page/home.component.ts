@@ -173,6 +173,7 @@ export class HomeComponent extends Destroy$ {
     })
     this.filterService.getFilterChangeEmitter().subscribe((posts: Post[]) => {
       this.displayOnlinePosts = posts
+      console.log("ngOnInit", posts)
       this.cd.markForCheck()
     })
     this.lateInit()
@@ -210,6 +211,7 @@ export class HomeComponent extends Destroy$ {
           this.allUserOnlinePosts =
             mapping.get(this.symbols.userOnlinePost) || [];
           this.allOnlinePosts = [...otherOnlinePost, ...this.userOnlinePosts];
+          console.log("allOnlinePosts", this.allOnlinePosts)
           this.allMissions = this.store.selectSnapshot(DataQueries.getMany("Mission", profile.company.missions));
   
           this.selectDraft(null);
