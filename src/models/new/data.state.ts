@@ -922,11 +922,19 @@ export class DataState {
   boostPost(ctx: StateContext<DataModel>, boost: BoostPost) {
     return this.http.post("data", boost).pipe(
       tap((response: any) => {
+        ctx.setState(
+          transformField(
+            "Post",
+            boost.postId,
+            "boostTimestamp",
+            () => {
+              return response.UserProfile[boost.postId][21];
+            }
+          ));
       })
-    );        
+    );
   }
 }
-
 //make a deep version of toJSON
 
 export class DataQueries {

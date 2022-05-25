@@ -858,6 +858,7 @@ export class HomeComponent extends Destroy$ {
       temporaryAllOnlinePost.push(onlinePost)
     })
     this.allOnlinePosts = temporaryAllOnlinePost
+    this.filterST.updatePosts(this.allOnlinePosts);
   }
 
   closeAdFilterMenu(value: any){
