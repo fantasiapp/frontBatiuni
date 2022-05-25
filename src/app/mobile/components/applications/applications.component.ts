@@ -23,6 +23,7 @@ import { AppComponent } from "src/app/app.component";
 import { InfoService } from "src/app/shared/components/info/info.component";
 import { SearchbarComponent } from "src/app/shared/components/searchbar/searchbar.component";
 import { flatten } from "@angular/compiler";
+import { getUserDataService } from "src/app/shared/services/getUserData.service";
 // import { UISlideMenuComponent } from 'src/app/shared/components/slidemenu/slidemenu.component';
 
 @Component({
@@ -32,10 +33,10 @@ import { flatten } from "@angular/compiler";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ApplicationsComponent extends Destroy$ {
-  @Select(DataQueries.currentProfile)
+  // @Select(DataQueries.currentProfile)
   profile$!: Observable<Profile>;
 
-  @QueryAll("Post")
+  // @QueryAll("Post")
   posts$!: Observable<Post[]>;
 
   //split the set all of posts into these (what we need)
@@ -50,7 +51,7 @@ export class ApplicationsComponent extends Destroy$ {
   openAdFilterMenu: boolean = false;
 
   postMenu = new PostMenu();
-
+  hasCombined: boolean = false;
   userDrafts: Post[] = [];
   userOnlinePosts: Post[] = [];
   allOnlinePosts: Post[] = [];
@@ -58,14 +59,41 @@ export class ApplicationsComponent extends Destroy$ {
   time: number = 0;
   searchbar!: SearchbarComponent;
 
-  constructor(private cd: ChangeDetectorRef, private info: InfoService, private store: Store, private appComponent: AppComponent) {
+  constructor(private cd: ChangeDetectorRef, private info: InfoService, private store: Store, private appComponent: AppComponent, private getUserDataService: getUserDataService) {
     super();
     this.searchbar = new SearchbarComponent(store);
+    this.profile$ = store.select(DataQueries.currentProfile)
+    this.posts$ = store.select(DataQueries.getAll("Post"))
   }
 
   ngOnInit(): void {
+
+    this.getUserDataService.getDataChangeEmitter().subscribe((value) => {
+      this.profile$ = this.store.select(DataQueries.currentProfile)
+      this.posts$ = this.store.select(DataQueries.getAll("Post"))
+      this.initAll()
+    })
+
     this.info.alignWith('header_search');
-    combineLatest([this.profile$, this.posts$])
+    this.initAll()
+
+  }
+
+  ngAfterViewInit() {
+  }
+
+  initAll() {
+    this.initCombinedLatest()
+    this.time = this.store.selectSnapshot(DataState.time);
+    this.initPost()
+    
+    this.cd.markForCheck;
+    this.selectPost(null);
+  }
+
+  initCombinedLatest() {
+    if(!this.hasCombined) {
+      combineLatest([this.profile$, this.posts$])
       .pipe(takeUntil(this.destroy$))
       .subscribe(([profile, posts]) => {
         const mapping = splitByOutput(posts, (post) => {
@@ -84,9 +112,10 @@ export class ApplicationsComponent extends Destroy$ {
         this.userDrafts = mapping.get(this.symbols.userDraft) || [];
         this.userOnlinePosts = mapping.get(this.symbols.userOnlinePost) || [];
         this.allOnlinePosts = [...otherOnlinePost, ...this.userOnlinePosts];
-      });
-    this.time = this.store.selectSnapshot(DataState.time);
+      });}
+  }
 
+  initPost() {
     for (let post of this.allOnlinePosts){
       const profile = this.store.selectSnapshot(DataQueries.currentProfile);
       let companiesId;
@@ -102,11 +131,6 @@ export class ApplicationsComponent extends Destroy$ {
         this.allCandidatedPost.push(post)
       }
     }
-    this.cd.markForCheck;
-    this.selectPost(null);
-  }
-
-  ngAfterViewInit() {
   }
 
   selectPost(filter: any) {

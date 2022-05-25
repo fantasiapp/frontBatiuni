@@ -68,6 +68,7 @@ import { SwipeupService } from "src/app/shared/components/swipeup/swipeup.compon
 import { transformAll } from "@angular/compiler/src/render3/r3_ast";
 import { ClassGetter } from "@angular/compiler/src/output/output_ast";
 import { isLoadingService } from "src/app/shared/services/isLoading.service";
+import { getUserDataService } from "src/app/shared/services/getUserData.service";
 
 export interface DataModel {
   fields: Record<string[]>;
@@ -107,7 +108,8 @@ export class DataState {
     private slide: SlidemenuService,
     private swipeup: SwipeupService,
     private zone: NgZone,
-    private loadingService: isLoadingService
+    private loadingService: isLoadingService,
+    private getUserDataService: getUserDataService
   ) {}
 
   private pending$: Record<Subject<any>> = {};
@@ -256,7 +258,8 @@ export class DataState {
       ctx.setState(compose(...loadOperations, sessionOperation));
       this.isFirstTime = false
       this.loadingService.emitLoadingChangeEvent(false)
-    }
+      }
+      this.getUserDataService.emitDataChangeEvent()
       console.log("new view", this.store.selectSnapshot(DataState.view))
       this.flagUpdate = true
     })
@@ -265,6 +268,7 @@ export class DataState {
     else{
       return 
     }
+    this.flagUpdate = true
   }
 
   @Action(Logout)

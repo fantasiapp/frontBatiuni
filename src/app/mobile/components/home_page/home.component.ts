@@ -76,13 +76,15 @@ export class HomeComponent extends Destroy$ {
   profileSubContractor: Profile | null = null;
   amountSubContractor: String | null = null;
 
+  // @Select(DataQueries.currentProfile)
   profile$!: Observable<Profile>;
 
+  // @Select(DataState.view)
   view$!: Observable<"PME" | "ST">;
 
   time: number = 0;
 
-  @QueryAll("Post")
+  // @QueryAll("Post")
   posts$!: Observable<Post[]>;
 
   //split the set all of posts into these (what we need)
@@ -139,6 +141,7 @@ export class HomeComponent extends Destroy$ {
   openAdFilterMenu: boolean = false;
   toogle: boolean = false;
   isLoading: boolean;
+  hasCombined: boolean = false;
   imports = { DistanceSliderConfig, SalarySliderConfig };
   draftMenu = new PostMenu();
   postMenu = new PostMenu();
@@ -162,10 +165,21 @@ export class HomeComponent extends Destroy$ {
     super();
     this.isLoading = this.loadingService.isLoading
     this.searchbar = new SearchbarComponent(store);
+    this.profile$ = this.store.select(DataQueries.currentProfile)
+    this.view$ = this.store.select(DataState.view)
+    this.posts$ = this.store.select(DataQueries.getAll("Post"))
   }
 
   ngOnInit() {
-    this.appComponent.updateUserData();
+    this.getUserDataService.getDataChangeEmitter().subscribe((value: boolean) => {
+      console.log("allo ?")
+      this.profile$ = this.store.select(DataQueries.currentProfile)
+      this.view$ = this.store.select(DataState.view)
+      this.posts$ = this.store.select(DataQueries.getAll("Post"))
+      this.time = this.store.selectSnapshot(DataState.time);
+      this.initCombineLatest()
+      this.cd.markForCheck()
+    })
     this.loadingService.getLoadingChangeEmitter().subscribe((bool : boolean) => {
       this.isLoading = bool
       console.log("isLoading", this.isLoading)
@@ -178,68 +192,22 @@ export class HomeComponent extends Destroy$ {
     this.mobile.footerStateSubject.subscribe((b) => {
       this.showFooter = b;
       this.cd.markForCheck();
-    });
-    this.getUserDataService.getLoadingChangeEmitter().subscribe((value: boolean) => {
-      this.lateInit()
-    })
-    this.lateInit()
+    });    
+    this.initAll()
   }
 
-  lateInit() {
-    this.profile$ = this.store.select(DataQueries.currentProfile)
-    this.view$ = this.store.select(DataState.view)
-    // console.log("is loading", this.isLoading)
-    // console.log("avant")
-    // this.isLoading = true
-    // this.cd.markForCheck()
-    // await delay(5000)
-    // this.isLoading = false
-    // this.cd.markForCheck()
-    // console.log("yoooo")
-    // console.log("isLoading", this.isLoading)
-    console.log("----------------------le test des data Queries------------------------")
-    console.log("this.store.select(DataQueries.currentProfile)", this.store.select(DataQueries.currentProfile))
-    console.log("profile$", this.profile$)
+  async initAll() {
     if (!this.isLoading) {
       this.info.alignWith("header_search");
-      combineLatest([this.profile$, this.posts$])
-        .pipe(takeUntil(this.destroy$))
-        .subscribe(([profile, posts]) => {
-          const mapping = splitByOutput(posts, (post) => {
-            //0 -> userOnlinePosts | 1 -> userDrafts
-            if (profile.company.posts.includes(post.id))
-              return post.draft
-                ? this.symbols.userDraft
-                : this.symbols.userOnlinePost;
-  
-            return post.draft
-              ? this.symbols.discard
-              : this.symbols.otherOnlinePost;
-          });
-          const otherOnlinePost = mapping.get(this.symbols.otherOnlinePost) || [];
-          this.allUserDrafts = mapping.get(this.symbols.userDraft) || [];
-          this.allUserOnlinePosts =
-            mapping.get(this.symbols.userOnlinePost) || [];
-          this.allOnlinePosts = [...otherOnlinePost, ...this.userOnlinePosts];
-          this.allMissions = this.store.selectSnapshot(DataQueries.getMany("Mission", profile.company.missions));
-  
-          this.selectDraft(null);
-          this.selectUserOnline(null);
-          this.selectMission(null);
-          this.selectSearchDraft("");
-          this.selectSearchOnline("");
-          this.selectSearchMission("");
-  
-        });
+      this.initCombineLatest()
       // const view = this.store.selectSnapshot(DataState.view)
       // this._openCloseMission = view == 'ST' && this.missions.length != 0
-
       this.time = this.store.selectSnapshot(DataState.time);
-      this.updatePage()
+      this.cd.markForCheck()
     }
     else {
-      // await delay(10000)
-      this.lateInit()
+      await delay(10000)
+      this.initAll()
     }
   }
 
@@ -247,16 +215,51 @@ export class HomeComponent extends Destroy$ {
   get footerHide(){return !this.showFooter}
 
   ngOnDestroy(): void {
+    console.log("hey... pourquoi t'as tout détruit ?? :'(")
     this.info.alignWith("last");
     super.ngOnDestroy();
   }
 
   ngAfterViewInit() {
-    this.updatePage()
+    this.appComponent.updateUserData();
   }
 
-  updatePage() {
-    this.cd.markForCheck()
+  initCombineLatest() {
+    console.log("----------------------InitCombineLatest() alors que je suis même pas dans home mdrrr--------------------")
+    console.log("hasCombined", this.hasCombined)
+    if (!this.hasCombined){
+      combineLatest([this.profile$, this.posts$])
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(([profile, posts]) => {
+        console.log("----------------------subscribe() alors que je suis même pas dans home mdrrr--------------------")
+        const mapping = splitByOutput(posts, (post) => {
+          //0 -> userOnlinePosts | 1 -> userDrafts
+          if (profile.company.posts.includes(post.id))
+            return post.draft
+              ? this.symbols.userDraft
+              : this.symbols.userOnlinePost;
+
+          return post.draft
+            ? this.symbols.discard
+            : this.symbols.otherOnlinePost;
+        });
+        const otherOnlinePost = mapping.get(this.symbols.otherOnlinePost) || [];
+        this.allUserDrafts = mapping.get(this.symbols.userDraft) || [];
+        this.allUserOnlinePosts =
+          mapping.get(this.symbols.userOnlinePost) || [];
+        this.allOnlinePosts = [...otherOnlinePost, ...this.userOnlinePosts];
+        this.allMissions = this.store.selectSnapshot(DataQueries.getMany("Mission", profile.company.missions));
+
+        this.selectDraft(null);
+        this.selectUserOnline(null);
+        this.selectMission(null);
+        this.selectSearchDraft("");
+        this.selectSearchOnline("");
+        this.selectSearchMission("");
+      })
+      this.cd.markForCheck()
+      this.hasCombined = true
+    }
   }
 
   get openCloseMission() {
@@ -801,7 +804,6 @@ export class HomeComponent extends Destroy$ {
   @ViewChild("slideOnlinePost") private slideOnlinePost!: UISlideMenuComponent;
 
   slideOnlinePostClose() {
-    this.updatePage()
     // Close View
     this.slideOnlinePost.close();
 
