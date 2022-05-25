@@ -254,8 +254,10 @@ export class HomeComponent extends Destroy$ {
   }
 
   ngAfterViewInit() {
-    this.filterST.updateFilteredPosts(this.filterST.filterForm.value)
-    this.displayOnlinePosts = this.filterST.filteredPosts;
+    if (this.filterST) {
+      this.filterST.updateFilteredPosts(this.filterST.filterForm.value)
+      this.displayOnlinePosts = this.filterST.filteredPosts;
+    }
     this.updatePage()
   }
 
