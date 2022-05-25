@@ -179,7 +179,7 @@ export class HomeComponent extends Destroy$ {
       this.showFooter = b;
       this.cd.markForCheck();
     });
-    this.getUserDataService.getLoadingChangeEmitter().subscribe((value: boolean) => {
+    this.getUserDataService.getDataChangeEmitter().subscribe((value: boolean) => {
       this.lateInit()
     })
     this.lateInit()
