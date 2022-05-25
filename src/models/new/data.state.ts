@@ -332,8 +332,8 @@ export class DataState {
         let key = Object.keys(response)
         let id = response.supervisionId
         delete response.supervisionId;
+        console.log('uploadImageSupervison', response);
         response[parseInt(key[0])].push(picture.imageBase64)
-
         ctx.setState(compose(addComplexChildren("Supervision", id, "File", response)))
       })
     );
@@ -708,9 +708,10 @@ export class DataState {
         }
         delete response[application.action];
         let key = Object.keys(response)
+        console.log('createSupervision', response);
         ctx.setState(addComplexChildren("Company", profile.company.id, "Mission", response));
-        let supervision = response[parseInt(key[0])][42][response[parseInt(key[0])][42].length-1]
-        ctx.setState(addComplexChildren("Mission", response, "Supervision", supervision))
+        // let supervision = response[parseInt(key[0])][42][response[parseInt(key[0])][42].length-1]
+        // ctx.setState(addComplexChildren("Mission", response, "Supervision", supervision))
       })
     );
   }
@@ -725,11 +726,11 @@ export class DataState {
           throw response.messages;
         }
         delete response[application.action];
-        console.log('response', response);
-        // for (const date of response.datePost) {
-        //   ctx.setState(addComplexChildren('Mission', response.mission.id,'DatePost', date))
+        console.log('modifyMissionDate', response);
+        // for (const key in response.datePost) {
+        //   ctx.setState(addComplexChildren('Mission', response.mission.id,'DatePost', response.datePost[key]))
         // }
-        ctx.setState(addComplexChildren("Company",profile.company.id,"Mission", response.mission));
+        ctx.setState(addComplexChildren("Company", profile.company.id, "Mission", response));
       })
     );
   }
@@ -943,6 +944,7 @@ export class DataQueries {
   ): Interface<K> {
     const fields = allFields[target];
 
+    // console.log('dataquerie', values, fields, id);
     const output: any = {};
     if (Array.isArray(values)) {
       if (fields.length != values.length)
@@ -991,9 +993,11 @@ export class DataQueries {
   }
 
   private static getDataById<K extends DataTypes>(type: K, id: number) {
+    // console.log('getDataBy', type, id);
     return createSelector(
       [DataState.getType(type)],
       (record: Record<any[]>) => {
+        // console.log('getDataBy', type, id, record, record[id]);
         return record[id];
       }
     );
@@ -1043,9 +1047,11 @@ export class DataQueries {
 
   static getById<K extends DataTypes>(type: K, id: number) {
     //no id => get All
+    // console.log('getbyId', id, type);
     return createSelector(
       [DataState.fields, DataQueries.getDataById(type, id)],
       (fields: Record<string[]>, values: any[]) => {
+        // console.log('getbyId', values, id, fields, type);
         return values ? DataQueries.toJson(fields, type, id, values) : null;
       }
     );
@@ -1111,6 +1117,8 @@ export class DataQueries {
         const filesIndex = fields["Company"].indexOf("File"),
           natureIndex = fields["File"].indexOf("nature"),
           fileIds = company?.[filesIndex] || [];
+
+        // console.log('getprofileImage', filesIndex, fileIds, natureIndex);
         for (let id of fileIds)
           if (files[id][natureIndex] == "userImage")
             return DataQueries.toJson(fields, "File", id, files[id]);

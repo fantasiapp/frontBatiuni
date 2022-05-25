@@ -1,8 +1,10 @@
 import { Component, ChangeDetectionStrategy, Input, ViewChild, ElementRef, Output, EventEmitter, NgZone, asNativeElements, ChangeDetectorRef } from '@angular/core';
-import { Store } from '@ngxs/store';
+import { Select, Store } from '@ngxs/store';
 import * as mapboxgl from 'mapbox-gl';
+import { Observable } from 'rxjs';
+import { availableCompanies } from 'src/app/mobile/components/SOS_page/sos-page.component';
 import { Company, Mission, Post } from 'src/models/new/data.interfaces';
-import { DataQueries } from 'src/models/new/data.state';
+import { DataQueries, DataState } from 'src/models/new/data.state';
 import { Availability } from '../calendar/calendar.ui';
 
 export type MarkerData = {
@@ -20,6 +22,10 @@ export type MarkerType = Exclude<Availability, 'nothing'>;
 })
 export class UIMapComponent {
 
+  @Select(DataState.view)
+  view$!: Observable<"PME" | "ST">;
+  view!: 'PME' | 'ST'
+
   //I bet you can make a better system, this just works
   mode: 'company' | 'post' = 'company';
   
@@ -30,21 +36,26 @@ export class UIMapComponent {
     this.mode = 'post';
     this._posts = values;
     this._companies = this.store.selectSnapshot(DataQueries.getMany('Company', this.posts.map(post => post.company)));
+    console.log('this,initialized', this.initialized);
     if ( this.initialized ) this.showPosts();
   }
+
+  currentPost: Post | null = null
 
   _companies: Company[] = [];
   get companies() { return this._companies; }
 
-  @Input()
-  set companies(values: Company[]) {
-    this.mode = 'company';
-    this._companies = values;
-    this._posts = [];
-    if ( this.initialized ) this.showCompanies();
-  }
+  // @Input()
+  // set companies(values: Company[]) {
+  //   this.mode = 'company';
+  //   this._companies = values;
+  //   this._posts = [];
+  //   if ( this.initialized ) this.showCompanies();
+  // }
 
-  @Input() availabilities: MarkerType[] = [];
+  // @Input() availabilities: MarkerType[] = [];
+
+  @Input() availableCompanies: availableCompanies[] = []
   
   @Input()
   center: MarkerData = {
@@ -59,7 +70,7 @@ export class UIMapComponent {
   companyClick = new EventEmitter<Company>();
 
   @ViewChild('map', {read: ElementRef, static: true})
-  view!: ElementRef;
+  mapContainer!: ElementRef;
 
   mapbox: any;
   mapboxStyles = 'mapbox://styles/zeuschatoui/ckxj0zqovi9lf15p5gysrfax4';
@@ -72,7 +83,7 @@ export class UIMapComponent {
   popupContainer!: ElementRef
 
 
-  currentCompany: Company | null = null
+  currentCompany: Company | null = null;
   currentAvailability: MarkerType = 'unavailable';
 
   createPopup() {
@@ -86,14 +97,10 @@ export class UIMapComponent {
 
   loadPopup(company: Company, post?: Post, availability?: MarkerType) {
     this.popupContent.innerHTML = `${company.name}`;
-    this.popupContent.onclick = () => {
-      if ( this.mode == 'post' )
-        this.postClick.emit(post);
-      else
-        this.companyClick.emit(company);
-    };
+
 
     this.currentCompany = company
+    if(post) this.currentPost = post
     if (!availability) availability = 'unavailable';
     this.currentAvailability = availability
     this.popupContainer.nativeElement.style.display = 'block'
@@ -116,26 +123,31 @@ export class UIMapComponent {
 
   private initialized: boolean = false;
   ngOnInit() {
+    this.view$.subscribe(view=>{
+      this.view = view
+      this.mapbox = new mapboxgl.Map({
+        accessToken: 'pk.eyJ1IjoiemV1c2NoYXRvdWkiLCJhIjoiY2t3c2h0Yjk0MGo2NDJvcWh3azNwNnF6ZSJ9.ZBbZHpP2RFSzCUPkjfEvMQ',
+        container: this.mapContainer.nativeElement,
+        style: this.mapboxStyles,
+        zoom: 5,
+        center: [this.center.longitude, this.center.latitude],
+        attributionControl: false
+      });
+  
+      this.createPopup();
+      this.refresh();
+      this.initialized = true;
+  
+      if(this.posts) this.showPosts();
+    })
 
-    console.log('test', this.popupContainer.nativeElement);
-    this.mapbox = new mapboxgl.Map({
-      accessToken: 'pk.eyJ1IjoiemV1c2NoYXRvdWkiLCJhIjoiY2t3c2h0Yjk0MGo2NDJvcWh3azNwNnF6ZSJ9.ZBbZHpP2RFSzCUPkjfEvMQ',
-      container: this.view.nativeElement,
-      style: this.mapboxStyles,
-      zoom: 5,
-      center: [this.center.longitude, this.center.latitude],
-      attributionControl: false
-    });
-
-    this.createPopup();
-    this.refresh();
-    this.initialized = true;
   }
 
   refresh() {
     this.reset();
-    if ( this.mode == 'post' )
-      this.showPosts();
+    if ( this.mode == 'post' ){
+      // this.showPosts();
+    }
     else
       this.showCompanies(); 
   }
@@ -160,20 +172,22 @@ export class UIMapComponent {
   }
 
   private showCompanies() {
-    this.companies.forEach((company, i) => {
+    this.availableCompanies.forEach((availableCompany)=> {
+      let company = availableCompany.company;
+      let availability = availableCompany.availability;
       if ( company.latitude == null || company.longitude == null ) return;
 
-      let marker = new mapboxgl.Marker(this.createMarker(this.availabilities[i]))
+      let marker = new mapboxgl.Marker(this.createMarker(availability))
         .setLngLat([company.longitude, company.latitude])
         .addTo(this.mapbox);
       
       marker.getElement().onclick = () => {
-        marker.setPopup(this.loadPopup(company, undefined, this.availabilities[i]));
+        marker.setPopup(this.loadPopup(company, undefined, availability));
       }
 
       this.aliveMarkers.push(marker);
       return marker;
-    });
+    })
   }
 
   reset() {
@@ -185,8 +199,3 @@ export class UIMapComponent {
     this.aliveMarkers.length = 0;
   }
 }
-
-
-
-
-

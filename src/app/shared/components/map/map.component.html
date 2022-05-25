@@ -3,7 +3,6 @@
 </div>
 
 <div class="popup-container" style="display: none;" #popupContainer>
-    <sos-card [profile]="{company: currentCompany!}" [availability]="currentAvailability">
-
-    </sos-card>
+    <sos-card (click)="companyClick.emit(currentCompany)" *ngIf="currentCompany && view == 'PME'" [profile]="{company: currentCompany!}" [availability]="currentAvailability"></sos-card>
+    <offer (click)="postClick.emit(currentPost)" *ngIf="currentPost && view == 'ST'" src="assets/brouillon.svg" [deletable]="true" [post]="currentPost" [view]="'PME'" ></offer> 
 </div>

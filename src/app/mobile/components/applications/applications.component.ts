@@ -21,6 +21,8 @@ import { Input } from "hammerjs";
 import { getLevenshteinDistance } from "src/app/shared/services/levenshtein";
 import { AppComponent } from "src/app/app.component";
 import { InfoService } from "src/app/shared/components/info/info.component";
+import { SearchbarComponent } from "src/app/shared/components/searchbar/searchbar.component";
+import { flatten } from "@angular/compiler";
 // import { UISlideMenuComponent } from 'src/app/shared/components/slidemenu/slidemenu.component';
 
 @Component({
@@ -54,9 +56,11 @@ export class ApplicationsComponent extends Destroy$ {
   allOnlinePosts: Post[] = [];
   allCandidatedPost: Post[] = [];
   time: number = 0;
+  searchbar!: SearchbarComponent;
 
   constructor(private cd: ChangeDetectorRef, private info: InfoService, private store: Store, private appComponent: AppComponent) {
     super();
+    this.searchbar = new SearchbarComponent(store);
   }
 
   ngOnInit(): void {
@@ -133,13 +137,19 @@ export class ApplicationsComponent extends Destroy$ {
       if (filter.sortMissionDate === true) {this.allCandidatedPost.sort((a: any, b: any) => Date.parse(a['startDate']) - Date.parse(b['startDate']))}
     
       for (let post of this.allCandidatedPost) {
-      
-        let isDifferentDate = (filter.missionDate && post.startDate < filter.date)
+
+        let candidates = this.store.selectSnapshot(DataQueries.getMany("Candidate", post.candidates));
+        const user = this.store.selectSnapshot(DataQueries.currentUser);
+        let userCandidate = candidates.filter(candidate => candidate.company == user.company)
+        let applicationDate = userCandidate.map(candidate => {return candidate.date})
+        let isDifferentApplicationDate = (filter.postulationDate && applicationDate[0] != filter.postulationDate) 
+
+        let isDifferentDate = (filter.missionDate && post.startDate < filter.missionDate)
 
         let isDifferentManPower = (filter.manPower && post.manPower != (filter.manPower === "true"))
         let isNotIncludedJob = (filter.jobs && filter.jobs.length && filter.jobs.every((job: any) => {return job.id != post.job}))
 
-        if (isDifferentDate || isDifferentManPower || isNotIncludedJob) {
+        if (isDifferentDate || isDifferentManPower || isNotIncludedJob || isDifferentApplicationDate) {
           continue;
         }
         this.userOnlinePosts.push(post);
@@ -152,14 +162,6 @@ export class ApplicationsComponent extends Destroy$ {
     this.selectPost(filter);
   };
 
-  adToString(ad: any){
-    let company = this.store.selectSnapshot(DataQueries.getById("Company", ad.company));
-    let job = this.store.selectSnapshot(DataQueries.getById("Job", ad.job));
-    let manPower = ad.manPower ? "Main d'oeuvre" : "Fourniture et Pose"
-    let adString = ad.id.toString() + " " + ad.address + " " + company?.name + " " + job?.name + " " + ad.contactName + " " + ad.description + " " + manPower + " " + ad.dueDate + " " + ad.startDate + " " + ad.endDate 
-    return adString
-  }
-
   selectSearch(searchForm:  string){
     this.userOnlinePosts = [];
     if (searchForm == "" || searchForm == null)  {
@@ -167,7 +169,7 @@ export class ApplicationsComponent extends Destroy$ {
     } else {
       let levenshteinDist: any = [];
       for (let post of this.allCandidatedPost) {
-        let postString = this.adToString(post)
+        let postString = this.searchbar.postToString(post)
         console.log(postString)
         levenshteinDist.push([post,getLevenshteinDistance(postString.toLowerCase(),searchForm.toLowerCase()),]);
       }
