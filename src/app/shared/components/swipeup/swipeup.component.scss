@@ -83,3 +83,7 @@ ul::ng-deep > li{
   overflow-y: auto;
   max-height: calc(#{$swipeup-height} - #{$swipeup-decoration-height});
 }
+
+ul {
+  overflow: hidden;
+}

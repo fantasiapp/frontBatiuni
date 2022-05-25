@@ -211,13 +211,12 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
     
     let formControl = formGroup.get(formControlName)!
     let comment = formControl.value
-    formControl.reset()
     
     this.currentTaskId = task ? task!.id : null
     if (!this.mission!.isClosed) {
       let detailPostId: number | null = task ? task.id : null
       this.store.dispatch(new CreateSupervision(this.mission!.id, detailPostId, null, comment, this.date.value)).pipe(take(1)).subscribe(() => {
-        // input.value = ''
+        formControl.reset()
         this.updatePageOnlyDate()
       })
     }
