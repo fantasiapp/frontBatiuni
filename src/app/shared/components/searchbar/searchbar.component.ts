@@ -38,8 +38,8 @@ export class SearchbarComponent  implements OnInit{
   }
 
   resetSearch(){
-    console.log(this.searchForm.value)
     this.searchForm.reset();
+    document.querySelector("form")?.reset();
   }
 
   postToString(ad: any){
