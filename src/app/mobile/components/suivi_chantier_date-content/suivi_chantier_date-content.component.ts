@@ -56,8 +56,7 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
   // _accordionOpen: boolean = false;
   // get accordionOpen(){  return this._accordionOpen}
 
-  datePostId: Ref<PostDate> | null = null
-
+  datePost: PostDate | null = null
   tasks!: Task[];
   dates!: DateG[]
 
@@ -71,6 +70,7 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
       this.cd.markForCheck()
     })
     this.date = this.dates[this.date.id]
+    this.datePost = this.date.date
     this.computeIterable(this.date)
   }
 
@@ -218,8 +218,11 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
     this.currentTaskId = task ? task!.id : null
     if (!this.mission!.isClosed) {
       let detailPostId: number | null = task ? task.id : null
-      let datePost: number | null = this.datePostId 
-      this.store.dispatch(new CreateSupervision(detailPostId, datePost, comment)).pipe(take(1)).subscribe(() => {
+      let datePostId: number | null = null;
+      if (!detailPostId) {
+        datePostId= this.datePost ? this.datePost.id : null
+      }
+      this.store.dispatch(new CreateSupervision(detailPostId, datePostId, comment)).pipe(take(1)).subscribe(() => {
         formControl.reset()
         this.updatePageOnlyDate()
       })
@@ -275,6 +278,7 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
 
     this.dates = dates.map((value: unknown, id) => {
       let date = typeof value == "number"? this.store.selectSnapshot(DataQueries.getById("DatePost", value as number))!.date : value;
+      
       return {
         id: id,
         date: date,
