@@ -712,6 +712,10 @@ export class DataState {
         ctx.setState(addComplexChildren("Company", profile.company.id, "Mission", response));
         // let supervision = response[parseInt(key[0])][42][response[parseInt(key[0])][42].length-1]
         // ctx.setState(addComplexChildren("Mission", response, "Supervision", supervision))
+
+
+        // changement supervision to DAtes Post
+        // ctx.setState(addComplexChildren("Mission", response.mission, "DatePost", response.datePost))
       })
     );
   }

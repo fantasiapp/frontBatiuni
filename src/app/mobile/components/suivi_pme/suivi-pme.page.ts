@@ -141,10 +141,7 @@ export class SuiviPME {
         validated: detail.validated,
         refused: detail.refused,
         supervisions: detail.supervisions,
-        supervisionsObject: this.computeSupervisionsforTask(
-          detail.supervisions,
-          supervisionsTaks
-        ),
+        supervisionsObject: this.computeSupervisionsforTask(detail.supervisions,supervisionsTaks),
         validationImage: SuiviPME.computeTaskImage(detail, "validated"),
         invalidationImage: SuiviPME.computeTaskImage(detail, "refused"),
       }));
@@ -155,7 +152,7 @@ export class SuiviPME {
       let dateObject: PostDate = this.store.selectSnapshot(DataQueries.getById("DatePost", value))!;
       return {
         id: id,
-        value: dateObject.date,
+        date: dateObject,
         tasks: this.tasks,
         selectedTasks: this.computeSelectedTask(dateObject.date),
         taskWithoutDouble: this.dateWithoutDouble(),
@@ -166,7 +163,7 @@ export class SuiviPME {
         ),
       } as DateG;
     })
-    this.dates.sort((date1:DateG, date2:DateG) => {return date1.value > date2.value ? 1 : -1})
+    this.dates.sort((date1:DateG, date2:DateG) => {return date1.date.date > date2.date.date ? 1 : -1})
   }
 
   computeSupervisionsforTask(
@@ -365,7 +362,7 @@ export class SuiviPME {
     );
     this.computeDates(this.mission!);
     this.dates.forEach((dateNew) => {
-      if (dateNew.value == dateOld.value) {
+      if (dateNew.date.date == dateOld.date.date) {
         dateResult = dateNew;
       }
     });

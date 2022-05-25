@@ -14,6 +14,7 @@ import { PopupService } from "src/app/shared/components/popup/popup.component";
 import {
   DateG,
   Mission,
+  PostDate,
   Ref,
   Supervision,
   Task,
@@ -55,6 +56,8 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
   // _accordionOpen: boolean = false;
   // get accordionOpen(){  return this._accordionOpen}
 
+  datePostId: Ref<PostDate> | null = null
+
   tasks!: Task[];
   dates!: DateG[]
 
@@ -86,7 +89,7 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
 
   _date: DateG = {
     id: 0,
-    value: "1970:01:01",
+    date: {id:-1, date:'', validated: false, deleted:false, supervision: -1},
     tasks: [],
     selectedTasks: [],
     taskWithoutDouble: [],
@@ -215,7 +218,8 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
     this.currentTaskId = task ? task!.id : null
     if (!this.mission!.isClosed) {
       let detailPostId: number | null = task ? task.id : null
-      this.store.dispatch(new CreateSupervision(this.mission!.id, detailPostId, null, comment, this.date.value)).pipe(take(1)).subscribe(() => {
+      let datePost: number | null = this.datePostId 
+      this.store.dispatch(new CreateSupervision(detailPostId, datePost, comment)).pipe(take(1)).subscribe(() => {
         formControl.reset()
         this.updatePageOnlyDate()
       })
@@ -240,7 +244,7 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
     this.mission = mission;
     this.computeDates(mission!);
     this.dates?.forEach((dateNew) => {
-      if (dateNew.value == dateOld.value) {
+      if (dateNew.date.date == dateOld.date.date) {
         dateResult = dateNew;
       }
     });
@@ -273,7 +277,7 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
       let date = typeof value == "number"? this.store.selectSnapshot(DataQueries.getById("DatePost", value as number))!.date : value;
       return {
         id: id,
-        value: date as string,
+        date: date,
         tasks: this.tasks,
         selectedTasks: this.computeSelectedTask(date as string),
         taskWithoutDouble: this.dateWithoutDouble(),
@@ -281,7 +285,7 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
         supervisions: this.computeSupervisionsForMission(date as string,supervisionsTaks),
       } as DateG;
     });
-      this.dates.sort((date1, date2) => (date1.value > date2.value ? 1 : -1));
+      this.dates.sort((date1, date2) => (date1.date.date > date2.date.date ? 1 : -1));
   }
 
   computeSupervisionsforTask(supervisionsId: number[], supervisionsTask: number[]) {
