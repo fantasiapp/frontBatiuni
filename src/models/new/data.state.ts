@@ -210,6 +210,7 @@ export class DataState {
   //------------------------------------------------------------------------
   @Action(GetGeneralData)
   getGeneralData(ctx: StateContext<DataModel>) {
+    console.log("getGeneralData c'est pas trop tôt ça fait 2h qu'on t'attend")
     //eventually make a local storage service
     //const data = localStorage.getItem('general-data');
     const req = /*data ? of(JSON.parse(data)) : */ this.http.get("initialize", {
@@ -221,7 +222,8 @@ export class DataState {
         //localStorage.setItem('general-data', JSON.stringify(response));
         const operations = this.reader.readStaticData(response);
         ctx.setState(compose(...operations));
-      })
+        console.log("response", response)
+  })
     );
   }
 

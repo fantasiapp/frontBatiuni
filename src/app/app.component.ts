@@ -51,12 +51,7 @@ export class AppComponent extends Destroy$ {
   async ngOnInit() {
     await this.store.dispatch(new Load()).toPromise();
     await SplashScreen.hide();
-    try {
-      await this.store.dispatch(new GetGeneralData()).toPromise();
-    } catch (e) {
-      if (!environment.production) alert("GetGeneralData: 505 Error");
-    }
-
+    this.executeGetGeneralData()
     this.ready$.next(true);
     this.ready$.complete();
   }
@@ -67,6 +62,7 @@ export class AppComponent extends Destroy$ {
 
   async updateUserData() {
     if (!this.firstAttemptAlreadyTried) {
+      this.executeGetGeneralData()
       this.firstAttemptAlreadyTried = true
     }
     else if (false) { // supposed to be this.readyToUpdate
@@ -98,6 +94,14 @@ export class AppComponent extends Destroy$ {
       this.readyToUpdate = bool!;
     } else {
       this.readyToUpdate = !this.readyToUpdate;
+    }
+  }
+
+  async executeGetGeneralData() {
+    try {
+      await this.store.dispatch(new GetGeneralData()).toPromise();
+    } catch (e) {
+      if (!environment.production) alert("GetGeneralData: 505 Error");
     }
   }
 
