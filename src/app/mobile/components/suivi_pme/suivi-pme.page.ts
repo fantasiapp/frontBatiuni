@@ -153,6 +153,7 @@ export class SuiviPME {
       dates = Object.keys(mission.dates).map((key) => +key as number);
     this.dates = dates?.map((value: number, id) => {
       let dateObject: PostDate = this.store.selectSnapshot(DataQueries.getById("DatePost", value))!;
+      console.log('DATEEEOBJECT', dateObject);
       return {
         id: id,
         value: dateObject.date,
@@ -430,7 +431,7 @@ export class SuiviPME {
     })
 
     this.setupDayState(datesSelected, dateToBeUnSelected);
-    if(setup) this.saveToBackAdFormDate()
+    if(!setup) this.saveToBackAdFormDate()
 
   }
 
@@ -458,9 +459,11 @@ export class SuiviPME {
     this.store.dispatch(new ModifyMissionDate(this.mission!.id, this.AdFormDate.get("hourlyStart")!.value, this.AdFormDate.get("hourlyEnd")!.value, selectedDate)).pipe(take(1)).subscribe(() => {
       if (!this.alert) this.swipeupModifyDate = false;
       // Update de mission et accordionData puis update la vue
-      this.mission = this.store.selectSnapshot(DataQueries.getById("Mission", this.mission!.id));
-      this.computeDates(this.mission!);
+      this.mission = this.store.selectSnapshot(DataQueries.getById("Mission", this.mission!.id))!;
+      this.computeDates(this.mission);
+
       this.cd.markForCheck();
+      console.log('cdmark', this.mission);
     });
   }
 
@@ -481,11 +484,14 @@ export class SuiviPME {
   }
 
   computePendingDate() :{pendingDeleted: string[], pendingValidated: string[]}{
-    console.log('mission', this.mission);
-    if(!this.mission) return {pendingDeleted: [], pendingValidated: []}   
+    if(!this.mission || !this.mission.dates) return {pendingDeleted: [], pendingValidated: []}   
     let pendingDeleted: string[] = [] 
     let pendingValidated: string[] = []
-    this.store.selectSnapshot(DataQueries.getMany("DatePost", this.mission.dates)).forEach(date => {
+
+    let datesId = this.mission.dates;
+    if (typeof datesId === "object" && !Array.isArray(datesId))
+      datesId = Object.keys(datesId).map((key) => +key as number);
+    this.store.selectSnapshot(DataQueries.getMany("DatePost", datesId)).forEach(date => {
       if(date.deleted) pendingDeleted.push(date.date)
       else if (!date.validated) pendingValidated.push(date.date)
     })
