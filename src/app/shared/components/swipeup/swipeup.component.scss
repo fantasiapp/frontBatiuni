@@ -61,7 +61,7 @@ $swipeup-height: 80vh;
 .list {
   font-size: 0.9em;
   list-style-type: none;
-  padding: 1rem 0 2rem;
+  padding: 1rem 2rem 2rem;
   @include with-set-safe-area(padding, bottom, 2rem);
 
   // ?? 
@@ -75,10 +75,8 @@ $swipeup-height: 80vh;
 }
 
 ul::ng-deep > li{
-  // background-color: #F4F4F4;
   padding-bottom: 0.5rem;
   padding-top: 0.5rem;
-  padding-inline: 2rem;
 }
 
 .content {
