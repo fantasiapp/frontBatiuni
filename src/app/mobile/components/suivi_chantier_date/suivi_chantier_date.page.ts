@@ -25,7 +25,7 @@ export class SuiviChantierDate extends Destroy${
   @Input()
   view: 'ST' | 'PME' = "PME";
   _date: DateG = {id:0, 
-    date: {id:-1, date:'', validated: false, deleted:false, supervision: -1}, 
+    date: {id:-1, date:'', validated: false, deleted:false, supervisions: []}, 
     tasks:[], selectedTasks:[], taskWithoutDouble:[], view:this.view, supervisions: []};
   get date() { return this._date; }
   

@@ -89,7 +89,7 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
 
   _date: DateG = {
     id: 0,
-    date: {id:-1, date:'', validated: false, deleted:false, supervision: -1},
+    date: {id:-1, date:'', validated: false, deleted:false, supervisions: []},
     tasks: [],
     selectedTasks: [],
     taskWithoutDouble: [],
@@ -276,19 +276,22 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
     if (typeof mission.dates === "object" && !Array.isArray(mission.dates))
       dates = Object.keys(mission.dates).map((key) => +key as number);
 
-    this.dates = dates.map((value: unknown, id) => {
-      let date = typeof value == "number"? this.store.selectSnapshot(DataQueries.getById("DatePost", value as number))!.date : value;
-      
-      return {
-        id: id,
-        date: date,
-        tasks: this.tasks,
-        selectedTasks: this.computeSelectedTask(date as string),
-        taskWithoutDouble: this.dateWithoutDouble(),
-        view: this.view,
-        supervisions: this.computeSupervisionsForMission(date as string,supervisionsTaks),
-      } as DateG;
-    });
+    this.dates = dates.map((value: any, id) => {
+
+      let dates = value;
+      if (typeof value === "object" && !Array.isArray(value))
+        dates = Object.keys(value).map((key) => +key as number);
+      let date = this.store.selectSnapshot(DataQueries.getById("DatePost", dates));
+      let dateG = {
+          id: id,
+          date: date!,
+          tasks: this.tasks,
+          selectedTasks: this.computeSelectedTask(date!.date as string),
+          taskWithoutDouble: this.dateWithoutDouble(),
+          view: this.view,
+          supervisions: this.computeSupervisionsForMission(date?.date as string, supervisionsTaks),
+        } as DateG;
+      return dateG});
       this.dates.sort((date1, date2) => (date1.date.date > date2.date.date ? 1 : -1));
   }
 
