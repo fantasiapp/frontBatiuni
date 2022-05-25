@@ -184,8 +184,9 @@
         <img (click)="slideMission.close()" src="assets/arrowlblack.svg" />
         <h1 class="grow center-text">Annonce(s) validée</h1>
         <img
-          (click)="swipeupMenu()"
+          (click)="swipeupMenu(); view == 'PME' && suiviChantier.submitAdFormDate(true)"
           [src]="view == 'PME' ? 'assets/Option.svg' : 'assets/phone.png'"
+
         />
       </header>
 
@@ -194,6 +195,7 @@
         [callBackParent]="callBackSwipeup"
         [toogle]="toogle"
         content
+        #suiviChantier
       ></suivi-chantier>
     </slidemenu>
   </ng-container>

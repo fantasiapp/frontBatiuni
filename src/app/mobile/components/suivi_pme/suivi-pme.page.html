@@ -94,7 +94,7 @@
       <label>Dates du chantier</label>
       <calendar [blockedDate]="computeBlockedDate()" [mission]="mission" [useEvents]="false" formControlName="calendar" [mode]="'single'"></calendar>
     </div>
-    <div style="height:150px">
+    <div style="min-height:100px">
       <p>{{ alert }}</p>
     </div>
     <button class="button active" (click)="submitAdFormDate()">Valider</button>

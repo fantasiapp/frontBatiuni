@@ -62,11 +62,12 @@ export class SuiviPME {
   get missionMenu() {
     return this._missionMenu;
   }
-
+  
+  calendarForm = new FormControl([])
   AdFormDate = new FormGroup({
     hourlyStart: new FormControl("07:00"),
     hourlyEnd: new FormControl("17:30:00"),
-    calendar: new FormControl([]),
+    calendar: this.calendarForm
   });
 
   @Input()
@@ -150,7 +151,7 @@ export class SuiviPME {
     let dates = mission.dates;
     if (typeof mission.dates === "object" && !Array.isArray(mission.dates))
       dates = Object.keys(mission.dates).map((key) => +key as number);
-    this.dates = dates.map((value: number, id) => {
+    this.dates = dates?.map((value: number, id) => {
       let dateObject: PostDate = this.store.selectSnapshot(DataQueries.getById("DatePost", value))!;
       return {
         id: id,
@@ -389,47 +390,71 @@ export class SuiviPME {
       );
   }
 
-  async submitAdFormDate() {
-    let datesSelected = this.AdFormDate.get("calendar")!.value.map(
-      (dayState: DayState) => {
-        return dayState.date;
-      }
-    );
+  async submitAdFormDate(setup: boolean = false) {
+    let datesSelected: string[] = this.calendarForm!.value.filter((day : DayState) => day.availability == 'selected').map((day: DayState) => day.date)
+
+    console.log('datesSelected', datesSelected);
     let blockedDates = this.computeBlockedDate();
+    let pendingDates = this.computePendingDate()
 
     this.alert = "";
     let dateToBeSelected: string[] = [];
+    let dateToBeUnSelected: string[] = [];
 
     blockedDates.forEach((date) => {
       if (!datesSelected.includes(date)) {
+        console.log('date blopkce', date);
         this.alert += `La date ${date} doit obligatoirement être sélectionnée.\r\n`;
         dateToBeSelected.push(date);
       }
     });
+    
+    console.log('pending', pendingDates);
 
-    this.setupDayState(dateToBeSelected);
-    this.saveToBackAdFormDate();
+    pendingDates.pendingValidated.forEach((date) => {
+      if(!datesSelected.includes(date)){
+        this.alert += `La date ${date} est en cours de validation.\r\n`
+        dateToBeSelected.push(date)
+      }
+    })
 
-    // Il faut maintenant update mission, et accordionDates
+    pendingDates.pendingDeleted.forEach((date)=>{
+      if(datesSelected.includes(date)){
+        this.alert += `La date ${date} est en cours de suppression.\r\n`
+        dateToBeUnSelected.push(date)
+      }
+    })
+
+    dateToBeSelected.map(date => {
+      if(!datesSelected.includes(date)) datesSelected.push(date)
+    })
+
+    this.setupDayState(datesSelected, dateToBeUnSelected);
+    if(setup) this.saveToBackAdFormDate()
+
   }
 
   // Reset le calendrier si on a deselectionner ou selectionner des dates bloquer
-  setupDayState(dateToBeSelected: string[]) {
+  setupDayState(dateToBeSelected: string[], dateToBeUnSelected: string[]) {
     let dayStates: DayState[] = dateToBeSelected.map((date) => {
       return { date: date, availability: "selected" };
     });
-    this.AdFormDate.get("calendar")?.value.forEach((day: DayState) => {
-      dayStates.push(day);
-    });
-    this.AdFormDate.get("calendar")?.setValue(dayStates);
+
+    console.log('date to unselected', dateToBeUnSelected);
+    dayStates = dayStates.filter(day => !dateToBeUnSelected.includes(day.date))
+    
+    console.log('dayStates', dayStates);
+    this.calendarForm.setValue(dayStates);
   }
 
   saveToBackAdFormDate() {
-    const selectedDate: string[] = this.AdFormDate.get("calendar")!.value.map(
+    const selectedDate: string[] = this.calendarForm!.value.map(
       (dayState: DayState) => {
         return dayState.date;
       }
     );
+
+    console.log('SELECTED', selectedDate);
     this.store.dispatch(new ModifyMissionDate(this.mission!.id, this.AdFormDate.get("hourlyStart")!.value, this.AdFormDate.get("hourlyEnd")!.value, selectedDate)).pipe(take(1)).subscribe(() => {
       if (!this.alert) this.swipeupModifyDate = false;
       // Update de mission et accordionData puis update la vue
@@ -445,13 +470,25 @@ export class SuiviPME {
     }
     let listBlockedDate: string[] = [];
     let listDetailedPost = this.mission!.details;
+
     listDetailedPost.forEach((detailId) => {
-      let detailDate = this.store.selectSnapshot(
-        DataQueries.getById("DetailedPost", detailId)
-      )!.date;
-      if (detailDate && !listBlockedDate.includes(detailDate))
-        listBlockedDate.push(detailDate);
+      let detailDate = this.store.selectSnapshot(DataQueries.getById("DetailedPost", detailId))!;
+      // si la date a une Task, la considerer bloquer
+      if (detailDate && detailDate.date && !listBlockedDate.includes(detailDate.date))
+        listBlockedDate.push(detailDate.date);
     });
     return listBlockedDate;
+  }
+
+  computePendingDate() :{pendingDeleted: string[], pendingValidated: string[]}{
+    console.log('mission', this.mission);
+    if(!this.mission) return {pendingDeleted: [], pendingValidated: []}   
+    let pendingDeleted: string[] = [] 
+    let pendingValidated: string[] = []
+    this.store.selectSnapshot(DataQueries.getMany("DatePost", this.mission.dates)).forEach(date => {
+      if(date.deleted) pendingDeleted.push(date.date)
+      else if (!date.validated) pendingValidated.push(date.date)
+    })
+    return {pendingDeleted: pendingDeleted, pendingValidated:pendingValidated}
   }
 }
