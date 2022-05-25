@@ -163,4 +163,8 @@ export class MissionFilterForm extends Filter<Mission> {
       this.callbackFilter(value);
     });
   }
+
+  resetFilter(){
+    this.filterForm.reset();
+  }
 }

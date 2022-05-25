@@ -104,9 +104,11 @@ export class ApplicationsComponent extends Destroy$ {
     }
     this.cd.markForCheck;
     this.selectPost(null);
+    this.selectSearch('');
   }
 
   ngAfterViewInit() {
+    this.cd.markForCheck;
   }
 
   selectPost(filter: any) {
@@ -114,21 +116,14 @@ export class ApplicationsComponent extends Destroy$ {
     if (filter == null) {  
       this.userOnlinePosts = this.allCandidatedPost;
     } else {
-      // Array qui contiendra les posts et leur valeur en distance Levenshtein pour une adresse demandée
+      // Trie les posts selon leur distance de levenshtein
       let levenshteinDist: any = [];
       if (filter.address) {
         for (let post of this.allCandidatedPost) {levenshteinDist.push([post,getLevenshteinDistance(post.address.toLowerCase(),filter.address.toLowerCase()),]);}
         levenshteinDist.sort((a: any, b: any) => a[1] - b[1]);
-        let keys = levenshteinDist.map((key: any) => {
-          return key[0];
-        });
-        // Trie les posts selon leur distance de levenshtein
+        let keys = levenshteinDist.map((key: any) => {return key[0];});
         this.allCandidatedPost.sort((a: any,b: any)=>keys.indexOf(a) - keys.indexOf(b));
-      } else {
-        this.allCandidatedPost.sort((a, b) => {
-          return a["id"] - b["id"];
-        });
-      }
+      } 
 
       // Trie les posts par date de mission la plus proche
       if (filter.sortPostDate === true) {this.allCandidatedPost.sort((a: any, b: any) => Date.parse(a['dueDate']) - Date.parse(b['dueDate']))}
@@ -196,6 +191,7 @@ export class ApplicationsComponent extends Destroy$ {
     // setTimeout(() => {
     //   // this.annonceResume.open()
     // }, 20);
+    this.cd.markForCheck;
   }
 
   ngOnDestroy(): void {

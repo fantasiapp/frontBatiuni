@@ -67,7 +67,6 @@ export class OptionsModel extends UIDefaultAccessor<Option[]> {
 
   @Input()
   set options(val: Option[]) {
-    console.log("i'm called", val)
     this.search = '';
     this._options = val;
     this.value = [];
