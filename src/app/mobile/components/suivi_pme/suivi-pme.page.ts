@@ -153,7 +153,6 @@ export class SuiviPME {
       dates = Object.keys(mission.dates).map((key) => +key as number);
     this.dates = dates?.map((value: number, id) => {
       let dateObject: PostDate = this.store.selectSnapshot(DataQueries.getById("DatePost", value))!;
-      console.log('DATEEEOBJECT', dateObject);
       return {
         id: id,
         value: dateObject.date,

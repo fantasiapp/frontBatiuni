@@ -197,26 +197,27 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
   });
 
 
-  onSubmit( task: Task| null, inputEl: HTMLTextAreaElement | HTMLInputElement){
-    this.mainComment(task, inputEl);
+  onSubmit( task: Task| null, formGroup: FormGroup, formControlName: string){
+    this.mainComment(task, formGroup, formControlName);
     this.cd.markForCheck()
   }
-  textareaSubmit(e: any,input: HTMLFormElement){
-    // console.log(e.key, e.code, 'abricot')
-    // console.log('input', e.keyCode, e.type);
+  textareaSubmit(e: any, input: HTMLFormElement){
     if(e.keyCode == 13){
       input.dispatchEvent(new Event("submit", {cancelable: true}))
       e.preventDefault(); // Prevents the addition of a new line in the text field (not needed in a lot of cases)
     }
   }
-  mainComment(task:Task | null, inputEl: HTMLTextAreaElement | HTMLInputElement) {
-    // let idInput = task ? "input_"+task!.id : "input_general"
-    let input = inputEl
+  mainComment(task:Task | null, formGroup: FormGroup, formControlName: string) {
+    
+    let formControl = formGroup.get(formControlName)!
+    let comment = formControl.value
+    formControl.reset()
+    
     this.currentTaskId = task ? task!.id : null
-    if (input.value.trim() != '' && !this.mission!.isClosed) {
+    if (!this.mission!.isClosed) {
       let detailPostId: number | null = task ? task.id : null
-      this.store.dispatch(new CreateSupervision(this.mission!.id, detailPostId, null, input.value, this.date.value)).pipe(take(1)).subscribe(() => {
-        input.value = ''
+      this.store.dispatch(new CreateSupervision(this.mission!.id, detailPostId, null, comment, this.date.value)).pipe(take(1)).subscribe(() => {
+        // input.value = ''
         this.updatePageOnlyDate()
       })
     }
