@@ -229,6 +229,8 @@ export class HomeComponent extends Destroy$ {
           this.selectSearchDraft("");
           this.selectSearchOnline("");
           this.selectSearchMission("");
+
+          console.log("num online posts", this.allOnlinePosts.length)
   
         });
       // const view = this.store.selectSnapshot(DataState.view)
@@ -252,6 +254,8 @@ export class HomeComponent extends Destroy$ {
   }
 
   ngAfterViewInit() {
+    this.filterST.updateFilteredPosts(this.filterST.filterForm.value)
+    this.displayOnlinePosts = this.filterST.filteredPosts;
     this.updatePage()
   }
 
@@ -857,10 +861,10 @@ export class HomeComponent extends Destroy$ {
   }
 
   closeAdFilterMenu(value: any){
-    console.log("pifpafpouf", value);
     this.openAdFilterMenu = value;
     this.filterST.updateFilteredPosts(this.filterST.filterForm.value);
     this.displayOnlinePosts = this.filterST.filteredPosts;
+    this.filterST.isFilterOn(this.filterST.filterForm.value);
     this.cd.markForCheck();
   }
 }
