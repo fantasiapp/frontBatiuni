@@ -260,7 +260,7 @@ export class STFilterForm {
 
   updateFilteredPosts(filter: any) {
     this.filteredPosts = [];
-    
+    console.log(this.posts.length)
     const user = this.store.selectSnapshot(DataQueries.currentUser);
 
     // Filter
@@ -288,7 +288,10 @@ export class STFilterForm {
       let isNotIncludedJob = (filter.jobs && filter.jobs.length && filter.jobs.every((job: any) => {return job.id != post.job}))
       
       //Salary
-      let isNotInRangeSalary = (filter.salary && (company.amount < filter.salary[0] || company.amount > filter.salary[1]))
+      let isNotInRangeSalary = false;
+      if (filter.salary[0] != SalarySliderConfig.floor || filter.salary[1] != SalarySliderConfig.ceil){
+        isNotInRangeSalary = (company.amount < filter.salary[0] || company.amount > filter.salary[1])
+      }
 
       //Employees
       const jobsForCompany = this.store.selectSnapshot(DataQueries.getMany('JobForCompany', company.jobs));
@@ -378,7 +381,7 @@ export class STFilterForm {
       });
     }
 
-    
+    console.log(this.filteredPosts.length)
     this.cd.markForCheck();
   }
 
