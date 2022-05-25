@@ -213,7 +213,7 @@ export type PostDate = {
   date: string;
   validated: boolean;
   deleted: boolean;
-  supervision: Ref<Supervision>
+  // supervision: Ref<Supervision>
 };
 
 export type Task = PostDetail & {
