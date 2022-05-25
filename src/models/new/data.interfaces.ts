@@ -87,7 +87,6 @@ export interface Supervision {
   date: string;
   comment: string;
   files: Ref<File>[];
-  // Supervisions: Ref<Supervision>[];
 }
 
 export interface Disponibility {
@@ -129,6 +128,7 @@ export interface Post {
   contactName: string;
   draft: boolean;
   manPower: boolean;
+  creationDate: string;
   dueDate: string;
   startDate: string;
   endDate: string;
@@ -156,7 +156,8 @@ export interface Candidate {
   devis: string;
   isChoosen : boolean;
   isRefused : boolean;
-  isViewed: boolean
+  isViewed: boolean;
+  date: string;
 };
 
 export interface Establishement {

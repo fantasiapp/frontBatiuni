@@ -239,7 +239,6 @@ import { Mobile } from "../services/mobile-footer.service";
       <button
         class="button passive font-Poppins full-width"
         (click)="submit(true)"
-        [disabled]="invalid"
       >
         {{ this.post ? "Enregistrer" : "Brouillon" }}
       </button>

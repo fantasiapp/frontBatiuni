@@ -75,7 +75,7 @@ import { getLevenshteinDistance } from "src/app/shared/services/levenshtein";
 
     <div class="form-input">
       <label>Estimation de la rémunération horaire</label>
-      <ngx-slider [options]="imports.SalarySliderConfig" [highValue]="400" formControlName="salary"></ngx-slider>
+      <ngx-slider [options]="imports.SalarySliderConfig" [highValue]="100000" formControlName="salary"></ngx-slider>
     </div>
 
       <div class="form-input space-children-margin">
@@ -249,18 +249,18 @@ export class STFilterForm {
 
   ngOnInit() {
 
-    this.filterForm.valueChanges.subscribe((value) => {
-      this.updateFilteredPosts(value);
-      this.isFilterOn(value);
-      this.updateEvent.emit(this.filteredPosts);
-      this.filterService.emitFilterChangeEvent(this.filteredPosts)
-    });
+    // this.filterForm.valueChanges.subscribe((value) => {
+    //   this.updateFilteredPosts(value);
+    //   this.isFilterOn(value);
+    //   this.updateEvent.emit(this.filteredPosts);
+    //   this.filterService.emitFilterChangeEvent(this.filteredPosts)
+    // });
 
   }
 
   updateFilteredPosts(filter: any) {
     this.filteredPosts = [];
-    
+    console.log(this.posts.length)
     const user = this.store.selectSnapshot(DataQueries.currentUser);
 
     // Filter
@@ -288,7 +288,10 @@ export class STFilterForm {
       let isNotIncludedJob = (filter.jobs && filter.jobs.length && filter.jobs.every((job: any) => {return job.id != post.job}))
       
       //Salary
-      let isNotInRangeSalary = (filter.salary && (company.amount < filter.salary[0] || company.amount > filter.salary[1]))
+      let isNotInRangeSalary = false;
+      if (filter.salary[0] != SalarySliderConfig.floor || filter.salary[1] != SalarySliderConfig.ceil){
+        isNotInRangeSalary = (post.amount < filter.salary[0] || post.amount > filter.salary[1])
+      }
 
       //Employees
       const jobsForCompany = this.store.selectSnapshot(DataQueries.getMany('JobForCompany', company.jobs));
@@ -378,7 +381,7 @@ export class STFilterForm {
       });
     }
 
-    
+    console.log(this.filteredPosts.length)
     this.cd.markForCheck();
   }
 

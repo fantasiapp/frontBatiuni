@@ -64,6 +64,7 @@ import { isLoadingService } from "src/app/shared/services/isLoading.service";
 import { STFilterForm } from "src/app/shared/forms/STFilter.form";
 import { PMEFilterForm } from "src/app/shared/forms/PMEFilter.form";
 import { SearchbarComponent } from "src/app/shared/components/searchbar/searchbar.component";
+import { getUserDataService } from "src/app/shared/services/getUserData.service";
 
 @Component({
   selector: "home",
@@ -75,10 +76,8 @@ export class HomeComponent extends Destroy$ {
   profileSubContractor: Profile | null = null;
   amountSubContractor: String | null = null;
 
-  @Select(DataQueries.currentProfile)
   profile$!: Observable<Profile>;
 
-  @Select(DataState.view)
   view$!: Observable<"PME" | "ST">;
 
   time: number = 0;
@@ -157,7 +156,8 @@ export class HomeComponent extends Destroy$ {
     private filters: FilterService,
     private mobile: Mobile,
     private loadingService: isLoadingService,
-    private filterService: FilterService
+    private filterService: FilterService,
+    private getUserDataService: getUserDataService
   ) {
     super();
     this.isLoading = this.loadingService.isLoading
@@ -175,10 +175,19 @@ export class HomeComponent extends Destroy$ {
       this.displayOnlinePosts = posts
       this.cd.markForCheck()
     })
+    this.mobile.footerStateSubject.subscribe((b) => {
+      this.showFooter = b;
+      this.cd.markForCheck();
+    });
+    this.getUserDataService.getLoadingChangeEmitter().subscribe((value: boolean) => {
+      this.lateInit()
+    })
     this.lateInit()
   }
 
-  async lateInit() {
+  lateInit() {
+    this.profile$ = this.store.select(DataQueries.currentProfile)
+    this.view$ = this.store.select(DataState.view)
     // console.log("is loading", this.isLoading)
     // console.log("avant")
     // this.isLoading = true
@@ -188,6 +197,9 @@ export class HomeComponent extends Destroy$ {
     // this.cd.markForCheck()
     // console.log("yoooo")
     // console.log("isLoading", this.isLoading)
+    console.log("----------------------le test des data Queries------------------------")
+    console.log("this.store.select(DataQueries.currentProfile)", this.store.select(DataQueries.currentProfile))
+    console.log("profile$", this.profile$)
     if (!this.isLoading) {
       this.info.alignWith("header_search");
       combineLatest([this.profile$, this.posts$])
@@ -204,7 +216,6 @@ export class HomeComponent extends Destroy$ {
               ? this.symbols.discard
               : this.symbols.otherOnlinePost;
           });
-  
           const otherOnlinePost = mapping.get(this.symbols.otherOnlinePost) || [];
           this.allUserDrafts = mapping.get(this.symbols.userDraft) || [];
           this.allUserOnlinePosts =
@@ -222,17 +233,12 @@ export class HomeComponent extends Destroy$ {
         });
       // const view = this.store.selectSnapshot(DataState.view)
       // this._openCloseMission = view == 'ST' && this.missions.length != 0
-  
-      this.mobile.footerStateSubject.subscribe((b) => {
-        this.showFooter = b;
-        this.cd.markForCheck();
-      });
-      
+
       this.time = this.store.selectSnapshot(DataState.time);
       this.updatePage()
     }
     else {
-      await delay(10000)
+      // await delay(10000)
       this.lateInit()
     }
   }
@@ -446,14 +452,17 @@ export class HomeComponent extends Destroy$ {
       if(view=='PME'){
         if (headerActiveView == 0){
           this.filterPME.resetFilter()
+          this.searchbar.resetSearch()
           this.filterOn = false;
         }  
         if (headerActiveView == 1) {
           this.filterPME.resetFilter()
+          this.searchbar.resetSearch()
           this.filterOn = false;
         }    
         if (headerActiveView == 2) {
           this.filterPME.resetFilter()
+          this.searchbar.resetSearch()
           this.filterOn = false;
         }
       }
@@ -847,4 +856,11 @@ export class HomeComponent extends Destroy$ {
     this.allOnlinePosts = temporaryAllOnlinePost
   }
 
+  closeAdFilterMenu(value: any){
+    console.log("pifpafpouf", value);
+    this.openAdFilterMenu = value;
+    this.filterST.updateFilteredPosts(this.filterST.filterForm.value);
+    this.displayOnlinePosts = this.filterST.filteredPosts;
+    this.cd.markForCheck();
+  }
 }
