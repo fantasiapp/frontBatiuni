@@ -2,6 +2,7 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  ViewChild,
 } from "@angular/core";
 import { Select, Store } from "@ngxs/store";
 import { combineLatest, Observable } from "rxjs";
@@ -27,6 +28,7 @@ import { getLevenshteinDistance } from "src/app/shared/services/levenshtein";
 import * as moment from "moment";
 import { AppComponent } from "src/app/app.component";
 import { SearchbarComponent } from "src/app/shared/components/searchbar/searchbar.component";
+import { MissionFilterForm } from "src/app/shared/forms/missions.form";
 
 @Component({
   selector: "missions",
@@ -42,6 +44,7 @@ export class MissionsComponent extends Destroy$ {
   allMyMissions: Mission[] = [];
   missionMenu = new PostMenu<Mission>();
   filterOn: boolean = false;
+  viewList: boolean = true;
 
   detailedDays: MissionDetailedDay[] = [];
   _openCloseMission = false;
@@ -55,6 +58,9 @@ export class MissionsComponent extends Destroy$ {
 
   @QueryAll("Mission")
   missions$!: Observable<Mission[]>;
+
+  @ViewChild(MissionFilterForm)
+  filterMission!: MissionFilterForm;
 
   constructor(
     private store: Store,
@@ -133,6 +139,17 @@ export class MissionsComponent extends Destroy$ {
 
   ngAfterViewInit() {
     this.appComponent.updateUserData()
+  }
+
+  changeView(headerActiveView: number) {
+    if (headerActiveView == 0){
+      this.searchbar.resetSearch()
+      this.viewList = true;
+    }  
+    if (headerActiveView == 1) {
+      this.searchbar.resetSearch()
+      this.viewList = false;
+    }    
   }
 
   isFilterOn(filter: any){
