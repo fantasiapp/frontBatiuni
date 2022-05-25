@@ -220,7 +220,7 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
       let detailPostId: number | null = task ? task.id : null
       let datePostId: number | null = null;
       if (!detailPostId) {
-        datePostId= this.datePost ? this.datePost.id : null
+        datePostId = this.datePost ? this.datePost.id : null
       }
       this.store.dispatch(new CreateSupervision(detailPostId, datePostId, comment)).pipe(take(1)).subscribe(() => {
         formControl.reset()
