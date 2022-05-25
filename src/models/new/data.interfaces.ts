@@ -156,7 +156,8 @@ export interface Candidate {
   devis: string;
   isChoosen : boolean;
   isRefused : boolean;
-  isViewed: boolean
+  isViewed: boolean;
+  date: string;
 };
 
 export interface Establishement {
