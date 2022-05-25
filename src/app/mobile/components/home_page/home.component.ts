@@ -270,7 +270,7 @@ export class HomeComponent extends Destroy$ {
     if (filter == null) {
       this.userDrafts = this.allUserDrafts;
     } else {
-      // Array qui contiendra les posts et leur valeur en distance Levenshtein pour une adresse demandée
+       // Trie les posts selon leur distance de levenshtein
       let levenshteinDist: any = [];
       if (filter.address) {
         for (let post of this.allUserDrafts) {levenshteinDist.push([post,getLevenshteinDistance(post.address.toLowerCase(),filter.address.toLowerCase()),]);}
@@ -278,32 +278,30 @@ export class HomeComponent extends Destroy$ {
         let keys = levenshteinDist.map((key: any) => {
           return key[0];
         });
-        // Trie les posts selon leur distance de levenshtein
         this.allUserDrafts.sort((a: any,b: any)=>keys.indexOf(a) - keys.indexOf(b));
       } 
 
       // Trie brouillons les plus anciens
-      if (filter.sortDraftDate === true) {this.allUserDrafts.sort((a: any, b: any) => a['id'] - b['id'])} 
+      if (filter.sortDraftDate === true) {this.allUserDrafts.sort((a: any, b: any) => Date.parse(a['creationDate']) - Date.parse(b['creationDate']))} 
 
       // Trie les brouillons les plus complets (selon leurs details + nb de documents)
       let detailPost: any = []; 
       if (filter.sortDraftFull === true) {
         for (let post of this.allUserDrafts){
           detailPost.push([post, post.details.length + post.files.length]) ;
-          }
+        }
         detailPost.sort((a: any, b: any) => b[1] - a[1]);
         let detailKeys = detailPost.map((key: any) => {return key[0]});
         this.allUserDrafts.sort((a: any, b: any) => detailKeys.indexOf(a) - detailKeys.indexOf(b));
       }
 
       for (let post of this.allUserDrafts) {
+
         let isDifferentDate = (filter.date && post.startDate < filter.date)
         let isDifferentManPower = (filter.manPower && post.manPower != (filter.manPower === "true"))
         let isNotIncludedJob = (filter.jobs && filter.jobs.length && filter.jobs.every((job: any) => {return job.id != post.job}))
 
-        if (isDifferentDate || isDifferentManPower || isNotIncludedJob) {
-          continue;
-        }
+        if (isDifferentDate || isDifferentManPower || isNotIncludedJob) { continue }
         this.userDrafts.push(post);
       }
     }
@@ -320,20 +318,15 @@ export class HomeComponent extends Destroy$ {
     if (filter == null) {
       this.userOnlinePosts = this.allUserOnlinePosts;
     } else {
-      // Array qui contiendra les posts et leur valeur en distance Levenshtein pour une adresse demandée
+      // On trie les posts selon leur distance de levenshtein
       let levenshteinDist: any = [];
       if (filter.address) {
-        for (let post of this.allUserOnlinePosts) {levenshteinDist.push([post,getLevenshteinDistance(post.address.toLowerCase(),filter.address.toLowerCase()),]);}
+        for (let post of this.allUserOnlinePosts) {levenshteinDist.push([post,getLevenshteinDistance(post.address.toLowerCase(),filter.address.toLowerCase()),])}
         levenshteinDist.sort((a: any, b: any) => a[1] - b[1]);
-        let keys = levenshteinDist.map((key: any) => {
-          return key[0];
-        });
-
-        // On trie les posts selon leur distance de levenshtein
-        this.allUserOnlinePosts.sort(
-          (a: any, b: any) => keys.indexOf(a) - keys.indexOf(b)
-        );
+        let keys = levenshteinDist.map((key: any) => { return key[0] })
+        this.allUserOnlinePosts.sort((a: any, b: any) => keys.indexOf(a) - keys.indexOf(b))
       } 
+
       // Trie Posts selon leurs réponses
       if (filter.sortPostResponse === true) {
         let responses = [];
@@ -341,9 +334,9 @@ export class HomeComponent extends Destroy$ {
           const candidatesIds = post.candidates || [],
           candidates = this.store.selectSnapshot(DataQueries.getMany("Candidate", candidatesIds));
           let possCandidate = candidates.reduce((possibleCandidates: Candidate[], candidate: Candidate) => { 
-            if (!candidate.isRefused) {possibleCandidates.push(candidate);}
-            return possibleCandidates; }, []
-          );
+            if (!candidate.isRefused) {possibleCandidates.push(candidate)}
+            return possibleCandidates; 
+          }, []);
           responses.push([post, possCandidate.length])
         }
         responses.sort((a: any,b: any) => b[1] - a[1]);
@@ -366,27 +359,18 @@ export class HomeComponent extends Destroy$ {
 
   selectMission(filter: any) {
     this.missions = [];
+    this.allMissions.sort((a, b) => {return Number(a["isClosed"]) - Number(b["isClosed"]);});
     if (filter == null) {
       this.missions = this.allMissions;
     } else {
-      this.allMissions.sort((a, b) => {return Number(a["isClosed"]) - Number(b["isClosed"]);});
-      
+      // On trie les posts selon leur distance de levenshtein
       let levenshteinDist: any = [];
       if (filter.address) {
         for (let mission of this.allMissions) {levenshteinDist.push([mission,getLevenshteinDistance(mission.address.toLowerCase(),filter.address.toLowerCase()),]);}
         levenshteinDist.sort((a: any, b: any) => a[1] - b[1]);
-        let keys = levenshteinDist.map((key: any) => {
-          return key[0];
-        });
-        this.allMissions.sort(
-          (a: any, b: any) => keys.indexOf(a) - keys.indexOf(b)
-        );
-      } else {
-        this.allMissions.sort((a, b) => {
-          return a["id"] - b["id"];
-        });
-        this.allMissions.sort((a, b) => {return Number(a["isClosed"]) - Number(b["isClosed"]);});
-      }
+        let keys = levenshteinDist.map((key: any) => {return key[0];});
+        this.allMissions.sort((a: any, b: any) => keys.indexOf(a) - keys.indexOf(b));
+      } 
 
       // Trie missions selon leurs notifications
       if (filter.sortMissionNotifications === true) {
@@ -404,16 +388,14 @@ export class HomeComponent extends Destroy$ {
       }
 
       for (let mission of this.allMissions) {
+
         let isDifferentDate = (filter.date && mission.startDate < filter.date)
         let isDifferentManPower = (filter.manPower && mission.manPower != (filter.manPower === "true"))
         let isNotIncludedJob = (filter.jobs && filter.jobs.length && filter.jobs.every((job: any) => {return job.id != mission.job}))
 
-        if (isDifferentDate || isDifferentManPower || isNotIncludedJob) {
-          continue;
-        }
+        if (isDifferentDate || isDifferentManPower || isNotIncludedJob) {continue;}
         this.missions.push(mission);
       }
-      // Trie les missions pour que celles clôturées soient en derniers
     }
     this.cd.markForCheck();
   }
@@ -481,6 +463,11 @@ export class HomeComponent extends Destroy$ {
 
   selectSearchDraft(searchForm:  string){
     this.userDrafts = [];
+    this.allUserOnlinePosts.sort((post1, post2) => {
+      let b1 = post1.boostTimestamp > this.time ? 1 : 0;
+      let b2 = post2.boostTimestamp > this.time ? 1 : 0;
+      return b2 - b1
+    });
     if (searchForm == "" || searchForm == null)  {
       this.userDrafts = this.allUserDrafts
     } else {
@@ -499,6 +486,11 @@ export class HomeComponent extends Destroy$ {
 
   selectSearchOnline(searchForm:  string){
     this.userOnlinePosts = [];
+    this.allUserOnlinePosts.sort((post1, post2) => {
+      let b1 = post1.boostTimestamp > this.time ? 1 : 0;
+      let b2 = post2.boostTimestamp > this.time ? 1 : 0;
+      return b2 - b1
+    });
     if (searchForm == "" || searchForm == null)  {
       this.userOnlinePosts = this.allUserOnlinePosts
     } else {
@@ -517,6 +509,7 @@ export class HomeComponent extends Destroy$ {
 
   selectSearchMission(searchForm:  string){
     this.missions = [];
+    this.allMissions.sort((a, b) => {return Number(a["isClosed"]) - Number(b["isClosed"]);});
     if (searchForm == "" || searchForm == null)  {
       this.missions = this.allMissions
     } else {
@@ -535,6 +528,11 @@ export class HomeComponent extends Destroy$ {
 
   selectSearchST(searchForm:  string){
     this.displayOnlinePosts = [];
+    this.allOnlinePosts.sort((post1, post2) => {
+      let b1 = post1.boostTimestamp > this.time ? 1 : 0;
+      let b2 = post2.boostTimestamp > this.time ? 1 : 0;
+      return b2 - b1
+    });
     if (searchForm == "" || searchForm == null)  {
       this.displayOnlinePosts = this.allOnlinePosts
     } else {
