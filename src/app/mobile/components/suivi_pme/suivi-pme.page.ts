@@ -150,6 +150,12 @@ export class SuiviPME {
       dates = Object.keys(mission.dates).map((key) => +key as number);
     this.dates = dates?.map((value: number, id) => {
       let dateObject: PostDate = this.store.selectSnapshot(DataQueries.getById("DatePost", value))!;
+
+      let supervisionId = dateObject.supervisions;
+      if (typeof supervisionId === "object" && !Array.isArray(supervisionId))
+        supervisionId = Object.keys(supervisionId).map((key) => +key as number);
+
+      let supervision = this.store.selectSnapshot(DataQueries.getMany("Supervision", supervisionId))
       return {
         id: id,
         date: dateObject,
@@ -157,10 +163,7 @@ export class SuiviPME {
         selectedTasks: this.computeSelectedTask(dateObject.date),
         taskWithoutDouble: this.dateWithoutDouble(),
         view: this.view,
-        supervisions: this.computeSupervisionsForMission(
-          dateObject.date,
-          supervisionsTaks
-        ),
+        supervisions: supervision,
       } as DateG;
     })
     this.dates.sort((date1:DateG, date2:DateG) => {return date1.date.date > date2.date.date ? 1 : -1})

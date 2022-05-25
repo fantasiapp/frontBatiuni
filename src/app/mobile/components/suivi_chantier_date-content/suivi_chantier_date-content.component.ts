@@ -281,7 +281,12 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
       let dates = value;
       if (typeof value === "object" && !Array.isArray(value))
         dates = Object.keys(value).map((key) => +key as number);
-      let date = this.store.selectSnapshot(DataQueries.getById("DatePost", dates));
+      let date = this.store.selectSnapshot(DataQueries.getById("DatePost", dates))!;
+      let supervisionId = date.supervisions;
+      if (typeof supervisionId === "object" && !Array.isArray(supervisionId))
+        supervisionId = Object.keys(supervisionId).map((key) => +key as number);
+
+      let supervision = this.store.selectSnapshot(DataQueries.getMany("Supervision", supervisionId))
       let dateG = {
           id: id,
           date: date!,
@@ -289,7 +294,7 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
           selectedTasks: this.computeSelectedTask(date!.date as string),
           taskWithoutDouble: this.dateWithoutDouble(),
           view: this.view,
-          supervisions: this.computeSupervisionsForMission(date?.date as string, supervisionsTaks),
+          supervisions: supervision,
         } as DateG;
       return dateG});
       this.dates.sort((date1, date2) => (date1.date.date > date2.date.date ? 1 : -1));
