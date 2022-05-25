@@ -847,4 +847,11 @@ export class HomeComponent extends Destroy$ {
     this.allOnlinePosts = temporaryAllOnlinePost
   }
 
+  closeAdFilterMenu(value: any){
+    console.log("pifpafpouf", value);
+    this.openAdFilterMenu = value;
+    this.filterST.updateFilteredPosts(this.filterST.filterForm.value);
+    this.displayOnlinePosts = this.filterST.filteredPosts;
+    this.cd.markForCheck();
+  }
 }

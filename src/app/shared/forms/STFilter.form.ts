@@ -75,7 +75,7 @@ import { getLevenshteinDistance } from "src/app/shared/services/levenshtein";
 
     <div class="form-input">
       <label>Estimation de la rémunération horaire</label>
-      <ngx-slider [options]="imports.SalarySliderConfig" [highValue]="400" formControlName="salary"></ngx-slider>
+      <ngx-slider [options]="imports.SalarySliderConfig" [highValue]="100000" formControlName="salary"></ngx-slider>
     </div>
 
       <div class="form-input space-children-margin">
@@ -249,12 +249,12 @@ export class STFilterForm {
 
   ngOnInit() {
 
-    this.filterForm.valueChanges.subscribe((value) => {
-      this.updateFilteredPosts(value);
-      this.isFilterOn(value);
-      this.updateEvent.emit(this.filteredPosts);
-      this.filterService.emitFilterChangeEvent(this.filteredPosts)
-    });
+    // this.filterForm.valueChanges.subscribe((value) => {
+    //   this.updateFilteredPosts(value);
+    //   this.isFilterOn(value);
+    //   this.updateEvent.emit(this.filteredPosts);
+    //   this.filterService.emitFilterChangeEvent(this.filteredPosts)
+    // });
 
   }
 
@@ -290,7 +290,7 @@ export class STFilterForm {
       //Salary
       let isNotInRangeSalary = false;
       if (filter.salary[0] != SalarySliderConfig.floor || filter.salary[1] != SalarySliderConfig.ceil){
-        isNotInRangeSalary = (company.amount < filter.salary[0] || company.amount > filter.salary[1])
+        isNotInRangeSalary = (post.amount < filter.salary[0] || post.amount > filter.salary[1])
       }
 
       //Employees
