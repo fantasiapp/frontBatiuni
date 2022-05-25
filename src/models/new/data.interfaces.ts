@@ -212,7 +212,8 @@ export type PostDate = {
   id: Ref<PostDate>;
   date: string;
   validated: boolean;
-  deleted: boolean
+  deleted: boolean;
+  supervision: Ref<Supervision>
 };
 
 export type Task = PostDetail & {
