@@ -17,6 +17,7 @@ import { MarkerType } from "src/app/shared/components/map/map.component";
 import { SearchbarComponent } from "src/app/shared/components/searchbar/searchbar.component";
 import { SlidemenuService } from "src/app/shared/components/slidemenu/slidemenu.component";
 import { FilterService } from "src/app/shared/services/filter.service";
+import { getUserDataService } from "src/app/shared/services/getUserData.service";
 import { getLevenshteinDistance } from "src/app/shared/services/levenshtein";
 import { File, Company, Profile } from "src/models/new/data.interfaces";
 import {
@@ -60,7 +61,8 @@ export class SOSPageComponent extends Destroy$ {
     private slides: SlidemenuService, 
     private info: InfoService, 
     private appComponent: AppComponent, 
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    private getUserDataService: getUserDataService
   ) {
     super();
     this.searchbar = new SearchbarComponent(store);
@@ -249,6 +251,7 @@ export class SOSPageComponent extends Destroy$ {
 
   ngOnDestroy(): void {
     this.info.alignWith("last");
+    this.getUserDataService.emitDataChangeEvent();
     super.ngOnDestroy();
   }
 }

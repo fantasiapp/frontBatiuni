@@ -68,6 +68,7 @@ import { SwipeupService } from "src/app/shared/components/swipeup/swipeup.compon
 import { transformAll } from "@angular/compiler/src/render3/r3_ast";
 import { ClassGetter } from "@angular/compiler/src/output/output_ast";
 import { isLoadingService } from "src/app/shared/services/isLoading.service";
+import { getUserDataService } from "src/app/shared/services/getUserData.service";
 
 export interface DataModel {
   fields: Record<string[]>;
@@ -107,7 +108,8 @@ export class DataState {
     private slide: SlidemenuService,
     private swipeup: SwipeupService,
     private zone: NgZone,
-    private loadingService: isLoadingService
+    private loadingService: isLoadingService,
+    private getUserDataService: getUserDataService
   ) {}
 
   private pending$: Record<Subject<any>> = {};
@@ -137,13 +139,11 @@ export class DataState {
   clear(ctx: StateContext<DataModel>, clear: Clear) {
     const current = ctx.getState();
     if (clear.data) {
-      console.log("clear, showView", current.session.view);
       ctx.patchState({
         [clear.data]: {},
         fields: { ...current.fields, [clear.data]: [] },
       });}
     else
-    console.log("clear, showView", current.session.view)
       ctx.setState({
         fields: {},
         session: {
@@ -209,7 +209,6 @@ export class DataState {
   //------------------------------------------------------------------------
   @Action(GetGeneralData)
   getGeneralData(ctx: StateContext<DataModel>) {
-    console.log("getGeneralData c'est pas trop tôt ça fait 2h qu'on t'attend")
     //eventually make a local storage service
     //const data = localStorage.getItem('general-data');
     const req = /*data ? of(JSON.parse(data)) : */ this.http.get("initialize", {
@@ -221,43 +220,49 @@ export class DataState {
         //localStorage.setItem('general-data', JSON.stringify(response));
         const operations = this.reader.readStaticData(response);
         ctx.setState(compose(...operations));
-        console.log("response", response)
   })
     );
   }
 
   @Action(GetUserData)
   getUserData(ctx: StateContext<DataModel>, action: GetUserData) {
+    console.log("getUserData")
     const req = this.http.get("data", { action: action.action });
     if (this.flagUpdate){
       this.flagUpdate = false
     return req.pipe(
       tap((response: any) => {
-        const loadOperations = this.reader.readInitialData(response),
-          sessionOperation = this.reader.readCurrentSession(response);
-      if (!this.isFirstTime) {
-        let oldView = this.store.selectSnapshot(DataState.view)
-        ctx.setState(compose(...loadOperations, sessionOperation));
-        const state = ctx.getState();
-        ctx.patchState({
-          session: {
-            ...state.session,
-            view: oldView,
-          },
-        })
-      } else {
-        this.loadingService.emitLoadingChangeEvent(true)
-        ctx.setState(compose(...loadOperations, sessionOperation));
-        this.isFirstTime = false
-        this.loadingService.emitLoadingChangeEvent(false)
-      }
-      this.flagUpdate = true
+        this.getUserDataService.setNewResponse(response)
+        if (this.isFirstTime) {
+          this.getUserDataService.getDataChangeEmitter().subscribe((value) => {
+            this.updateLocalData(ctx, value)
+          })
+          this.updateLocalData(ctx, response)
+        }
+        this.flagUpdate = true
     })
       );
     }
     else{
       return 
     }
+  }
+
+  updateLocalData(ctx: StateContext<DataModel>, response: any) {
+    const loadOperations = this.reader.readInitialData(response),
+    sessionOperation = this.reader.readCurrentSession(response);
+    if (!this.isFirstTime) {
+      let oldView = this.store.selectSnapshot(DataState.view)
+        ctx.setState(compose(...loadOperations, sessionOperation));
+        const state = ctx.getState();
+        ctx.patchState({session: {...state.session,view: oldView,}})
+      }
+      else {
+      this.loadingService.emitLoadingChangeEvent(true)
+      ctx.setState(compose(...loadOperations, sessionOperation));
+      this.isFirstTime = false
+      this.loadingService.emitLoadingChangeEvent(false)
+      }
   }
 
   @Action(Logout)
@@ -325,7 +330,6 @@ export class DataState {
         let key = Object.keys(response)
         let id = response.supervisionId
         delete response.supervisionId;
-        console.log('uploadImageSupervison', response);
         response[parseInt(key[0])].push(picture.imageBase64)
         ctx.setState(compose(addComplexChildren("Supervision", id, "File", response)))
       })
@@ -717,7 +721,6 @@ export class DataState {
           throw response.messages;
         }
         delete response[application.action];
-        console.log('modifyMissionDate', response);
         
         ctx.setState(addComplexChildren("Company", profile.company.id, "Mission", response.mission));
         for (const key in response.datePost) {
@@ -737,7 +740,6 @@ export class DataState {
     const profile = this.store.selectSnapshot(DataQueries.currentProfile)!;
     return this.http.post("data", application).pipe(
       tap((response: any) => {
-        console.log('response;', response);
         if (response[application.action] !== "OK") {
           this.inZone(() => this.info.show("error", response.messages, 3000));
           throw response.messages;
@@ -946,7 +948,6 @@ export class DataQueries {
   ): Interface<K> {
     const fields = allFields[target];
 
-    // console.log('dataquerie', values, fields, id);
     const output: any = {};
     if (Array.isArray(values)) {
       if (fields.length != values.length)
@@ -995,11 +996,9 @@ export class DataQueries {
   }
 
   private static getDataById<K extends DataTypes>(type: K, id: number) {
-    // console.log('getDataBy', type, id);
     return createSelector(
       [DataState.getType(type)],
       (record: Record<any[]>) => {
-        // console.log('getDataBy', type, id, record, record[id]);
         return record[id];
       }
     );

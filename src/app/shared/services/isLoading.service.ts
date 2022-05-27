@@ -12,6 +12,7 @@ export class isLoadingService {
   isLoading: boolean = false
 
   constructor(private store: Store) {}
+
   emitLoadingChangeEvent(bool : boolean) {
     this.isLoading = bool
     this.navchange.emit(this.isLoading);

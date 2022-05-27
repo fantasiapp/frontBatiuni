@@ -7,6 +7,7 @@ import { Destroy$ } from "src/app/shared/common/classes";
 import { Login } from "src/models/auth/auth.actions";
 import { Email } from "src/validators/persist";
 import { ComplexPassword, setErrors } from "src/validators/verify";
+import { isLoadingService } from "../services/isLoading.service";
 
 @Component({
   selector: 'connexion-form',
@@ -76,17 +77,19 @@ export class ConnexionForm extends Destroy$ {
   private _errors: string[] = [];
   get errors() { return this._errors; }
 
-  constructor(private router: Router, private store: Store, private cd: ChangeDetectorRef) {
+  constructor(private router: Router, private store: Store, private cd: ChangeDetectorRef, private isLoadingService: isLoadingService) {
     super();
   }
 
   async onSubmit(e: any) {
+    this.isLoadingService.emitLoadingChangeEvent(true)
     let { email, password } = this.loginForm.value;
     this.store.dispatch(new Login(email, password))
     .pipe(take(1)).subscribe(
       (success) => {
         if(success){
           const result = this.router.navigate(['', 'home']);
+          // this.isLoadingService.emitLoadingChangeEvent(false)
           // if ( !result ) {
           //   setErrors(this.loginForm, {all: 'Erreur inattendue. (500 ?)'});
           //   this.cd.markForCheck();
@@ -94,6 +97,7 @@ export class ConnexionForm extends Destroy$ {
         }
       },
       errors => {
+        this.isLoadingService.emitLoadingChangeEvent(false)
         setErrors(this.loginForm, errors);
         this.cd.markForCheck();
       }

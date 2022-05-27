@@ -76,8 +76,10 @@ export class HomeComponent extends Destroy$ {
   profileSubContractor: Profile | null = null;
   amountSubContractor: String | null = null;
 
+  @Select(DataQueries.currentProfile)
   profile$!: Observable<Profile>;
 
+  @Select(DataState.view)
   view$!: Observable<"PME" | "ST">;
 
   time: number = 0;
@@ -168,44 +170,29 @@ export class HomeComponent extends Destroy$ {
     this.appComponent.updateUserData();
     this.loadingService.getLoadingChangeEmitter().subscribe((bool : boolean) => {
       this.isLoading = bool
-      console.log("isLoading", this.isLoading)
       this.cd.markForCheck()
     })
     this.filterService.getFilterChangeEmitter().subscribe((posts: Post[]) => {
       this.displayOnlinePosts = posts
-      console.log("ngOnInit", posts)
       this.cd.markForCheck()
     })
     this.mobile.footerStateSubject.subscribe((b) => {
       this.showFooter = b;
       this.cd.markForCheck();
     });
-    this.getUserDataService.getLoadingChangeEmitter().subscribe((value: boolean) => {
+    this.getUserDataService.getDataChangeEmitter().subscribe((value: boolean) => {
       this.lateInit()
     })
     this.lateInit()
   }
 
-  lateInit() {
-    this.profile$ = this.store.select(DataQueries.currentProfile)
-    this.view$ = this.store.select(DataState.view)
-    // console.log("is loading", this.isLoading)
-    // console.log("avant")
-    // this.isLoading = true
-    // this.cd.markForCheck()
-    // await delay(5000)
-    // this.isLoading = false
-    // this.cd.markForCheck()
-    // console.log("yoooo")
-    // console.log("isLoading", this.isLoading)
-    console.log("----------------------le test des data Queries------------------------")
-    console.log("this.store.select(DataQueries.currentProfile)", this.store.select(DataQueries.currentProfile))
-    console.log("profile$", this.profile$)
+  async lateInit() {
     if (!this.isLoading) {
       this.info.alignWith("header_search");
       combineLatest([this.profile$, this.posts$])
         .pipe(takeUntil(this.destroy$))
         .subscribe(([profile, posts]) => {
+
           const mapping = splitByOutput(posts, (post) => {
             //0 -> userOnlinePosts | 1 -> userDrafts
             if (profile.company.posts.includes(post.id))
@@ -222,9 +209,9 @@ export class HomeComponent extends Destroy$ {
           this.allUserOnlinePosts =
             mapping.get(this.symbols.userOnlinePost) || [];
           this.allOnlinePosts = [...otherOnlinePost, ...this.userOnlinePosts];
-          console.log("allOnlinePosts", this.allOnlinePosts)
           this.allMissions = this.store.selectSnapshot(DataQueries.getMany("Mission", profile.company.missions));
   
+          if (this.filterST) {this.filterST.updatePosts(this.allOnlinePosts)}
           this.selectDraft(null);
           this.selectUserOnline(null);
           this.selectMission(null);
@@ -232,18 +219,15 @@ export class HomeComponent extends Destroy$ {
           this.selectSearchOnline("");
           this.selectSearchMission("");
 
-          console.log("num online posts", this.allOnlinePosts.length)
   
         });
-      // const view = this.store.selectSnapshot(DataState.view)
-      // this._openCloseMission = view == 'ST' && this.missions.length != 0
-
       this.time = this.store.selectSnapshot(DataState.time);
       this.updatePage()
     }
     else {
-      // await delay(10000)
+      await delay(2000)
       this.lateInit()
+      this.cd.markForCheck()
     }
   }
 
@@ -252,6 +236,7 @@ export class HomeComponent extends Destroy$ {
 
   ngOnDestroy(): void {
     this.info.alignWith("last");
+    this.getUserDataService.emitDataChangeEvent();
     super.ngOnDestroy();
   }
 
@@ -570,7 +555,6 @@ export class HomeComponent extends Destroy$ {
         this.selectSearchOnline(searchForm)
         break;
       case 2:
-        console.log("mission")
         this.selectSearchMission(searchForm)
     }
   };
@@ -717,7 +701,6 @@ export class HomeComponent extends Destroy$ {
         (success) => {
           // Si la candidature est envoyée on quite la vue de la candidature
           this.updateAllOnlinePost(post)
-          console.log("posts dans apply post", this.allOnlinePosts)
           this.slideOnlinePostClose();
         },
         (error) =>

@@ -7,6 +7,7 @@ import { DataQueries, QueryAll } from "src/models/new/data.state";
 import { Destroy$ } from "src/app/shared/common/classes";
 import { assignCopy, splitByOutput } from "../../common/functions";
 import { MarkViewed } from "src/models/new/user/user.actions";
+import { getUserDataService } from "../../services/getUserData.service";
 
 @Component({
   selector: "applications",
@@ -33,12 +34,25 @@ export class ApplicationsComponent extends Destroy$ implements OnInit {
   userDrafts: Post[] = [];
   userOnlinePosts: Post[] = [];
   allOnlinePosts: Post[] = [];
-  constructor(private store: Store) {
+  hasCombinedLatest: boolean = false;
+  constructor(private store: Store, private getUserDataService: getUserDataService) {
     super();
   }
 
   ngOnInit(): void {
-    combineLatest([this.profile$, this.posts$])
+    this.getUserDataService.getDataChangeEmitter().subscribe((value) => {
+      this.initAll()
+  })
+    this.initAll()
+  }
+
+  initAll() {
+    this.initCombinedLatest()
+  }
+
+  initCombinedLatest() {
+    if(!this.hasCombinedLatest) {
+      combineLatest([this.profile$, this.posts$])
       .pipe(takeUntil(this.destroy$))
       .subscribe(([profile, posts]) => {
         const mapping = splitByOutput(posts, (post) => {
@@ -58,6 +72,8 @@ export class ApplicationsComponent extends Destroy$ implements OnInit {
         this.userOnlinePosts = mapping.get(this.symbols.userOnlinePost) || [];
         this.allOnlinePosts = [...otherOnlinePost, ...this.userOnlinePosts];
       });
+      this.hasCombinedLatest = true
+    }
   }
 
   openPost(post: Post | null) {

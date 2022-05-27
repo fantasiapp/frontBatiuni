@@ -266,7 +266,7 @@ export class STFilterForm {
     for (let post of this.posts) {
 
       const company = this.store.selectSnapshot(DataQueries.getById('Company', post.company))!;
-
+      
       //Date
       let isDifferentDate = (filter.date && post.startDate < filter.date)
 
@@ -372,7 +372,6 @@ export class STFilterForm {
       });
     }
 
-    console.log("updateFilteredPosts", this.filteredPosts.length)
     //startDate
     if (filter.startDateSort) {
       this.filteredPosts.sort((a, b) => {
@@ -380,7 +379,6 @@ export class STFilterForm {
       });
     }
 
-    console.log(this.filteredPosts.length)
     this.cd.markForCheck();
   }
 
@@ -388,6 +386,7 @@ export class STFilterForm {
     this.posts = posts
     this.updateFilteredPosts(this.filterForm.value);
     this.updateEvent.emit(this.filteredPosts);
+    this.filterService.emitFilterChangeEvent(this.filteredPosts)
   }
   
   arrayEquals(a: any[], b: any[]) {

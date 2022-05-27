@@ -77,26 +77,12 @@ export class ExtendedProfileComponent extends Destroy$ {
   ngOnChanges(changes: SimpleChanges) {
 
     if (changes["profile$"] && !changes["profile$"].isFirstChange()) {
-      (this.profile$ as Observable<Profile>)
-        .pipe(take(1))
-        .subscribe((profile) => {
-          this.files = profile.company.files as any;
-          this.companyJobs = profile.company.jobs as any;
-          this.jobs = this.companyJobs.map(({ job }) => job) as any;
-        });
+      this.initSubscribeProfile()
     }
   }
 
   ngOnInit() {
-    (this.profile$ as Observable<Profile>)
-      .pipe(take(1))
-      .subscribe((profile) => {
-        console.log("avant avant")
-        this.files = profile.company.files as any;
-        this.companyJobs = profile.company.jobs as any;
-        this.jobs = this.companyJobs.map(({ job }) => job) as any;
-        console.log('email', profile.user?.email);
-      });
+    this.initSubscribeProfile()
     // this.showView = "PME"
   }
 
@@ -105,6 +91,16 @@ export class ExtendedProfileComponent extends Destroy$ {
     return this.files.filter(
       (file) => file.nature == "admin" || file.nature == "labels"
     );
+  }
+
+  initSubscribeProfile() {
+    (this.profile$ as Observable<Profile>)
+      .pipe(take(1))
+      .subscribe((profile) => {
+        this.files = profile.company.files as any;
+        this.companyJobs = profile.company.jobs as any;
+        this.jobs = this.companyJobs.map(({ job }) => job) as any;
+      })
   }
 
   getFileColor(filename: string) {

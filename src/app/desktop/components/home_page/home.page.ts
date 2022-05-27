@@ -41,6 +41,8 @@ import {
 // import * as UserActions from "src/models/new/user/user.actions";
 // import { OfferComponent } from "src/app/shared/components/offer/offer.compnent";
 import { ApplyForm } from "src/app/mobile/ui/annonce-resume/annonce-resume.ui";
+import { InitialState } from "@ngxs/store/internals";
+import { getUserDataService } from "src/app/shared/services/getUserData.service";
 
 type PostMenu = { open: boolean; post: Post | null };
 
@@ -89,9 +91,13 @@ export class HomePageComponent extends Destroy$ {
     private cd: ChangeDetectorRef,
     private store: Store,
     private info: InfoService,
-    private popup: PopupService
+    private popup: PopupService,
+    private getUserDataService: getUserDataService
   ) {
     super();
+    this.profile$ = store.select(DataQueries.currentProfile)
+    this.view$ = store.select(DataState.view)
+    this.posts$ = store.select(DataQueries.getAll("Post"))
   }
 
   amount!: number;
@@ -149,6 +155,10 @@ export class HomePageComponent extends Destroy$ {
   editMenu: PostMenu = { open: false, post: null };
 
   ngOnInit() {
+    this.initCombinedLatest()
+  }
+
+  initCombinedLatest() {
     combineLatest([this.profile$, this.posts$])
       .pipe(takeUntil(this.destroy$))
       .subscribe(([profile, posts]) => {
@@ -168,7 +178,7 @@ export class HomePageComponent extends Destroy$ {
         this.userOnlinePosts = mapping.get(this.symbols.userOnlinePost) || [];
         this.allOnlinePosts = mapping.get(this.symbols.otherOnlinePost) || [];
         this.cd.markForCheck();
-      });
+      })
   }
 
   switchDraft(id: number) {

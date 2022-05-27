@@ -9,13 +9,19 @@ import { Store } from '@ngxs/store';
 export class getUserDataService {
   navchange: EventEmitter<boolean> = new EventEmitter();
 
+  response: any;
+
   constructor(private store: Store) {}
 
-  emitLoadingChangeEvent() {
-    this.navchange.emit(true);
+  emitDataChangeEvent() {
+    this.navchange.emit(this.response);
   }
 
-  getLoadingChangeEmitter() {
+  setNewResponse(response: any) {
+    this.response = response
+  }
+
+  getDataChangeEmitter() {
     return this.navchange;
   }
 }

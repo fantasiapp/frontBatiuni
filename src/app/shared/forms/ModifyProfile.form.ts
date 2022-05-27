@@ -131,7 +131,7 @@ import { SpacingPipe } from "../pipes/spacing.pipe";
                 <label>Métiers</label>
                 <ng-container formArrayName="UserProfile.Company.JobForCompany">
                   <span
-                    class="position-relative number form-element"
+                    class="number form-element"
                     *ngFor="let control of companyJobsControls; index as i"
                   >
                     <ng-container [formGroupName]="i">
@@ -446,11 +446,9 @@ export class ModifyProfileForm {
 
   //outputs
   onSubmit() {
-    console.log(this.form.controls["UserProfile.Company.companyPhone"]);
 
     this.form.controls["UserProfile.Company.companyPhone"].setValue(this.form.controls["UserProfile.Company.companyPhone"].value.replace(/\s/g, ""));
     this.form.controls["UserProfile.cellPhone"].setValue(this.form.controls["UserProfile.cellPhone"].value.replace(/\s/g, ""));
-    console.log(this.form.value)
     this.submit.emit(this.form);
   }
   @Output() submit = new EventEmitter<FormGroup>();
@@ -550,11 +548,9 @@ export class ModifyProfileForm {
     this.companyFiles = this.store.selectSnapshot(
       DataQueries.getMany("File", this.profile.company.files)
     );
-    console.log("this.profile.company.labels before", typeof this.profile.company.labels, this.profile.company.labels)
     this.companyLabels = this.store.selectSnapshot(
       DataQueries.getMany("LabelForCompany", this.profile.company.labels)
     );
-    console.log("this.profile.company.labels after", typeof this.profile.company.labels, this.profile.company.labels)
     this.companyJobs = this.store.selectSnapshot(
       DataQueries.getMany("JobForCompany", this.profile.company.jobs)
     );
@@ -626,7 +622,6 @@ export class ModifyProfileForm {
     jobControl.clear();
       for (let jobForCompany of this.companyJobs) {
       const jobObject = jobMapping.get(jobForCompany.id)!;
-      console.log("jobObject", jobObject)
       jobControl.push(
         new FormGroup({
           job: new FormControl(jobObject),

@@ -320,7 +320,6 @@ export class RegisterForm extends Destroy$ {
   );
 
   onSubmit(f: any) {
-    console.log("onSubmit", !this.pending, this.registerForm)
     if (!this.pending) {
       this.pending = true;
       this.store
@@ -360,9 +359,7 @@ export class RegisterForm extends Destroy$ {
       }
     });
 
-    console.log(this.registerForm.get("secondPage")?.valid)
     this.registerForm.valueChanges.subscribe((value) => {
-      console.log(value)
     })
   }
 
