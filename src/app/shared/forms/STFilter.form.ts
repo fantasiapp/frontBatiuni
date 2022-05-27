@@ -261,13 +261,15 @@ export class STFilterForm {
   updateFilteredPosts(filter: any) {
     this.filteredPosts = [];
     const user = this.store.selectSnapshot(DataQueries.currentUser);
+    const now = new Date().toISOString().slice(0, 10);
+    let allPosts = this.posts.filter((post) => post.dueDate > now)
 
     // Filter
-    for (let post of this.posts) {
-
+    for (let post of allPosts) {
+      console.log(post)
       const company = this.store.selectSnapshot(DataQueries.getById('Company', post.company))!;
       
-      //Date
+      //Date de mission
       let isDifferentDate = (filter.date && post.startDate < filter.date)
 
       //Radius
