@@ -10,7 +10,7 @@ import {
 import { FormArray, FormGroup } from "@angular/forms";
 import { Store } from "@ngxs/store";
 import { Control } from "mapbox-gl";
-import { DistanceSliderConfig, SalarySliderConfig } from "src/app/shared/common/config";
+import { DistanceSliderConfig, SalarySliderConfig } from "src/app/shared/common/sliderConfig";
 import { Job, Post } from "src/models/new/data.interfaces";
 import { DataQueries, SnapshotAll } from "src/models/new/data.state";
 import { OptionsModel } from "../components/options/options";

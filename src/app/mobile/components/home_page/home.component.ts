@@ -18,7 +18,7 @@ import { Destroy$ } from "src/app/shared/common/classes";
 import {
   DistanceSliderConfig,
   SalarySliderConfig,
-} from "src/app/shared/common/config";
+} from "src/app/shared/common/sliderConfig";
 import { assignCopy, delay, splitByOutput } from "src/app/shared/common/functions";
 import { InfoService } from "src/app/shared/components/info/info.component";
 import { PopupService } from "src/app/shared/components/popup/popup.component";

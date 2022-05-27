@@ -10,7 +10,7 @@ import { Store } from "@ngxs/store";
 import {
   DistanceSliderConfig,
   SalarySliderConfig,
-} from "src/app/shared/common/config";
+} from "src/app/shared/common/sliderConfig";
 import { Job, Mission } from "src/models/new/data.interfaces";
 import { SnapshotAll } from "src/models/new/data.state";
 import { UISwitchComponent } from "../components/switch/switch.component";

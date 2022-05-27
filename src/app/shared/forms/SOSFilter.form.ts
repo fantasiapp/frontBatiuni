@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input, OnInit, QueryList, ViewChildren } from "@angular/core";
-import { DistanceSliderConfig, SalarySliderConfig } from "src/app/shared/common/config";
+import { DistanceSliderConfig, SalarySliderConfig } from "src/app/shared/common/sliderConfig";
 import { Company, Job, Post, Profile } from "src/models/new/data.interfaces";
 import { NgxSliderModule } from '@angular-slider/ngx-slider';
 import { Filter } from "../directives/filter.directive";
