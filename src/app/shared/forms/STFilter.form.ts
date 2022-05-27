@@ -279,7 +279,7 @@ export class STFilterForm {
       let postLongitude = post.longitude*(Math.PI/180);
       let distance = 6371*Math.acos(Math.sin(userLatitude)*Math.sin(postLatitude) + Math.cos(userLatitude)*Math.cos(postLatitude)*Math.cos(postLongitude-userLongitude))
 
-      let isNotInRadius = (filter.radius  && distance > filter.radius)
+      let isNotInRadius = ((filter.radius || filter.radius == 0) && distance > filter.radius)
 
       //Manpower
       let isDifferentManPower = (filter.manPower && post.manPower != (filter.manPower === "true"))
