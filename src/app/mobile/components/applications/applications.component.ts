@@ -55,6 +55,7 @@ export class ApplicationsComponent extends Destroy$ {
   userOnlinePosts: Post[] = [];
   allOnlinePosts: Post[] = [];
   allCandidatedPost: Post[] = [];
+  filterOn: boolean = false;
   time: number = 0;
   searchbar!: SearchbarComponent;
 
@@ -154,8 +155,18 @@ export class ApplicationsComponent extends Destroy$ {
   }
 
   callbackFilter = (filter: any): void => {
+    console.log(filter)
     this.selectPost(filter);
+    this.isFilterOn(filter);
   };
+
+  isFilterOn(filter: any){
+    if (filter.address == "" && filter.jobs.length == 0 && filter.manPower == null && filter.missionDate == "" && filter.postulationDate == "" && filter.sortMissionDate == false && filter.sortPostDate == false){
+      this.filterOn = false;
+    } else {
+      this.filterOn = true;
+    }
+  }
 
   selectSearch(searchForm:  string){
     this.userOnlinePosts = [];

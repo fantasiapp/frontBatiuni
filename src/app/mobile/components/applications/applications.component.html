@@ -5,7 +5,7 @@
     </div>
     <div class="pick flex center-cross">
         <searchbar class="grow" [callbackSearch]="callbackSearch"></searchbar>
-        <img src="assets/filterDarkBlue.svg" (click)="openAdFilterMenu = true" style="margin-left: 1rem"/>
+        <img [src]="filterOn ? 'assets/filterBlue.svg':'assets/filterDarkBlue.svg'" (click)="openAdFilterMenu = true" style="margin-left: 1rem"/>
     </div>
 </header>
 
