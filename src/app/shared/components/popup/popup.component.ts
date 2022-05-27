@@ -336,14 +336,12 @@ export class PopupService {
   }
 
   openFile(file: BasicFile | File) {
-    console.log("openFile est appelé, file :", file)
     if (!file.content) {
       let name: string = "File" + (file as File).id!.toString()
       if (SingleCache.checkValueInCache(name)) {
         this.openFile(SingleCache.getValueByName(name))
       }
       else {
-      console.log("je suis dans le if")
       this.downloader
         .downloadFile((file as File).id!, true)
         .subscribe((file) => {
