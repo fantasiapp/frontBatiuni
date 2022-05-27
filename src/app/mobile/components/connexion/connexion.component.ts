@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from "@angular/core";
+import { isLoadingService } from "src/app/shared/services/isLoading.service";
 import { GetUserData } from "src/models/new/user/user.actions";
 
 @Component({
@@ -7,4 +8,16 @@ import { GetUserData } from "src/models/new/user/user.actions";
   styleUrls: ['./connexion.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ConnexionComponent {};
+export class ConnexionComponent {
+  isLoading: boolean
+
+  constructor(private cd: ChangeDetectorRef ,private isLoadingService: isLoadingService) {
+    this.isLoading = isLoadingService.isLoading
+    this.isLoadingService.getLoadingChangeEmitter().subscribe((bool) => {
+      this.isLoading = bool
+      console.log("je change dans le connexion component", bool)
+      this.cd.markForCheck()
+    })
+    console.log("isloading in the connexion", this.isLoading)
+  }
+};

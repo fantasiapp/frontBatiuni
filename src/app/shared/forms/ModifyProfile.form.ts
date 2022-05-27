@@ -131,7 +131,7 @@ import { SpacingPipe } from "../pipes/spacing.pipe";
                 <label>Métiers</label>
                 <ng-container formArrayName="UserProfile.Company.JobForCompany">
                   <span
-                    class="position-relative number form-element"
+                    class="number form-element"
                     *ngFor="let control of companyJobsControls; index as i"
                   >
                     <ng-container [formGroupName]="i">

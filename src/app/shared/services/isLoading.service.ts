@@ -9,7 +9,7 @@ import { Store } from '@ngxs/store';
 export class isLoadingService {
   navchange: EventEmitter<boolean> = new EventEmitter();
 
-  isLoading: boolean = true
+  isLoading: boolean = false
 
   constructor(private store: Store) {}
 

@@ -76,13 +76,15 @@ export class HomeComponent extends Destroy$ {
   profileSubContractor: Profile | null = null;
   amountSubContractor: String | null = null;
 
+  @Select(DataQueries.currentProfile)
   profile$!: Observable<Profile>;
 
+  @Select(DataState.view)
   view$!: Observable<"PME" | "ST">;
 
   time: number = 0;
 
-  // @QueryAll("Post")
+  @QueryAll("Post")
   posts$!: Observable<Post[]>;
 
   //split the set all of posts into these (what we need)
@@ -138,7 +140,7 @@ export class HomeComponent extends Destroy$ {
   _openCloseMission: boolean = false;
   openAdFilterMenu: boolean = false;
   toogle: boolean = false;
-  isLoading: boolean = true;
+  isLoading: boolean;
   imports = { DistanceSliderConfig, SalarySliderConfig };
   draftMenu = new PostMenu();
   postMenu = new PostMenu();
@@ -160,10 +162,7 @@ export class HomeComponent extends Destroy$ {
     private getUserDataService: getUserDataService
   ) {
     super();
-    console.log("isLoading dans le constructor avant", this.isLoading)
-    console.log("le isLoading su service", this.loadingService.isLoading)
     this.isLoading = this.loadingService.isLoading
-    console.log("isLoading dans le constructor après", this.isLoading)
     this.searchbar = new SearchbarComponent(store);
   }
 
@@ -191,21 +190,6 @@ export class HomeComponent extends Destroy$ {
   }
 
   async lateInit() {
-    this.profile$ = this.store.select(DataQueries.currentProfile)
-    this.view$ = this.store.select(DataState.view)
-    this.posts$ = this.store.select(DataQueries.getAll("Post"))
-    // console.log("is loading", this.isLoading)
-    // console.log("avant")
-    // this.isLoading = true
-    // this.cd.markForCheck()
-    // await delay(5000)
-    // this.isLoading = false
-    // this.cd.markForCheck()
-    // console.log("yoooo")
-    // console.log("isLoading", this.isLoading)
-    console.log("----------------------le test des data Queries------------------------")
-    console.log("this.store.select(DataQueries.currentProfile)", this.store.select(DataQueries.currentProfile))
-    console.log("profile$", this.profile$)
     if (!this.isLoading) {
       console.log("je suis dedans", this.isLoading)
       this.info.alignWith("header_search");
@@ -215,6 +199,8 @@ export class HomeComponent extends Destroy$ {
 
           const mapping = splitByOutput(posts, (post) => {
             //0 -> userOnlinePosts | 1 -> userDrafts
+            console.log("allllo avant ")
+            console.log("allllo", profile.company.posts)
             if (profile.company.posts.includes(post.id))
               return post.draft
                 ? this.symbols.userDraft
@@ -231,7 +217,7 @@ export class HomeComponent extends Destroy$ {
           this.allOnlinePosts = [...otherOnlinePost, ...this.userOnlinePosts];
           this.allMissions = this.store.selectSnapshot(DataQueries.getMany("Mission", profile.company.missions));
   
-          this.filterST.updatePosts(this.allOnlinePosts)
+          if (this.filterST) {this.filterST.updatePosts(this.allOnlinePosts)}
           this.selectDraft(null);
           this.selectUserOnline(null);
           this.selectMission(null);
@@ -240,9 +226,6 @@ export class HomeComponent extends Destroy$ {
           this.selectSearchMission("");
   
         });
-      // const view = this.store.selectSnapshot(DataState.view)
-      // this._openCloseMission = view == 'ST' && this.missions.length != 0
-
       this.time = this.store.selectSnapshot(DataState.time);
       this.updatePage()
     }

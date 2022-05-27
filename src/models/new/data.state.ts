@@ -276,7 +276,6 @@ export class DataState {
     this.flagUpdate = true
     console.log("logout")
     this.isFirstTime = true
-    this.loadingService.isLoading = true
     ctx.setState({ fields: {}, session: { view: "ST", currentUser: -1 , time: 0} });
     ctx.dispatch(new GetGeneralData()); // a sign to decouple this from DataModel
   }
