@@ -170,7 +170,7 @@ export class ApplicationsComponent extends Destroy$ {
       let levenshteinDist: any = [];
       for (let post of this.allCandidatedPost) {
         let postString = this.searchbar.postToString(post)
-        console.log(postString)
+        console.log("hey" ,postString)
         levenshteinDist.push([post,getLevenshteinDistance(postString.toLowerCase(),searchForm.toLowerCase()),]);
       }
       levenshteinDist.sort((a: any, b: any) => a[1] - b[1]);

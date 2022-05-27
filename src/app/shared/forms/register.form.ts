@@ -362,7 +362,7 @@ export class RegisterForm extends Destroy$ {
 
     console.log(this.registerForm.get("secondPage")?.valid)
     this.registerForm.valueChanges.subscribe((value) => {
-      console.log(value)
+      console.log("value", value)
     })
   }
 

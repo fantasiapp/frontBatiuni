@@ -260,14 +260,14 @@ export class STFilterForm {
 
   updateFilteredPosts(filter: any) {
     this.filteredPosts = [];
-    console.log(this.posts.length)
+    console.log("Qsdfghjklm", this.posts.length)
     const user = this.store.selectSnapshot(DataQueries.currentUser);
 
     // Filter
     for (let post of this.posts) {
 
       const company = this.store.selectSnapshot(DataQueries.getById('Company', post.company))!;
-
+      
       //Date
       let isDifferentDate = (filter.date && post.startDate < filter.date)
 
@@ -381,7 +381,7 @@ export class STFilterForm {
       });
     }
 
-    console.log(this.filteredPosts.length)
+    console.log(this.filteredPosts)
     this.cd.markForCheck();
   }
 
@@ -389,6 +389,7 @@ export class STFilterForm {
     this.posts = posts
     this.updateFilteredPosts(this.filterForm.value);
     this.updateEvent.emit(this.filteredPosts);
+    this.filterService.emitFilterChangeEvent(this.filteredPosts)
   }
   
   arrayEquals(a: any[], b: any[]) {

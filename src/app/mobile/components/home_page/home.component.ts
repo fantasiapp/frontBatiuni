@@ -82,7 +82,7 @@ export class HomeComponent extends Destroy$ {
 
   time: number = 0;
 
-  @QueryAll("Post")
+  // @QueryAll("Post")
   posts$!: Observable<Post[]>;
 
   //split the set all of posts into these (what we need)
@@ -138,7 +138,7 @@ export class HomeComponent extends Destroy$ {
   _openCloseMission: boolean = false;
   openAdFilterMenu: boolean = false;
   toogle: boolean = false;
-  isLoading: boolean;
+  isLoading: boolean = true;
   imports = { DistanceSliderConfig, SalarySliderConfig };
   draftMenu = new PostMenu();
   postMenu = new PostMenu();
@@ -160,16 +160,21 @@ export class HomeComponent extends Destroy$ {
     private getUserDataService: getUserDataService
   ) {
     super();
+    console.log("isLoading dans le constructor avant", this.isLoading)
+    console.log("le isLoading su service", this.loadingService.isLoading)
     this.isLoading = this.loadingService.isLoading
+    console.log("isLoading dans le constructor après", this.isLoading)
     this.searchbar = new SearchbarComponent(store);
   }
 
   ngOnInit() {
     this.appComponent.updateUserData();
     this.loadingService.getLoadingChangeEmitter().subscribe((bool : boolean) => {
+      console.log("dans le subscribe,", bool)
       this.isLoading = bool
-      console.log("isLoading", this.isLoading)
+      console.log("isLoading dans le subscribe", this.isLoading)
       this.cd.markForCheck()
+      console.log("j'ai actualisé", this.cd)
     })
     this.filterService.getFilterChangeEmitter().subscribe((posts: Post[]) => {
       this.displayOnlinePosts = posts
@@ -185,9 +190,10 @@ export class HomeComponent extends Destroy$ {
     this.lateInit()
   }
 
-  lateInit() {
+  async lateInit() {
     this.profile$ = this.store.select(DataQueries.currentProfile)
     this.view$ = this.store.select(DataState.view)
+    this.posts$ = this.store.select(DataQueries.getAll("Post"))
     // console.log("is loading", this.isLoading)
     // console.log("avant")
     // this.isLoading = true
@@ -201,10 +207,12 @@ export class HomeComponent extends Destroy$ {
     console.log("this.store.select(DataQueries.currentProfile)", this.store.select(DataQueries.currentProfile))
     console.log("profile$", this.profile$)
     if (!this.isLoading) {
+      console.log("je suis dedans", this.isLoading)
       this.info.alignWith("header_search");
       combineLatest([this.profile$, this.posts$])
         .pipe(takeUntil(this.destroy$))
         .subscribe(([profile, posts]) => {
+
           const mapping = splitByOutput(posts, (post) => {
             //0 -> userOnlinePosts | 1 -> userDrafts
             if (profile.company.posts.includes(post.id))
@@ -223,6 +231,7 @@ export class HomeComponent extends Destroy$ {
           this.allOnlinePosts = [...otherOnlinePost, ...this.userOnlinePosts];
           this.allMissions = this.store.selectSnapshot(DataQueries.getMany("Mission", profile.company.missions));
   
+          this.filterST.updatePosts(this.allOnlinePosts)
           this.selectDraft(null);
           this.selectUserOnline(null);
           this.selectMission(null);
@@ -238,8 +247,10 @@ export class HomeComponent extends Destroy$ {
       this.updatePage()
     }
     else {
-      // await delay(10000)
+      console.log("hey")
+      await delay(2000)
       this.lateInit()
+      this.cd.markForCheck()
     }
   }
 
@@ -248,6 +259,7 @@ export class HomeComponent extends Destroy$ {
 
   ngOnDestroy(): void {
     this.info.alignWith("last");
+    this.getUserDataService.emitDataChangeEvent();
     super.ngOnDestroy();
   }
 

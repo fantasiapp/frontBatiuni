@@ -27,7 +27,6 @@ import { Observable } from "rxjs";
 import { Destroy$ } from "src/app/shared/common/classes";
 import { getFileColor } from "../../common/functions";
 import { AppComponent } from "src/app/app.component";
-import { getUserDataService } from "../../services/getUserData.service";
 
 @Component({
   selector: "extended-profile",
