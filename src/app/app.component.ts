@@ -61,18 +61,20 @@ export class AppComponent extends Destroy$ {
   }
 
   async updateUserData() {
-    if (!this.firstAttemptAlreadyTried) {
-      this.executeGetGeneralData()
-      this.firstAttemptAlreadyTried = true
-    }
-    else if (this.readyToUpdate) { // supposed to be this.readyToUpdate
-      this.readyToUpdate = false
-      this.getUserData()
-      await delay(20000)
-      this.notifService.checkNotif()
-      this.notifService.emitNotifChangeEvent()
-      this.readyToUpdate = true
-    }
+    while(true) {  
+      if (!this.firstAttemptAlreadyTried) {
+        this.executeGetGeneralData()
+        this.firstAttemptAlreadyTried = true
+        await delay(5000)
+      }
+      else if (this.readyToUpdate) { // supposed to be this.readyToUpdate
+        this.readyToUpdate = false
+        this.getUserData()
+        await delay(5000)
+        this.notifService.checkNotif()
+        this.notifService.emitNotifChangeEvent()
+        this.readyToUpdate = true
+      }}
   }
 
   getUserData() {
