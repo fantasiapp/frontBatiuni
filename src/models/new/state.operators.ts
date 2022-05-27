@@ -30,7 +30,7 @@ namespace mutable {
   export function update(draft: any, target: DataTypes, values: Record<any>) {
     const targetObjects = draft[target],
       fields = draft.fields[target];
-    
+      console.log("update", target, values)
     //translate data
     Object.entries<any>(values).forEach(([id, item]) => {
       //An horrible patch waiting for a true solution

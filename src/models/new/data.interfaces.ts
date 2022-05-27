@@ -212,7 +212,8 @@ export type PostDate = {
   id: Ref<PostDate>;
   date: string;
   validated: boolean;
-  deleted: boolean
+  deleted: boolean;
+  supervisions: Ref<Supervision>[]
 };
 
 export type Task = PostDetail & {
@@ -223,7 +224,7 @@ export type Task = PostDetail & {
 
 export type DateG = {
   id: number
-  value: string
+  date: PostDate
   tasks: Task[] | null
   selectedTasks: Task[]
   taskWithoutDouble: Task[]

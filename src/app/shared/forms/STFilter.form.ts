@@ -75,7 +75,7 @@ import { getLevenshteinDistance } from "src/app/shared/services/levenshtein";
 
     <div class="form-input">
       <label>Estimation de la rémunération horaire</label>
-      <ngx-slider [options]="imports.SalarySliderConfig" [highValue]="400" formControlName="salary"></ngx-slider>
+      <ngx-slider [options]="imports.SalarySliderConfig" [highValue]="100000" formControlName="salary"></ngx-slider>
     </div>
 
       <div class="form-input space-children-margin">
@@ -249,16 +249,17 @@ export class STFilterForm {
 
   ngOnInit() {
 
-    this.filterForm.valueChanges.subscribe((value) => {
-      this.updateFilteredPosts(value);
-      this.isFilterOn(value);
-      this.updateEvent.emit(this.filteredPosts);
-      this.filterService.emitFilterChangeEvent(this.filteredPosts)
-    });
+    // this.filterForm.valueChanges.subscribe((value) => {
+    //   this.updateFilteredPosts(value);
+    //   this.isFilterOn(value);
+    //   this.updateEvent.emit(this.filteredPosts);
+    //   this.filterService.emitFilterChangeEvent(this.filteredPosts)
+    // });
 
   }
 
   updateFilteredPosts(filter: any) {
+    console.log("updateFilteredPosts", this.posts.length)
     this.filteredPosts = [];
     console.log("Qsdfghjklm", this.posts.length)
     const user = this.store.selectSnapshot(DataQueries.currentUser);
@@ -290,7 +291,7 @@ export class STFilterForm {
       //Salary
       let isNotInRangeSalary = false;
       if (filter.salary[0] != SalarySliderConfig.floor || filter.salary[1] != SalarySliderConfig.ceil){
-        isNotInRangeSalary = (company.amount < filter.salary[0] || company.amount > filter.salary[1])
+        isNotInRangeSalary = (post.amount < filter.salary[0] || post.amount > filter.salary[1])
       }
 
       //Employees
@@ -373,11 +374,11 @@ export class STFilterForm {
       });
     }
 
-
+    console.log("updateFilteredPosts", this.filteredPosts.length)
     //startDate
     if (filter.startDateSort) {
       this.filteredPosts.sort((a, b) => {
-        return a["id"] - b["id"];
+        return b["id"] - a["id"];
       });
     }
 
@@ -400,7 +401,7 @@ export class STFilterForm {
   }
 
   isFilterOn(filter: any){
-    if (filter.address == "" && filter.date == "" && filter.jobs.length == 0 && filter.manPower == null && filter.candidate == false && filter.counterOffer == false &&  filter.dueDateSort == false && this.arrayEquals(filter.employees, [true, true, true, true, true]) && this.arrayEquals(filter.salary, [1, 400]) && filter.favorite == false && filter.radius == 2000 && filter.startDateSort == false && filter.viewed == false){
+    if (filter.address == "" && filter.date == "" && filter.jobs.length == 0 && filter.manPower == null && filter.candidate == false && filter.counterOffer == false &&  filter.dueDateSort == false && this.arrayEquals(filter.employees, [true, true, true, true, true]) && this.arrayEquals(filter.salary, [1, 100000]) && filter.favorite == false && filter.radius == 2000 && filter.startDateSort == false && filter.viewed == false){
       this.filterOnST.emit(false)
     } else {
       this.filterOnST.emit(true);

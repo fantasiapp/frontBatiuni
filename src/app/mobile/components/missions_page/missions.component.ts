@@ -2,6 +2,7 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  ViewChild,
 } from "@angular/core";
 import { Select, Store } from "@ngxs/store";
 import { combineLatest, Observable } from "rxjs";
@@ -28,6 +29,7 @@ import * as moment from "moment";
 import { AppComponent } from "src/app/app.component";
 import { SearchbarComponent } from "src/app/shared/components/searchbar/searchbar.component";
 import { getUserDataService } from "src/app/shared/services/getUserData.service";
+import { MissionFilterForm } from "src/app/shared/forms/missions.form";
 
 @Component({
   selector: "missions",
@@ -43,6 +45,7 @@ export class MissionsComponent extends Destroy$ {
   allMyMissions: Mission[] = [];
   missionMenu = new PostMenu<Mission>();
   filterOn: boolean = false;
+  viewList: boolean = true;
 
   detailedDays: MissionDetailedDay[] = [];
   _openCloseMission = false;
@@ -56,6 +59,9 @@ export class MissionsComponent extends Destroy$ {
 
   @QueryAll("Mission")
   missions$!: Observable<Mission[]>;
+
+  @ViewChild(MissionFilterForm)
+  filterMission!: MissionFilterForm;
 
   constructor(
     private store: Store,
@@ -136,6 +142,17 @@ export class MissionsComponent extends Destroy$ {
   ngAfterViewInit() {
   }
 
+  changeView(headerActiveView: number) {
+    if (headerActiveView == 0){
+      this.searchbar.resetSearch()
+      this.viewList = true;
+    }  
+    if (headerActiveView == 1) {
+      this.searchbar.resetSearch()
+      this.viewList = false;
+    }    
+  }
+
   isFilterOn(filter: any){
     if (filter.address == "" && filter.isClosed == false && filter.jobs.length == 0 && filter.manPower == null && filter.missionDate == "" && filter.sortMissionDate == false && filter.unread == false && filter.validationDate == ""){
       this.filterOn = false;
@@ -151,6 +168,7 @@ export class MissionsComponent extends Destroy$ {
 
   selectSearchMission(searchForm:  string){
     this.myMissions = [];
+    this.allMyMissions.sort((a, b) => {return Number(a["isClosed"]) - Number(b["isClosed"]);});
     if (searchForm == "" || searchForm == null)  {
       this.myMissions = this.allMyMissions
     } else {
@@ -173,37 +191,20 @@ export class MissionsComponent extends Destroy$ {
 
   selectMissions(filter: any) {
     this.myMissions = [];
+    this.allMyMissions.sort((a, b) => {return Number(a["isClosed"]) - Number(b["isClosed"]);});
     if (filter == null) {
       this.myMissions = this.allMyMissions;
     } else {
-      this.allMyMissions.sort((a, b) => {return Number(a["isClosed"]) - Number(b["isClosed"]);});
-      // Array qui contiendra les posts et leur valeur en distance Levenshtein pour une adresse demandée
+      //Trie en distance Levenshtein pour une adresse demandée
       let levenshteinDist: any = [];
       if (filter.address) {
         for (let mission of this.allMyMissions) {
-          levenshteinDist.push([
-            mission,
-            getLevenshteinDistance(
-              mission.address.toLowerCase(),
-              filter.address.toLowerCase()
-            ),
-          ]);
+          levenshteinDist.push([mission,getLevenshteinDistance(mission.address.toLowerCase(),filter.address.toLowerCase()),]);
         }
         levenshteinDist.sort((a: any, b: any) => a[1] - b[1]);
-        let keys = levenshteinDist.map((key: any) => {
-          return key[0];
-        });
-
-        // On trie les posts selon leur distance de levenshtein
-        this.allMyMissions.sort(
-          (a: any, b: any) => keys.indexOf(a) - keys.indexOf(b)
-        );
-      } else {
-        this.allMyMissions.sort((a, b) => {
-          return a["id"] - b["id"];
-        });
-        this.allMyMissions.sort((a, b) => {return Number(a["isClosed"]) - Number(b["isClosed"]);});
-      }
+        let keys = levenshteinDist.map((key: any) => {return key[0];});
+        this.allMyMissions.sort((a: any, b: any) => keys.indexOf(a) - keys.indexOf(b));
+      } 
 
       // Trie les missions par date plus proche
       if (filter.sortMissionDate === true) {this.allMyMissions.sort((a: any, b: any) => Date.parse(a['startDate']) - Date.parse(b['startDate']))}
@@ -221,8 +222,6 @@ export class MissionsComponent extends Destroy$ {
       if ( isDifferentValidationDate || isNotInMissionDate || isDifferentManPower || isNotIncludedJob || isUnread || isNotClosed) { continue }
       this.myMissions.push(mission)
       }
-      // Trie les missions pour que celles clôturées soient en derniers
-
     }
     this.cd.markForCheck();
   }

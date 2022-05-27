@@ -162,18 +162,12 @@ export class SOSPageComponent extends Destroy$ {
     } else {
       // Trie les posts selon leur distance de levenshtein
       let levenshteinDist: any = [];
-      if (filter.address) {
-        for (let company of this.allAvailableCompanies) {
-          levenshteinDist.push([company,getLevenshteinDistance(company.address.toLowerCase(), filter.address.toLowerCase())]);
-        }
+      if (filter.address != "") {
+        for (let company of this.allAvailableCompanies) {levenshteinDist.push([company,getLevenshteinDistance(company.address.toLowerCase(), filter.address.toLowerCase())]);}
         levenshteinDist.sort((a: any, b: any) => a[1] - b[1]);
-        let keys = levenshteinDist.map((key: any) => {
-          return key[0];
-        });
+        let keys = levenshteinDist.map((key: any) => {return key[0];});
         this.allAvailableCompanies.sort((a: any,b: any)=>keys.indexOf(a) - keys.indexOf(b));
-      } else {
-        this.allAvailableCompanies.sort((a, b) => { return a["id"] - b["id"]; });
-      }
+      } 
 
       // Trie les companies selon leurs notes
       if (filter.sortNotation === true) {this.allAvailableCompanies.sort((a: any, b: any) => b['starsST'] - a['starsST'])} 
@@ -201,6 +195,7 @@ export class SOSPageComponent extends Destroy$ {
       }      
 
       for (let company of this.allAvailableCompanies) {
+
         let includedJob = false;
         if (filter.jobs){
           let Jobs = this.store.selectSnapshot(DataQueries.getMany("JobForCompany", company.jobs));
@@ -219,7 +214,7 @@ export class SOSPageComponent extends Destroy$ {
         let postLatitude = company.latitude*(Math.PI/180);
         let postLongitude = company.longitude*(Math.PI/180);
         let distance = 6371*Math.acos(Math.sin(userLatitude)*Math.sin(postLatitude) + Math.cos(userLatitude)*Math.cos(postLatitude)*Math.cos(postLongitude-userLongitude))
-        let isNotRightRadius = (filter.radius && distance > filter.radius)
+        let isNotRightRadius = (filter.radius != 2000 && distance > filter.radius)
 
         let available = false;
         let today = new Date().toISOString().slice(0, 10)
@@ -228,7 +223,6 @@ export class SOSPageComponent extends Destroy$ {
         let availableToday =  disponibilityToday.map(dispo => dispo.nature)
         if (availableToday[0] === "Disponible") { available = true}
         let isNotDisponible = (filter.sortDisponibleProfils && !available)
-      
 
         if (isNotRightAmount || isNotRightRadius || isNotIncludedJob || isNotDisponible) {continue}
         this.isCompanyAvailable(company)

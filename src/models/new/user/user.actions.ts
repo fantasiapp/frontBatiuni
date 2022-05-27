@@ -337,7 +337,7 @@ export class CloseMissionST {
 export class CreateSupervision {
   static readonly type = '[Data] Create Supervision';
   action = 'createSupervision'
-  constructor(public missionId: number, public detailedPostId: number | null, public parentId: number | null, public comment: string, public date:string) {}
+  constructor(public detailedPostId: number | null, public datePostId: number | null, public comment: string) {}
 }
 
 export class NotificationViewed {

@@ -231,7 +231,6 @@ export class DataState {
 
   @Action(GetUserData)
   getUserData(ctx: StateContext<DataModel>, action: GetUserData) {
-    console.log("GetUserData mais qu'est ce que tu fais là !")
     const req = this.http.get("data", { action: action.action });
     if (this.flagUpdate){
       this.flagUpdate = false
@@ -712,10 +711,8 @@ export class DataState {
         }
         delete response[application.action];
         let key = Object.keys(response)
-        console.log('createSupervision', response);
-        ctx.setState(addComplexChildren("Company", profile.company.id, "Mission", response));
-        // let supervision = response[parseInt(key[0])][42][response[parseInt(key[0])][42].length-1]
-        // ctx.setState(addComplexChildren("Mission", response, "Supervision", supervision))
+        if ("datePostId" in response) {ctx.setState(addComplexChildren("DatePost",response["datePostId"], "Supervision", response["supervision"]))}
+        if ("detailedPostId" in response) {ctx.setState(addComplexChildren("DetailedPost",response["detailedPostId"], "Supervision", response["supervision"]))}
       })
     );
   }
@@ -731,10 +728,13 @@ export class DataState {
         }
         delete response[application.action];
         console.log('modifyMissionDate', response);
-        // for (const key in response.datePost) {
-        //   ctx.setState(addComplexChildren('Mission', response.mission.id,'DatePost', response.datePost[key]))
-        // }
-        ctx.setState(addComplexChildren("Company", profile.company.id, "Mission", response));
+        
+        ctx.setState(addComplexChildren("Company", profile.company.id, "Mission", response.mission));
+        for (const key in response.datePost) {
+          let datePost = {[key]: response.datePost[key]}
+          ctx.setState(update('DatePost', datePost))
+          // ctx.setState(addComplexChildren('Mission', response.mission.id,'DatePost', datePost))
+        }
       })
     );
   }
@@ -932,11 +932,19 @@ export class DataState {
   boostPost(ctx: StateContext<DataModel>, boost: BoostPost) {
     return this.http.post("data", boost).pipe(
       tap((response: any) => {
+        ctx.setState(
+          transformField(
+            "Post",
+            boost.postId,
+            "boostTimestamp",
+            () => {
+              return response.UserProfile[boost.postId][21];
+            }
+          ));
       })
-    );        
+    );
   }
 }
-
 //make a deep version of toJSON
 
 export class DataQueries {

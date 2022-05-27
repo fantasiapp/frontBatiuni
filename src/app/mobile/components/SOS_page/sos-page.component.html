@@ -3,24 +3,26 @@
   <span tab_1>Carte</span>
 </page-header>
 
-<div class="hosted-page space-children-margin page-content-with-tabs">
-  <ng-container [ngSwitch]="activeView">
-    <ng-container *ngSwitchCase="0">
+<ng-container [ngSwitch]="activeView">
+  <ng-container *ngSwitchCase="0">
+      <div class="hosted-page space-children-margin page-content-with-tabs">
       <sos-card 
         (click)="checkCompanyProfile(companyAvailable.company)" 
         *ngFor="let companyAvailable of availableCompanies" 
         [profile]="{company: companyAvailable.company}" 
         [availability]="companyAvailable.availability">
       </sos-card>
+    </div>
     </ng-container>
+    <div class="map-container space-children-margin page-content-with-tabs">
     <mapbox-batiuni 
       [availableCompanies]="availableCompanies"
       (companyClick)="checkCompanyProfile($event)"
       class="space-children-margin" 
       *ngSwitchCase="1">
     </mapbox-batiuni>
+    </div>
   </ng-container>
-</div>
 
 
 <swipeup [(open)]="openSOSFilterMenu" type="view">

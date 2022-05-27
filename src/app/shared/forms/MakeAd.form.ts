@@ -1,3 +1,4 @@
+import { DatePipe } from "@angular/common";
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -78,7 +79,7 @@ import { Mobile } from "../services/mobile-footer.service";
           </div>
         </div>
         <div class="form-input">
-          <label>Date de validation de l'annonce</label>
+          <label>Date d'échéance de l'annonce</label>
           <input class="form-element" type="date" formControlName="dueDate" />
           <img src="assets/calendar.png" />
         </div>
@@ -366,6 +367,9 @@ import { Mobile } from "../services/mobile-footer.service";
     `,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [
+    DatePipe
+  ]
 })
 export class MakeAdForm {
   @HostBinding("class.page")
@@ -479,6 +483,7 @@ export class MakeAdForm {
     public mobile: Mobile,
     private cd: ChangeDetectorRef,
     private router: Router,
+    private datePipe: DatePipe,
   ) {
     // setInterval(()=>{
     //   this.mobile.test1()
@@ -501,7 +506,7 @@ export class MakeAdForm {
   }
 
   makeAdForm = new FormGroup({
-    dueDate: new FormControl("2022-05-24", [
+    dueDate: new FormControl(this.datePipe.transform(new Date(), "yyyy-MM-dd"), [
       Validators.required,
       this.dueDateValidator,
     ]),

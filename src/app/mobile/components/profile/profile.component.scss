@@ -50,7 +50,8 @@ swipeup li.spacer {
 
 swipeup li{
   background-color: #F4F4F4;
-  // padding-bottom: 0.5rem;
-  // padding-top: 0.5rem;
-  // padding-inline: 2rem;
+  width: 100vw;
+  position: relative;
+  left: -2rem;
+  padding-left: 2rem;
 }
