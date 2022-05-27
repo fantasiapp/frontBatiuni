@@ -27,6 +27,7 @@ import { getLevenshteinDistance } from "src/app/shared/services/levenshtein";
 import * as moment from "moment";
 import { AppComponent } from "src/app/app.component";
 import { SearchbarComponent } from "src/app/shared/components/searchbar/searchbar.component";
+import { getUserDataService } from "src/app/shared/services/getUserData.service";
 
 @Component({
   selector: "missions",
@@ -60,7 +61,8 @@ export class MissionsComponent extends Destroy$ {
     private store: Store,
     private info: InfoService,
     private cd: ChangeDetectorRef,
-    private appComponent: AppComponent
+    private appComponent: AppComponent,
+    private getUserDataService: getUserDataService
   ) {
     super();
     this.searchbar = new SearchbarComponent(store);
@@ -132,7 +134,6 @@ export class MissionsComponent extends Destroy$ {
   }
 
   ngAfterViewInit() {
-    this.appComponent.updateUserData()
   }
 
   isFilterOn(filter: any){
@@ -244,6 +245,7 @@ export class MissionsComponent extends Destroy$ {
 
   ngOnDestroy(): void {
     this.info.alignWith("last");
+    this.getUserDataService.emitDataChangeEvent();
     super.ngOnDestroy();
   }
 

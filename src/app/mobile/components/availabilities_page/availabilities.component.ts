@@ -6,6 +6,7 @@ import { AppComponent } from "src/app/app.component";
 import { Destroy$ } from "src/app/shared/common/classes";
 import { Availability, CalendarUI, DayState } from "src/app/shared/components/calendar/calendar.ui";
 import { SwipeupService, SwipeupView } from "src/app/shared/components/swipeup/swipeup.component";
+import { getUserDataService } from "src/app/shared/services/getUserData.service";
 import { Profile } from "src/models/new/data.interfaces";
 import { nameToAvailability } from "src/models/new/data.mapper";
 import { DataQueries } from "src/models/new/data.state";
@@ -49,7 +50,7 @@ export class AvailabilitiesComponent extends Destroy$ {
     },
   }]
 
-  constructor(private store: Store, private swipeupService: SwipeupService, private appComponent: AppComponent) {
+  constructor(private store: Store, private swipeupService: SwipeupService, private appComponent: AppComponent, private getUserDataService: getUserDataService) {
     super();
   }
 
@@ -92,6 +93,7 @@ export class AvailabilitiesComponent extends Destroy$ {
   }
 
   ngOnDestroy() {
+    this.getUserDataService.emitDataChangeEvent()
     super.ngOnDestroy();
   }
 }

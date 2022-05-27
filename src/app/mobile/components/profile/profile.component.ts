@@ -17,6 +17,7 @@ import { Notification } from "src/models/new/data.interfaces";
 import { NotificationViewed } from "src/models/new/user/user.actions";
 import { AppComponent } from "src/app/app.component";
 import { NotifService } from "src/app/shared/services/notif.service";
+import { getUserDataService } from "src/app/shared/services/getUserData.service";
 
 
 @Component({
@@ -70,12 +71,13 @@ export class ProfileComponent extends Destroy$ {
   @Select(DataQueries.currentProfile)
   profile$!: Observable<Profile>;
 
-  constructor(private store: Store, private cd: ChangeDetectorRef, private info: InfoService, private popup: PopupService, private notifService: NotifService) {
+  constructor(private store: Store, private cd: ChangeDetectorRef, private info: InfoService, private popup: PopupService, private notifService: NotifService, private getUserDataService: getUserDataService) {
     super();
     this.profile$.subscribe((profile) => {
       this.updateProfile(profile)
     });
   }
+
 
   updateProfile(profile:Profile) {
     this.notifications = []
