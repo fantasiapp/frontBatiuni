@@ -14,7 +14,7 @@ import { takeUntil } from "rxjs/operators";
 import { Post, PostMenu, Profile } from "src/models/new/data.interfaces";
 import { DataQueries, DataState, QueryAll } from "src/models/new/data.state";
 import { Destroy$ } from "src/app/shared/common/classes";
-import { assignCopy, splitByOutput } from "../../../shared/common/functions";
+import { delay, assignCopy, splitByOutput } from "../../../shared/common/functions";
 import { MarkViewed } from "src/models/new/user/user.actions";
 import { UIAnnonceResume } from "src/app/mobile/ui/annonce-resume/annonce-resume.ui";
 import { Input } from "hammerjs";
@@ -23,6 +23,7 @@ import { AppComponent } from "src/app/app.component";
 import { InfoService } from "src/app/shared/components/info/info.component";
 import { SearchbarComponent } from "src/app/shared/components/searchbar/searchbar.component";
 import { flatten } from "@angular/compiler";
+
 // import { UISlideMenuComponent } from 'src/app/shared/components/slidemenu/slidemenu.component';
 
 @Component({
@@ -108,8 +109,21 @@ export class ApplicationsComponent extends Destroy$ {
     this.selectSearch('');
   }
 
+  async test() {
+    let bool = true
+    while(true) {
+      if (bool){
+        bool = false
+        console.log("allUserOnline", this.userOnlinePosts)
+        await delay(5000)
+        this.cd.markForCheck()
+        bool=true}
+    }
+  }
+
   ngAfterViewInit() {
     this.cd.markForCheck;
+    this.test()
   }
 
   selectPost(filter: any) {
@@ -201,6 +215,7 @@ export class ApplicationsComponent extends Destroy$ {
     // setTimeout(() => {
     //   // this.annonceResume.open()
     // }, 20);
+    console.log("coucou", this.allCandidatedPost)
     this.cd.markForCheck;
   }
 
@@ -210,6 +225,7 @@ export class ApplicationsComponent extends Destroy$ {
   }
 
   slideOnlinePostClose() {
+    console.log("coucou", this.allCandidatedPost)
     this.postMenu.open = false;
     // Update
     this.annonceResume.close();
