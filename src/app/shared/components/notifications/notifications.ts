@@ -151,7 +151,6 @@ export class Notifications {
             } else {
               const fullname = company ? company.name[0].toUpperCase() : "A";
               src = this.imageGenerator.generate(fullname);
-              console.log("downloadFile de notification.ts dans case \"PME\" ")
               this.downloader.downloadFile(logoPME).subscribe((image) => {
               src = this.downloader.toSecureBase64(image);
               SingleCache.setValueByName("companyImage" + company!.id.toString(), src)
@@ -194,7 +193,6 @@ export class Notifications {
             } else {
                 const fullname = company ? company.name[0].toUpperCase() : "A";
                 src = this.imageGenerator.generate(fullname);
-              console.log("downloadFile de notification.ts dans case \"ST\" ")
               this.downloader.downloadFile(logo).subscribe((image) => {
                 src = this.downloader.toSecureBase64(image);
                 SingleCache.setValueByName("companyImage" + company!.id.toString(), src)

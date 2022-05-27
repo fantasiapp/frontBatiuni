@@ -68,7 +68,6 @@ export class AvailabilitiesComponent extends Destroy$ {
   }
 
   ngAfterViewInit() {
-    this.appComponent.updateUserData()
   }
 
   submit(calendar: CalendarUI) {
