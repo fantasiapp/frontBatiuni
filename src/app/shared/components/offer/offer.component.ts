@@ -146,7 +146,6 @@ export class OfferComponent {
         this.src = this.imageGenerator.generate(fullname);
           this.cd.markForCheck();
       } else {
-              console.log("downloadFile de offer.component.ts")
               this.downloader.downloadFile(logo).subscribe((image) => {
           this.src = this.downloader.toSecureBase64(image);
           SingleCache.setValueByName("companyImage" + this.company!.id.toString(), this.src)
