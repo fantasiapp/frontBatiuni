@@ -65,7 +65,7 @@ export class AppComponent extends Destroy$ {
       this.executeGetGeneralData()
       this.firstAttemptAlreadyTried = true
     }
-    else if (false) { // supposed to be this.readyToUpdate
+    else if (this.readyToUpdate) { // supposed to be this.readyToUpdate
       this.readyToUpdate = false
       this.getUserData()
       await delay(20000)

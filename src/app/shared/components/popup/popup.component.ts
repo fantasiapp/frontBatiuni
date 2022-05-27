@@ -336,20 +336,20 @@ export class PopupService {
   }
 
   openFile(file: BasicFile | File) {
-    if (!file.content && SingleCache.checkValueInCache("File" + (file as File).id!.toString())) {
-      if (!file.content) {
-          this.openFile(SingleCache.getValueByName("File" + (file as File).id!.toString()))
-          return;
-        }
+    if (!file.content) {
+      let name: string = "File" + (file as File).id!.toString()
+      if (SingleCache.checkValueInCache(name)) {
+        this.openFile(SingleCache.getValueByName(name))
       }
-    else {
-        this.downloader
-          .downloadFile((file as File).id!, true)
-          .subscribe((file) => {
-            SingleCache.setValueByName("File" + (file as File).id!.toString(), file)
-            this.openFile(file)
-          });
-        return;}
+      else {
+      this.downloader
+        .downloadFile((file as File).id!, true)
+        .subscribe((file) => {
+          SingleCache.setValueByName(name, file)
+          this.openFile(file)
+        })}
+      return;
+    }
 
     let context = this.downloader.createFileContext(file);
     this.popups$.next({
