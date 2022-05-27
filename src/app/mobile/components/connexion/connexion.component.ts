@@ -15,9 +15,7 @@ export class ConnexionComponent {
     this.isLoading = isLoadingService.isLoading
     this.isLoadingService.getLoadingChangeEmitter().subscribe((bool) => {
       this.isLoading = bool
-      console.log("je change dans le connexion component", bool)
       this.cd.markForCheck()
     })
-    console.log("isloading in the connexion", this.isLoading)
   }
 };

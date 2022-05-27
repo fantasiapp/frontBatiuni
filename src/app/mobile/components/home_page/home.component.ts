@@ -169,15 +169,11 @@ export class HomeComponent extends Destroy$ {
   ngOnInit() {
     this.appComponent.updateUserData();
     this.loadingService.getLoadingChangeEmitter().subscribe((bool : boolean) => {
-      console.log("dans le subscribe,", bool)
       this.isLoading = bool
-      console.log("isLoading dans le subscribe", this.isLoading)
       this.cd.markForCheck()
-      console.log("j'ai actualisé", this.cd)
     })
     this.filterService.getFilterChangeEmitter().subscribe((posts: Post[]) => {
       this.displayOnlinePosts = posts
-      console.log("ngOnInit", posts)
       this.cd.markForCheck()
     })
     this.mobile.footerStateSubject.subscribe((b) => {
@@ -192,7 +188,6 @@ export class HomeComponent extends Destroy$ {
 
   async lateInit() {
     if (!this.isLoading) {
-      console.log("je suis dedans", this.isLoading)
       this.info.alignWith("header_search");
       combineLatest([this.profile$, this.posts$])
         .pipe(takeUntil(this.destroy$))
@@ -200,8 +195,6 @@ export class HomeComponent extends Destroy$ {
 
           const mapping = splitByOutput(posts, (post) => {
             //0 -> userOnlinePosts | 1 -> userDrafts
-            console.log("allllo avant ")
-            console.log("allllo", profile.company.posts)
             if (profile.company.posts.includes(post.id))
               return post.draft
                 ? this.symbols.userDraft
@@ -216,7 +209,6 @@ export class HomeComponent extends Destroy$ {
           this.allUserOnlinePosts =
             mapping.get(this.symbols.userOnlinePost) || [];
           this.allOnlinePosts = [...otherOnlinePost, ...this.userOnlinePosts];
-          console.log("allOnlinePosts", this.allOnlinePosts)
           this.allMissions = this.store.selectSnapshot(DataQueries.getMany("Mission", profile.company.missions));
   
           if (this.filterST) {this.filterST.updatePosts(this.allOnlinePosts)}
@@ -227,14 +219,12 @@ export class HomeComponent extends Destroy$ {
           this.selectSearchOnline("");
           this.selectSearchMission("");
 
-          console.log("num online posts", this.allOnlinePosts.length)
   
         });
       this.time = this.store.selectSnapshot(DataState.time);
       this.updatePage()
     }
     else {
-      console.log("hey")
       await delay(2000)
       this.lateInit()
       this.cd.markForCheck()
@@ -565,7 +555,6 @@ export class HomeComponent extends Destroy$ {
         this.selectSearchOnline(searchForm)
         break;
       case 2:
-        console.log("mission")
         this.selectSearchMission(searchForm)
     }
   };
@@ -712,7 +701,6 @@ export class HomeComponent extends Destroy$ {
         (success) => {
           // Si la candidature est envoyée on quite la vue de la candidature
           this.updateAllOnlinePost(post)
-          console.log("posts dans apply post", this.allOnlinePosts)
           this.slideOnlinePostClose();
         },
         (error) =>

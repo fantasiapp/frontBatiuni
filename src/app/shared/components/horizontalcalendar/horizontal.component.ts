@@ -127,7 +127,6 @@ export class HorizontaleCalendar implements OnInit {
 
   toCalendarDays(workDays: MissionDetailedDay[]): DayState[] {
     this.detailedDays = workDays;
-    console.log('workDays', workDays);
     return workDays.map((workDay) => ({
       date: workDay.date,
       availability: this.getNotification(workDay.date, workDay.mission) ? 'notification' : "selected",

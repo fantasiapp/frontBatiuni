@@ -584,8 +584,6 @@ export class MakeAdForm {
   }
 
   submit(draft: boolean) {
-    console.log("submit", draft)
-    console.log(this.post)
     if (this.post) {
       if (!draft) {
         this.info.show("info", "Mise en ligne de l'annonce...", Infinity);

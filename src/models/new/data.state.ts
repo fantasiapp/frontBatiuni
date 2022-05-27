@@ -139,13 +139,11 @@ export class DataState {
   clear(ctx: StateContext<DataModel>, clear: Clear) {
     const current = ctx.getState();
     if (clear.data) {
-      console.log("clear, showView", current.session.view);
       ctx.patchState({
         [clear.data]: {},
         fields: { ...current.fields, [clear.data]: [] },
       });}
     else
-    console.log("clear, showView", current.session.view)
       ctx.setState({
         fields: {},
         session: {
@@ -169,7 +167,6 @@ export class DataState {
 
   @Selector()
   static view(state: DataModel) {
-    // console.log("view le get : ", state.session.view)
     return state.session.view;
   }
 
@@ -212,7 +209,6 @@ export class DataState {
   //------------------------------------------------------------------------
   @Action(GetGeneralData)
   getGeneralData(ctx: StateContext<DataModel>) {
-    console.log("getGeneralData c'est pas trop tôt ça fait 2h qu'on t'attend")
     //eventually make a local storage service
     //const data = localStorage.getItem('general-data');
     const req = /*data ? of(JSON.parse(data)) : */ this.http.get("initialize", {
@@ -224,13 +220,13 @@ export class DataState {
         //localStorage.setItem('general-data', JSON.stringify(response));
         const operations = this.reader.readStaticData(response);
         ctx.setState(compose(...operations));
-        console.log("response", response)
   })
     );
   }
 
   @Action(GetUserData)
   getUserData(ctx: StateContext<DataModel>, action: GetUserData) {
+    console.log("getUserData")
     const req = this.http.get("data", { action: action.action });
     if (this.flagUpdate){
       this.flagUpdate = false
@@ -253,7 +249,6 @@ export class DataState {
   }
 
   updateLocalData(ctx: StateContext<DataModel>, response: any) {
-    console.log("les données locales one étét mis à jours")
     const loadOperations = this.reader.readInitialData(response),
     sessionOperation = this.reader.readCurrentSession(response);
     if (!this.isFirstTime) {
@@ -335,7 +330,6 @@ export class DataState {
         let key = Object.keys(response)
         let id = response.supervisionId
         delete response.supervisionId;
-        console.log('uploadImageSupervison', response);
         response[parseInt(key[0])].push(picture.imageBase64)
         ctx.setState(compose(addComplexChildren("Supervision", id, "File", response)))
       })
@@ -727,7 +721,6 @@ export class DataState {
           throw response.messages;
         }
         delete response[application.action];
-        console.log('modifyMissionDate', response);
         
         ctx.setState(addComplexChildren("Company", profile.company.id, "Mission", response.mission));
         for (const key in response.datePost) {
@@ -747,7 +740,6 @@ export class DataState {
     const profile = this.store.selectSnapshot(DataQueries.currentProfile)!;
     return this.http.post("data", application).pipe(
       tap((response: any) => {
-        console.log('response;', response);
         if (response[application.action] !== "OK") {
           this.inZone(() => this.info.show("error", response.messages, 3000));
           throw response.messages;
@@ -956,7 +948,6 @@ export class DataQueries {
   ): Interface<K> {
     const fields = allFields[target];
 
-    // console.log('dataquerie', values, fields, id);
     const output: any = {};
     if (Array.isArray(values)) {
       if (fields.length != values.length)
@@ -1005,11 +996,9 @@ export class DataQueries {
   }
 
   private static getDataById<K extends DataTypes>(type: K, id: number) {
-    // console.log('getDataBy', type, id);
     return createSelector(
       [DataState.getType(type)],
       (record: Record<any[]>) => {
-        // console.log('getDataBy', type, id, record, record[id]);
         return record[id];
       }
     );

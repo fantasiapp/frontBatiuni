@@ -36,7 +36,6 @@ export class UIMapComponent {
     this.mode = 'post';
     this._posts = values;
     this._companies = this.store.selectSnapshot(DataQueries.getMany('Company', this.posts.map(post => post.company)));
-    console.log('this,initialized', this.initialized);
     if ( this.initialized ) this.showPosts();
   }
 

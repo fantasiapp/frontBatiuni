@@ -10,7 +10,6 @@ import { ApplyForm } from "src/app/mobile/ui/annonce-resume/annonce-resume.ui";
 export class ChangeProfileType {
   static readonly type = '[User] Change Profile Type';
   constructor(public type: boolean) {
-    console.log("constructor change ", type)
   };
 };
 

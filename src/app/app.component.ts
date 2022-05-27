@@ -67,7 +67,6 @@ export class AppComponent extends Destroy$ {
     }
     else if (false) { // supposed to be this.readyToUpdate
       this.readyToUpdate = false
-      console.log("avant getUserData")
       this.getUserData()
       await delay(20000)
       this.notifService.checkNotif()

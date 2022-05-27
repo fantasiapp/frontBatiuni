@@ -108,7 +108,6 @@ export class MissionsComponent extends Destroy$ {
           const dateid = missionDatesId[i]
           let date = this.store.selectSnapshot(DataQueries.getById('DatePost', dateid))
   
-          // console.log('date', date);
           dateAlreadyParsedFromMission.push(date!.date)
   
           this.detailedDays.push({

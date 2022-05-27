@@ -77,7 +77,6 @@ export class MailForm {
         }
       },
       (errors) => {
-        console.log(errors);
         setErrors(this.mailSender, errors);
         this.cd.markForCheck();
       }

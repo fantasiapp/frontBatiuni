@@ -14,9 +14,7 @@ export class isLoadingService {
   constructor(private store: Store) {}
 
   emitLoadingChangeEvent(bool : boolean) {
-    console.log("je change")
     this.isLoading = bool
-    console.log("c'est envoyé,")
     this.navchange.emit(this.isLoading);
   }
 

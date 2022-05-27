@@ -14,7 +14,6 @@ export class getUserDataService {
   constructor(private store: Store) {}
 
   emitDataChangeEvent() {
-    console.log("yooooo")
     this.navchange.emit(this.response);
   }
 

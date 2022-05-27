@@ -363,7 +363,6 @@ export class SuiviPME {
     this.mission = this.store.selectSnapshot(
       DataQueries.getById("Mission", this.mission!.id)
     );
-    console.log("reloadMission", this.mission!.dates)
     this.computeDates(this.mission!);
     this.dates.forEach((dateNew) => {
       if (dateNew.date.date == dateOld.date.date) {
@@ -394,7 +393,6 @@ export class SuiviPME {
   async submitAdFormDate(setup: boolean = false) {
     let datesSelected: string[] = this.calendarForm!.value.filter((day : DayState) => day.availability == 'selected').map((day: DayState) => day.date)
 
-    console.log('datesSelected', datesSelected);
     let blockedDates = this.computeBlockedDate();
     let pendingDates = this.computePendingDate()
 
@@ -404,13 +402,11 @@ export class SuiviPME {
 
     blockedDates.forEach((date) => {
       if (!datesSelected.includes(date)) {
-        console.log('date blopkce', date);
         this.alert += `La date ${date} doit obligatoirement être sélectionnée.\r\n`;
         dateToBeSelected.push(date);
       }
     });
     
-    console.log('pending', pendingDates);
 
     pendingDates.pendingValidated.forEach((date) => {
       if(!datesSelected.includes(date)){
@@ -441,10 +437,8 @@ export class SuiviPME {
       return { date: date, availability: "selected" };
     });
 
-    console.log('date to unselected', dateToBeUnSelected);
     dayStates = dayStates.filter(day => !dateToBeUnSelected.includes(day.date))
     
-    console.log('dayStates', dayStates);
     this.calendarForm.setValue(dayStates);
   }
 
@@ -455,7 +449,6 @@ export class SuiviPME {
       }
     );
 
-    console.log('SELECTED', selectedDate);
     this.store.dispatch(new ModifyMissionDate(this.mission!.id, this.AdFormDate.get("hourlyStart")!.value, this.AdFormDate.get("hourlyEnd")!.value, selectedDate)).pipe(take(1)).subscribe(() => {
       if (!this.alert) this.swipeupModifyDate = false;
       // Update de mission et accordionData puis update la vue
@@ -463,7 +456,6 @@ export class SuiviPME {
       this.computeDates(this.mission);
 
       this.cd.markForCheck();
-      console.log('cdmark', this.mission);
     });
   }
 
