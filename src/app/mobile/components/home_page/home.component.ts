@@ -31,7 +31,6 @@ import {
   ApplyPost,
   CandidateViewed,
   DeletePost,
-  DownloadFile,
   DuplicatePost,
   GetUserData,
   HandleApplication,
