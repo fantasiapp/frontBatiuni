@@ -87,7 +87,6 @@ export class SOSPageComponent extends Destroy$ {
   }
 
   ngAfterViewInit() {
-    this.appComponent.updateUserData()
   }
 
   callbackFilter = (filter: any): void => {
