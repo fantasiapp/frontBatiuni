@@ -259,9 +259,7 @@ export class STFilterForm {
   }
 
   updateFilteredPosts(filter: any) {
-    console.log("updateFilteredPosts", this.posts.length)
     this.filteredPosts = [];
-    console.log(this.posts.length)
     const user = this.store.selectSnapshot(DataQueries.currentUser);
 
     // Filter

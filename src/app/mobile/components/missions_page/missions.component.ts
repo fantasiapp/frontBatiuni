@@ -42,9 +42,11 @@ export class MissionsComponent extends Destroy$ {
   openFilterMenu: boolean = false;
   myMissions: Mission[] = [];
   allMyMissions: Mission[] = [];
+  missionToRate:  Mission[] = [];
   missionMenu = new PostMenu<Mission>();
   filterOn: boolean = false;
   viewList: boolean = true;
+  submitStarsST: boolean = false;
 
   detailedDays: MissionDetailedDay[] = [];
   _openCloseMission = false;
@@ -106,7 +108,6 @@ export class MissionsComponent extends Destroy$ {
           const dateid = missionDatesId[i]
           let date = this.store.selectSnapshot(DataQueries.getById('DatePost', dateid))
   
-          // console.log('date', date);
           dateAlreadyParsedFromMission.push(date!.date)
   
           this.detailedDays.push({
@@ -123,6 +124,7 @@ export class MissionsComponent extends Destroy$ {
           }
         }
     }});
+    this.missionToRate = this.allMyMissions.filter((mission) => mission.isClosed && (mission.vibeST == 0 || mission.securityST == 0 || mission.organisationST == 0))
     if (this.missionToClose) {
       this._openCloseMission = this.missionToClose.securityST == 0;
       const company = this.store.selectSnapshot(
@@ -133,7 +135,6 @@ export class MissionsComponent extends Destroy$ {
     } else {
       this._openCloseMission = false;
     }
-
     this.selectMissions(null);
   }
 
@@ -247,9 +248,7 @@ export class MissionsComponent extends Destroy$ {
   }
 
   get missionToClose(): Mission | null {
-    const missionToClose = this.allMyMissions.filter(
-      (mission) => mission.isClosed && mission.vibeST == 0
-    );
+    const missionToClose = this.missionToRate.filter((mission) => !this.submitStarsST)
     if (missionToClose.length != 0) {
       return missionToClose[0];
     }
@@ -295,13 +294,13 @@ export class MissionsComponent extends Destroy$ {
           this.openCloseMission = false;
           this.cd.markForCheck();
         });
+    this.submitStarsST = true;
   }
 
   starActionST(index: number, nature: string) {
-    if (nature == "vibeST") this.missionToClose!.vibeST = index + 1;
-    if (nature == "securityST") this.missionToClose!.securityST = index + 1;
-    if (nature == "organisationST")
-      this.missionToClose!.organisationST = index + 1;
+    if (nature == "vibeST") {this.missionToClose!.vibeST = index + 1;}
+    if (nature == "securityST") {this.missionToClose!.securityST = index + 1;}
+    if (nature == "organisationST") {this.missionToClose!.organisationST = index + 1;}
     this.cd.markForCheck();
   }
 
