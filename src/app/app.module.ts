@@ -20,8 +20,11 @@ import { DataState } from 'src/models/new/data.state';
 
 import { registerLocaleData } from '@angular/common';
 import localeFr from '@angular/common/locales/fr';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { initializeApp } from "firebase/app";
 registerLocaleData(localeFr);
 
+initializeApp(environment.firebase)
 @Injectable()
 export class CustomConfig extends HammerGestureConfig {
   overrides: { [key: string]: Object; } = {
@@ -53,7 +56,13 @@ export class CustomConfig extends HammerGestureConfig {
     BrowserAnimationsModule,
     GlobalRoutingModule,
     HammerModule,
-    SharedModule
+    SharedModule,
+    ServiceWorkerModule.register('ngsw-worker.js', {
+      enabled: environment.production,
+      // Register the ServiceWorker as soon as the application is stable
+      // or after 30 seconds (whichever comes first).
+      registrationStrategy: 'registerWhenStable:30000'
+    })
   ],
   providers: [
     DataReader,

@@ -19,6 +19,7 @@ import { Logout } from "src/models/auth/auth.actions";
 import { delay } from "./shared/common/functions";
 import { waitForAsync } from "@angular/core/testing";
 import { NotifService } from "./shared/services/notif.service";
+import { getMessaging, getToken, onMessage} from "firebase/messaging"
 
 @Component({
   selector: "app-root",
@@ -39,6 +40,10 @@ import { NotifService } from "./shared/services/notif.service";
   ],
 })
 export class AppComponent extends Destroy$ {
+
+  title = 'af-notification'
+  message : any = null
+
   constructor(private store: Store, private mobile: Mobile, private notifService: NotifService) {
     super();
     this.mobile.init();
@@ -56,6 +61,8 @@ export class AppComponent extends Destroy$ {
     this.executeGetGeneralData()
     this.ready$.next(true);
     this.ready$.complete();
+    this.requestPermission()
+    this.listen()
   }
 
   prepareRoute(outlet: RouterOutlet) {
@@ -106,6 +113,24 @@ export class AppComponent extends Destroy$ {
     } catch (e) {
       if (!environment.production) alert("GetGeneralData: 505 Error");
     }
+  }
+
+  requestPermission() {
+    const messaging = getMessaging()
+    getToken(messaging, {vapidKey : environment.firebase.vapidKey}).then((currentToken) => {
+        if (currentToken) {console.log("we got the token", currentToken)}
+        else {console.log('No registration token available. Request permission to generate one.')}
+      }).catch((err) => {
+        console.log('An error occurred while retrieving token. ', err)
+      })
+  }
+
+  listen() {
+    const messaging = getMessaging()
+    onMessage(messaging, (payload) => {
+      console.log('Message received. ', payload)
+      this.message = payload
+    })
   }
 
   // mobileInit(){
