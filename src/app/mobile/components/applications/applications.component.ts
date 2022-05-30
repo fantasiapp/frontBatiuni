@@ -114,9 +114,11 @@ export class ApplicationsComponent extends Destroy$ {
     while(true) {
       if (bool){
         bool = false
-        console.log("allUserOnline", this.userOnlinePosts)
+        console.log("applications component")
+        console.log("userOnlinePosts", this.userOnlinePosts)
+        console.log("allOnlinePosts", this.allOnlinePosts)
+        console.log("allCandidatedPost", this.allCandidatedPost)
         await delay(5000)
-        this.cd.markForCheck()
         bool=true}
     }
   }
@@ -127,6 +129,7 @@ export class ApplicationsComponent extends Destroy$ {
   }
 
   selectPost(filter: any) {
+    console.log("hey")
     this.userOnlinePosts = [];
     if (filter == null) {  
       this.userOnlinePosts = this.allCandidatedPost;
@@ -183,6 +186,7 @@ export class ApplicationsComponent extends Destroy$ {
   }
 
   selectSearch(searchForm:  string){
+    console.log("ho")
     this.userOnlinePosts = [];
     if (searchForm == "" || searchForm == null)  {
       this.userOnlinePosts = this.allCandidatedPost
@@ -215,20 +219,15 @@ export class ApplicationsComponent extends Destroy$ {
     // setTimeout(() => {
     //   // this.annonceResume.open()
     // }, 20);
-    console.log("coucou", this.allCandidatedPost)
-    this.cd.markForCheck;
+    this.cd.markForCheck;    
+    console.log("coucou", this.userOnlinePosts)
+
   }
 
   ngOnDestroy(): void {
+    console.log("pourquoi tant de n")
     this.info.alignWith("last");
     super.ngOnDestroy();
-  }
-
-  slideOnlinePostClose() {
-    console.log("coucou", this.allCandidatedPost)
-    this.postMenu.open = false;
-    // Update
-    this.annonceResume.close();
   }
 
   isRefused(onlinePost: Post) {
@@ -239,6 +238,4 @@ export class ApplicationsComponent extends Destroy$ {
     });
   }
   
-  @ViewChild(UIAnnonceResume, { static: false })
-  private annonceResume!: UIAnnonceResume;
 }
