@@ -770,6 +770,7 @@ export class DataState {
           throw response.messages;
         }
         delete response[application.action];
+        console.log('REPONSE', response)
         ctx.setState(
           addComplexChildren("Company", profile.company.id, "Mission", response)
         );
@@ -787,6 +788,7 @@ export class DataState {
           throw response.messages;
         }
         delete response[application.action];
+        console.log('REPONSEST', response)
         ctx.setState(
           addComplexChildren("Company", profile.company.id, "Mission", response)
         );

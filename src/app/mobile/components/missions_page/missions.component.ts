@@ -127,6 +127,7 @@ export class MissionsComponent extends Destroy$ {
         }
     }});
     this.missionToRate = this.allMyMissions.filter((mission) => mission.isClosed && (mission.vibeST == 0 || mission.securityST == 0 || mission.organisationST == 0))
+    console.log("MissionTorate", this.missionToRate)
     if (this.missionToClose) {
       this._openCloseMission = this.missionToClose.securityST == 0;
       const company = this.store.selectSnapshot(
@@ -295,8 +296,8 @@ export class MissionsComponent extends Destroy$ {
           this.doClose = true;
           this.openCloseMission = false;
           this.cd.markForCheck();
-        });
-    this.submitStarsST = true;
+          this.submitStarsST = true;
+  });
   }
 
   starActionST(index: number, nature: string) {
