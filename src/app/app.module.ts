@@ -21,8 +21,10 @@ import { DataState } from 'src/models/new/data.state';
 import { registerLocaleData } from '@angular/common';
 import localeFr from '@angular/common/locales/fr';
 import { ServiceWorkerModule } from '@angular/service-worker';
+import { initializeApp } from "firebase/app";
 registerLocaleData(localeFr);
 
+initializeApp(environment.firebase)
 @Injectable()
 export class CustomConfig extends HammerGestureConfig {
   overrides: { [key: string]: Object; } = {
