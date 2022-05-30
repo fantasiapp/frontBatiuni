@@ -502,8 +502,7 @@ input[type=number] {
 .modal {
   position: fixed; /* Stay in place */
   z-index: 11; /* Sit on top */
-  padding-top: 10%; /* Location of the box */
-  padding-bottom: 10%;
+  padding: 10%; /* Location of the box */
   left: 0;
   top: 0;
   width: 100%; /* Full width */
@@ -521,7 +520,6 @@ input[type=number] {
   margin: 0px auto;
   padding: 0 !important;
   display: block;
-  width: 100%;
   animation-name: zoom;
   animation-duration: 0.3s;
 }
