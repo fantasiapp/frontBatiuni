@@ -145,7 +145,8 @@ export class SOSPageComponent extends Destroy$ {
   }
 
   isFilterOn(filter: any){
-    if (filter.address == "" && this.arrayEquals(filter.amount, [1, 400]) && filter.jobs.length == 0 && filter.radius == 2000 && filter.sortDisponibleProfils == false && filter.sortFullProfils == false && filter.sortNotation == false){
+    console.log(filter)
+    if (filter.address == "" && this.arrayEquals(filter.amount, [0, 400]) && filter.jobs.length == 0 && filter.radius == 2000 && filter.sortDisponibleProfils == false && filter.sortFullProfils == false && filter.sortNotation == false){
       this.filterOn = false;
     } else {
       this.filterOn = true;
