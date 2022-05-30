@@ -1,0 +1,16 @@
+<header class="clear-margin full-width sticky-header flex column white-header">
+    <div class="pick flex row small-space-children-margin">
+        <img class="left" [routerLink]="['','home','profile']"  src="assets/arrowlblack.svg" />
+        <h1 class="grow center-text">Mes contacts bloqués</h1>
+    </div>
+</header>
+
+<div class="hosted-page space-children-margin page-content-with-tabs">
+    <blocked-contact-card
+      (click)="checkCompanyProfile(company)" 
+      *ngFor="let company of blockedCompanies" 
+      [profile]="{company: company}" >
+    </blocked-contact-card>
+</div>
+
+

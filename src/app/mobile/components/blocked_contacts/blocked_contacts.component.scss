@@ -1,0 +1,23 @@
+@use 'src/styles/variables' as *;
+@use 'src/styles/mixins' as *;
+
+:host {
+    @extend %page;
+    @extend %no-navigation ;
+  }
+  
+  header {
+    display: block;
+    position: fixed;
+    // height: $mission-header-height;
+    height: calc(#{50px} + env(20px));
+    padding-top: calc(env(20px) + 1rem);
+    padding-bottom: 0;
+    box-shadow: 0px 0px 5px grey;
+  }
+
+  .left {
+    left: 8px;
+  }
+
+

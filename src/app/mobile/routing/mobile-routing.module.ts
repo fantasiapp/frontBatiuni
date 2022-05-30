@@ -15,6 +15,7 @@ import { FacturePage } from '../components/factures/facture.page';
 import { EngagementPage } from '../components/abonnement/engagement/engagement';
 import { MakeAdComponent } from '../components/make_ad/make_ad.component';
 import { SOSPageComponent } from '../components/SOS_page/sos-page.component';
+import { BlockedContactsComponent } from '../components/blocked_contacts/blocked_contacts.component';
 import { BoosterPage } from '../components/booster/booster.page';
 // import { SuiviPME } from '../components/suivi_pme/suivi-pme.page';
 // import { SuiviChantierDate } from "../components/suivi_chantier_select_date/suivi_chantier_select_date.page";
@@ -81,6 +82,9 @@ const routes: Routes = [{
     path: 'applications',
     component: ApplicationsComponent,
   }, {
+    path: 'blocked_contacts',
+    component: BlockedContactsComponent,
+  }, {
     path: 'factures',
     component: FacturePage,
   }, {
@@ -94,7 +98,8 @@ const routes: Routes = [{
     children: [
       {path: 'profile', component: ProfileComponent, data: { animation: 'profile' }},
       {path: 'missions', component: MissionsComponent, data: { animation: 'missions' }},
-      {path: 'availabilities', component: AvailabilitiesComponent, data: { animation: 'availabilities' }},      {path: 'sos', component: SOSPageComponent, data: { animation: 'sos' } },
+      {path: 'availabilities', component: AvailabilitiesComponent, data: { animation: 'availabilities' }},      
+      {path: 'sos', component: SOSPageComponent, data: { animation: 'sos' } },
       {path: 'make', component: MakeAdComponent, data: { animation: 'make'} },
       {path: 'make/:id', component: MakeAdComponent, data: { animation: 'make'} },
       {path: '', pathMatch: 'full', component: HomeComponent, data: { animation: 'home' } },

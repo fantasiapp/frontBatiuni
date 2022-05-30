@@ -30,6 +30,7 @@ import { ModifyProfileForm } from "./forms/ModifyProfile.form";
 import { ProfileResume } from "./components/profile-resume/profile-resume.component";
 import { FileIcon } from "./components/FileIcon/file.icon";
 import { UISOSCard } from "./components/SOSCard/SOSCard.ui";
+import { UIBlockedContactCard } from "./components/BlockedContactCard/BlockedContactCard.ui";
 import { InfoHandler } from "./components/info/info.component";
 import { ConnexionForm } from "./forms/connexion.form";
 import { CalendarUI } from "./components/calendar/calendar.ui";
@@ -98,6 +99,7 @@ import { ApplicationForm } from "./forms/application.form";
     ProfileResume,
     FileIcon,
     UISOSCard,
+    UIBlockedContactCard,
     InfoHandler,
     CalendarUI,
     HorizontaleCalendar,
@@ -170,6 +172,7 @@ import { ApplicationForm } from "./forms/application.form";
     ProfileResume,
     FileIcon,
     UISOSCard,
+    UIBlockedContactCard,
     CalendarUI,
     InfoHandler,
     HorizontaleCalendar,

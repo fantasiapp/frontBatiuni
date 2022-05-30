@@ -16,7 +16,7 @@
     <li (click)="slideModifyMenu(false)">Modifier mon profil</li>
     <li (click)="slideModifyMenu(true)">Modifier mon mot de passe</li>
     <li [routerLink]="['','applications']" *ngIf="this.view == 'ST'"> Candidatures en cours</li>
-    <li *ngIf="this.view == 'PME'"> Contacts bloqués</li>
+    <li [routerLink]="['','blocked_contacts']" *ngIf="this.view == 'PME'"> Contacts bloqués</li>
 
     <li class="spacer"></li>
     <li [routerLink]="['','abonnement']">Gérer mes abonnements</li>
