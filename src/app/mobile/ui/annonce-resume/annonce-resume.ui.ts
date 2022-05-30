@@ -68,7 +68,7 @@ export type ApplyForm = {
               {{ post?.numberOfPeople || 1 }} {{ job?.name || "Employé" }}
             </li>
             <li>Du {{ post.hourlyStart }} Au {{ post.hourlyEnd }}</li>
-            <li>Adresse : {{ post?.adress }}</li>
+            <li>Adresse : {{ post.Adresse }}</li>
           </ul>
           <span
             ><small

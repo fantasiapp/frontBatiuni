@@ -20,6 +20,7 @@ import { DataState } from 'src/models/new/data.state';
 
 import { registerLocaleData } from '@angular/common';
 import localeFr from '@angular/common/locales/fr';
+import { ServiceWorkerModule } from '@angular/service-worker';
 registerLocaleData(localeFr);
 
 @Injectable()
@@ -53,7 +54,13 @@ export class CustomConfig extends HammerGestureConfig {
     BrowserAnimationsModule,
     GlobalRoutingModule,
     HammerModule,
-    SharedModule
+    SharedModule,
+    ServiceWorkerModule.register('ngsw-worker.js', {
+      enabled: environment.production,
+      // Register the ServiceWorker as soon as the application is stable
+      // or after 30 seconds (whichever comes first).
+      registrationStrategy: 'registerWhenStable:30000'
+    })
   ],
   providers: [
     DataReader,
