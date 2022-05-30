@@ -58,7 +58,7 @@ export class UISOSCard {
     if ( this.availability == 'available' )
       return "#B9EDAF";
     else if ( this.availability == 'availablelimits' )
-      return "#ffc425";
+      return "#FFC425";
     else if ( this.availability == 'unavailable' )
       return "red";
     
