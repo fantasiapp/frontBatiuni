@@ -63,6 +63,9 @@ export class SuiviComments {
     this.cd.markForCheck();
   }
 
+  modalImage: SafeResourceUrl = "";
+  displayModal: boolean = false;
+
   _supervision: Supervision = {
     id: -1,
     // Supervisions: [],
@@ -102,5 +105,18 @@ export class SuiviComments {
           });
       }
     }
+  }
+
+  openModalImage(image: SafeResourceUrl) {
+    console.log(image);
+    this.displayModal = true;
+    this.modalImage = image;
+
+  }
+
+  closeModalImage() {
+    console.log("close image")
+    this.displayModal = false;
+    this.modalImage = "";
   }
 }

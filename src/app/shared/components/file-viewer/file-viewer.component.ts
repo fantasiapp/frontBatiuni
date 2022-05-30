@@ -20,6 +20,7 @@ export class FileViewer {
   fileContext!: FileContext;
 
   openWindow(url: string) {
+    console.log(this.fileContext)
     window.open(url);
   }
 };
