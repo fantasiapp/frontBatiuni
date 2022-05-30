@@ -51,30 +51,30 @@ export type ApplyForm = {
             value="{{ company!.starsPME }}"
             disabled
           ></stars>
-          <span>{{
+          <span class="ManPower">{{
             post.manPower ? "Main d'oeuvre" : "Fourniture et pose"
           }}</span>
-          <span
+          <span class='missionDates'
             >Du {{ toLocateDate(post.startDate) }} Au
             {{ toLocateDate(post.endDate) }}</span
           >
-          <span>{{ this.amountOrigin || 0 }} {{ this.post.currency }} </span>
+          <span class='amount'>{{ this.amountOrigin || 0 }} {{ this.post.currency }} HT par mission </span>
         </div>
 
         <div class="needs">
-          <span class="title  ">Nous avons besoin de:</span>
+          <span class="title  ">Nous avons besoin...</span>
           <ul>
             <li>
               {{ post?.numberOfPeople || 1 }} {{ job?.name || "Employé" }}
             </li>
-            <li>Du {{ post.hourlyStart }} Au {{ post.hourlyEnd }}</li>
-            <li>Adresse : {{ post?.adress }}</li>
+            <li>Horaires du chantier : {{ post.hourlyStart }} - {{ post.hourlyEnd }}</li>
+            <li>Date de présence : {{ toLocateDate(post.startDate) }} -
+            {{ toLocateDate(post.endDate) }}</li>
+            <li>Adresse du chantier : {{ post?.address }}</li>
+            <li>Nom du contact : {{post.contactName }}</li>
           </ul>
-          <span
-            ><small
-              >Date d’échéance Le {{ toLocateDate(post?.dueDate) }}</small
-            ></span
-          >
+          <span class='date'> Date d’échéance Le {{ toLocateDate(post?.dueDate) }} 
+          </span>
         </div>
 
         <div class="description">
@@ -83,7 +83,7 @@ export type ApplyForm = {
         </div>
 
         <div class="detail">
-          <span class="title">Détail de la préstation</span>
+          <span class="title  ">Détail de la prestation</span>
           <ul>
             <li *ngFor="let detail of details">{{ detail.content }}</li>
           </ul>

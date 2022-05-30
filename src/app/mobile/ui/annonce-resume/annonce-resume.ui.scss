@@ -37,24 +37,52 @@
     
 }
 .company {
-  color: $light;
+  color: #999999;
+  font-size: 16px;
 }
 
-.needs, .description, .documents {
-  .title { color: $dark;}
+.ManPower{
+  color: #333333;
+  font-size: 18px;
+}
+
+.missionDates, .amount {
+  color: #000000;
+  font-size: 14px;
+}
+
+.needs, .description, .documents, .detail {
+  .title { 
+    color: #054162;
+    font-size: 16px;
+    font-weight: medium;
+    margin: 25px 0;
+  }
   ul {
-    color: $light;
+    color: #656565;
     white-space: normal;
+    margin: 20px 0;
     li {
-      margin: 0.5rem 1rem;
-      font-size: 14px;
+      margin: 1rem 1rem;
+      font-family: Roboto;
+      font-size: 16px;
       a { text-decoration: underline; }
     }
   }
 
   p {
-    margin: 10px 0;
+    color: #656565;
+    font-family: Roboto;
+    font-size: 16px;
+    margin: 20px 0;
   }
+}
+
+.date {
+  color: #656565;
+  font-size: 16px;
+  text-align: center;  
+  margin: 25px 0;
 }
 
 .documents {
