@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input, OnInit, QueryList, ViewChildren } from "@angular/core";
-import { DistanceSliderConfig, SalarySliderConfig } from "src/app/shared/common/sliderConfig";
+import { DistanceSliderConfig, SOSSalarySliderConfig } from "src/app/shared/common/sliderConfig";
 import { Company, Job, Post, Profile } from "src/models/new/data.interfaces";
 import { NgxSliderModule } from '@angular-slider/ngx-slider';
 import { Filter } from "../directives/filter.directive";
@@ -32,7 +32,7 @@ import { FormArray, FormControl, FormGroup } from "@angular/forms";
 
     <div class="form-input">
       <label>Estimation de salaire</label>
-      <ngx-slider [options]="imports.SalarySliderConfig" [value]="0" [highValue]="400" formControlName="amount"></ngx-slider>
+      <ngx-slider [options]="imports.SOSSalarySliderConfig" [value]="0" [highValue]="400" formControlName="amount"></ngx-slider>
     </div>
 
 
@@ -69,7 +69,7 @@ import { FormArray, FormControl, FormGroup } from "@angular/forms";
 })
 
 export class SOSFilterForm implements OnInit {
-  imports = { DistanceSliderConfig, SalarySliderConfig };
+  imports = { DistanceSliderConfig, SOSSalarySliderConfig };
 
   valueDistance: number = 2000;
 

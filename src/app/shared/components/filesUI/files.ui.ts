@@ -100,6 +100,7 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
       name: "Veuillez télécharger un document",
       nature: this.filename,
     };
+    console.log("init", this.value);
   }
 
   private getBase64(files: FileList, index: number = 0) {
@@ -174,7 +175,7 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
       hideOnClick: true,
       items: [
         {
-          name: "Supprimer un Fichier",
+          name: "Supprimer un fichier",
           click: () => {
             //search file having the same name and delete it
           },
@@ -191,7 +192,7 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
               if (permissions.camera != "granted")
                 return this.info.show(
                   "error",
-                  "L'Accès au caméra n'est pas accordé",
+                  "L'accès à la caméra n'est pas accordé",
                   3000
                 );
 
@@ -208,9 +209,11 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
         {
           name: "Visualiser un fichier",
           click: () => {
+            console.log("Visualiser un fichier", this.value);
             if (!this.value || (!this.value.content && this.value.id == void 0))
               return this.info.show("error", "Aucun fichier à affichier", 3000);
 
+            console.log("open file", this.value);
             this.popup.openFile(this.value);
           },
         },

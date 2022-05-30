@@ -352,11 +352,12 @@ export class PopupService {
     }
 
     let context = this.downloader.createFileContext(file);
+    console.log(context)
     this.popups$.next({
       type: "component",
       component: FileViewer,
       init: (viewer: FileViewer) => {
-        viewer.fileContext = context;
+        viewer.fileContextList = [context];
       },
       close: () => {
         this.downloader.clearContext(context);

@@ -1,0 +1,24 @@
+@use 'src/styles/variables' as *;
+@use 'src/styles/mixins' as *;
+
+:host {
+    @extend %page;
+    @extend %no-navigation ;
+  }
+  
+  header {
+    padding: 50px;
+    display: block;
+    position: fixed;
+  }
+
+  .left {
+    left: 8px;
+  }
+
+  .cards {
+    margin-top: 80px;
+    color: gray
+  }
+
+
