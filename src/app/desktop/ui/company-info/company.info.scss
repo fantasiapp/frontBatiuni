@@ -75,7 +75,7 @@ $textColor : #44444F;
     width: 150px;
     height: 150px;
     background-color: #fcfcfc;
-    img {aspect-ratio: 1 / 1;  object-fit: contain;width: inherit; }
+    img {aspect-ratio: 1 / 1;  object-fit: cover;width: inherit; }
     overflow: hidden;
 }
 .info {
