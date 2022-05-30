@@ -1,12 +1,8 @@
 import { ChangeDetectionStrategy, Component, HostBinding, Input } from "@angular/core";
 import { Store } from "@ngxs/store";
 import { Observable } from "rxjs";
-import { UIProfileImageComponent } from "src/app/shared/components/profile-image/profile-image.component";
-import { Company, Job, Profile } from "src/models/new/data.interfaces";
+import { Job, Profile } from "src/models/new/data.interfaces";
 import { DataQueries, QueryProfile } from "src/models/new/data.state";
-import { Availability } from "../calendar/calendar.ui";
-import { ExtendedProfileComponent } from "../extended-profile/extended-profile.component";
-import { SlidemenuService } from "../slidemenu/slidemenu.component";
 
 @Component({
   selector: 'blocked-contact-card',

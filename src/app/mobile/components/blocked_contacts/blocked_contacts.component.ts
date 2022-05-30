@@ -39,13 +39,13 @@ export class BlockedContactsComponent extends Destroy$ {
     }
 
     ngOnInit() {
-        this.info.alignWith('header_search');
-        this.companies$.subscribe((companies) => {
-          for (const company of companies) {
-            this.blockedCompanies.push(company);    
-          } 
-        })      
-        this.cd.markForCheck;
+      this.info.alignWith('header_search');
+      this.companies$.subscribe((companies) => {
+        for (const company of companies) {
+          this.blockedCompanies.push(company);    
+        } 
+      })      
+      this.cd.markForCheck;
     }
 
     ngAfterViewInit() {
@@ -67,11 +67,11 @@ export class BlockedContactsComponent extends Destroy$ {
         });
     }
 
-    // ngOnDestroy(): void {
-    //     this.info.alignWith("last");
-    //     this.getUserDataService.emitDataChangeEvent();
-    //     super.ngOnDestroy();
-    // }
+    ngOnDestroy(): void {
+        this.info.alignWith("last");
+        this.getUserDataService.emitDataChangeEvent();
+        super.ngOnDestroy();
+    }
 
 
 }
