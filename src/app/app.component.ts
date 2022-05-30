@@ -42,6 +42,8 @@ export class AppComponent extends Destroy$ {
   constructor(private store: Store, private mobile: Mobile, private notifService: NotifService) {
     super();
     this.mobile.init();
+    console.log("constructor de app.component.ts")
+    this.updateUserData();
   }
 
   ready$ = new AsyncSubject<true>();
@@ -61,16 +63,16 @@ export class AppComponent extends Destroy$ {
   }
 
   async updateUserData() {
-    while(true) {  
+    while(true) {
       if (!this.firstAttemptAlreadyTried) {
         this.executeGetGeneralData()
         this.firstAttemptAlreadyTried = true
-        await delay(5000)
+        await delay(20000)
       }
       else if (this.readyToUpdate) { // supposed to be this.readyToUpdate
         this.readyToUpdate = false
         this.getUserData()
-        await delay(5000)
+        await delay(20000)
         this.notifService.checkNotif()
         this.notifService.emitNotifChangeEvent()
         this.readyToUpdate = true

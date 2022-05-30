@@ -271,7 +271,7 @@ export class STFilterFormOld extends Filter<Post> {
         return radius >= range[0] && radius <= range[1];
       }),
       this.inList('job', (job) => { return job.id }),
-      this.onlyIf('$manPower', manPower => { console.log(manPower); return manPower }),
+      this.onlyIf('$manPower', manPower => { return manPower }),
       this.onlyIf('amount', (amount, range) => {
         return amount >= range[0] && amount <= range[1];
       }),

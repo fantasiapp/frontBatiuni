@@ -68,6 +68,7 @@ export type ApplyForm = {
               {{ post?.numberOfPeople || 1 }} {{ job?.name || "Employé" }}
             </li>
             <li>Du {{ post.hourlyStart }} Au {{ post.hourlyEnd }}</li>
+            <li>Adresse : {{ post.Adresse }}</li>
           </ul>
           <span
             ><small
@@ -79,6 +80,10 @@ export type ApplyForm = {
         <div class="description">
           <span class="title  ">Description des missions</span>
           <p>{{ post.description }}</p>
+        </div>
+
+        <div class="detail">
+          <span class="title">Détail de la préstation</span>
           <ul>
             <li *ngFor="let detail of details">{{ detail.content }}</li>
           </ul>

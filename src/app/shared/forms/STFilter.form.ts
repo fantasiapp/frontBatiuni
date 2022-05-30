@@ -266,7 +266,6 @@ export class STFilterForm {
 
     // Filter
     for (let post of allPosts) {
-      console.log(post)
       const company = this.store.selectSnapshot(DataQueries.getById('Company', post.company))!;
       
       //Date de mission

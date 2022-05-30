@@ -50,7 +50,7 @@ export class FileDownloader {
     return this.store.dispatch(new DownloadFile(id, notify)).pipe(
       take(1), //will unsubscribe
       map((_) => {
-        console.log("hello")
+        // console.log("hello")
         return this.store.selectSnapshot(DataQueries.getById("File", id))!;
       })
     );

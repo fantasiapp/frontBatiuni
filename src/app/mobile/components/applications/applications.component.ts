@@ -155,7 +155,6 @@ export class ApplicationsComponent extends Destroy$ {
   }
 
   callbackFilter = (filter: any): void => {
-    console.log(filter)
     this.selectPost(filter);
     this.isFilterOn(filter);
   };

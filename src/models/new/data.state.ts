@@ -228,18 +228,21 @@ export class DataState {
   getUserData(ctx: StateContext<DataModel>, action: GetUserData) {
     console.log("getUserData")
     const req = this.http.get("data", { action: action.action });
+    if (this.isFirstTime) {
+      this.loadingService.emitLoadingChangeEvent(true)
+    }
     if (this.flagUpdate){
       this.flagUpdate = false
-    return req.pipe(
-      tap((response: any) => {
-        this.getUserDataService.setNewResponse(response)
-        if (this.isFirstTime) {
-          this.getUserDataService.getDataChangeEmitter().subscribe((value) => {
-            this.updateLocalData(ctx, value)
-          })
-          this.updateLocalData(ctx, response)
-        }
-        this.flagUpdate = true
+      return req.pipe(
+        tap((response: any) => {
+          this.getUserDataService.setNewResponse(response)
+          if (this.isFirstTime) {
+            this.getUserDataService.getDataChangeEmitter().subscribe((value) => {
+              this.updateLocalData(ctx, value)
+            })
+            this.updateLocalData(ctx, response)
+          }
+          this.flagUpdate = true
     })
       );
     }
@@ -259,11 +262,10 @@ export class DataState {
         ctx.patchState({session: {...state.session,view: oldView,}})
       }
       else {
-      this.loadingService.emitLoadingChangeEvent(true)
       ctx.setState(compose(...loadOperations, sessionOperation));
       this.isFirstTime = false
-      this.loadingService.emitLoadingChangeEvent(false)
       }
+      this.loadingService.emitLoadingChangeEvent(false)
   }
 
   @Action(Logout)

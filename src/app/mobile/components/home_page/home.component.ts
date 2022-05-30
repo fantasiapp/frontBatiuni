@@ -166,7 +166,6 @@ export class HomeComponent extends Destroy$ {
   }
 
   ngOnInit() {
-    this.appComponent.updateUserData();
     this.loadingService.getLoadingChangeEmitter().subscribe((bool : boolean) => {
       this.isLoading = bool
       this.cd.markForCheck()
@@ -186,7 +185,8 @@ export class HomeComponent extends Destroy$ {
   }
 
   async lateInit() {
-    if (!this.isLoading) {
+      console.log("coucou", this.isLoading)
+      if (!this.isLoading) {
       this.info.alignWith("header_search");
       combineLatest([this.profile$, this.posts$])
         .pipe(takeUntil(this.destroy$))
@@ -224,6 +224,7 @@ export class HomeComponent extends Destroy$ {
       this.updatePage()
     }
     else {
+      console.log("coucou dans le else")
       await delay(2000)
       this.lateInit()
       this.cd.markForCheck()
