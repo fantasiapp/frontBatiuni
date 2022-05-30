@@ -229,7 +229,6 @@ export class DataState {
     console.log("getUserData")
     const req = this.http.get("data", { action: action.action });
     if (this.isFirstTime) {
-      this.loadingService.emitLoadingChangeEvent(true)
     }
     if (this.flagUpdate){
       this.flagUpdate = false
@@ -243,6 +242,7 @@ export class DataState {
             this.updateLocalData(ctx, response)
           }
           this.flagUpdate = true
+
     })
       );
     }
@@ -262,6 +262,7 @@ export class DataState {
         ctx.patchState({session: {...state.session,view: oldView,}})
       }
       else {
+      this.loadingService.emitLoadingChangeEvent(true)
       ctx.setState(compose(...loadOperations, sessionOperation));
       this.isFirstTime = false
       }
