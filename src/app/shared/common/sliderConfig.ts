@@ -59,3 +59,12 @@ export const SalarySliderConfig: Options = {
     return value + ' €';
   }
 };
+
+export const SOSSalarySliderConfig: Options = {
+  floor: 0,
+  ceil: 400,
+  showSelectionBar: true,
+  translate(value: number): string {
+    return value + ' €';
+  }
+}  
