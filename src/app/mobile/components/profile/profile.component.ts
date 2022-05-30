@@ -200,4 +200,11 @@ export class ProfileComponent extends Destroy$ {
     this.openMenu = false;
     this.openApplications = true;
   }
+
+  ngOnDestroy(): void {
+    console.log("Oh non pourquoi tu détruis")
+    this.info.alignWith("last");
+    super.ngOnDestroy();
+  }
+
 };

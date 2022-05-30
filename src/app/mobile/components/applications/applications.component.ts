@@ -14,7 +14,7 @@ import { takeUntil } from "rxjs/operators";
 import { Post, PostMenu, Profile } from "src/models/new/data.interfaces";
 import { DataQueries, DataState, QueryAll } from "src/models/new/data.state";
 import { Destroy$ } from "src/app/shared/common/classes";
-import { assignCopy, splitByOutput } from "../../../shared/common/functions";
+import { delay, assignCopy, splitByOutput } from "../../../shared/common/functions";
 import { MarkViewed } from "src/models/new/user/user.actions";
 import { UIAnnonceResume } from "src/app/mobile/ui/annonce-resume/annonce-resume.ui";
 import { Input } from "hammerjs";
@@ -23,6 +23,7 @@ import { AppComponent } from "src/app/app.component";
 import { InfoService } from "src/app/shared/components/info/info.component";
 import { SearchbarComponent } from "src/app/shared/components/searchbar/searchbar.component";
 import { flatten } from "@angular/compiler";
+
 // import { UISlideMenuComponent } from 'src/app/shared/components/slidemenu/slidemenu.component';
 
 @Component({
@@ -108,11 +109,27 @@ export class ApplicationsComponent extends Destroy$ {
     this.selectSearch('');
   }
 
+  async test() {
+    let bool = true
+    while(true) {
+      if (bool){
+        bool = false
+        console.log("applications component")
+        console.log("userOnlinePosts", this.userOnlinePosts)
+        console.log("allOnlinePosts", this.allOnlinePosts)
+        console.log("allCandidatedPost", this.allCandidatedPost)
+        await delay(5000)
+        bool=true}
+    }
+  }
+
   ngAfterViewInit() {
     this.cd.markForCheck;
+    this.test()
   }
 
   selectPost(filter: any) {
+    console.log("hey")
     this.userOnlinePosts = [];
     if (filter == null) {  
       this.userOnlinePosts = this.allCandidatedPost;
@@ -168,6 +185,7 @@ export class ApplicationsComponent extends Destroy$ {
   }
 
   selectSearch(searchForm:  string){
+    console.log("ho")
     this.userOnlinePosts = [];
     if (searchForm == "" || searchForm == null)  {
       this.userOnlinePosts = this.allCandidatedPost
@@ -200,18 +218,15 @@ export class ApplicationsComponent extends Destroy$ {
     // setTimeout(() => {
     //   // this.annonceResume.open()
     // }, 20);
-    this.cd.markForCheck;
+    this.cd.markForCheck;    
+    console.log("coucou", this.userOnlinePosts)
+
   }
 
   ngOnDestroy(): void {
+    console.log("pourquoi tant de n")
     this.info.alignWith("last");
     super.ngOnDestroy();
-  }
-
-  slideOnlinePostClose() {
-    this.postMenu.open = false;
-    // Update
-    this.annonceResume.close();
   }
 
   isRefused(onlinePost: Post) {
@@ -222,6 +237,4 @@ export class ApplicationsComponent extends Destroy$ {
     });
   }
   
-  @ViewChild(UIAnnonceResume, { static: false })
-  private annonceResume!: UIAnnonceResume;
 }
