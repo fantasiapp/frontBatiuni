@@ -7,9 +7,10 @@
   }
   
   header {
-    padding: 50px;
     display: block;
     position: fixed;
+    height: 100px;
+    padding-top: 40px;
   }
 
   .left {
@@ -17,8 +18,7 @@
   }
 
   .cards {
-    margin-top: 80px;
-    color: gray
+    margin-top: 90px;
   }
 
 
