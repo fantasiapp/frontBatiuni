@@ -5,12 +5,14 @@
     </div>
 </header>
 
-<div class="hosted-page space-children-margin page-content-with-tabs">
+<div class="cards">
+<div class="hosted-page space-children-margin">
     <blocked-contact-card
       (click)="checkCompanyProfile(company)" 
       *ngFor="let company of blockedCompanies" 
       [profile]="{company: company}" >
     </blocked-contact-card>
+</div>
 </div>
 
 
