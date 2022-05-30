@@ -10,37 +10,50 @@ export const DistanceSliderConfig: Options = {
     }
 }  
 
+let salaryFloor = 0;
+let salaryCeil = 100000;
 
 export const SalarySliderConfig: Options = {
-  floor: 1,
-  ceil: 100000,
+  floor: salaryFloor,
+  ceil: salaryCeil,
   
   showSelectionBar: true,
 
   customPositionToValue(position: number): number {
-    switch (true) {
-      case position <= 1/3:
-        return position * (1000 - 1)/(1/3) + 1;
-      case position <= 2/3:
-        return position * (10000-1000)/(1/3) - 8000;
-      case position <= 1:
-        return position * (100000-10000) / (1/3) - 170000;
+    // compute the value of a slider (floor to ceil) given its position (0 to 1)
+    // this function must be strictly increasing
+    let numSubdivisions = Math.ceil(Math.log10(salaryCeil)) - 2;
+
+    if (position <= 1/numSubdivisions) {
+      return position * (1000)/(1/numSubdivisions);
     }
-    return 0;
+    else {
+      let subdivisionPosition = Math.floor(position * (numSubdivisions)) + 1;
+      console.log(subdivisionPosition);
+      let m = numSubdivisions * (10**(subdivisionPosition+2) - 10**(subdivisionPosition+1));
+      let p = subdivisionPosition/numSubdivisions - m * 10**(subdivisionPosition+1);
+      p = 0;
+       console.log(m, p)
+      console.log(m*position + p)
+      return salaryCeil
+    }
   },
 
   customValueToPosition(value: number): number {
-    switch (true) {
-      case value <= 1000:
-        return value / (1000 - 1) * (1/3);
-      case value <= 10000:
-        return (value - 1000) / (10000 - 1000) * (1/3) + 1/3;
-      case value <= 100000:
-        return (value - 10000) / (100000 - 10000) * (1/3) + 2/3;
-    }
-    return 0;
-  },
+    // compute the position of a slider (0 to 1) given its value (floor to ceil)
+    // this function must be strictly increasing
 
+    let numSubdivisions = Math.ceil(Math.log10(salaryCeil)) - 2;
+    if (value <= 1000) {
+      return value / (1000) * (1/numSubdivisions);
+    }
+    else {
+      let subdivisionPosition = Math.ceil(Math.log10(value)) - 2;
+      let m = 1/numSubdivisions /(10**(subdivisionPosition+2) - 10**(subdivisionPosition+1));
+      let p = (subdivisionPosition-1)/numSubdivisions - 1/numSubdivisions/9;
+      return m * value + p;
+    }
+  },
 
   translate(value: number): string {
     return value + ' €';
