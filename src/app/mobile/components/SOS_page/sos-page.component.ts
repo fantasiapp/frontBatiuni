@@ -8,7 +8,7 @@ import { combineLatest, Observable, of } from "rxjs";
 import { switchMap, takeUntil } from "rxjs/operators";
 import { AppComponent } from "src/app/app.component";
 import { Destroy$ } from "src/app/shared/common/classes";
-import { DistanceSliderConfig, SalarySliderConfig } from "src/app/shared/common/sliderConfig";
+import { DistanceSliderConfig, SOSSalarySliderConfig } from "src/app/shared/common/sliderConfig";
 import { splitByOutput } from "src/app/shared/common/functions";
 import { Availability } from "src/app/shared/components/calendar/calendar.ui";
 import { ExtendedProfileComponent } from "src/app/shared/components/extended-profile/extended-profile.component";
@@ -38,7 +38,7 @@ export interface availableCompanies {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SOSPageComponent extends Destroy$ {
-  imports = { DistanceSliderConfig, SalarySliderConfig };
+  imports = { DistanceSliderConfig, SOSSalarySliderConfig };
 
   activeView: number = 0;
   openSOSFilterMenu: boolean = false;

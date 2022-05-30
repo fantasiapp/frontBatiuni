@@ -211,6 +211,7 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
             if (!this.value || (!this.value.content && this.value.id == void 0))
               return this.info.show("error", "Aucun fichier à affichier", 3000);
 
+            console.log("open file", this.value);
             this.popup.openFile(this.value);
           },
         },
