@@ -119,3 +119,11 @@ header > div > img ~ span::after {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
+
+.map-container {
+  width: 100vw;
+  position: relative;
+  left: -2rem;
+  top: -1rem;
+  
+}
