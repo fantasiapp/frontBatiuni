@@ -19,9 +19,12 @@ export class ModalImage {
 
   scale: number = 1;
 
+  isMobile: boolean = true;
 
-  ngOnInit() {
-  }
+  ngOnInit() {  
+    this.isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    console.log("is mobile", this.isMobile)
+}
 
 
   xDown: number = 0;
