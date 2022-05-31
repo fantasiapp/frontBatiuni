@@ -120,7 +120,7 @@ export class ModalImage {
   ngAfterViewInit() {
     let img = document.getElementById("target")!;
 
-    if (false) {
+    if ( this.isMobile ) {
         img.onwheel = (event) => {
             event.preventDefault();
 
