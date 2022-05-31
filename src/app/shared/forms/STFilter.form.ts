@@ -259,7 +259,6 @@ export class STFilterForm {
   }
 
   updateFilteredPosts(filter: any) {
-    console.log(filter)
     this.filteredPosts = [];
     const user = this.store.selectSnapshot(DataQueries.currentUser);
     const now = new Date().toISOString().slice(0, 10);
