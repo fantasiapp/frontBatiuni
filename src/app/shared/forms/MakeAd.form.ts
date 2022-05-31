@@ -278,6 +278,15 @@ import { Mobile } from "../services/mobile-footer.service";
       border-radius: 3px;
     }
 
+    input{
+      margin-top: 20px;
+    }
+
+    switch{
+      margin-top: 20px;
+      margin-bottom: 20px;
+    }
+
     .option-container {
       margin-left: 30px;
       width: 100px;

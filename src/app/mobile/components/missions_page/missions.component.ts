@@ -82,7 +82,8 @@ export class MissionsComponent extends Destroy$ {
     combineLatest([this.profile$, this.missions$]).pipe(takeUntil(this.destroy$)).subscribe(([profile, missions]) => {
       //filter own missions
       //for now accept all missions
-      
+      console.log("la requete en local", this.store.selectSnapshot(DataQueries.getAll("Mission")))
+      console.log("Missions", missions)
       this.allMyMissions = missions.filter(mission => mission.subContractor == profile.company.id);
       //compute work days
 
@@ -240,13 +241,16 @@ export class MissionsComponent extends Destroy$ {
       open: !!mission,
       swipeup: false,
     });
+    console.log("est ce que je dispatch ou pas ?", !mission)
     if (mission) this.store.dispatch(new MarkViewed(mission.id));
   }
 
   ngOnDestroy(): void {
     this.info.alignWith("last");
     this.getUserDataService.emitDataChangeEvent();
+    console.log("on check les missions avant de tout détruire", this.store.selectSnapshot(DataQueries.getAll("Mission")))
     super.ngOnDestroy();
+    console.log("on check les missions après avoir tout détruit", this.store.selectSnapshot(DataQueries.getAll("Mission")))
   }
 
   get missionToClose(): Mission | null {

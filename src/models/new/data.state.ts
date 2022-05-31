@@ -768,6 +768,7 @@ export class DataState {
           throw response.messages;
         }
         delete response[application.action];
+        console.log('Response', response)
         ctx.setState(
           addComplexChildren("Company", profile.company.id, "Mission", response)
         );
@@ -785,9 +786,11 @@ export class DataState {
           throw response.messages;
         }
         delete response[application.action];
+        console.log('ReponseST', response)
         ctx.setState(
           addComplexChildren("Company", profile.company.id, "Mission", response)
         );
+        console.log("Dans CloseMissionST", this.store.selectSnapshot(DataQueries.getAll("Mission")))
       })
     );
   }
