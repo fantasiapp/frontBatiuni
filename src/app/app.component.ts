@@ -20,6 +20,7 @@ import { delay } from "./shared/common/functions";
 import { waitForAsync } from "@angular/core/testing";
 import { NotifService } from "./shared/services/notif.service";
 import { getMessaging, getToken, onMessage} from "firebase/messaging"
+import { initializeApp } from "firebase/app";
 
 @Component({
   selector: "app-root",
@@ -44,6 +45,7 @@ export class AppComponent extends Destroy$ {
   title = 'af-notification'
   message : any = null
   public isConnected: boolean = false;
+  app: any
 
   constructor(private store: Store, private mobile: Mobile, private notifService: NotifService) {
     super();
@@ -61,6 +63,7 @@ export class AppComponent extends Destroy$ {
     this.executeGetGeneralData()
     this.ready$.next(true);
     this.ready$.complete();
+    this.app = initializeApp(environment.firebase)
     this.requestPermission()
     this.listen()
   }
@@ -112,7 +115,7 @@ export class AppComponent extends Destroy$ {
   }
 
   requestPermission() {
-    const messaging = getMessaging()
+    const messaging = getMessaging(this.app)
     console.log("la vapid key utilisé : ", environment.firebase.vapidKey)
     console.log("le messaging : ", messaging)
     getToken(messaging, {vapidKey : environment.firebase.vapidKey}).then((currentToken) => {
@@ -124,7 +127,7 @@ export class AppComponent extends Destroy$ {
   }
 
   listen() {
-    const messaging = getMessaging()
+    const messaging = getMessaging(this.app)
     onMessage(messaging, (payload) => {
       console.log('Message received. ', payload)
       this.message = payload
