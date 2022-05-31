@@ -40,6 +40,10 @@ export class BlockedContactsComponent extends Destroy$ {
 
     ngOnInit() {
       this.info.alignWith('header_search');
+      const user = this.store.selectSnapshot(DataQueries.currentUser);
+      let userCompany = this.store.selectSnapshot(DataQueries.getById('Company', user.company))
+      // A changer avec les contacts bloqués :
+      // let blockedCompanies = this.store.selectSnapshot(DataQueries.getById('Company', userCompany.blockedCompanies))
       this.companies$.subscribe((companies) => {
         for (const company of companies) {
           this.blockedCompanies.push(company);    
