@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, ViewRef } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input, ViewChild, ViewRef } from "@angular/core";
 import { SafeResourceUrl } from "@angular/platform-browser";
 
 export type FileContext = {
@@ -22,6 +22,9 @@ export class FileViewer {
   displayModal: boolean = false;
   modalImage: SafeResourceUrl = "";
 
+  constructor(private cd: ChangeDetectorRef) {
+  }
+
   ngOnInit() {
     console.log("init", this.fileContext)
   }
@@ -35,7 +38,7 @@ export class FileViewer {
     console.log(image);
     this.displayModal = true;
     this.modalImage = image;
-
+    this.cd.markForCheck();
   }
 
   closeModalImage() {

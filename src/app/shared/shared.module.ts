@@ -66,7 +66,7 @@ import { SlideProfileComponent } from './components/slide-profile/slide-profile.
 import { Mobile } from "./services/mobile-footer.service";
 import { NotificationAgendaComponent } from './components/notification-agenda/notification-agenda.component';
 import { ApplicationForm } from "./forms/application.form";
-
+import { ModalImage } from "./components/modal-image/modal-image.component";
 @NgModule({
   declarations: [
     UICheckboxComponent,
@@ -133,6 +133,7 @@ import { ApplicationForm } from "./forms/application.form";
     RatingComponent,
     SlideProfileComponent,
     NotificationAgendaComponent,
+    ModalImage
   ],
   imports: [
     CommonModule,
