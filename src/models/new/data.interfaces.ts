@@ -73,11 +73,20 @@ export interface Company {
 
 export interface PostDetail {
   id: Ref<PostDetail>;
-  date: string;
-  content: string;
-  validated : boolean;
-  refused : boolean;
-  supervisions: Ref<Supervision>[];
+  date: string
+  content: string
+  validated : boolean
+  refused : boolean
+  supervisions: Ref<Supervision>[]
+};
+
+export interface PostDetailGraphic {
+  id: Ref<PostDetail>;
+  date: string
+  content: string
+  validated : boolean
+  refused : boolean
+  supervisions: Supervision[]
 };
 
 export interface Supervision {
@@ -144,7 +153,7 @@ export interface Post {
   details: Ref<PostDetail>[];
   files: Ref<File>[];
   candidates: Ref<Candidate>[];
-  dates: Ref<PostDate>[];
+  dates: Ref<DatePost>[];
   boostTimestamp: number;
 };
 
@@ -205,16 +214,26 @@ export type Mission = Post & {
 
   isClosed: boolean;
   contract: Ref<File>;
-  supervisions: Ref<Supervision>[]
 };
 
-export type PostDate = {
-  id: Ref<PostDate>;
+export type DatePost = {
+  id: Ref<DatePost>;
   date: string;
   validated: boolean;
   deleted: boolean;
   supervisions: Ref<Supervision>[]
+  details: Ref<PostDetail>[]
 };
+
+export type PostDateAvailableTask = {
+  id: Ref<PostDateAvailableTask>
+  date: string
+  validated: boolean
+  deleted: boolean
+  supervisions: Supervision[]
+  postDetails: PostDetailGraphic[]
+  allPostDetails: PostDetail[]
+}
 
 export type Task = PostDetail & {
   validationImage:string,
@@ -224,7 +243,7 @@ export type Task = PostDetail & {
 
 export type DateG = {
   id: number
-  date: PostDate
+  date: DatePost
   tasks: Task[] | null
   selectedTasks: Task[]
   taskWithoutDouble: Task[]
@@ -247,7 +266,7 @@ export type Interface<K extends DataTypes> =
   K extends 'LabelForCompany' ? LabelForCompany :
   K extends 'Candidate' ? Candidate :
   K extends 'Mission' ? Mission :
-  K extends 'DatePost' ? PostDate :
+  K extends 'DatePost' ? DatePost :
   K extends 'Establishments' ? Establishement :
   K extends 'Notification' ? Notification :
   K;

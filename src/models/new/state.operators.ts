@@ -34,7 +34,7 @@ namespace mutable {
     Object.entries<any>(values).forEach(([id, item]) => {
       //An horrible patch waiting for a true solution
       if (!targetObjects) return
-      const current = targetObjects[id];
+        const current = targetObjects[id];
       //if not created create
       if ( !current ) {
         
@@ -56,9 +56,9 @@ namespace mutable {
                 mutable.deleteIds(draft, fields[i], current[i]);
               }
               mutable.update(draft, fields[i], item[i]);
-              if (fields[i] != "DatePost") {
+              // if (fields[i] != "DatePost") {
                 item[i] = Object.keys(item[i]).map(id => +id);
-              }
+              // }
             }
           }
         }
@@ -130,7 +130,7 @@ namespace mutable {
     //add to parent
     const parentObject = draft[parent]?.[parentId],
       childIndex = draft.fields[parent].indexOf(child);
-    
+  
     if ( !parentObject || childIndex <= -1 ) return;
     
     for ( const id of ids )

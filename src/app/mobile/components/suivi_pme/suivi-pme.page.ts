@@ -20,11 +20,12 @@ import {
   Mission,
   PostMenu,
   PostDetail,
+  PostDetailGraphic,
   Profile,
   Supervision,
-  DateG,
   Task,
-  PostDate,
+  DatePost,
+  PostDateAvailableTask,
 } from "src/models/new/data.interfaces";
 import { DataQueries, DataState } from "src/models/new/data.state";
 import {
@@ -48,7 +49,8 @@ export class SuiviPME {
   track: { [key: string]: Map<PostDetail, Supervision[]> } = {};
   isNotSigned: boolean = true;
   isNotSignedByUser: boolean = true;
-  dates: DateG[] = [];
+  dates: DatePost[] = [];
+  datesNew: PostDateAvailableTask[] = []
   currentDateId: number | null = null;
   tasks: Task[] | null = null;
   companyName: string = "";
@@ -89,7 +91,7 @@ export class SuiviPME {
       this.isNotSignedByUser =
         (!mission.signedByCompany && this.view == "PME") ||
         (!mission.signedBySubContractor && this.view == "ST");
-      this.computeDates(mission);
+      // this.computeDates(mission);
       this.companyName =
         this.view == "ST" ? this.company!.name : this.subContractor!.name;
       this.contactName =
@@ -130,119 +132,163 @@ export class SuiviPME {
     private cd: ChangeDetectorRef
   ) {}
 
-  computeDates(mission: Mission) {
-    let supervisionsTaks: number[] = [];
-    this.tasks = this.store
-      .selectSnapshot(DataQueries.getMany("DetailedPost", mission.details))
-      ?.map((detail) => ({
-        id: detail.id,
-        date: detail.date,
-        content: detail.content,
-        validated: detail.validated,
-        refused: detail.refused,
-        supervisions: detail.supervisions,
-        supervisionsObject: this.computeSupervisionsforTask(detail.supervisions,supervisionsTaks),
-        validationImage: SuiviPME.computeTaskImage(detail, "validated"),
-        invalidationImage: SuiviPME.computeTaskImage(detail, "refused"),
-      }));
-    let dates = mission.dates;
-    if (typeof mission.dates === "object" && !Array.isArray(mission.dates))
-      dates = Object.keys(mission.dates).map((key) => +key as number);
-    this.dates = dates?.map((value: number, id) => {
-      let dateObject: PostDate = this.store.selectSnapshot(DataQueries.getById("DatePost", value))!;
+  // computeDates(mission: Mission) {
+  //   let supervisionsTaks: number[] = [];
+  //   this.tasks = this.store
+  //     .selectSnapshot(DataQueries.getMany("DetailedPost", mission.details))
+  //     ?.map((detail) => ({
+  //       id: detail.id,
+  //       date: detail.date,
+  //       content: detail.content,
+  //       validated: detail.validated,
+  //       refused: detail.refused,
+  //       supervisions: detail.supervisions,
+  //       supervisionsObject: this.computeSupervisionsforTask(detail.supervisions,supervisionsTaks),
+  //       validationImage: SuiviPME.computeTaskImage(detail, "validated"),
+  //       invalidationImage: SuiviPME.computeTaskImage(detail, "refused"),
+  //     }));
+  //   let dates = mission.dates;
+  //   if (typeof mission.dates === "object" && !Array.isArray(mission.dates))
+  //     dates = Object.keys(mission.dates).map((key) => +key as number);
+  //   this.dates = dates?.map((value: number, id) => {
+  //     let dateObject: PostDate = this.store.selectSnapshot(DataQueries.getById("DatePost", value))!;
 
-      let supervisionId = dateObject.supervisions;
-      if (typeof supervisionId === "object" && !Array.isArray(supervisionId))
-        supervisionId = Object.keys(supervisionId).map((key) => +key as number);
+  //     let supervisionId = dateObject.supervisions;
+  //     if (typeof supervisionId === "object" && !Array.isArray(supervisionId))
+  //       supervisionId = Object.keys(supervisionId).map((key) => +key as number);
 
-      let supervision = this.store.selectSnapshot(DataQueries.getMany("Supervision", supervisionId))
-      return {
-        id: id,
-        date: dateObject,
-        tasks: this.tasks,
-        selectedTasks: this.computeSelectedTask(dateObject.date),
-        taskWithoutDouble: this.dateWithoutDouble(),
-        view: this.view,
-        supervisions: supervision,
-      } as DateG;
-    })
-    this.dates.sort((date1:DateG, date2:DateG) => {return date1.date.date > date2.date.date ? 1 : -1})
-  }
+  //     let supervision = this.store.selectSnapshot(DataQueries.getMany("Supervision", supervisionId))
+  //     return {
+  //       id: id,
+  //       date: dateObject,
+  //       tasks: this.tasks,
+  //       selectedTasks: this.computeSelectedTask(dateObject.date),
+  //       taskWithoutDouble: this.dateWithoutDouble(),
+  //       view: this.view,
+  //       supervisions: supervision,
+  //     } as DateG;
+  //   })
+  //   this.dates.sort((date1:DateG, date2:DateG) => {return date1.date.date > date2.date.date ? 1 : -1})
+  // }
 
-  computeSupervisionsforTask(
-    supervisionsId: number[],
-    supervisionsTask: number[]
-  ) {
-    let supervisions: Supervision[] = [];
-    supervisionsId.forEach((id) => {
-      let supervision = this.store.selectSnapshot(
-        DataQueries.getById("Supervision", id)
-      );
-      if (supervision) {
-        supervisions.push(supervision!);
-        supervisionsTask.push(supervision.id);
-      }
-    });
-    return supervisions;
-  }
+  // computeDates(mission: Mission) {
+  //   let dates:DatePost[] = []
+  //   if (typeof (mission.dates) === "object" && !Array.isArray(mission.dates)) dates = mission.dates
+  //   else dates = this.store.selectSnapshot(DataQueries.getMany("DatePost", mission.dates))
+  //   const allPostDetails = this.computeAllPostDetails(mission.details)
+  //   this.dates = dates.map((date) => {
+  //     const [supervisions, postDetail] = this.computeFieldOfDate(date)
+  //     return {
+  //       "id":date.id,
+  //       "date": date.date,
+  //       "validated":date.validated,
+  //       "deleted":date.deleted,
+  //       "supervisions":supervisions,
+  //       "postDetails":postDetail,
+  //       "allPostDetails":allPostDetails
+  //     } as unknown as PostDateAvailableTask
+  //   })
+  // }
 
-  computeSupervisionsForMission(date: string, supervisionsTask: number[]): Supervision[] {
-    let supervisions: Supervision[] = [];
-    // console.log('supervision', this.mission);
-    let allSupervisions: (Supervision | null)[] = this.mission!.supervisions.map((id) => {
-        // console.log('supervision', id);
-        let supervision = this.store.selectSnapshot(DataQueries.getById("Supervision", id));
-        // console.log('apresDAtaqiurei');
-        if (
-          supervision &&
-          supervision.date == date &&
-          !supervisionsTask.includes(supervision.id)
-        ) {
-          return supervision;
-        }
-        return null;
-      });
-    for (let index in allSupervisions) {
-      if (allSupervisions[index]) {
-        supervisions.push(allSupervisions[index]!);
-      }
-    }
-    return supervisions;
-  }
+  // computeFieldOfDate(date:DatePost) {
+  //   let supervisions:Supervision[] = []
+  //   let postDetails:PostDetail[] = []
+  //   let avaliableDetails:PostDetail[] = []
+  //   if (typeof(date.supervisions) === "object" && !Array.isArray(date.supervisions))
+  //     supervisions = Object.values(date.supervisions) as Supervision[]
+  //   else
+  //     supervisions = this.store.selectSnapshot(DataQueries.getMany("Supervision", date.supervisions))
+  //     console.log("supervisions", supervisions, date.supervisions)
 
-  static computeTaskImage(task: PostDetail, type: String) {
-    if (type === "validated") {
-      if (task.validated && !task.refused) {
-        return "assets/suivi-valider-OK.svg";
-      } else {
-        return "assets/suivi-valider.svg";
-      }
-    } else {
-      if (!task.validated && task.refused) {
-        return "assets/suivi-refuser-OK.svg";
-      } else {
-        return "assets/suivi-refuser.svg";
-      }
-    }
-  }
+  //   if (typeof(date.details) === "object" && !Array.isArray(date.details))
+  //     postDetails = Object.values(date.details)
+  //   else
+  //     postDetails = this.store.selectSnapshot(DataQueries.getMany("DetailedPost", date.details))
 
-  dateWithoutDouble(): Task[] {
-    return this.tasks!.filter((task) => !task.date);
-  }
+  //   let postDetailsGraphic = postDetails.map((postDetail) => {
+  //     let supervisions:Supervision[]
+  //     if ((typeof(postDetail.supervisions) === "object") && !Array.isArray(postDetail.supervisions)) {
+  //       supervisions = Object.values(postDetail.supervisions) as unknown as Supervision[]
+  //     } else {
+  //       supervisions = this.store.selectSnapshot(DataQueries.getMany("Supervision", postDetail.supervisions as unknown as number[]))
+  //     }
+  //     return {
+  //       "id": postDetail.id,
+  //       "date": postDetail.date,
+  //       "content": postDetail.content,
+  //       "validated": postDetail.validated,
+  //       "refused": postDetail.refused,
+  //       "supervisions": supervisions,
+  //     } as PostDetailGraphic
+  //   })
+  //   return [supervisions, postDetailsGraphic, avaliableDetails]
+  // }
 
-  computeSelectedTask(date: string) {
-    let selectedTask: Task[] = [];
-    this.tasks?.forEach((task) =>
-      this.computeSelectedTaskAction(selectedTask, date, task)
-    );
-    return selectedTask;
-  }
+  // computeAllPostDetails(details:any[]) {
+  //   let avaliableTasks: PostDetail[] = []
+  //   if (typeof(details) === "object" && !Array.isArray(details)) avaliableTasks = details
+  //   else avaliableTasks = this.store.selectSnapshot(DataQueries.getMany("DetailedPost", details))
+  //   return avaliableTasks
+  //   }
 
-  computeSelectedTaskAction(selectedTask: Task[], date: string, task: Task) {
-    if (date == task.date) {
-      selectedTask.push(task);
-    }
-  }
+  // computeSupervisionsforTask(
+  //   supervisionsId: number[],
+  //   supervisionsTask: number[]
+  // ) {
+  //   let supervisions: Supervision[] = [];
+  //   supervisionsId.forEach((id) => {
+  //     let supervision = this.store.selectSnapshot(
+  //       DataQueries.getById("Supervision", id)
+  //     );
+  //     if (supervision) {
+  //       supervisions.push(supervision!);
+  //       supervisionsTask.push(supervision.id);
+  //     }
+  //   });
+  //   return supervisions;
+  // }
+
+  // computeSupervisionsForMission(date: string, supervisionsTask: number[]): Supervision[] {
+  //   let supervisions: Supervision[] = [];
+  //   // console.log('supervision', this.mission);
+  //   let allSupervisions: (Supervision | null)[] = this.mission!.supervisions.map((id) => {
+  //       // console.log('supervision', id);
+  //       let supervision = this.store.selectSnapshot(DataQueries.getById("Supervision", id));
+  //       // console.log('apresDAtaqiurei');
+  //       if (
+  //         supervision &&
+  //         supervision.date == date &&
+  //         !supervisionsTask.includes(supervision.id)
+  //       ) {
+  //         return supervision;
+  //       }
+  //       return null;
+  //     });
+  //   for (let index in allSupervisions) {
+  //     if (allSupervisions[index]) {
+  //       supervisions.push(allSupervisions[index]!);
+  //     }
+  //   }
+  //   return supervisions;
+  // }
+
+  // dateWithoutDouble(): Task[] {
+  //   return this.tasks!.filter((task) => !task.date);
+  // }
+
+  // computeSelectedTask(date: string) {
+  //   let selectedTask: Task[] = [];
+  //   this.tasks?.forEach((task) =>
+  //     this.computeSelectedTaskAction(selectedTask, date, task)
+  //   );
+  //   return selectedTask;
+  // }
+
+  // computeSelectedTaskAction(selectedTask: Task[], date: string, task: Task) {
+  //   if (date == task.date) {
+  //     selectedTask.push(task);
+  //   }
+  // }
 
   closeMission() {
     if (this.mission!.subContractor && !this.mission!.isClosed) {
@@ -355,22 +401,25 @@ export class SuiviPME {
   currentProfile$!: Observable<Profile>;
 
   signContract() {
+    console.log("sign contract")
     this.popup.openSignContractDialog(this.mission!);
   }
 
-  reloadMission = (dateOld: DateG): (DateG | Mission)[] => {
-    let dateResult = dateOld;
+  reloadMission = (dateId: number): (PostDateAvailableTask | Mission)[] => {
     this.mission = this.store.selectSnapshot(
       DataQueries.getById("Mission", this.mission!.id)
-    );
-    this.computeDates(this.mission!);
-    this.dates.forEach((dateNew) => {
-      if (dateNew.date.date == dateOld.date.date) {
-        dateResult = dateNew;
-      }
-    });
-
-    return [dateResult, this.mission!];
+    )
+    const newDate = this.store.selectSnapshot(DataQueries.getById("DatePost", dateId))
+    const supervisions = this.store.selectSnapshot(DataQueries.getAll("Supervision"))
+    console.log("reloadMission supervision", dateId, newDate, supervisions)
+    // this.computeDates(this.mission!);
+    console.log("reloadMission", this.dates)
+    let dateNew = this.dates[0]
+    this.dates.forEach((date) => {
+      if (date.id === dateId) dateNew = date
+    })
+    console.log("dateNew", dateNew)
+    return [dateNew, this.mission!]
   };
 
   modifyTimeTable() {
@@ -392,7 +441,6 @@ export class SuiviPME {
 
   async submitAdFormDate(setup: boolean = false) {
     let datesSelected: string[] = this.calendarForm!.value.filter((day : DayState) => day.availability == 'selected').map((day: DayState) => day.date)
-
     let blockedDates = this.computeBlockedDate();
     let pendingDates = this.computePendingDate()
 
@@ -406,7 +454,6 @@ export class SuiviPME {
         dateToBeSelected.push(date);
       }
     });
-    
 
     pendingDates.pendingValidated.forEach((date) => {
       if(!datesSelected.includes(date)){
@@ -448,7 +495,6 @@ export class SuiviPME {
         return dayState.date;
       }
     );
-
     this.store.dispatch(new ModifyMissionDate(this.mission!.id, this.AdFormDate.get("hourlyStart")!.value, this.AdFormDate.get("hourlyEnd")!.value, selectedDate)).pipe(take(1)).subscribe(() => {
       if (!this.alert) this.swipeupModifyDate = false;
       // Update de mission et accordionData puis update la vue

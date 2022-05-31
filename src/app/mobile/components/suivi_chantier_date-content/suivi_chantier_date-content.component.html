@@ -1,30 +1,30 @@
 <div class="chantier-tache-container">
-    <div id="taskMain_{{date.id}}" *ngIf="date.view=='PME' && !mission!.isClosed">
+    <div id="taskMain_{{date.id}}" *ngIf="view=='PME' && !mission!.isClosed">
         <div class="chantier-tache">
             <label>Choisir les tâches pour ce jour</label>
             <img (click)="swipeMenu = true" src="assets/Option.svg"/>
         </div>
     </div>
-    <div class="taskByDate" *ngFor="let iterable of iterableTasksComment; let index = index">
+    <div class="taskByDate" *ngFor="let taskGraphic of tasksGraphic; let index = index">
         <div class="details chantier-tache">
-          <span class="detail-name">{{ iterable.selectedTask.content }}</span>
+          <span class="detail-name">{{ taskGraphic.selectedTask.content }}</span>
           <div class="controls">
-            <img (click)="validate(iterable.selectedTask, validateImg)" id="control_validate_{{iterable.selectedTask.id}}" [src]= "iterable.selectedTask.validationImage" #validateImg/>
-            <img (click)="refuse(iterable.selectedTask, refuseImg)" id="control_refuse_{{iterable.selectedTask.id}}" [src]= "iterable.selectedTask.invalidationImage" #refuseImg/>
+            <img (click)="validate(taskGraphic.selectedTask, validateImg)" id="control_validate_{{taskGraphic.selectedTask.id}}" [src]= "taskGraphic.validationImage" #validateImg/>
+            <img (click)="refuse(taskGraphic.selectedTask, refuseImg)" id="control_refuse_{{taskGraphic.selectedTask.id}}" [src]= "taskGraphic.invalidationImage" #refuseImg/>
           </div>
         </div>
-        <div class="comment-container" *ngIf="!iterable.selectedTask.supervisionsObject.length">
-          <div *ngIf="iterable.selectedTask.refused && !mission!.isClosed" class="divComment">
-            <form [formGroup]="iterable.formGroup" (ngSubmit)="onSubmit(iterable.selectedTask, iterable.formGroup, 'comment')">
-              <input id="input_{{iterable.selectedTask.id}}" class="inputComment" type="text" placeholder="Ajouter un commentaire" formControlName="comment" #comment>
+        <div class="comment-container" *ngIf="!taskGraphic.selectedTask.supervisions.length">
+          <div *ngIf="taskGraphic.selectedTask.refused && !mission!.isClosed" class="divComment">
+            <form [formGroup]="taskGraphic.formGroup" (ngSubmit)="onSubmit(taskGraphic.selectedTask, taskGraphic.formGroup, 'comment')">
+              <input id="input_{{taskGraphic.selectedTask.id}}" class="inputComment" type="text" placeholder="Ajouter un commentaire" formControlName="comment" #comment>
             </form>
           </div>
         </div>
-        <div class="comment-container" *ngFor="let supervision of iterable.selectedTask.supervisionsObject; let isLast = last">
+        <div class="comment-container" *ngFor="let supervision of taskGraphic.selectedTask.supervisions; let isLast = last">
           <comment-suivi  [supervision]="supervision"></comment-suivi>
-          <div *ngIf="iterable.selectedTask.refused && !mission!.isClosed && isLast" class="divComment">
-            <form [formGroup]="iterable.formGroup" (ngSubmit)="onSubmit(iterable.selectedTask, iterable.formGroup, 'comment')">
-              <input id="input_{{iterable.selectedTask.id}}" class="inputComment" type="text" placeholder="Ajouter un commentaire" formControlName="comment" #comment>
+          <div *ngIf="taskGraphic.selectedTask.refused && !mission!.isClosed && isLast" class="divComment">
+            <form [formGroup]="taskGraphic.formGroup" (ngSubmit)="onSubmit(taskGraphic.selectedTask, taskGraphic.formGroup, 'comment')">
+              <input id="input_{{taskGraphic.selectedTask.id}}" class="inputComment" type="text" placeholder="Ajouter un commentaire" formControlName="comment" #comment>
             </form>
             <img (click)="cameraSwipe(supervision.id)" src="assets/camera-outline.svg"/>
           </div>
@@ -58,7 +58,7 @@
 
 
 <swipeup [(open)]="swipeMenu">
-    <li (click)="addDateToPost()"> Modifier les tâches</li>
+    <li (click)="addTaskToPost()"> Modifier les tâches</li>
 </swipeup>
 
 <swipeup [(open)]="swipeMenuImage" #modifyPicture>

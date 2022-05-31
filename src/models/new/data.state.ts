@@ -679,10 +679,10 @@ export class DataState {
           this.inZone(() => this.info.show("error", response.messages, 3000));
           throw response.messages;
         }
-        delete response[application.action];
+        delete response[application.action]
         ctx.setState(
           addComplexChildren("Company", profile.company.id, "Mission", response)
-        );
+        )
       })
     );
   }
@@ -697,9 +697,9 @@ export class DataState {
           throw response.messages;
         }
         delete response[application.action];
-        let key = Object.keys(response)
-        if ("datePostId" in response) {ctx.setState(addComplexChildren("DatePost",response["datePostId"], "Supervision", response["supervision"]))}
-        if ("detailedPostId" in response) {ctx.setState(addComplexChildren("DetailedPost",response["detailedPostId"], "Supervision", response["supervision"]))}
+        console.log("createSupervision", response, response["type"], response["type"] == "DatePost")
+        if (response["type"] == "DatePost") ctx.setState(addComplexChildren("DatePost", response["fatherId"], "Supervision", response["supervision"]))
+        if (response["type"] == "detailedPost") ctx.setState(addComplexChildren("DetailedPost",response["fatherId"], "Supervision", response["supervision"]))
       })
     );
   }

@@ -12,9 +12,8 @@ import { assignCopy } from "src/app/shared/common/functions";
 import { MissionDetailedDay } from "src/app/shared/components/horizontalcalendar/horizontal.component";
 import { InfoService } from "src/app/shared/components/info/info.component";
 import {
-  DateG,
   Mission,
-  PostDate,
+  DatePost,
   PostDetail,
   PostMenu,
   Profile,
@@ -99,7 +98,7 @@ export class MissionsComponent extends Destroy$ {
         
         // const diffDays = end.diff(start, 'days', true);
         // let day = start.clone();
-        let missionDatesId: Ref<PostDate>[];
+        let missionDatesId: Ref<DatePost>[];
         if (typeof mission.dates === "object" && !Array.isArray(mission.dates)) {
           missionDatesId = Object.keys(mission.dates).map(key => (+key as number))
         }

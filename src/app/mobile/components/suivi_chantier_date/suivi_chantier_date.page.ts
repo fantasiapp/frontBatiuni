@@ -1,7 +1,7 @@
 import { Select, Store } from "@ngxs/store";
 import { ChangeDetectionStrategy, Component, ChangeDetectorRef, Input, ViewChild, EventEmitter, Output, ViewEncapsulation} from "@angular/core";
 import { Destroy$ } from "src/app/shared/common/classes";
-import { Mission, DateG } from "src/models/new/data.interfaces";
+import { Mission, PostDateAvailableTask } from "src/models/new/data.interfaces";
 import { PopupService } from "src/app/shared/components/popup/popup.component";
 import { UIAccordion } from "src/app/shared/components/accordion/accordion.ui";
 
@@ -24,9 +24,7 @@ export class SuiviChantierDate extends Destroy${
     
   @Input()
   view: 'ST' | 'PME' = "PME";
-  _date: DateG = {id:0, 
-    date: {id:-1, date:'', validated: false, deleted:false, supervisions: []}, 
-    tasks:[], selectedTasks:[], taskWithoutDouble:[], view:this.view, supervisions: []};
+  _date: PostDateAvailableTask = {id:-1, date:'', validated: false, deleted:false, supervisions: [], postDetails: [], allPostDetails: []}
   get date() { return this._date; }
   
   @ViewChild('accordion') accordion!:UIAccordion;
@@ -34,7 +32,7 @@ export class SuiviChantierDate extends Destroy${
   
   
   @Input()
-  set date(date: DateG) {
+  set date(date: PostDateAvailableTask) {
     this._date = date;
   }
   
@@ -50,6 +48,6 @@ export class SuiviChantierDate extends Destroy${
   // get reloadMission() { return this._reloadMission; }
   
 @Input()
-reloadMission!: (date:DateG) => (DateG|Mission)[] 
+reloadMission!: (date:number) => (PostDateAvailableTask|Mission)[] 
   
 }
