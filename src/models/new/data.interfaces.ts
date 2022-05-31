@@ -87,6 +87,7 @@ export interface PostDetailGraphic {
   validated : boolean
   refused : boolean
   supervisions: Supervision[]
+  checked : boolean
 };
 
 export interface Supervision {
