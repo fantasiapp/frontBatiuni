@@ -230,23 +230,23 @@ export class UIPopup extends DimensionMenu {
     });
   }
 
-  disableCheckbox(task: Task, date: DateG) {
-    for (const selectedTask of date.selectedTasks) {
-      if (
-        task.content == selectedTask.content &&
-        (selectedTask.refused || selectedTask.validated)
-      )
-        return true;
-    }
-    return false;
-  }
+  // disableCheckbox(task: Task, disabled: boolean) {
+  //   // for (const selectedTask of date.selectedTasks) {
+  //   //   if (
+  //   //     task.content == selectedTask.content &&
+  //   //     (selectedTask.refused || selectedTask.validated)
+  //   //   )
+  //   //     return true;
+  //   // }
+  //   // return false;
+  // }
 
-  checkedCheckbox(task: Task, date: DateG) {
-    for (const selectedTask of date.selectedTasks) {
-      if (task.content == selectedTask.content) return true;
-    }
-    return false;
-  }
+  // checkedCheckbox(task: Task, date: DateG) {
+  //   for (const selectedTask of date.selectedTasks) {
+  //     if (task.content == selectedTask.content) return true;
+  //   }
+  //   return false;
+  // }
 
   modifyDetailedPostDate(
     task: Task,
@@ -256,15 +256,7 @@ export class UIPopup extends DimensionMenu {
   ) {
     // let unset = checkbox.value;
     // console.log("modifyDetailedPostDate")
-    // this.store
-    //   .dispatch(
-    //     new ModifyDetailedPost(
-    //       this.findTaskWithDate(date, task, missionId, unset!),
-    //       unset
-    //     )
-    //   )
-    //   .pipe(take(1))
-    //   .subscribe(() => {
+    // this.store.dispatch(new ModifyDetailedPost(this.findTaskWithDate(date, task, missionId, unset!), unset)).pipe(take(1)).subscribe(() => {
     //     this.cd.markForCheck();
     //   });
     //   console.log("modifyDetailedPostDate end")
@@ -453,7 +445,7 @@ export class PopupService {
 
   openDateDialog(
     mission: Mission,
-    PostDateAvailableTask: PostDateAvailableTask,
+    date: PostDateAvailableTask,
     objectSuivi: SuiviChantierDateContentComponent
   ) {
     const view = this.store.selectSnapshot(DataState.view),
@@ -462,8 +454,7 @@ export class PopupService {
 
     const context = {
       $implicit: {
-        // date: dateG,
-        PostDateAvailableTask: PostDateAvailableTask,
+        date: date,
         view: view,
       },
     };

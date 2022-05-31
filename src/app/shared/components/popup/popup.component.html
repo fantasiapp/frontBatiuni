@@ -25,15 +25,15 @@
 <ng-template #setDate let-assignDate>
   <div class="main-date" #tache>
     <div class="header-container">
-      <h3 class="title-date">Le {{assignDate.PostDateAvailableTask.date}}</h3>
+      <h3 class="title-date">Le {{assignDate.date.date}}</h3>
     </div>
 
     <img class="hero-img" src="assets/popup-contrat.svg" alt="contrat">
     
     <label class="subtitle-date">Choisissez les tâches du jour :</label>
     <ul id="list-date">
-      <li *ngFor="let detailedPost of assignDate.PostDateAvailableTask.allPostDetails" [ngClass]="{'disabled': disableCheckbox(detailedPost, assignDate.date)}">
-        <checkbox (click)="modifyDetailedPostDate(detailedPost, assignDate.date, assignDate.missionId, checkbox)" [value]="checkedCheckbox(detailedPost.allPostDetails, assignDate.postDetails)" #checkbox></checkbox>
+      <li *ngFor="let detailedPost of assignDate.date.allPostDetails" [ngClass]="{'disabled': !detailedPost.checked}">
+        <checkbox (click)="modifyDetailedPostDate(detailedPost, assignDate.date, assignDate.missionId, checkbox)" [value]="detailedPost.checked" #checkbox></checkbox>
         <span (click)="modifyDetailedPostDate(detailedPost, assignDate.date, assignDate.missionId, checkbox); checkbox.onChange($event)">{{ detailedPost.content }}</span>
       </li>
     </ul>
