@@ -701,15 +701,8 @@ export class DataState {
         }
         delete response[application.action];
         console.log("createSupervision", response, response["type"], response["type"] == "DatePost")
-        if (response["type"] == "DatePost") {
-          let datePost = this.store.selectSnapshot(DataQueries.getById("DatePost", 7))
-          console.log("createSupervision datePost", datePost)
-          console.log("createSupervision before", this.store.selectSnapshot(DataQueries.getMany("Supervision", datePost!.supervisions)))
-          ctx.setState(addComplexChildren("DatePost",response["datePostId"], "Supervision", response["supervision"]))
-          datePost = this.store.selectSnapshot(DataQueries.getById("DatePost", 7))
-          console.log("createSupervision after", this.store.selectSnapshot(DataQueries.getMany("Supervision", datePost!.supervisions)))
-        }
-        if (response["type"] == "detailedPost") ctx.setState(addComplexChildren("DetailedPost",response["detailedPostId"], "Supervision", response["supervision"]))
+        if (response["type"] == "DatePost") ctx.setState(addComplexChildren("DatePost", response["fatherId"], "Supervision", response["supervision"]))
+        if (response["type"] == "detailedPost") ctx.setState(addComplexChildren("DetailedPost",response["fatherId"], "Supervision", response["supervision"]))
       })
     );
   }

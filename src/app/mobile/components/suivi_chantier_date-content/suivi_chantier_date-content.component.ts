@@ -14,7 +14,7 @@ import { PopupService } from "src/app/shared/components/popup/popup.component";
 import {
   PostDateAvailableTask,
   Mission,
-  PostDate,
+  DatePost,
   PostDetail,
   PostDetailGraphic,
   Ref,

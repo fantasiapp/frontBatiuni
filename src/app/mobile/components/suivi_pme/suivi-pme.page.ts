@@ -24,7 +24,7 @@ import {
   Profile,
   Supervision,
   Task,
-  PostDate,
+  DatePost,
   PostDateAvailableTask,
 } from "src/models/new/data.interfaces";
 import { DataQueries, DataState } from "src/models/new/data.state";
@@ -172,14 +172,12 @@ export class SuiviPME {
   // }
 
   computeDates(mission: Mission) {
-    let dates:PostDate[] = []
+    let dates:DatePost[] = []
     if (typeof (mission.dates) === "object" && !Array.isArray(mission.dates)) dates = mission.dates
     else dates = this.store.selectSnapshot(DataQueries.getMany("DatePost", mission.dates))
-    console.log("computeDates", dates, mission.dates)
     const allPostDetails = this.computeAllPostDetails(mission.details)
     this.dates = dates.map((date) => {
       const [supervisions, postDetail] = this.computeFieldOfDate(date)
-      console.log("inside", supervisions)
       return {
         "id":date.id,
         "date": date.date,
@@ -190,10 +188,9 @@ export class SuiviPME {
         "allPostDetails":allPostDetails
       } as unknown as PostDateAvailableTask
     })
-    console.log("computeDates end", this.dates)
   }
 
-  computeFieldOfDate(date:PostDate) {
+  computeFieldOfDate(date:DatePost) {
     let supervisions:Supervision[] = []
     let postDetails:PostDetail[] = []
     let avaliableDetails:PostDetail[] = []

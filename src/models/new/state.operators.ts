@@ -30,12 +30,11 @@ namespace mutable {
   export function update(draft: any, target: DataTypes, values: Record<any>) {
     const targetObjects = draft[target],
       fields = draft.fields[target];
-    console.log("update", target, values)
     //translate data
     Object.entries<any>(values).forEach(([id, item]) => {
       //An horrible patch waiting for a true solution
       if (!targetObjects) return
-      const current = targetObjects[id];
+        const current = targetObjects[id];
       //if not created create
       if ( !current ) {
         
@@ -131,7 +130,7 @@ namespace mutable {
     //add to parent
     const parentObject = draft[parent]?.[parentId],
       childIndex = draft.fields[parent].indexOf(child);
-    
+  
     if ( !parentObject || childIndex <= -1 ) return;
     
     for ( const id of ids )
