@@ -73,25 +73,22 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
   tasksGraphic: TaskGraphic[] = [];
 
   ngOnInit(){
-    console.log("init date")
     this.computeDate( this.dateOrigin)
     this.computeTasks(this.date)
     this.cd.markForCheck()
-    console.log("chantier-date task", this.tasksGraphic)
   }
 
 
   computeDate(date:DatePost) {
-    const [supervisions, postDetail] = this.computeFieldOfDate(date)
-    const allPostDetails = this.computeAllPostDetails(this.mission!.details)
-    console.log("init",date)
+    const [supervisions, postDetails] = this.computeFieldOfDate(date)
+    const allPostDetails = this.computeAllPostDetails(this.mission!.details, postDetails as unknown as PostDetailGraphic[])
     this.date = {
       "id":date.id,
       "date": date.date,
       "validated":date.validated,
       "deleted":date.deleted,
       "supervisions":supervisions,
-      "postDetails":postDetail,
+      "postDetails":postDetails,
       "allPostDetails":allPostDetails
     } as unknown as PostDateAvailableTask
   }
@@ -104,7 +101,6 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
       supervisions = Object.values(date.supervisions) as Supervision[]
     else
       supervisions = this.store.selectSnapshot(DataQueries.getMany("Supervision", date.supervisions))
-      console.log("supervisions", supervisions, date.supervisions)
 
     if (typeof(date.details) === "object" && !Array.isArray(date.details))
       postDetails = Object.values(date.details)
@@ -125,16 +121,29 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
         "validated": postDetail.validated,
         "refused": postDetail.refused,
         "supervisions": supervisions,
+        "checked": true
       } as PostDetailGraphic
     })
-    return [supervisions, postDetailsGraphic, avaliableDetails]
+    return [supervisions, postDetailsGraphic]
   }
 
-  computeAllPostDetails(details:any[]) {
+  computeAllPostDetails(details:any[], postDetails:PostDetailGraphic[]) {
     let avaliableTasks: PostDetail[] = []
     if (typeof(details) === "object" && !Array.isArray(details)) avaliableTasks = details
     else avaliableTasks = this.store.selectSnapshot(DataQueries.getMany("DetailedPost", details))
-    return avaliableTasks
+    const selectedContent = postDetails.map((detail) => detail.content)
+    return avaliableTasks.map((task) => {
+      const checked = selectedContent.includes(task.content)
+      return {
+        "id":task.id,
+        "date":task.date,
+        "content": task.content,
+        "validated": task.validated,
+        "refused": task.refused,
+        "supervisions": [],
+        "checked": checked
+        } as PostDetailGraphic
+    })
   }
 
   computeTasks(date: PostDateAvailableTask){
@@ -146,11 +155,9 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
         formGroup: new FormGroup({comment: new FormControl()})
       }
     ))
-    console.log("tasksGraphic", this.tasksGraphic)
   }
 
   computeSupervisions(postDetail: PostDetailGraphic) {
-    console.log("computeSupervisions", postDetail.supervisions, Array.isArray(postDetail.supervisions), typeof(postDetail.supervisions))
     if ((typeof(postDetail.supervisions) === "object") && !Array.isArray(postDetail.supervisions)) {
       postDetail.supervisions = Object.values(postDetail.supervisions) as unknown as Supervision[]
     } else {
@@ -209,7 +216,6 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
 
   addTaskToPost() {
     this.popup.openDateDialog(this.mission!, this.date, this);
-    console.log("addTaskToPost", this.date)
     this.swipeMenu = false;
   }
 
