@@ -251,7 +251,7 @@ export class DataState {
   }
 
   updateLocalData(ctx: StateContext<DataModel>, response: any) {
-    console.log("update local data")
+    console.log("update local data", response)
     const loadOperations = this.reader.readInitialData(response),
     sessionOperation = this.reader.readCurrentSession(response);
     if (!this.isFirstTime) {

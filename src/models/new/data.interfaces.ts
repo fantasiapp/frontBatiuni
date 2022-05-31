@@ -2,7 +2,7 @@ export type Record<T = any> = {
   [key: string]: T;
 };
 
-export type DataTypes = 'Job' | 'Label' | 'Role' | 'UserProfile' | 'Company' |
+export type DataTypes = 'Job' | 'Label' | 'Role' | 'UserProfile' | 'Company' | 'BlockedCandidate' |
   'Post' | 'DetailedPost' | 'Supervision' | 'Disponibility' | 'File' |
   'JobForCompany' | 'LabelForCompany' | 'Candidate' | 'Mission' |
   'Establishments'| 'DatePost' | 'Notification' ; //..
@@ -70,6 +70,14 @@ export interface Company {
   allQualifications : boolean
   Notification: Ref<Notification>[]
 };
+
+export interface BlockedCandidate {
+  id: Ref<BlockedCandidate>;
+  blocker: Ref<Company>;
+  blocked: Ref<Company>;
+  status: boolean;
+  date: string;
+}
 
 export interface PostDetail {
   id: Ref<PostDetail>;
@@ -270,6 +278,7 @@ export type Interface<K extends DataTypes> =
   K extends 'DatePost' ? DatePost :
   K extends 'Establishments' ? Establishement :
   K extends 'Notification' ? Notification :
+  K extends 'BlockedCandidate' ? BlockedCandidate :
   K;
 
 export type Profile = {
