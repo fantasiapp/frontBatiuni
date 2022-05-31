@@ -95,6 +95,12 @@ export class ModalImage {
       this.yTranslation += event.changedTouches[0].clientY - this.yDown;
     };
 
+    img.addEventListener("gesturestart", (event) => {
+      event.preventDefault();
+      console.log("gesturestart")
+      console.log(event)
+      this.scale += 1 / 100;
+    });
   }
 
   async test() {
