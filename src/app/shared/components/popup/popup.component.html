@@ -34,7 +34,7 @@
     <ul id="list-date">
       <li *ngFor="let detailedPost of assignDate.date.allPostDetails" [ngClass]="{'disabled': detailedPost.checked && (detailedPost.validated || detailedPost.refused)}">
         <checkbox (click)="modifyDetailedPostDate(detailedPost, checkbox, assignDate.datePostId)" [value]="detailedPost.checked" #checkbox></checkbox>
-        <span (click)="modifyDetailedPostDate(detailedPost, checkbox, assignDate.datePostId); checkbox.onChange($event)">{{ detailedPost.content }}</span>
+        <span (click)="modifyDetailedPostDate(detailedPost, checkbox, assignDate); checkbox.onChange($event)">{{ detailedPost.content }}</span>
       </li>
     </ul>
     <form (ngSubmit)="addNewTask($event, assignDate, addTask)" [formGroup]="newTaskForm">

@@ -76,6 +76,10 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
     this.computeDate( this.dateOrigin)
     this.computeTasks(this.date)
     this.cd.markForCheck()
+
+    this.popup.taskWithoutDouble.subscribe(allPostDetails => {
+      this.date.allPostDetails = allPostDetails
+    })
   }
 
 
@@ -185,6 +189,7 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
 
   constructor(private cd: ChangeDetectorRef, private store: Store, private popup: PopupService) {
     super();
+
   }
 
   async takePhoto() {
