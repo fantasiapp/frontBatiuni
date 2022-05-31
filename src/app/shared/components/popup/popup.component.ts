@@ -250,17 +250,13 @@ export class UIPopup extends DimensionMenu {
     checkbox: UICheckboxComponent
   ) {
     let unset = checkbox.value;
-    this.store
-      .dispatch(
-        new ModifyDetailedPost(
-          this.findTaskWithDate(date, task, missionId, unset!),
-          unset
-        )
-      )
-      .pipe(take(1))
-      .subscribe(() => {
-        this.cd.markForCheck();
-      });
+    this.store.dispatch(new ModifyDetailedPost(this.findTaskWithDate(date, task, missionId, unset!),unset)).pipe(take(1)).subscribe(() => {
+      this.cd.markForCheck();
+    });
+
+    // this.store.dispatch(new ModifyDetailedPost(postDate.detailDate).pipe(take(1)).subscribe(() => {
+    //   this.cd.markForCheck();
+    // });
   }
 
   findTaskWithDate(
