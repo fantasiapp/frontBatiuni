@@ -40,9 +40,11 @@ import {
   Company,
   Mission,
   DateG,
+  PostDetailGraphic,
   Task,
   Ref,
-  PostDate,
+  DatePost,
+  PostDateAvailableTask,
 } from "src/models/new/data.interfaces";
 import { DataQueries, DataState } from "src/models/new/data.state";
 import { FileContext, FileViewer } from "../file-viewer/file-viewer.component";
@@ -66,6 +68,11 @@ export interface assignDateType {
   date: DateG;
   view: "ST" | "PME";
 }
+
+// export interface assignDateType {
+//   postDateAvailableTask: PostDateAvailableTask;
+//   view: "ST" | "PME";
+// }
 
 @Component({
   selector: "popup",
@@ -197,32 +204,30 @@ export class UIPopup extends DimensionMenu {
   }
 
   addNewTask(e: Event, assignDate: assignDateType, input: HTMLInputElement) {
-    this.store
-      .dispatch(
-        new CreateDetailedPost(
-          assignDate.missionId,
-          input.value,
-          assignDate.date.date.date
-        )
-      )
-      .pipe(take(1))
-      .subscribe(() => {
-        input.value = "";
+    // this.store.dispatch(new CreateDetailedPost(assignDate.postDateAvailableTask, input.value, assignDate!.date!.date!.date))
 
-        const mission = this.store.selectSnapshot(
-          DataQueries.getById("Mission", assignDate.missionId)
-        );
-        const missionPostDetail = this.store.selectSnapshot(
-          DataQueries.getMany("DetailedPost", mission!.details)
-        ) as Task[];
-        const newTask = missionPostDetail[missionPostDetail.length - 1];
-        assignDate.date.taskWithoutDouble.push(newTask);
-        assignDate.date.selectedTasks.push(newTask);
-        this.popupService.taskWithoutDouble.next(
-          assignDate.date.taskWithoutDouble
-        );
-        this.cd.markForCheck();
-      });
+    this.store.dispatch(new CreateDetailedPost(assignDate.missionId, input.value, assignDate!.date!.date!.date)).pipe(take(1)).subscribe(() => {
+      input.value = "";
+
+      //On a les post date maintenant
+
+      // const mission = this.store.selectSnapshot(
+      //   DataQueries.getById("Mission", assignDate.missionId)
+      // )
+      // console.log("assignDate", assignDate)
+      // const missionPostDetail = this.store.selectSnapshot(
+      //   DataQueries.getMany("DetailedPost", mission!.details)
+      // ) as Task[];
+      // const newTask = missionPostDetail[missionPostDetail.length - 1];
+      
+      
+      // assignDate.date.taskWithoutDouble.push(newTask);
+      // assignDate.date.selectedTasks.push(newTask);
+      // this.popupService.taskWithoutDouble.next(
+      //   assignDate.date.taskWithoutDouble
+      // );
+      // this.cd.markForCheck();
+    });
   }
 
   disableCheckbox(task: Task, date: DateG) {
@@ -249,23 +254,29 @@ export class UIPopup extends DimensionMenu {
     missionId: Ref<Mission>,
     checkbox: UICheckboxComponent
   ) {
-    let unset = checkbox.value;
-    this.store
-      .dispatch(
-        new ModifyDetailedPost(
-          this.findTaskWithDate(date, task, missionId, unset!),
-          unset
-        )
-      )
-      .pipe(take(1))
-      .subscribe(() => {
-        this.cd.markForCheck();
-      });
+    // let unset = checkbox.value;
+    // console.log("modifyDetailedPostDate")
+    // this.store
+    //   .dispatch(
+    //     new ModifyDetailedPost(
+    //       this.findTaskWithDate(date, task, missionId, unset!),
+    //       unset
+    //     )
+    //   )
+    //   .pipe(take(1))
+    //   .subscribe(() => {
+    //     this.cd.markForCheck();
+    //   });
+    //   console.log("modifyDetailedPostDate end")
+
+    // this.store.dispatch(new ModifyDetailedPost(postDate.detailDate).pipe(take(1)).subscribe(() => {
+    //   this.cd.markForCheck();
+    // });
   }
 
   findTaskWithDate(
     date: DateG,
-    task: Task,
+    task: PostDetailGraphic,
     missionId: Ref<Mission>,
     unset: boolean
   ) {
@@ -274,19 +285,20 @@ export class UIPopup extends DimensionMenu {
       DataQueries.getById("Mission", missionId)
     );
     let taskWithId = task;
-    this.store
-      .selectSnapshot(DataQueries.getMany("DetailedPost", mission!.details))
-      .forEach((detail) => {
-        if (
-          unset &&
-          detail.date == date.date.date &&
-          detail.content == task.content
-        )
-          taskWithId = detail as Task;
-        else if (!unset && !detail.date && detail.content == task.content)
-          taskWithId = detail as Task;
-      });
-    taskWithId.date = date.date.date;
+    // this.store
+    //   .selectSnapshot(DataQueries.getMany("DetailedPost", mission!.details))
+    //   .forEach((detail) => {
+    //     if (
+    //       unset &&
+    //       detail.date == date.date?.date &&
+    //       detail.content == task.content
+    //     )
+    //       taskWithId = detail as Task;
+    //     else if (!unset && !detail.date && detail.content == task.content)
+    //       taskWithId = detail as Task;
+    //   })
+    // taskWithId.date = date.date?.date!;
+    // console.log("task", task)
     return taskWithId;
   }
 
@@ -441,9 +453,8 @@ export class PopupService {
 
   openDateDialog(
     mission: Mission,
-    date: DateG,
-    objectSuivi: SuiviChantierDateContentComponent,
-    datePost: PostDate | null
+    PostDateAvailableTask: PostDateAvailableTask,
+    objectSuivi: SuiviChantierDateContentComponent
   ) {
     const view = this.store.selectSnapshot(DataState.view),
       closed$ = new Subject<void>();
@@ -451,10 +462,9 @@ export class PopupService {
 
     const context = {
       $implicit: {
-        missionId: mission!.id,
-        date: date,
+        // date: dateG,
+        PostDateAvailableTask: PostDateAvailableTask,
         view: view,
-        datePost: datePost
       },
     };
 
@@ -467,8 +477,7 @@ export class PopupService {
         close: (test: boolean) => {
           closed$.next();
           let content = document.getElementById("addTask") as HTMLInputElement;
-          let contentValue = content.value ? content.value : null;
-          objectSuivi.updatePage(contentValue, mission!.id);
+          objectSuivi.updatePage(content);
         },
       });
       first = false;

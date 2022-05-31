@@ -34,6 +34,7 @@ import {
   DuplicatePost,
   GetUserData,
   HandleApplication,
+  BlockCompany,
   MarkViewed,
   SetFavorite,
   SwitchPostType,
@@ -207,6 +208,7 @@ export class HomeComponent extends Destroy$ {
           this.allUserOnlinePosts =
             mapping.get(this.symbols.userOnlinePost) || [];
           this.allOnlinePosts = [...otherOnlinePost, ...this.userOnlinePosts];
+          console.log("allOnlinePosts", profile.company)
           this.allMissions = this.store.selectSnapshot(DataQueries.getMany("Mission", profile.company.missions));
   
           if (this.filterST) {this.filterST.updatePosts(this.allOnlinePosts)}
@@ -706,7 +708,7 @@ export class HomeComponent extends Destroy$ {
       );
   }
 
-  handleApplication(post: Post, application: number) {
+  handleApplication(post: Post, candidateId: number) {
     this.swipeupService.show({
       type: "menu",
       hideOnClick: true,
@@ -716,7 +718,7 @@ export class HomeComponent extends Destroy$ {
           class: "validate application-response",
           click: () => {
             this.store
-              .dispatch(new HandleApplication(application, post, true))
+              .dispatch(new HandleApplication(candidateId, post, true))
               .pipe(take(1))
               .subscribe(() => {
                 //if successful, quit the slidemenu
@@ -730,7 +732,7 @@ export class HomeComponent extends Destroy$ {
           class: "reject application-response",
           click: () => {
             this.store
-              .dispatch(new HandleApplication(application, post, false))
+              .dispatch(new HandleApplication(candidateId, post, false))
               .pipe(take(1))
               .subscribe(() => {
                 this.openPost(null);
@@ -741,7 +743,15 @@ export class HomeComponent extends Destroy$ {
         {
           name: "Bloquer le contact",
           class: "block application-response",
-          click: () => this.info.show("info", "En developpement", 2000),
+          click: () => {
+            this.store
+              .dispatch(new BlockCompany(candidateId, true))
+              .pipe(take(1))
+              .subscribe(() => {
+                this.openPost(null);
+                this.cd.markForCheck();
+              });
+          }
         },
       ],
     });

@@ -13,6 +13,7 @@ import { HttpService } from "src/app/services/http.service";
 import {
   GetGeneralData,
   HandleApplication,
+  BlockCompany,
   SignContract,
   MarkViewed,
   ModifyAvailability,
@@ -635,6 +636,18 @@ export class DataState {
     );
   }
 
+  @Action(BlockCompany)
+  blockCompany(ctx: StateContext<DataModel>, handle: HandleApplication) {
+    const { post, ...data } = handle;
+    return this.http.get("data", data).pipe(
+      tap((response: any) => {
+        console.log("blockCompany", response)
+        if (response[handle.action] !== "OK") this.inZone(() => this.info.show("error", response.messages, 3000))
+        else this.inZone(() => this.info.show("success", response.messages, 2000));
+      })
+    )
+  }
+
   @Action(SignContract)
   signContract(ctx: StateContext<DataModel>, application: SignContract) {
     const profile = this.store.selectSnapshot(DataQueries.currentProfile)!;
@@ -654,10 +667,7 @@ export class DataState {
   }
 
   @Action(CreateDetailedPost)
-  createDetailedPost(
-    ctx: StateContext<DataModel>,
-    application: CreateDetailedPost
-  ) {
+  createDetailedPost(ctx: StateContext<DataModel>, application: CreateDetailedPost) {
     const profile = this.store.selectSnapshot(DataQueries.currentProfile)!;
     return this.http.post("data", application).pipe(
       tap((response: any) => {
@@ -674,10 +684,7 @@ export class DataState {
   }
 
   @Action(ModifyDetailedPost)
-  modifyDetailedPost(
-    ctx: StateContext<DataModel>,
-    application: ModifyDetailedPost
-  ) {
+  modifyDetailedPost(ctx: StateContext<DataModel>, application: ModifyDetailedPost) {
     const profile = this.store.selectSnapshot(DataQueries.currentProfile)!;
     return this.http.post("data", application).pipe(
       tap((response: any) => {
@@ -685,19 +692,16 @@ export class DataState {
           this.inZone(() => this.info.show("error", response.messages, 3000));
           throw response.messages;
         }
-        delete response[application.action];
+        delete response[application.action]
         ctx.setState(
           addComplexChildren("Company", profile.company.id, "Mission", response)
-        );
+        )
       })
     );
   }
 
   @Action(CreateSupervision)
-  createSupervision(
-    ctx: StateContext<DataModel>,
-    application: CreateSupervision
-  ) {
+  createSupervision(ctx: StateContext<DataModel>, application: CreateSupervision) {
     const profile = this.store.selectSnapshot(DataQueries.currentProfile)!;
     return this.http.post("data", application).pipe(
       tap((response: any) => {
@@ -706,9 +710,9 @@ export class DataState {
           throw response.messages;
         }
         delete response[application.action];
-        let key = Object.keys(response)
-        if ("datePostId" in response) {ctx.setState(addComplexChildren("DatePost",response["datePostId"], "Supervision", response["supervision"]))}
-        if ("detailedPostId" in response) {ctx.setState(addComplexChildren("DetailedPost",response["detailedPostId"], "Supervision", response["supervision"]))}
+        console.log("createSupervision", response, response["type"], response["type"] == "DatePost")
+        if (response["type"] == "DatePost") ctx.setState(addComplexChildren("DatePost", response["fatherId"], "Supervision", response["supervision"]))
+        if (response["type"] == "DetailedPost") ctx.setState(addComplexChildren("DetailedPost",response["fatherId"], "Supervision", response["supervision"]))
       })
     );
   }

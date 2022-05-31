@@ -21,6 +21,7 @@ import {
   Disponibility,
   Mission,
   PostDetail,
+  PostDetailGraphic,
   Profile,
   Ref,
 } from "src/models/new/data.interfaces";
@@ -374,20 +375,20 @@ export class HorizontaleCalendar implements OnInit {
   }
 
   taskValidation(decision: boolean, task: any) {
-    const detailPost: PostDetail | null = this.store.selectSnapshot(
-      DataQueries.getById("DetailedPost", task.idTask)
-    );
+    // const detailPost: PostDetailGraphic | null = this.store.selectSnapshot(
+    //   DataQueries.getById("DetailedPost", task.idTask)
+    // );
 
-    if (!detailPost!.refused) {
-      detailPost!.validated = decision;
-      task.validated = decision;
-      this.store
-        .dispatch(new ModifyDetailedPost(detailPost))
-        .pipe(take(1))
-        .subscribe(() => {
-          this.cd.markForCheck();
-        });
-    }
+    // if (!detailPost!.refused) {
+    //   detailPost!.validated = decision;
+    //   task.validated = decision;
+    //   this.store
+    //     .dispatch(new ModifyDetailedPost(detailPost))
+    //     .pipe(take(1))
+    //     .subscribe(() => {
+    //       this.cd.markForCheck();
+    //     });
+    // }
   }
 
   showgrey(selectedday: any) {

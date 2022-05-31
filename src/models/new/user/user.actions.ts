@@ -2,7 +2,7 @@ import { FormGroup } from "@angular/forms";
 import { FileUIOutput } from "src/app/shared/components/filesUI/files.ui";
 import { PropertyTrap } from "src/app/shared/common/classes";
 import { getDirtyValues } from "src/app/shared/common/functions";
-import { DataTypes, Post, PostDetail, Profile, Mission } from "../data.interfaces";
+import { DataTypes, Post, PostDetail, PostDetailGraphic, Profile, Mission } from "../data.interfaces";
 import { CalendarUI, DayState } from "src/app/shared/components/calendar/calendar.ui";
 import { availabilityToName } from "../data.mapper";
 import { ApplyForm } from "src/app/mobile/ui/annonce-resume/annonce-resume.ui";
@@ -283,7 +283,13 @@ export class HandleApplication {
   action = 'handleCandidateForPost';
   
   constructor(public Candidate: number, public post: Post, public response: boolean) {}
-};
+}
+
+export class BlockCompany {
+  static readonly type = 'block a company';
+  action = 'blockCompany';
+  constructor(public candidateId: number, public status: boolean) {}
+}
 
 export class SignContract {
   static readonly type = '[Data] Sign Contract';
@@ -301,7 +307,7 @@ export class CreateDetailedPost {
 export class ModifyDetailedPost {
   static readonly type = '[Data] Modify DetailedPost';
   action = 'modifyDetailedPost';
-  constructor(public detailedPost: PostDetail | null, public unset: boolean = false) {
+  constructor(public detailedPost: PostDetailGraphic | null, public unset: boolean = false) {
   }
 }
 
