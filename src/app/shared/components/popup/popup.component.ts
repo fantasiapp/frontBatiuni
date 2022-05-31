@@ -42,6 +42,7 @@ import {
   DateG,
   Task,
   Ref,
+  PostDate,
 } from "src/models/new/data.interfaces";
 import { DataQueries, DataState } from "src/models/new/data.state";
 import { FileContext, FileViewer } from "../file-viewer/file-viewer.component";
@@ -441,7 +442,8 @@ export class PopupService {
   openDateDialog(
     mission: Mission,
     date: DateG,
-    objectSuivi: SuiviChantierDateContentComponent
+    objectSuivi: SuiviChantierDateContentComponent,
+    datePost: PostDate | null
   ) {
     const view = this.store.selectSnapshot(DataState.view),
       closed$ = new Subject<void>();
@@ -452,6 +454,7 @@ export class PopupService {
         missionId: mission!.id,
         date: date,
         view: view,
+        datePost: datePost
       },
     };
 
