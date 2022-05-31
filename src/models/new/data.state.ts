@@ -699,7 +699,7 @@ export class DataState {
         delete response[application.action];
         console.log("createSupervision", response, response["type"], response["type"] == "DatePost")
         if (response["type"] == "DatePost") ctx.setState(addComplexChildren("DatePost", response["fatherId"], "Supervision", response["supervision"]))
-        if (response["type"] == "detailedPost") ctx.setState(addComplexChildren("DetailedPost",response["fatherId"], "Supervision", response["supervision"]))
+        if (response["type"] == "DetailedPost") ctx.setState(addComplexChildren("DetailedPost",response["fatherId"], "Supervision", response["supervision"]))
       })
     );
   }
