@@ -28,18 +28,18 @@ export class FileDownloader {
         Array.isArray(file.content) ? file.content[0] : file.content,
         type
       ),
-      url = URL.createObjectURL(blob),
+      url = [URL.createObjectURL(blob)],
       context: FileContext = {
         type,
         url,
-        safeUrl: this.sanitizer.bypassSecurityTrustResourceUrl(url),
+        safeUrl: [this.sanitizer.bypassSecurityTrustResourceUrl(url[0])],
       };
 
     return context;
   }
 
   clearContext(fileContext: FileContext) {
-    fileContext.url && URL.revokeObjectURL(fileContext.url);
+    fileContext.url.length && URL.revokeObjectURL(fileContext.url[0]);
   }
 
   downloadFile(file: File | number, notify: boolean = false): Observable<File> {
