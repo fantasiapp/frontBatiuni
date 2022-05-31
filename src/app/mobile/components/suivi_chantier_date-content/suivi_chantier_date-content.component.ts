@@ -46,38 +46,95 @@ export interface TaskGraphic {
 export class SuiviChantierDateContentComponent extends Destroy$ {
   swipeMenu: boolean = false;
   swipeMenuImage: boolean = false;
+  // datePost: DatePost | null = null
 
   @Input()
   view: "ST" | "PME" = "PME";
   currentTaskId: number | null = null;
 
   @Input()
-  reloadMission: (dateId: number) => (PostDateAvailableTask | Mission)[] = (
-    dateId: number
-  ): (PostDateAvailableTask | Mission)[] => {
-    return [this.date, this.mission!];
-  };
+  dateOrigin:DatePost = {id:-1, date:'', validated: false, deleted:false, supervisions: [], details: []}
+
+  @Input()
+  dateId:number = -1
+
+  @Input()
+  mission: Mission | null = null;
+
+  date:PostDateAvailableTask = {id:5, date:'12-12-2022', validated: false, deleted:false, supervisions: [], postDetails: [], allPostDetails: []}
 
   // @Input()
   // _accordionOpen: boolean = false;
   // get accordionOpen(){  return this._accordionOpen}
 
   tasks!: Task[];
-  dates!: PostDateAvailableTask[]
+  // date!: DatePost
 
   tasksGraphic: TaskGraphic[] = [];
 
   ngOnInit(){
-    // this.mission = this.store.selectSnapshot(DataQueries.getById("Mission", this.mission!.id))
-    // this.computeDates(this.mission!)
-    // this.popup.taskWithoutDouble.pipe(takeUntil(this.destroy$)).subscribe(tasks => {
-    //   this.date.taskWithoutDouble = tasks;
-    //   this.cd.markForCheck()
-    // })
-    // this.date = this.dates[this.date.id]
+    console.log("init date")
+    this.computeDate( this.dateOrigin)
     this.computeTasks(this.date)
+    this.cd.markForCheck()
     console.log("chantier-date task", this.tasksGraphic)
   }
+
+  computeDate(date:DatePost) {
+    const [supervisions, postDetail] = this.computeFieldOfDate(date)
+    const allPostDetails = this.computeAllPostDetails(this.mission!.details)
+    console.log("init",date)
+    this.date = {
+          "id":date.id,
+          "date": date.date,
+          "validated":date.validated,
+          "deleted":date.deleted,
+          "supervisions":supervisions,
+          "postDetails":postDetail,
+          "allPostDetails":allPostDetails
+        } as unknown as PostDateAvailableTask
+  }
+
+  computeFieldOfDate(date:DatePost) {
+    let supervisions:Supervision[] = []
+    let postDetails:PostDetail[] = []
+    let avaliableDetails:PostDetail[] = []
+    if (typeof(date.supervisions) === "object" && !Array.isArray(date.supervisions))
+      supervisions = Object.values(date.supervisions) as Supervision[]
+    else
+      supervisions = this.store.selectSnapshot(DataQueries.getMany("Supervision", date.supervisions))
+      console.log("supervisions", supervisions, date.supervisions)
+
+    if (typeof(date.details) === "object" && !Array.isArray(date.details))
+      postDetails = Object.values(date.details)
+    else
+      postDetails = this.store.selectSnapshot(DataQueries.getMany("DetailedPost", date.details))
+
+    let postDetailsGraphic = postDetails.map((postDetail) => {
+      let supervisions:Supervision[]
+      if ((typeof(postDetail.supervisions) === "object") && !Array.isArray(postDetail.supervisions)) {
+        supervisions = Object.values(postDetail.supervisions) as unknown as Supervision[]
+      } else {
+        supervisions = this.store.selectSnapshot(DataQueries.getMany("Supervision", postDetail.supervisions as unknown as number[]))
+      }
+      return {
+        "id": postDetail.id,
+        "date": postDetail.date,
+        "content": postDetail.content,
+        "validated": postDetail.validated,
+        "refused": postDetail.refused,
+        "supervisions": supervisions,
+      } as PostDetailGraphic
+    })
+    return [supervisions, postDetailsGraphic, avaliableDetails]
+  }
+
+  computeAllPostDetails(details:any[]) {
+    let avaliableTasks: PostDetail[] = []
+    if (typeof(details) === "object" && !Array.isArray(details)) avaliableTasks = details
+    else avaliableTasks = this.store.selectSnapshot(DataQueries.getMany("DetailedPost", details))
+    return avaliableTasks
+    }
 
   computeTasks(date: PostDateAvailableTask){
     this.tasksGraphic = date.postDetails.map(postDetail => (
@@ -120,27 +177,6 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
 
   constructor(private cd: ChangeDetectorRef, private store: Store, private popup: PopupService) {
     super();
-  }
-
-  _date: PostDateAvailableTask = {id:-1, date:'', validated: false, deleted:false, supervisions: [], postDetails: [], allPostDetails:[]}
-  get date() {
-    return this._date;
-  }
-
-  @Input()
-  set date(date: PostDateAvailableTask) {
-    this._date = date;
-  }
-
-  _mission!: Mission | null;
-  get mission() {
-    return this._mission;
-  }
-
-  @Input()
-  set mission(mission: Mission | null) {
-    // this.view = this.store.selectSnapshot(DataState.view)
-    this._mission = mission;
   }
 
   async takePhoto() {
@@ -191,11 +227,11 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
 
   updatePageOnlyDate() {
     console.log("updatePageOnlyDate")
-    let [date, mission] = this.reloadMission(this.date.id)
-    this.date = date as PostDateAvailableTask
-    this.computeTasks(date as PostDateAvailableTask)
-    this.mission = mission as Mission
-    this.cd.markForCheck()
+    // let [date, mission] = this.reloadMission(this.date.id)
+    // this.date = date as PostDateAvailableTask
+    // this.computeTasks(date as PostDateAvailableTask)
+    // this.mission = mission as Mission
+    // this.cd.markForCheck()
   }
 
   validate(task: PostDetailGraphic, control: HTMLImageElement) {
@@ -324,134 +360,74 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
     //   this.dates.sort((date1, date2) => (date1.date.date > date2.date.date ? 1 : -1));
   // }
 
-  computeDate(date:DatePost) {
-    console.log(date)
-    // if (typeof (mission.dates) === "object" && !Array.isArray(mission.dates)) dates = mission.dates
-    // else dates = this.store.selectSnapshot(DataQueries.getMany("DatePost", mission.dates))
-    // const allPostDetails = this.computeAllPostDetails(mission.details)
-    // this.dates = dates.map((date) => {
-    //   const [supervisions, postDetail] = this.computeFieldOfDate(date)
-    //   return {
-    //     "id":date.id,
-    //     "date": date.date,
-    //     "validated":date.validated,
-    //     "deleted":date.deleted,
-    //     "supervisions":supervisions,
-    //     "postDetails":postDetail,
-    //     "allPostDetails":allPostDetails
-    //   } as unknown as PostDateAvailableTask
-    // })
-  }
+  // computeSupervisionsforTask(supervisionsId: number[], supervisionsTask: number[]) {
+  //   let supervisions: Supervision[] = [];
+  //   // let supervisionId = this.distToArray(supervisionsId)
+  //   supervisionsId.forEach((id) => {
+  //     let supervision = this.store.selectSnapshot(
+  //       DataQueries.getById("Supervision", id)
+  //     );
+  //     if (supervision) {
+  //       supervisions.push(supervision!);
+  //       supervisionsTask.push(supervision.id);
+  //     }
+  //   });
+  //   return supervisions;
+  // }
 
-  computeFieldOfDate(date:DatePost) {
-    let supervisions:Supervision[] = []
-    let postDetails:PostDetail[] = []
-    let avaliableDetails:PostDetail[] = []
-    if (typeof(date.supervisions) === "object" && !Array.isArray(date.supervisions))
-      supervisions = Object.values(date.supervisions) as Supervision[]
-    else
-      supervisions = this.store.selectSnapshot(DataQueries.getMany("Supervision", date.supervisions))
-      console.log("supervisions", supervisions, date.supervisions)
+  // computeSelectedTask(date: string) {
+  //   let selectedTask: Task[] = [];
+  //   this.tasks?.forEach((task) =>
+  //     this.computeSelectedTaskAction(selectedTask, date, task)
+  //   );
+  //   return selectedTask;
+  // }
+  // computeSelectedTaskAction(selectedTask: Task[], date: string, task: Task) {
+  //   if (date == task.date) {
+  //     selectedTask.push(task);
+  //   }
+  // }
 
-    if (typeof(date.details) === "object" && !Array.isArray(date.details))
-      postDetails = Object.values(date.details)
-    else
-      postDetails = this.store.selectSnapshot(DataQueries.getMany("DetailedPost", date.details))
+  // dateWithoutDouble(): Task[] {
+  //   let listWithOutDouble: Task[] = [];
+  //   let listWithOutDoubleStr: string[] = [];
+  //   if (this.tasks) {
+  //     let dictionary = Object.assign(
+  //       {},
+  //       ...this.tasks!.map((task) => ({ [task.content]: task }))
+  //     );
+  //     Object.keys(dictionary).forEach((key) => {
+  //       if (!listWithOutDoubleStr.includes(dictionary[key])) {
+  //         listWithOutDouble.push(dictionary[key]);
+  //         listWithOutDoubleStr.push(key);
+  //       }
+  //     });
+  //   }
+  //   return listWithOutDouble;
+  // }
 
-    let postDetailsGraphic = postDetails.map((postDetail) => {
-      let supervisions:Supervision[]
-      if ((typeof(postDetail.supervisions) === "object") && !Array.isArray(postDetail.supervisions)) {
-        supervisions = Object.values(postDetail.supervisions) as unknown as Supervision[]
-      } else {
-        supervisions = this.store.selectSnapshot(DataQueries.getMany("Supervision", postDetail.supervisions as unknown as number[]))
-      }
-      return {
-        "id": postDetail.id,
-        "date": postDetail.date,
-        "content": postDetail.content,
-        "validated": postDetail.validated,
-        "refused": postDetail.refused,
-        "supervisions": supervisions,
-      } as PostDetailGraphic
-    })
-    return [supervisions, postDetailsGraphic, avaliableDetails]
-  }
+  // distToArray(dist: any) {
+  //   let arr;
+  //   if (Array.isArray(dist)) arr = dist;
+  //   else arr = Object.keys(dist).map((key) => +key as number);
+  //   return arr;
+  // }
 
-  computeAllPostDetails(details:any[]) {
-    let avaliableTasks: PostDetail[] = []
-    if (typeof(details) === "object" && !Array.isArray(details)) avaliableTasks = details
-    else avaliableTasks = this.store.selectSnapshot(DataQueries.getMany("DetailedPost", details))
-    return avaliableTasks
-    }
-
-  computeSupervisionsforTask(supervisionsId: number[], supervisionsTask: number[]) {
-    let supervisions: Supervision[] = [];
-    // let supervisionId = this.distToArray(supervisionsId)
-    supervisionsId.forEach((id) => {
-      let supervision = this.store.selectSnapshot(
-        DataQueries.getById("Supervision", id)
-      );
-      if (supervision) {
-        supervisions.push(supervision!);
-        supervisionsTask.push(supervision.id);
-      }
-    });
-    return supervisions;
-  }
-
-  computeSelectedTask(date: string) {
-    let selectedTask: Task[] = [];
-    this.tasks?.forEach((task) =>
-      this.computeSelectedTaskAction(selectedTask, date, task)
-    );
-    return selectedTask;
-  }
-  computeSelectedTaskAction(selectedTask: Task[], date: string, task: Task) {
-    if (date == task.date) {
-      selectedTask.push(task);
-    }
-  }
-
-  dateWithoutDouble(): Task[] {
-    let listWithOutDouble: Task[] = [];
-    let listWithOutDoubleStr: string[] = [];
-    if (this.tasks) {
-      let dictionary = Object.assign(
-        {},
-        ...this.tasks!.map((task) => ({ [task.content]: task }))
-      );
-      Object.keys(dictionary).forEach((key) => {
-        if (!listWithOutDoubleStr.includes(dictionary[key])) {
-          listWithOutDouble.push(dictionary[key]);
-          listWithOutDoubleStr.push(key);
-        }
-      });
-    }
-    return listWithOutDouble;
-  }
-
-  distToArray(dist: any) {
-    let arr;
-    if (Array.isArray(dist)) arr = dist;
-    else arr = Object.keys(dist).map((key) => +key as number);
-    return arr;
-  }
-
-  computeSupervisionsForMission(date: string, supervisionsTask: number[]): Supervision[] {
-    let supervisions: Supervision[] = [];
-    // let supervisionId = this.distToArray(this.mission!.supervisions);
-    // let allSupervisions: (Supervision | null)[] = supervisionId.map((id) => {
-    //   let supervision = this.store.selectSnapshot(DataQueries.getById("Supervision", id));
-    //   if (supervision && supervision.date == date && !supervisionsTask.includes(supervision.id)) {
-    //     return supervision;
-    //   }
-    //   return null;
-    // });
-    // for (let index in allSupervisions) {
-    //   if (allSupervisions[index]) {
-    //     supervisions.push(allSupervisions[index]!);
-    //   }
-    // }
-    return supervisions;
-  }
+  // computeSupervisionsForMission(date: string, supervisionsTask: number[]): Supervision[] {
+  //   let supervisions: Supervision[] = [];
+  //   // let supervisionId = this.distToArray(this.mission!.supervisions);
+  //   // let allSupervisions: (Supervision | null)[] = supervisionId.map((id) => {
+  //   //   let supervision = this.store.selectSnapshot(DataQueries.getById("Supervision", id));
+  //   //   if (supervision && supervision.date == date && !supervisionsTask.includes(supervision.id)) {
+  //   //     return supervision;
+  //   //   }
+  //   //   return null;
+  //   // });
+  //   // for (let index in allSupervisions) {
+  //   //   if (allSupervisions[index]) {
+  //   //     supervisions.push(allSupervisions[index]!);
+  //   //   }
+  //   // }
+  //   return supervisions;
+  // }
 }
