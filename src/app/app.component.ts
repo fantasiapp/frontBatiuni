@@ -115,16 +115,23 @@ export class AppComponent extends Destroy$ {
   }
 
   requestPermission() {
-    const messaging = getMessaging(this.app)
+    const messaging: any = getMessaging(this.app)
     console.log("l'app' utilisé : ", this.app)
     console.log("la vapid key utilisé : ", environment.firebase.vapidKey)
     console.log("le messaging : ", messaging)
-    getToken(messaging, {vapidKey : environment.firebase.vapidKey}).then((currentToken) => {
-        if (currentToken) {console.log("we got the token", currentToken)}
-        else {console.log('No registration token available. Request permission to generate one.')}
-      }).catch((err) => {
-        console.log('An error occurred while retrieving token. ', err)
+    console.log("le sw de messaging : ", messaging.swRegistration)
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("./firebase-messaging-sw.js").then((registration) => {
+        console.log("mjlkqsfdjlkmfqsdq", registration)
+        getToken(messaging, {vapidKey : environment.firebase.vapidKey, serviceWorkerRegistration: registration}).then((currentToken) => {
+          if (currentToken) {console.log("we got the token", currentToken)}
+          else {console.log('No registration token available. Request permission to generate one.')}
+        }).catch((err) => {
+          console.log('An error occurred while retrieving token. ', err)
+        })
       })
+    }
+
   }
 
   listen() {
