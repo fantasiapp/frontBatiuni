@@ -641,15 +641,9 @@ export class DataState {
     const { post, ...data } = handle;
     return this.http.get("data", data).pipe(
       tap((response: any) => {
-        if (response[handle.action] !== "OK") {
-          this.inZone(() => this.info.show("error", response.messages, 3000));
-          throw response.messages;
-        } else {
-          delete response[handle.action];
-          const company = this.store.selectSnapshot(DataQueries.currentCompany);
-          this.inZone(() => this.info.show("success", "En developpement", 2000));
-          this.slide.hide();
-        }
+        console.log("blockCompany", response)
+        if (response[handle.action] !== "OK") this.inZone(() => this.info.show("error", response.messages, 3000))
+        else this.inZone(() => this.info.show("success", response.messages, 2000));
       })
     )
   }
