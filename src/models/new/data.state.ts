@@ -229,6 +229,7 @@ export class DataState {
     const req = this.http.get("data", { action: action.action });
     if (this.isFirstTime) {
       this.booleanService.emitLoadingChangeEvent(true)
+      this.booleanService.emitConnectedChangeEvent(true)
     }
     if (this.flagUpdate){
       this.flagUpdate = false
