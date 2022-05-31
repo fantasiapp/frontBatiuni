@@ -192,10 +192,10 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
   updatePageOnlyDate() {
     console.log("updatePageOnlyDate")
     let [date, mission] = this.reloadMission(this.date.id)
-    // this.date = date as PostDateAvailableTask
-    // this.computeTasks(date as PostDateAvailableTask)
-    // this.mission = mission as Mission
-    // this.cd.markForCheck()
+    this.date = date as PostDateAvailableTask
+    this.computeTasks(date as PostDateAvailableTask)
+    this.mission = mission as Mission
+    this.cd.markForCheck()
   }
 
   validate(task: PostDetailGraphic, control: HTMLImageElement) {
@@ -217,8 +217,6 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
       })
     }
   }
-
-  
 
   formMain = new FormGroup({
     commentMain: new FormControl("", [Validators.required]),
