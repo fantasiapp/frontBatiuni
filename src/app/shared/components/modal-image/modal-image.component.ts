@@ -126,6 +126,7 @@ export class ModalImage {
     console.log("pinch start")
     console.log(event)
     this.baseDist = this.getDistance(event.touches[0], event.touches[1]);
+    this.currentDist = this.baseDist;
     this.baseScale = this.scale;
   }
 
@@ -148,7 +149,7 @@ export class ModalImage {
     console.log(event)
 
     this.scale = this.baseScale * this.currentDist / this.baseDist;
-    
+
     let img = document.getElementById("target")!;
     img.style.transform = `scale(${this.scale}) translate(${this.xTranslation}px, ${this.yTranslation}px)`;
   }
