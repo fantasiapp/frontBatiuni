@@ -215,7 +215,7 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
   }
 
   addTaskToPost() {
-    this.popup.openDateDialog(this.mission!, this.date, this);
+    this.popup.openDateDialog(this.mission!.id, this.date, this);
     this.swipeMenu = false;
   }
 

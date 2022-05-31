@@ -655,17 +655,24 @@ export class DataState {
 
   @Action(CreateDetailedPost)
   createDetailedPost(ctx: StateContext<DataModel>, application: CreateDetailedPost) {
+    console.log('3');
     const profile = this.store.selectSnapshot(DataQueries.currentProfile)!;
+    console.log('4');
     return this.http.post("data", application).pipe(
       tap((response: any) => {
+        console.log('5');
         if (response[application.action] !== "OK") {
           this.inZone(() => this.info.show("error", response.messages, 3000));
           throw response.messages;
         }
+        console.log('6');
         delete response[application.action];
+        console.log('createDetailPost', response);
+        console.log('7');
         ctx.setState(
           addComplexChildren("Company", profile.company.id, "Mission", response)
-        );
+          );
+          console.log('8');
       })
     );
   }
@@ -680,8 +687,10 @@ export class DataState {
           throw response.messages;
         }
         delete response[application.action]
+        delete response.deleted
+        console.log('modifyDetailedPost', response);
         ctx.setState(
-          addComplexChildren("Company", profile.company.id, "Mission", response)
+          addComplexChildren("Company", profile.company.id, response.type, response.object)
         )
       })
     );

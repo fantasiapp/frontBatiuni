@@ -45,6 +45,7 @@ import {
   Ref,
   DatePost,
   PostDateAvailableTask,
+  PostDetail,
 } from "src/models/new/data.interfaces";
 import { DataQueries, DataState } from "src/models/new/data.state";
 import { FileContext, FileViewer } from "../file-viewer/file-viewer.component";
@@ -65,7 +66,7 @@ const TRANSITION_DURATION = 200;
 
 export interface assignDateType {
   missionId: Ref<Mission>;
-  date: DateG;
+  date: PostDateAvailableTask;
   view: "ST" | "PME";
 }
 
@@ -203,55 +204,39 @@ export class UIPopup extends DimensionMenu {
       .subscribe(() => {});
   }
 
-  addNewTask(e: Event, assignDate: assignDateType, input: HTMLInputElement) {
+  addNewTask(e: Event,assignDate: assignDateType, input: HTMLInputElement) {
     // this.store.dispatch(new CreateDetailedPost(assignDate.postDateAvailableTask, input.value, assignDate!.date!.date!.date))
 
-    this.store.dispatch(new CreateDetailedPost(assignDate.missionId, input.value, assignDate!.date!.date!.date)).pipe(take(1)).subscribe(() => {
+    // console.log('addNewTask', missionId, input.value, date);
+    console.log('object');
+    this.store.dispatch(new CreateDetailedPost(assignDate.missionId, input.value, assignDate.date.date)).pipe(take(1)).subscribe(() => {
       input.value = "";
 
       //On a les post date maintenant
 
-      // const mission = this.store.selectSnapshot(
-      //   DataQueries.getById("Mission", assignDate.missionId)
-      // )
+      const mission = this.store.selectSnapshot(
+        DataQueries.getById("Mission", assignDate.missionId)
+      )
       // console.log("assignDate", assignDate)
-      // const missionPostDetail = this.store.selectSnapshot(
-      //   DataQueries.getMany("DetailedPost", mission!.details)
-      // ) as Task[];
-      // const newTask = missionPostDetail[missionPostDetail.length - 1];
+      const missionPostDetail = this.store.selectSnapshot(
+        DataQueries.getMany("DetailedPost", mission!.details)
+      ) as Task[];
+      const newTask = missionPostDetail[missionPostDetail.length - 1];
       
       
-      // assignDate.date.taskWithoutDouble.push(newTask);
-      // assignDate.date.selectedTasks.push(newTask);
-      // this.popupService.taskWithoutDouble.next(
-      //   assignDate.date.taskWithoutDouble
-      // );
-      // this.cd.markForCheck();
+      assignDate.date.allPostDetails.push(newTask);
+      // assignDate.date.postDetails.push(newTask);
+
+      this.popupService.taskWithoutDouble.next(
+        assignDate.date.allPostDetails
+      );
+      this.cd.markForCheck();
     });
   }
 
-  // disableCheckbox(task: Task, disabled: boolean) {
-  //   // for (const selectedTask of date.selectedTasks) {
-  //   //   if (
-  //   //     task.content == selectedTask.content &&
-  //   //     (selectedTask.refused || selectedTask.validated)
-  //   //   )
-  //   //     return true;
-  //   // }
-  //   // return false;
-  // }
-
-  // checkedCheckbox(task: Task, date: DateG) {
-  //   for (const selectedTask of date.selectedTasks) {
-  //     if (task.content == selectedTask.content) return true;
-  //   }
-  //   return false;
-  // }
 
   modifyDetailedPostDate(
-    task: Task,
-    date: DateG,
-    missionId: Ref<Mission>,
+    detailDate: PostDetailGraphic,
     checkbox: UICheckboxComponent
   ) {
     // let unset = checkbox.value;
@@ -261,9 +246,9 @@ export class UIPopup extends DimensionMenu {
     //   });
     //   console.log("modifyDetailedPostDate end")
 
-    // this.store.dispatch(new ModifyDetailedPost(postDate.detailDate).pipe(take(1)).subscribe(() => {
-    //   this.cd.markForCheck();
-    // });
+    this.store.dispatch(new ModifyDetailedPost(detailDate, checkbox.value)).pipe(take(1)).subscribe(() => {
+      this.cd.markForCheck();
+    });
   }
 
   findTaskWithDate(
@@ -325,7 +310,7 @@ export type PopupView = (
 export class PopupService {
   popups$ = new Subject<PopupView>();
   dimension$ = new Subject<Dimension>();
-  taskWithoutDouble = new Subject<Task[]>();
+  taskWithoutDouble = new Subject<PostDetail[]>();
   defaultDimension: Dimension = {
     left: "20px",
     top: "30px",
@@ -444,7 +429,7 @@ export class PopupService {
   }
 
   openDateDialog(
-    mission: Mission,
+    mission: Ref<Mission>,
     date: PostDateAvailableTask,
     objectSuivi: SuiviChantierDateContentComponent
   ) {
@@ -454,6 +439,7 @@ export class PopupService {
 
     const context = {
       $implicit: {
+        mission: mission,
         date: date,
         view: view,
       },

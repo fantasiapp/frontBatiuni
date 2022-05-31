@@ -127,6 +127,7 @@ ul, li {
     display: flex;
     span {
       margin-left: 1rem;
+      max-width: 180px;
     }
   }
 }
