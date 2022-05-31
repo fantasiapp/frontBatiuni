@@ -202,7 +202,6 @@ export class ProfileComponent extends Destroy$ {
   }
 
   ngOnDestroy(): void {
-    console.log("Oh non pourquoi tu détruis")
     this.info.alignWith("last");
     super.ngOnDestroy();
   }

@@ -7,7 +7,7 @@ import { Destroy$ } from "src/app/shared/common/classes";
 import { Login } from "src/models/auth/auth.actions";
 import { Email } from "src/validators/persist";
 import { ComplexPassword, setErrors } from "src/validators/verify";
-import { isLoadingService } from "../services/isLoading.service";
+import { BooleanService } from "../services/boolean.service";
 
 @Component({
   selector: 'connexion-form',
@@ -77,7 +77,7 @@ export class ConnexionForm extends Destroy$ {
   private _errors: string[] = [];
   get errors() { return this._errors; }
 
-  constructor(private router: Router, private store: Store, private cd: ChangeDetectorRef, private isLoadingService: isLoadingService) {
+  constructor(private router: Router, private store: Store, private cd: ChangeDetectorRef, private isLoadingService: BooleanService) {
     super();
   }
 

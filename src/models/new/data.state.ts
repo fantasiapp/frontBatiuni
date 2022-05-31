@@ -67,8 +67,9 @@ import { SlidemenuService } from "src/app/shared/components/slidemenu/slidemenu.
 import { SwipeupService } from "src/app/shared/components/swipeup/swipeup.component";
 import { transformAll } from "@angular/compiler/src/render3/r3_ast";
 import { ClassGetter } from "@angular/compiler/src/output/output_ast";
-import { isLoadingService } from "src/app/shared/services/isLoading.service";
+import { BooleanService } from "src/app/shared/services/boolean.service";
 import { getUserDataService } from "src/app/shared/services/getUserData.service";
+import { AppComponent } from "src/app/app.component";
 
 export interface DataModel {
   fields: Record<string[]>;
@@ -108,7 +109,7 @@ export class DataState {
     private slide: SlidemenuService,
     private swipeup: SwipeupService,
     private zone: NgZone,
-    private loadingService: isLoadingService,
+    private booleanService: BooleanService,
     private getUserDataService: getUserDataService
   ) {}
 
@@ -209,19 +210,16 @@ export class DataState {
   //------------------------------------------------------------------------
   @Action(GetGeneralData)
   getGeneralData(ctx: StateContext<DataModel>) {
-    //eventually make a local storage service
-    //const data = localStorage.getItem('general-data');
-    const req = /*data ? of(JSON.parse(data)) : */ this.http.get("initialize", {
-      action: "getGeneralData",
-    });
+    if(this.isFirstTime){
+      console.log("getGeneralData")
+      const req = this.http.get("initialize", {action: "getGeneralData",})
 
-    return req.pipe(
-      tap((response: any) => {
-        //localStorage.setItem('general-data', JSON.stringify(response));
+      return req.pipe(tap((response: any) => {
         const operations = this.reader.readStaticData(response);
         ctx.setState(compose(...operations));
-  })
-    );
+      }))
+    }
+    else return
   }
 
   @Action(GetUserData)
@@ -229,7 +227,7 @@ export class DataState {
     console.log("getUserData")
     const req = this.http.get("data", { action: action.action });
     if (this.isFirstTime) {
-      this.loadingService.emitLoadingChangeEvent(true)
+      this.booleanService.emitLoadingChangeEvent(true)
     }
     if (this.flagUpdate){
       this.flagUpdate = false
@@ -265,7 +263,7 @@ export class DataState {
       ctx.setState(compose(...loadOperations, sessionOperation));
       this.isFirstTime = false
       }
-      this.loadingService.emitLoadingChangeEvent(false)
+      this.booleanService.emitLoadingChangeEvent(false)
   }
 
   @Action(Logout)
@@ -273,6 +271,7 @@ export class DataState {
     this.flagUpdate = true
     console.log("logout")
     this.isFirstTime = true
+    this.booleanService.emitConnectedChangeEvent(false)
     ctx.setState({ fields: {}, session: { view: "ST", currentUser: -1 , time: 0} });
     ctx.dispatch(new GetGeneralData()); // a sign to decouple this from DataModel
   }
@@ -769,7 +768,6 @@ export class DataState {
           throw response.messages;
         }
         delete response[application.action];
-        console.log('REPONSE', response)
         ctx.setState(
           addComplexChildren("Company", profile.company.id, "Mission", response)
         );
@@ -787,7 +785,6 @@ export class DataState {
           throw response.messages;
         }
         delete response[application.action];
-        console.log('REPONSEST', response)
         ctx.setState(
           addComplexChildren("Company", profile.company.id, "Mission", response)
         );

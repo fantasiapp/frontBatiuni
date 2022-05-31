@@ -100,7 +100,6 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
       name: "Veuillez télécharger un document",
       nature: this.filename,
     };
-    console.log("init", this.value);
   }
 
   private getBase64(files: FileList, index: number = 0) {
@@ -209,11 +208,9 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
         {
           name: "Visualiser un fichier",
           click: () => {
-            console.log("Visualiser un fichier", this.value);
             if (!this.value || (!this.value.content && this.value.id == void 0))
               return this.info.show("error", "Aucun fichier à affichier", 3000);
 
-            console.log("open file", this.value);
             this.popup.openFile(this.value);
           },
         },

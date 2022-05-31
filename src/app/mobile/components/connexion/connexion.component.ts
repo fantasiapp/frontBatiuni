@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from "@angular/core";
-import { isLoadingService } from "src/app/shared/services/isLoading.service";
+import { BooleanService } from "src/app/shared/services/boolean.service";
 import { GetUserData } from "src/models/new/user/user.actions";
 
 @Component({
@@ -11,7 +11,7 @@ import { GetUserData } from "src/models/new/user/user.actions";
 export class ConnexionComponent {
   isLoading: boolean
 
-  constructor(private cd: ChangeDetectorRef ,private isLoadingService: isLoadingService) {
+  constructor(private cd: ChangeDetectorRef ,private isLoadingService: BooleanService) {
     this.isLoading = isLoadingService.isLoading
     this.isLoadingService.getLoadingChangeEmitter().subscribe((bool) => {
       this.isLoading = bool

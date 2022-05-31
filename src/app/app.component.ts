@@ -43,11 +43,11 @@ export class AppComponent extends Destroy$ {
 
   title = 'af-notification'
   message : any = null
+  public isConnected: boolean = false;
 
   constructor(private store: Store, private mobile: Mobile, private notifService: NotifService) {
     super();
     this.mobile.init();
-    console.log("constructor de app.component.ts")
     this.updateUserData();
   }
 
@@ -70,13 +70,9 @@ export class AppComponent extends Destroy$ {
   }
 
   async updateUserData() {
-    while(true) {
-      if (!this.firstAttemptAlreadyTried) {
-        this.executeGetGeneralData()
-        this.firstAttemptAlreadyTried = true
-        await delay(20000)
-      }
-      else if (this.readyToUpdate) { // supposed to be this.readyToUpdate
+    while(this.isConnected) {
+      if (this.readyToUpdate) {
+        this.executeGetGeneralData() // supposed to be this.readyToUpdate
         this.readyToUpdate = false
         this.getUserData()
         await delay(20000)

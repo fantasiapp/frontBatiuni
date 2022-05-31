@@ -114,10 +114,6 @@ export class ApplicationsComponent extends Destroy$ {
     while(true) {
       if (bool){
         bool = false
-        console.log("applications component")
-        console.log("userOnlinePosts", this.userOnlinePosts)
-        console.log("allOnlinePosts", this.allOnlinePosts)
-        console.log("allCandidatedPost", this.allCandidatedPost)
         await delay(5000)
         bool=true}
     }
@@ -129,7 +125,6 @@ export class ApplicationsComponent extends Destroy$ {
   }
 
   selectPost(filter: any) {
-    console.log("hey")
     this.userOnlinePosts = [];
     if (filter == null) {  
       this.userOnlinePosts = this.allCandidatedPost;
@@ -185,7 +180,7 @@ export class ApplicationsComponent extends Destroy$ {
   }
 
   selectSearch(searchForm:  string){
-    console.log("ho")
+    ("ho")
     this.userOnlinePosts = [];
     if (searchForm == "" || searchForm == null)  {
       this.userOnlinePosts = this.allCandidatedPost
@@ -219,12 +214,10 @@ export class ApplicationsComponent extends Destroy$ {
     //   // this.annonceResume.open()
     // }, 20);
     this.cd.markForCheck;    
-    console.log("coucou", this.userOnlinePosts)
 
   }
 
   ngOnDestroy(): void {
-    console.log("pourquoi tant de n")
     this.info.alignWith("last");
     super.ngOnDestroy();
   }

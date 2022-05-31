@@ -59,7 +59,7 @@ import { AuthState } from "src/models/auth/auth.state";
 import { Logout } from "src/models/auth/auth.actions";
 import { analyzeAndValidateNgModules } from "@angular/compiler";
 import { AppComponent } from "src/app/app.component";
-import { isLoadingService } from "src/app/shared/services/isLoading.service";
+import { BooleanService } from "src/app/shared/services/boolean.service";
 import { STFilterForm } from "src/app/shared/forms/STFilter.form";
 import { PMEFilterForm } from "src/app/shared/forms/PMEFilter.form";
 import { SearchbarComponent } from "src/app/shared/components/searchbar/searchbar.component";
@@ -156,17 +156,17 @@ export class HomeComponent extends Destroy$ {
     private slideService: SlidemenuService,
     private filters: FilterService,
     private mobile: Mobile,
-    private loadingService: isLoadingService,
+    private booleanService: BooleanService,
     private filterService: FilterService,
     private getUserDataService: getUserDataService
   ) {
     super();
-    this.isLoading = this.loadingService.isLoading
+    this.isLoading = this.booleanService.isLoading
     this.searchbar = new SearchbarComponent(store);
   }
 
   ngOnInit() {
-    this.loadingService.getLoadingChangeEmitter().subscribe((bool : boolean) => {
+    this.booleanService.getLoadingChangeEmitter().subscribe((bool : boolean) => {
       this.isLoading = bool
       this.cd.markForCheck()
     })
@@ -185,7 +185,6 @@ export class HomeComponent extends Destroy$ {
   }
 
   async lateInit() {
-      console.log("coucou", this.isLoading)
       if (!this.isLoading) {
       this.info.alignWith("header_search");
       combineLatest([this.profile$, this.posts$])
@@ -224,7 +223,6 @@ export class HomeComponent extends Destroy$ {
       this.updatePage()
     }
     else {
-      console.log("coucou dans le else")
       await delay(2000)
       this.lateInit()
       this.cd.markForCheck()
