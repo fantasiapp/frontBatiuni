@@ -313,7 +313,6 @@ export class DataState {
     return req.pipe(
       tap((response: any) => {
         if (response[picture.action] !== "OK") throw response["messages"];
-
         delete response[picture.action];
         ctx.setState(compose(addSimpleChildren("Company", profile.company.id, "File", response, "nature")));
       })
@@ -668,24 +667,17 @@ export class DataState {
 
   @Action(CreateDetailedPost)
   createDetailedPost(ctx: StateContext<DataModel>, application: CreateDetailedPost) {
-    console.log('3');
     const profile = this.store.selectSnapshot(DataQueries.currentProfile)!;
-    console.log('4');
     return this.http.post("data", application).pipe(
       tap((response: any) => {
-        console.log('5');
         if (response[application.action] !== "OK") {
           this.inZone(() => this.info.show("error", response.messages, 3000));
           throw response.messages;
         }
-        console.log('6');
         delete response[application.action];
-        console.log('createDetailPost', response);
-        console.log('7');
         ctx.setState(
           addComplexChildren("Company", profile.company.id, "Mission", response)
-          );
-          console.log('8');
+        );
       })
     );
   }
@@ -700,11 +692,15 @@ export class DataState {
           throw response.messages;
         }
         delete response[application.action]
-        delete response.deleted
-        console.log('modifyDetailedPost', response);
-        ctx.setState(
-          addComplexChildren("Company", profile.company.id, response.type, response.object)
-        )
+        // ctx.setState(
+        //   addComplexChildren("Company", profile.company.id, "Mission", response)
+        // )
+        if (response["type"] == "DatePost") {
+          console.log("modifyDetailedPost", response, response["detailedPost"])
+          ctx.setState(
+            addComplexChildren(response["type"], response["fatherId"], "DetailedPost", response["detailedPost"])
+          )
+        }
       })
     );
   }
@@ -736,7 +732,7 @@ export class DataState {
           throw response.messages;
         }
         delete response[application.action];
-        console.log('response ModifyMission', response);
+        
         ctx.setState(addComplexChildren("Company", profile.company.id, "Mission", response.mission));
         for (const key in response.datePost) {
           let datePost = {[key]: response.datePost[key]}
