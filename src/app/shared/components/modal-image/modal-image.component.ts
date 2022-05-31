@@ -114,6 +114,7 @@ export class ModalImage {
   }
 
   baseDist: number = 0;
+  baseScale: number = 1;
 
   getDistance(touch1: Touch, touch2: Touch) {
     return Math.hypot(touch1.clientX - touch2.clientX, touch1.clientY - touch2.clientY);
@@ -124,6 +125,7 @@ export class ModalImage {
     console.log("pinch start")
     console.log(event)
     this.baseDist = this.getDistance(event.touches[0], event.touches[1]);
+    this.baseScale = this.scale;
   }
 
   pinchMove(event: TouchEvent) {
@@ -133,7 +135,7 @@ export class ModalImage {
     let dist = this.getDistance(event.touches[0], event.touches[1]);
     console.log(dist);
     
-    let scaling = this.scale * dist / this.baseDist;
+    let scaling = this.baseScale * dist / this.baseDist;
 
     let img = document.getElementById("target")!;
     img.style.transform = `scale(${scaling}) translate(${this.xTranslation}px, ${this.yTranslation}px)`;
@@ -146,7 +148,7 @@ export class ModalImage {
 
     let dist = this.getDistance(event.changedTouches[0], event.changedTouches[1]);
     console.log(dist);
-    this.scale = this.scale * dist / this.baseDist;
+    this.scale = this.baseScale * dist / this.baseDist;
 
     this.baseDist = this.getDistance(event.changedTouches[0], event.changedTouches[1]);
 
