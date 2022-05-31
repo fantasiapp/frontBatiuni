@@ -133,17 +133,25 @@ export class ModalImage {
     let dist = this.getDistance(event.touches[0], event.touches[1]);
     console.log(dist);
     
-    this.scale = this.scale * dist / this.baseDist;
+    let scaling = this.scale * dist / this.baseDist;
 
     let img = document.getElementById("target")!;
-    img.style.transform = `scale(${this.scale}) translate(${this.xTranslation}px, ${this.yTranslation}px)`;
+    img.style.transform = `scale(${scaling}) translate(${this.xTranslation}px, ${this.yTranslation}px)`;
   }
 
   pinchEnd(event: TouchEvent) {
     event.preventDefault();
     console.log("pinch end")
     console.log(event)
+
+    let dist = this.getDistance(event.changedTouches[0], event.changedTouches[1]);
+    console.log(dist);
+    this.scale = this.scale * dist / this.baseDist;
+
     this.baseDist = this.getDistance(event.changedTouches[0], event.changedTouches[1]);
+
+    let img = document.getElementById("target")!;
+    img.style.transform = `scale(${this.scale}) translate(${this.xTranslation}px, ${this.yTranslation}px)`;
   }
     
   async test() {
