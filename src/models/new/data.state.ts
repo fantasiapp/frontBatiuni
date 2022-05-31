@@ -654,10 +654,7 @@ export class DataState {
   }
 
   @Action(CreateDetailedPost)
-  createDetailedPost(
-    ctx: StateContext<DataModel>,
-    application: CreateDetailedPost
-  ) {
+  createDetailedPost(ctx: StateContext<DataModel>, application: CreateDetailedPost) {
     const profile = this.store.selectSnapshot(DataQueries.currentProfile)!;
     return this.http.post("data", application).pipe(
       tap((response: any) => {
@@ -674,10 +671,7 @@ export class DataState {
   }
 
   @Action(ModifyDetailedPost)
-  modifyDetailedPost(
-    ctx: StateContext<DataModel>,
-    application: ModifyDetailedPost
-  ) {
+  modifyDetailedPost(ctx: StateContext<DataModel>, application: ModifyDetailedPost) {
     const profile = this.store.selectSnapshot(DataQueries.currentProfile)!;
     return this.http.post("data", application).pipe(
       tap((response: any) => {
@@ -694,10 +688,7 @@ export class DataState {
   }
 
   @Action(CreateSupervision)
-  createSupervision(
-    ctx: StateContext<DataModel>,
-    application: CreateSupervision
-  ) {
+  createSupervision(ctx: StateContext<DataModel>, application: CreateSupervision) {
     const profile = this.store.selectSnapshot(DataQueries.currentProfile)!;
     return this.http.post("data", application).pipe(
       tap((response: any) => {
