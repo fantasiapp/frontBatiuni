@@ -283,7 +283,13 @@ export class HandleApplication {
   action = 'handleCandidateForPost';
   
   constructor(public Candidate: number, public post: Post, public response: boolean) {}
-};
+}
+
+export class BlockCompany {
+  static readonly type = 'block a company';
+  action = 'blockCompany';
+  constructor(public candidateId: number, public status: boolean) {}
+}
 
 export class SignContract {
   static readonly type = '[Data] Sign Contract';

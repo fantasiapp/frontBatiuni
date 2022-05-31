@@ -13,6 +13,7 @@ import { HttpService } from "src/app/services/http.service";
 import {
   GetGeneralData,
   HandleApplication,
+  BlockCompany,
   SignContract,
   MarkViewed,
   ModifyAvailability,
@@ -633,6 +634,24 @@ export class DataState {
           );
       })
     );
+  }
+
+  @Action(BlockCompany)
+  BlockCompany(ctx: StateContext<DataModel>, handle: HandleApplication) {
+    const { post, ...data } = handle;
+    return this.http.get("data", data).pipe(
+      tap((response: any) => {
+        if (response[handle.action] !== "OK") {
+          this.inZone(() => this.info.show("error", response.messages, 3000));
+          throw response.messages;
+        } else {
+          delete response[handle.action];
+          const company = this.store.selectSnapshot(DataQueries.currentCompany);
+          this.inZone(() => this.info.show("success", "En developpement", 2000));
+          this.slide.hide();
+        }
+      })
+    )
   }
 
   @Action(SignContract)
