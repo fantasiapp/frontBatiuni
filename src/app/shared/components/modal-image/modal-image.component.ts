@@ -117,7 +117,7 @@ export class ModalImage {
   ngAfterViewInit() {
     let img = document.getElementById("target")!;
 
-    if (Capacitor.getPlatform() === "web") {
+    if (false) {
         img.onwheel = (event) => {
             event.preventDefault();
 
