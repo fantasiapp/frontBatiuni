@@ -234,11 +234,7 @@ export class UIPopup extends DimensionMenu {
     });
   }
 
-  findTaskWithDate(
-    date: DateG,
-    task: PostDetailGraphic,
-    missionId: Ref<Mission>,
-    unset: boolean
+  findTaskWithDate(date: DateG, task: PostDetailGraphic, missionId: Ref<Mission>, unset: boolean
   ) {
     // essayer d'avoir un this.mission plutot que de l'appeler 20fois
     const mission = this.store.selectSnapshot(
