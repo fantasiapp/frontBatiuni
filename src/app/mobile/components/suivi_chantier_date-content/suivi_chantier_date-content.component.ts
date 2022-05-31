@@ -215,7 +215,7 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
   }
 
   addTaskToPost() {
-    this.popup.openDateDialog(this.mission!.id, this.date, this);
+    this.popup.openDateDialog(this.mission!.id, this.date, this.dateOrigin.id, this);
     this.swipeMenu = false;
   }
 
@@ -241,7 +241,7 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
   validate(task: PostDetailGraphic, control: HTMLImageElement) {
     if (this.view == 'ST' && !task.refused && !this.mission!.isClosed) {
       task.validated = !task.validated
-      this.store.dispatch(new ModifyDetailedPost(task)).pipe(take(1)).subscribe((mis) => {
+      this.store.dispatch(new ModifyDetailedPost(task, false, this.dateOrigin.id)).pipe(take(1)).subscribe((mis) => {
         this.mission = this.store.selectSnapshot(DataQueries.getById('Mission', this.mission!.id))
         control.src = this.computeTaskImage(task, "validated")
       })
@@ -251,7 +251,7 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
   refuse(task: PostDetailGraphic, control: HTMLImageElement) {
     if (this.view == 'ST' && !task.validated && !this.mission!.isClosed) {
       task.refused = !task.refused
-      this.store.dispatch(new ModifyDetailedPost(task)).pipe(take(1)).subscribe(() => {
+      this.store.dispatch(new ModifyDetailedPost(task, false, this.dateOrigin.id)).pipe(take(1)).subscribe(() => {
         this.mission = this.store.selectSnapshot(DataQueries.getById('Mission', this.mission!.id))
         control.src = this.computeTaskImage(task, "refused")
       })

@@ -212,21 +212,12 @@ export class UIPopup extends DimensionMenu {
     this.store.dispatch(new CreateDetailedPost(assignDate.missionId, input.value, assignDate.date.date)).pipe(take(1)).subscribe(() => {
       input.value = "";
 
-      //On a les post date maintenant
-
-      const mission = this.store.selectSnapshot(
-        DataQueries.getById("Mission", assignDate.missionId)
-      )
-      // console.log("assignDate", assignDate)
-      const missionPostDetail = this.store.selectSnapshot(
-        DataQueries.getMany("DetailedPost", mission!.details)
-      ) as Task[];
+      const mission = this.store.selectSnapshot(DataQueries.getById("Mission", assignDate.missionId))
+      const missionPostDetail = this.store.selectSnapshot(DataQueries.getMany("DetailedPost", mission!.details)) as Task[];
       const newTask = missionPostDetail[missionPostDetail.length - 1];
       
       
       assignDate.date.allPostDetails.push(newTask);
-      // assignDate.date.postDetails.push(newTask);
-
       this.popupService.taskWithoutDouble.next(
         assignDate.date.allPostDetails
       );
@@ -235,18 +226,10 @@ export class UIPopup extends DimensionMenu {
   }
 
 
-  modifyDetailedPostDate(
-    detailDate: PostDetailGraphic,
-    checkbox: UICheckboxComponent
-  ) {
-    // let unset = checkbox.value;
-    // console.log("modifyDetailedPostDate")
-    // this.store.dispatch(new ModifyDetailedPost(this.findTaskWithDate(date, task, missionId, unset!), unset)).pipe(take(1)).subscribe(() => {
-    //     this.cd.markForCheck();
-    //   });
-    //   console.log("modifyDetailedPostDate end")
+  modifyDetailedPostDate(detailDate: PostDetailGraphic, checkbox: UICheckboxComponent, datePostId: Ref<DatePost>) {
+    // let unset = checkbox.value
 
-    this.store.dispatch(new ModifyDetailedPost(detailDate, checkbox.value)).pipe(take(1)).subscribe(() => {
+    this.store.dispatch(new ModifyDetailedPost(detailDate, checkbox.value, datePostId)).pipe(take(1)).subscribe(() => {
       this.cd.markForCheck();
     });
   }
@@ -431,6 +414,7 @@ export class PopupService {
   openDateDialog(
     mission: Ref<Mission>,
     date: PostDateAvailableTask,
+    datePostId: Ref<DatePost>,
     objectSuivi: SuiviChantierDateContentComponent
   ) {
     const view = this.store.selectSnapshot(DataState.view),
@@ -441,6 +425,7 @@ export class PopupService {
       $implicit: {
         mission: mission,
         date: date,
+        datePostId: datePostId,
         view: view,
       },
     };
