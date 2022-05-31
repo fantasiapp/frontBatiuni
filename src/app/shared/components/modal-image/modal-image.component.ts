@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, ElementRef, Input, ViewChild, ViewRef } from "@angular/core";
+import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
 import { SafeResourceUrl } from "@angular/platform-browser";
 
 
@@ -17,6 +17,11 @@ export class ModalImage {
   ngOnInit() {
     console.log("modal")
     console.log(this.src)
+    document.onreadystatechange = (state) => {
+      console.log("plop")
+    }
+    console.log(document.getElementById("modalImage"))
+    console.log(document.getElementsByName("modalImage"))
   }
 
   ngAfterViewInit() {
