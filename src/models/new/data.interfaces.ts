@@ -73,11 +73,20 @@ export interface Company {
 
 export interface PostDetail {
   id: Ref<PostDetail>;
-  date: string;
-  content: string;
-  validated : boolean;
-  refused : boolean;
-  supervisions: Ref<Supervision>[];
+  date: string
+  content: string
+  validated : boolean
+  refused : boolean
+  supervisions: Ref<Supervision>[]
+};
+
+export interface PostDetailGraphic {
+  id: Ref<PostDetail>;
+  date: string
+  content: string
+  validated : boolean
+  refused : boolean
+  supervisions: Supervision[]
 };
 
 export interface Supervision {
@@ -205,7 +214,6 @@ export type Mission = Post & {
 
   isClosed: boolean;
   contract: Ref<File>;
-  supervisions: Ref<Supervision>[]
 };
 
 export type PostDate = {
@@ -214,7 +222,18 @@ export type PostDate = {
   validated: boolean;
   deleted: boolean;
   supervisions: Ref<Supervision>[]
+  details: Ref<PostDetail>[]
 };
+
+export type PostDateAvailableTask = {
+  id: Ref<PostDateAvailableTask>
+  date: string
+  validated: boolean
+  deleted: boolean
+  supervisions: Supervision[]
+  postDetails: PostDetailGraphic[]
+  allPostDetails: PostDetail[]
+}
 
 export type Task = PostDetail & {
   validationImage:string,

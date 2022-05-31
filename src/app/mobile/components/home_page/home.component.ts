@@ -222,7 +222,7 @@ export class HomeComponent extends Destroy$ {
           this.allUserOnlinePosts =
             mapping.get(this.symbols.userOnlinePost) || [];
           this.allOnlinePosts = [...otherOnlinePost, ...this.userOnlinePosts];
-          console.log("allOnlinePosts", this.allOnlinePosts)
+          console.log("allOnlinePosts", profile.company)
           this.allMissions = this.store.selectSnapshot(DataQueries.getMany("Mission", profile.company.missions));
   
           this.selectDraft(null);

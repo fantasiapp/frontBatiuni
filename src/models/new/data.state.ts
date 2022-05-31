@@ -679,10 +679,10 @@ export class DataState {
           this.inZone(() => this.info.show("error", response.messages, 3000));
           throw response.messages;
         }
-        delete response[application.action];
+        delete response[application.action]
         ctx.setState(
           addComplexChildren("Company", profile.company.id, "Mission", response)
-        );
+        )
       })
     );
   }
@@ -692,7 +692,7 @@ export class DataState {
     ctx: StateContext<DataModel>,
     application: CreateSupervision
   ) {
-    const profile = this.store.selectSnapshot(DataQueries.currentProfile)!;
+    const profile = this.store.selectSnapshot(DataQueries.currentProfile)!
     return this.http.post("data", application).pipe(
       tap((response: any) => {
         if (response[application.action] !== "OK") {
@@ -700,9 +700,16 @@ export class DataState {
           throw response.messages;
         }
         delete response[application.action];
-        let key = Object.keys(response)
-        if ("datePostId" in response) {ctx.setState(addComplexChildren("DatePost",response["datePostId"], "Supervision", response["supervision"]))}
-        if ("detailedPostId" in response) {ctx.setState(addComplexChildren("DetailedPost",response["detailedPostId"], "Supervision", response["supervision"]))}
+        console.log("createSupervision", response, response["type"], response["type"] == "DatePost")
+        if (response["type"] == "DatePost") {
+          let datePost = this.store.selectSnapshot(DataQueries.getById("DatePost", 7))
+          console.log("createSupervision datePost", datePost)
+          console.log("createSupervision before", this.store.selectSnapshot(DataQueries.getMany("Supervision", datePost!.supervisions)))
+          ctx.setState(addComplexChildren("DatePost",response["datePostId"], "Supervision", response["supervision"]))
+          datePost = this.store.selectSnapshot(DataQueries.getById("DatePost", 7))
+          console.log("createSupervision after", this.store.selectSnapshot(DataQueries.getMany("Supervision", datePost!.supervisions)))
+        }
+        if (response["type"] == "detailedPost") ctx.setState(addComplexChildren("DetailedPost",response["detailedPostId"], "Supervision", response["supervision"]))
       })
     );
   }

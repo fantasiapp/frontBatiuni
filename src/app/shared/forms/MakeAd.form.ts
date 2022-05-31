@@ -538,6 +538,7 @@ export class MakeAdForm {
   });
   get invalid() {
     const calendar = this.makeAdForm.get("calendar")
+    console.log("invalid", this.makeAdForm.valid)
     return !this.makeAdForm.valid || calendar?.value.length == 0;
   }
 

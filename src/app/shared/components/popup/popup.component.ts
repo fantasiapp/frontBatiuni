@@ -40,6 +40,7 @@ import {
   Company,
   Mission,
   DateG,
+  PostDetailGraphic,
   Task,
   Ref,
 } from "src/models/new/data.interfaces";
@@ -201,7 +202,7 @@ export class UIPopup extends DimensionMenu {
         new CreateDetailedPost(
           assignDate.missionId,
           input.value,
-          assignDate.date.date.date
+          assignDate!.date!.date!.date
         )
       )
       .pipe(take(1))
@@ -210,7 +211,8 @@ export class UIPopup extends DimensionMenu {
 
         const mission = this.store.selectSnapshot(
           DataQueries.getById("Mission", assignDate.missionId)
-        );
+        )
+        console.log("assignDate", assignDate)
         const missionPostDetail = this.store.selectSnapshot(
           DataQueries.getMany("DetailedPost", mission!.details)
         ) as Task[];
@@ -248,23 +250,25 @@ export class UIPopup extends DimensionMenu {
     missionId: Ref<Mission>,
     checkbox: UICheckboxComponent
   ) {
-    let unset = checkbox.value;
-    this.store
-      .dispatch(
-        new ModifyDetailedPost(
-          this.findTaskWithDate(date, task, missionId, unset!),
-          unset
-        )
-      )
-      .pipe(take(1))
-      .subscribe(() => {
-        this.cd.markForCheck();
-      });
+    // let unset = checkbox.value;
+    // console.log("modifyDetailedPostDate")
+    // this.store
+    //   .dispatch(
+    //     new ModifyDetailedPost(
+    //       this.findTaskWithDate(date, task, missionId, unset!),
+    //       unset
+    //     )
+    //   )
+    //   .pipe(take(1))
+    //   .subscribe(() => {
+    //     this.cd.markForCheck();
+    //   });
+    //   console.log("modifyDetailedPostDate end")
   }
 
   findTaskWithDate(
     date: DateG,
-    task: Task,
+    task: PostDetailGraphic,
     missionId: Ref<Mission>,
     unset: boolean
   ) {
@@ -273,19 +277,20 @@ export class UIPopup extends DimensionMenu {
       DataQueries.getById("Mission", missionId)
     );
     let taskWithId = task;
-    this.store
-      .selectSnapshot(DataQueries.getMany("DetailedPost", mission!.details))
-      .forEach((detail) => {
-        if (
-          unset &&
-          detail.date == date.date.date &&
-          detail.content == task.content
-        )
-          taskWithId = detail as Task;
-        else if (!unset && !detail.date && detail.content == task.content)
-          taskWithId = detail as Task;
-      });
-    taskWithId.date = date.date.date;
+    // this.store
+    //   .selectSnapshot(DataQueries.getMany("DetailedPost", mission!.details))
+    //   .forEach((detail) => {
+    //     if (
+    //       unset &&
+    //       detail.date == date.date?.date &&
+    //       detail.content == task.content
+    //     )
+    //       taskWithId = detail as Task;
+    //     else if (!unset && !detail.date && detail.content == task.content)
+    //       taskWithId = detail as Task;
+    //   })
+    // taskWithId.date = date.date?.date!;
+    // console.log("task", task)
     return taskWithId;
   }
 
@@ -440,7 +445,7 @@ export class PopupService {
 
   openDateDialog(
     mission: Mission,
-    date: DateG,
+    dateG: DateG,
     objectSuivi: SuiviChantierDateContentComponent
   ) {
     const view = this.store.selectSnapshot(DataState.view),
@@ -450,7 +455,7 @@ export class PopupService {
     const context = {
       $implicit: {
         missionId: mission!.id,
-        date: date,
+        date: dateG,
         view: view,
       },
     };
