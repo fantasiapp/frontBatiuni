@@ -25,6 +25,7 @@ import { RegistrationSuccess } from "./validators/registration_success/registrat
 import { ModifyPasswordForm } from "./forms/ModifyPassword.form";
 import { ImageGenerator } from "./services/image-generator.service";
 import { OfferComponent } from "./components/offer/offer.component";
+import { OfferMapComponent } from "./components/offer-map/offer-map.component";
 import { NavigationMenu } from "./components/navigation/navigation.component";
 import { ModifyProfileForm } from "./forms/ModifyProfile.form";
 import { ProfileResume } from "./components/profile-resume/profile-resume.component";
@@ -95,6 +96,7 @@ import { ApplicationForm } from "./forms/application.form";
     RegistrationSuccess,
     ModifyPasswordForm,
     OfferComponent,
+    OfferMapComponent,
     NavigationMenu,
     ModifyProfileForm,
     ProfileResume,
@@ -169,6 +171,7 @@ import { ApplicationForm } from "./forms/application.form";
     RegistrationSuccess,
     ModifyPasswordForm,
     OfferComponent,
+    OfferMapComponent,
     NavigationMenu,
     ModifyProfileForm,
     ProfileResume,
