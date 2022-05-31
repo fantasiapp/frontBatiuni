@@ -277,7 +277,7 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
   //   return [dateResult, this.mission!];
   // };
 
-  computeDates(mission: Mission) {
+  // computeDates(mission: Mission) {
     // let supervisionsTaks: number[] = [];
     // let detailsId = this.distToArray(mission.details);
 
@@ -322,7 +322,67 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
     //     } as DateG;
     //   return dateG});
     //   this.dates.sort((date1, date2) => (date1.date.date > date2.date.date ? 1 : -1));
+  // }
+
+  computeDate(date:DatePost) {
+    console.log(date)
+    // if (typeof (mission.dates) === "object" && !Array.isArray(mission.dates)) dates = mission.dates
+    // else dates = this.store.selectSnapshot(DataQueries.getMany("DatePost", mission.dates))
+    // const allPostDetails = this.computeAllPostDetails(mission.details)
+    // this.dates = dates.map((date) => {
+    //   const [supervisions, postDetail] = this.computeFieldOfDate(date)
+    //   return {
+    //     "id":date.id,
+    //     "date": date.date,
+    //     "validated":date.validated,
+    //     "deleted":date.deleted,
+    //     "supervisions":supervisions,
+    //     "postDetails":postDetail,
+    //     "allPostDetails":allPostDetails
+    //   } as unknown as PostDateAvailableTask
+    // })
   }
+
+  computeFieldOfDate(date:DatePost) {
+    let supervisions:Supervision[] = []
+    let postDetails:PostDetail[] = []
+    let avaliableDetails:PostDetail[] = []
+    if (typeof(date.supervisions) === "object" && !Array.isArray(date.supervisions))
+      supervisions = Object.values(date.supervisions) as Supervision[]
+    else
+      supervisions = this.store.selectSnapshot(DataQueries.getMany("Supervision", date.supervisions))
+      console.log("supervisions", supervisions, date.supervisions)
+
+    if (typeof(date.details) === "object" && !Array.isArray(date.details))
+      postDetails = Object.values(date.details)
+    else
+      postDetails = this.store.selectSnapshot(DataQueries.getMany("DetailedPost", date.details))
+
+    let postDetailsGraphic = postDetails.map((postDetail) => {
+      let supervisions:Supervision[]
+      if ((typeof(postDetail.supervisions) === "object") && !Array.isArray(postDetail.supervisions)) {
+        supervisions = Object.values(postDetail.supervisions) as unknown as Supervision[]
+      } else {
+        supervisions = this.store.selectSnapshot(DataQueries.getMany("Supervision", postDetail.supervisions as unknown as number[]))
+      }
+      return {
+        "id": postDetail.id,
+        "date": postDetail.date,
+        "content": postDetail.content,
+        "validated": postDetail.validated,
+        "refused": postDetail.refused,
+        "supervisions": supervisions,
+      } as PostDetailGraphic
+    })
+    return [supervisions, postDetailsGraphic, avaliableDetails]
+  }
+
+  computeAllPostDetails(details:any[]) {
+    let avaliableTasks: PostDetail[] = []
+    if (typeof(details) === "object" && !Array.isArray(details)) avaliableTasks = details
+    else avaliableTasks = this.store.selectSnapshot(DataQueries.getMany("DetailedPost", details))
+    return avaliableTasks
+    }
 
   computeSupervisionsforTask(supervisionsId: number[], supervisionsTask: number[]) {
     let supervisions: Supervision[] = [];
