@@ -116,6 +116,7 @@ export class AppComponent extends Destroy$ {
 
   requestPermission() {
     const messaging = getMessaging(this.app)
+    console.log("l'app' utilisé : ", this.app)
     console.log("la vapid key utilisé : ", environment.firebase.vapidKey)
     console.log("le messaging : ", messaging)
     getToken(messaging, {vapidKey : environment.firebase.vapidKey}).then((currentToken) => {
