@@ -23,23 +23,19 @@ export class FileViewer {
   modalImage: SafeResourceUrl = "";
 
   ngOnInit() {
-    console.log("init", this.fileContextList)
   }
 
   openWindow(url: string) {
-    console.log(this.fileContextList)
     window.open(url);
   }
 
   openModalImage(image: SafeResourceUrl) {
-    console.log(image);
     this.displayModal = true;
     this.modalImage = image;
 
   }
 
   closeModalImage() {
-    console.log("close image")
     this.displayModal = false;
     this.modalImage = "";
   }

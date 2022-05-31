@@ -52,7 +52,6 @@ export class BlockedContactsComponent extends Destroy$ {
     }
 
     checkCompanyProfile(company: Company) {
-        console.log('bloqués')
         this.slides.show(company.name, {
           type: "component",
           component: ExtendedProfileComponent,
