@@ -35,124 +35,167 @@ export class ModalImage {
   xTranslation: number = 0;
   yTranslation: number = 0;
 
+  hammerIt(elm: HTMLElement) {
+    let hammertime = new Hammer(elm, {});
+    hammertime.get('pinch').set({
+        enable: true
+    });
+    var posX = 0,
+        posY = 0,
+        scale = 1,
+        last_scale = 1,
+        last_posX = 0,
+        last_posY = 0,
+        max_pos_x = 0,
+        max_pos_y = 0,
+        transform = "",
+        el = elm;
+
+    hammertime.on('doubletap pan pinch panend pinchend', function(ev) {
+        if (ev.type == "doubletap") {
+            transform =
+                "translate3d(0, 0, 0) " +
+                "scale3d(2, 2, 1) ";
+            scale = 2;
+            last_scale = 2;
+            try {
+                if (window.getComputedStyle(el, null).getPropertyValue('-webkit-transform').toString() != "matrix(1, 0, 0, 1, 0, 0)") {
+                    transform =
+                        "translate3d(0, 0, 0) " +
+                        "scale3d(1, 1, 1) ";
+                    scale = 1;
+                    last_scale = 1;
+                }
+            } catch (err) {}
+            el.style.webkitTransform = transform;
+            transform = "";
+        }
+
+        //pan    
+        if (scale != 1) {
+            posX = last_posX + ev.deltaX;
+            posY = last_posY + ev.deltaY;
+            max_pos_x = Math.ceil((scale - 1) * el.clientWidth / 2);
+            max_pos_y = Math.ceil((scale - 1) * el.clientHeight / 2);
+            if (posX > max_pos_x) {
+                posX = max_pos_x;
+            }
+            if (posX < -max_pos_x) {
+                posX = -max_pos_x;
+            }
+            if (posY > max_pos_y) {
+                posY = max_pos_y;
+            }
+            if (posY < -max_pos_y) {
+                posY = -max_pos_y;
+            }
+        }
+
+
+        //pinch
+        if (ev.type == "pinch") {
+            scale = Math.max(.999, Math.min(last_scale * (ev.scale), 4));
+        }
+        if(ev.type == "pinchend"){last_scale = scale;}
+
+        //panend
+        if(ev.type == "panend"){
+            last_posX = posX < max_pos_x ? posX : max_pos_x;
+            last_posY = posY < max_pos_y ? posY : max_pos_y;
+        }
+
+        if (scale != 1) {
+            transform =
+                "translate3d(" + posX + "px," + posY + "px, 0) " +
+                "scale3d(" + scale + ", " + scale + ", 1)";
+        }
+
+        if (transform) {
+            el.style.webkitTransform = transform;
+        }
+    });
+}
+
   ngAfterViewInit() {
     console.log("modal");
     console.log(this.src);
     let img = document.getElementById("target")!;
     console.log("div", img);
 
-    img.onwheel = (event) => {
-      event.preventDefault();
-      console.log("zoom")
-      console.log(event)
-      console.log(this)
-      console.log("scale before", this.scale)
+    this.hammerIt(img);
 
-      this.scale += event.deltaY / 100;
-      this.scale = Math.max(1, Math.min(this.scale, 10));
-      console.log("scale after", this.scale);
+    // img.onwheel = (event) => {
+    //   event.preventDefault();
+    //   console.log("zoom")
+    //   console.log(event)
+    //   console.log(this)
+    //   console.log("scale before", this.scale)
 
-      img = document.getElementById("target")!;
-      img.style.transform = `scale(${this.scale}) translate(${this.xTranslation}px, ${this.yTranslation}px)`;
-    };
+    //   this.scale += event.deltaY / 100;
+    //   this.scale = Math.max(1, Math.min(this.scale, 10));
+    //   console.log("scale after", this.scale);
 
-    img.ontouchstart = (event) => {
-      if (event.touches.length === 2) {
-        this.pinchScaling = true;
-        this.pinchStart(event);
-      } else {
-        event.preventDefault();
-        console.log("touchstart")
-        console.log(event)
+    //   img = document.getElementById("target")!;
+    //   img.style.transform = `scale(${this.scale}) translate(${this.xTranslation}px, ${this.yTranslation}px)`;
+    // };
+
+    // img.ontouchstart = (event) => {
+    //   if (event.touches.length === 2) {
+    //     this.pinchScaling = true;
+    //     this.pinchStart(event);
+    //   } else {
+    //     event.preventDefault();
+    //     console.log("touchstart")
+    //     console.log(event)
         
-        img = document.getElementById("target")!;
+    //     img = document.getElementById("target")!;
         
-        this.xDown = event.touches[0].clientX;
-        this.yDown = event.touches[0].clientY;
+    //     this.xDown = event.touches[0].clientX;
+    //     this.yDown = event.touches[0].clientY;
 
-        console.log("start", this.xDown, this.yDown)
-      }
-    };
+    //     console.log("start", this.xDown, this.yDown)
+    //   }
+    // };
 
-    img.ontouchmove = (event) => {
-      if (this.pinchScaling) {
-        this.pinchMove(event);
-      } else {
-        event.preventDefault();
-        console.log("slide")
-        console.log(event);
+    // img.ontouchmove = (event) => {
+    //   if (this.pinchScaling) {
+    //     this.pinchMove(event);
+    //   } else {
+    //     event.preventDefault();
+    //     console.log("slide")
+    //     console.log(event);
 
-        let x = event.touches[0].clientX;
-        let y = event.touches[0].clientY;
+    //     let x = event.touches[0].clientX;
+    //     let y = event.touches[0].clientY;
 
-        let deltaX = x - this.xDown;
-        let deltaY = y - this.yDown;
+    //     let deltaX = x - this.xDown;
+    //     let deltaY = y - this.yDown;
 
-        console.log("move", deltaX, deltaY);
+    //     console.log("move", deltaX, deltaY);
 
-        img = document.getElementById("target")!;
+    //     img = document.getElementById("target")!;
 
-        console.log("scale move", this.scale)
-        console.log("move", this.xTranslation + deltaX, this.yTranslation + deltaY)
-        img.style.transform = `scale(${this.scale}) translate(${this.xTranslation + deltaX}px, ${this.yTranslation + deltaY}px)`;
-      }
-    };
+    //     console.log("scale move", this.scale)
+    //     console.log("move", this.xTranslation + deltaX, this.yTranslation + deltaY)
+    //     img.style.transform = `scale(${this.scale}) translate(${this.xTranslation + deltaX}px, ${this.yTranslation + deltaY}px)`;
+    //   }
+    // };
 
-    img.ontouchend = (event) => {
-      if (this.pinchScaling) {
-        this.pinchEnd(event);
-        this.pinchScaling = false;
-      } else {
-        event.preventDefault();
-        console.log("end")
-        console.log(event);
-        this.xTranslation += event.changedTouches[0].clientX - this.xDown;
-        this.yTranslation += event.changedTouches[0].clientY - this.yDown;
-      };
-    };
+    // img.ontouchend = (event) => {
+    //   if (this.pinchScaling) {
+    //     this.pinchEnd(event);
+    //     this.pinchScaling = false;
+    //   } else {
+    //     event.preventDefault();
+    //     console.log("end")
+    //     console.log(event);
+    //     this.xTranslation += event.changedTouches[0].clientX - this.xDown;
+    //     this.yTranslation += event.changedTouches[0].clientY - this.yDown;
+    //   };
+    // };
 
   }
-
-  baseDist: number = 0;
-  baseScale: number = 1;
-  currentDist: number = 0;
-
-  getDistance(touch1: Touch, touch2: Touch) {
-    return Math.hypot(touch1.clientX - touch2.clientX, touch1.clientY - touch2.clientY);
-  }
-
-  pinchStart(event: TouchEvent) {
-    event.preventDefault();
-    console.log("pinch start")
-    console.log(event)
-    this.baseDist = this.getDistance(event.touches[0], event.touches[1]);
-    this.currentDist = this.baseDist;
-    this.baseScale = this.scale;
-  }
-
-  pinchMove(event: TouchEvent) {
-    event.preventDefault();
-    console.log("pinch")
-    console.log(event)
-    let dist = this.getDistance(event.touches[0], event.touches[1]);
-    console.log(dist);
-    
-    let scaling = this.baseScale * this.currentDist / this.baseDist;
-
-    let img = document.getElementById("target")!;
-    img.style.transform = `scale(${scaling}) translate(${this.xTranslation}px, ${this.yTranslation}px)`;
-  }
-
-  pinchEnd(event: TouchEvent) {
-    event.preventDefault();
-    console.log("pinch end")
-    console.log(event)
-
-    this.scale = this.baseScale * this.currentDist / this.baseDist;
-
-    let img = document.getElementById("target")!;
-    img.style.transform = `scale(${this.scale}) translate(${this.xTranslation}px, ${this.yTranslation}px)`;
-  }
+  
     
   async test() {
     let bool = true
