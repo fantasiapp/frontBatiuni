@@ -23,7 +23,7 @@
   <p class="font-Roboto">Avec {{contactName}} entreprise {{ companyName }} </p>
 </div>
 <div class="full-width flex column">
-  <suivi-chantier_date *ngFor="let date of dates" [view]="view" [date]="date" [mission]="mission"></suivi-chantier_date>
+  <suivi-chantier_date *ngFor="let date of dates" [view]="view" [dateId]="date" [mission]="mission"></suivi-chantier_date>
   <!-- <div class="newDate">
     <img src="assets/plusBlue.svg">
     <span>Ajouter une nouvelle date</span>

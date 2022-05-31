@@ -20,12 +20,12 @@ import {
   Mission,
   PostMenu,
   PostDetail,
-  PostDetailGraphic,
+  // PostDetailGraphic,
   Profile,
   Supervision,
   Task,
   DatePost,
-  PostDateAvailableTask,
+  // PostDateAvailableTask,
 } from "src/models/new/data.interfaces";
 import { DataQueries, DataState } from "src/models/new/data.state";
 import {
@@ -49,8 +49,8 @@ export class SuiviPME {
   track: { [key: string]: Map<PostDetail, Supervision[]> } = {};
   isNotSigned: boolean = true;
   isNotSignedByUser: boolean = true;
-  dates: PostDateAvailableTask[] = [];
-  datesNew: PostDateAvailableTask[] = []
+  dates: number[] = [];
+  // datesNew: PostDateAvailableTask[] = []
   currentDateId: number | null = null;
   tasks: Task[] | null = null;
   companyName: string = "";
@@ -91,6 +91,11 @@ export class SuiviPME {
       this.isNotSignedByUser =
         (!mission.signedByCompany && this.view == "PME") ||
         (!mission.signedBySubContractor && this.view == "ST");
+      let arrayDateId = []
+      if (!Array.isArray(mission.dates)) arrayDateId = Object.keys(mission.dates).map(date => +date)
+      else arrayDateId = mission.dates
+      console.log("dates missionMenu", arrayDateId)
+      this.dates = arrayDateId
       // this.computeDates(mission);
       this.companyName =
         this.view == "ST" ? this.company!.name : this.subContractor!.name;
