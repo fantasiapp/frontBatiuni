@@ -44,6 +44,7 @@ import {
   Task,
   Ref,
   DatePost,
+  PostDateAvailableTask,
 } from "src/models/new/data.interfaces";
 import { DataQueries, DataState } from "src/models/new/data.state";
 import { FileContext, FileViewer } from "../file-viewer/file-viewer.component";
@@ -67,6 +68,11 @@ export interface assignDateType {
   date: DateG;
   view: "ST" | "PME";
 }
+
+// export interface assignDateType {
+//   postDateAvailableTask: PostDateAvailableTask;
+//   view: "ST" | "PME";
+// }
 
 @Component({
   selector: "popup",
@@ -198,33 +204,30 @@ export class UIPopup extends DimensionMenu {
   }
 
   addNewTask(e: Event, assignDate: assignDateType, input: HTMLInputElement) {
-    this.store
-      .dispatch(
-        new CreateDetailedPost(
-          assignDate.missionId,
-          input.value,
-          assignDate!.date!.date!.date
-        )
-      )
-      .pipe(take(1))
-      .subscribe(() => {
-        input.value = "";
+    // this.store.dispatch(new CreateDetailedPost(assignDate.postDateAvailableTask, input.value, assignDate!.date!.date!.date))
 
-        const mission = this.store.selectSnapshot(
-          DataQueries.getById("Mission", assignDate.missionId)
-        )
-        console.log("assignDate", assignDate)
-        const missionPostDetail = this.store.selectSnapshot(
-          DataQueries.getMany("DetailedPost", mission!.details)
-        ) as Task[];
-        const newTask = missionPostDetail[missionPostDetail.length - 1];
-        assignDate.date.taskWithoutDouble.push(newTask);
-        assignDate.date.selectedTasks.push(newTask);
-        this.popupService.taskWithoutDouble.next(
-          assignDate.date.taskWithoutDouble
-        );
-        this.cd.markForCheck();
-      });
+    this.store.dispatch(new CreateDetailedPost(assignDate.missionId, input.value, assignDate!.date!.date!.date)).pipe(take(1)).subscribe(() => {
+      input.value = "";
+
+      //On a les post date maintenant
+
+      // const mission = this.store.selectSnapshot(
+      //   DataQueries.getById("Mission", assignDate.missionId)
+      // )
+      // console.log("assignDate", assignDate)
+      // const missionPostDetail = this.store.selectSnapshot(
+      //   DataQueries.getMany("DetailedPost", mission!.details)
+      // ) as Task[];
+      // const newTask = missionPostDetail[missionPostDetail.length - 1];
+      
+      
+      // assignDate.date.taskWithoutDouble.push(newTask);
+      // assignDate.date.selectedTasks.push(newTask);
+      // this.popupService.taskWithoutDouble.next(
+      //   assignDate.date.taskWithoutDouble
+      // );
+      // this.cd.markForCheck();
+    });
   }
 
   disableCheckbox(task: Task, date: DateG) {
@@ -449,9 +452,8 @@ export class PopupService {
   }
 
   openDateDialog(
-    mission: Mission,
-    dateG: DateG,
-    datePost: DatePost | null,
+    // dateG: DateG,
+    PostDateAvailableTask: PostDateAvailableTask,
     objectSuivi: SuiviChantierDateContentComponent
   ) {
     const view = this.store.selectSnapshot(DataState.view),
@@ -460,10 +462,9 @@ export class PopupService {
 
     const context = {
       $implicit: {
-        missionId: mission!.id,
-        date: dateG,
+        // date: dateG,
+        PostDateAvailableTask: PostDateAvailableTask,
         view: view,
-        datePost: datePost
       },
     };
 
@@ -476,8 +477,7 @@ export class PopupService {
         close: (test: boolean) => {
           closed$.next();
           let content = document.getElementById("addTask") as HTMLInputElement;
-          let contentValue = content.value ? content.value : null;
-          objectSuivi.updatePage(contentValue, mission!.id);
+          objectSuivi.updatePage(content);
         },
       });
       first = false;

@@ -49,7 +49,7 @@ export class SuiviPME {
   track: { [key: string]: Map<PostDetail, Supervision[]> } = {};
   isNotSigned: boolean = true;
   isNotSignedByUser: boolean = true;
-  dates: DatePost[] = [];
+  dates: PostDateAvailableTask[] = [];
   datesNew: PostDateAvailableTask[] = []
   currentDateId: number | null = null;
   tasks: Task[] | null = null;
@@ -405,22 +405,22 @@ export class SuiviPME {
     this.popup.openSignContractDialog(this.mission!);
   }
 
-  reloadMission = (dateId: number): (PostDateAvailableTask | Mission)[] => {
-    this.mission = this.store.selectSnapshot(
-      DataQueries.getById("Mission", this.mission!.id)
-    )
-    const newDate = this.store.selectSnapshot(DataQueries.getById("DatePost", dateId))
-    const supervisions = this.store.selectSnapshot(DataQueries.getAll("Supervision"))
-    console.log("reloadMission supervision", dateId, newDate, supervisions)
-    // this.computeDates(this.mission!);
-    console.log("reloadMission", this.dates)
-    let dateNew = this.dates[0]
-    this.dates.forEach((date) => {
-      if (date.id === dateId) dateNew = date
-    })
-    console.log("dateNew", dateNew)
-    return [dateNew, this.mission!]
-  };
+  // reloadMission = (dateId: number): (PostDateAvailableTask | Mission)[] => {
+  //   this.mission = this.store.selectSnapshot(
+  //     DataQueries.getById("Mission", this.mission!.id)
+  //   )
+  //   const newDate = this.store.selectSnapshot(DataQueries.getById("DatePost", dateId))
+  //   const supervisions = this.store.selectSnapshot(DataQueries.getAll("Supervision"))
+  //   console.log("reloadMission supervision", dateId, newDate, supervisions)
+  //   // this.computeDates(this.mission!);
+  //   console.log("reloadMission", this.dates)
+  //   let dateNew = this.dates[0]
+  //   this.dates.forEach((date) => {
+  //     if (date.id === dateId) dateNew = date
+  //   })
+  //   console.log("dateNew", dateNew)
+  //   return [dateNew, this.mission!]
+  // };
 
   modifyTimeTable() {
     this.missionMenu.swipeup = false;
@@ -499,7 +499,7 @@ export class SuiviPME {
       if (!this.alert) this.swipeupModifyDate = false;
       // Update de mission et accordionData puis update la vue
       this.mission = this.store.selectSnapshot(DataQueries.getById("Mission", this.mission!.id))!;
-      this.computeDates(this.mission);
+      // this.computeDates(this.mission);
 
       this.cd.markForCheck();
     });

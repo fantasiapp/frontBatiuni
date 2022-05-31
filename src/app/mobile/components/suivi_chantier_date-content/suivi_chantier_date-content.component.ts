@@ -173,20 +173,21 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
   }
 
   addTaskToPost() {
-    // this.popup.openDateDialog(this.mission!, this.date, this);
-    // console.log("addTaskToPost", this.date)
-    // this.swipeMenu = false;
+    this.popup.openDateDialog(this.date, this);
+    console.log("addTaskToPost", this.date)
+    this.swipeMenu = false;
   }
 
-  updatePage(content: string | null, missionId: number) {
-    // if (content) {
-    //   this.store.dispatch(new CreateDetailedPost(missionId, content, this.date.value)).pipe(take(1)).subscribe(() => {
-    //     this.updatePageOnlyDate()
-    //   })
-    // } else {
+  updatePage(content: any) {
+    if (content) {
+
+      // Query pour update la page lorsque l'on rajoute des task a une journee en pme, est call seulement vensant de popup
+      // this.store.dispatch(new CreateDetailedPost(this.dateQuelquechose, content)).pipe(take(1)).subscribe(() => {
+        this.updatePageOnlyDate()
+      // })
+    } else {
     this.updatePageOnlyDate();
-    // document.getElementById("accordion") as HTMLImageElement;
-    // }
+    }
   }
 
   updatePageOnlyDate() {
