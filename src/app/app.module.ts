@@ -24,6 +24,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { initializeApp } from "firebase/app";
 registerLocaleData(localeFr);
 
+console.log("je suis rentré dedans")
 initializeApp(environment.firebase)
 @Injectable()
 export class CustomConfig extends HammerGestureConfig {
