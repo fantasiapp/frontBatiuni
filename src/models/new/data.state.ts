@@ -637,7 +637,7 @@ export class DataState {
   }
 
   @Action(BlockCompany)
-  BlockCompany(ctx: StateContext<DataModel>, handle: HandleApplication) {
+  blockCompany(ctx: StateContext<DataModel>, handle: HandleApplication) {
     const { post, ...data } = handle;
     return this.http.get("data", data).pipe(
       tap((response: any) => {
