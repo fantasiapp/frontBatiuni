@@ -59,7 +59,7 @@ export class ModalImage {
     img.ontouchstart = (event) => {
       if (event.touches.length === 2) {
         this.pinchScaling = true;
-        
+        this.pinchStart(event);
       } else {
         event.preventDefault();
         console.log("touchstart")
@@ -76,7 +76,7 @@ export class ModalImage {
 
     img.ontouchmove = (event) => {
       if (this.pinchScaling) {
-        pinchMove(event);
+        this.pinchMove(event);
       } else {
         event.preventDefault();
         console.log("slide")
@@ -100,7 +100,7 @@ export class ModalImage {
 
     img.ontouchend = (event) => {
       if (this.pinchScaling) {
-        pinchEnd(event);
+        this.pinchEnd(event);
         this.pinchScaling = false;
       } else {
         event.preventDefault();
