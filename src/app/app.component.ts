@@ -113,6 +113,7 @@ export class AppComponent extends Destroy$ {
 
   requestPermission() {
     const messaging = getMessaging()
+    console.log("la vapid key utilisé : ", environment.firebase.vapidKey)
     getToken(messaging, {vapidKey : environment.firebase.vapidKey}).then((currentToken) => {
         if (currentToken) {console.log("we got the token", currentToken)}
         else {console.log('No registration token available. Request permission to generate one.')}
