@@ -77,8 +77,10 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
     this.computeTasks(this.date)
     this.cd.markForCheck()
 
-    this.popup.taskWithoutDouble.subscribe(allPostDetails => {
-      this.date.allPostDetails = allPostDetails
+    this.popup.taskWithoutDouble.pipe(takeUntil(this.destroy$)).subscribe(curPostDetail => {
+
+
+      // to do
     })
   }
 

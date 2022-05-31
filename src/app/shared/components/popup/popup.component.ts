@@ -231,9 +231,9 @@ export class UIPopup extends DimensionMenu {
     let datePostId: Ref<DatePost> = assignDate.datePostId
 
     this.store.dispatch(new ModifyDetailedPost(detailDate, checkbox.value, datePostId)).pipe(take(1)).subscribe(() => {
-      this.popupService.taskWithoutDouble.next(
-        assignDate.date.allPostDetails
-      );
+      
+      //to do
+
       this.cd.markForCheck();
     });
   }
