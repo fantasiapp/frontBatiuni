@@ -2,8 +2,10 @@
 <ng-container *ngIf="(profile$ | async) as profile">
   <header class="clear-margin full-width sticky-header flex center-cross white-header">
     <h1 class="grow">Mon Profil</h1>
-    <img src="assets/notification.svg" (click)="openNotifications = true" alt="notification_button"/>
-    <span *ngIf="notificationsUnseen" [attr.data-notification-number]="notificationsUnseen" class="notification"></span>
+    <div class="notification-container">
+      <img src="assets/notification.svg" (click)="openNotifications = true" alt="notification_button"/>
+      <span *ngIf="notificationsUnseen" [attr.data-notification-number]="notificationsUnseen" class="notification"></span>
+    </div>
     <img src="assets/menu.svg" (click)="openMenu = true" alt="menu_button"/>
   </header>
 
@@ -13,14 +15,20 @@
   <swipeup [(open)]="openMenu">
     <li (click)="slideModifyMenu(false)">Modifier mon profil</li>
     <li (click)="slideModifyMenu(true)">Modifier mon mot de passe</li>
-    <li>Candidatures en cours</li>
+    <li [routerLink]="['','applications']" *ngIf="this.view == 'ST'"> Candidatures en cours</li>
+    <li [routerLink]="['','blocked_contacts']" *ngIf="this.view == 'PME'"> Contacts bloqués</li>
+
+    <li class="spacer"></li>
     <li [routerLink]="['','abonnement']">Gérer mes abonnements</li>
     <li [routerLink]="['','factures']">Mes factures</li>
-    <li>Partager l'application</li>
+    <li class="spacer"></li>
+    <li (click)="slideInviteFriends()">Inviter vos amis</li>
+    <li >Partager l'application</li>
     <li>Noter l'application</li>
     <li>Nous contacter</li>
     <li>FAQ</li>
     <li>Mentions légales</li>
+    <li class="spacer"></li>
     <li (click)="logout()">Se déconnecter</li>
   </swipeup>
 
@@ -31,11 +39,15 @@
         <li (click)="takePhoto()">Accédez à l'appareil photo</li>
         <li (click)="selectPhoto()">Télécharger une image</li>
       </swipeup>
-
       <profile-resume [profile]="profile" [canChangePicture]="!modifyPassword" class="flex column center-cross space-children-margin" (changePicture)="swipeModifyPicture()"></profile-resume>
-  
       <modify-password-form *ngIf="modifyPassword" class="grow" (submit)="changePassword($event)"></modify-password-form>
       <modify-profile-form *ngIf="!modifyPassword" class="grow" [profile]="profile" (submit)="modifyProfile($event)" #modifyForm></modify-profile-form>
+    </div>
+  </slidemenu>
+
+  <slidemenu [(open)]="openInviteFriendMenu" #inviteFriends>
+    <div class="modify-page hosted-page flex column center-cross space-children-margin" content>
+      <invite_friends class="flex column center-cross space-children-margin"></invite_friends>
     </div>
   </slidemenu>
 
@@ -43,4 +55,5 @@
     <div class="full-width center-text text-emphasis" header>Notifications</div>
     <notifications class="hosted-page flex column center-cross space-children-margin" [notifications]="notifications" content></notifications>
   </slidemenu>
+
 </ng-container>

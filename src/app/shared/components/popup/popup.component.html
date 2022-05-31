@@ -1,13 +1,14 @@
 <div class="cover" [class.open]="open && !willClose"></div>
 
 <div class="menu cover-parent background-white flex column center space-children-margin center-text" [class.open]="open && !willClose">
+  <img src="assets/X.svg" (click)="close()" class="position-absolute close-button"/>
   <ng-container #view>
     <ng-content></ng-content>
   </ng-container>
-  <img src="assets/X.svg" (click)="close()" class="position-absolute close-button"/>
 </div>
 
 <ng-template #delete let-output>
+
   Voudriez-vous supprimer l'annonce ?
   <hr class="dashed" style="margin-left: 0 !important"/>
   <div class="controls full-width flex space-around">
@@ -17,27 +18,34 @@
 </ng-template>
 
 <ng-template #sign let-signature>
-  <file-viewer [fileContext]="signature.fileContext" class="grow"></file-viewer>
-  <button *ngIf="!signature.signedByProfile" class="button active" (click)="actionSign(signature.missionId, signature.view)">Signer</button>
+  <file-viewer [fileContextList]="signature.fileContext" class="grow"></file-viewer>
+  <button *ngIf="!signature.signedByProfile" class="button active" id="signer" (click)="actionSign(signature.missionId, signature.view)">Signer</button>
 </ng-template>
 
 <ng-template #setDate let-assignDate>
-  <div class="mainDate form-input">
-    <div style="height:5%;"></div>
-    <h3 class="titleDate">Le {{assignDate.date.value}}</h3>
-    <div style="height:5%;"></div>
-    <label class="subtitleDate">Choisissez les tâches du jour</label>
-    <ul id="listDate">
-      <li class="liDate" *ngFor="let task of assignDate.date.taskWithoutDouble">
-        <span class="setDateTask">{{ task.content }}</span>
-        <checkbox (click)="modifyDetailedPostDate(task, assignDate.date)" [value]="task.date == assignDate.date.value"></checkbox>
+  <div class="main-date" #tache>
+    <div class="header-container">
+      <h3 class="title-date">Le {{assignDate.date.value}}</h3>
+      <!-- <img src="assets/X.svg" (click)="close()"/> -->
+    </div>
+
+    <img class="hero-img" src="assets/popup-contrat.svg" alt="contrat">
+    
+    <label class="subtitle-date">Choisissez les tâches du jour :</label>
+    <ul id="list-date">
+      <li *ngFor="let task of assignDate.date.taskWithoutDouble" [ngClass]="{'disabled': disableCheckbox(task, assignDate.date)}">
+        <checkbox (click)="modifyDetailedPostDate(task, assignDate.date, assignDate.missionId, checkbox)" [value]="checkedCheckbox(task, assignDate.date)" #checkbox></checkbox>
+        <span (click)="modifyDetailedPostDate(task, assignDate.date, assignDate.missionId, checkbox); checkbox.onChange($event)">{{ task.content }}</span>
       </li>
     </ul>
-    <input id="addTask" type="text" placeholder="Ajouter une nouvelle tâche"  (focusout)="addNewTask(assignDate.missionId, assignDate.date.value)">
+    <form (ngSubmit)="addNewTask($event, assignDate, addTask)" [formGroup]="newTaskForm">
+      <input id="addTask" type="text" placeholder="Ajouter une nouvelle tâche" formControlName="task" #addTask>
+    </form>
   </div>
 </ng-template>
 
 <ng-template #closeMission let-context>
+  <!-- <img src="assets/X.svg" (click)="close()" class="position-absolute close-button"/> -->
   <label>Noter l'entreprise {{ context.name }}</label>
   <label>Confirmer-vous la clôture de cette mission ?</label>
   <div style="height:5%;"></div>

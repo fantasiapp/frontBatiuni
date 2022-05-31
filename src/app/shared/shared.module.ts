@@ -18,22 +18,24 @@ import { UISwitchComponent } from "./components/switch/switch.component";
 import { FileUI } from "./components/filesUI/files.ui";
 import { RegisterForm } from "./forms/register.form";
 import { RouterModule } from "@angular/router";
-import { ReactiveFormsModule } from "@angular/forms";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { SlidesDirective } from "./directives/slides.directive";
 import { EmailConfirmation } from "./validators/email_confirmation/emailconfirmation.component";
 import { RegistrationSuccess } from "./validators/registration_success/registrationsuccess.component";
 import { ModifyPasswordForm } from "./forms/ModifyPassword.form";
 import { ImageGenerator } from "./services/image-generator.service";
-import { OfferComponent } from "./components/offer/offer.compnent";
+import { OfferComponent } from "./components/offer/offer.component";
 import { NavigationMenu } from "./components/navigation/navigation.component";
 import { ModifyProfileForm } from "./forms/ModifyProfile.form";
 import { ProfileResume } from "./components/profile-resume/profile-resume.component";
 import { FileIcon } from "./components/FileIcon/file.icon";
 import { UISOSCard } from "./components/SOSCard/SOSCard.ui";
+import { UISOSCardMap } from "./components/SOSCardMap/SOSCardMap.ui";
+import { UIBlockedContactCard } from "./components/BlockedContactCard/BlockedContactCard.ui";
 import { InfoHandler } from "./components/info/info.component";
 import { ConnexionForm } from "./forms/connexion.form";
 import { CalendarUI } from "./components/calendar/calendar.ui";
-import { HorizantaleCalendar } from "./components/horizontalcalendar/horizontal.component";
+import { HorizontaleCalendar } from "./components/horizontalcalendar/horizontal.component";
 import { UISuggestionBox } from "./components/suggestionbox/suggestionbox.component";
 import { ControlErrorsDirective, ErrorMessageComponent } from "./common/formerrors";
 import { SpacingPipe } from "./pipes/spacing.pipe";
@@ -61,6 +63,10 @@ import { MissionFilterForm } from "./forms/missions.form";
 import { FileViewer } from "./components/file-viewer/file-viewer.component";
 import { BannerComponent } from './components/banner/banner.component';
 import { RatingComponent } from "./components/rating/rating.component";
+import { SlideProfileComponent } from './components/slide-profile/slide-profile.component';
+import { Mobile } from "./services/mobile-footer.service";
+import { NotificationAgendaComponent } from './components/notification-agenda/notification-agenda.component';
+import { ApplicationForm } from "./forms/application.form";
 
 @NgModule({
   declarations: [
@@ -77,6 +83,7 @@ import { RatingComponent } from "./components/rating/rating.component";
     UISwitchComponent,
     FileUI,
     MakeAdForm,
+    ApplicationForm,
     STFilterForm,
     PMEFilterForm,
     SOSFilterForm,
@@ -93,9 +100,11 @@ import { RatingComponent } from "./components/rating/rating.component";
     ProfileResume,
     FileIcon,
     UISOSCard,
+    UISOSCardMap,
+    UIBlockedContactCard,
     InfoHandler,
     CalendarUI,
-    HorizantaleCalendar,
+    HorizontaleCalendar,
     UISuggestionBox,
     ErrorMessageComponent,
     ControlErrorsDirective,
@@ -123,17 +132,20 @@ import { RatingComponent } from "./components/rating/rating.component";
     MissionFilterForm,
     FileViewer,
     BannerComponent,
-    RatingComponent
+    RatingComponent,
+    SlideProfileComponent,
+    NotificationAgendaComponent,
   ],
   imports: [
     CommonModule,
     NgxSliderModule,
     RouterModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ],
   exports: [
     OptionsModel,
     MakeAdForm,
+    ApplicationForm,
     STFilterForm,
     PMEFilterForm,
     SOSFilterForm,
@@ -162,9 +174,11 @@ import { RatingComponent } from "./components/rating/rating.component";
     ProfileResume,
     FileIcon,
     UISOSCard,
+    UISOSCardMap,
+    UIBlockedContactCard,
     CalendarUI,
     InfoHandler,
-    HorizantaleCalendar,
+    HorizontaleCalendar,
     UISuggestionBox,
     ErrorMessageComponent,
     ControlErrorsDirective,
@@ -192,8 +206,9 @@ import { RatingComponent } from "./components/rating/rating.component";
     UIComment,
     MissionFilterForm,
     FileViewer,
-    RatingComponent
+    RatingComponent,
+    SlideProfileComponent,
   ],
-  providers: [ImageGenerator, FileDownloader, FilterService]
+  providers: [ImageGenerator, FileDownloader, FilterService, Mobile]
 })
 export class SharedModule {}

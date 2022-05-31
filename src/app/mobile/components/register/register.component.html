@@ -1,10 +1,13 @@
 <paging [length]="2" [(index)]="form.slider.index" (navigate)="form.onNavigate($event)"></paging>
-<register-form [showSteps]="false" [showSubmitButton]="false" class="mobile-view"></register-form>
-<footer class="big-sticky-footer flex column">
+<register-form [showSteps]="false" [showSubmitButton]="false" class="mobile-view" [ngClass]="{'footerHideMobile': !showFooter}"></register-form>
+<footer [@footerTranslate]="showFooter" class="big-sticky-footer flex column">
   <a class="external-links form-links block center-text" [routerLink]="['', 'connexion']">
     J'ai déjà un compte
   </a>
-  <button class="button gradient font-Poppins" [disabled]="form.slider.index == 1 && !form.registerForm.valid && !form.pending" (click)="form.slider.index == 0 ? form.slider.index = 1 : form.onSubmit(null)">{{ form.slider.index == 0 ? 'Etape Suivante' : 'Valider'}}</button>
+  <button 
+    class="button gradient font-Poppins" 
+    [disabled]="((form.slider.index == 0 && !form.registerForm.get('firstPage')?.valid) || (form.slider.index == 1 && !form.registerForm.get('secondPage')?.valid))
+           && !form.pending" (click)="form.slider.index == 0 ? form.slider.index = 1 : form.onSubmit(null)">{{ form.slider.index == 0 ? 'Etape Suivante' : 'Valider'}}</button>
   <div class="form-step">
     <div [class.active]="form.slider.index == 0" (click)="form.slider.index = 0"></div>
     <div [class.active]="form.slider.index == 1" (click)="form.slider.index = 1"></div>

@@ -1,4 +1,4 @@
-<div class="comment-provider">
+<div class="comment-provider" [ngClass]="{'comment-reverse': reverseComment}">
   <profile-image class="user-image" [profile]="supervision.companyId"></profile-image>
 
   <div class="comment-box">
@@ -12,13 +12,11 @@
   </div>
 </div>
 
-<div class="comment-image position-relative" *ngIf="supervision.files.length > 0">
-  <div class="cover-parent" [slide-template]="image" [contexts]="supervision.files"></div>
-  
-  <ng-container *ngIf="manyFiles">
-    <img (click)="slides.slide('left')" class="position-absolute left" [class.hidden]="slides.first" src="assets/arrowleft.svg"/>
-    <img (click)="slides.slide('right')" class="position-absolute right" [class.hidden]="slides.last" src="assets/arrowright.svg"/>  
-  </ng-container>
+<div class="comment-image position-relative" *ngIf="images.length">
+  <img class="background" [src]="images[nbImageSelected] || 'assets/unavailable.jpg'"/>
+  <img class="main" [src]="images[nbImageSelected] || 'assets/unavailable.jpg'" (click)="openModalImage(images[nbImageSelected])"/>
+  <img *ngIf="imageHasNext" (click)="otherImage(1)" class="position-absolute right" src="assets/arrowright.svg"/>
+  <img *ngIf="imageHasPrevious" (click)="otherImage(-1)" class="position-absolute left" src="assets/arrowleft.svg"/>
 </div>
 
 
@@ -26,6 +24,8 @@
   <ng-content select="comment-suivi"></ng-content>
 </div>
 
-<ng-template #image let-src="supervision">
-  <img class="main" [src]="getImage(supervision.files) || 'assets/unavailable.jpg'"/>
-</ng-template>
+<ng-container modal>
+  <div class="modal" [ngClass]="displayModal ? 'displayed' : 'hidden'" (click)="closeModalImage()">
+    <img [src]="modalImage" class="modal-content"/>
+  </div>
+</ng-container>

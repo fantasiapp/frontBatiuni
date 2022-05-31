@@ -1,14 +1,34 @@
 <ng-container *ngIf="post">
   <!-- <app-banner *ngIf="(isClosed)" [post]="post"></app-banner> -->
-  <div class="container grow flex center-cross space-between" [ngClass]="(isClosed) ? 'offres-infos-closed' : ''">
-    <div class="offres-infos">
-      <p class="entreprise">{{company?.name || 'Entreprise'}}</p>
-      <p class="metier">{{post?.manPower ? 'Main d\'oeuvre' : 'Fourniture et Pose'}}</p>
-      <p class="address">{{post?.address || 'addresse'}}</p>
-      <p class="date">{{post?.dueDate ?  toLocateDate(post.dueDate) : '19 Janvier 2038'}}</p>
+  <div class="container grow flex center-cross space-between" 
+      [ngClass]="{'offres-infos-closed': isClosed, 
+                  'offres-infos-postulated': hasPostulated && !isAppliedPage,
+                  'boosted': post.boostTimestamp >= time }">
+    <div class="offres-infos" >
+      <ng-container *ngIf="view == 'PME';else stTemplate" #stTemplate>
+        <span class="metier">{{metier?.name}}</span>
+        <span class="address text-dark">{{post?.address || 'addresse'}}</span>
+        <span class="man-pow">{{post?.manPower ? 'Main d\'oeuvre' : 'Fourniture et Pose'}}</span>
+        <span class="date text-dark">{{post?.dueDate ?  toLocateDate(post.dueDate) : '19 Janvier 2038'}}</span>
+      </ng-container>
+      <ng-template #stTemplate>
+        <span class="entreprise text-dark">{{company?.name || 'Entreprise'}}</span>
+        <span class="man-pow">{{post?.manPower ? 'Main d\'oeuvre' : 'Fourniture et Pose'}}</span>
+        <span class="metier text-dark">{{metier?.name}}</span>
+        <span class="address">{{post?.address || 'addresse'}}</span>
+        <span class="date text-dark">{{post?.dueDate ?  toLocateDate(post.dueDate) : '19 Janvier 2038'}}</span>
+      </ng-template>
     </div>
-    <div class="offres-logo flex center">
-      <img [src]="src"/>
+    <div class="offer-logo flex center">
+      <div *ngIf="view == 'ST'" class="favorite-container" (click)="toggleFavorite($event)">
+        <img *ngIf="!favoritePost;else favoritePosts" src="assets/starEmpty.svg" alt="not-favoritePosts">
+        <ng-template #favoritePosts><img src="assets/starFull.svg" alt="favoritePosts"></ng-template>
+      </div>
+      <img class="imageProfile" [src]="src"/>
+      <span class="hasPostulated" *ngIf="hasPostulated && !isAppliedPage">Déjà postulé</span>
+      <span class="ongoing" *ngIf="hasPostulated && isAppliedPage && !isRefused">En cours</span>
+      <span class="refused" *ngIf="hasPostulated && isAppliedPage && isRefused">Refusé</span>
     </div>
   </div>
+  <span *ngIf="unseenCandidate && showCandidate" [attr.data-notification-number]="unseenCandidate" class="notification"></span>
 </ng-container>

@@ -29,7 +29,8 @@ html, body {
 	font-size: 16px;
 	font-family: 'Roboto', sans-serif;
 	// background: white;
-	height: 100vh;
+  height: 100vh;
+  width: 100vw;
 	overflow-x: hidden;
 }
 
@@ -50,6 +51,18 @@ h4 {  font-family: "Poppins"; font-weight: 400}
 
 // -----------------------------
 
+// input {
+//   all: unset;
+// }
+
+body {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0
+}
+
 .clear-margin {
   margin: 0;
 }
@@ -67,7 +80,7 @@ header {
 .page-content {
   @extend %overflow-y;
   @include with-set-safe-area(margin, top, $sticky-header-height);
-  height: calc(100vh - #{$sticky-header-height} + #{$navigation-height} - env(safe-area-inset-bottom));
+  height: calc(100vh - #{$sticky-header-height} - #{$navigation-height} - env(safe-area-inset-bottom));
 }
 
 .page-content-without-nav {
@@ -103,12 +116,12 @@ button {
   outline: none;
   border: none;
   // padding: 10px 15px;
-  padding: $spacer-100 $spacer-200;
   border-radius: 8px;
   font-family: inherit;
   font-weight: 200;
-
+  
   &.button {
+    padding: $spacer-75 $spacer-150;
     color: white;
     cursor: pointer;
     &:disabled {
@@ -480,4 +493,39 @@ input[type=number] {
 .validate-application {
   position: relative;
 
+}
+
+.hidden {
+  display: none;
+}
+
+.modal {
+  position: fixed; /* Stay in place */
+  z-index: 11; /* Sit on top */
+  padding-top: 100px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.9); /* Black w/ opacity */
+}
+
+.displayed {
+  display: block;
+}
+
+.modal-content {
+  margin: 0px auto;
+  padding: 0 !important;
+  display: block;
+  width: 100%;
+  animation-name: zoom;
+  animation-duration: 0.6s;
+}
+
+@keyframes zoom {
+  from {transform:scale(0)}
+  to {transform:scale(1)}
 }

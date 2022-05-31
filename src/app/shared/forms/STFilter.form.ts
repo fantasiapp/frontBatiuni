@@ -1,191 +1,409 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, QueryList, ViewChildren } from "@angular/core";
-import { FormArray, FormGroup } from "@angular/forms";
+import { Options } from "@angular-slider/ngx-slider";
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+  QueryList,
+  ViewChild,
+  ViewChildren,
+} from "@angular/core";
+import { FormArray, FormControl, FormGroup } from "@angular/forms";
 import { Store } from "@ngxs/store";
-import { DistanceSliderConfig, SalarySliderConfig } from "src/app/shared/common/config";
-import { Post } from "src/models/new/data.interfaces";
-import { DataQueries } from "src/models/new/data.state";
+import { Control } from "mapbox-gl";
+import { DistanceSliderConfig, SalarySliderConfig } from "src/app/shared/common/sliderConfig";
+import { Candidate, Job, Post } from "src/models/new/data.interfaces";
+import { DataQueries, SnapshotAll } from "src/models/new/data.state";
+import { OptionsModel } from "../components/options/options";
 import { UISwitchComponent } from "../components/switch/switch.component";
 import { Filter } from "../directives/filter.directive";
 import { FilterService } from "../services/filter.service";
-
+import { getLevenshteinDistance } from "src/app/shared/services/levenshtein";
 
 @Component({
-  selector: 'st-filter-form',
+  selector: "st-filter-form",
   template: `
-  <form class="form-control full-width" [formGroup]="form!">
-    <div class="form-input">
-      <label>Date de mission</label>
-      <input type="date" class="form-element" formControlName="match_dueDate"/>
-      <img src="assets/calendar.png"/>
-    </div>
+    <form class="form-control full-width" [formGroup]="filterForm">
+      <div class="form-input">
+        <label>Date de mission</label>
+        <div class="flex row space-between">
+            <label>À partir de : </label>
+        <input
+          type="date"
+          class="form-element"
+          formControlName="date"
+        />
+        <img src="assets/calendar.png" />
+        </div>
+      </div>
+
+      <div class="form-input">
+        <label>Adresse de chantier</label>
+        <input
+          type="text"
+          class="form-element"
+          formControlName="address"
+        />
+      </div>
 
     <div class="form-input">
-      <label>Adresse de chantier</label>
-      <input type="text" class="form-element" formControlName="match_address"/>
+      <label>Dans un rayon autour de</label>
+      <ngx-slider [(value)]=valueDistance [options]="imports.DistanceSliderConfig" formControlName="radius"></ngx-slider>
     </div>
+
+    <div class="form-input form-spacer">
+      <label>Métier</label>
+      <options [options]="allJobs" formControlName="jobs"></options>
+    </div>
+
+    <div class="form-input form-spacer">
+      <label class="form-title">Type</label>
+        <div class="flex row radio-container">
+          <div class="radio-item">
+            <radiobox class="grow" hostName=manPower onselect="true" name="job-type" formControlName="manPower" #manPower1></radiobox>
+            <span (click)="manPower1.onChange($event)">Main d'oeuvre</span>
+          </div>
+          <div class="radio-item">
+            <radiobox class="grow" hostName=manPower onselect="false" name="job-type" formControlName="manPower" #manPower2></radiobox>
+            <span (click)="manPower2.onChange($event)">Fourniture et pose</span>
+          </div>
+        </div>
+    </div>
+
 
     <div class="form-input">
-      <label>Dans un rayon autour de:</label>
-      <ngx-slider [options]="imports.DistanceSliderConfig" formControlName="if_$radius"></ngx-slider>
+      <label>Estimation de la rémunération horaire</label>
+      <ngx-slider [options]="imports.SalarySliderConfig" [highValue]="100000" formControlName="salary"></ngx-slider>
     </div>
 
-    <div class="form-input">
-      <label>Estimation de salaire:</label>
-      <ngx-slider [options]="imports.SalarySliderConfig" [value]="0" [highValue]="100000" formControlName="if_amount"></ngx-slider>
-    </div>
+      <div class="form-input space-children-margin">
+        <ng-container formArrayName="employees">
+        <label class="form-title">Taille de l'entreprise</label>
+          <div class="radio-item">
+            <checkbox class="grow"  [value]="true" formControlName="0"></checkbox>
+            <span >Moins de 10 salariés</span>
+          </div>
+          <div class="radio-item">
+            <checkbox
+              class="grow"
+              [value]="true"
+              [formControlName]="'1'"
+            ></checkbox>
+            <span>Entre 11 et 20 salariés</span>
+          </div>
+          <div class="radio-item">
+            <checkbox
+              class="grow"
+              [value]="true"
+              [formControlName]="'2'"
+            ></checkbox>
+            <span>Entre 20 et 50 salariés</span>
+          </div>
+          <div class="radio-item">
+            <checkbox
+              class="grow"
+              [value]="true"
+              [formControlName]="'3'"
+            ></checkbox>
+            <span>Entre 50 et 100 salariés</span>
+          </div>
+          <div class="radio-item">
+            <checkbox
+              class="grow"
+              [value]="true"
+              [formControlName]="'4'"
+            ></checkbox>
+            <span>Plus de 100 salariés</span>
+          </div>
+        </ng-container>
+      </div>
 
-    <div class="form-input space-children-margin">
-      <label>Taille de l'entreprise</label>
-      <ng-container formArrayName="some_employee">
-        <div class="radio-item">
-          <checkbox class="grow" name="job-type" [formControlName]="0"></checkbox>
-          <span>Moins de 10 salariés</span>
+      <div class="form-input space-children-margin">
+        <label class="form-title">Réorganiser la liste selon</label>
+        <div class="switch-container flex center-cross">
+          <span class="criteria">Annonces déjà vues uniquement</span>
+          <switch class="default" formControlName="viewed"></switch>
         </div>
-        <div class="radio-item">
-          <checkbox class="grow" name="job-type" [formControlName]="1"></checkbox>
-          <span>Entre 11 et 20 salariés</span>
+        <div class="switch-container flex center-cross">
+          <span class="criteria">Annonces favorites uniquement</span>
+          <switch class="default" formControlName="favorite"></switch>
         </div>
-        <div class="radio-item">
-          <checkbox class="grow" name="job-type" [formControlName]="2"></checkbox>
-          <span>Entre 20 et 25 salariées</span>
+        <div class="switch-container flex center-cross">
+          <span class="criteria">Annonces déjà postulées uniquement</span>
+          <switch class="default" formControlName="candidate"></switch>
         </div>
-        <div class="radio-item">
-          <checkbox class="grow" name="job-type" [formControlName]="3"></checkbox>
-          <span>Entre 50 et 100 salariés</span>
+        <div class="switch-container flex center-cross">
+          <span class="criteria">Annonces ouvertes à une contre-proposition</span>
+          <switch class="default" formControlName="counterOffer"></switch>
         </div>
-        <div class="radio-item">
-          <checkbox class="grow" name="job-type" [formControlName]="4"></checkbox>
-          <span>Plus de 100 salariés</span>
+        <div class="switch-container flex center-cross">
+          <span class="criteria"
+            >Date de validation de l'annonce de la plus proche à la plus
+            lointaine</span
+          >
+          <switch
+            class="default"
+            (valueChange)="onSwitchClick($event, [switch2])"
+            formControlName="dueDateSort"
+            #switch1
+          ></switch>
         </div>
-      </ng-container>
-    </div>
-
-    <div class="form-input space-children-margin">
-      <label>Réorganiser la liste selon</label>
-      <div class="switch-container flex center-cross">
-        <span class="criteria">Annonces déjà vus uniquement</span>
-        <switch class="default" formControlName="if_$viewed"></switch>
+        <div class="switch-container flex center-cross">
+          <span class="criteria"
+            >Date de publication de la plus récente à la plus ancienne</span
+          >
+          <switch
+            class="default"
+            (valueChange)="onSwitchClick($event, [switch1])"
+            formControlName="startDateSort"
+            #switch2
+          ></switch>
+        </div>
       </div>
-      <div class="switch-container flex center-cross">
-        <span class="criteria">Annonces favoristes uniquement</span>
-        <switch class="default" formControlName="if_$favorite"></switch>
-      </div>
-      <div class="switch-container flex center-cross">
-        <span class="criteria">Annonces déjà postulées uniquement</span>
-        <switch class="default" formControlName="if_$candidate"></switch>
-      </div>
-      <div class="switch-container flex center-cross">
-        <span class="criteria">Annonces ouverte à contre-proposition</span>
-        <switch class="default" formControlName="if_counterOffer"></switch>
-      </div>
-      <div class="switch-container flex center-cross">
-        <span class="criteria">Date d'échéance de l'annonce de la plus proche à la plus lointaine</span>
-        <switch class="default" (valueChange)="onSwitchClick($event, [switch2])" formControlName="sort_dueDate" #switch1></switch>
-      </div>
-      <div class="switch-container flex center-cross">
-        <span class="criteria">Date de publication la plus récente à la plus anciennce</span>
-        <switch class="default" (valueChange)="onSwitchClick($event, [switch1])" formControlName="sort_startDate" #switch2></switch>
-      </div>
-      
-    </div>
-  </form>
+    </form>
   `,
-  styles: [`
-    :host {
-      display: block;
-      width: 100%;
-      height: 100%;    
-    }
-    
-    switch::ng-deep .slider {
-      background: #ccc;
-    }
-  `],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  styles: [
+    `
+      :host {
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+
+      switch::ng-deep .slider {
+        background: #ccc;
+      }
+    `,
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 //save computed properties
-export class STFilterForm extends Filter<Post> {
+export class STFilterForm {
+  checkboxValues = [true]
+
   imports = { DistanceSliderConfig, SalarySliderConfig };
 
-  @Input('filter') name: string = 'ST';
+  valueDistance: number=2000;
+
+  @Input("filter") name: string = "ST";
+
+  @Input()
+  time: number = 0;
+
+  @Input()
+  posts: Post[] = [];
+
+  filteredPosts: Post[] = [];
+
+  @Output()
+  filterOnST = new EventEmitter<boolean>();
+
+  filterForm = new FormGroup({
+    date: new FormControl(""),
+    address: new FormControl(""),
+    radius: new FormControl(2000),
+    jobs: new FormControl([]),
+    salary: new FormControl(0),
+    manPower: new FormControl(null),
+    employees: new FormArray([
+      new FormControl(true),
+      new FormControl(true),
+      new FormControl(true),
+      new FormControl(true),
+      new FormControl(true),
+    ]),
+    viewed: new FormControl(false),
+    favorite: new FormControl(false),
+    candidate: new FormControl(false),
+    counterOffer: new FormControl(false),
+    dueDateSort: new FormControl(false),
+    startDateSort: new FormControl(false),
+  });
+
+  @Output('update')
+  updateEvent = new EventEmitter();
 
   @ViewChildren(UISwitchComponent)
   switches!: QueryList<UISwitchComponent>;
 
+  @SnapshotAll('Job')
+  allJobs!: Job[];
+
+  @ViewChild('job')
+  options!: OptionsModel;
+
   //cancel other filters
   onSwitchClick(value: boolean, cancelIfTrue: UISwitchComponent[]) {
-    if ( !value ) return;
-    this.switches.forEach(item => {
-      if ( cancelIfTrue.includes(item) ) {
-        item.value = false;
+    if (!value) return;
+    this.switches.forEach((item) => {
+      if (cancelIfTrue.includes(item)) {
+        cancelIfTrue[0].value = false;
+        this.cd.markForCheck();
       }
+    });
+  }
+
+  constructor(private store: Store, private cd: ChangeDetectorRef, private filterService: FilterService) {}
+
+  ngOnInit() {
+
+    // this.filterForm.valueChanges.subscribe((value) => {
+    //   this.updateFilteredPosts(value);
+    //   this.isFilterOn(value);
+    //   this.updateEvent.emit(this.filteredPosts);
+    //   this.filterService.emitFilterChangeEvent(this.filteredPosts)
+    // });
+
+  }
+
+  updateFilteredPosts(filter: any) {
+    this.filteredPosts = [];
+    const user = this.store.selectSnapshot(DataQueries.currentUser);
+    const now = new Date().toISOString().slice(0, 10);
+    let allPosts = this.posts.filter((post) => post.dueDate > now)
+
+    // Filter
+    for (let post of allPosts) {
+      const company = this.store.selectSnapshot(DataQueries.getById('Company', post.company))!;
+      
+      //Date de mission
+      let isDifferentDate = (filter.date && post.startDate < filter.date)
+
+      //Radius
+      let userCompany: any = this.store.selectSnapshot(DataQueries.getById("Company", user.company));
+      let userLatitude = userCompany.latitude*(Math.PI/180);
+      let userLongitude = userCompany.longitude*(Math.PI/180);
+      let postLatitude = post.latitude*(Math.PI/180);
+      let postLongitude = post.longitude*(Math.PI/180);
+      let distance = 6371*Math.acos(Math.sin(userLatitude)*Math.sin(postLatitude) + Math.cos(userLatitude)*Math.cos(postLatitude)*Math.cos(postLongitude-userLongitude))
+
+      let isNotInRadius = ((filter.radius || filter.radius == 0) && distance > filter.radius)
+
+      //Manpower
+      let isDifferentManPower = (filter.manPower && post.manPower != (filter.manPower === "true"))
+
+      //Job
+      let isNotIncludedJob = (filter.jobs && filter.jobs.length && filter.jobs.every((job: any) => {return job.id != post.job}))
+      
+      //Salary
+      let isNotInRangeSalary = false;
+      if (filter.salary[0] != SalarySliderConfig.floor || filter.salary[1] != SalarySliderConfig.ceil){
+        isNotInRangeSalary = (post.amount < filter.salary[0] || post.amount > filter.salary[1])
+      }
+
+      //Employees
+      const jobsForCompany = this.store.selectSnapshot(DataQueries.getMany('JobForCompany', company.jobs));
+      let count = jobsForCompany.reduce((acc, {number}) => acc + number, 0);
+      let isNotBetween1And10 = (!filter.employees[0] && (count >= 1 && count <= 10))
+      let isNotBetween11And20 = (!filter.employees[1] && (count >= 11 && count <= 20))
+      let isNotBetween21And50 = (!filter.employees[2] && (count >= 21 && count <= 50))
+      let isNotBetween51And100 = (!filter.employees[3] && (count >= 51 && count <= 100))
+      let isNotMoreThan100 = (!filter.employees[4] && count > 100)
+
+      //Viewed
+      let isNotViewed = (filter.viewed && !user.viewedPosts.includes(post.id));
+
+      //Favorite
+      let isNotFavorite = (filter.favorite && !user.favoritePosts.includes(post.id));
+
+      //Candidate
+      let candidates = this.store.selectSnapshot(DataQueries.getMany("Candidate", post.candidates))
+      let companies = candidates.map(candidate => candidate.company)
+      let isNotCandidate = (filter.candidate && !companies.includes(user.company));
+
+      //CounterOffer
+      let isNotCounterOffer = (filter.counterOffer && !post.counterOffer);
+      
+      if ( isDifferentDate || 
+          isDifferentManPower || 
+          isNotIncludedJob || 
+          isNotInRadius || 
+          isNotInRangeSalary || 
+          isNotViewed ||
+          isNotFavorite ||
+          isNotCandidate ||
+          isNotCounterOffer ||
+          isNotBetween1And10 ||
+          isNotBetween11And20 ||
+          isNotBetween21And50 ||
+          isNotBetween51And100 ||
+          isNotMoreThan100
+          ) { continue }
+
+      this.filteredPosts.push(post)
+    }
+
+    // Sort
+
+    //Boosted post
+    this.filteredPosts.sort((post1, post2) => {
+      let b1 = post1.boostTimestamp > this.time ? 1 : 0;
+      let b2 = post2.boostTimestamp > this.time ? 1 : 0;
+      return b2 - b1
     })
+    //Address
+    // Array qui contiendra les posts et leur valeur en distance Levenshtein pour une adresse demandée
+    let levenshteinDist: any = [];
+    if (filter.address) {
+      for (let post of this.filteredPosts) {levenshteinDist.push([post,getLevenshteinDistance(post.address.toLowerCase(),filter.address.toLowerCase()),]);}
+      levenshteinDist.sort((a: any, b: any) => a[1] - b[1]);
+      let keys = levenshteinDist.map((key: any) => {
+        return key[0];
+      });
+      // On trie les posts selon leur distance de levenshtein
+      this.filteredPosts.sort(
+        (a: any, b: any) => keys.indexOf(a) - keys.indexOf(b)
+      );
+    } 
+    
+    //dueDate
+    if (filter.dueDateSort) {
+      this.filteredPosts.sort((a: any, b: any) => {
+        let aDate = a.dueDate;
+        let bDate = b.dueDate;
+        if (aDate < bDate) {
+          return -1;
+        } else if (aDate > bDate) {
+          return 1;
+        } else {
+          return 0;
+        }
+      });
+    }
+
+    //startDate
+    if (filter.startDateSort) {
+      this.filteredPosts.sort((a, b) => {
+        return b["id"] - a["id"];
+      });
+    }
+
+    this.cd.markForCheck();
   }
 
-  constructor(service: FilterService, private store: Store) {
-    super(service);
+  updatePosts(posts: Post[]) {
+    this.posts = posts
+    this.updateFilteredPosts(this.filterForm.value);
+    this.updateEvent.emit(this.filteredPosts);
+    this.filterService.emitFilterChangeEvent(this.filteredPosts)
+  }
+  
+  arrayEquals(a: any[], b: any[]) {
+    return Array.isArray(a) &&
+      Array.isArray(b) &&
+      a.length === b.length &&
+      a.every((val, index) => val === b[index]);
   }
 
-  ngOnInit(): void {
-    super.ngOnInit();
-
-    //either precompute with defineComputedProperty
-    //or evaluate during the function call
-
-    this.create<{
-      $favorite: boolean;
-      $viewed: boolean;
-      $candidate: boolean;
-      $employeeCount: number;
-      $radius: number;
-    }>([
-      this.defineComputedProperty('$employeeCount', (post) => {
-        const company = this.store.selectSnapshot(DataQueries.getById('Company', post.company))!,
-          jobsForCompany = this.store.selectSnapshot(DataQueries.getMany('JobForCompany', company.jobs));
-        return jobsForCompany.reduce((acc, {number}) => acc + number, 0);
-      }),
-      this.defineComputedProperty('$favorite', (post) => {
-        const user = this.store.selectSnapshot(DataQueries.currentUser);
-        console.log('computing favorite on', post, '=>', user.favoritePosts.includes(post.id))
-        return user.favoritePosts.includes(post.id);
-      }),
-      this.defineComputedProperty('$viewed', (post) => {
-        const user = this.store.selectSnapshot(DataQueries.currentUser);
-        console.log('computing viewed on', post, '=>', user.viewedPosts.includes(post.id))
-        return user.viewedPosts.includes(post.id);
-      }),
-      this.match('dueDate'),
-      this.match('address'),
-      this.some(
-        'employee',
-        this.onlyIf('$employeeCount', count => 1 <= count && count <= 10, [], true),
-        this.onlyIf('$employeeCount', count => count > 10 && count <= 25, [], true),
-        this.onlyIf('$employeeCount', count => count > 25 && count <= 50, [], true),
-        this.onlyIf('$employeeCount', count => count > 50 && count <= 100, [], true),
-        this.onlyIf('$employeeCount', count => count > 100, [], true),
-      ),
-      this.onlyIf('$viewed', viewed => {
-
-        return viewed;
-      }),
-      this.onlyIf('$favorite', favorite => {
-        
-        return favorite;
-      }),
-      this.onlyIf('$candidate', candidate => candidate),
-      this.onlyIf('counterOffer', counterOffer => counterOffer),
-      this.onlyIf('$radius', radius => true),
-      this.onlyIf('amount', (amount, range) => {
-        return amount >= range[0] && amount <= range[1];
-      }),
-      this.sortBy('dueDate', (d1, d2) => {
-        console.log('sorting');
-        return new Date(d1).getTime() - new Date(d2).getTime();
-      }),
-      this.sortBy('startDate', () => 1)
-    ]);
-
-    //initialize
-    (this.form.controls['some_employee'] as FormArray).controls[0].setValue(1);
+  isFilterOn(filter: any){
+    if (filter.address == "" && filter.date == "" && filter.jobs.length == 0 && filter.manPower == null && filter.candidate == false && filter.counterOffer == false &&  filter.dueDateSort == false && this.arrayEquals(filter.employees, [true, true, true, true, true]) && this.arrayEquals(filter.salary, [1, 100000]) && filter.favorite == false && filter.radius == 2000 && filter.startDateSort == false && filter.viewed == false){
+      this.filterOnST.emit(false)
+    } else {
+      this.filterOnST.emit(true);
+    }
+    this.cd.markForCheck;
   }
 }
+

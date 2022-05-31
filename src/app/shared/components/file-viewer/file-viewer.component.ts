@@ -17,9 +17,26 @@ export type FileContext = {
 export class FileViewer {
 
   @Input()
-  fileContext!: FileContext;
+  fileContextList!: FileContext[];
+
+  displayModal: boolean = false;
+  modalImage: SafeResourceUrl = "";
+
+  ngOnInit() {
+  }
 
   openWindow(url: string) {
     window.open(url);
+  }
+
+  openModalImage(image: SafeResourceUrl) {
+    this.displayModal = true;
+    this.modalImage = image;
+
+  }
+
+  closeModalImage() {
+    this.displayModal = false;
+    this.modalImage = "";
   }
 };

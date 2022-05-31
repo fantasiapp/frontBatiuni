@@ -16,15 +16,18 @@ import { PagingComponent } from "./components/paging/paging.component";
 import { ProfileComponent } from "./components/profile/profile.component";
 import { RegisterComponent } from "./components/register/register.component";
 import { SOSPageComponent } from "./components/SOS_page/sos-page.component";
+import { BlockedContactsComponent } from "./components/blocked_contacts/blocked_contacts.component";
 import { SuiviPME } from "./components/suivi_pme/suivi-pme.page";
 import { SuiviChantierDate } from "./components/suivi_chantier_date/suivi_chantier_date.page";
 import { UIModule } from "./ui/ui.module";
 import { SharedModule } from "../shared/shared.module";
-import { ReactiveFormsModule } from "@angular/forms";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { AppRoutingModule } from "./routing/mobile-routing.module";
 import { ForgotPassword } from "./components/forgot_password/forgot.password";
 import { MailSender } from "./components/only_mail/only.mail";
-
+import { ApplicationsComponent } from "./components/applications/applications.component";
+import { InviteFriendsComponent } from "./components/invite_friends/invite_friends.component";
+import { SuiviChantierDateContentComponent } from './components/suivi_chantier_date-content/suivi_chantier_date-content.component';
 
 @NgModule({
   declarations: [
@@ -42,12 +45,16 @@ import { MailSender } from "./components/only_mail/only.mail";
     AbonnementPage,
     FacturePage,
     SOSPageComponent,
+    BlockedContactsComponent,
     EngagementPage,
     BoosterPage,
     SuiviPME,
     SuiviChantierDate,
     ForgotPassword,
     MailSender,
+    ApplicationsComponent,
+    InviteFriendsComponent,
+    SuiviChantierDateContentComponent
   ],
   imports: [
     CommonModule,
@@ -55,6 +62,7 @@ import { MailSender } from "./components/only_mail/only.mail";
     UIModule,
     AppRoutingModule,
     ReactiveFormsModule,
+    FormsModule,
   ]
 })
 export class MobileModule {}

@@ -3,20 +3,34 @@
 
 
 :host {
-  display: block;
   position: fixed;
   left: 0; top: 0;
   width: 100%;
-  height: calc(#{$paging-height + $paging-decoration-height} + env(safe-area-inset-top));
+  z-index: 10;
+  height: calc(#{$paging-height} + #{$paging-decoration-height} + constant(safe-area-inset-top));
+  height: calc(#{$paging-height} + #{$paging-decoration-height} + env(safe-area-inset-top));
+  
+  color: white;
   border-bottom: 5px solid white; //cover the blue line
   @include set-safe-area(padding, top);
+  padding-bottom: $paging-decoration-height;
+  background-color: $primary;
+}
+
+.header {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  @extend %page
 }
 
 a {
-  margin-left: $spacer-200;
-  img {
-    margin-right: 1rem;
-  }
+   margin-left: $spacer-200;
+   display: flex;
+   align-items: center;
+   img {
+     margin-right: $spacer-100;
+   }
 }
 
 .decoration-cover {

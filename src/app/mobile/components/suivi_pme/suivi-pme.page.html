@@ -1,6 +1,5 @@
 <div class="container hosted-page space-children-margin">
   <annonce-resume [collapsed]="true" [application]="false" [post]="mission"></annonce-resume>
-
   <!-- CONTRAT DOCUSIGN URL -->
   <div *ngIf="isNotSigned" class="contrat">
     <h3>
@@ -24,7 +23,7 @@
   <p class="font-Roboto">Avec {{contactName}} entreprise {{ companyName }} </p>
 </div>
 <div class="full-width flex column">
-  <suivi-chantier_date *ngFor="let date of dates" [date]="date" [mission]="mission" [reloadMission]="reloadMission"></suivi-chantier_date>
+  <suivi-chantier_date *ngFor="let date of dates" [view]="view" [date]="date" [mission]="mission" [reloadMission]="reloadMission"></suivi-chantier_date>
   <!-- <div class="newDate">
     <img src="assets/plusBlue.svg">
     <span>Ajouter une nouvelle date</span>
@@ -33,10 +32,10 @@
 </div>
 
 <swipeup [(open)]="missionMenu.swipeup">
-  <li (click)="modifyTimeTable()">Modifier les horaires de présence ou les dates</li>
+  <li *ngIf="!mission?.isClosed" (click)="modifyTimeTable()">Modifier les horaires / les dates de présence</li>
   <li>Appeler le 06 21 94 03 86</li>
-  <li (click)="closeMission()">Clôturer la mission</li>
-  <li>Dupliquer l'annonce</li>
+  <li *ngIf="mission?.signedByCompany && mission?.signedBySubContractor && !mission?.isClosed" (click)="closeMission()">Clôturer la mission</li>
+  <li (click)="duplicateMission()">Dupliquer l'annonce</li>
 </swipeup>
 
 <swipeup [(open)]="missionMenu.swipeupCloseMission">
@@ -60,7 +59,7 @@
       <div class="star-container">
         <img *ngFor="let flag of getArrayStar('security'); let index=index;" (click)="starAction(index, 'security')" [src]="flag ? 'assets/starFull.svg' : 'assets/starEmpty.svg'">
       </div>
-      <textarea (click)="textStarAction('security')" placeholder="Ajouter un commentaire" rows="5" cols="30" id="starTextSecurity">{{ mission!.securityComment }}</textarea>
+      <textarea (focusout)="textStarAction('security')" placeholder="Ajouter un commentaire" rows="5" cols="30" id="starTextSecurity">{{ mission!.securityComment }}</textarea>
     </div>
 
     <div *ngIf="mission" class="form-input">
@@ -68,7 +67,7 @@
       <div class="star-container">
         <img *ngFor="let flag of getArrayStar('organisation'); let index=index;" (click)="starAction(index, 'organisation')" [src]="flag ? 'assets/starFull.svg' : 'assets/starEmpty.svg'">
       </div>
-      <textarea (click)="textStarAction('organisation')" placeholder="Ajouter un commentaire" rows="5" cols="30" id="starTextOrganisation">{{ mission!.organisationComment }}</textarea>
+      <textarea (focusout)="textStarAction('organisation')" placeholder="Ajouter un commentaire" rows="5" cols="30" id="starTextOrganisation">{{ mission!.organisationComment }}</textarea>
     </div>
     <button [ngClass]="classSubmit" (click)="submitStar()">Valider</button>
   </div>
@@ -92,9 +91,9 @@
 
     <div class="form-input">
       <label>Dates du chantier</label>
-      <calendar [useEvents]="false" formControlName="calendar" [mode]="'single'"></calendar>
+      <calendar [blockedDate]="computeBlockedDate()" [mission]="mission" [useEvents]="false" formControlName="calendar" [mode]="'single'"></calendar>
     </div>
-    <div style="height:150px">
+    <div style="min-height:100px">
       <p>{{ alert }}</p>
     </div>
     <button class="button active" (click)="submitAdFormDate()">Valider</button>

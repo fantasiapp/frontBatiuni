@@ -1,0 +1,12 @@
+<div class="center-text container">
+  <img src="assets/codeImage.svg"/>
+  <h1>Inviter vos amis</h1>
+  <span>A rejoindre l'application BatiUni avec votre code parrain</span>
+
+  <form [formGroup]="emailForm" style="width:90%">
+    <p *ngIf="token">Le code pour permettre à votre invité de s'enregistrer est {{ token }}</p>
+    <input type="text" class="inviteFriendsInput" placeholder="Saisissez l'adresse email de votre ami" formControlName="email">
+    <div style="height:20px"></div> 
+    <button class="flex center button active" class="button inviteFriendsSubmit" (click)="inviteFriend()">Envoyer</button>
+  </form>
+</div>

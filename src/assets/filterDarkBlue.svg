@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="48" height="48" viewBox="0 0 48 48">
+  <defs>
+    <clipPath id="clip-path">
+      <rect id="_52_Background_Mask_" data-name="52 (Background/Mask)" width="24" height="24" fill="none"/>
+    </clipPath>
+    <clipPath id="clip-path-2">
+      <rect id="_52_Background_Mask_2" data-name="52 (Background/Mask)" width="24" height="24" transform="translate(-0.036)" fill="none" stroke="#156c9d" stroke-width="1"/>
+    </clipPath>
+  </defs>
+  <g id="Group_1086" data-name="Group 1086" transform="translate(3241 5811)">
+    <g id="Filter" transform="translate(-3241 -5811)">
+      <rect id="Rectangle_4" data-name="Rectangle 4" width="48" height="48" rx="10" fill="#156c9d"/>
+      <g id="_52" data-name="52" transform="translate(12 12)">
+        <rect id="_52_Background_Mask_3" data-name="52 (Background/Mask)" width="24" height="24" fill="none"/>
+        <g id="_52-2" data-name="52" clip-path="url(#clip-path)">
+          <g id="Group" transform="translate(4.771 5.5)">
+            <path id="Vector" d="M2.15,4.3A2.15,2.15,0,1,1,4.3,2.15,2.15,2.15,0,0,1,2.15,4.3Z" transform="translate(3.03 9)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="1.2" stroke-dasharray="0 0"/>
+            <path id="Vector-2" data-name="Vector" d="M3.03,0H0" transform="translate(0 11.15)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="1.2" stroke-dasharray="0 0"/>
+            <path id="Vector-3" data-name="Vector" d="M5.33,0H0" transform="translate(9.67 11.15)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="1.2" stroke-dasharray="0 0"/>
+            <path id="Vector-4" data-name="Vector" d="M2.15,4.3A2.15,2.15,0,1,1,4.3,2.15,2.15,2.15,0,0,1,2.15,4.3Z" transform="translate(7.66)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="1.2" stroke-dasharray="0 0"/>
+            <path id="Vector-5" data-name="Vector" d="M0,0H3.03" transform="translate(11.97 2.15)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="1.2" stroke-dasharray="0 0"/>
+            <path id="Vector-6" data-name="Vector" d="M0,0H5.33" transform="translate(0 2.15)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="1.2" stroke-dasharray="0 0"/>
+          </g>
+        </g>
+      </g>
+    </g>
+    <g id="_52-3" data-name="52" transform="translate(-3228.964 -5799)" clip-path="url(#clip-path-2)">
+      <g id="Group-2" data-name="Group" transform="translate(4.736 5.5)">
+        <path id="Vector-7" data-name="Vector" d="M2.15,4.3A2.15,2.15,0,1,1,4.3,2.15,2.15,2.15,0,0,1,2.15,4.3Z" transform="translate(3.03 9)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="1.2" stroke-dasharray="0 0"/>
+        <path id="Vector-8" data-name="Vector" d="M3.03,0H0" transform="translate(0 11.15)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="1.2" stroke-dasharray="0 0"/>
+        <path id="Vector-9" data-name="Vector" d="M5.33,0H0" transform="translate(9.67 11.15)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="1.2" stroke-dasharray="0 0"/>
+        <path id="Vector-10" data-name="Vector" d="M2.15,4.3A2.15,2.15,0,1,1,4.3,2.15,2.15,2.15,0,0,1,2.15,4.3Z" transform="translate(7.66)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="1.2" stroke-dasharray="0 0"/>
+        <path id="Vector-11" data-name="Vector" d="M0,0H3.03" transform="translate(11.97 2.15)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="1.2" stroke-dasharray="0 0"/>
+        <path id="Vector-12" data-name="Vector" d="M0,0H5.33" transform="translate(0 2.15)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="1.2" stroke-dasharray="0 0"/>
+      </g>
+    </g>
+  </g>
+</svg>

@@ -20,6 +20,11 @@ interface Match<T, ComputedProperties, Key extends KeyOf<T, ComputedProperties> 
   name: Key; //keys are matched against formControl
 };
 
+interface Search<T, ComputedProperties, Key extends KeyOf<T, ComputedProperties> = KeyOf<T, ComputedProperties>> {
+  type: 'search';
+  name: Key; //keys are matched against formControl
+};
+
 interface If<T, ComputedProperties, Key extends KeyOf<T, ComputedProperties> = KeyOf<T, ComputedProperties>> {
   //applies condition on items
   type: 'if';
@@ -34,6 +39,7 @@ interface Sort<T, ComputedProperties, Key extends KeyOf<T, ComputedProperties> =
   type: 'sort';
   name: Key;
   comparaison: (u: any, v: any) => number;
+  initialValue: boolean;
 };
 
 interface Some<T, ComputedProperties> {
@@ -48,8 +54,14 @@ interface Every<T, ComputedProperties> {
   items: Step<T, ComputedProperties>[];
 };
 
+interface InList<T, ComputedProperties, Key extends KeyOf<T, ComputedProperties> = KeyOf<T, ComputedProperties>> {
+  name: Key;
+  type: 'inList';
+  transform: (t: any, ...args: any[]) => any;
+};
+
 export type Step<T = any, ComputedProperties = any> =
-  Compute<T, ComputedProperties> | Match<T, ComputedProperties> | If<T, ComputedProperties> | Sort<T, ComputedProperties> | Some<T, ComputedProperties> | Every<T, ComputedProperties>;
+  Compute<T, ComputedProperties> | Match<T, ComputedProperties> | If<T, ComputedProperties> | Sort<T, ComputedProperties> | Some<T, ComputedProperties> | Every<T, ComputedProperties> | Search<T, ComputedProperties> | InList<T, ComputedProperties>;
 
 export class AugmentedType<T extends {id: number}, ComputedProperties> {
   private cache: Record<Partial<ComputedProperties>> = {};
@@ -111,12 +123,16 @@ export abstract class Filter<T extends {id: number}> extends Destroy$ {
     return { type: 'match', name }
   }
 
+  protected search<ComputedProperties, K extends KeyOf<T, ComputedProperties>>(name: K): Search<T, ComputedProperties, K> {
+    return { type: 'search', name }
+  }
+
   protected onlyIf<ComputedProperties, K extends KeyOf<T, ComputedProperties>>(name: K, condition: (t: ValueOf<T, ComputedProperties, K>, ...args: any[]) => boolean, otherwise?: T[], initialValue: boolean = false): If<T, ComputedProperties> {
     return { type: 'if', name, condition, otherwise, initialValue }
   }
 
-  protected sortBy<ComputedProperties, K extends KeyOf<T, ComputedProperties>>(name: K, comparaison: (u: ValueOf<T, ComputedProperties, K>, v: ValueOf<T, ComputedProperties, K>) => number): Sort<T, ComputedProperties> {
-    return { type: 'sort', name, comparaison};
+  protected sortBy<ComputedProperties, K extends KeyOf<T, ComputedProperties>>(name: K, comparaison: (u: ValueOf<T, ComputedProperties, K>, v: ValueOf<T, ComputedProperties, K>) => number, initialValue: boolean = false): Sort<T, ComputedProperties> {
+    return { type: 'sort', name, comparaison, initialValue};
   }
 
   protected every<ComputedProperties>(name: string, ...args: Step<T, ComputedProperties>[]): Every<T, ComputedProperties> {
@@ -135,6 +151,14 @@ export abstract class Filter<T extends {id: number}> extends Destroy$ {
     }
   }
 
+  protected inList<ComputedProperties, K extends KeyOf<T, ComputedProperties>>(name: K, transform: (u: any) => any): InList<T, ComputedProperties> {
+    return { 
+      name, 
+      type: 'inList', 
+      transform};
+  }
+
+
   private createControl<ComputedProperties>(step: Step<T, ComputedProperties>) {
     if ( step.type == 'every' || step.type == 'some' ) {
       const array =  new FormArray([]);
@@ -143,24 +167,22 @@ export abstract class Filter<T extends {id: number}> extends Destroy$ {
       
       return array;
     } else {
-      if ( step.type == 'if' )
+      if ( step.type == 'if' || step.type == "sort")
         return new FormControl(step.initialValue || false);
       return new FormControl();
     }
   }
 
   ngOnInit() {
-    this.service.add(this.name, this);
   }
 
   ngAfterViewInit() {
-    this.form.valueChanges.pipe(debounceTime(0), takeUntil(this.destroy$)).subscribe(() => {
+    this.form.valueChanges.pipe(debounceTime(0), takeUntil(this.destroy$)).subscribe((value) => {
       this.update();
     });
   }
 
   ngOnDestroy() {
-    this.service.remove(this.name);
     super.ngOnDestroy();
   }
 
@@ -175,13 +197,22 @@ export abstract class Filter<T extends {id: number}> extends Destroy$ {
   private evaluateStep(input: T[], control: any, step: Step<T>) {
     const controlValue = control.value;
     let lastValue: Set<T>;
-    
     switch ( step.type ) {
       case 'match':
         return input.filter(item => {
-          return controlValue == this.type.getValue(item, step);
+          return controlValue == this.type.getValue(item, step) || controlValue == "" || controlValue == null;
         });
-      
+      case 'search':
+        return input.filter(item => {
+          const value = this.type.getValue(item, step);
+          if ( controlValue == null ) return true;
+          if ( controlValue == "" ) return true;
+          if ( typeof controlValue == 'string' ) {
+            const search = controlValue.toLowerCase();
+            return value.toLowerCase().indexOf(search) != -1;
+          }
+          return value == controlValue;
+        });
       case 'if':
         if ( controlValue ) {
           const res = input.filter(item => step.condition(this.type.getValue(item, step), controlValue))
@@ -210,7 +241,18 @@ export abstract class Filter<T extends {id: number}> extends Destroy$ {
         }
 
         return [...lastValue];
-              
+
+      case 'inList':
+        if (controlValue == null || controlValue == "") {
+          return input;
+        }
+
+        return input.filter(item => {
+          return controlValue.some((value: any) => {
+            return this.type.getValue(item, step) == step.transform(value);
+          })
+        });
+
       default:
         break;
     }
@@ -225,16 +267,12 @@ export abstract class Filter<T extends {id: number}> extends Destroy$ {
     //emit and return
     const controls = this.form.controls;
     let input = this.input;
-
     if ( !input.length ) return [];
-    
     for ( const step of this.pipeline ) {
       const name = step.type + '_' + (step.name as string);
-      if ( controls[name].touched ) {
-        input = this.evaluateStep(input, controls[name], step);
-      }
+      // console.log(name);
+      input = this.evaluateStep(input, controls[name], step);
     }
-
     this.updateEvent.emit(input);
     return input;
   }

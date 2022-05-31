@@ -25,16 +25,23 @@
 
   //events
   pointer-events: none;
+
+  > div {
+    display: flex;
+    justify-content: center;
+    align-items: center
+  }
 }
 
 
 $icon-size: 16px;
 img {
-  position: absolute;
-  left: 40px;
+  // position: absolute;
+  // left: 40px;
   width: $icon-size;
   height: $icon-size;
-  top: math.div($info-height - $icon-size, 2);
+  // top: math.div($info-height - $icon-size, 2);
+  margin-right: 0.5rem;
   filter: invert(1);
 }
 

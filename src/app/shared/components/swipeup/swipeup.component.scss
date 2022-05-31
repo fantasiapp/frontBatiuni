@@ -2,7 +2,7 @@
 @use 'src/styles/variables' as *;
 @use 'src/styles/mixins' as *;
 
-$swipeup-height: 70vh;
+$swipeup-height: 80vh;
 
 :host {
   position: fixed;
@@ -64,7 +64,6 @@ $swipeup-height: 70vh;
   padding: 1rem 2rem 2rem;
   @include with-set-safe-area(padding, bottom, 2rem);
 
-
   // ?? 
   ::ng-deep img {
     width: $icon-size;
@@ -75,11 +74,16 @@ $swipeup-height: 70vh;
   }
 }
 
-.list::ng-deep li:not(:last-of-type) {
-  margin-bottom: 15px;
+ul::ng-deep > li{
+  padding-bottom: 0.5rem;
+  padding-top: 0.5rem;
 }
 
 .content {
   overflow-y: auto;
   max-height: calc(#{$swipeup-height} - #{$swipeup-decoration-height});
+}
+
+ul {
+  overflow: hidden;
 }

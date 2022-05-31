@@ -6,8 +6,11 @@
             <div class="flex center-cross center-main" 
             (click)="showAgenda(i.day[2])" 
             (click)="showgrey(i)"
-            [style.background]="i.status == 'occupe' && i.selected ? 'grey' : i.status == 'occupe' && !i.selected ? '#0D6191' : i.status != 'occupe' && i.selected ? 'grey' : '#FFFFFF' "
-                [style.color]="i.status == 'occupe' && i.selected ? '#FFFFFF' : i.status == 'occupe' && !i.selected ? '#FFFFFF' : i.status != 'occupe' && i.selected ? '#FFFFFF' : i.status != 'occupe' && !i.selected ? '#0D6191' : '' "
+            [class]="i.notification"
+            [class]="i.status"
+            [ngClass]="{'today': i.today, 'selected' : i.selected }"
+            [style.background]="i.status == 'occupe' && i.selected ? 'grey' : i.notification ? 'red' : i.status == 'occupe' && !i.selected ? '#0D6191' : i.status != 'occupe' && i.selected ? 'grey' : '#FFFFFF' "
+            [style.color]="i.status == 'occupe' && i.selected ? '#FFFFFF' : i.status == 'occupe' && !i.selected ? '#FFFFFF' : i.status != 'occupe' && i.selected ? '#FFFFFF' : i.status != 'occupe' && !i.selected ? '#0D6191' : '' "
             >
                 <span class="nameofday"> {{i.day[1].slice(0,1).toUpperCase()+i.day[1].slice(1,2)}}</span>
                 <span class="daynumber">{{i.day[0]}} </span>
@@ -20,22 +23,38 @@
 </div>
 <div class="day-availibility space-children-margin">
     <div class="selected-day">{{spanShowToday}}</div>
-    <div class="selected-day-availibility flex center-cross">Vous étes dispo <div class="sous-conditions"></div></div>
+    <div class="selected-day-availibility flex center-cross">Votre disponibilité : <div class="disponibilities" 
+        [ngClass]="{'disponible':curDisponibility?.nature == 'Disponible', 
+        'sous-condition': curDisponibility?.nature == 'Disponible Sous Conditions', 
+        'non-disponible': curDisponibility?.nature == 'Non Disponible'}"></div></div>
 </div>
 <div class="agenda flex position-relative " >
     <ol class="full-width"> 
         <li class="flex center-cross " 
         *ngFor="let hours of hoursperday">
         {{hours}}h 
-            <div class="agenda-line full-width"></div></li>
+            <div class="agenda-line full-width"></div>
+        </li>
     </ol>
-   <div 
-   class="topthing position-absolute" 
-   [style.height.px]="greenCardHeight" 
-   [style.top.px]="greenCardFromTop">
-       <p >
-        {{bilan}}
-       </p>
-   </div>
+    <div class="topthing position-absolute">
+        <div *ngFor="let card of currentCardCalendars"  class="card-container" 
+        [style.height.px]="card.cardHeight" 
+        [style.top.px]="card.cardFromTop" [@inOutAnimation]="{params: {currHeight: card.cardHeight}}"
+        (click)="openMission(card.mission)">
+            <div>
+                <h4>
+                    {{ card.title }}
+                </h4>
+                <span>{{ card.mission.address }}</span><br>
+    
+                <span *ngIf="card.tasks[0]">Les tâche pour ce jour :</span>
+                <div class="task-container" *ngFor="let task of card.tasks">
+                    <span>- {{ task.content }}</span>
+                </div>
+            </div>
+            <notification-agenda (click)="$event.stopPropagation()" *ngIf="card.change.deleted || card.change.schedule || !card.change.validate" [card]="card" [field]="fieldValidation(card)" [date]="card.date" (cardUpdate)="onCardUpdate($event, card)"></notification-agenda>
+    
+        </div>
+    </div>
    
 </div>

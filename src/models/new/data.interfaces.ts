@@ -35,6 +35,7 @@ export interface User {
   proposer: string;
   cellPhone: string;
   function: string;
+  tokenFriend: string;
   favoritePosts: Ref<Post>[];
   viewedPosts: Ref<Post>[];
 };
@@ -55,6 +56,7 @@ export interface Company {
   latitude: number;
   longitude: number;
   companyPhone: string;
+  email: string;
   webSite: string;
   jobs: Ref<JobForCompany>[];
   labels: Ref<LabelForCompany>[];
@@ -85,7 +87,6 @@ export interface Supervision {
   date: string;
   comment: string;
   files: Ref<File>[];
-  Supervisions: Ref<Supervision>[];
 }
 
 export interface Disponibility {
@@ -126,12 +127,15 @@ export interface Post {
   longitude: number;
   contactName: string;
   draft: boolean;
-  manPower: number;
+  manPower: boolean;
+  creationDate: string;
   dueDate: string;
   startDate: string;
   endDate: string;
   hourlyStart: string;
+  hourlyStartChange:string;
   hourlyEnd: string;
+  hourlyEndChange: string;
   amount: number;
   currency: string;
   unitOfTime: string;
@@ -141,15 +145,19 @@ export interface Post {
   files: Ref<File>[];
   candidates: Ref<Candidate>[];
   dates: Ref<PostDate>[];
+  boostTimestamp: number;
 };
 
 export interface Candidate {
   id: Ref<Candidate>;
   company: Ref<Company>;
+  contact:string
   amount: number;
   devis: string;
   isChoosen : boolean;
   isRefused : boolean;
+  isViewed: boolean;
+  date: string;
 };
 
 export interface Establishement {
@@ -162,13 +170,16 @@ export interface Establishement {
 };
 
 export type Notification = {
-  id: Ref<PostDate>
-  post: Ref<Post>
-  mission: Ref<Mission>
+  id: Ref<Notification>
+  company: Ref<Company>
+  subContractor: Ref<Company>
+  posts: Ref<Post>
+  missions: Ref<Mission>
   role: string
   timestamp: number
   content: string
   hasBeenViewed: boolean
+  nature: string
 };
 
 export type Mission = Post & {
@@ -199,7 +210,10 @@ export type Mission = Post & {
 
 export type PostDate = {
   id: Ref<PostDate>;
-  name: string;
+  date: string;
+  validated: boolean;
+  deleted: boolean;
+  supervisions: Ref<Supervision>[]
 };
 
 export type Task = PostDetail & {
@@ -210,7 +224,7 @@ export type Task = PostDetail & {
 
 export type DateG = {
   id: number
-  value: string
+  date: PostDate
   tasks: Task[] | null
   selectedTasks: Task[]
   taskWithoutDouble: Task[]
@@ -251,4 +265,11 @@ export class PostMenu<T extends Post | Mission = Post> {
   favorite: boolean = false;
 
   get candidates() { return this.post?.candidates || []; }
+
+  isBoosted(time: number) { 
+    if (this.post?.boostTimestamp) {
+      return this.post?.boostTimestamp >= time || false
+    }
+    return false;
+  }
 };

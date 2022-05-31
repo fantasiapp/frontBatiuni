@@ -93,7 +93,7 @@ export class InfoHandler extends Destroy$ {
     this.resetTimer();
     this.content = info.content;
     this.type = info.type;
-    this.time = info.time || 2500;
+    this.time = info.time || 2000;
     this.cd.markForCheck();
     
     if ( this.time != Infinity ) {

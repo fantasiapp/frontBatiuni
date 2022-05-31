@@ -1,8 +1,9 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostBinding, HostListener, Input, NgZone, Output, SimpleChanges, ViewChild } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostBinding, HostListener, Input, NgZone, Output, QueryList, SimpleChanges } from "@angular/core";
 import { NG_VALUE_ACCESSOR } from "@angular/forms";
 import { UIDefaultAccessor } from "src/app/shared/common/classes";
 import { filterMap, focusOutside, getTopmostElement, makeid } from "src/app/shared/common/functions";
 import { Option } from "src/models/option";
+import { UIRadioboxComponent } from "../box/radiobox.component";
 
 @Component({
   selector: 'options',
@@ -128,6 +129,8 @@ export class OptionsModel extends UIDefaultAccessor<Option[]> {
   }
 
   writeValue(value: Option[]) {
+    if (value == null || value == undefined)
+      value = [];
     const ids = value.map(({id}) => id);
     this.value = filterMap(this.options, (option) => {
       return ids.includes(option.id) ? option : null;

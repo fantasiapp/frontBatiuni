@@ -9,40 +9,40 @@
 
     <profile-image [profile]="profile"></profile-image>
     <span class="company">{{ profile.company!.name }}</span>
-    <stars (click)='openRatings = true' class="stars" value="{{ profile.company!.starsPME }}" disabled></stars>
+    <stars (click)='openRatings = true' class="stars" value="{{ view == 'ST' ? profile.company!.starsST : profile.company!.starsPME  }}" disabled></stars>
     <button *ngIf="profileRecommandation" class="recommendation-button button active"><img src="assets/mail-outline.svg" alt="recommandation">
       Demander une recommandation
     </button>
     <section class="full-width section modify-profile">
-      <div *ngFor="let mission of missions" class="company-rate">
-        <span class="company-name">{{ view == 'ST' ?  mission.contactName : mission.subContractorContact }}</span>
+      <div *ngFor="let ratingInfo of ratingInfos" class="company-rate">
+        <span class="company-name">Note par {{ view == 'ST' ?  ratingInfo.contactName : ratingInfo.subContractorName }} de {{ view == 'ST' ? ratingInfo.companyContractor : ratingInfo.subContractorContact }}</span>
         <div class="criterion">
           <div class="flex center-cross">
-            <span class="criterion-stars">Qualité du travail fourni
+            <span class="criterion-stars">{{ view == 'ST' ? 'Qualité du travail fourni' : 'Ambiance sur le chantier' }}
             </span>
-            <stars class="stars" [value]="mission.quality" disabled></stars>
+            <stars class="stars" [value]="ratingInfo.qualityVibe" disabled></stars>
           </div>
 
-          <span>{{ mission.qualityComment }}</span>
+          <span>{{ ratingInfo.qualityVibeComment }}</span>
         </div>
         <div class="criterion">
           <div class="flex center-cross">
             <span class="criterion-stars">Respect de la securité et de la propreté du chantier
             </span>
-            <stars class="stars" [value]="mission.security" disabled></stars>
+            <stars class="stars" [value]="ratingInfo.security" disabled></stars>
           </div>
 
-          <span>{{ mission.securityComment }}</span>
+          <span>{{ ratingInfo.securityComment }}</span>
 
         </div>
         <div class="criterion">
           <div class="flex center-cross">
-            <span class="criterion-stars">Organisation
+            <span class="criterion-stars">{{ view == 'ST' ? 'Organisation' : 'Organisation PME' }}
             </span>
-            <stars class="stars" [value]="mission.organisation" disabled></stars>
+            <stars class="stars" [value]="ratingInfo.organisation" disabled></stars>
           </div>
 
-          <span>{{ mission.organisationComment }}</span>
+          <span>{{ ratingInfo.organisationComment }}</span>
 
         </div>
       </div>

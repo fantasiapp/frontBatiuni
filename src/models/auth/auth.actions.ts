@@ -31,14 +31,14 @@ export class Register {
   static fromFormGroup(group: FormGroup) {
     let input = group.value;
     return new Register(
-      input.firstname,
-      input.lastname,
-      input.email,
-      input.password,
-      input.company,
-      +input.role[0].id,
-      input.proposer,
-      input.jobs.map((job: Option) => job.id)
+      input.firstPage.firstname,
+      input.firstPage.lastname,
+      input.firstPage.email,
+      input.firstPage.password,
+      input.secondPage.company,
+      +input.secondPage.role[0].id,
+      input.secondPage.proposer,
+      input.secondPage.jobs.map((job: Option) => job.id)
     );
   };
 };

@@ -1,5 +1,16 @@
-import { ChangeDetectionStrategy, Component, ContentChild, Input, ViewChild } from "@angular/core";
-import { DomSanitizer } from "@angular/platform-browser";
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  ContentChild,
+  Input,
+  OnChanges,
+  SimpleChanges,
+  ViewChild,
+  ViewChildren,
+} from "@angular/core";
+import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser";
 import { Store } from "@ngxs/store";
 import { map, take } from "rxjs/operators";
 import { Supervision, File } from "src/models/new/data.interfaces";
@@ -7,62 +18,103 @@ import { DownloadFile } from "src/models/new/user/user.actions";
 import { SlideTemplate } from "../../directives/slideTemplate.directive";
 import { FileDownloader } from "../../services/file-downloader.service";
 import { DataQueries } from "src/models/new/data.state";
+import { ImageGenerator } from "../../services/image-generator.service";
+import { SingleCache } from "../../services/SingleCache";
 
 @Component({
-  selector: 'comment-suivi',
-  templateUrl: './comment.suivi.html',
-  styleUrls: ['./comment.suivi.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  selector: "comment-suivi",
+  templateUrl: "./comment.suivi.html",
+  styleUrls: ["./comment.suivi.scss"],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SuiviComments {
   // We can get the name and the profile image from the state
 
-  @ViewChild(SlideTemplate, {read: SlideTemplate, static: true})
-  slides!: SlideTemplate<{src: string}>;
-
-  @ContentChild(SuiviComments, {read: SuiviComments})
+  @ContentChild(SuiviComments, { read: SuiviComments })
   parentComment: SuiviComments | null = null;
 
-  constructor(private downloader: FileDownloader, private sanitizer: DomSanitizer, private store: Store) {
-    
+  reverseComment: boolean = false;
+  constructor(
+    private cd: ChangeDetectorRef,
+    private imageGenerator: ImageGenerator,
+    private downloader: FileDownloader,
+    private sanitizer: DomSanitizer,
+    private store: Store
+  ) {}
+
+  ngOnInit() {
+    const myUser = this.store.selectSnapshot(DataQueries.currentUser);
+    const myName = myUser.firstName + " " + myUser.lastName;
+
+    myName == this.supervision.author && (this.reverseComment = true);
   }
+
+  images: SafeResourceUrl[] = [];
+  nbImageSelected: number = 0;
+  get imageHasNext(): boolean {
+    return this.nbImageSelected + 1 < this.images.length;
+  }
+  get imageHasPrevious(): boolean {
+    return this.nbImageSelected > 0;
+  }
+
+  otherImage(change: number) {
+    this.nbImageSelected += change;
+    this.cd.markForCheck();
+  }
+
+  modalImage: SafeResourceUrl = "";
+  displayModal: boolean = false;
 
   _supervision: Supervision = {
     id: -1,
-    Supervisions: [],
-    author: 'Gabriel Dubois', //maybe this should be a UserProfile ?
+    // Supervisions: [],
+    author: "Gabriel Dubois", //maybe this should be a UserProfile ?
     companyId: 1,
-    date: '13-11-2021',
-    comment: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-    files: []
+    date: "13-11-2021",
+    comment:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+    files: [],
   };
   get supervision() {
-    return this._supervision; }
+    return this._supervision;
+  }
 
   @Input()
   set supervision(supervision: Supervision) {
     this._supervision = supervision;
   }
 
-  get manyFiles() { return this.supervision.files.length > 1; }
-
-  slide(k: number) {
-    //download fields on the go
+  modifySupervision() {
   }
 
-  // getImage(file?: File) {
-  //   if ( !file ) return null;
-  //   if ( file.content ) return this.downloader.toSecureBase64(file);
+  deleteSupervision() {
+  }
 
-  //   return this.downloader.downloadFile(file).pipe(map(file => this.downloader.toSecureBase64(file)));
-  // }
+  ngAfterContentInit(): void {
+    this.images = []
+    for (let file of this.supervision.files) {
+      if (SingleCache.checkValueInCache("supervisionImage" + file.toString())) {
+        this.images.push(SingleCache.getValueByName("supervisionImage" + file.toString()))
+      }
+      else {
+        this.downloader.downloadFile(file).subscribe((image) => {
+          this.images.push(this.downloader.toSecureBase64(image));
+          SingleCache.setValueByName("supervisionImage" + file.toString(), this.downloader.toSecureBase64(image))
+          this.cd.markForCheck();
+          });
+      }
+    }
+  }
 
-  getImage(file:number[]) {
-    // let fileObject = this.store.selectSnapshot(DataQueries.getById('File', file[0]));
-    let test = this.downloader.downloadFile(file[0])    // return this.downloader.downloadFile(file[0]).pipe(map(file => 
-    //   {
-    //     this.downloader.toSecureBase64(file)}));
-    //   }
-    return null
+  openModalImage(image: SafeResourceUrl) {
+    this.displayModal = true;
+    this.modalImage = image;
+
+  }
+
+  closeModalImage() {
+    this.displayModal = false;
+    this.modalImage = "";
   }
 }

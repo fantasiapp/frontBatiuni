@@ -9,7 +9,8 @@ import { ApplyForm } from "src/app/mobile/ui/annonce-resume/annonce-resume.ui";
 
 export class ChangeProfileType {
   static readonly type = '[User] Change Profile Type';
-  constructor(public type: boolean) {};
+  constructor(public type: boolean) {
+  };
 };
 
 export class ChangeProfilePicture {
@@ -29,7 +30,7 @@ export class UploadImageSupervision {
   static readonly type = '[User] Upload Supervision Picture';
   ext: string = '';
   imageBase64: string = '';
-  constructor(src: any, public missionId:number | null, public taskId:number | null) {
+  constructor(src: any, public supervisionId: number | null) {
     this.ext = src.format;
     this.imageBase64 = src.base64String;
   }
@@ -47,6 +48,11 @@ export class GetUserData {
   constructor(public token: string) {}
   readonly action = 'getUserData';
 };
+
+
+
+
+
 
 export class ModifyUserProfile {
   static readonly type = '[User] Change User Profile';
@@ -188,6 +194,8 @@ export class UploadPost {
     public files: any,
     public draft: boolean,
     public id?:number,
+    public isBoosted?:boolean,
+    public boostedTimestamp?:Date,
   ) {
     if ( this.id ) this.action = 'modifyPost';
     else delete this['id'];
@@ -200,7 +208,6 @@ export class UploadPost {
     documents.forEach(doc => {
       files[doc.name] = doc.fileData;
     });
-    console.log("fromPostForm", value.calendar)
     
     return new UploadPost(
       value.address,
@@ -260,6 +267,12 @@ export class ApplyPost {
   }
 }
 
+export class CandidateViewed {
+  static readonly type = 'declare Candidate Viewed';
+  action = 'candidateViewed';
+  constructor(public candidateId: number) {}
+}
+
 export class GetGeneralData {
   static readonly type = '[Data] Get General data';
   action = 'getGeneralData';
@@ -288,7 +301,7 @@ export class CreateDetailedPost {
 export class ModifyDetailedPost {
   static readonly type = '[Data] Modify DetailedPost';
   action = 'modifyDetailedPost';
-  constructor(public detailedPost: PostDetail | null) {
+  constructor(public detailedPost: PostDetail | null, public unset: boolean = false) {
   }
 }
 
@@ -296,6 +309,13 @@ export class ModifyMissionDate {
   static readonly type = '[Data] modify date Mission';
   action = 'modifyMissionDate'
   constructor(public missionId: number, public hourlyStart:string, public hourlyEnd:string, public calendar:string[]) {
+  }
+}
+
+export class ValidateMissionDate {
+  static readonly type = '[Data] validate date Mission';
+  action = 'validateMissionDate'
+  constructor(public missionId: number, public field: string, public state:boolean, public date: string) {
   }
 }
 
@@ -316,7 +336,7 @@ export class CloseMissionST {
 export class CreateSupervision {
   static readonly type = '[Data] Create Supervision';
   action = 'createSupervision'
-  constructor(public missionId: number, public detailedPostId: number | null, public parentId: number | null, public comment: string, public date:string) {}
+  constructor(public detailedPostId: number | null, public datePostId: number | null, public comment: string) {}
 }
 
 export class NotificationViewed {
@@ -332,11 +352,24 @@ export class SetFavorite {
   constructor(public value: boolean, public Post: number) {}
 }
 
+export class InviteFriend {
+  static readonly type = 'invite Friend';
+  action = 'inviteFriend';
+
+  constructor(public mail: string, public register: boolean) {}
+}
+
 export class MarkViewed {
   static readonly type = '[User.ST] View Post';
   action = 'isViewed';
   constructor(public Post: number) {}
 };
+
+export class BoostPost {
+  static readonly type = '[Data] Boost Post';
+  action = 'boostPost';
+  constructor(public postId: number, public duration: number) {}
+}
 
 // export class ContractSignature {
 //   static readonly type = '[User] Contract Signature';

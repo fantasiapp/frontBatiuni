@@ -1,6 +1,10 @@
 <div *ngIf="ready$ | async" [@routeAnimation]="prepareRoute(outlet)" class="router">
   <router-outlet #outlet="outlet"></router-outlet>
 </div>
+<div *ngIf="message">
+  <h1>{{ message.notification.title }}</h1>
+  <h2>{{ message.notification.body }}</h2>
+</div>
 <slidemenu [fromService]="true"></slidemenu>
 <popup [fromService]="true"></popup>
 <swipeup [fromService]="true" type="none"></swipeup>

@@ -1,0 +1,63 @@
+@use 'src/styles/variables' as *;
+@use 'src/styles/mixins' as *;
+@use 'src/styles/responsive' as *;
+
+:host {
+  display: flex;
+  justify-content: center;
+  background: white;
+  border-left: $sos-border-thickness solid transparent;
+  height: 160px;
+  width: 307px;
+  padding: $sos-card-padding;
+  border-radius: 8px;
+
+  box-shadow: 0 5px 3px 0 rgba(149, 157, 165, 0.2);
+  @include desktop-only {
+    border-left-width: 12px;
+  }
+
+  // position: relative;
+}
+
+.container {
+  width: 307px;
+  height: 160px;
+}
+
+.presentation {
+  flex-grow: 0;
+  transform: scale(0.7);
+}
+
+.name, .job{
+  color: #333333;
+  font-family: Roboto;
+  font-size: 14px;
+  margin-bottom: 0.5rem;
+}
+
+.disponibility{
+  color: #333333;
+  font-family: Roboto;
+  font-size: 12px;
+  margin-bottom: 0.5rem;
+}
+
+.address, .amount {
+  color: #999999;
+  font-family: Roboto;
+  font-weight: lighter;
+  font-size: 12px;
+  margin-bottom: 1px;
+  margin-bottom: 0.5rem;
+}
+
+// .job {
+//   color: $dark;
+//   overflow: hidden;
+//   display: -webkit-box;
+//   text-overflow: ellipsis;
+//   -webkit-box-orient: vertical;
+//   -webkit-line-clamp: 2;
+// }

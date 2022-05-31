@@ -7,6 +7,7 @@ import { Destroy$ } from "src/app/shared/common/classes";
 import { Login } from "src/models/auth/auth.actions";
 import { Email } from "src/validators/persist";
 import { ComplexPassword, setErrors } from "src/validators/verify";
+import { BooleanService } from "../services/boolean.service";
 
 @Component({
   selector: 'connexion-form',
@@ -35,7 +36,7 @@ import { ComplexPassword, setErrors } from "src/validators/verify";
         Mot de passe oublié !
       </a>
     </section>
-    <div class="form-action" style="margin-top: auto;">
+    <div class="form-action" style="margin-top: auto; margin-bottom: unset">
       <div *ngIf="loginForm.errors?.server" class="server-error">
         {{ loginForm.errors?.server }}
       </div>
@@ -48,6 +49,16 @@ import { ComplexPassword, setErrors } from "src/validators/verify";
   `,
   styles: [`
     @use "/src/styles/forms.scss" as *;
+
+    :host{
+      overflow: scroll;
+      padding-bottom: calc(env(safe-area-inset-bottom) + 2rem);
+    }
+    form {
+      height: fit-content;
+      min-height: 100%;
+    }
+
   `],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -66,22 +77,27 @@ export class ConnexionForm extends Destroy$ {
   private _errors: string[] = [];
   get errors() { return this._errors; }
 
-  constructor(private router: Router, private store: Store, private cd: ChangeDetectorRef) {
+  constructor(private router: Router, private store: Store, private cd: ChangeDetectorRef, private isLoadingService: BooleanService) {
     super();
   }
 
   async onSubmit(e: any) {
+    this.isLoadingService.emitLoadingChangeEvent(true)
     let { email, password } = this.loginForm.value;
     this.store.dispatch(new Login(email, password))
     .pipe(take(1)).subscribe(
-      async (success) => {
-        const result = await this.router.navigate(['', 'home']);
-        if ( !result ) {
-          setErrors(this.loginForm, {all: 'Erreur inattendue. (500 ?)'});
-          this.cd.markForCheck();
+      (success) => {
+        if(success){
+          const result = this.router.navigate(['', 'home']);
+          // this.isLoadingService.emitLoadingChangeEvent(false)
+          // if ( !result ) {
+          //   setErrors(this.loginForm, {all: 'Erreur inattendue. (500 ?)'});
+          //   this.cd.markForCheck();
+          // }
         }
       },
       errors => {
+        this.isLoadingService.emitLoadingChangeEvent(false)
         setErrors(this.loginForm, errors);
         this.cd.markForCheck();
       }

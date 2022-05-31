@@ -15,8 +15,13 @@
 .header-calendar {
   align-content: center;
   justify-content: space-between;
+  margin-bottom: 0.5rem;
   h1 {
     color: #1e2843;
+  }
+
+  .btn-next {
+    margin-left: 1rem;
   }
 }
 .wrapper-calendar {
@@ -26,6 +31,9 @@
   background-color: $bg-white;
   padding: 10px;
   li {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     height: 25px;
     width: 25px;
     font-size: 0.8rem;
@@ -95,9 +103,35 @@ ol {
     background-color: $primary;
     @extend %bgcolor;
   }
+
+  .notification {
+    background-color: red;
+    @extend %bgcolor
+  }
   
   .nothing {
     background-color: $bg-white;
-    @extend %bgcolor;
+    // @extend %bgcolor;
   }
+
+  .preselected, .preselected.selected {
+    background-color: $bg-white;
+    color: $dark!important;
+    border-radius: 50%;
+    border: 2px solid #1e2843;
+    width: 21px;
+    height: 21px;
+  }
+}
+
+.past-date {
+  background: unset;
+  pointer-events: none;
+  color: $light!important;
+  // @extend %bgcolor;
+}
+.blocked-date {
+  background: $light;
+  pointer-events: none;
+  @extend %bgcolor;
 }

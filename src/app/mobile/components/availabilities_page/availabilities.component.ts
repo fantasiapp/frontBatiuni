@@ -2,9 +2,11 @@ import { ChangeDetectionStrategy, Component, ViewChild } from "@angular/core";
 import { Select, Store } from "@ngxs/store";
 import { Observable } from "rxjs";
 import { takeUntil } from "rxjs/operators";
+import { AppComponent } from "src/app/app.component";
 import { Destroy$ } from "src/app/shared/common/classes";
 import { Availability, CalendarUI, DayState } from "src/app/shared/components/calendar/calendar.ui";
-import { SwipeupService } from "src/app/shared/components/swipeup/swipeup.component";
+import { SwipeupService, SwipeupView } from "src/app/shared/components/swipeup/swipeup.component";
+import { getUserDataService } from "src/app/shared/services/getUserData.service";
 import { Profile } from "src/models/new/data.interfaces";
 import { nameToAvailability } from "src/models/new/data.mapper";
 import { DataQueries } from "src/models/new/data.state";
@@ -30,28 +32,25 @@ export class AvailabilitiesComponent extends Destroy$ {
     class: 'disponible',
     click: () => {
       this.setCalendarDayState('available');
+      this.submit(this.calendar);
     }
   }, {
     name: 'Disponible sous-conditions',
     class: 'sous-conditions',
     click: () => {
       this.setCalendarDayState('availablelimits');
-    }
-  }, {
-    name: 'Pas disponible',
-    class: 'pas-disponible',
-    click: () => {
-      this.setCalendarDayState('unavailable');
+      this.submit(this.calendar);
     }
   }, {
     name: 'Non renseigné',
     class: 'non-renseigne',
     click: () => {
       this.setCalendarDayState('nothing');
+      this.submit(this.calendar);
     },
   }]
 
-  constructor(private store: Store, private swipeupService: SwipeupService) {
+  constructor(private store: Store, private swipeupService: SwipeupService, private appComponent: AppComponent, private getUserDataService: getUserDataService) {
     super();
   }
 
@@ -66,6 +65,9 @@ export class AvailabilitiesComponent extends Destroy$ {
         const now = (new Date).toISOString().slice(0, 10);
         this.currentAvailability = this.availabilities.find(day => day.date == now)?.availability || 'nothing';
     });
+  }
+
+  ngAfterViewInit() {
   }
 
   submit(calendar: CalendarUI) {
@@ -90,7 +92,7 @@ export class AvailabilitiesComponent extends Destroy$ {
   }
 
   ngOnDestroy() {
+    this.getUserDataService.emitDataChangeEvent()
     super.ngOnDestroy();
-    this.submit(this.calendar);
   }
 }

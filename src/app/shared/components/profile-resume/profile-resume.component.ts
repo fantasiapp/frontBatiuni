@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, SimpleChanges } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, Output, SimpleChanges } from "@angular/core";
 import { Select, Store } from "@ngxs/store";
 import { Observable } from "rxjs";
 import { Profile, File, Company, User } from "src/models/new/data.interfaces";
@@ -14,14 +14,20 @@ import { ChangeProfileType } from "src/models/new/user/user.actions";
 export class ProfileResume {
 
   openRatings: boolean = false;
+  @Input()
+  showRecomandation: boolean = true;
 
-  constructor(private store: Store) {}
+  constructor(private store: Store) {
+  }
 
   @Input()
   profile!: Profile;  
 
   @Select(DataState.view)
-  view$!: Observable<string>;
+  view$!: Observable<'ST' | 'PME'>;
+
+  @Input()
+  showView!: 'ST' | 'PME';
 
   @Input()
   switch: boolean = true;

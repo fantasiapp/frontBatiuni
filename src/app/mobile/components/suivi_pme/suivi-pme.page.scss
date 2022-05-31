@@ -62,10 +62,6 @@ details summary::-webkit-details-marker {
   color: $secondaryBackground;
 }
 
-.list {
-
-}
-
 .red {
   filter: invert(24%) sepia(89%) saturate(7468%) hue-rotate(360deg) brightness(104%) contrast(123%);
 }
@@ -80,7 +76,9 @@ details summary::-webkit-details-marker {
   font-size: 1rem;
 }
 
-
+.button {
+  height: 2.5rem;
+}
 
 .submitActivated {
   background-color: #0D6191;

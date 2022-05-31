@@ -38,6 +38,7 @@ import { ComplexPassword, MatchField } from "src/validators/verify";
       box-shadow: 0 -3px 3px 0 #ddd;
       background-color: white;
       @extend %sticky-footer;
+      transform: translateY(-100%)
     }
 
   `],

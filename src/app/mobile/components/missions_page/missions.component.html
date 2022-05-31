@@ -1,4 +1,9 @@
-<page-header name="Mes missions" [(activeView)]="activeView" (filterClicked)="openFilterMenu = true">
+<page-header name="Mes missions" 
+  [(activeView)]="activeView" 
+  (activeViewChange)="changeView($event)"
+  (filterClicked)="viewList ? openFilterMenu = true : openFilterMenu = false" 
+  [filterOpen]="filterOn" 
+  [callbackSearch]="callbackSearch">
   <span tab_0>Vue liste</span>
   <span tab_1>Calendrier</span>
 </page-header>
@@ -6,9 +11,16 @@
 <div class="hosted-page space-children-margin page-content-with-tabs">
   <ng-container [ngSwitch]="activeView">
     <ng-container *ngSwitchCase="0">
-      <offer *ngFor="let mission of myMissions" [post]="mission" src="assets/validée.svg" (click)="openMission(mission)"></offer>
+      <offer 
+        *ngFor="let mission of myMissions" 
+        [post]="mission" 
+        (click)="openMission(mission)" 
+        [view]="'ST'">
+      </offer>
     </ng-container>
-    <horizontal-calendar [detailedDays]="detailedDays" class="space-children-margin" *ngSwitchCase="1"></horizontal-calendar>
+    <ng-container *ngSwitchCase="1">
+      <horizontal-calendar (open)="openMission($event)" [detailedDays]="detailedDays" class="space-children-margin"></horizontal-calendar>
+    </ng-container>
   </ng-container>
 </div>
 
@@ -17,10 +29,11 @@
 </slidemenu>
 
 <swipeup [(open)]="openFilterMenu" type="view">
-  <mission-filter-form view></mission-filter-form>
+  <mission-filter-form [callbackFilter]="callbackFilter" view></mission-filter-form>
 </swipeup>
 
-<swipeup [(open)]="openCloseMission" [doClose]="doClose">
+<!-- <swipeup [(open)]="openCloseMission" [doClose]="doClose"> -->
+  <swipeup [(open)]="openCloseMission" [doClose]="doClose">
   <div *ngIf="missionToClose" class="cloture-swipeup">
     <h3>Noter l'entreprise</h3>
     <h6 >{{ missionCompany }}, contact: {{ missionToClose.contactName }}</h6>
@@ -33,7 +46,7 @@
       <div class="star-container">
         <img *ngFor="let flag of getArrayStarST('vibeST'); let index=index;" (click)="starActionST(index, 'vibeST')" [src]="flag ? 'assets/starFull.svg' : 'assets/starEmpty.svg'">
       </div>
-      <textarea (focusout)="textStarActionST('vibeST')" placeholder="Ajouter un commentaire" rows="5" cols="30" id="starTextQualityST">{{ missionToClose!.vibeCommentST }}</textarea>
+      <textarea (focusout)="textStarActionST('vibeST')" placeholder="Ajouter un commentaire" rows="5" cols="30" id="starTextVibeST">{{ missionToClose!.vibeCommentST }}</textarea>
     </div>
     
     <div *ngIf="missionToClose" class="form-input">
@@ -41,7 +54,7 @@
       <div class="star-container">
         <img *ngFor="let flag of getArrayStarST('securityST'); let index=index;" (click)="starActionST(index, 'securityST')" [src]="flag ? 'assets/starFull.svg' : 'assets/starEmpty.svg'">
       </div>
-      <textarea (click)="textStarActionST('securityST')" placeholder="Ajouter un commentaire" rows="5" cols="30" id="starTextSecurityST">{{ missionToClose!.securityCommentST }}</textarea>
+      <textarea (focusout)="textStarActionST('securityST')" placeholder="Ajouter un commentaire" rows="5" cols="30" id="starTextSecurityST">{{ missionToClose!.securityCommentST }}</textarea>
     </div>
 
     <div *ngIf="missionToClose" class="form-input">
@@ -49,7 +62,7 @@
       <div class="star-container">
         <img *ngFor="let flag of getArrayStarST('organisationST'); let index=index;" (click)="starActionST(index, 'organisationST')" [src]="flag ? 'assets/starFull.svg' : 'assets/starEmpty.svg'">
       </div>
-      <textarea (click)="textStarActionST('organisationST')" placeholder="Ajouter un commentaire" rows="5" cols="30" id="starTextOrganisationST">{{ missionToClose?.organisationCommentST }}</textarea>
+      <textarea (focusout)="textStarActionST('organisationST')" placeholder="Ajouter un commentaire" rows="5" cols="30" id="starTextOrganisationST">{{ missionToClose?.organisationCommentST }}</textarea>
     </div>
     <button [ngClass]="classSubmit" (click)="submitStarST()">Valider</button>
   </div>

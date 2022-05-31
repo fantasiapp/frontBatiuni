@@ -2,15 +2,19 @@
   <div class="hosted-page flex column center-cross space-children-margin font-Poppins">
     <profile-resume class="flex column center-cross space-children-margin"
       [canChangePicture]="false"
-      (ratingsClicked)="ratingsClicked.emit($event)"
       [showMore]="true"
       [profile]="profile"
+      [switch]="showSwitch"
+      [showRecomandation]="showRecomandation"
+      [showView]="showView"
+      [star]="showStar"
     ></profile-resume>
   
     <section class="job-description full-width flex column space-children-margin">
       <h4 class="text-light-emphasis">Nom de l'entreprise : <span class="value">{{profile.company.name}}</span></h4>
       <h4 class="text-light-emphasis">N SIRET : <span class="value">{{profile.company.siret}}</span></h4>
-      <h4 class="text-light-emphasis" *ngIf = "profile.company.allQualifications">Métier : <span class="value">TCE</span></h4>
+      <h4 class="text-light-emphasis" *ngIf = "profile.company.allQualifications">Métier : <span class="value">TCE<br/></span>
+      <span *ngFor="let job of companyJobs; let i = index" class="value">{{ job.number }} {{ jobs[i].name }}, </span></h4>
 
       <h4 class="text-light-emphasis" *ngIf = "!profile.company.allQualifications">Métier : 
       <span *ngFor="let job of companyJobs; let i = index" class="value">{{ job.number }} {{ jobs[i].name }}, </span></h4>
@@ -44,9 +48,11 @@
         <ul class="contact list flex space-around">
           <li><a [href]="'tel:+33' + profile.company.companyPhone"><img src="assets/missions/call.svg"/></a></li>
           <li><a [href]="'sms:+33' + profile.company.companyPhone"><img src="assets/missions/envoyer-un-message.svg"/></a></li>
-          <li><a [href]="'mailto:' + profile.company" disabled><img src="assets/missions/envoyer-un-mail.svg"/></a></li>
+          <li><a [href]="'mailto:' + profile.company.email" disabled><img src="assets/missions/envoyer-un-mail.svg"/></a></li>
         </ul>
       </section>
     </ng-container>
+
+    <!-- <div style="height: 1rem; width: 100%;"></div> -->
   </div>
 </ng-container>

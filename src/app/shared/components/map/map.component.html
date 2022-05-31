@@ -1,3 +1,19 @@
 <div class="map" #map>
 
 </div>
+
+<div class="popup-container" style="display: none;" #popupContainer>
+    <sos-card-map
+        (click)="companyClick.emit(currentCompany)" 
+        *ngIf="currentCompany && view == 'PME'" 
+        [profile]="{company: currentCompany!}" 
+        [availability]="currentAvailability">
+    </sos-card-map>
+    <offer 
+        (click)="postClick.emit(currentPost)" 
+        *ngIf="currentPost && view == 'ST'"
+        [deletable]="true" 
+        [post]="currentPost" 
+        [view]="'PME'" >
+    </offer> 
+</div>

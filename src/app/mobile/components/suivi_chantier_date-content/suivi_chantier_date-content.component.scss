@@ -1,0 +1,142 @@
+@use 'src/styles/variables' as *;
+
+
+
+.chantier-tache-container {
+  display: flex;
+  flex-direction: column;
+  row-gap: 2rem;
+
+  > *:not(:last-child) {
+    padding-inline: 2rem;
+  }
+}
+
+.chantier-tache {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.details {
+  align-items: center;
+}
+
+.detail-name::before {
+  content: '';
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #000;
+  margin-right: 0.5rem;
+}
+
+
+.controls {
+  display: flex;
+  img:first-child {
+    margin-right: 15px;
+  }
+}
+
+.taskByDate {
+  display: flex;
+  flex-direction: column;
+  row-gap: 1rem;
+}
+
+.divComment {
+  display: flex;
+  position: relative;
+  flex-direction: row;
+  padding: .5rem 1rem;
+  background: white;
+  border-radius: 1.5rem;
+  border: 1px solid #F7F7F7;
+  
+  &:focus-within {
+    border: 1px solid $primary;
+  }
+  img {
+    height: 1.5rem;
+  }
+}
+
+form {
+  width: 100%;
+  .inputComment {
+    width: 100%;
+    word-break: break-word;
+
+    &.mainInputComment {
+      height: 3rem;
+      padding: .5rem;
+      // resize: none;
+      // min-height: 50px;
+      // max-height: 100px;
+    }
+  }
+}
+
+.partenerComment-container {
+  & > div {
+    display: flex;
+    flex-direction: column;
+    row-gap: 1rem;
+    padding: 2rem;
+  }
+  .partenerComment {
+    background: #e5e8ed;
+    padding: 2rem;
+  }
+
+  .divComment {
+    margin-top: 1rem;
+    padding: unset;
+    border-color: #bdbdbd;
+    border-radius: 4px;
+    justify-content: space-between;
+    textarea {
+      padding: .5rem;
+      resize: none;
+      min-height: 50px;
+      max-height: 100px;
+      width: 90%;
+    }
+    img {
+      align-self: flex-end;
+      position: relative;
+      top: -.5rem;
+      right: .5rem
+    }
+  }
+  .partenerComment-addPhoto {
+    display: flex;
+    align-items: center;
+    font-size: 0.875rem;
+    justify-content: flex-end;
+    margin-top: 1rem;
+    img {
+      margin-left: 1rem;
+      height: 1.5rem;
+      width: 1.5rem;
+    }
+  }
+}
+
+.newDate {
+  display: flex;
+  flex-direction:row;
+  justify-content: space-between;
+  width:50%;
+  margin-left: 25%;
+  margin-top: 30px;
+}
+
+.liDate {
+  display: flex;
+  flex-direction:row;
+  justify-content: space-around;
+  width:90%;
+}

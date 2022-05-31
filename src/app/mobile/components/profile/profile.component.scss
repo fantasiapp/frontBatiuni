@@ -19,7 +19,12 @@ header {
 }
 
 .notification {
-  @extend %has-notifications
+  @extend %has-notifications;
+
+  &::after {
+    left: -20px;
+    top: -20px
+  }
 }
 
 /* im sorry for writing this page badly */
@@ -29,4 +34,24 @@ header {
   .form-container {
     padding-bottom: $page-padding;
   }
+}
+
+.notification::after {
+  position: relative;
+  top: -1rem;
+  left: -1rem;
+
+}
+
+swipeup li.spacer {
+  height: 2rem;
+  background-color: white;
+}
+
+swipeup li{
+  background-color: #F4F4F4;
+  width: 100vw;
+  position: relative;
+  left: -2rem;
+  padding-left: 2rem;
 }
