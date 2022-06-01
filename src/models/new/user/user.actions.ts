@@ -300,7 +300,7 @@ export class SignContract {
 export class CreateDetailedPost {
   static readonly type = '[Data] Create DetailedPost';
   action = 'createDetailedPost';
-  constructor(public missionId: number, public content: string, public date: string) {
+  constructor(public missionId: number, public content: string, public dateId: Ref<DatePost>) {
   }
 }
 
