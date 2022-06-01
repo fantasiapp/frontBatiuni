@@ -5,7 +5,7 @@ export type Record<T = any> = {
 export type DataTypes = 'Job' | 'Label' | 'Role' | 'UserProfile' | 'Company' | 'BlockedCandidate' |
   'Post' | 'DetailedPost' | 'Supervision' | 'Disponibility' | 'File' |
   'JobForCompany' | 'LabelForCompany' | 'Candidate' | 'Mission' |
-  'Establishments'| 'DatePost' | 'Notification' ; //..
+  'Establishments'| 'DatePost' | 'Notification' | 'Recommandation'; //..
 
 //just to indicate
 export type Ref<T> = number;
@@ -187,6 +187,17 @@ export interface Establishement {
   NTVAI: string;
 };
 
+export type Recommandation = {
+  id: Ref<Recommandation>;
+  idCompany: Ref<Company>;
+  qualityStars: number;
+  qualityComment: string;
+  securityStars: number;
+  securityComment: string;
+  organisationStars: number;
+  organisationComment: string;
+}
+
 export type Notification = {
   id: Ref<Notification>
   company: Ref<Company>
@@ -279,6 +290,7 @@ export type Interface<K extends DataTypes> =
   K extends 'Establishments' ? Establishement :
   K extends 'Notification' ? Notification :
   K extends 'BlockedCandidate' ? BlockedCandidate :
+  K extends 'Recommandation' ? Recommandation :
   K;
 
 export type Profile = {
