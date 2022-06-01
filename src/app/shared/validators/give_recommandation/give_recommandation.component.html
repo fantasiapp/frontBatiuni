@@ -2,6 +2,13 @@
   <div class="cloture-swipeup">
     <h3>Noter l'entreprise</h3>
     <!-- <h6>{{ mission!.subContractorName }}</h6> -->
+    <div>
+      <textarea (focusout)="getCompanyInfoByText('lastName')" placeholder="Entrer votre nom" id="textLastName" cols="15" rows="1">{{ recommandation!.lastName }}</textarea>
+      <textarea (focusout)="getCompanyInfoByText('firstName')" placeholder="Entrer votre prénom" id="textFirstName" cols="15" rows="1">{{ recommandation!.firstName }}</textarea>
+    </div>
+    <div>
+      <textarea (focusout)="getCompanyInfoByText('companyName')" placeholder="Entrer le nom de votre entreprise" id="textCompanyName" cols="35" rows="1">{{ recommandation!.company }}</textarea>
+    </div>
     <div class="star-container" *ngIf="hasGeneralStars">
       <img  *ngFor="let flag of getArrayStar('general'); let index=index;" [src]="flag ? 'assets/starFull.svg' : 'assets/starEmpty.svg'">
     </div>

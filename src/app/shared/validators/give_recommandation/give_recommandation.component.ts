@@ -1,4 +1,4 @@
-import {  ChangeDetectionStrategy, ChangeDetectorRef, Component } from "@angular/core";
+import {  ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { Store } from "@ngxs/store";
 import { interval, race } from "rxjs";
@@ -15,12 +15,15 @@ import { Recommandation } from "src/models/new/data.interfaces";
 })
 export class GiveRecommandation extends Destroy$ {
 
+  @Input()
+  companyId: number = -1;
+
   recommandation: Recommandation = {
     id:-1,
     firstName: "",
     lastName: "",
     company: "",
-    idCompany : 0,
+    idCompany : this.companyId,
     qualityStars : 0,
     qualityComment : "",
     securityStars : 0,
@@ -68,6 +71,25 @@ export class GiveRecommandation extends Destroy$ {
         "starTextOrganisation"
       ) as HTMLTextAreaElement;
       this.recommandation!.organisationComment = content!.value;
+    }
+  }
+
+  getCompanyInfoByText(nature: string) {
+    if (nature == "lastName") {
+      let content = document.getElementById(
+        "textLastName"
+      ) as HTMLTextAreaElement;
+      this.recommandation!.lastName = content!.value;
+    } else if (nature == "firstName") {
+      let content = document.getElementById(
+        "textFirstName"
+      ) as HTMLTextAreaElement;
+      this.recommandation!.firstName = content!.value;
+    } else if (nature == "companyName") {
+      let content = document.getElementById(
+        "textCompanyName"
+      ) as HTMLTextAreaElement;
+      this.recommandation!.company = content!.value;
     }
   }
 
