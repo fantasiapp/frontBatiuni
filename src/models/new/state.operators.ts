@@ -31,7 +31,6 @@ namespace mutable {
     const targetObjects = draft[target],
       fields = draft.fields[target];
     //translate data
-    console.log("update", target, values)
     Object.entries<any>(values).forEach(([id, item]) => {
       //An horrible patch waiting for a true solution
       if (!targetObjects) return
@@ -65,7 +64,6 @@ namespace mutable {
         }
       }
     });
-    
     mutable.addValues(draft, target, values);
   }
 

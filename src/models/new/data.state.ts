@@ -681,7 +681,6 @@ export class DataState {
         ctx.setState(addComplexChildren(response["type"], response["fatherId"], "DetailedPost", response["detailedPost"]))
         if (response["detailedPost2"])
           ctx.setState(addComplexChildren("Mission", response["missionId"], "DetailedPost", response["detailedPost2"]))
-        
       })
     );
   }
@@ -691,6 +690,7 @@ export class DataState {
     const profile = this.store.selectSnapshot(DataQueries.currentProfile)!;
     return this.http.post("data", application).pipe(
       tap((response: any) => {
+        console.log("modifyDetailedPost", response)
         if (response[application.action] !== "OK") {
           this.inZone(() => this.info.show("error", response.messages, 3000));
           throw response.messages;
@@ -737,21 +737,13 @@ export class DataState {
         }
         delete response[application.action];
         
-        ctx.setState(addComplexChildren("Company", profile.company.id, "Mission", response.mission));
-        for (const key in response.datePost) {
-          let datePost = {[key]: response.datePost[key]}
-          ctx.setState(update('DatePost', datePost))
-          // ctx.setState(addComplexChildren('Mission', response.mission.id,'DatePost', datePost))
-        }
+        ctx.setState(addComplexChildren('Mission', response.mission.id,'DatePost', response.datePost))
       })
     );
   }
 
   @Action(ValidateMissionDate)
-  validateMissionDate(
-    ctx: StateContext<DataModel>,
-    application: ValidateMissionDate
-  ) {
+  validateMissionDate(ctx: StateContext<DataModel>, application: ValidateMissionDate) {
     const profile = this.store.selectSnapshot(DataQueries.currentProfile)!;
     return this.http.post("data", application).pipe(
       tap((response: any) => {
@@ -763,9 +755,10 @@ export class DataState {
             this.info.show("info", "La mission est mise à jour", 3000)
           );
           delete response[application.action];
-          
-          ctx.setState(update('DatePost', response.datePost))
-          ctx.setState(addComplexChildren("Company",profile.company.id,"Mission",response.mission));
+          console.log('validateMissionDate', response)
+          ctx.setState(addComplexChildren('Mission', response.mission.id,'DatePost', response.datePost))
+          // console.log('validateMissionDate', profile.company.id, response.mission)
+          // ctx.setState(addComplexChildren('Company', profile.company.id,'Mission', response.mission))
         }
       })
     );

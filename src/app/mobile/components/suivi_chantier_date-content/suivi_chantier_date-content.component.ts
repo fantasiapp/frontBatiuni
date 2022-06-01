@@ -73,14 +73,29 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
   tasksGraphic: TaskGraphic[] = [];
 
   ngOnInit(){
-    this.computeDate( this.dateOrigin)
-    this.computeTasks(this.date)
-    this.cd.markForCheck()
+    this.updatePageOnlyDate()
 
     this.popup.modifyPostDetailList.pipe(takeUntil(this.destroy$)).subscribe(curPostDetail => {
-      // if(curPostDetail.checked){
-      //   this.tasksGraphic
-      // }
+      // this.updatePageOnlyDate()
+      const postDetailG = curPostDetail
+      console.log('addTask', postDetailG, this.tasksGraphic);
+
+      let a = false
+      for (const taskGraphic of this.tasksGraphic) {
+        if(taskGraphic.selectedTask.id == postDetailG.id) {
+          taskGraphic.selectedTask.checked = postDetailG.checked
+          a =true
+        }
+      }
+      // this.tasksGraphic.filter(taskGraphic => taskGraphic.selectedTask.id == postDetailG.id).length
+      if (!a) {
+        this.tasksGraphic.push({
+          selectedTask:postDetailG,
+          validationImage: this.computeTaskImage(postDetailG, "validated"),
+          invalidationImage: this.computeTaskImage(postDetailG, "refused"),
+          formGroup: new FormGroup({comment: new FormControl()})
+        })
+      }
     })
   }
 
@@ -138,10 +153,18 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
     if (typeof(details) === "object" && !Array.isArray(details)) avaliableTasks = details
     else avaliableTasks = this.store.selectSnapshot(DataQueries.getMany("DetailedPost", details))
     const selectedContent = postDetails.map((detail) => detail.content)
+    const selectedContentId = postDetails.map((detail) => { return { 
+        [detail.content]: detail.id
+      }
+    })
     return avaliableTasks.map((task) => {
       const checked = selectedContent.includes(task.content)
+      const content : string = task.content
+      let selected = selectedContentId.filter(s => !!s[content])[0]
+      const id = selected && selected.hasOwnProperty(content) ? selected[content] : task.id
+      console.log('TASKs', id);
       return {
-        "id":task.id,
+        "id": id,
         "date":task.date,
         "content": task.content,
         "validated": task.validated,
@@ -155,7 +178,7 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
   computeTasks(date: PostDateAvailableTask){
     this.tasksGraphic = date.postDetails.map(postDetail => (
       {
-        selectedTask:postDetail,
+        selectedTask: postDetail,
         validationImage: this.computeTaskImage(postDetail, "validated"),
         invalidationImage: this.computeTaskImage(postDetail, "refused"),
         formGroup: new FormGroup({comment: new FormControl()})
