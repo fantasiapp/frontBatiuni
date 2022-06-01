@@ -133,6 +133,15 @@ export class ModalImage extends Destroy$ {
       });
     } else {
       this.hammerIt(img);
+      img.addEventListener("wheel", (event) => {
+        event.preventDefault();
+        console.log("wheeeeeeeeel")
+        this.scale += event.deltaY / 100;
+        this.scale = Math.max(1, Math.min(this.scale, 10));
+
+        img = document.getElementById("target")!;
+        img.style.transform = `translate(${this.xTranslation}px, ${this.yTranslation}px) scale(${this.scale})`;
+      });
     }
   }
 
