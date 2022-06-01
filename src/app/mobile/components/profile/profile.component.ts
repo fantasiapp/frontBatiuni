@@ -164,7 +164,8 @@ export class ProfileComponent extends Destroy$ {
           this.cd.markForCheck();
         },
         err => {
-          this.info.show("error", "Aucune valeur n'est modifiée", 5000);
+          console.log("error", err)
+          // this.info.show("error", "Aucune valeur n'est modifiée", 5000);
           this.cd.markForCheck();
         }
         );
