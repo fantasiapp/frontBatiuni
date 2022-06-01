@@ -1,9 +1,10 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, Output, SimpleChanges } from "@angular/core";
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, ViewChild } from "@angular/core";
 import { Select, Store } from "@ngxs/store";
 import { Observable } from "rxjs";
 import { Profile, File, Company, User } from "src/models/new/data.interfaces";
 import { DataQueries, DataState } from "src/models/new/data.state";
 import { ChangeProfileType } from "src/models/new/user/user.actions";
+import { UIProfileImageComponent } from "../profile-image/profile-image.component";
 
 @Component({
   selector: 'profile-resume',
@@ -49,6 +50,9 @@ export class ProfileResume {
 
   @Output()
   changePicture = new EventEmitter();
+
+  @ViewChild(UIProfileImageComponent)
+  profileImage!: UIProfileImageComponent;
 
   changeProfileType(type: boolean) {
     this.store.dispatch(new ChangeProfileType(type));

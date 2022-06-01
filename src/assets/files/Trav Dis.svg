@@ -20,6 +20,6 @@
       <rect id="Rectangle_83" data-name="Rectangle 83" width="33.465" height="2.183" transform="translate(15.203 45.833)" fill="#ccc"/>
       <rect id="Rectangle_84" data-name="Rectangle 84" width="33.465" height="2.183" transform="translate(15.203 52.38)" fill="#ccc"/>
     </g>
-    <text id="Trav._Dis." data-name="Trav. Dis." transform="translate(4.449 20.364)" fill="#fff" font-size="10" font-family="Roboto" font-weight="500"><tspan x="0" y="0">Trav. Dis.</tspan></text>
+    <text id="Trav_Dis." data-name="Trav Dis." transform="translate(4.449 20.364)" fill="#fff" font-size="10" font-family="Roboto" font-weight="500"><tspan x="0" y="0">Trav Dis</tspan></text>
   </g>
 </svg>
