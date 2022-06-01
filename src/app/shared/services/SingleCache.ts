@@ -35,9 +35,11 @@ export class SingleCache {
     }
 
     public static setValueByName (name: string, value: any)  {
-        if (!this.checkValueInCache(name)) {
             this.instance.ob[name] = value
-        }
+    }
+
+    public static deleteValueByName (name: string) {
+        delete this.instance.ob[name]
     }
 
     public static compareValue (name: string, valueToCompare: any) {

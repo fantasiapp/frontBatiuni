@@ -1,8 +1,8 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from "@angular/core";
+import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
 import { SafeResourceUrl } from "@angular/platform-browser";
-import { Capacitor } from "@capacitor/core";
+import { merge } from "hammerjs";
+import { Destroy$ } from "src/app/shared/common/classes";
 import { delay } from "../../common/functions";
-import { ImageGenerator } from "../../services/image-generator.service";
 
 
 //simple component for showing images
@@ -12,7 +12,7 @@ import { ImageGenerator } from "../../services/image-generator.service";
   styleUrls: ['./modal-image.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ModalImage {
+export class ModalImage extends Destroy$ {
 
   @Input()
   src: SafeResourceUrl = "";
@@ -22,6 +22,7 @@ export class ModalImage {
   isMobile: boolean = true;
 
   ngOnInit() {
+    console.log("plop")
     this.isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
   }
 
@@ -115,21 +116,28 @@ export class ModalImage {
     });
   }
 
-  ngAfterViewInit() {
+  ngOnChanges(): void {
+    console.log("ngOnChanges")
     let img = document.getElementById("target")!;
-
+    console.log("image onChanges", img);
     if (!this.isMobile) {
-      img.onwheel = (event) => {
+      console.log("not mobile")
+      img.addEventListener("wheel", (event) => {
         event.preventDefault();
-
+        console.log("wheeeeeeeeel")
         this.scale += event.deltaY / 100;
         this.scale = Math.max(1, Math.min(this.scale, 10));
 
         img = document.getElementById("target")!;
         img.style.transform = `translate(${this.xTranslation}px, ${this.yTranslation}px) scale(${this.scale})`;
-      };
+      });
     } else {
       this.hammerIt(img);
     }
+  }
+
+  ngOnDestroy(): void {
+    console.log("EXPLOSION")
+    super.ngOnDestroy();
   }
 };

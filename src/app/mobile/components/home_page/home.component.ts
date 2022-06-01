@@ -709,6 +709,38 @@ export class HomeComponent extends Destroy$ {
       );
   }
 
+  validateCandidate(post: Post, candidateId: number){
+    this.store
+    .dispatch(new HandleApplication(candidateId, post, true))
+    .pipe(take(1))
+    .subscribe(() => {
+      //if successful, quit the slidemenu
+      this.openPost(null);
+      this.cd.markForCheck();
+    });
+  }
+
+  refuseCandidate(post: Post, candidateId: number){
+    this.store
+      .dispatch(new HandleApplication(candidateId, post, false))
+      .pipe(take(1))
+      .subscribe(() => {
+        this.openPost(null);
+        this.cd.markForCheck();
+      });
+  }
+
+  blockCandidate(candidateId: number){
+    let candidate = this.store.selectSnapshot(DataQueries.getById('Candidate', candidateId))     
+    this.store
+      .dispatch(new BlockCompany(candidate!.company, true))
+      .pipe(take(1))
+      .subscribe(() => {
+        this.openPost(null);
+        this.cd.markForCheck();
+      });
+  }
+
   handleApplication(post: Post, candidateId: number) {
     this.swipeupService.show({
       type: "menu",
@@ -718,40 +750,21 @@ export class HomeComponent extends Destroy$ {
           name: "Valider la candidature",
           class: "validate application-response",
           click: () => {
-            this.store
-              .dispatch(new HandleApplication(candidateId, post, true))
-              .pipe(take(1))
-              .subscribe(() => {
-                //if successful, quit the slidemenu
-                this.openPost(null);
-                this.cd.markForCheck();
-              });
+            this.popup.validateCandidate(candidateId, post, this)
           },
         },
         {
           name: "Refuser la candidature",
           class: "reject application-response",
           click: () => {
-            this.store
-              .dispatch(new HandleApplication(candidateId, post, false))
-              .pipe(take(1))
-              .subscribe(() => {
-                this.openPost(null);
-                this.cd.markForCheck();
-              });
+            this.popup.refuseCandidate(candidateId, post, this)
           },
         },
         {
           name: "Bloquer le contact",
           class: "block application-response",
           click: () => {
-            this.store
-              .dispatch(new BlockCompany(candidateId, true))
-              .pipe(take(1))
-              .subscribe(() => {
-                this.openPost(null);
-                this.cd.markForCheck();
-              });
+            this.popup.blockCandidate(candidateId, this)
           }
         },
       ],

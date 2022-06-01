@@ -252,6 +252,7 @@ import { SpacingPipe } from "../pipes/spacing.pipe";
             </div>
 
             <ng-container formGroupName="UserProfile.Company.admin">
+              
               <fileinput
                 [showtitle]="false"
                 filename="Kbis"
@@ -263,9 +264,9 @@ import { SpacingPipe } from "../pipes/spacing.pipe";
               <fileinput
                 [showtitle]="false"
                 filename="Attestation travail dissimulé"
-                formControlName="Trav. Dis"
+                formControlName="Trav Dis"
               >
-                <file-svg name="Trav. Dis" color="#054162" image></file-svg>
+                <file-svg name="Trav Dis" color="#054162" image></file-svg>
               </fileinput>
 
               <fileinput
@@ -446,9 +447,9 @@ export class ModifyProfileForm {
 
   //outputs
   onSubmit() {
-
     this.form.controls["UserProfile.Company.companyPhone"].setValue(this.form.controls["UserProfile.Company.companyPhone"].value.replace(/\s/g, ""));
     this.form.controls["UserProfile.cellPhone"].setValue(this.form.controls["UserProfile.cellPhone"].value.replace(/\s/g, ""));
+    console.log(this.form.value);
     this.submit.emit(this.form);
   }
   @Output() submit = new EventEmitter<FormGroup>();
@@ -505,7 +506,7 @@ export class ModifyProfileForm {
     "UserProfile.Company.LabelForCompany": new FormArray([]),
     "UserProfile.Company.admin": new FormGroup({
       Kbis: new FormControl(defaultFileUIOuput("admin")),
-      "Trav. Dis": new FormControl(defaultFileUIOuput("admin")),
+      "Trav Dis": new FormControl(defaultFileUIOuput("admin")),
       "RC + DC": new FormControl(defaultFileUIOuput("admin")),
       URSSAF: new FormControl(defaultFileUIOuput("admin")),
       Impôts: new FormControl(defaultFileUIOuput("admin")),

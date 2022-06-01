@@ -640,14 +640,13 @@ export class DataState {
   }
 
   @Action(BlockCompany)
-  blockCompany(ctx: StateContext<DataModel>, handle: HandleApplication) {
-    const { post, ...data } = handle;
-    return this.http.get("data", data).pipe(
+  blockCompany(ctx: StateContext<DataModel>, block: BlockCompany) {
+    return this.http.get("data", block).pipe(
       tap((response: any) => {
-        console.log("blockCompany", response)
-        if (response[handle.action] !== "OK") this.inZone(() => this.info.show("error", response.messages, 3000))
-        else this.inZone(() => this.info.show("success", response.messages, 2000));
+        if (response[block.action] !== "OK") this.inZone(() => this.info.show("error", response.messages, 3000))
+        else {delete response[block.action]; this.inZone(() => this.info.show("success", response.messages, 2000));}
       })
+
     )
   }
 
