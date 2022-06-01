@@ -53,14 +53,15 @@ export class AppComponent extends Destroy$ {
     super();
     this.mobile.init();
     this.isConnected = booleanService.isConnected
-    this.booleanService.getConnectedChangeEmitter().subscribe((value) => {
-      this.isConnected = value
-      console.log("je suis dedans", this.isConnected)
-      if(value && !this.isWhileOn){
-        this.updateUserData()
-      }
-      this.isWhileOn = value
-    })
+    // this.booleanService.getConnectedChangeEmitter().subscribe((value) => {
+    //   this.isConnected = value
+    //   console.log("je suis dedans", this.isConnected)
+    //   if(value && !this.isWhileOn){
+    //     this.updateUserData()
+    //   }
+    //   this.isWhileOn = value
+    // })
+    this.updateUserData()
   }
 
   ready$ = new AsyncSubject<true>();
@@ -86,7 +87,7 @@ export class AppComponent extends Destroy$ {
 
   async updateUserData() {
     console.log("je suis appelé (updataUserData)")
-    while(this.isConnected) {
+    while(true) {
       console.log("dans le while")
       if (!this.firstAttemptAlreadyTried){
         this.firstAttemptAlreadyTried = true

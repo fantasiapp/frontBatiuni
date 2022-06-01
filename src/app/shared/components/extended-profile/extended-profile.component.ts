@@ -27,6 +27,8 @@ import { Observable } from "rxjs";
 import { Destroy$ } from "src/app/shared/common/classes";
 import { getFileColor } from "../../common/functions";
 import { AppComponent } from "src/app/app.component";
+import { BlockCompany } from "src/models/new/user/user.actions";
+import { Router } from '@angular/router';
 
 @Component({
   selector: "extended-profile",
@@ -68,11 +70,14 @@ export class ExtendedProfileComponent extends Destroy$ {
   @Input()
   showStar: boolean = true;
 
+  deblock: boolean = false;
+
   constructor(
     private store: Store,
     private popup: PopupService,
     private cd: ChangeDetectorRef,
-    private appComponent: AppComponent
+    private appComponent: AppComponent,
+    private router: Router
   ) {
     super();
   }
@@ -113,6 +118,18 @@ export class ExtendedProfileComponent extends Destroy$ {
   //easier than requestFile, we can have direct access
   openFile(file: File) {
     this.popup.openFile(file);
+  }
+
+  deblockContact(companyId: number){
+    this.store
+      .dispatch(new BlockCompany(companyId, false))
+      .pipe(take(1))
+      .subscribe(() => {
+        console.log('Débloque le contact')
+        // this.router.navigateByUrl(['/blocked_contacts'])
+        this.cd.markForCheck();
+      });
+      console.log('All blocked companies',this.store.selectSnapshot(DataQueries.getAll('BlockedCandidate')))
   }
 
   @Output()

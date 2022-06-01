@@ -58,8 +58,11 @@
       class="flex row space-between sticky-footer full-width submit-container"
       style="background-color: white;"
       >
+      <!-- <a [routerLink]="['','home']"> Test </a> -->
       <button
+        [routerLink]="['../app/mobile/components/blocked_contacts']"
         class="button gradient font-Poppins full-width"
+        (click)="deblockContact(profile.company.id)"
       >
         Débloquer le contact
       </button>
