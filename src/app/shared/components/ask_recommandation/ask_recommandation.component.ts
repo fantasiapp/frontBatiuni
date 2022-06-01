@@ -29,9 +29,7 @@ export class AskRecommandationComponent extends Destroy$ {
     if (this.emailForm.valid) {
       this.store.dispatch(new AskRecommandation(this.emailForm.get('email')!.value, true)).pipe(take(1)).subscribe(
         async (success) => {
-          this.token = this.store.selectSnapshot(DataQueries.currentProfile).user.tokenFriend
           this.cd.markForCheck()
-          this.store.dispatch(new AskRecommandation(this.emailForm.get('email')!.value, false))
         }
       )
     }

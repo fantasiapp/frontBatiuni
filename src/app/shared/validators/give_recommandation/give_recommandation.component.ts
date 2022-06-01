@@ -1,11 +1,12 @@
+import { ThrowStmt } from "@angular/compiler";
 import {  ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { Store } from "@ngxs/store";
 import { interval, race } from "rxjs";
 import { take, takeUntil } from "rxjs/operators";
 import { Destroy$ } from "src/app/shared/common/classes";
-import { ConfirmAccount } from "src/models/auth/auth.actions";
 import { Recommandation } from "src/models/new/data.interfaces";
+import { GiveRecommandation } from "src/models/new/user/user.actions"
 
 @Component({
   selector: 'give_recommandation',
@@ -13,11 +14,12 @@ import { Recommandation } from "src/models/new/data.interfaces";
   styleUrls: ['give_recommandation.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class GiveRecommandation extends Destroy$ {
+export class GiveARecommandation extends Destroy$ {
 
   @Input()
   companyId: number = -1;
 
+  hasSentRecommandation: boolean = false;
   recommandation: Recommandation = {
     id:-1,
     firstName: "",
@@ -124,26 +126,27 @@ export class GiveRecommandation extends Destroy$ {
     return array;
   }
 
-  submitStar() {
+  submitRecommandation() {
     if (this.hasGeneralStars){
       console.log('coucou je note')
-      // this.store
-      //   .dispatch(
-      //     new Closerecommandation(
-      //       this.recommandation!.id,
-      //       this.recommandation!.qualityStars,
-      //       this.recommandation!.qualityComment,
-      //       this.recommandation!.securityStars,
-      //       this.recommandation!.securityComment,
-      //       this.recommandation!.organisationStars,
-      //       this.recommandation!.organisationComment
-      //     )
-      //   )
-      //   .pipe(take(1))
-      //   .subscribe(() => {
-      //     // this._recommandationMenu.swipeupCloserecommandation = false;
-      //     this.cd.markForCheck();
-      //   });
+      this.store.dispatch(new GiveRecommandation(
+            this.recommandation!.idCompany,
+            this.recommandation!.firstName,
+            this.recommandation!.lastName,
+            this.recommandation!.company,
+            this.recommandation!.qualityStars,
+            this.recommandation!.qualityComment,
+            this.recommandation!.securityStars,
+            this.recommandation!.securityComment,
+            this.recommandation!.organisationStars,
+            this.recommandation!.organisationComment
+          )
+        )
+        .pipe(take(1))
+        .subscribe(() => {
+          this.hasSentRecommandation = true
+          this.cd.markForCheck();
+        });
     }
   }
 

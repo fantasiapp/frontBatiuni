@@ -1,4 +1,4 @@
-<div class="recommandation cover-parent flex column center">
+<div *ngIf="!hasSentRecommandation" class="recommandation cover-parent flex column center">
   <div class="cloture-swipeup">
     <h3>Noter l'entreprise</h3>
     <!-- <h6>{{ mission!.subContractorName }}</h6> -->
@@ -36,15 +36,15 @@
       </div>
       <textarea (focusout)="textStarAction('organisation')" placeholder="Ajouter un commentaire" rows="5" cols="30" id="starTextOrganisation">{{ recommandation!.organisationComment }}</textarea>
     </div>
-    <button [ngClass]="classSubmit" (click)="submitStar()">Envoyer la recommandation</button>
+    <button [ngClass]="classSubmit" (click)="submitRecommandation()">Envoyer la recommandation</button>
   </div>
 </div>
 
-<!-- <ng-template #waiting_tpl>
+<ng-template *ngIf="hasSentRecommandation" #waiting_tpl>
   <div class="ripple">
     <div></div>
     <div></div>
   </div>
-  <p class="confirmed-with-success">{{ content }} {{ points }}</p>
+  <p class="confirmed-with-success">Merci pour votre recommandation</p>
 
-</ng-template> -->
+</ng-template>
