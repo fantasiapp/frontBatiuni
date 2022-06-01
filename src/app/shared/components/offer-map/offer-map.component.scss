@@ -1,0 +1,95 @@
+@use 'src/styles/mixins' as *;
+@use 'src/styles/variables' as *;
+@use "src/styles/responsive" as *; 
+
+:host {
+  display: flex;
+  touch-action: unset !important;
+  -webkit-user-drag: unset !important
+}
+
+.entreprise, .metier {
+  color: #333333;
+  font-size: 16px;
+}
+
+.man-pow{
+  color: #797979;
+  font-size: 14px;
+}
+
+.address {
+  white-space: pre;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: lighter;
+  font-size: 14px;
+  color: #999999;
+}
+
+.date {
+  color: #000000;
+  font-size: 14px;
+}
+
+.container {
+  display: flex;
+  background: $bg-white;
+  padding: $item-padding;
+  color: $light;
+  justify-content: center;
+  flex-shrink: 0;
+  border-radius: 5px;
+  width: 100%;
+  box-shadow: 10px 24px 54px #00000024; // x y spread outline color
+  // overflow: hidden;
+  // position: relative;
+}
+
+.boosted {
+  border-color: rgb(255, 196, 37);
+  border-width: 3px;
+  border-style: solid;
+}
+
+.offres-infos {
+  flex : 1;
+  white-space: nowrap;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  row-gap: 0.5rem;
+  padding-right: 2rem;
+  font-family: Roboto;
+}
+
+
+.showDesktopOption {
+  ul {
+    list-style-type: none;
+  }
+  padding: 1rem;
+  position: absolute;
+  background-color: $bg-white;
+  min-width: 160px;
+  overflow: auto;
+  border-radius: 12px;
+  right:0;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index:1500;
+}
+
+
+.offer-logo {
+  width: 5rem;
+  
+  .imageProfile {
+    border-radius: 50%;
+    width: 5rem;
+    height: 5rem;
+    object-fit: cover;
+    
+  }
+}
+
+

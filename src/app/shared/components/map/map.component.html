@@ -9,11 +9,11 @@
         [profile]="{company: currentCompany!}" 
         [availability]="currentAvailability">
     </sos-card-map>
-    <offer 
+    <offer-map 
         (click)="postClick.emit(currentPost)" 
         *ngIf="currentPost && view == 'ST'"
         [deletable]="true" 
         [post]="currentPost" 
-        [view]="'PME'" >
-    </offer> 
+        >
+    </offer-map> 
 </div>

@@ -358,7 +358,7 @@ export class PopupService {
       type: "component",
       component: FileViewer,
       init: (viewer: FileViewer) => {
-        viewer.fileContextList = [context];
+        viewer.fileContext = context;
       },
       close: () => {
         this.downloader.clearContext(context);

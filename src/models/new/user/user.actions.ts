@@ -288,7 +288,7 @@ export class HandleApplication {
 export class BlockCompany {
   static readonly type = 'block a company';
   action = 'blockCompany';
-  constructor(public candidateId: number, public status: boolean) {}
+  constructor(public companyId: number, public status: boolean) {}
 }
 
 export class SignContract {

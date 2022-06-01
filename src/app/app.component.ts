@@ -20,6 +20,8 @@ import { delay } from "./shared/common/functions";
 import { waitForAsync } from "@angular/core/testing";
 import { NotifService } from "./shared/services/notif.service";
 import { getMessaging, getToken, onMessage} from "firebase/messaging"
+import { initializeApp } from "firebase/app";
+import { BooleanService } from "./shared/services/boolean.service";
 
 @Component({
   selector: "app-root",
@@ -43,12 +45,23 @@ export class AppComponent extends Destroy$ {
 
   title = 'af-notification'
   message : any = null
-  public isConnected: boolean = false;
+  isConnected: boolean;
+  isWhileOn: boolean = false;
+  app: any
 
-  constructor(private store: Store, private mobile: Mobile, private notifService: NotifService) {
+  constructor(private store: Store, private mobile: Mobile, private notifService: NotifService, private booleanService: BooleanService) {
     super();
     this.mobile.init();
-    this.updateUserData();
+    this.isConnected = booleanService.isConnected
+    // this.booleanService.getConnectedChangeEmitter().subscribe((value) => {
+    //   this.isConnected = value
+    //   console.log("je suis dedans", this.isConnected)
+    //   if(value && !this.isWhileOn){
+    //     this.updateUserData()
+    //   }
+    //   this.isWhileOn = value
+    // })
+    this.updateUserData()
   }
 
   ready$ = new AsyncSubject<true>();
@@ -61,8 +74,11 @@ export class AppComponent extends Destroy$ {
     this.executeGetGeneralData()
     this.ready$.next(true);
     this.ready$.complete();
+    this.app = initializeApp(environment.firebase)
     this.requestPermission()
     this.listen()
+
+
   }
 
   prepareRoute(outlet: RouterOutlet) {
@@ -70,8 +86,16 @@ export class AppComponent extends Destroy$ {
   }
 
   async updateUserData() {
-    while(this.isConnected) {
-      if (this.readyToUpdate) {
+    console.log("je suis appelé (updataUserData)")
+    while(false) {
+      console.log("dans le while")
+      if (!this.firstAttemptAlreadyTried){
+        this.firstAttemptAlreadyTried = true
+        this.readyToUpdate = false
+        await delay(20000)
+        this.readyToUpdate = true
+      }
+      else if (this.readyToUpdate) {
         this.executeGetGeneralData() // supposed to be this.readyToUpdate
         this.readyToUpdate = false
         this.getUserData()
@@ -112,17 +136,22 @@ export class AppComponent extends Destroy$ {
   }
 
   requestPermission() {
-    const messaging = getMessaging()
-    getToken(messaging, {vapidKey : environment.firebase.vapidKey}).then((currentToken) => {
-        if (currentToken) {console.log("we got the token", currentToken)}
-        else {console.log('No registration token available. Request permission to generate one.')}
-      }).catch((err) => {
-        console.log('An error occurred while retrieving token. ', err)
+    const messaging: any = getMessaging(this.app)
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("./firebase-messaging-sw.js").then((registration) => {
+        getToken(messaging, {vapidKey : environment.firebase.vapidKey, serviceWorkerRegistration: registration}).then((currentToken) => {
+          if (currentToken) {console.log("we got the token", currentToken)}
+          else {console.log('No registration token available. Request permission to generate one.')}
+        }).catch((err) => {
+          console.log('An error occurred while retrieving token. ', err)
+        })
       })
+    }
+
   }
 
   listen() {
-    const messaging = getMessaging()
+    const messaging = getMessaging(this.app)
     onMessage(messaging, (payload) => {
       console.log('Message received. ', payload)
       this.message = payload

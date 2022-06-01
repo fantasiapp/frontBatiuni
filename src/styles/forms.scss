@@ -162,8 +162,10 @@
 
   .form-section-title {
     @extend .form-title;
-    color: $secondaryBackground;
+    color: #0D5A87;
     font-family: "Poppins";
+    font-size: 18px;
+    font-weight: medium;
   }
 
   .form-subtitle {
@@ -178,6 +180,9 @@
 .form-input {
   font-family: "Poppins";
   position: relative;
+  font-size: 16px;
+  color: #080F18;
+  margin-bottom: 0.5rem;
   // margin-bottom: $form-item-spacing;
   
 
