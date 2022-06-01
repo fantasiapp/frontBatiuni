@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
 import { SafeResourceUrl } from "@angular/platform-browser";
+import { merge } from "hammerjs";
 import { Destroy$ } from "src/app/shared/common/classes";
 
 
@@ -10,7 +11,7 @@ import { Destroy$ } from "src/app/shared/common/classes";
   styleUrls: ['./modal-image.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ModalImage extends Destroy$ {
+export class ModalImage {
 
   @Input()
   src: SafeResourceUrl = "";
@@ -115,25 +116,28 @@ export class ModalImage extends Destroy$ {
   }
 
   ngAfterViewInit() {
+    console.log("ngAfterViewInit")
     let img = document.getElementById("target")!;
 
     if (!this.isMobile) {
-      img.onwheel = (event) => {
+      console.log("not mobile")
+      img.addEventListener("wheel", (event) => {
         event.preventDefault();
-
+        console.log("wheeeeeeeeel")
         this.scale += event.deltaY / 100;
         this.scale = Math.max(1, Math.min(this.scale, 10));
 
         img = document.getElementById("target")!;
         img.style.transform = `translate(${this.xTranslation}px, ${this.yTranslation}px) scale(${this.scale})`;
-      };
+      });
     } else {
       this.hammerIt(img);
     }
+    
   }
 
-  ngOnDestroy(): void {
-    console.log("EXPLOSION")
-    super.ngOnDestroy();
-  }
+  // ngOnDestroy(): void {
+  //   console.log("EXPLOSION")
+  //   super.ngOnDestroy();
+  // }
 };

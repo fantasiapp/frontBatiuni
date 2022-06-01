@@ -39,7 +39,9 @@ export class FileDownloader {
   }
 
   clearContext(fileContext: FileContext) {
+    console.log("clearContext", fileContext);
     fileContext.url.length && URL.revokeObjectURL(fileContext.url[0]);
+    console.log("clearContext", fileContext);
   }
 
   downloadFile(file: File | number, notify: boolean = false): Observable<File> {
