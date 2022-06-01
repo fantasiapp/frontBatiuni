@@ -256,12 +256,11 @@ export class UIPopup extends DimensionMenu {
     this.store.dispatch(new ModifyDetailedPost(detailDate, detailDate.checked, datePostId)).pipe(take(1)).subscribe(() => {
       console.log('detailDate', detailDate);
       detailDate.checked = !detailDate.checked
-      console.log('detailDate', detailDate);
+      const newDetailDate = detailDate
+      newDetailDate.date = assignDate.date.date
+      console.log('newDetailDate', newDetailDate);
       
-
-      // const postDetail = this.store.selectSnapshot(DataQueries.getById('DetailedPost', detailDate.id))!
-      //to do
-      this.popupService.modifyPostDetailList.next(detailDate)
+      this.popupService.modifyPostDetailList.next(newDetailDate)
 
       this.cd.markForCheck();
     });
