@@ -69,6 +69,8 @@ import { Mobile } from "./services/mobile-footer.service";
 import { NotificationAgendaComponent } from './components/notification-agenda/notification-agenda.component';
 import { ApplicationForm } from "./forms/application.form";
 import { ModalImage } from "./components/modal-image/modal-image.component";
+import { AskRecommandationComponent } from "./components/ask_recommandation/ask_recommandation.component";
+import { Recommandation } from "./validators/recommandation/recommandation.component";
 @NgModule({
   declarations: [
     UICheckboxComponent,
@@ -137,7 +139,9 @@ import { ModalImage } from "./components/modal-image/modal-image.component";
     RatingComponent,
     SlideProfileComponent,
     NotificationAgendaComponent,
-    ModalImage
+    ModalImage,
+    AskRecommandationComponent,
+    Recommandation
   ],
   imports: [
     CommonModule,
@@ -212,6 +216,7 @@ import { ModalImage } from "./components/modal-image/modal-image.component";
     FileViewer,
     RatingComponent,
     SlideProfileComponent,
+    Recommandation
   ],
   providers: [ImageGenerator, FileDownloader, FilterService, Mobile]
 })

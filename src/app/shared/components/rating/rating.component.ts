@@ -45,6 +45,7 @@ export class RatingComponent extends UIOpenMenu {
   missions: Mission[] | undefined;
   ratingInfos?: ratingInfo[];
   company: Company | undefined;
+  openRecommandationMenu: boolean = false;
   
   constructor(private info: InfoService, private store: Store) {
     super()
@@ -114,8 +115,8 @@ export class RatingComponent extends UIOpenMenu {
     super.open = value   
   }
 
-  askRecommandation() {
-    
+  openRecommandation() {
+    this.openRecommandationMenu = true
   }
   
   close() {

@@ -28,7 +28,6 @@ import { MailSender } from "./components/only_mail/only.mail";
 import { ApplicationsComponent } from "./components/applications/applications.component";
 import { InviteFriendsComponent } from "./components/invite_friends/invite_friends.component";
 import { SuiviChantierDateContentComponent } from './components/suivi_chantier_date-content/suivi_chantier_date-content.component';
-import { AskRecommandationComponent } from "./components/ask_recommandation/ask_recommandation.component"
 
 @NgModule({
   declarations: [
@@ -55,8 +54,7 @@ import { AskRecommandationComponent } from "./components/ask_recommandation/ask_
     MailSender,
     ApplicationsComponent,
     InviteFriendsComponent,
-    SuiviChantierDateContentComponent,
-    AskRecommandationComponent
+    SuiviChantierDateContentComponent
   ],
   imports: [
     CommonModule,
