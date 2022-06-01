@@ -1,7 +1,7 @@
 <p *ngIf="!fileContext; else showFile"> Aucun fichier à afficher. </p>
 
 <ng-template #showFile>
-    <ng-container *ngIf="fileContext.type.startsWith('image'); then image; else object"></ng-container>
+    <ng-container *ngIf="fileContext.type.startsWith('image') || fileContext.type.endsWith('pdf'); then image; else object"></ng-container>
 
     <ng-template #image>
       <ng-container *ngFor="let safeUrl of fileContext.safeUrl" >
