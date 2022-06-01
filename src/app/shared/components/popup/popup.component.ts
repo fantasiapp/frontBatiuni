@@ -227,8 +227,7 @@ export class UIPopup extends DimensionMenu {
       const newTask = missionPostDetail[missionPostDetail.length - 1];
       console.log('NewTask,', newTask);
       
-      
-      assignDate.date.allPostDetails = this.store.selectSnapshot(DataQueries.getMany("DetailedPost", mission!.details));
+      // assignDate.date.allPostDetails = this.store.selectSnapshot(DataQueries.getMany("DetailedPost", mission!.details));
       // this.popupService.addPostDetailList.next(newTask);
       const newTaskSupervision = this.store.selectSnapshot(DataQueries.getMany("Supervision", newTask.supervisions))
       const detailDate: PostDetailGraphic = {
@@ -240,6 +239,7 @@ export class UIPopup extends DimensionMenu {
         supervisions: newTaskSupervision,
         checked: true
       }
+      assignDate.date.allPostDetails.push(detailDate)
       console.log('detailDAte,', detailDate);
       assignDate.date.postDetails.push(detailDate)
       this.popupService.modifyPostDetailList.next(detailDate)
