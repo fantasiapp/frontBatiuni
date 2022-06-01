@@ -76,8 +76,6 @@ export class AppComponent extends Destroy$ {
     this.app = initializeApp(environment.firebase)
     this.requestPermission()
     this.listen()
-
-
   }
 
   prepareRoute(outlet: RouterOutlet) {
@@ -95,7 +93,7 @@ export class AppComponent extends Destroy$ {
         this.readyToUpdate = true
       }
       else if (this.readyToUpdate) {
-        this.executeGetGeneralData() // supposed to be this.readyToUpdate
+        this.executeGetGeneralData() 
         this.readyToUpdate = false
         this.getUserData()
         await delay(20000)

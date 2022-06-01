@@ -22,6 +22,7 @@ import {
   InviteFriend,
   ValidateMissionDate,
   BoostPost,
+  AskRecommandation,
 } from "./user/user.actions";
 import {
   ApplyPost,
@@ -252,26 +253,27 @@ export class DataState {
   }
 
   updateLocalData(ctx: StateContext<DataModel>, response: any) {
-    console.log("update local data", response)
-    const loadOperations = this.reader.readInitialData(response),
-    sessionOperation = this.reader.readCurrentSession(response);
-    if (!this.isFirstTime) {
-      let oldView = this.store.selectSnapshot(DataState.view)
+    if(this.booleanService.isConnected){
+      console.log("update local data", response)
+      const loadOperations = this.reader.readInitialData(response),
+      sessionOperation = this.reader.readCurrentSession(response);
+      if (!this.isFirstTime) {
+        let oldView = this.store.selectSnapshot(DataState.view)
+          ctx.setState(compose(...loadOperations, sessionOperation));
+          const state = ctx.getState();
+          ctx.patchState({session: {...state.session,view: oldView,}})
+        }
+        else {
         ctx.setState(compose(...loadOperations, sessionOperation));
-        const state = ctx.getState();
-        ctx.patchState({session: {...state.session,view: oldView,}})
-      }
-      else {
-      ctx.setState(compose(...loadOperations, sessionOperation));
-      this.isFirstTime = false
-      }
-      this.booleanService.emitLoadingChangeEvent(false)
+        this.isFirstTime = false
+        }
+        this.booleanService.emitLoadingChangeEvent(false)}
   }
 
   @Action(Logout)
   logout(ctx: StateContext<DataModel>) {
-    this.flagUpdate = true
     console.log("logout")
+    this.flagUpdate = true
     this.isFirstTime = true
     this.booleanService.emitConnectedChangeEvent(false)
     ctx.setState({ fields: {}, session: { view: "ST", currentUser: -1 , time: 0} });
@@ -946,9 +948,18 @@ export class DataState {
       })
     );
   }
+
+  @Action(AskRecommandation)
+  askRecommandation(ctx: StateContext<DataModel>, demand: AskRecommandation){
+    const user = this.store.selectSnapshot(DataQueries.currentUser);
+    return this.http.get("data", demand).pipe(
+      tap((response: any) => {
+        //write code to manage the response
+      })
+    )
+  }
 }
 //make a deep version of toJSON
-
 export class DataQueries {
   static toJson<K extends DataTypes>(
     allFields: Record<string[]>,

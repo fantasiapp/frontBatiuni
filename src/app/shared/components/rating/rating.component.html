@@ -10,7 +10,7 @@
     <profile-image [profile]="profile"></profile-image>
     <span class="company">{{ profile.company!.name }}</span>
     <stars (click)='openRatings = true' class="stars" value="{{ view == 'ST' ? profile.company!.starsST : profile.company!.starsPME  }}" disabled></stars>
-    <button *ngIf="profileRecommandation" class="recommendation-button button active"><img src="assets/mail-outline.svg" alt="recommandation">
+    <button *ngIf="profileRecommandation" class="recommendation-button button active" (click)="askRecommandation()"><img src="assets/mail-outline.svg" alt="recommandation">
       Demander une recommandation
     </button>
     <section class="full-width section modify-profile">

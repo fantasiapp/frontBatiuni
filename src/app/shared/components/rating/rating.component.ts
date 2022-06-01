@@ -113,6 +113,10 @@ export class RatingComponent extends UIOpenMenu {
     this.openRatings = value
     super.open = value   
   }
+
+  askRecommandation() {
+    
+  }
   
   close() {
     this.openRatings = false
