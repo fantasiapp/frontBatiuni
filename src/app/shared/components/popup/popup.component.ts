@@ -61,6 +61,7 @@ import { UICheckboxComponent } from "../box/checkbox.component";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { SingleCache } from "../../services/SingleCache";
 import { HomeComponent } from "src/app/mobile/components/home_page/home.component";
+import { BoosterPage } from "src/app/mobile/components/booster/booster.page";
 
 const TRANSITION_DURATION = 200;
 
@@ -120,6 +121,9 @@ export class UIPopup extends DimensionMenu {
 
   @ViewChild("blockCandidate", { read: TemplateRef, static: true })
   blockCandidate!: TemplateRef<any>;
+
+  @ViewChild("boostPost", { read: TemplateRef, static: true })
+  boostPost!: TemplateRef<any>;
 
   @Input()
   content?: Exclude<PopupView, ContextUpdate>;
@@ -326,7 +330,7 @@ export class UIPopup extends DimensionMenu {
 
 export type PredefinedPopups<T = any> = {
   readonly type: "predefined";
-  name: "deletePost" | "sign" | "setDate" | "closeMission" | "validateCandidate" | "refuseCandidate" | "blockCandidate"; // | 'closeMission'
+  name: "deletePost" | "sign" | "setDate" | "closeMission" | "validateCandidate" | "refuseCandidate" | "blockCandidate" | "boostPost"; // | 'closeMission'
   context?: TemplateContext;
 };
 
@@ -612,6 +616,37 @@ export class PopupService {
         close: () => {
           if (context.$implicit.isActive) {
             object.blockCandidate(candidateId);
+          }
+          closed$.next();
+        },
+      });
+
+      first = false;
+    }
+  }
+
+  boostPost(post: Post, boostForm: any, object: BoosterPage) {
+
+    let first: boolean = true;
+    const closed$ = new Subject<void>();
+
+    const context = {
+      $implicit: {
+        address: post.address,
+        duration: boostForm.duration,
+        isActive: false,
+      },
+    };
+
+    if (first) {
+      this.dimension$.next(this.defaultDimension);
+      this.popups$.next({
+        type: "predefined",
+        name: "boostPost",
+        context,
+        close: () => {
+          if (context.$implicit.isActive) {
+            object.boostPost();
           }
           closed$.next();
         },

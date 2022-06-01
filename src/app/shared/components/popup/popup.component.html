@@ -80,3 +80,13 @@
     <button class="button passive" (click)="close()">Non, merci</button>
   </div>
 </ng-template>
+
+<ng-template #boostPost let-context>
+  <label *ngIf="context.duration != 0">Êtes-vous sûr de vouloir <strong> Booster </strong> cette annonce à l'adresse {{ context.address }} pour {{ context.duration }} jours ?</label>
+  <label *ngIf="context.duration == 0">Êtes-vous sûr de vouloir <strong> Booster </strong> cette annonce à l'adresse {{ context.address }} jusqu'à la date d'échéance de l'annonce ?</label>
+  <div style="height:5%;"></div>
+  <div class="controls cloture">
+    <button class="button active" (click)="openActionClose(context)">Oui, je confirme </button>
+    <button class="button passive" (click)="close()">Non, merci</button>
+  </div>
+</ng-template>
