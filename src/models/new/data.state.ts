@@ -229,6 +229,7 @@ export class DataState {
     const req = this.http.get("data", { action: action.action });
     if (this.isFirstTime) {
       this.booleanService.emitLoadingChangeEvent(true)
+      this.booleanService.emitConnectedChangeEvent(true)
     }
     if (this.flagUpdate){
       this.flagUpdate = false
@@ -251,7 +252,7 @@ export class DataState {
   }
 
   updateLocalData(ctx: StateContext<DataModel>, response: any) {
-    console.log("update local data")
+    console.log("update local data", response)
     const loadOperations = this.reader.readInitialData(response),
     sessionOperation = this.reader.readCurrentSession(response);
     if (!this.isFirstTime) {
@@ -636,14 +637,13 @@ export class DataState {
   }
 
   @Action(BlockCompany)
-  blockCompany(ctx: StateContext<DataModel>, handle: HandleApplication) {
-    const { post, ...data } = handle;
-    return this.http.get("data", data).pipe(
+  blockCompany(ctx: StateContext<DataModel>, block: BlockCompany) {
+    return this.http.get("data", block).pipe(
       tap((response: any) => {
-        console.log("blockCompany", response)
-        if (response[handle.action] !== "OK") this.inZone(() => this.info.show("error", response.messages, 3000))
-        else this.inZone(() => this.info.show("success", response.messages, 2000));
+        if (response[block.action] !== "OK") this.inZone(() => this.info.show("error", response.messages, 3000))
+        else {delete response[block.action]; this.inZone(() => this.info.show("success", response.messages, 2000));}
       })
+
     )
   }
 
@@ -772,6 +772,7 @@ export class DataState {
           throw response.messages;
         }
         delete response[application.action];
+        console.log('Response', response)
         ctx.setState(
           addComplexChildren("Company", profile.company.id, "Mission", response)
         );
@@ -789,9 +790,11 @@ export class DataState {
           throw response.messages;
         }
         delete response[application.action];
+        console.log('ReponseST', response)
         ctx.setState(
           addComplexChildren("Company", profile.company.id, "Mission", response)
         );
+        console.log("Dans CloseMissionST", this.store.selectSnapshot(DataQueries.getAll("Mission")))
       })
     );
   }

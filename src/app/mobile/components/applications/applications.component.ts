@@ -52,7 +52,6 @@ export class ApplicationsComponent extends Destroy$ {
 
   postMenu = new PostMenu();
 
-  userDrafts: Post[] = [];
   userOnlinePosts: Post[] = [];
   allOnlinePosts: Post[] = [];
   allCandidatedPost: Post[] = [];
@@ -70,22 +69,16 @@ export class ApplicationsComponent extends Destroy$ {
     combineLatest([this.profile$, this.posts$])
       .pipe(takeUntil(this.destroy$))
       .subscribe(([profile, posts]) => {
-        const mapping = splitByOutput(posts, (post) => {
+      const mapping = splitByOutput(posts, (post) => {
           //0 -> userOnlinePosts | 1 -> userDrafts
-          if (profile.company.posts.includes(post.id))
-            return post.draft
-              ? this.symbols.userDraft
-              : this.symbols.userOnlinePost;
-
-          return post.draft
-            ? this.symbols.discard
-            : this.symbols.otherOnlinePost;
+          if (profile.company.posts.includes(post.id)){
+            return post.draft ? this.symbols.userDraft : this.symbols.userOnlinePost;
+          }
+          return post.draft ? this.symbols.discard : this.symbols.otherOnlinePost;
         });
-
         const otherOnlinePost = mapping.get(this.symbols.otherOnlinePost) || [];
-        this.userDrafts = mapping.get(this.symbols.userDraft) || [];
-        this.userOnlinePosts = mapping.get(this.symbols.userOnlinePost) || [];
         this.allOnlinePosts = [...otherOnlinePost, ...this.userOnlinePosts];
+
       });
     this.time = this.store.selectSnapshot(DataState.time);
 
@@ -109,19 +102,8 @@ export class ApplicationsComponent extends Destroy$ {
     this.selectSearch('');
   }
 
-  async test() {
-    let bool = true
-    while(true) {
-      if (bool){
-        bool = false
-        await delay(5000)
-        bool=true}
-    }
-  }
-
   ngAfterViewInit() {
     this.cd.markForCheck;
-    this.test()
   }
 
   selectPost(filter: any) {
@@ -180,7 +162,6 @@ export class ApplicationsComponent extends Destroy$ {
   }
 
   selectSearch(searchForm:  string){
-    ("ho")
     this.userOnlinePosts = [];
     if (searchForm == "" || searchForm == null)  {
       this.userOnlinePosts = this.allCandidatedPost
@@ -214,7 +195,6 @@ export class ApplicationsComponent extends Destroy$ {
     //   // this.annonceResume.open()
     // }, 20);
     this.cd.markForCheck;    
-
   }
 
   ngOnDestroy(): void {

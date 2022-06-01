@@ -187,6 +187,7 @@ export class HomeComponent extends Destroy$ {
 
   async lateInit() {
       if (!this.isLoading) {
+        console.log('lateinit', this.store.selectSnapshot(DataQueries.getAll('BlockedCandidate')))
       this.info.alignWith("header_search");
       combineLatest([this.profile$, this.posts$])
         .pipe(takeUntil(this.destroy$))
@@ -744,8 +745,9 @@ export class HomeComponent extends Destroy$ {
           name: "Bloquer le contact",
           class: "block application-response",
           click: () => {
+            let candidate = this.store.selectSnapshot(DataQueries.getById('Candidate', candidateId))     
             this.store
-              .dispatch(new BlockCompany(candidateId, true))
+              .dispatch(new BlockCompany(candidate!.company, true))
               .pipe(take(1))
               .subscribe(() => {
                 this.openPost(null);

@@ -9,6 +9,9 @@ import { getUserDataService } from "src/app/shared/services/getUserData.service"
 import { SlidemenuService } from "src/app/shared/components/slidemenu/slidemenu.component";
 import { ExtendedProfileComponent } from "src/app/shared/components/extended-profile/extended-profile.component";
 import { Observable } from "rxjs";
+import { BlockCompany } from "src/models/new/user/user.actions";
+import { take } from "rxjs/operators";
+import { PopupService } from "src/app/shared/components/popup/popup.component";
 
 @Component({
     selector: "blocked_contacts",
@@ -33,18 +36,20 @@ export class BlockedContactsComponent extends Destroy$ {
         private info: InfoService, 
         private appComponent: AppComponent, 
         private cd: ChangeDetectorRef,
-        private getUserDataService: getUserDataService
+        private getUserDataService: getUserDataService,
       ) {
         super();
     }
 
     ngOnInit() {
       this.info.alignWith('header_search');
-      this.companies$.subscribe((companies) => {
-        for (const company of companies) {
-          this.blockedCompanies.push(company);    
-        } 
-      })      
+      const user = this.store.selectSnapshot(DataQueries.currentUser);
+      let userCompany = this.store.selectSnapshot(DataQueries.getById('Company', user.company))
+      let allBlockedCompanies = this.store.selectSnapshot(DataQueries.getAll('BlockedCandidate'))
+      let blockedCompaniesData = allBlockedCompanies.filter((company) => company.blocker == userCompany!.id && company.status == true)
+      let blockedCompaniesId = blockedCompaniesData.map(company => company.blocked)
+      this.blockedCompanies = this.store.selectSnapshot(DataQueries.getMany('Company', blockedCompaniesId))
+      console.log("All companies blocked", this.store.selectSnapshot(DataQueries.getAll('BlockedCandidate')))
       this.cd.markForCheck;
     }
 
@@ -61,7 +66,8 @@ export class BlockedContactsComponent extends Destroy$ {
             component.showView = "ST";
             component.showSwitch = false;
             component.showRecomandation = false;
-            component.showStar = true
+            component.showStar = true;
+            component.showDeblockButton = true;
           },
         });
     }

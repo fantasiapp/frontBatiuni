@@ -35,7 +35,7 @@
     
     <hr class="dashed"/>
     <section class="full-width documents">
-      <!-- <h4>Documents importants</h4> -->
+      <h3>Documents importants</h3>
       <div class="documents-grid">
         <file-svg *ngFor="let file of attachedFiles" [name]="file.name" [color]="getFileColor(file.name)" (click)="openFile(file)"></file-svg>
       </div>
@@ -52,6 +52,22 @@
         </ul>
       </section>
     </ng-container>
+
+    <ng-container *ngIf="showDeblockButton">
+      <footer
+      class="flex row space-between sticky-footer full-width submit-container"
+      style="background-color: white;"
+      >
+      <!-- <a [routerLink]="['','home']"> Test </a> -->
+      <button
+        [routerLink]="['../app/mobile/components/blocked_contacts']"
+        class="button gradient font-Poppins full-width"
+        (click)="deblockContact(profile.company.id)"
+      >
+        Débloquer le contact
+      </button>
+      </footer>
+      </ng-container>
 
     <!-- <div style="height: 1rem; width: 100%;"></div> -->
   </div>

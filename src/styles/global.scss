@@ -319,6 +319,7 @@ input, textarea {
 }
 .radio-item {
   font-size: 0.9em;
+  margin-top: 0.5rem;
 }
 
 .radio-container {
@@ -502,7 +503,7 @@ input[type=number] {
 .modal {
   position: fixed; /* Stay in place */
   z-index: 11; /* Sit on top */
-  padding-top: 100px; /* Location of the box */
+  padding: 10%; /* Location of the box */
   left: 0;
   top: 0;
   width: 100%; /* Full width */
@@ -522,7 +523,7 @@ input[type=number] {
   display: block;
   width: 100%;
   animation-name: zoom;
-  animation-duration: 0.6s;
+  animation-duration: 0.3s;
 }
 
 @keyframes zoom {
