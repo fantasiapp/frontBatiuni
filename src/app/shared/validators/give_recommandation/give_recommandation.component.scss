@@ -1,0 +1,34 @@
+@use 'src/styles/variables' as *;
+@use 'src/styles/mixins' as *;
+@use "src/styles/effects" as *;
+
+:host {
+  font-family: "Poppins";
+  @extend %absolute-cover;
+  background-color: $buttonGradient;
+}
+
+.recommandation {   
+  .success-circle {
+    @include circle(80px, $landingColor);
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 70px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+    text-align: center;
+  }
+}
+
+button {
+  background-color: $infosColor;
+  color:#FFFFFF;
+  width: 60%;
+  max-width: 200px;
+}
+
+p {
+  color: #FFFFFF;
+  margin-top: 25px;
+  margin-bottom: 100px;
+}
+
+.ripple {
+  @extend %ripple;
+}

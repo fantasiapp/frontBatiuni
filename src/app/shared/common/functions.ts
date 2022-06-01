@@ -151,7 +151,7 @@ const fileColors: { [key: string]: string } = {
   impôts: "#156C9D",
   kbis: "#156C9D",
   urssaf: "#F9C067",
-  "trav. dis": "#054162",
+  "trav dis": "#054162",
   "rc + dc": "#999999",
   "congés payés": "32A290",
 };

@@ -46,6 +46,8 @@ import {
   DatePost,
   PostDateAvailableTask,
   PostDetail,
+  User,
+  Post,
 } from "src/models/new/data.interfaces";
 import { DataQueries, DataState } from "src/models/new/data.state";
 import { FileContext, FileViewer } from "../file-viewer/file-viewer.component";
@@ -59,6 +61,9 @@ import { SuiviChantierDateContentComponent } from "src/app/mobile/components/sui
 import { UICheckboxComponent } from "../box/checkbox.component";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { SingleCache } from "../../services/SingleCache";
+import { HomeComponent } from "src/app/mobile/components/home_page/home.component";
+import { BoosterPage } from "src/app/mobile/components/booster/booster.page";
+import { UIAnnonceResume } from "src/app/mobile/ui/annonce-resume/annonce-resume.ui";
 
 const TRANSITION_DURATION = 200;
 
@@ -110,6 +115,21 @@ export class UIPopup extends DimensionMenu {
 
   @ViewChild("closeMission", { read: TemplateRef, static: true })
   closeMission!: TemplateRef<any>;
+
+  @ViewChild("validateCandidate", { read: TemplateRef, static: true })
+  validateCandidate!: TemplateRef<any>;
+
+  @ViewChild("refuseCandidate", { read: TemplateRef, static: true })
+  refuseCandidate!: TemplateRef<any>;
+
+  @ViewChild("blockCandidate", { read: TemplateRef, static: true })
+  blockCandidate!: TemplateRef<any>;
+
+  @ViewChild("boostPost", { read: TemplateRef, static: true })
+  boostPost!: TemplateRef<any>;
+
+  @ViewChild("onApply", { read: TemplateRef, static: true })
+  onApply!: TemplateRef<any>;
 
   @Input()
   content?: Exclude<PopupView, ContextUpdate>;
@@ -227,8 +247,7 @@ export class UIPopup extends DimensionMenu {
       const newTask = missionPostDetail[missionPostDetail.length - 1];
       console.log('NewTask,', newTask);
       
-      
-      assignDate.date.allPostDetails = this.store.selectSnapshot(DataQueries.getMany("DetailedPost", mission!.details));
+      // assignDate.date.allPostDetails = this.store.selectSnapshot(DataQueries.getMany("DetailedPost", mission!.details));
       // this.popupService.addPostDetailList.next(newTask);
       const newTaskSupervision = this.store.selectSnapshot(DataQueries.getMany("Supervision", newTask.supervisions))
       const detailDate: PostDetailGraphic = {
@@ -240,6 +259,7 @@ export class UIPopup extends DimensionMenu {
         supervisions: newTaskSupervision,
         checked: true
       }
+      assignDate.date.allPostDetails.push(detailDate)
       console.log('detailDAte,', detailDate);
       assignDate.date.postDetails.push(detailDate)
       this.popupService.modifyPostDetailList.next(detailDate)
@@ -256,12 +276,11 @@ export class UIPopup extends DimensionMenu {
     this.store.dispatch(new ModifyDetailedPost(detailDate, detailDate.checked, datePostId)).pipe(take(1)).subscribe(() => {
       console.log('detailDate', detailDate);
       detailDate.checked = !detailDate.checked
-      console.log('detailDate', detailDate);
+      const newDetailDate = detailDate
+      newDetailDate.date = assignDate.date.date
+      console.log('newDetailDate', newDetailDate);
       
-
-      // const postDetail = this.store.selectSnapshot(DataQueries.getById('DetailedPost', detailDate.id))!
-      //to do
-      this.popupService.modifyPostDetailList.next(detailDate)
+      this.popupService.modifyPostDetailList.next(newDetailDate)
 
       this.cd.markForCheck();
     });
@@ -302,7 +321,7 @@ export class UIPopup extends DimensionMenu {
 
 export type PredefinedPopups<T = any> = {
   readonly type: "predefined";
-  name: "deletePost" | "sign" | "setDate" | "closeMission"; // | 'closeMission'
+  name: "deletePost" | "sign" | "setDate" | "closeMission" | "validateCandidate" | "refuseCandidate" | "blockCandidate" | "boostPost" | "onApply"; // | 'closeMission'
   context?: TemplateContext;
 };
 
@@ -495,6 +514,166 @@ export class PopupService {
         close: () => {
           if (context.$implicit.isActive) {
             object.openCloseMission();
+          }
+          closed$.next();
+        },
+      });
+
+      first = false;
+    }
+  }
+
+  validateCandidate(candidateId: number, post: Post, object: HomeComponent) {
+    let candidate = this.store.selectSnapshot(DataQueries.getById('Candidate', candidateId))
+    let companies = this.store.selectSnapshot(DataQueries.getAll('Company'))
+    let candidateCompany = companies.filter(company => company.id == candidate?.company)
+    let first: boolean = true;
+    const closed$ = new Subject<void>();
+
+    const context = {
+      $implicit: {
+        name: candidateCompany[0].name,
+        isActive: false,
+      },
+    };
+
+    if (first) {
+      this.dimension$.next(this.defaultDimension);
+      this.popups$.next({
+        type: "predefined",
+        name: "validateCandidate",
+        context,
+        close: () => {
+          if (context.$implicit.isActive) {
+            object.validateCandidate(post, candidateId);
+          }
+          closed$.next();
+        },
+      });
+
+      first = false;
+    }
+  }
+
+  refuseCandidate(candidateId: number, post: Post, object: HomeComponent) {
+    let candidate = this.store.selectSnapshot(DataQueries.getById('Candidate', candidateId))
+    let companies = this.store.selectSnapshot(DataQueries.getAll('Company'))
+    let candidateCompany = companies.filter(company => company.id == candidate?.company)
+    let first: boolean = true;
+    const closed$ = new Subject<void>();
+
+    const context = {
+      $implicit: {
+        name: candidateCompany[0].name,
+        isActive: false,
+      },
+    };
+
+    if (first) {
+      this.dimension$.next(this.defaultDimension);
+      this.popups$.next({
+        type: "predefined",
+        name: "refuseCandidate",
+        context,
+        close: () => {
+          if (context.$implicit.isActive) {
+            object.refuseCandidate(post, candidateId);
+          }
+          closed$.next();
+        },
+      });
+
+      first = false;
+    }
+  }
+
+  blockCandidate(candidateId: number, object: HomeComponent) {
+    let candidate = this.store.selectSnapshot(DataQueries.getById('Candidate', candidateId))
+    let companies = this.store.selectSnapshot(DataQueries.getAll('Company'))
+    let candidateCompany = companies.filter(company => company.id == candidate?.company)
+    let first: boolean = true;
+    const closed$ = new Subject<void>();
+
+    const context = {
+      $implicit: {
+        name: candidateCompany[0].name,
+        isActive: false,
+      },
+    };
+
+    if (first) {
+      this.dimension$.next(this.defaultDimension);
+      this.popups$.next({
+        type: "predefined",
+        name: "blockCandidate",
+        context,
+        close: () => {
+          if (context.$implicit.isActive) {
+            object.blockCandidate(candidateId);
+          }
+          closed$.next();
+        },
+      });
+
+      first = false;
+    }
+  }
+
+  boostPost(post: Post, boostForm: any, object: BoosterPage) {
+
+    let first: boolean = true;
+    const closed$ = new Subject<void>();
+
+    const context = {
+      $implicit: {
+        address: post.address,
+        duration: boostForm.duration,
+        isActive: false,
+      },
+    };
+
+    if (first) {
+      this.dimension$.next(this.defaultDimension);
+      this.popups$.next({
+        type: "predefined",
+        name: "boostPost",
+        context,
+        close: () => {
+          if (context.$implicit.isActive) {
+            object.boostPost();
+          }
+          closed$.next();
+        },
+      });
+
+      first = false;
+    }
+  }
+
+  onApply(post: Post, object: UIAnnonceResume) {
+
+    let first: boolean = true;
+    const closed$ = new Subject<void>();
+
+    const context = {
+      $implicit: {
+        address: post.address,
+        name: post.contactName,
+        startDate: post.startDate,
+        endDate: post.endDate,
+        isActive: false,
+      },
+    };
+
+    if (first) {
+      this.dimension$.next(this.defaultDimension);
+      this.popups$.next({
+        type: "predefined",
+        name: "onApply",
+        context,
+        close: () => {
+          if (context.$implicit.isActive) {
+            object.onApply();
           }
           closed$.next();
         },

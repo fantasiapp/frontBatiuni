@@ -54,3 +54,49 @@
     <button class="button passive" (click)="close()">Annuler</button>
   </div>
 </ng-template>
+
+<ng-template #validateCandidate let-context>
+  <label>Vous avez bien validé la candidature de  {{ context.name }}</label>
+  <label>Veuillez confirmez votre opération pour recevoir le contrat !</label>
+  <div style="height:5%;"></div>
+  <div class="controls cloture">
+    <button class="button active" (click)="openActionClose(context)">Confirmer</button>
+    <button class="button passive" (click)="close()">Annuler</button>
+  </div>
+</ng-template>
+
+<ng-template #refuseCandidate let-context>
+  <label>Souhaitez-vous refuser la candidature de {{ context.name }} ?</label>
+  <div style="height:5%;"></div>
+  <div class="controls cloture">
+    <button class="button active" (click)="openActionClose(context)">Oui, je refuse</button>
+    <button class="button passive" (click)="close()">Non, merci</button>
+  </div>
+</ng-template>
+
+<ng-template #blockCandidate let-context>
+  <label>Souhaitez-vous bloquer {{ context.name }} ?</label>
+  <div style="height:5%;"></div>
+  <div class="controls cloture">
+    <button class="button active" (click)="openActionClose(context)">Oui, je bloque</button>
+    <button class="button passive" (click)="close()">Non, merci</button>
+  </div>
+</ng-template>
+
+<ng-template #boostPost let-context>
+  <label *ngIf="context.duration != 0">Êtes-vous sûr de vouloir <strong> Booster </strong> cette annonce à l'adresse {{ context.address }} pour {{ context.duration }} jours ?</label>
+  <label *ngIf="context.duration == 0">Êtes-vous sûr de vouloir <strong> Booster </strong> cette annonce à l'adresse {{ context.address }} jusqu'à la date d'échéance de l'annonce ?</label>
+  <div style="height:5%;"></div>
+  <div class="controls cloture">
+    <button class="button active" (click)="openActionClose(context)">Oui, je confirme </button>
+    <button class="button passive" (click)="close()">Non, merci</button>
+  </div>
+</ng-template>
+
+<ng-template #onApply let-context>
+  <label>Vous êtes sur le point de postuler à l'offre {{ context.address }} au sein de l'entreprise {{ context.name }} du {{context.startDate}} au {{context.endDate}}?</label>  <div style="height:5%;"></div>
+  <div class="controls cloture">
+    <button class="button active" (click)="openActionClose(context)">Confirmer </button>
+    <button class="button passive" (click)="close()">Annuler</button>
+  </div>
+</ng-template>

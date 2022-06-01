@@ -377,6 +377,18 @@ export class BoostPost {
   constructor(public postId: number, public duration: number) {}
 }
 
+export class AskRecommandation {
+  static readonly type = 'ask for a recommandation';
+  action = 'askRecommandation';
+  constructor(public mail: string, public register: boolean) {}
+}
+
+export class GiveRecommandation {
+  static readonly type = 'give a recommandation';
+  action = 'giveRecommandation';
+  constructor(public companyId: number, public firstName: string, public lastName: string, public company: string, public qualityStars:number, public qualityComment:string, public securityStars:number, public securityComment:string, public organisationStars:number, public organisationComment:string) {}
+}
+
 // export class ContractSignature {
 //   static readonly type = '[User] Contract Signature';
 //   action = 'downloadContract';

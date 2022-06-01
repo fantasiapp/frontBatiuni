@@ -22,6 +22,8 @@ import {
   InviteFriend,
   ValidateMissionDate,
   BoostPost,
+  AskRecommandation,
+  GiveRecommandation,
 } from "./user/user.actions";
 import {
   ApplyPost,
@@ -252,26 +254,27 @@ export class DataState {
   }
 
   updateLocalData(ctx: StateContext<DataModel>, response: any) {
-    console.log("update local data", response)
-    const loadOperations = this.reader.readInitialData(response),
-    sessionOperation = this.reader.readCurrentSession(response);
-    if (!this.isFirstTime) {
-      let oldView = this.store.selectSnapshot(DataState.view)
+    if(this.booleanService.isConnected){
+      console.log("update local data", response)
+      const loadOperations = this.reader.readInitialData(response),
+      sessionOperation = this.reader.readCurrentSession(response);
+      if (!this.isFirstTime) {
+        let oldView = this.store.selectSnapshot(DataState.view)
+          ctx.setState(compose(...loadOperations, sessionOperation));
+          const state = ctx.getState();
+          ctx.patchState({session: {...state.session,view: oldView,}})
+        }
+        else {
         ctx.setState(compose(...loadOperations, sessionOperation));
-        const state = ctx.getState();
-        ctx.patchState({session: {...state.session,view: oldView,}})
-      }
-      else {
-      ctx.setState(compose(...loadOperations, sessionOperation));
-      this.isFirstTime = false
-      }
-      this.booleanService.emitLoadingChangeEvent(false)
+        this.isFirstTime = false
+        }
+        this.booleanService.emitLoadingChangeEvent(false)}
   }
 
   @Action(Logout)
   logout(ctx: StateContext<DataModel>) {
-    this.flagUpdate = true
     console.log("logout")
+    this.flagUpdate = true
     this.isFirstTime = true
     this.booleanService.emitConnectedChangeEvent(false)
     ctx.setState({ fields: {}, session: { view: "ST", currentUser: -1 , time: 0} });
@@ -680,8 +683,10 @@ export class DataState {
         // delete response[application.action];
         console.log("createDetailedPost", response)
         ctx.setState(addComplexChildren(response["type"], response["fatherId"], "DetailedPost", response["detailedPost"]))
-        if (response["detailedPost2"])
+        if (response["detailedPost2"]){
+          console.log('createDetailedPost add to Mission');
           ctx.setState(addComplexChildren("Mission", response["missionId"], "DetailedPost", response["detailedPost2"]))
+        }
       })
     );
   }
@@ -699,7 +704,9 @@ export class DataState {
         delete response[application.action]
         console.log("modifyDetailedPost", response)
         if (response["deleted"] == "yes") {
-          ctx.setState(deleteIds("DatePost", [response["detailedPostId"]]));
+          console.log('modifyDetailedPost', response['detailedPostId']);
+          ctx.setState(deleteIds("DetailedPost", [response["detailedPostId"]]));
+          ctx.setState(update('DatePost', response["datePost"]));
         } else if (response["type"] == "DatePost") {
           console.log("modifyDetailedPost", response, response["detailedPost"])
           ctx.setState(addComplexChildren(response["type"], response["fatherId"], "DetailedPost", response["detailedPost"]))
@@ -946,9 +953,29 @@ export class DataState {
       })
     );
   }
+
+  @Action(AskRecommandation)
+  askRecommandation(ctx: StateContext<DataModel>, demand: AskRecommandation){
+    const user = this.store.selectSnapshot(DataQueries.currentUser);
+    return this.http.get("data", demand).pipe(
+      tap((response: any) => {
+        //write code to manage the response
+      })
+    )
+  }
+
+  @Action(GiveRecommandation)
+  giveRecommandation(ctx: StateContext<DataModel>, application : AskRecommandation){
+    const user = this.store.selectSnapshot(DataQueries.currentUser);
+    return this.http.get("data", application).pipe(
+      tap((response: any) => {
+        //write code to manage the response
+        ctx.setState(addValues("Recommandation", response))
+      })
+    )
+  }
 }
 //make a deep version of toJSON
-
 export class DataQueries {
   static toJson<K extends DataTypes>(
     allFields: Record<string[]>,

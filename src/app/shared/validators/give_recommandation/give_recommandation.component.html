@@ -1,0 +1,50 @@
+<div class="recommandation cover-parent flex column center">
+  <div class="cloture-swipeup">
+    <h3>Noter l'entreprise</h3>
+    <!-- <h6>{{ mission!.subContractorName }}</h6> -->
+    <div>
+      <textarea (focusout)="getCompanyInfoByText('lastName')" placeholder="Entrer votre nom" id="textLastName" cols="15" rows="1">{{ recommandation!.lastName }}</textarea>
+      <textarea (focusout)="getCompanyInfoByText('firstName')" placeholder="Entrer votre prénom" id="textFirstName" cols="15" rows="1">{{ recommandation!.firstName }}</textarea>
+    </div>
+    <div>
+      <textarea (focusout)="getCompanyInfoByText('companyName')" placeholder="Entrer le nom de votre entreprise" id="textCompanyName" cols="35" rows="1">{{ recommandation!.company }}</textarea>
+    </div>
+    <div class="star-container" *ngIf="hasGeneralStars">
+      <img  *ngFor="let flag of getArrayStar('general'); let index=index;" [src]="flag ? 'assets/starFull.svg' : 'assets/starEmpty.svg'">
+    </div>
+
+    <div class="form-input">
+      <p>Qualité du travail fourni</p>
+      <div class="star-container">
+        <img *ngFor="let flag of getArrayStar('quality'); let index=index;" (click)="starAction(index, 'quality')" [src]="flag ? 'assets/starFull.svg' : 'assets/starEmpty.svg'">
+      </div>
+      <textarea (focusout)="textStarAction('quality')" placeholder="Ajouter un commentaire" rows="5" cols="30" id="starTextQuality">{{ recommandation!.qualityComment }}</textarea>
+    </div>
+    
+    <div class="form-input">
+      <p>Respect de la sécurité et de la propreté du chantier</p>
+      <div class="star-container">
+        <img *ngFor="let flag of getArrayStar('security'); let index=index;" (click)="starAction(index, 'security')" [src]="flag ? 'assets/starFull.svg' : 'assets/starEmpty.svg'">
+      </div>
+      <textarea (focusout)="textStarAction('security')" placeholder="Ajouter un commentaire" rows="5" cols="30" id="starTextSecurity">{{ recommandation!.securityComment }}</textarea>
+    </div>
+
+    <div class="form-input">
+      <p>Organisation</p>
+      <div class="star-container">
+        <img *ngFor="let flag of getArrayStar('organisation'); let index=index;" (click)="starAction(index, 'organisation')" [src]="flag ? 'assets/starFull.svg' : 'assets/starEmpty.svg'">
+      </div>
+      <textarea (focusout)="textStarAction('organisation')" placeholder="Ajouter un commentaire" rows="5" cols="30" id="starTextOrganisation">{{ recommandation!.organisationComment }}</textarea>
+    </div>
+    <button [ngClass]="classSubmit" (click)="submitStar()">Envoyer la recommandation</button>
+  </div>
+</div>
+
+<!-- <ng-template #waiting_tpl>
+  <div class="ripple">
+    <div></div>
+    <div></div>
+  </div>
+  <p class="confirmed-with-success">{{ content }} {{ points }}</p>
+
+</ng-template> -->

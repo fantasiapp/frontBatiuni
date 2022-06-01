@@ -149,7 +149,7 @@ export type ApplyForm = {
         <footer class="sticky-footer">
           <button
             class="button full-width active"
-            (click)="onApply()"
+            (click)="showPopUp()"
             [disabled]="disableValidation"
           >
             Postuler
@@ -311,6 +311,11 @@ export class UIAnnonceResume extends Destroy$ {
     amount: new FormControl(this.amount),
     devis: new FormControl([this.devis[0]]),
   });
+
+  showPopUp(){
+    console.log("ce post",this.post)
+    this.popup.onApply(this.post, this);
+  }
 
   onApply() {
     const formValue = this.form.value;
