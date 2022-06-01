@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, ViewChild } from "@angular/core";
+import { FormControl, FormGroup } from "@angular/forms";
 import { Select, Store } from "@ngxs/store";
 import { Observable } from "rxjs";
 import { takeUntil } from "rxjs/operators";
@@ -7,9 +8,9 @@ import { Destroy$ } from "src/app/shared/common/classes";
 import { Availability, CalendarUI, DayState } from "src/app/shared/components/calendar/calendar.ui";
 import { SwipeupService, SwipeupView } from "src/app/shared/components/swipeup/swipeup.component";
 import { getUserDataService } from "src/app/shared/services/getUserData.service";
-import { Profile } from "src/models/new/data.interfaces";
+import { Job, Profile } from "src/models/new/data.interfaces";
 import { nameToAvailability } from "src/models/new/data.mapper";
-import { DataQueries } from "src/models/new/data.state";
+import { DataQueries, SnapshotAll } from "src/models/new/data.state";
 import { ModifyAvailability } from "src/models/new/user/user.actions";
 
 @Component({
@@ -25,7 +26,16 @@ export class AvailabilitiesComponent extends Destroy$ {
   @Select(DataQueries.currentProfile)
   profile$!: Observable<Profile>;
 
+  @SnapshotAll('Job')
+  allJobs!: Job[];
+
   availabilities: DayState[] = [];
+
+  jobForm = new FormGroup({
+    job: new FormControl([]),
+  },
+    {}
+  );
 
   private items = [{
     name: 'Disponible',

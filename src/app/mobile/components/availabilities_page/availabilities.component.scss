@@ -1,13 +1,16 @@
 @use 'src/styles/variables' as *;
 @use 'src/styles/mixins' as *;
 
-:host {
-  @extend %page;
-}
 
 .current-availability {
   display: inline-block;
   width: $icon-size;
   height: $icon-size;
   border-radius: 50%;
+}
+
+.formjob{
+  margin-top: 130px;
+  margin-left: 30px;
+  margin-right: 30px;
 }

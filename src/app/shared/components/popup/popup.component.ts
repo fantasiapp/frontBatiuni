@@ -45,6 +45,8 @@ import {
   Ref,
   DatePost,
   PostDateAvailableTask,
+  User,
+  Post,
 } from "src/models/new/data.interfaces";
 import { DataQueries, DataState } from "src/models/new/data.state";
 import { FileContext, FileViewer } from "../file-viewer/file-viewer.component";
@@ -58,6 +60,7 @@ import { SuiviChantierDateContentComponent } from "src/app/mobile/components/sui
 import { UICheckboxComponent } from "../box/checkbox.component";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { SingleCache } from "../../services/SingleCache";
+import { HomeComponent } from "src/app/mobile/components/home_page/home.component";
 
 const TRANSITION_DURATION = 200;
 
@@ -108,6 +111,15 @@ export class UIPopup extends DimensionMenu {
 
   @ViewChild("closeMission", { read: TemplateRef, static: true })
   closeMission!: TemplateRef<any>;
+
+  @ViewChild("validateCandidate", { read: TemplateRef, static: true })
+  validateCandidate!: TemplateRef<any>;
+
+  @ViewChild("refuseCandidate", { read: TemplateRef, static: true })
+  refuseCandidate!: TemplateRef<any>;
+
+  @ViewChild("blockCandidate", { read: TemplateRef, static: true })
+  blockCandidate!: TemplateRef<any>;
 
   @Input()
   content?: Exclude<PopupView, ContextUpdate>;
@@ -314,7 +326,7 @@ export class UIPopup extends DimensionMenu {
 
 export type PredefinedPopups<T = any> = {
   readonly type: "predefined";
-  name: "deletePost" | "sign" | "setDate" | "closeMission"; // | 'closeMission'
+  name: "deletePost" | "sign" | "setDate" | "closeMission" | "validateCandidate" | "refuseCandidate" | "blockCandidate"; // | 'closeMission'
   context?: TemplateContext;
 };
 
@@ -504,6 +516,102 @@ export class PopupService {
         close: () => {
           if (context.$implicit.isActive) {
             object.openCloseMission();
+          }
+          closed$.next();
+        },
+      });
+
+      first = false;
+    }
+  }
+
+  validateCandidate(candidateId: number, post: Post, object: HomeComponent) {
+    let candidate = this.store.selectSnapshot(DataQueries.getById('Candidate', candidateId))
+    let companies = this.store.selectSnapshot(DataQueries.getAll('Company'))
+    let candidateCompany = companies.filter(company => company.id == candidate?.company)
+    let first: boolean = true;
+    const closed$ = new Subject<void>();
+
+    const context = {
+      $implicit: {
+        name: candidateCompany[0].name,
+        isActive: false,
+      },
+    };
+
+    if (first) {
+      this.dimension$.next(this.defaultDimension);
+      this.popups$.next({
+        type: "predefined",
+        name: "validateCandidate",
+        context,
+        close: () => {
+          if (context.$implicit.isActive) {
+            object.validateCandidate(post, candidateId);
+          }
+          closed$.next();
+        },
+      });
+
+      first = false;
+    }
+  }
+
+  refuseCandidate(candidateId: number, post: Post, object: HomeComponent) {
+    let candidate = this.store.selectSnapshot(DataQueries.getById('Candidate', candidateId))
+    let companies = this.store.selectSnapshot(DataQueries.getAll('Company'))
+    let candidateCompany = companies.filter(company => company.id == candidate?.company)
+    let first: boolean = true;
+    const closed$ = new Subject<void>();
+
+    const context = {
+      $implicit: {
+        name: candidateCompany[0].name,
+        isActive: false,
+      },
+    };
+
+    if (first) {
+      this.dimension$.next(this.defaultDimension);
+      this.popups$.next({
+        type: "predefined",
+        name: "refuseCandidate",
+        context,
+        close: () => {
+          if (context.$implicit.isActive) {
+            object.refuseCandidate(post, candidateId);
+          }
+          closed$.next();
+        },
+      });
+
+      first = false;
+    }
+  }
+
+  blockCandidate(candidateId: number, object: HomeComponent) {
+    let candidate = this.store.selectSnapshot(DataQueries.getById('Candidate', candidateId))
+    let companies = this.store.selectSnapshot(DataQueries.getAll('Company'))
+    let candidateCompany = companies.filter(company => company.id == candidate?.company)
+    let first: boolean = true;
+    const closed$ = new Subject<void>();
+
+    const context = {
+      $implicit: {
+        name: candidateCompany[0].name,
+        isActive: false,
+      },
+    };
+
+    if (first) {
+      this.dimension$.next(this.defaultDimension);
+      this.popups$.next({
+        type: "predefined",
+        name: "blockCandidate",
+        context,
+        close: () => {
+          if (context.$implicit.isActive) {
+            object.blockCandidate(candidateId);
           }
           closed$.next();
         },
