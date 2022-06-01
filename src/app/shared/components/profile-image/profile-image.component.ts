@@ -47,7 +47,6 @@ export class UIProfileImageComponent extends Destroy$ {
       this.setColor(profile.company)
       if (!SingleCache.checkValueInCache("companyImage" + profile.company.id.toString())){
         this.image = this.store.selectSnapshot(DataQueries.getProfileImage(profile.company.id));
-        console.log("not in cache", !this.image)
         if ( !this.image ) {
           const fullname = profile.company.name[0].toUpperCase();
           this.src = this.imageGenerator.generate(fullname);
@@ -55,14 +54,12 @@ export class UIProfileImageComponent extends Destroy$ {
           this.cd.markForCheck();
         } else {
           this.downloader.downloadFile(this.image).subscribe(image => {
-            console.log("downloading", image)
             this.src = this.downloader.toSecureBase64(image);
             SingleCache.setValueByName("companyImage" + profile.company.id.toString(), this.src)
             this.cd.markForCheck();
           });
         }}
       else {
-        console.log("ça existe")
         this.src = SingleCache.getValueByName("companyImage" + profile.company.id.toString())
         this.cd.markForCheck()
       }
@@ -71,7 +68,6 @@ export class UIProfileImageComponent extends Destroy$ {
   }
 
   updateProfile(profile: Profile){
-    console.log("lolilol")
     this.profile = profile;
     SingleCache.deleteValueByName("companyImage" + profile.company.id.toString())
     this.changePicture()
