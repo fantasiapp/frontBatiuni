@@ -233,7 +233,7 @@ export type PostDateAvailableTask = {
   deleted: boolean
   supervisions: Supervision[]
   postDetails: PostDetailGraphic[]
-  allPostDetails: PostDetail[]
+  allPostDetails: PostDetailGraphic[]
 }
 
 export type Task = PostDetail & {
