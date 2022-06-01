@@ -35,7 +35,7 @@
       <li *ngFor="let detailedPost of assignDate.date.allPostDetails" 
       (click)="modifyDetailedPostDate(detailedPost, checkbox, assignDate); checkbox.onChange($event)" 
       [ngClass]="{'disabled': detailedPost.checked && (detailedPost.validated || detailedPost.refused)}">
-        <checkbox style="pointer-events: none;" [value]="detailedPostCheck(assignDate.date, detailedPost)" #checkbox></checkbox>
+        <checkbox style="pointer-events: none;" [value]="detailedPost.checked" #checkbox></checkbox>
         <span >{{ detailedPost.content }}</span>
       </li>
     </ul>
