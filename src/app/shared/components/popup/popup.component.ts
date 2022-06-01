@@ -67,6 +67,7 @@ const TRANSITION_DURATION = 200;
 export interface assignDateType {
   missionId: Ref<Mission>;
   date: PostDateAvailableTask;
+  datePostId: Ref<DatePost>;
   view: "ST" | "PME";
 }
 
@@ -209,37 +210,54 @@ export class UIPopup extends DimensionMenu {
 
     // console.log('addNewTask', missionId, input.value, date);
     console.log('object');
-    this.store.dispatch(new CreateDetailedPost(assignDate.missionId, input.value, assignDate.date.date)).pipe(take(1)).subscribe(() => {
+    console.log('assing', assignDate);
+    this.store.dispatch(new CreateDetailedPost(assignDate.missionId, input.value, assignDate.datePostId)).pipe(take(1)).subscribe(() => {
       input.value = "";
-
+      
+      console.log('assing', assignDate);
       const mission = this.store.selectSnapshot(DataQueries.getById("Mission", assignDate.missionId))
       const missionPostDetail = this.store.selectSnapshot(DataQueries.getMany("DetailedPost", mission!.details)) as Task[];
+      console.log('assing', assignDate);
       const newTask = missionPostDetail[missionPostDetail.length - 1];
       
-      
-      assignDate.date.allPostDetails.push(newTask);
-      this.popupService.taskWithoutDouble.next(
-        assignDate.date.allPostDetails
-      );
+
+      assignDate.date.allPostDetails = this.store.selectSnapshot(DataQueries.getMany("DetailedPost", mission!.details));
+      // this.popupService.addPostDetailList.next(newTask);
+      const newTaskSupervision = this.store.selectSnapshot(DataQueries.getMany("Supervision", newTask.supervisions))
+      const detailDate: PostDetailGraphic = {
+        id: newTask.id,
+        date: newTask.date,
+        content: newTask.content,
+        validated: newTask.validated,
+        refused: newTask.refused,
+        supervisions: newTaskSupervision,
+        checked: true
+      }
+      assignDate.date.postDetails.push(detailDate)
+      this.popupService.modifyPostDetailList.next({selectedDetailDate:detailDate, checked: true})
+
       this.cd.markForCheck();
     });
   }
 
 
-  modifyDetailedPostDate(detailDate: PostDetailGraphic, checkbox: UICheckboxComponent, datePostId: Ref<DatePost>) {
+  modifyDetailedPostDate(detailDate: PostDetailGraphic, checkbox: UICheckboxComponent, assignDate: assignDateType ) {
     // let unset = checkbox.value
+    let datePostId: Ref<DatePost> = assignDate.datePostId
+    
+    this.store.dispatch(new ModifyDetailedPost(detailDate, detailDate.checked, datePostId)).pipe(take(1)).subscribe(() => {
+      detailDate.checked = !detailDate.checked
+      
 
-    this.store.dispatch(new ModifyDetailedPost(detailDate, checkbox.value, datePostId)).pipe(take(1)).subscribe(() => {
+      // const postDetail = this.store.selectSnapshot(DataQueries.getById('DetailedPost', detailDate.id))!
+      //to do
+      this.popupService.modifyPostDetailList.next({selectedDetailDate:detailDate, checked: detailDate.checked})
+
       this.cd.markForCheck();
     });
   }
 
-  findTaskWithDate(
-    date: DateG,
-    task: PostDetailGraphic,
-    missionId: Ref<Mission>,
-    unset: boolean
-  ) {
+  findTaskWithDate(date: DateG, task: PostDetailGraphic, missionId: Ref<Mission>, unset: boolean) {
     // essayer d'avoir un this.mission plutot que de l'appeler 20fois
     const mission = this.store.selectSnapshot(
       DataQueries.getById("Mission", missionId)
@@ -293,7 +311,8 @@ export type PopupView = (
 export class PopupService {
   popups$ = new Subject<PopupView>();
   dimension$ = new Subject<Dimension>();
-  taskWithoutDouble = new Subject<PostDetail[]>();
+  modifyPostDetailList = new Subject<{selectedDetailDate:PostDetailGraphic, checked: boolean}>();
+  addPostDetailList = new Subject<PostDetail>();
   defaultDimension: Dimension = {
     left: "20px",
     top: "30px",
@@ -412,7 +431,7 @@ export class PopupService {
   }
 
   openDateDialog(
-    mission: Ref<Mission>,
+    missionId: Ref<Mission>,
     date: PostDateAvailableTask,
     datePostId: Ref<DatePost>,
     objectSuivi: SuiviChantierDateContentComponent
@@ -423,7 +442,7 @@ export class PopupService {
 
     const context = {
       $implicit: {
-        mission: mission,
+        missionId: missionId,
         date: date,
         datePostId: datePostId,
         view: view,

@@ -124,7 +124,6 @@ namespace mutable {
   //deep alternative to pushChildValues
   export function addComplexChildren<K extends DataTypes>(draft: any, parent: DataTypes, parentId: number, child: K, values: Record<any>, uniqueBy?: keyof Interface<K>) {
     //Add children
-    console.log("before", child, values)
     mutable.update(draft, child, values);
     const ids = Object.keys(values).map(id => +id);
 
@@ -194,7 +193,6 @@ export function addSimpleChildren<K extends DataTypes>(parent: DataTypes, parent
 };
 
 export function addComplexChildren<K extends DataTypes>(parent: DataTypes, parentId: number, child: K, values: Record<any>) {
-  console.log("addComplexChildren start", parent, parentId, child, values)
   return produce(draft => mutable.addComplexChildren(draft, parent, parentId, child, values));
 };
 

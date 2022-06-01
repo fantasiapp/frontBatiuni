@@ -668,16 +668,19 @@ export class DataState {
   @Action(CreateDetailedPost)
   createDetailedPost(ctx: StateContext<DataModel>, application: CreateDetailedPost) {
     const profile = this.store.selectSnapshot(DataQueries.currentProfile)!;
+    const missionId = application.missionId
+    console.log('misssionId', missionId);
     return this.http.post("data", application).pipe(
       tap((response: any) => {
-        if (response[application.action] !== "OK") {
-          this.inZone(() => this.info.show("error", response.messages, 3000));
-          throw response.messages;
-        }
-        delete response[application.action];
-        ctx.setState(
-          addComplexChildren("Company", profile.company.id, "Mission", response)
-        );
+        // if (response[application.action] !== "OK") {
+        //   this.inZone(() => this.info.show("error", response.messages, 3000));
+        //   throw response.messages;
+        // }
+        // delete response[application.action];
+        console.log("createDetailedPost", response)
+        ctx.setState(addComplexChildren(response["type"], response["fatherId"], "DetailedPost", response["detailedPost"]))
+        ctx.setState(addComplexChildren("Company", profile.company.id, "Mission", response.mission));
+        
       })
     );
   }
@@ -699,9 +702,7 @@ export class DataState {
           )
         } else if (response["type"] == "DatePost") {
           console.log("modifyDetailedPost", response, response["detailedPost"])
-          ctx.setState(
-            addComplexChildren(response["type"], response["fatherId"], "DetailedPost", response["detailedPost"])
-          )
+          ctx.setState(addComplexChildren(response["type"], response["fatherId"], "DetailedPost", response["detailedPost"]))
         }
       })
     );
