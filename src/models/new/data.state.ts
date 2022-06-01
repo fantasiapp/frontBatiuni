@@ -698,9 +698,7 @@ export class DataState {
         delete response[application.action]
         console.log("modifyDetailedPost", response)
         if (response["deleted"] == "yes") {
-          ctx.setState(
-            addComplexChildren("Company", profile.company.id, "Mission", response["Object"])
-          )
+          ctx.setState(deleteIds("DatePost", [response["detailedPostId"]]));
         } else if (response["type"] == "DatePost") {
           console.log("modifyDetailedPost", response, response["detailedPost"])
           ctx.setState(addComplexChildren(response["type"], response["fatherId"], "DetailedPost", response["detailedPost"]))
