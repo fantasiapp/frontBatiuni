@@ -679,7 +679,9 @@ export class DataState {
         // delete response[application.action];
         console.log("createDetailedPost", response)
         ctx.setState(addComplexChildren(response["type"], response["fatherId"], "DetailedPost", response["detailedPost"]))
+        console.log('createDetailPost 2');
         ctx.setState(addComplexChildren("Company", profile.company.id, "Mission", response.mission));
+        console.log('createDetailPost 3');
         
       })
     );

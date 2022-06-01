@@ -32,8 +32,10 @@
     
     <label class="subtitle-date">Choisissez les tâches du jour :</label>
     <ul id="list-date">
-      <li *ngFor="let detailedPost of assignDate.date.allPostDetails" (click)="modifyDetailedPostDate(detailedPost, checkbox, assignDate); checkbox.onChange($event)" [ngClass]="{'disabled': detailedPost.checked && (detailedPost.validated || detailedPost.refused)}">
-        <checkbox style="pointer-events: none;" [value]="detailedPost.checked" #checkbox></checkbox>
+      <li *ngFor="let detailedPost of assignDate.date.allPostDetails" 
+      (click)="modifyDetailedPostDate(detailedPost, checkbox, assignDate); checkbox.onChange($event)" 
+      [ngClass]="{'disabled': detailedPost.checked && (detailedPost.validated || detailedPost.refused)}">
+        <checkbox style="pointer-events: none;" [value]="detailedPostCheck(assignDate.date, detailedPost)" #checkbox></checkbox>
         <span >{{ detailedPost.content }}</span>
       </li>
     </ul>

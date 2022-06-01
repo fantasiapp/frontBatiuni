@@ -78,6 +78,8 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
     this.popup.modifyPostDetailList.pipe(takeUntil(this.destroy$)).subscribe(curPostDetail => {
       // this.updatePageOnlyDate()
       const postDetailG = curPostDetail
+      console.log('addTask', postDetailG, this.tasksGraphic);
+
       let a = false
       for (const taskGraphic of this.tasksGraphic) {
         if(taskGraphic.selectedTask.id == postDetailG.id) {
@@ -85,6 +87,7 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
           a =true
         }
       }
+      // this.tasksGraphic.filter(taskGraphic => taskGraphic.selectedTask.id == postDetailG.id).length
       if (!a) {
         this.tasksGraphic.push({
           selectedTask:postDetailG,

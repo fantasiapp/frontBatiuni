@@ -205,6 +205,12 @@ export class UIPopup extends DimensionMenu {
       .subscribe(() => {});
   }
 
+  detailedPostCheck(postDateAvailableTask: PostDateAvailableTask, detailedPost: PostDetail){
+    const postDetails = postDateAvailableTask.postDetails.filter(postDetail => postDetail.id == detailedPost.id)
+    console.log('checked', !!postDetails.length ? postDetails[0].checked : false);
+    return !!postDetails.length ? postDetails[0].checked : false
+  }
+
   addNewTask(e: Event,assignDate: assignDateType, input: HTMLInputElement) {
     // this.store.dispatch(new CreateDetailedPost(assignDate.postDateAvailableTask, input.value, assignDate!.date!.date!.date))
 
@@ -219,20 +225,22 @@ export class UIPopup extends DimensionMenu {
       const missionPostDetail = this.store.selectSnapshot(DataQueries.getMany("DetailedPost", mission!.details)) as Task[];
       console.log('assing', assignDate);
       const newTask = missionPostDetail[missionPostDetail.length - 1];
+      console.log('NewTask,', newTask);
       
-
+      
       assignDate.date.allPostDetails = this.store.selectSnapshot(DataQueries.getMany("DetailedPost", mission!.details));
       // this.popupService.addPostDetailList.next(newTask);
       const newTaskSupervision = this.store.selectSnapshot(DataQueries.getMany("Supervision", newTask.supervisions))
       const detailDate: PostDetailGraphic = {
         id: newTask.id,
-        date: newTask.date,
+        date: assignDate.date.date,
         content: newTask.content,
         validated: newTask.validated,
         refused: newTask.refused,
         supervisions: newTaskSupervision,
         checked: true
       }
+      console.log('detailDAte,', detailDate);
       assignDate.date.postDetails.push(detailDate)
       this.popupService.modifyPostDetailList.next(detailDate)
 
