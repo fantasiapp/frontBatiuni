@@ -63,7 +63,8 @@ export class BlockedContactsComponent extends Destroy$ {
             component.showView = "ST";
             component.showSwitch = false;
             component.showRecomandation = false;
-            component.showStar = true
+            component.showStar = true;
+            component.showDeblockButton = true;
           },
         });
     }

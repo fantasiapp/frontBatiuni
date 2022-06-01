@@ -723,6 +723,7 @@ export class HomeComponent extends Destroy$ {
               .pipe(take(1))
               .subscribe(() => {
                 //if successful, quit the slidemenu
+                console.log('Ona bien validé')
                 this.openPost(null);
                 this.cd.markForCheck();
               });
@@ -749,7 +750,9 @@ export class HomeComponent extends Destroy$ {
               .dispatch(new BlockCompany(candidateId, true))
               .pipe(take(1))
               .subscribe(() => {
+                console.log('Bloque le contact')
                 this.openPost(null);
+                this.annonceResume.close()
                 this.cd.markForCheck();
               });
           }

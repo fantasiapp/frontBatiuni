@@ -53,6 +53,9 @@ export class ExtendedProfileComponent extends Destroy$ {
   showContact: boolean = false;
 
   @Input()
+  showDeblockButton: boolean = false;
+
+  @Input()
   showSwitch: boolean = true;
 
   // rating demander recommandation button
