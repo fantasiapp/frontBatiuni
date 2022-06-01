@@ -1,8 +1,6 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from "@angular/core";
+import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
 import { SafeResourceUrl } from "@angular/platform-browser";
-import { Capacitor } from "@capacitor/core";
-import { delay } from "../../common/functions";
-import { ImageGenerator } from "../../services/image-generator.service";
+import { Destroy$ } from "src/app/shared/common/classes";
 
 
 //simple component for showing images
@@ -12,7 +10,7 @@ import { ImageGenerator } from "../../services/image-generator.service";
   styleUrls: ['./modal-image.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ModalImage {
+export class ModalImage extends Destroy$ {
 
   @Input()
   src: SafeResourceUrl = "";
@@ -22,6 +20,7 @@ export class ModalImage {
   isMobile: boolean = true;
 
   ngOnInit() {
+    console.log("plop")
     this.isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
   }
 
@@ -131,5 +130,10 @@ export class ModalImage {
     } else {
       this.hammerIt(img);
     }
+  }
+
+  ngOnDestroy(): void {
+    console.log("EXPLOSION")
+    super.ngOnDestroy();
   }
 };
