@@ -102,6 +102,7 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
 
   computeDate(date:DatePost) {
     const [supervisions, postDetails] = this.computeFieldOfDate(date)
+    this.mission = this.store.selectSnapshot(DataQueries.getById('Mission', this.mission!.id))
     const allPostDetails = this.computeAllPostDetails(this.mission!.details, postDetails as unknown as PostDetailGraphic[])
     this.date = {
       "id":date.id,
@@ -123,10 +124,11 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
     else
       supervisions = this.store.selectSnapshot(DataQueries.getMany("Supervision", date.supervisions))
 
-    if (typeof(date.details) === "object" && !Array.isArray(date.details))
-      postDetails = Object.values(date.details)
-    else
-      postDetails = this.store.selectSnapshot(DataQueries.getMany("DetailedPost", date.details))
+    let postDetailsId = []
+    if (!Array.isArray(date.details)) postDetailsId = Object.keys(date.details).map(detail => +detail)
+    else postDetailsId = date.details
+    
+    postDetails = this.store.selectSnapshot(DataQueries.getMany("DetailedPost", postDetailsId))
 
     let postDetailsGraphic = postDetails.map((postDetail) => {
       let supervisions:Supervision[]

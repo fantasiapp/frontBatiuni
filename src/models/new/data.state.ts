@@ -683,7 +683,7 @@ export class DataState {
         if (response["detailedPost2"])
           ctx.setState(addComplexChildren("Mission", response["missionId"], "DetailedPost", response["detailedPost2"]))
         
-        // ctx.setState(addComplexChildren("Company", profile.company.id, "Mission", response.mission));
+        ctx.setState(addComplexChildren("Company", profile.company.id, "Mission", response.mission));
       })
     );
   }
