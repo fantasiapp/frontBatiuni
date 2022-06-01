@@ -73,14 +73,26 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
   tasksGraphic: TaskGraphic[] = [];
 
   ngOnInit(){
-    this.computeDate( this.dateOrigin)
-    this.computeTasks(this.date)
-    this.cd.markForCheck()
+    this.updatePageOnlyDate()
 
     this.popup.modifyPostDetailList.pipe(takeUntil(this.destroy$)).subscribe(curPostDetail => {
-      // if(curPostDetail.checked){
-      //   this.tasksGraphic
-      // }
+      // this.updatePageOnlyDate()
+      const postDetailG = curPostDetail
+      let a = false
+      for (const taskGraphic of this.tasksGraphic) {
+        if(taskGraphic.selectedTask.id == postDetailG.id) {
+          taskGraphic.selectedTask.checked = postDetailG.checked
+          a =true
+        }
+      }
+      if (!a) {
+        this.tasksGraphic.push({
+          selectedTask:postDetailG,
+          validationImage: this.computeTaskImage(postDetailG, "validated"),
+          invalidationImage: this.computeTaskImage(postDetailG, "refused"),
+          formGroup: new FormGroup({comment: new FormControl()})
+        })
+      }
     })
   }
 

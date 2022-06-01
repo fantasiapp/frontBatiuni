@@ -251,24 +251,6 @@ export class SuiviPME {
     console.log("sign contract")
     this.popup.openSignContractDialog(this.mission!);
   }
-
-  // reloadMission = (dateId: number): (PostDateAvailableTask | Mission)[] => {
-  //   this.mission = this.store.selectSnapshot(
-  //     DataQueries.getById("Mission", this.mission!.id)
-  //   )
-  //   const newDate = this.store.selectSnapshot(DataQueries.getById("DatePost", dateId))
-  //   const supervisions = this.store.selectSnapshot(DataQueries.getAll("Supervision"))
-  //   console.log("reloadMission supervision", dateId, newDate, supervisions)
-  //   // this.computeDates(this.mission!);
-  //   console.log("reloadMission", this.dates)
-  //   let dateNew = this.dates[0]
-  //   this.dates.forEach((date) => {
-  //     if (date.id === dateId) dateNew = date
-  //   })
-  //   console.log("dateNew", dateNew)
-  //   return [dateNew, this.mission!]
-  // };
-
   modifyTimeTable() {
     this.missionMenu.swipeup = false;
     this.swipeupModifyDate = true;
@@ -286,7 +268,8 @@ export class SuiviPME {
       );
   }
 
-  async submitAdFormDate(setup: boolean = false) {
+  submitAdFormDate(setup: boolean = false) {
+    console.log('SUBmiTeAddd');
     let datesSelected: string[] = this.calendarForm!.value.filter((day : DayState) => day.availability == 'selected').map((day: DayState) => day.date)
     let blockedDates = this.computeBlockedDate();
     let pendingDates = this.computePendingDate()
@@ -337,6 +320,7 @@ export class SuiviPME {
   }
 
   saveToBackAdFormDate() {
+    console.log('start saveToBack');
     const selectedDate: string[] = this.calendarForm!.value.map(
       (dayState: DayState) => {
         return dayState.date;
@@ -347,28 +331,37 @@ export class SuiviPME {
       // Update de mission et accordionData puis update la vue
       this.mission = this.store.selectSnapshot(DataQueries.getById("Mission", this.mission!.id))!;
       // this.computeDates(this.mission);
+      let arrayDateId = []
+      if (!Array.isArray(this.mission.dates)) arrayDateId = Object.keys(this.mission.dates).map(date => +date)
+      else arrayDateId = this.mission.dates
+      this.dates = arrayDateId
 
       this.cd.markForCheck();
+      console.log('end saveToBack');
     });
+    console.log('end saveToBack 2');
   }
 
   computeBlockedDate(): string[] {
+    console.log('Start blocked');
     if(!this.mission){
       return []
     }
     let listBlockedDate: string[] = [];
     let listDetailedPost = this.mission!.details;
-
+    
     listDetailedPost.forEach((detailId) => {
       let detailDate = this.store.selectSnapshot(DataQueries.getById("DetailedPost", detailId))!;
       // si la date a une Task, la considerer bloquer
       if (detailDate && detailDate.date && !listBlockedDate.includes(detailDate.date))
-        listBlockedDate.push(detailDate.date);
+      listBlockedDate.push(detailDate.date);
     });
+    console.log('end blocked');
     return listBlockedDate;
   }
 
   computePendingDate() :{pendingDeleted: string[], pendingValidated: string[]}{
+    console.log('Startpending');
     if(!this.mission || !this.mission.dates) return {pendingDeleted: [], pendingValidated: []}   
     let pendingDeleted: string[] = [] 
     let pendingValidated: string[] = []
@@ -376,10 +369,12 @@ export class SuiviPME {
     let datesId = this.mission.dates;
     if (typeof datesId === "object" && !Array.isArray(datesId))
       datesId = Object.keys(datesId).map((key) => +key as number);
-    this.store.selectSnapshot(DataQueries.getMany("DatePost", datesId)).forEach(date => {
+    this.store.selectSnapshot(DataQueries.getMany("DatePost", this.dates)).forEach(date => {
       if(date.deleted) pendingDeleted.push(date.date)
       else if (!date.validated) pendingValidated.push(date.date)
     })
+
+    console.log('endpending');
     return {pendingDeleted: pendingDeleted, pendingValidated:pendingValidated}
   }
 }

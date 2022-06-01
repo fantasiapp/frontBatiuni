@@ -234,7 +234,7 @@ export class UIPopup extends DimensionMenu {
         checked: true
       }
       assignDate.date.postDetails.push(detailDate)
-      this.popupService.modifyPostDetailList.next({selectedDetailDate:detailDate, checked: true})
+      this.popupService.modifyPostDetailList.next(detailDate)
 
       this.cd.markForCheck();
     });
@@ -251,7 +251,7 @@ export class UIPopup extends DimensionMenu {
 
       // const postDetail = this.store.selectSnapshot(DataQueries.getById('DetailedPost', detailDate.id))!
       //to do
-      this.popupService.modifyPostDetailList.next({selectedDetailDate:detailDate, checked: detailDate.checked})
+      this.popupService.modifyPostDetailList.next(detailDate)
 
       this.cd.markForCheck();
     });
@@ -311,7 +311,7 @@ export type PopupView = (
 export class PopupService {
   popups$ = new Subject<PopupView>();
   dimension$ = new Subject<Dimension>();
-  modifyPostDetailList = new Subject<{selectedDetailDate:PostDetailGraphic, checked: boolean}>();
+  modifyPostDetailList = new Subject<PostDetailGraphic>();
   addPostDetailList = new Subject<PostDetail>();
   defaultDimension: Dimension = {
     left: "20px",
