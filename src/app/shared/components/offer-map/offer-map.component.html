@@ -1,0 +1,14 @@
+<ng-container *ngIf="post">
+  <div class="container grow flex center-cross space-between">
+    <div class="offres-infos" >
+        <span class="entreprise">{{company?.name || 'Entreprise'}}</span>
+        <span class="man-pow">{{post?.manPower ? 'Main d\'oeuvre' : 'Fourniture et Pose'}}</span>
+        <span class="metier">{{metier?.name}}</span>
+        <span class="address">{{post?.address || 'addresse'}}</span>
+        <span class="date"> Du {{ toLocateDate(post.startDate) }} Au {{ toLocateDate(post.endDate) }}</span>
+    </div>
+    <div class="offer-logo flex center">
+      <img class="imageProfile" [src]="src"/>
+    </div>
+  </div>
+</ng-container>

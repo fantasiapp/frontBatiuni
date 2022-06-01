@@ -22,6 +22,8 @@ import {
   InviteFriend,
   ValidateMissionDate,
   BoostPost,
+  AskRecommandation,
+  GiveRecommandation,
 } from "./user/user.actions";
 import {
   ApplyPost,
@@ -229,6 +231,7 @@ export class DataState {
     const req = this.http.get("data", { action: action.action });
     if (this.isFirstTime) {
       this.booleanService.emitLoadingChangeEvent(true)
+      this.booleanService.emitConnectedChangeEvent(true)
     }
     if (this.flagUpdate){
       this.flagUpdate = false
@@ -251,26 +254,27 @@ export class DataState {
   }
 
   updateLocalData(ctx: StateContext<DataModel>, response: any) {
-    console.log("update local data")
-    const loadOperations = this.reader.readInitialData(response),
-    sessionOperation = this.reader.readCurrentSession(response);
-    if (!this.isFirstTime) {
-      let oldView = this.store.selectSnapshot(DataState.view)
+    if(this.booleanService.isConnected){
+      console.log("update local data", response)
+      const loadOperations = this.reader.readInitialData(response),
+      sessionOperation = this.reader.readCurrentSession(response);
+      if (!this.isFirstTime) {
+        let oldView = this.store.selectSnapshot(DataState.view)
+          ctx.setState(compose(...loadOperations, sessionOperation));
+          const state = ctx.getState();
+          ctx.patchState({session: {...state.session,view: oldView,}})
+        }
+        else {
         ctx.setState(compose(...loadOperations, sessionOperation));
-        const state = ctx.getState();
-        ctx.patchState({session: {...state.session,view: oldView,}})
-      }
-      else {
-      ctx.setState(compose(...loadOperations, sessionOperation));
-      this.isFirstTime = false
-      }
-      this.booleanService.emitLoadingChangeEvent(false)
+        this.isFirstTime = false
+        }
+        this.booleanService.emitLoadingChangeEvent(false)}
   }
 
   @Action(Logout)
   logout(ctx: StateContext<DataModel>) {
-    this.flagUpdate = true
     console.log("logout")
+    this.flagUpdate = true
     this.isFirstTime = true
     this.booleanService.emitConnectedChangeEvent(false)
     ctx.setState({ fields: {}, session: { view: "ST", currentUser: -1 , time: 0} });
@@ -776,6 +780,7 @@ export class DataState {
           throw response.messages;
         }
         delete response[application.action];
+        console.log('Response', response)
         ctx.setState(
           addComplexChildren("Company", profile.company.id, "Mission", response)
         );
@@ -793,9 +798,11 @@ export class DataState {
           throw response.messages;
         }
         delete response[application.action];
+        console.log('ReponseST', response)
         ctx.setState(
           addComplexChildren("Company", profile.company.id, "Mission", response)
         );
+        console.log("Dans CloseMissionST", this.store.selectSnapshot(DataQueries.getAll("Mission")))
       })
     );
   }
@@ -946,9 +953,29 @@ export class DataState {
       })
     );
   }
+
+  @Action(AskRecommandation)
+  askRecommandation(ctx: StateContext<DataModel>, demand: AskRecommandation){
+    const user = this.store.selectSnapshot(DataQueries.currentUser);
+    return this.http.get("data", demand).pipe(
+      tap((response: any) => {
+        //write code to manage the response
+      })
+    )
+  }
+
+  @Action(GiveRecommandation)
+  giveRecommandation(ctx: StateContext<DataModel>, application : AskRecommandation){
+    const user = this.store.selectSnapshot(DataQueries.currentUser);
+    return this.http.get("data", application).pipe(
+      tap((response: any) => {
+        //write code to manage the response
+        ctx.setState(addValues("Recommandation", response))
+      })
+    )
+  }
 }
 //make a deep version of toJSON
-
 export class DataQueries {
   static toJson<K extends DataTypes>(
     allFields: Record<string[]>,

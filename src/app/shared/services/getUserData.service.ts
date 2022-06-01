@@ -10,14 +10,19 @@ export class getUserDataService {
   navchange: EventEmitter<boolean> = new EventEmitter();
 
   response: any;
+  hasNewResponse: boolean = false;
 
   constructor(private store: Store) {}
 
   emitDataChangeEvent() {
-    this.navchange.emit(this.response);
+    if(this.hasNewResponse) {
+      this.navchange.emit(this.response);
+      this.hasNewResponse = false
+    }
   }
 
   setNewResponse(response: any) {
+    this.hasNewResponse = true
     this.response = response
   }
 

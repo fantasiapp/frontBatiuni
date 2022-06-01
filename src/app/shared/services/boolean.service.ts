@@ -27,12 +27,15 @@ export class BooleanService {
   isConnected: boolean = false
 
   emitConnectedChangeEvent(bool : boolean) {
+    console.log("j'associe", bool)
     this.isConnected = bool
-    this.isLoadingNavChange.emit(this.isConnected);
+    console.log("j'envoie", this.isConnected)
+    this.isConnectedNavChange.emit(this.isConnected);
   }
 
   getConnectedChangeEmitter() {
-    return this.isLoadingNavChange;
+    console.log("je get et mon état est", this.isConnected)
+    return this.isConnectedNavChange;
   }
 
 }

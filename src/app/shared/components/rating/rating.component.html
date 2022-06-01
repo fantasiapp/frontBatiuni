@@ -10,7 +10,7 @@
     <profile-image [profile]="profile"></profile-image>
     <span class="company">{{ profile.company!.name }}</span>
     <stars (click)='openRatings = true' class="stars" value="{{ view == 'ST' ? profile.company!.starsST : profile.company!.starsPME  }}" disabled></stars>
-    <button *ngIf="profileRecommandation" class="recommendation-button button active"><img src="assets/mail-outline.svg" alt="recommandation">
+    <button *ngIf="profileRecommandation" class="recommendation-button button active" (click)="openRecommandation()"><img src="assets/mail-outline.svg" alt="recommandation">
       Demander une recommandation
     </button>
     <section class="full-width section modify-profile">
@@ -46,6 +46,44 @@
 
         </div>
       </div>
+      <div *ngFor="let ratingInfo of recommandationInfos" class="company-recommandation">
+        <span class="company-name">Recommandé par {{ view == 'ST' ?  ratingInfo.contactName : ratingInfo.subContractorName }} de {{ view == 'ST' ? ratingInfo.companyContractor : ratingInfo.subContractorContact }}</span>
+        <div class="criterion">
+          <div class="flex center-cross">
+            <span class="criterion-stars">{{ view == 'ST' ? 'Qualité du travail fourni' : 'Ambiance sur le chantier' }}
+            </span>
+            <stars class="stars" [value]="ratingInfo.qualityVibe" disabled></stars>
+          </div>
+
+          <span>{{ ratingInfo.qualityVibeComment }}</span>
+        </div>
+        <div class="criterion">
+          <div class="flex center-cross">
+            <span class="criterion-stars">Respect de la securité et de la propreté du chantier
+            </span>
+            <stars class="stars" [value]="ratingInfo.security" disabled></stars>
+          </div>
+
+          <span>{{ ratingInfo.securityComment }}</span>
+
+        </div>
+        <div class="criterion">
+          <div class="flex center-cross">
+            <span class="criterion-stars">{{ view == 'ST' ? 'Organisation' : 'Organisation PME' }}
+            </span>
+            <stars class="stars" [value]="ratingInfo.organisation" disabled></stars>
+          </div>
+
+          <span>{{ ratingInfo.organisationComment }}</span>
+
+        </div>
+      </div>
     </section>
+  </div>
+</slidemenu>
+
+<slidemenu [(open)]="openRecommandationMenu" #askRecommandation>
+  <div class="modify-page hosted-page flex column center-cross space-children-margin" content>
+    <ask_recommandation class="flex column center-cross space-children-margin"></ask_recommandation>
   </div>
 </slidemenu>

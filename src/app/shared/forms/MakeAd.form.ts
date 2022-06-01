@@ -40,10 +40,10 @@ import { Mobile } from "../services/mobile-footer.service";
   template: `
     <form class="full-width form-control section-host" [formGroup]="makeAdForm">
       <section class="form-section">
-        <h2 class="form-section-title" #0>Besoins de l'entreprise</h2>
+        <h2 class="form-section-title" #0>Besoins de l'entreprise *</h2>
 
         <div class="form-input">
-          <label>Je cherche</label>
+          <label>Je recherche</label>
           <input
             type="number"
             min="0"
@@ -86,7 +86,7 @@ import { Mobile } from "../services/mobile-footer.service";
       </section>
 
       <section class="form-section">
-        <h2 class="form-section-title" #1>Infos chantiers</h2>
+        <h2 class="form-section-title" #1>Infos chantiers *</h2>
         <div class="form-input">
           <label>Adresse</label>
           <input type="text" class="form-element" formControlName="address" />
@@ -173,7 +173,7 @@ import { Mobile } from "../services/mobile-footer.service";
         </div>
       </section>
       <section class="form-section">
-        <h2 class="form-section-title" #2>Rémunération</h2>
+        <h2 class="form-section-title" #2>Rémunération pour la mission *</h2>
         <div class="form-input">
           <label>Montant</label>
           <div class="flex row remuneration">
@@ -184,7 +184,7 @@ import { Mobile } from "../services/mobile-footer.service";
               class="grow form-element"
               placeholder="Montant"
               formControlName="amount"
-            />
+            /> € HT
             <!-- <div class="option-container">
               <options
                 [searchable]="false"
@@ -276,6 +276,15 @@ import { Mobile } from "../services/mobile-footer.service";
       border: 2px solid #aaa;
       outline: none;
       border-radius: 3px;
+    }
+
+    input{
+      margin-top: 20px;
+    }
+
+    switch{
+      margin-top: 20px;
+      margin-bottom: 20px;
     }
 
     .option-container {

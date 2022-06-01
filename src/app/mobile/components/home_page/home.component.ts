@@ -187,6 +187,7 @@ export class HomeComponent extends Destroy$ {
 
   async lateInit() {
       if (!this.isLoading) {
+        console.log('lateinit', this.store.selectSnapshot(DataQueries.getAll('BlockedCandidate')))
       this.info.alignWith("header_search");
       combineLatest([this.profile$, this.posts$])
         .pipe(takeUntil(this.destroy$))
