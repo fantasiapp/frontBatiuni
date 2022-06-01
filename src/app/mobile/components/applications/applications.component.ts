@@ -22,7 +22,6 @@ import { getLevenshteinDistance } from "src/app/shared/services/levenshtein";
 import { AppComponent } from "src/app/app.component";
 import { InfoService } from "src/app/shared/components/info/info.component";
 import { SearchbarComponent } from "src/app/shared/components/searchbar/searchbar.component";
-import { flatten } from "@angular/compiler";
 
 // import { UISlideMenuComponent } from 'src/app/shared/components/slidemenu/slidemenu.component';
 

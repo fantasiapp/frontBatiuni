@@ -69,7 +69,6 @@ import produce from "immer";
 import { SlidemenuService } from "src/app/shared/components/slidemenu/slidemenu.component";
 import { SwipeupService } from "src/app/shared/components/swipeup/swipeup.component";
 import { transformAll } from "@angular/compiler/src/render3/r3_ast";
-import { ClassGetter } from "@angular/compiler/src/output/output_ast";
 import { BooleanService } from "src/app/shared/services/boolean.service";
 import { getUserDataService } from "src/app/shared/services/getUserData.service";
 import { AppComponent } from "src/app/app.component";
