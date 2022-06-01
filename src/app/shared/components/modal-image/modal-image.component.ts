@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
 import { SafeResourceUrl } from "@angular/platform-browser";
 import { merge } from "hammerjs";
 import { Destroy$ } from "src/app/shared/common/classes";
+import { delay } from "../../common/functions";
 
 
 //simple component for showing images
@@ -11,7 +12,7 @@ import { Destroy$ } from "src/app/shared/common/classes";
   styleUrls: ['./modal-image.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ModalImage {
+export class ModalImage extends Destroy$ {
 
   @Input()
   src: SafeResourceUrl = "";
@@ -115,10 +116,10 @@ export class ModalImage {
     });
   }
 
-  ngAfterViewInit() {
-    console.log("ngAfterViewInit")
+  ngOnChanges(): void {
+    console.log("ngOnChanges")
     let img = document.getElementById("target")!;
-
+    console.log("image onChanges", img);
     if (!this.isMobile) {
       console.log("not mobile")
       img.addEventListener("wheel", (event) => {
@@ -133,11 +134,10 @@ export class ModalImage {
     } else {
       this.hammerIt(img);
     }
-    
   }
 
-  // ngOnDestroy(): void {
-  //   console.log("EXPLOSION")
-  //   super.ngOnDestroy();
-  // }
+  ngOnDestroy(): void {
+    console.log("EXPLOSION")
+    super.ngOnDestroy();
+  }
 };
