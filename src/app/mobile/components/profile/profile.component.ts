@@ -18,6 +18,7 @@ import { NotificationViewed } from "src/models/new/user/user.actions";
 import { AppComponent } from "src/app/app.component";
 import { NotifService } from "src/app/shared/services/notif.service";
 import { getUserDataService } from "src/app/shared/services/getUserData.service";
+import { ProfileResume } from "src/app/shared/components/profile-resume/profile-resume.component";
 
 
 @Component({
@@ -34,6 +35,9 @@ export class ProfileComponent extends Destroy$ {
   @ViewChild('modifyMenu', {static: false, read: UISlideMenuComponent})
   modifyMenu!: UISlideMenuComponent;
 
+  @ViewChild(ProfileResume)
+  profileResume?: ProfileResume
+
   //move to state
   openMenu: boolean = false;
   openModifyMenu: boolean = false;
@@ -46,6 +50,8 @@ export class ProfileComponent extends Destroy$ {
   notifications: Notification[] = []
   companyId:number = -1
 
+  profile = this.store.selectSnapshot(DataQueries.currentProfile);
+
   view = this.store.selectSnapshot(DataState.view)
 
   get openNotifications() {
@@ -56,8 +62,7 @@ export class ProfileComponent extends Destroy$ {
 
     if (b) {
       this.store.dispatch(new NotificationViewed(this.companyId, this.view)).pipe(take(1)).subscribe(() => {
-        const profile = this.store.selectSnapshot(DataQueries.currentProfile)
-        this.updateProfile(profile)
+        this.updateProfile()
         this.cd.markForCheck()
       });
     } else {
@@ -68,25 +73,23 @@ export class ProfileComponent extends Destroy$ {
     this._openNotifications = !this._openNotifications
   }
   
-  @Select(DataQueries.currentProfile)
-  profile$!: Observable<Profile>;
 
   constructor(private store: Store, private cd: ChangeDetectorRef, private info: InfoService, private popup: PopupService, private notifService: NotifService, private getUserDataService: getUserDataService) {
     super();
-    this.profile$.subscribe((profile) => {
-      this.updateProfile(profile)
-    });
   }
 
 
-  updateProfile(profile:Profile) {
+  updateProfile() {
+    console.log("update profile", this.profile)
+    this.profile = this.store.selectSnapshot(DataQueries.currentProfile)
+    console.log("updated profile", this.profile)
     this.notifications = []
     this.notificationsUnseen = 0
       // Arnaque du bug
-      this.companyId = profile.user?.company!
-      profile.company = this.store.selectSnapshot(DataQueries.getById('Company', this.companyId))!
-      if (profile.company?.Notification) {
-        for (const notification of this.store.selectSnapshot(DataQueries.getMany('Notification', profile.company!.Notification)))
+      this.companyId = this.profile.user?.company!
+      this.profile.company = this.store.selectSnapshot(DataQueries.getById('Company', this.companyId))!
+      if (this.profile.company?.Notification) {
+        for (const notification of this.store.selectSnapshot(DataQueries.getMany('Notification', this.profile.company!.Notification)))
           if (this.view == notification!.role) {
             this.notifications.push(notification!)
             if (!notification!.hasBeenViewed) {
@@ -94,6 +97,8 @@ export class ProfileComponent extends Destroy$ {
             }
           }
       }
+      this.profileResume?.profileImage.updateProfile(this.profile);
+
   }
 
   slideModifyMenu(modifyPassword: boolean) {
@@ -148,8 +153,7 @@ export class ProfileComponent extends Destroy$ {
   }
   
   modifyProfile(form: any /*FormGroup*/) {
-    this.profile$.pipe(take(1)).subscribe(profile => {
-      const action = this.store.dispatch(new UserActions.ModifyUserProfile({profile: profile, form}));
+      const action = this.store.dispatch(new UserActions.ModifyUserProfile({profile: this.profile, form}));
       this.info.show("info", "Mise à jour en cours...", Infinity);
       action.pipe(take(1))
         .subscribe(
@@ -164,7 +168,6 @@ export class ProfileComponent extends Destroy$ {
           this.cd.markForCheck();
         }
         );
-    });
   }
 
   changePassword(form: FormGroup) {
@@ -182,7 +185,12 @@ export class ProfileComponent extends Destroy$ {
       resultType: CameraResultType.Base64,
       source: CameraSource.Camera
     });
-    this.store.dispatch(new UserActions.ChangeProfilePicture(photo, 'image'))
+    console.log(photo);
+    this.openModifyPicture = false;
+    this.store.dispatch(new UserActions.ChangeProfilePicture(photo, 'image'));
+    this.updateProfile();
+
+    this.cd.markForCheck();
   }
 
   async selectPhoto() {
@@ -192,8 +200,12 @@ export class ProfileComponent extends Destroy$ {
       source: CameraSource.Photos,
     });
 
-
-    this.store.dispatch(new UserActions.ChangeProfilePicture(photo, 'image'))
+    console.log(photo)
+    this.store.dispatch(new UserActions.ChangeProfilePicture(photo, 'image')).subscribe(() => {
+      this.updateProfile();
+      this.cd.markForCheck();
+    });
+    this.openModifyPicture = false;
   }
 
   openApplicationsMenu(){
