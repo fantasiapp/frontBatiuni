@@ -62,6 +62,7 @@ import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { SingleCache } from "../../services/SingleCache";
 import { HomeComponent } from "src/app/mobile/components/home_page/home.component";
 import { BoosterPage } from "src/app/mobile/components/booster/booster.page";
+import { UIAnnonceResume } from "src/app/mobile/ui/annonce-resume/annonce-resume.ui";
 
 const TRANSITION_DURATION = 200;
 
@@ -124,6 +125,9 @@ export class UIPopup extends DimensionMenu {
 
   @ViewChild("boostPost", { read: TemplateRef, static: true })
   boostPost!: TemplateRef<any>;
+
+  @ViewChild("onApply", { read: TemplateRef, static: true })
+  onApply!: TemplateRef<any>;
 
   @Input()
   content?: Exclude<PopupView, ContextUpdate>;
@@ -330,7 +334,7 @@ export class UIPopup extends DimensionMenu {
 
 export type PredefinedPopups<T = any> = {
   readonly type: "predefined";
-  name: "deletePost" | "sign" | "setDate" | "closeMission" | "validateCandidate" | "refuseCandidate" | "blockCandidate" | "boostPost"; // | 'closeMission'
+  name: "deletePost" | "sign" | "setDate" | "closeMission" | "validateCandidate" | "refuseCandidate" | "blockCandidate" | "boostPost" | "onApply"; // | 'closeMission'
   context?: TemplateContext;
 };
 
@@ -647,6 +651,39 @@ export class PopupService {
         close: () => {
           if (context.$implicit.isActive) {
             object.boostPost();
+          }
+          closed$.next();
+        },
+      });
+
+      first = false;
+    }
+  }
+
+  onApply(post: Post, object: UIAnnonceResume) {
+
+    let first: boolean = true;
+    const closed$ = new Subject<void>();
+
+    const context = {
+      $implicit: {
+        address: post.address,
+        name: post.contactName,
+        startDate: post.startDate,
+        endDate: post.endDate,
+        isActive: false,
+      },
+    };
+
+    if (first) {
+      this.dimension$.next(this.defaultDimension);
+      this.popups$.next({
+        type: "predefined",
+        name: "onApply",
+        context,
+        close: () => {
+          if (context.$implicit.isActive) {
+            object.onApply();
           }
           closed$.next();
         },

@@ -90,3 +90,11 @@
     <button class="button passive" (click)="close()">Non, merci</button>
   </div>
 </ng-template>
+
+<ng-template #onApply let-context>
+  <label>Vous êtes sur le point de postuler à l'offre {{ context.address }} au sein de l'entreprise {{ context.name }} du {{context.startDate}} au {{context.endDate}}?</label>  <div style="height:5%;"></div>
+  <div class="controls cloture">
+    <button class="button active" (click)="openActionClose(context)">Confirmer </button>
+    <button class="button passive" (click)="close()">Annuler</button>
+  </div>
+</ng-template>
