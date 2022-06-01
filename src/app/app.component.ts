@@ -84,7 +84,7 @@ export class AppComponent extends Destroy$ {
 
   async updateUserData() {
     console.log("je suis appelé (updataUserData)")
-    while(this.isConnected) {
+    while(false) {
       console.log("dans le while")
       if (!this.firstAttemptAlreadyTried){
         this.firstAttemptAlreadyTried = true
