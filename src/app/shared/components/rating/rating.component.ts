@@ -44,6 +44,7 @@ export class RatingComponent extends UIOpenMenu {
 
   missions: Mission[] | undefined;
   ratingInfos?: ratingInfo[];
+  recommandationInfos?: ratingInfo[];
   company: Company | undefined;
   openRecommandationMenu: boolean = false;
   
@@ -67,6 +68,7 @@ export class RatingComponent extends UIOpenMenu {
 
   setRatingInfos(company: Company){
     this.ratingInfos = []
+    this.recommandationInfos = []
     if( this.view == 'ST'){
       let missions = this.store.selectSnapshot(DataQueries.getAll('Mission'))
       for ( let i = 0; i < missions.length; i++ ) {
@@ -86,6 +88,24 @@ export class RatingComponent extends UIOpenMenu {
             organisationComment: mission.organisationComment,
           }
           this.ratingInfos.push(ratingInfo);
+        }
+      }
+      let recommandations = this.store.selectSnapshot(DataQueries.getAll('Recommandation'))
+      for (const recommandation of recommandations) {
+        if(recommandation.idCompany == company.id) {
+          let ratingInfo: ratingInfo = {
+            contactName: recommandation.firstName + recommandation.lastName,
+            subContractorName: '',
+            companyContractor: recommandation.company,
+            subContractorContact: '',
+            qualityVibe: recommandation.qualityStars,
+            qualityVibeComment: recommandation.qualityComment,
+            security: recommandation.securityStars,
+            securityComment: recommandation.securityComment,
+            organisation: recommandation.organisationStars,
+            organisationComment: recommandation.organisationComment,
+          }
+          this.recommandationInfos.push(ratingInfo)
         }
       }
     } else {
