@@ -23,6 +23,7 @@ import {
   ValidateMissionDate,
   BoostPost,
   AskRecommandation,
+  GiveRecommandation,
 } from "./user/user.actions";
 import {
   ApplyPost,
@@ -955,6 +956,17 @@ export class DataState {
     return this.http.get("data", demand).pipe(
       tap((response: any) => {
         //write code to manage the response
+      })
+    )
+  }
+
+  @Action(GiveRecommandation)
+  giveRecommandation(ctx: StateContext<DataModel>, application : AskRecommandation){
+    const user = this.store.selectSnapshot(DataQueries.currentUser);
+    return this.http.get("data", application).pipe(
+      tap((response: any) => {
+        //write code to manage the response
+        ctx.setState(addValues("Recommandation", response))
       })
     )
   }

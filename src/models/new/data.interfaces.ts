@@ -187,9 +187,12 @@ export interface Establishement {
   NTVAI: string;
 };
 
-export type Recommandation = {
+export interface Recommandation {
   id: Ref<Recommandation>;
   idCompany: Ref<Company>;
+  firstName: string;
+  lastName: string;
+  company: string;
   qualityStars: number;
   qualityComment: string;
   securityStars: number;

@@ -17,6 +17,9 @@ export class GiveRecommandation extends Destroy$ {
 
   recommandation: Recommandation = {
     id:-1,
+    firstName: "",
+    lastName: "",
+    company: "",
     idCompany : 0,
     qualityStars : 0,
     qualityComment : "",
