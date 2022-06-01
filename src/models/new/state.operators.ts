@@ -31,6 +31,7 @@ namespace mutable {
     const targetObjects = draft[target],
       fields = draft.fields[target];
     //translate data
+    console.log("update", target, values)
     Object.entries<any>(values).forEach(([id, item]) => {
       //An horrible patch waiting for a true solution
       if (!targetObjects) return
@@ -193,6 +194,7 @@ export function addSimpleChildren<K extends DataTypes>(parent: DataTypes, parent
 };
 
 export function addComplexChildren<K extends DataTypes>(parent: DataTypes, parentId: number, child: K, values: Record<any>) {
+  console.log("addComplexChildren start", parent, parentId, child, values)
   return produce(draft => mutable.addComplexChildren(draft, parent, parentId, child, values));
 };
 

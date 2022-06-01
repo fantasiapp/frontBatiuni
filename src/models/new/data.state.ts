@@ -679,10 +679,11 @@ export class DataState {
         // delete response[application.action];
         console.log("createDetailedPost", response)
         ctx.setState(addComplexChildren(response["type"], response["fatherId"], "DetailedPost", response["detailedPost"]))
-        console.log('createDetailPost 2');
-        ctx.setState(addComplexChildren("Company", profile.company.id, "Mission", response.mission));
-        console.log('createDetailPost 3');
+
+        if (response["detailedPost2"])
+          ctx.setState(addComplexChildren("Mission", response["missionId"], "DetailedPost", response["detailedPost2"]))
         
+        ctx.setState(addComplexChildren("Company", profile.company.id, "Mission", response.mission));
       })
     );
   }
@@ -701,7 +702,7 @@ export class DataState {
         console.log("modifyDetailedPost", response)
         if (response["deleted"] == "yes") {
           ctx.setState(
-            addComplexChildren("Company", profile.company.id, response["type"], response["Object"])
+            addComplexChildren("Company", profile.company.id, "Mission", response["Object"])
           )
         } else if (response["type"] == "DatePost") {
           console.log("modifyDetailedPost", response, response["detailedPost"])
