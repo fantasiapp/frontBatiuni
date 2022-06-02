@@ -2,6 +2,10 @@
 @use 'src/styles/mixins' as *;
 
 
+:host{
+  width: 100%;
+}
+
 .current-availability {
   display: inline-block;
   width: $icon-size;

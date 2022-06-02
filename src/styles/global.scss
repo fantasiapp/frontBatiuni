@@ -467,12 +467,13 @@ input[type=number] {
 
 .application-response {
   position: relative;
-  left: 20px;
+  left: 40px;
   &:before {
     @extend %absolute-center-y;
     left: -40px;
     width: 30px;
-    height: calc(100% + 10px);
+    // height: calc(100% + 10px);
+    height: 30px;
     content: '';
     background-repeat: no-repeat;
     background-size: contain;
