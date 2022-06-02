@@ -58,7 +58,6 @@ import { getLevenshteinDistance } from "src/app/shared/services/levenshtein";
 
 import { AuthState } from "src/models/auth/auth.state";
 import { Logout } from "src/models/auth/auth.actions";
-import { analyzeAndValidateNgModules } from "@angular/compiler";
 import { AppComponent } from "src/app/app.component";
 import { BooleanService } from "src/app/shared/services/boolean.service";
 import { STFilterForm } from "src/app/shared/forms/STFilter.form";

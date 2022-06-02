@@ -371,8 +371,9 @@ export class PopupService {
         })}
       return;
     }
-
+    console.log("openFile popup", file)
     let context = this.downloader.createFileContext(file);
+    console.log(context)
     this.popups$.next({
       type: "component",
       component: FileViewer,

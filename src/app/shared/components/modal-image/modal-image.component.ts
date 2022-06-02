@@ -22,7 +22,6 @@ export class ModalImage extends Destroy$ {
   isMobile: boolean = true;
 
   ngOnInit() {
-    console.log("plop")
     this.isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
   }
 
@@ -117,14 +116,10 @@ export class ModalImage extends Destroy$ {
   }
 
   ngOnChanges(): void {
-    console.log("ngOnChanges")
     let img = document.getElementById("target")!;
-    console.log("image onChanges", img);
     if (!this.isMobile) {
-      console.log("not mobile")
       img.addEventListener("wheel", (event) => {
         event.preventDefault();
-        console.log("wheeeeeeeeel")
         this.scale += event.deltaY / 100;
         this.scale = Math.max(1, Math.min(this.scale, 10));
 
@@ -137,7 +132,6 @@ export class ModalImage extends Destroy$ {
   }
 
   ngOnDestroy(): void {
-    console.log("EXPLOSION")
     super.ngOnDestroy();
   }
 };

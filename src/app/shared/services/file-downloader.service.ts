@@ -22,19 +22,32 @@ export class FileDownloader {
     );
   }
 
-  createFileContext(file: BasicFile): FileContext {
-    const type = getFileType(file.ext),
-      blob = b64toBlob(
-        Array.isArray(file.content) ? file.content[0] : file.content,
-        type
-      ),
-      url = [URL.createObjectURL(blob)],
-      context: FileContext = {
+  createFileContext(file: any): FileContext {
+    console.log("creating file context", file)
+
+    const type = getFileType(file.ext)
+    let blobType = type
+    if (type == 'application/pdf') {
+      blobType = 'image/jpeg'
+    }
+    const blob = file.content.map((content: string) => {
+      return b64toBlob(
+        Array.isArray(content) ? content[0] : content,
+        blobType
+      )
+    })
+    const url = blob.map((blob: Blob) => {
+      return URL.createObjectURL(blob)
+    })
+    const context: FileContext = {
         type,
         url,
-        safeUrl: [this.sanitizer.bypassSecurityTrustResourceUrl(url[0])],
+        safeUrl: url.map((url: string) => {
+          return this.sanitizer.bypassSecurityTrustResourceUrl(url)
+          }),
       };
 
+    console.log("context", context);
     return context;
   }
 

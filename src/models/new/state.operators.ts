@@ -184,6 +184,7 @@ export function addRecord(target: DataTypes, fields: string[], values: Record<an
 };
 
 export function update(target: DataTypes, values: any) {
+  console.log("update", target, values)
   return produce(draft => mutable.update(draft, target, values));
 };
 

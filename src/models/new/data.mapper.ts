@@ -148,6 +148,7 @@ export class DataReader {
   }
 
   readUpdates(data: any) {
+    console.log("readUpdates", data)
     return Object.keys(data).map((name) =>
       update(name as DataTypes, data[name])
     );

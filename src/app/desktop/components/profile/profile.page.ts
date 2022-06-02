@@ -71,7 +71,7 @@ export class ProfilePageComponent {
         form,
       })
     );
-    this.info.show("info", "Mise à jour en cours...", Infinity);
+    this.info.show("info", "Mise à jour en cours...", 2000);
     action.pipe(take(1)).subscribe(
       (success) => {
         // this.openModifyMenu = false;
