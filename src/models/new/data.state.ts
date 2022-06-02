@@ -485,6 +485,7 @@ export class DataState {
           throw response.messages;
         }
         delete response[application.action];
+        console.log('duplicatePost', response);
         ctx.setState(
           addComplexChildren("Company", profile.company.id, "Post", response)
         );
@@ -742,6 +743,8 @@ export class DataState {
         }
         delete response[application.action];
         
+        console.log('modifyMissionDate', response);
+        
         ctx.setState(addComplexChildren('Mission', response.mission.id,'DatePost', response.datePost))
       })
     );
@@ -761,7 +764,14 @@ export class DataState {
           );
           delete response[application.action];
           console.log('validateMissionDate', response)
-          ctx.setState(addComplexChildren('Mission', response.mission.id,'DatePost', response.datePost))
+          console.log(response.datePost);
+
+          if(response.datePost.hasOwnProperty('delete')) {
+            ctx.setState(deleteIds("DatePost", [response["datePost"]]));
+            ctx.setState(update('Mission', response["Mission"]));
+          } else {
+            ctx.setState(addComplexChildren(response.type, response.fatherId,'DatePost', response.datePost))
+          }
           // console.log('validateMissionDate', profile.company.id, response.mission)
           // ctx.setState(addComplexChildren('Company', profile.company.id,'Mission', response.mission))
         }

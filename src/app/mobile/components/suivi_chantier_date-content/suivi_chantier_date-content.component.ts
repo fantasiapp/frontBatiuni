@@ -80,8 +80,8 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
     this.popup.modifyPostDetailList.pipe(takeUntil(this.destroy$)).subscribe(curPostDetail => {
       // this.updatePageOnlyDate()
       console.log('datePost onChange', this.store.selectSnapshot(DataQueries.getById('DatePost', this.dateOrigin.id)));
-
-      if(curPostDetail.checked){
+      console.log('datePost onchange curPost', curPostDetail);
+      if(curPostDetail.checked && curPostDetail.date == this.dateOrigin.date){
         this.tasksGraphic.push({
           selectedTask:curPostDetail,
           validationImage: this.computeTaskImage(curPostDetail, "validated"),
