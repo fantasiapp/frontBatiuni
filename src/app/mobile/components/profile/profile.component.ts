@@ -38,8 +38,6 @@ export class ProfileComponent extends Destroy$ {
   @ViewChild(ProfileResume)
   profileResume?: ProfileResume
 
-  profile = this.store.selectSnapshot(DataQueries.currentProfile);
-
   //move to state
   openMenu: boolean = false;
   openModifyMenu: boolean = false;
@@ -50,7 +48,7 @@ export class ProfileComponent extends Destroy$ {
   _openNotifications : boolean = false;
   notificationsUnseen: number = 0
   notifications: Notification[] = []
-  companyId:number = this.profile.user?.company!
+  companyId:number = -1;
 
 
   view = this.store.selectSnapshot(DataState.view)
@@ -63,7 +61,8 @@ export class ProfileComponent extends Destroy$ {
 
     if (b) {
       this.store.dispatch(new NotificationViewed(this.companyId, this.view)).pipe(take(1)).subscribe(() => {
-        this.updateProfile()
+        const profile = this.store.selectSnapshot(DataQueries.currentProfile)
+        this.updateProfile(profile)
         this.cd.markForCheck()
       });
     } else {
@@ -74,23 +73,30 @@ export class ProfileComponent extends Destroy$ {
     this._openNotifications = !this._openNotifications
   }
   
+  @Select(DataQueries.currentProfile) 
+  profile$!: Observable<Profile>;
 
   constructor(private store: Store, private cd: ChangeDetectorRef, private info: InfoService, private popup: PopupService, private notifService: NotifService, private getUserDataService: getUserDataService) {
     super();
+    this.profile$.subscribe(profile => {
+      this.updateProfile(profile)
+    });
   }
 
 
-  updateProfile() {
-    console.log("update profile", this.profile)
-    this.profile = this.store.selectSnapshot(DataQueries.currentProfile)
-    console.log("updated profile", this.profile)
+  updateProfile(profile?: Profile) {
+
+    if (!profile) {
+      profile = this.store.selectSnapshot(DataQueries.currentProfile)
+    }
+    
     this.notifications = []
     this.notificationsUnseen = 0
       // Arnaque du bug
-      this.companyId = this.profile.user?.company!
-      this.profile.company = this.store.selectSnapshot(DataQueries.getById('Company', this.companyId))!
-      if (this.profile.company?.Notification) {
-        for (const notification of this.store.selectSnapshot(DataQueries.getMany('Notification', this.profile.company!.Notification)))
+      this.companyId = profile.user?.company!
+      profile.company = this.store.selectSnapshot(DataQueries.getById('Company', this.companyId))!
+      if (profile.company?.Notification) {
+        for (const notification of this.store.selectSnapshot(DataQueries.getMany('Notification', profile.company!.Notification)))
           if (this.view == notification!.role) {
             this.notifications.push(notification!)
             if (!notification!.hasBeenViewed) {
@@ -98,7 +104,7 @@ export class ProfileComponent extends Destroy$ {
             }
           }
       }
-      this.profileResume?.profileImage.updateProfile(this.profile);
+      this.profileResume?.profileImage.updateProfile(profile);
 
   }
 
@@ -154,7 +160,8 @@ export class ProfileComponent extends Destroy$ {
   }
   
   modifyProfile(form: any /*FormGroup*/) {
-      const action = this.store.dispatch(new UserActions.ModifyUserProfile({profile: this.profile, form}));
+    this.profile$.pipe(take(1)).subscribe(profile => {
+      const action = this.store.dispatch(new UserActions.ModifyUserProfile({profile: profile, form}))
       this.info.show("info", "Mise à jour en cours...", Infinity);
       action.pipe(take(1))
         .subscribe(
@@ -170,6 +177,7 @@ export class ProfileComponent extends Destroy$ {
           this.cd.markForCheck();
         }
         );
+      });
   }
 
   changePassword(form: FormGroup) {
