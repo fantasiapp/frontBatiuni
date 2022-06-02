@@ -124,6 +124,9 @@ export class OfferMapComponent {
       : null;
   }
 
+  @Input()
+  hideExactAdress: boolean = false;
+
   deletePost() {
     this.store.dispatch(new DeletePost(this.post!.id));
   }
@@ -170,5 +173,14 @@ export class OfferMapComponent {
     this.favoritePost = !this.favoritePost;
 
     this.store.dispatch(new SetFavorite(this.favoritePost, this.post!.id));
+  }
+
+
+  hideAdress(adress?: string) {
+    if (adress && this.hideExactAdress) {
+      return adress!.replace(/\d+/, "").trim();
+    } else {
+      return adress;
+    }
   }
 }

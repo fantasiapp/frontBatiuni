@@ -10,10 +10,11 @@
         [availability]="currentAvailability">
     </sos-card-map>
     <offer-map 
-        (click)="postClick.emit(currentPost)" 
+        (click)="postClick.emit({post: currentPost, hideExactAdress: true})"
         *ngIf="currentPost && view == 'ST'"
         [deletable]="true" 
         [post]="currentPost" 
+        [hideExactAdress]="true"
         >
     </offer-map> 
 </div>

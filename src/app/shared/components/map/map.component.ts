@@ -63,7 +63,7 @@ export class UIMapComponent {
   };
 
   @Output()
-  postClick = new EventEmitter<Post>();
+  postClick = new EventEmitter<{post: Post, hideExactAdress: boolean}>();
 
   @Output()
   companyClick = new EventEmitter<Company>();

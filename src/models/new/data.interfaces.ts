@@ -307,6 +307,7 @@ export class PostMenu<T extends Post | Mission = Post> {
   swipeup: boolean = false;
   swipeupCloseMission: boolean = false;
   favorite: boolean = false;
+  hideExactAdress: boolean = false;
 
   get candidates() { return this.post?.candidates || []; }
 
