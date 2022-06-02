@@ -572,12 +572,13 @@ export class HomeComponent extends Destroy$ {
     this.draftMenu = assignCopy(this.draftMenu, { post, open: !!post });
   }
 
-  openPost(post: Post | null) {
+  openPost(post: Post | null, hideExactAdress?: boolean) {
     //mark as viewed
     this.postMenu = assignCopy(this.postMenu, {
       post,
       open: !!post,
       swipeup: false,
+      hideExactAdress: hideExactAdress
     });
     if (post) this.store.dispatch(new MarkViewed(post.id));
 
