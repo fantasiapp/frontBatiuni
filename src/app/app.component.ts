@@ -85,23 +85,23 @@ export class AppComponent extends Destroy$ {
   async updateUserData() {
     console.log("je suis appelé (updataUserData)")
     while(this.isConnected) {
-      console.log("dans le while")
+      if (this.readyToUpdate){
+        this.readyToUpdate = false
+        console.log("dans le while", this.isWhileOn)
       if (!this.firstAttemptAlreadyTried){
         this.firstAttemptAlreadyTried = true
-        this.readyToUpdate = false
-        await delay(20000)
-        this.readyToUpdate = true
       }
-      else if (this.readyToUpdate) {
+      else{
         this.executeGetGeneralData() 
-        this.readyToUpdate = false
         this.getUserData()
-        await delay(20000)
         this.notifService.checkNotif()
         this.notifService.emitNotifChangeEvent()
-        this.readyToUpdate = true
-      }}
-  }
+      }
+      await delay(2000)
+      this.readyToUpdate = true
+      }
+    }
+    }
 
   getUserData() {
     let token = this.store.selectSnapshot(AuthState.token);
