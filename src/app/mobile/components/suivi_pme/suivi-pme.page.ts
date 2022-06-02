@@ -49,7 +49,7 @@ export class SuiviPME {
   track: { [key: string]: Map<PostDetail, Supervision[]> } = {};
   isNotSigned: boolean = true;
   isNotSignedByUser: boolean = true;
-  dates: number[] = [];
+  dates: DatePost[] = [];
   // datesNew: PostDateAvailableTask[] = []
   currentDateId: number | null = null;
   tasks: Task[] | null = null;
@@ -95,7 +95,8 @@ export class SuiviPME {
       if (!Array.isArray(mission.dates)) arrayDateId = Object.keys(mission.dates).map(date => +date)
       else arrayDateId = mission.dates
       console.log("dates missionMenu", arrayDateId)
-      this.dates = arrayDateId
+      this.dates = this.store.selectSnapshot(DataQueries.getMany('DatePost', arrayDateId))
+      
       // this.computeDates(mission);
       this.companyName =
         this.view == "ST" ? this.company!.name : this.subContractor!.name;
@@ -334,7 +335,7 @@ export class SuiviPME {
       let arrayDateId = []
       if (!Array.isArray(this.mission.dates)) arrayDateId = Object.keys(this.mission.dates).map(date => +date)
       else arrayDateId = this.mission.dates
-      this.dates = arrayDateId
+      this.dates = this.store.selectSnapshot(DataQueries.getMany('DatePost', arrayDateId))
 
       this.cd.markForCheck();
       console.log('end saveToBack');
@@ -343,7 +344,7 @@ export class SuiviPME {
   }
 
   computeBlockedDate(): string[] {
-    console.log('Start blocked');
+    console.log('Start blocked', this.mission);
     if(!this.mission){
       return []
     }
@@ -369,7 +370,7 @@ export class SuiviPME {
     let datesId = this.mission.dates;
     if (typeof datesId === "object" && !Array.isArray(datesId))
       datesId = Object.keys(datesId).map((key) => +key as number);
-    this.store.selectSnapshot(DataQueries.getMany("DatePost", this.dates)).forEach(date => {
+    this.store.selectSnapshot(DataQueries.getMany("DatePost", this.mission.dates)).forEach(date => {
       if(date.deleted) pendingDeleted.push(date.date)
       else if (!date.validated) pendingValidated.push(date.date)
     })
