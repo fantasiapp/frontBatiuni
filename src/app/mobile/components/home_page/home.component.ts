@@ -64,6 +64,7 @@ import { STFilterForm } from "src/app/shared/forms/STFilter.form";
 import { PMEFilterForm } from "src/app/shared/forms/PMEFilter.form";
 import { SearchbarComponent } from "src/app/shared/components/searchbar/searchbar.component";
 import { getUserDataService } from "src/app/shared/services/getUserData.service";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "home",
@@ -158,7 +159,8 @@ export class HomeComponent extends Destroy$ {
     private mobile: Mobile,
     private booleanService: BooleanService,
     private filterService: FilterService,
-    private getUserDataService: getUserDataService
+    private getUserDataService: getUserDataService,
+    private router: Router
   ) {
     super();
     this.isLoading = this.booleanService.isLoading
@@ -719,7 +721,8 @@ export class HomeComponent extends Destroy$ {
     .pipe(take(1))
     .subscribe(() => {
       //if successful, quit the slidemenu
-      this.openPost(null);
+      // this.openPost(null);
+      this.router.navigateByUrl('/home')
       this.cd.markForCheck();
     });
   }
@@ -741,6 +744,7 @@ export class HomeComponent extends Destroy$ {
       .pipe(take(1))
       .subscribe(() => {
         this.openPost(null);
+        this.router.navigateByUrl('/home_page')
         this.cd.markForCheck();
       });
   }
