@@ -71,7 +71,7 @@ export class ExtendedProfileComponent extends Destroy$ {
   showStar: boolean = true;
 
   deblock: boolean = false;
-
+  
   constructor(
     private store: Store,
     private popup: PopupService,
