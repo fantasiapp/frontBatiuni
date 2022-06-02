@@ -38,6 +38,8 @@ export class ProfileComponent extends Destroy$ {
   @ViewChild(ProfileResume)
   profileResume?: ProfileResume
 
+  profile = this.store.selectSnapshot(DataQueries.currentProfile);
+
   //move to state
   openMenu: boolean = false;
   openModifyMenu: boolean = false;
@@ -48,9 +50,8 @@ export class ProfileComponent extends Destroy$ {
   _openNotifications : boolean = false;
   notificationsUnseen: number = 0
   notifications: Notification[] = []
-  companyId:number = -1
+  companyId:number = this.profile.user?.company!
 
-  profile = this.store.selectSnapshot(DataQueries.currentProfile);
 
   view = this.store.selectSnapshot(DataState.view)
 
