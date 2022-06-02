@@ -187,7 +187,6 @@ export class HomeComponent extends Destroy$ {
 
   async lateInit() {
       if (!this.isLoading) {
-        console.log('lateinit', this.store.selectSnapshot(DataQueries.getAll('BlockedCandidate')))
       this.info.alignWith("header_search");
       combineLatest([this.profile$, this.posts$])
         .pipe(takeUntil(this.destroy$))
@@ -206,12 +205,9 @@ export class HomeComponent extends Destroy$ {
           });
           const otherOnlinePost = mapping.get(this.symbols.otherOnlinePost) || [];
           this.allUserDrafts = mapping.get(this.symbols.userDraft) || [];
-          this.allUserOnlinePosts =
-            mapping.get(this.symbols.userOnlinePost) || [];
+          this.allUserOnlinePosts = mapping.get(this.symbols.userOnlinePost) || [];
           this.allOnlinePosts = [...otherOnlinePost, ...this.userOnlinePosts];
-          console.log("allOnlinePosts", profile.company)
           this.allMissions = this.store.selectSnapshot(DataQueries.getMany("Mission", profile.company.missions));
-  
           if (this.filterST) {this.filterST.updatePosts(this.allOnlinePosts)}
           this.selectDraft(null);
           this.selectUserOnline(null);

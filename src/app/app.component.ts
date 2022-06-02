@@ -97,7 +97,7 @@ export class AppComponent extends Destroy$ {
         this.notifService.checkNotif()
         this.notifService.emitNotifChangeEvent()
       }
-      await delay(2000)
+      await delay(20000)
       this.readyToUpdate = true
       }
     }
