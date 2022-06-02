@@ -63,13 +63,19 @@
                   *ngFor="let onlinePost of displayOnlinePosts"
                   [deletable]="false"
                   [post]="onlinePost"
-                  (click)="openPost(onlinePost)"
+                  (click)="openPost(onlinePost, true)"
                   [view]="'ST'"
                   [time]="time"
+                  [hideExactAdress]="true"
                   ></offer>
               </ng-container>
     
-              <mapbox-batiuni [posts]="displayOnlinePosts" class="map-container space-children-margin" (postClick)="openPost($event)" *ngSwitchCase="1" (postClick)="openPost($event)"></mapbox-batiuni>
+              <mapbox-batiuni 
+                [posts]="displayOnlinePosts" 
+                class="map-container space-children-margin" 
+                (postClick)="openPost($event.post, $event.hideExactAdress)" 
+                *ngSwitchCase="1" 
+              ></mapbox-batiuni>
             </ng-container>
           </ng-template>
     </div>
@@ -139,6 +145,7 @@
           class="hosted-page content-with-footer"
           [collapsible]="false"
           [post]="postMenu.post!"
+          [hideExactAdress]="postMenu.hideExactAdress!"
           (apply)="applyPost(postMenu.post!, $event)"
           #resume
         ></annonce-resume>
