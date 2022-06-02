@@ -1,6 +1,7 @@
 import { ChangeDetectorRef, Component, Input,} from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { Store } from "@ngxs/store";
+import { PopupService } from "src/app/shared/components/popup/popup.component";
 import { SlidemenuService } from "src/app/shared/components/slidemenu/slidemenu.component";
 import { Post } from "src/models/new/data.interfaces";
 import { DataQueries } from "src/models/new/data.state";
@@ -24,10 +25,15 @@ export class BoosterPage {
   constructor(
     private store: Store,
     private slideService: SlidemenuService,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef, 
+    private popup: PopupService
     ) {}
 
   ngOnInit() {
+  }
+
+  showPopUp(){
+    this.popup.boostPost(this.post, this.boostForm.value, this)
   }
 
   boostPost(){
@@ -38,6 +44,8 @@ export class BoosterPage {
     )
     
   }
+
+
 
   get selected() {
     return this.boostForm.value.duration;

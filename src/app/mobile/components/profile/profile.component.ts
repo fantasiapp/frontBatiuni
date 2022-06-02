@@ -18,6 +18,7 @@ import { NotificationViewed } from "src/models/new/user/user.actions";
 import { AppComponent } from "src/app/app.component";
 import { NotifService } from "src/app/shared/services/notif.service";
 import { getUserDataService } from "src/app/shared/services/getUserData.service";
+import { ProfileResume } from "src/app/shared/components/profile-resume/profile-resume.component";
 
 
 @Component({
@@ -34,6 +35,9 @@ export class ProfileComponent extends Destroy$ {
   @ViewChild('modifyMenu', {static: false, read: UISlideMenuComponent})
   modifyMenu!: UISlideMenuComponent;
 
+  @ViewChild(ProfileResume)
+  profileResume?: ProfileResume
+
   //move to state
   openMenu: boolean = false;
   openModifyMenu: boolean = false;
@@ -44,7 +48,8 @@ export class ProfileComponent extends Destroy$ {
   _openNotifications : boolean = false;
   notificationsUnseen: number = 0
   notifications: Notification[] = []
-  companyId:number = -1
+  companyId:number = -1;
+
 
   view = this.store.selectSnapshot(DataState.view)
 
@@ -68,18 +73,23 @@ export class ProfileComponent extends Destroy$ {
     this._openNotifications = !this._openNotifications
   }
   
-  @Select(DataQueries.currentProfile)
+  @Select(DataQueries.currentProfile) 
   profile$!: Observable<Profile>;
 
   constructor(private store: Store, private cd: ChangeDetectorRef, private info: InfoService, private popup: PopupService, private notifService: NotifService, private getUserDataService: getUserDataService) {
     super();
-    this.profile$.subscribe((profile) => {
+    this.profile$.subscribe(profile => {
       this.updateProfile(profile)
     });
   }
 
 
-  updateProfile(profile:Profile) {
+  updateProfile(profile?: Profile) {
+
+    if (!profile) {
+      profile = this.store.selectSnapshot(DataQueries.currentProfile)
+    }
+    
     this.notifications = []
     this.notificationsUnseen = 0
       // Arnaque du bug
@@ -94,6 +104,8 @@ export class ProfileComponent extends Destroy$ {
             }
           }
       }
+      this.profileResume?.profileImage.updateProfile(profile);
+
   }
 
   slideModifyMenu(modifyPassword: boolean) {
@@ -149,7 +161,7 @@ export class ProfileComponent extends Destroy$ {
   
   modifyProfile(form: any /*FormGroup*/) {
     this.profile$.pipe(take(1)).subscribe(profile => {
-      const action = this.store.dispatch(new UserActions.ModifyUserProfile({profile: profile, form}));
+      const action = this.store.dispatch(new UserActions.ModifyUserProfile({profile: profile, form}))
       this.info.show("info", "Mise à jour en cours...", Infinity);
       action.pipe(take(1))
         .subscribe(
@@ -160,11 +172,12 @@ export class ProfileComponent extends Destroy$ {
           this.cd.markForCheck();
         },
         err => {
-          this.info.show("error", "Aucune valeur n'est modifiée", 5000);
+          console.log("error", err)
+          // this.info.show("error", "Aucune valeur n'est modifiée", 5000);
           this.cd.markForCheck();
         }
         );
-    });
+      });
   }
 
   changePassword(form: FormGroup) {
@@ -182,7 +195,12 @@ export class ProfileComponent extends Destroy$ {
       resultType: CameraResultType.Base64,
       source: CameraSource.Camera
     });
-    this.store.dispatch(new UserActions.ChangeProfilePicture(photo, 'image'))
+    console.log(photo);
+    this.openModifyPicture = false;
+    this.store.dispatch(new UserActions.ChangeProfilePicture(photo, 'image'));
+    this.updateProfile();
+
+    this.cd.markForCheck();
   }
 
   async selectPhoto() {
@@ -192,8 +210,12 @@ export class ProfileComponent extends Destroy$ {
       source: CameraSource.Photos,
     });
 
-
-    this.store.dispatch(new UserActions.ChangeProfilePicture(photo, 'image'))
+    console.log(photo)
+    this.store.dispatch(new UserActions.ChangeProfilePicture(photo, 'image')).subscribe(() => {
+      this.updateProfile();
+      this.cd.markForCheck();
+    });
+    this.openModifyPicture = false;
   }
 
   openApplicationsMenu(){

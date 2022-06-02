@@ -45,6 +45,9 @@ import {
   Ref,
   DatePost,
   PostDateAvailableTask,
+  PostDetail,
+  User,
+  Post,
 } from "src/models/new/data.interfaces";
 import { DataQueries, DataState } from "src/models/new/data.state";
 import { FileContext, FileViewer } from "../file-viewer/file-viewer.component";
@@ -58,6 +61,9 @@ import { SuiviChantierDateContentComponent } from "src/app/mobile/components/sui
 import { UICheckboxComponent } from "../box/checkbox.component";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { SingleCache } from "../../services/SingleCache";
+import { HomeComponent } from "src/app/mobile/components/home_page/home.component";
+import { BoosterPage } from "src/app/mobile/components/booster/booster.page";
+import { UIAnnonceResume } from "src/app/mobile/ui/annonce-resume/annonce-resume.ui";
 
 const TRANSITION_DURATION = 200;
 
@@ -65,7 +71,8 @@ const TRANSITION_DURATION = 200;
 
 export interface assignDateType {
   missionId: Ref<Mission>;
-  date: DateG;
+  date: PostDateAvailableTask;
+  datePostId: Ref<DatePost>;
   view: "ST" | "PME";
 }
 
@@ -108,6 +115,21 @@ export class UIPopup extends DimensionMenu {
 
   @ViewChild("closeMission", { read: TemplateRef, static: true })
   closeMission!: TemplateRef<any>;
+
+  @ViewChild("validateCandidate", { read: TemplateRef, static: true })
+  validateCandidate!: TemplateRef<any>;
+
+  @ViewChild("refuseCandidate", { read: TemplateRef, static: true })
+  refuseCandidate!: TemplateRef<any>;
+
+  @ViewChild("blockCandidate", { read: TemplateRef, static: true })
+  blockCandidate!: TemplateRef<any>;
+
+  @ViewChild("boostPost", { read: TemplateRef, static: true })
+  boostPost!: TemplateRef<any>;
+
+  @ViewChild("onApply", { read: TemplateRef, static: true })
+  onApply!: TemplateRef<any>;
 
   @Input()
   content?: Exclude<PopupView, ContextUpdate>;
@@ -203,83 +225,68 @@ export class UIPopup extends DimensionMenu {
       .subscribe(() => {});
   }
 
-  addNewTask(e: Event, assignDate: assignDateType, input: HTMLInputElement) {
+  detailedPostCheck(postDateAvailableTask: PostDateAvailableTask, detailedPost: PostDetail){
+    const postDetails = postDateAvailableTask.postDetails.filter(postDetail => postDetail.id == detailedPost.id)
+    console.log('checked', !!postDetails.length ? postDetails[0].checked : false);
+    return !!postDetails.length ? postDetails[0].checked : false
+  }
+
+  addNewTask(e: Event,assignDate: assignDateType, input: HTMLInputElement) {
     // this.store.dispatch(new CreateDetailedPost(assignDate.postDateAvailableTask, input.value, assignDate!.date!.date!.date))
 
-    this.store.dispatch(new CreateDetailedPost(assignDate.missionId, input.value, assignDate!.date!.date!.date)).pipe(take(1)).subscribe(() => {
+    // console.log('addNewTask', missionId, input.value, date);
+    console.log('object');
+    console.log('assing', assignDate);
+    this.store.dispatch(new CreateDetailedPost(assignDate.missionId, input.value, assignDate.datePostId)).pipe(take(1)).subscribe(() => {
       input.value = "";
-
-      //On a les post date maintenant
-
-      // const mission = this.store.selectSnapshot(
-      //   DataQueries.getById("Mission", assignDate.missionId)
-      // )
-      // console.log("assignDate", assignDate)
-      // const missionPostDetail = this.store.selectSnapshot(
-      //   DataQueries.getMany("DetailedPost", mission!.details)
-      // ) as Task[];
-      // const newTask = missionPostDetail[missionPostDetail.length - 1];
       
+      console.log('assing', assignDate);
+      const mission = this.store.selectSnapshot(DataQueries.getById("Mission", assignDate.missionId))
+      const missionPostDetail = this.store.selectSnapshot(DataQueries.getMany("DetailedPost", mission!.details)) as Task[];
+      console.log('assing', assignDate);
+      const newTask = missionPostDetail[missionPostDetail.length - 1];
+      console.log('NewTask,', newTask);
       
-      // assignDate.date.taskWithoutDouble.push(newTask);
-      // assignDate.date.selectedTasks.push(newTask);
-      // this.popupService.taskWithoutDouble.next(
-      //   assignDate.date.taskWithoutDouble
-      // );
-      // this.cd.markForCheck();
+      // assignDate.date.allPostDetails = this.store.selectSnapshot(DataQueries.getMany("DetailedPost", mission!.details));
+      // this.popupService.addPostDetailList.next(newTask);
+      const newTaskSupervision = this.store.selectSnapshot(DataQueries.getMany("Supervision", newTask.supervisions))
+      const detailDate: PostDetailGraphic = {
+        id: newTask.id,
+        date: assignDate.date.date,
+        content: newTask.content,
+        validated: newTask.validated,
+        refused: newTask.refused,
+        supervisions: newTaskSupervision,
+        checked: true
+      }
+      assignDate.date.allPostDetails.push(detailDate)
+      console.log('detailDAte,', detailDate);
+      assignDate.date.postDetails.push(detailDate)
+      this.popupService.modifyPostDetailList.next(detailDate)
+
+      this.cd.markForCheck();
     });
   }
 
-  disableCheckbox(task: Task, date: DateG) {
-    for (const selectedTask of date.selectedTasks) {
-      if (
-        task.content == selectedTask.content &&
-        (selectedTask.refused || selectedTask.validated)
-      )
-        return true;
-    }
-    return false;
+
+  modifyDetailedPostDate(detailDate: PostDetailGraphic, checkbox: UICheckboxComponent, assignDate: assignDateType ) {
+    // let unset = checkbox.value
+    let datePostId: Ref<DatePost> = assignDate.datePostId
+    
+    this.store.dispatch(new ModifyDetailedPost(detailDate, detailDate.checked, datePostId)).pipe(take(1)).subscribe(() => {
+      console.log('detailDate', detailDate);
+      detailDate.checked = !detailDate.checked
+      const newDetailDate = detailDate
+      newDetailDate.date = assignDate.date.date
+      console.log('newDetailDate', newDetailDate);
+      
+      this.popupService.modifyPostDetailList.next(newDetailDate)
+
+      this.cd.markForCheck();
+    });
   }
 
-  checkedCheckbox(task: Task, date: DateG) {
-    for (const selectedTask of date.selectedTasks) {
-      if (task.content == selectedTask.content) return true;
-    }
-    return false;
-  }
-
-  modifyDetailedPostDate(
-    task: Task,
-    date: DateG,
-    missionId: Ref<Mission>,
-    checkbox: UICheckboxComponent
-  ) {
-    // let unset = checkbox.value;
-    // console.log("modifyDetailedPostDate")
-    // this.store
-    //   .dispatch(
-    //     new ModifyDetailedPost(
-    //       this.findTaskWithDate(date, task, missionId, unset!),
-    //       unset
-    //     )
-    //   )
-    //   .pipe(take(1))
-    //   .subscribe(() => {
-    //     this.cd.markForCheck();
-    //   });
-    //   console.log("modifyDetailedPostDate end")
-
-    // this.store.dispatch(new ModifyDetailedPost(postDate.detailDate).pipe(take(1)).subscribe(() => {
-    //   this.cd.markForCheck();
-    // });
-  }
-
-  findTaskWithDate(
-    date: DateG,
-    task: PostDetailGraphic,
-    missionId: Ref<Mission>,
-    unset: boolean
-  ) {
+  findTaskWithDate(date: DateG, task: PostDetailGraphic, missionId: Ref<Mission>, unset: boolean) {
     // essayer d'avoir un this.mission plutot que de l'appeler 20fois
     const mission = this.store.selectSnapshot(
       DataQueries.getById("Mission", missionId)
@@ -314,7 +321,7 @@ export class UIPopup extends DimensionMenu {
 
 export type PredefinedPopups<T = any> = {
   readonly type: "predefined";
-  name: "deletePost" | "sign" | "setDate" | "closeMission"; // | 'closeMission'
+  name: "deletePost" | "sign" | "setDate" | "closeMission" | "validateCandidate" | "refuseCandidate" | "blockCandidate" | "boostPost" | "onApply"; // | 'closeMission'
   context?: TemplateContext;
 };
 
@@ -333,7 +340,8 @@ export type PopupView = (
 export class PopupService {
   popups$ = new Subject<PopupView>();
   dimension$ = new Subject<Dimension>();
-  taskWithoutDouble = new Subject<Task[]>();
+  modifyPostDetailList = new Subject<PostDetailGraphic>();
+  addPostDetailList = new Subject<PostDetail>();
   defaultDimension: Dimension = {
     left: "20px",
     top: "30px",
@@ -363,8 +371,9 @@ export class PopupService {
         })}
       return;
     }
-
+    console.log("openFile popup", file)
     let context = this.downloader.createFileContext(file);
+    console.log(context)
     this.popups$.next({
       type: "component",
       component: FileViewer,
@@ -452,8 +461,9 @@ export class PopupService {
   }
 
   openDateDialog(
-    mission: Mission,
-    PostDateAvailableTask: PostDateAvailableTask,
+    missionId: Ref<Mission>,
+    date: PostDateAvailableTask,
+    datePostId: Ref<DatePost>,
     objectSuivi: SuiviChantierDateContentComponent
   ) {
     const view = this.store.selectSnapshot(DataState.view),
@@ -462,8 +472,9 @@ export class PopupService {
 
     const context = {
       $implicit: {
-        // date: dateG,
-        PostDateAvailableTask: PostDateAvailableTask,
+        missionId: missionId,
+        date: date,
+        datePostId: datePostId,
         view: view,
       },
     };
@@ -504,6 +515,166 @@ export class PopupService {
         close: () => {
           if (context.$implicit.isActive) {
             object.openCloseMission();
+          }
+          closed$.next();
+        },
+      });
+
+      first = false;
+    }
+  }
+
+  validateCandidate(candidateId: number, post: Post, object: HomeComponent) {
+    let candidate = this.store.selectSnapshot(DataQueries.getById('Candidate', candidateId))
+    let companies = this.store.selectSnapshot(DataQueries.getAll('Company'))
+    let candidateCompany = companies.filter(company => company.id == candidate?.company)
+    let first: boolean = true;
+    const closed$ = new Subject<void>();
+
+    const context = {
+      $implicit: {
+        name: candidateCompany[0].name,
+        isActive: false,
+      },
+    };
+
+    if (first) {
+      this.dimension$.next(this.defaultDimension);
+      this.popups$.next({
+        type: "predefined",
+        name: "validateCandidate",
+        context,
+        close: () => {
+          if (context.$implicit.isActive) {
+            object.validateCandidate(post, candidateId);
+          }
+          closed$.next();
+        },
+      });
+
+      first = false;
+    }
+  }
+
+  refuseCandidate(candidateId: number, post: Post, object: HomeComponent) {
+    let candidate = this.store.selectSnapshot(DataQueries.getById('Candidate', candidateId))
+    let companies = this.store.selectSnapshot(DataQueries.getAll('Company'))
+    let candidateCompany = companies.filter(company => company.id == candidate?.company)
+    let first: boolean = true;
+    const closed$ = new Subject<void>();
+
+    const context = {
+      $implicit: {
+        name: candidateCompany[0].name,
+        isActive: false,
+      },
+    };
+
+    if (first) {
+      this.dimension$.next(this.defaultDimension);
+      this.popups$.next({
+        type: "predefined",
+        name: "refuseCandidate",
+        context,
+        close: () => {
+          if (context.$implicit.isActive) {
+            object.refuseCandidate(post, candidateId);
+          }
+          closed$.next();
+        },
+      });
+
+      first = false;
+    }
+  }
+
+  blockCandidate(candidateId: number, object: HomeComponent) {
+    let candidate = this.store.selectSnapshot(DataQueries.getById('Candidate', candidateId))
+    let companies = this.store.selectSnapshot(DataQueries.getAll('Company'))
+    let candidateCompany = companies.filter(company => company.id == candidate?.company)
+    let first: boolean = true;
+    const closed$ = new Subject<void>();
+
+    const context = {
+      $implicit: {
+        name: candidateCompany[0].name,
+        isActive: false,
+      },
+    };
+
+    if (first) {
+      this.dimension$.next(this.defaultDimension);
+      this.popups$.next({
+        type: "predefined",
+        name: "blockCandidate",
+        context,
+        close: () => {
+          if (context.$implicit.isActive) {
+            object.blockCandidate(candidateId);
+          }
+          closed$.next();
+        },
+      });
+
+      first = false;
+    }
+  }
+
+  boostPost(post: Post, boostForm: any, object: BoosterPage) {
+
+    let first: boolean = true;
+    const closed$ = new Subject<void>();
+
+    const context = {
+      $implicit: {
+        address: post.address,
+        duration: boostForm.duration,
+        isActive: false,
+      },
+    };
+
+    if (first) {
+      this.dimension$.next(this.defaultDimension);
+      this.popups$.next({
+        type: "predefined",
+        name: "boostPost",
+        context,
+        close: () => {
+          if (context.$implicit.isActive) {
+            object.boostPost();
+          }
+          closed$.next();
+        },
+      });
+
+      first = false;
+    }
+  }
+
+  onApply(post: Post, object: UIAnnonceResume) {
+
+    let first: boolean = true;
+    const closed$ = new Subject<void>();
+
+    const context = {
+      $implicit: {
+        address: post.address,
+        name: post.contactName,
+        startDate: post.startDate,
+        endDate: post.endDate,
+        isActive: false,
+      },
+    };
+
+    if (first) {
+      this.dimension$.next(this.defaultDimension);
+      this.popups$.next({
+        type: "predefined",
+        name: "onApply",
+        context,
+        close: () => {
+          if (context.$implicit.isActive) {
+            object.onApply();
           }
           closed$.next();
         },

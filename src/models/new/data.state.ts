@@ -69,7 +69,6 @@ import produce from "immer";
 import { SlidemenuService } from "src/app/shared/components/slidemenu/slidemenu.component";
 import { SwipeupService } from "src/app/shared/components/swipeup/swipeup.component";
 import { transformAll } from "@angular/compiler/src/render3/r3_ast";
-import { ClassGetter } from "@angular/compiler/src/output/output_ast";
 import { BooleanService } from "src/app/shared/services/boolean.service";
 import { getUserDataService } from "src/app/shared/services/getUserData.service";
 import { AppComponent } from "src/app/app.component";
@@ -317,7 +316,6 @@ export class DataState {
     return req.pipe(
       tap((response: any) => {
         if (response[picture.action] !== "OK") throw response["messages"];
-
         delete response[picture.action];
         ctx.setState(compose(addSimpleChildren("Company", profile.company.id, "File", response, "nature")));
       })
@@ -504,6 +502,7 @@ export class DataState {
 
     //check if the file is already downloaded
     if (file && file[contentIndex]) {
+      console.log("download File", typeof(file.content))
       return file.content;
     }
 
@@ -641,14 +640,13 @@ export class DataState {
   }
 
   @Action(BlockCompany)
-  blockCompany(ctx: StateContext<DataModel>, handle: HandleApplication) {
-    const { post, ...data } = handle;
-    return this.http.get("data", data).pipe(
+  blockCompany(ctx: StateContext<DataModel>, block: BlockCompany) {
+    return this.http.get("data", block).pipe(
       tap((response: any) => {
-        console.log("blockCompany", response)
-        if (response[handle.action] !== "OK") this.inZone(() => this.info.show("error", response.messages, 3000))
-        else this.inZone(() => this.info.show("success", response.messages, 2000));
+        if (response[block.action] !== "OK") this.inZone(() => this.info.show("error", response.messages, 3000))
+        else {delete response[block.action]; this.inZone(() => this.info.show("success", response.messages, 2000));}
       })
+
     )
   }
 
@@ -673,16 +671,21 @@ export class DataState {
   @Action(CreateDetailedPost)
   createDetailedPost(ctx: StateContext<DataModel>, application: CreateDetailedPost) {
     const profile = this.store.selectSnapshot(DataQueries.currentProfile)!;
+    const missionId = application.missionId
+    console.log('misssionId', missionId);
     return this.http.post("data", application).pipe(
       tap((response: any) => {
-        if (response[application.action] !== "OK") {
-          this.inZone(() => this.info.show("error", response.messages, 3000));
-          throw response.messages;
+        // if (response[application.action] !== "OK") {
+        //   this.inZone(() => this.info.show("error", response.messages, 3000));
+        //   throw response.messages;
+        // }
+        // delete response[application.action];
+        console.log("createDetailedPost", response)
+        ctx.setState(addComplexChildren(response["type"], response["fatherId"], "DetailedPost", response["detailedPost"]))
+        if (response["detailedPost2"]){
+          console.log('createDetailedPost add to Mission');
+          ctx.setState(addComplexChildren("Mission", response["missionId"], "DetailedPost", response["detailedPost2"]))
         }
-        delete response[application.action];
-        ctx.setState(
-          addComplexChildren("Company", profile.company.id, "Mission", response)
-        );
       })
     );
   }
@@ -692,14 +695,21 @@ export class DataState {
     const profile = this.store.selectSnapshot(DataQueries.currentProfile)!;
     return this.http.post("data", application).pipe(
       tap((response: any) => {
+        console.log("modifyDetailedPost", response)
         if (response[application.action] !== "OK") {
           this.inZone(() => this.info.show("error", response.messages, 3000));
           throw response.messages;
         }
         delete response[application.action]
-        ctx.setState(
-          addComplexChildren("Company", profile.company.id, "Mission", response)
-        )
+        console.log("modifyDetailedPost", response)
+        if (response["deleted"] == "yes") {
+          console.log('modifyDetailedPost', response['detailedPostId']);
+          ctx.setState(deleteIds("DetailedPost", [response["detailedPostId"]]));
+          ctx.setState(update('DatePost', response["datePost"]));
+        } else if (response["type"] == "DatePost") {
+          console.log("modifyDetailedPost", response, response["detailedPost"])
+          ctx.setState(addComplexChildren(response["type"], response["fatherId"], "DetailedPost", response["detailedPost"]))
+        }
       })
     );
   }
@@ -732,21 +742,13 @@ export class DataState {
         }
         delete response[application.action];
         
-        ctx.setState(addComplexChildren("Company", profile.company.id, "Mission", response.mission));
-        for (const key in response.datePost) {
-          let datePost = {[key]: response.datePost[key]}
-          ctx.setState(update('DatePost', datePost))
-          // ctx.setState(addComplexChildren('Mission', response.mission.id,'DatePost', datePost))
-        }
+        ctx.setState(addComplexChildren('Mission', response.mission.id,'DatePost', response.datePost))
       })
     );
   }
 
   @Action(ValidateMissionDate)
-  validateMissionDate(
-    ctx: StateContext<DataModel>,
-    application: ValidateMissionDate
-  ) {
+  validateMissionDate(ctx: StateContext<DataModel>, application: ValidateMissionDate) {
     const profile = this.store.selectSnapshot(DataQueries.currentProfile)!;
     return this.http.post("data", application).pipe(
       tap((response: any) => {
@@ -758,9 +760,10 @@ export class DataState {
             this.info.show("info", "La mission est mise à jour", 3000)
           );
           delete response[application.action];
-          
-          ctx.setState(update('DatePost', response.datePost))
-          ctx.setState(addComplexChildren("Company",profile.company.id,"Mission",response.mission));
+          console.log('validateMissionDate', response)
+          ctx.setState(addComplexChildren('Mission', response.mission.id,'DatePost', response.datePost))
+          // console.log('validateMissionDate', profile.company.id, response.mission)
+          // ctx.setState(addComplexChildren('Company', profile.company.id,'Mission', response.mission))
         }
       })
     );

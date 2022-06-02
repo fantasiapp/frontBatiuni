@@ -94,7 +94,6 @@ export class SuiviComments {
 
   ngAfterContentInit(): void {
     this.images = []
-    console.log("supervision comment", this.supervision)
     for (let file of this.supervision.files) {
       if (SingleCache.checkValueInCache("supervisionImage" + file.toString())) {
         this.images.push(SingleCache.getValueByName("supervisionImage" + file.toString()))

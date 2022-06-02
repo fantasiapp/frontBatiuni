@@ -73,14 +73,39 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
   tasksGraphic: TaskGraphic[] = [];
 
   ngOnInit(){
-    this.computeDate( this.dateOrigin)
-    this.computeTasks(this.date)
-    this.cd.markForCheck()
+    this.mission = this.store.selectSnapshot(DataQueries.getById('Mission', this.mission!.id))
+    console.log('mission', this.mission);
+    this.updatePageOnlyDate()
+
+    this.popup.modifyPostDetailList.pipe(takeUntil(this.destroy$)).subscribe(curPostDetail => {
+      // this.updatePageOnlyDate()
+      console.log('datePost onChange', this.store.selectSnapshot(DataQueries.getById('DatePost', this.dateOrigin.id)));
+
+      if(curPostDetail.checked){
+        this.tasksGraphic.push({
+          selectedTask:curPostDetail,
+          validationImage: this.computeTaskImage(curPostDetail, "validated"),
+          invalidationImage: this.computeTaskImage(curPostDetail, "refused"),
+          formGroup: new FormGroup({comment: new FormControl()})
+        })
+      } else {
+        this.tasksGraphic = this.tasksGraphic.filter(task => task.selectedTask.content != curPostDetail.content)
+        this.date.postDetails = this.date.postDetails.filter(postdetail => postdetail.content != curPostDetail.content)
+      }
+
+      this.tasksGraphic = this.tasksGraphic.filter(task => task.selectedTask.checked)
+
+      console.log('thius.taskGraphi', this.tasksGraphic);
+
+      this.cd.markForCheck()
+    })
   }
 
 
   computeDate(date:DatePost) {
     const [supervisions, postDetails] = this.computeFieldOfDate(date)
+    this.mission = this.store.selectSnapshot(DataQueries.getById('Mission', this.mission!.id))
+    console.log('mission', this.mission);
     const allPostDetails = this.computeAllPostDetails(this.mission!.details, postDetails as unknown as PostDetailGraphic[])
     this.date = {
       "id":date.id,
@@ -102,10 +127,12 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
     else
       supervisions = this.store.selectSnapshot(DataQueries.getMany("Supervision", date.supervisions))
 
-    if (typeof(date.details) === "object" && !Array.isArray(date.details))
-      postDetails = Object.values(date.details)
-    else
-      postDetails = this.store.selectSnapshot(DataQueries.getMany("DetailedPost", date.details))
+    let postDetailsId = []
+    if (!Array.isArray(date.details)) postDetailsId = Object.keys(date.details).map(detail => +detail)
+    else postDetailsId = date.details
+    
+    postDetails = this.store.selectSnapshot(DataQueries.getMany("DetailedPost", postDetailsId))
+    console.log('this.date, postDetails', postDetails);
 
     let postDetailsGraphic = postDetails.map((postDetail) => {
       let supervisions:Supervision[]
@@ -132,10 +159,18 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
     if (typeof(details) === "object" && !Array.isArray(details)) avaliableTasks = details
     else avaliableTasks = this.store.selectSnapshot(DataQueries.getMany("DetailedPost", details))
     const selectedContent = postDetails.map((detail) => detail.content)
+    const selectedContentId = postDetails.map((detail) => { return { 
+        [detail.content]: detail.id
+      }
+    })
     return avaliableTasks.map((task) => {
       const checked = selectedContent.includes(task.content)
+      const content : string = task.content
+      let selected = selectedContentId.filter(s => !!s[content])[0]
+      const id = selected && selected.hasOwnProperty(content) ? selected[content] : task.id
+      console.log('TASKs', id);
       return {
-        "id":task.id,
+        "id": id,
         "date":task.date,
         "content": task.content,
         "validated": task.validated,
@@ -147,14 +182,16 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
   }
 
   computeTasks(date: PostDateAvailableTask){
+    console.log('computeTask before');
     this.tasksGraphic = date.postDetails.map(postDetail => (
       {
-        selectedTask:postDetail,
+        selectedTask: postDetail,
         validationImage: this.computeTaskImage(postDetail, "validated"),
         invalidationImage: this.computeTaskImage(postDetail, "refused"),
         formGroup: new FormGroup({comment: new FormControl()})
       }
-    ))
+      ))
+      console.log('computeTask after');
   }
 
   computeSupervisions(postDetail: PostDetailGraphic) {
@@ -185,6 +222,7 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
 
   constructor(private cd: ChangeDetectorRef, private store: Store, private popup: PopupService) {
     super();
+
   }
 
   async takePhoto() {
@@ -215,7 +253,7 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
   }
 
   addTaskToPost() {
-    this.popup.openDateDialog(this.mission!, this.date, this);
+    this.popup.openDateDialog(this.mission!.id, this.date, this.dateOrigin.id, this);
     this.swipeMenu = false;
   }
 
@@ -233,6 +271,7 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
 
   updatePageOnlyDate() {
     this.dateOrigin = this.store.selectSnapshot(DataQueries.getById('DatePost', this.dateOrigin.id))!
+    console.log('THIS DATEORIGIN', this.dateOrigin, this.dateOrigin.id);
     this.computeDate( this.dateOrigin)
     this.computeTasks(this.date)
     this.cd.markForCheck()
@@ -241,7 +280,7 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
   validate(task: PostDetailGraphic, control: HTMLImageElement) {
     if (this.view == 'ST' && !task.refused && !this.mission!.isClosed) {
       task.validated = !task.validated
-      this.store.dispatch(new ModifyDetailedPost(task)).pipe(take(1)).subscribe((mis) => {
+      this.store.dispatch(new ModifyDetailedPost(task, false, this.dateOrigin.id)).pipe(take(1)).subscribe((mis) => {
         this.mission = this.store.selectSnapshot(DataQueries.getById('Mission', this.mission!.id))
         control.src = this.computeTaskImage(task, "validated")
       })
@@ -251,7 +290,7 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
   refuse(task: PostDetailGraphic, control: HTMLImageElement) {
     if (this.view == 'ST' && !task.validated && !this.mission!.isClosed) {
       task.refused = !task.refused
-      this.store.dispatch(new ModifyDetailedPost(task)).pipe(take(1)).subscribe(() => {
+      this.store.dispatch(new ModifyDetailedPost(task, false, this.dateOrigin.id)).pipe(take(1)).subscribe(() => {
         this.mission = this.store.selectSnapshot(DataQueries.getById('Mission', this.mission!.id))
         control.src = this.computeTaskImage(task, "refused")
       })

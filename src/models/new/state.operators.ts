@@ -64,7 +64,6 @@ namespace mutable {
         }
       }
     });
-    
     mutable.addValues(draft, target, values);
   }
 
@@ -185,6 +184,7 @@ export function addRecord(target: DataTypes, fields: string[], values: Record<an
 };
 
 export function update(target: DataTypes, values: any) {
+  console.log("update", target, values)
   return produce(draft => mutable.update(draft, target, values));
 };
 
@@ -193,6 +193,7 @@ export function addSimpleChildren<K extends DataTypes>(parent: DataTypes, parent
 };
 
 export function addComplexChildren<K extends DataTypes>(parent: DataTypes, parentId: number, child: K, values: Record<any>) {
+  console.log("addComplexChildren start", parent, parentId, child, values)
   return produce(draft => mutable.addComplexChildren(draft, parent, parentId, child, values));
 };
 
