@@ -946,7 +946,7 @@ export class DataState {
             boost.postId,
             "boostTimestamp",
             () => {
-              return response.UserProfile[boost.postId][21];
+              return response.UserProfile[boost.postId][22];
             }
           ));
       })
