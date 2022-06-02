@@ -74,13 +74,10 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
 
   ngOnInit(){
     this.mission = this.store.selectSnapshot(DataQueries.getById('Mission', this.mission!.id))
-    console.log('mission', this.mission);
     this.updatePageOnlyDate()
 
     this.popup.modifyPostDetailList.pipe(takeUntil(this.destroy$)).subscribe(curPostDetail => {
       // this.updatePageOnlyDate()
-      console.log('datePost onChange', this.store.selectSnapshot(DataQueries.getById('DatePost', this.dateOrigin.id)));
-      console.log('datePost onchange curPost', curPostDetail);
       if(curPostDetail.checked && curPostDetail.date == this.dateOrigin.date){
         this.tasksGraphic.push({
           selectedTask:curPostDetail,
@@ -95,7 +92,6 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
 
       this.tasksGraphic = this.tasksGraphic.filter(task => task.selectedTask.checked)
 
-      console.log('thius.taskGraphi', this.tasksGraphic);
 
       this.cd.markForCheck()
     })
@@ -105,7 +101,6 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
   computeDate(date:DatePost) {
     const [supervisions, postDetails] = this.computeFieldOfDate(date)
     this.mission = this.store.selectSnapshot(DataQueries.getById('Mission', this.mission!.id))
-    console.log('mission', this.mission);
     const allPostDetails = this.computeAllPostDetails(this.mission!.details, postDetails as unknown as PostDetailGraphic[])
     this.date = {
       "id":date.id,
@@ -132,7 +127,6 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
     else postDetailsId = date.details
     
     postDetails = this.store.selectSnapshot(DataQueries.getMany("DetailedPost", postDetailsId))
-    console.log('this.date, postDetails', postDetails);
 
     let postDetailsGraphic = postDetails.map((postDetail) => {
       let supervisions:Supervision[]
@@ -168,7 +162,6 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
       const content : string = task.content
       let selected = selectedContentId.filter(s => !!s[content])[0]
       const id = selected && selected.hasOwnProperty(content) ? selected[content] : task.id
-      console.log('TASKs', id);
       return {
         "id": id,
         "date":task.date,
@@ -182,7 +175,6 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
   }
 
   computeTasks(date: PostDateAvailableTask){
-    console.log('computeTask before');
     this.tasksGraphic = date.postDetails.map(postDetail => (
       {
         selectedTask: postDetail,
@@ -191,7 +183,6 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
         formGroup: new FormGroup({comment: new FormControl()})
       }
       ))
-      console.log('computeTask after');
   }
 
   computeSupervisions(postDetail: PostDetailGraphic) {
@@ -271,7 +262,6 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
 
   updatePageOnlyDate() {
     this.dateOrigin = this.store.selectSnapshot(DataQueries.getById('DatePost', this.dateOrigin.id))!
-    console.log('THIS DATEORIGIN', this.dateOrigin, this.dateOrigin.id);
     this.computeDate( this.dateOrigin)
     this.computeTasks(this.date)
     this.cd.markForCheck()

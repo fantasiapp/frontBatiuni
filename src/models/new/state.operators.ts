@@ -46,7 +46,7 @@ namespace mutable {
             }
           }
         }
-      // else update
+        // else update
       } else {
         if (typeof(item) != 'string') {
           for ( let i = 0; i < current.length; i++ ) {

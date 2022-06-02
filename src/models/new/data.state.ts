@@ -578,9 +578,8 @@ export class DataState {
           throw response.messages;
         }
         delete response[application.action];
-        ctx.setState(
-          addComplexChildren("Company", profile.company.id, "Post", response)
-        );
+        console.log('CandidateViewed', response);
+        ctx.setState(addComplexChildren("Company", profile.company.id, "Post", response));
       })
     );
   }
@@ -753,8 +752,10 @@ export class DataState {
   @Action(ValidateMissionDate)
   validateMissionDate(ctx: StateContext<DataModel>, application: ValidateMissionDate) {
     const profile = this.store.selectSnapshot(DataQueries.currentProfile)!;
+    console.log('validateMissionDate', ctx, application);
     return this.http.post("data", application).pipe(
       tap((response: any) => {
+        console.log('response', response);
         if (response[application.action] !== "OK") {
           this.inZone(() => this.info.show("error", response.messages, 3000));
           throw response.messages;
@@ -764,12 +765,17 @@ export class DataState {
           );
           delete response[application.action];
           console.log('validateMissionDate', response)
-          console.log(response.datePost);
 
-          if(response.datePost.hasOwnProperty('delete')) {
-            ctx.setState(deleteIds("DatePost", [response["datePost"]]));
-            ctx.setState(update('Mission', response["Mission"]));
+          if(response.hasOwnProperty('update')){
+            console.log('validate update hours');
+            ctx.setState(update(response.type, response.mission))
+          }
+          if(response.hasOwnProperty('deleted')) {
+            console.log('validate deleted');
+            ctx.setState(deleteIds("DatePost", [response["fatherId"]]));
+            ctx.setState(update('Mission', response["mission"]));
           } else {
+            console.log('validate');
             ctx.setState(addComplexChildren(response.type, response.fatherId,'DatePost', response.datePost))
           }
           // console.log('validateMissionDate', profile.company.id, response.mission)
