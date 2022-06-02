@@ -131,6 +131,9 @@ export class UIPopup extends DimensionMenu {
   @ViewChild("onApply", { read: TemplateRef, static: true })
   onApply!: TemplateRef<any>;
 
+  @ViewChild("onApplyConfirm", { read: TemplateRef, static: true })
+  onApplyConfirm!: TemplateRef<any>;
+
   @Input()
   content?: Exclude<PopupView, ContextUpdate>;
 
@@ -321,7 +324,7 @@ export class UIPopup extends DimensionMenu {
 
 export type PredefinedPopups<T = any> = {
   readonly type: "predefined";
-  name: "deletePost" | "sign" | "setDate" | "closeMission" | "validateCandidate" | "refuseCandidate" | "blockCandidate" | "boostPost" | "onApply"; // | 'closeMission'
+  name: "deletePost" | "sign" | "setDate" | "closeMission" | "validateCandidate" | "refuseCandidate" | "blockCandidate" | "boostPost" | "onApply" | "onApplyConfirm"; // | 'closeMission'
   context?: TemplateContext;
 };
 
@@ -676,6 +679,32 @@ export class PopupService {
           if (context.$implicit.isActive) {
             object.onApply();
           }
+          closed$.next();
+        },
+      });
+
+      first = false;
+    }
+  }
+
+  onApplyConfirm(object: UIAnnonceResume) {
+
+    let first: boolean = true;
+    const closed$ = new Subject<void>();
+
+    const context = {
+      $implicit: {
+        isActive: false,
+      },
+    };
+
+    if (first) {
+      this.dimension$.next(this.defaultDimension);
+      this.popups$.next({
+        type: "predefined",
+        name: "onApplyConfirm",
+        context,
+        close: () => {
           closed$.next();
         },
       });

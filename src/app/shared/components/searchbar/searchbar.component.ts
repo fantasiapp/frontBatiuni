@@ -67,9 +67,9 @@ export class SearchbarComponent  implements OnInit{
     let details = this.store.selectSnapshot(DataQueries.getMany("DetailedPost", ad.details));
     let detailContent = details.map((detail: { content: any; }) => detail.content);
     let manPower = ad.manPower ? "Main d'oeuvre" : "Fourniture et Pose"
-    let supervisions = this.store.selectSnapshot(DataQueries.getMany("Supervision", ad.supervisions));
-    let supervisionsContent = supervisions.map((supervision: { comment: any; }) => supervision.comment).toString();
-    let adString = ad.id.toString() + " " + ad.address + " " + company?.name + " " + detailContent + " " + job?.name + " " + ad.contactName + " " + ad.description + " " + manPower + " " + ad.dueDate + " " + ad.startDate + " " + ad.endDate + " " + ad.organisationComment + " " + ad.organisationCommentST + " " + ad.qualityComment + " " + ad.securityComment + " " + ad.securityCommentST + " " + ad.subContractorContact + " " + ad.subContractorName + " " + supervisionsContent
+    // let supervisions = this.store.selectSnapshot(DataQueries.getMany("Supervision", ad.supervisions));
+    // let supervisionsContent = supervisions.map((supervision: { comment: any; }) => supervision.comment).toString();
+    let adString = ad.id.toString() + " " + ad.address + " " + company?.name + " " + detailContent + " " + job?.name + " " + ad.contactName + " " + ad.description + " " + manPower + " " + ad.dueDate + " " + ad.startDate + " " + ad.endDate + " " + ad.organisationComment + " " + ad.organisationCommentST + " " + ad.qualityComment + " " + ad.securityComment + " " + ad.securityCommentST + " " + ad.subContractorContact + " " + ad.subContractorName 
     return adString
   }
 

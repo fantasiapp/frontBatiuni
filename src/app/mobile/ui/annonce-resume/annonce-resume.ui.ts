@@ -313,7 +313,6 @@ export class UIAnnonceResume extends Destroy$ {
   });
 
   showPopUp(){
-    console.log("ce post",this.post)
     this.popup.onApply(this.post, this);
   }
 
@@ -327,6 +326,7 @@ export class UIAnnonceResume extends Destroy$ {
       amount: formValue.amount,
       devis: formValue.devis[0].name,
     });
+    this.popup.onApplyConfirm(this);
   }
 
   // Permet de reset la value lorsque l'on sort d'une annonce, notament lorsqu'on passe d'une annonce a une autre ou le montant afficher restait le meme

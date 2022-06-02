@@ -56,6 +56,7 @@
 </ng-template>
 
 <ng-template #validateCandidate let-context>
+  <img src="assets/valider.svg" class=""validateImage>
   <label>Vous avez bien validé la candidature de  {{ context.name }}</label>
   <label>Veuillez confirmez votre opération pour recevoir le contrat !</label>
   <div style="height:5%;"></div>
@@ -84,8 +85,8 @@
 </ng-template>
 
 <ng-template #boostPost let-context>
-  <label *ngIf="context.duration != 0">Êtes-vous sûr de vouloir <strong> Booster </strong> cette annonce à l'adresse {{ context.address }} pour {{ context.duration }} jours ?</label>
-  <label *ngIf="context.duration == 0">Êtes-vous sûr de vouloir <strong> Booster </strong> cette annonce à l'adresse {{ context.address }} jusqu'à la date d'échéance de l'annonce ?</label>
+  <label class='boostPostLabel' *ngIf="context.duration != 0">Êtes-vous sûr de vouloir <span class='boostStrong'> Booster </span> cette annonce à l'adresse {{ context.address }} pour <span class='boostStrong'> {{ context.duration }} jours </span> ?</label>
+  <label class='boostPostLabel' *ngIf="context.duration == 0">Êtes-vous sûr de vouloir <span class='boostStrong'> Booster </span>  cette annonce à l'adresse {{ context.address }} jusqu'à la date d'échéance de l'annonce ?</label>
   <div style="height:5%;"></div>
   <div class="controls cloture">
     <button class="button active" (click)="openActionClose(context)">Oui, je confirme </button>
@@ -94,9 +95,16 @@
 </ng-template>
 
 <ng-template #onApply let-context>
-  <label>Vous êtes sur le point de postuler à l'offre {{ context.address }} au sein de l'entreprise {{ context.name }} du {{context.startDate}} au {{context.endDate}}?</label>  <div style="height:5%;"></div>
+  <label class="postuleLabel">Vous êtes sur le point de postuler à l'offre <span class='boostStrong'> {{ context.address }} </span> au sein de l'entreprise <span class='boostStrong'> {{ context.name }}</span> du {{context.startDate}} au {{context.endDate}}?</label>  
+  <div style="height:5%;"></div>
   <div class="controls cloture">
     <button class="button active" (click)="openActionClose(context)">Confirmer </button>
     <button class="button passive" (click)="close()">Annuler</button>
   </div>
+</ng-template>
+
+<ng-template #onApplyConfirm let-context>
+  <img src="assets/valider.svg" class=""validateImage>
+  <label>Votre candidature a bien été prise en compte !</label>  
+  <label>L'entreprise reviendra vers vous dans les plus brefs délais</label>  
 </ng-template>
