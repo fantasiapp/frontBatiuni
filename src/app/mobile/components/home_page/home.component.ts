@@ -503,9 +503,7 @@ export class HomeComponent extends Destroy$ {
 
   selectSearchMission(searchForm:  string){
     this.missions = [];
-    console.log("searchMission before", this.allMissions)
     this.allMissions.sort((a, b) => {return Number(a["isClosed"]) - Number(b["isClosed"]);});
-    console.log("searchMission after", this.allMissions)
     if (searchForm == "" || searchForm == null)  {
       this.missions = this.allMissions
     } else {
@@ -519,7 +517,6 @@ export class HomeComponent extends Destroy$ {
       this.allMissions.sort((a: any,b: any)=>keys.indexOf(a) - keys.indexOf(b));
       this.missions = this.allMissions
     }
-    console.log("searchMission ", this.missions)
     this.cd.markForCheck();
   }
 
