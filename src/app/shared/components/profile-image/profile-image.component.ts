@@ -69,9 +69,12 @@ export class UIProfileImageComponent extends Destroy$ {
 
   updateProfile(profile: Profile){
     this.profile = profile;
-    SingleCache.deleteValueByName("companyImage" + profile.company.id.toString())
-    this.changePicture()
-    this.cd.markForCheck()
+    console.log("updateProfile image", profile)
+    if (profile.company) {
+      SingleCache.deleteValueByName("companyImage" + profile.company.id.toString())
+      this.changePicture()
+      this.cd.markForCheck()
+    }
   }
 
   setColor(company:Company) {
