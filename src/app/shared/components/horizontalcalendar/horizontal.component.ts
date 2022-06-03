@@ -318,7 +318,6 @@ export class HorizontaleCalendar implements OnInit {
 
 
     let mission = this.store.selectSnapshot(DataQueries.getById("Mission", card.mission.id));
-    console.log('onCArdUpdate', mission);
     let heightTop = this.calculator(mission!.hourlyStart, mission!.hourlyEnd);
 
     card.mission = mission!;
@@ -356,6 +355,7 @@ export class HorizontaleCalendar implements OnInit {
       this.currentCardCalendars = newCardCalendars;
       console.log('curretneCardCalendard,', this.currentCardCalendars);
     }
+
     this.cd.markForCheck();
   }
 

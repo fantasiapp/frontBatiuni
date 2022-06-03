@@ -783,16 +783,14 @@ export class DataState {
           console.log('validateMissionDate', response)
 
           if(response.hasOwnProperty('update')){
-            console.log('validate update hours');
-            ctx.setState(update(response.type, response.mission))
-          }
-          if(response.hasOwnProperty('deleted')) {
-            console.log('validate deleted');
-            ctx.setState(deleteIds("DatePost", [response["fatherId"]]));
-            ctx.setState(update('Mission', response["mission"]));
+            ctx.setState(update(response.type, response[response.type]))
           } else {
-            console.log('validate');
-            ctx.setState(addComplexChildren(response.type, response.fatherId,'DatePost', response.datePost))
+            if(response.hasOwnProperty('deleted')) {
+              ctx.setState(deleteIds("DatePost", [response["fatherId"]]));
+              ctx.setState(update('Mission', response["mission"]));
+            } else {
+              ctx.setState(addComplexChildren(response.type, response.fatherId,'DatePost', response.datePost))
+            }
           }
           // console.log('validateMissionDate', profile.company.id, response.mission)
           // ctx.setState(addComplexChildren('Company', profile.company.id,'Mission', response.mission))
