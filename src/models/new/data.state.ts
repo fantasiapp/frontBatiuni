@@ -484,6 +484,7 @@ export class DataState {
           throw response.messages;
         }
         delete response[application.action];
+        console.log('duplicatePost', response);
         ctx.setState(
           addComplexChildren("Company", profile.company.id, "Post", response)
         );
@@ -577,9 +578,8 @@ export class DataState {
           throw response.messages;
         }
         delete response[application.action];
-        ctx.setState(
-          addComplexChildren("Company", profile.company.id, "Post", response)
-        );
+        console.log('CandidateViewed', response);
+        ctx.setState(addComplexChildren("Company", profile.company.id, "Post", response));
       })
     );
   }
@@ -758,6 +758,8 @@ export class DataState {
         }
         delete response[application.action];
         
+        console.log('modifyMissionDate', response);
+        
         ctx.setState(addComplexChildren('Mission', response.mission.id,'DatePost', response.datePost))
       })
     );
@@ -766,8 +768,10 @@ export class DataState {
   @Action(ValidateMissionDate)
   validateMissionDate(ctx: StateContext<DataModel>, application: ValidateMissionDate) {
     const profile = this.store.selectSnapshot(DataQueries.currentProfile)!;
+    console.log('validateMissionDate', ctx, application);
     return this.http.post("data", application).pipe(
       tap((response: any) => {
+        console.log('response', response);
         if (response[application.action] !== "OK") {
           this.inZone(() => this.info.show("error", response.messages, 3000));
           throw response.messages;
@@ -777,7 +781,19 @@ export class DataState {
           );
           delete response[application.action];
           console.log('validateMissionDate', response)
-          ctx.setState(addComplexChildren('Mission', response.mission.id,'DatePost', response.datePost))
+
+          if(response.hasOwnProperty('update')){
+            console.log('validate update hours');
+            ctx.setState(update(response.type, response.mission))
+          }
+          if(response.hasOwnProperty('deleted')) {
+            console.log('validate deleted');
+            ctx.setState(deleteIds("DatePost", [response["fatherId"]]));
+            ctx.setState(update('Mission', response["mission"]));
+          } else {
+            console.log('validate');
+            ctx.setState(addComplexChildren(response.type, response.fatherId,'DatePost', response.datePost))
+          }
           // console.log('validateMissionDate', profile.company.id, response.mission)
           // ctx.setState(addComplexChildren('Company', profile.company.id,'Mission', response.mission))
         }
@@ -796,8 +812,8 @@ export class DataState {
         }
         delete response[application.action];
         console.log('Response', response)
-        ctx.setState(update("Mission", response)
-        );
+        ctx.setState(update("Mission", response));
+
       })
     );
   }
@@ -814,7 +830,7 @@ export class DataState {
         delete response[application.action];
         console.log('ReponseST', response)
         ctx.setState(update("Mission", response));
-        console.log("Dans CloseMissionST", this.store.selectSnapshot(DataQueries.getAll("Mission")))
+        // console.log("Dans CloseMissionST", this.store.selectSnapshot(DataQueries.getAll("Mission")))
       })
     );
   }

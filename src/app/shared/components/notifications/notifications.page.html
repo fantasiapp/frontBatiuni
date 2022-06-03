@@ -1,7 +1,7 @@
 <section>
   <span *ngIf="today.length" class="text-emphasis">Aujourd'hui</span>
   <div *ngFor="let notification of today;let indexToday = index" class="todays-notifications flex">
-    <div class="offer-logo flex center">
+    <div class="offer-logo">
       <img [src]="notification.src" />
     </div>
     <span class="infos">
@@ -13,7 +13,7 @@
 <section>
   <span *ngIf="month.length" class="text-emphasis">Ce mois</span>
   <div *ngFor="let notification of month; let indexHtml = index" class="monthly-notifications flex">
-    <div class="offer-logo flex center">
+    <div class="offer-logo">
       <img [src]="notification.src" />
     </div>
     <span class="infos">
