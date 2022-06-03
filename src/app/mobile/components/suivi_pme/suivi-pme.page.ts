@@ -8,7 +8,7 @@ import {
 import { FormArray, FormControl, FormGroup, Validators } from "@angular/forms";
 import { Select, Store } from "@ngxs/store";
 import { Observable } from "rxjs";
-import { take } from "rxjs/operators";
+import { take, takeUntil } from "rxjs/operators";
 import { PopupService } from "src/app/shared/components/popup/popup.component";
 import {
   CloseMission,
@@ -32,6 +32,7 @@ import {
   CalendarUI,
   DayState,
 } from "src/app/shared/components/calendar/calendar.ui";
+import { Destroy$ } from "src/app/shared/common/classes";
 
 // export type Task = PostDetail & {validationImage:string, invalidationImage:string}
 
@@ -43,7 +44,7 @@ import {
   styleUrls: ["suivi-pme.page.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SuiviPME {
+export class SuiviPME extends Destroy${
   company: Company | null = null;
   subContractor: Company | null = null;
   track: { [key: string]: Map<PostDetail, Supervision[]> } = {};
@@ -135,8 +136,12 @@ export class SuiviPME {
   constructor(
     private store: Store,
     private popup: PopupService,
-    private cd: ChangeDetectorRef
-  ) {}
+    private cd: ChangeDetectorRef,
+  ) {super()}
+
+  ngOnInit(){
+    
+  }
 
   closeMission() {
     if (this.mission!.subContractor && !this.mission!.isClosed) {

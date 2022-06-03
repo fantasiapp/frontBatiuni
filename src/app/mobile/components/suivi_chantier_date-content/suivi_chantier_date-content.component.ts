@@ -72,11 +72,22 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
 
   tasksGraphic: TaskGraphic[] = [];
 
+  constructor(private cd: ChangeDetectorRef, private store: Store, private popup: PopupService) {
+    super();
+  }
+
   ngOnInit(){
     this.mission = this.store.selectSnapshot(DataQueries.getById('Mission', this.mission!.id))
     this.updatePageOnlyDate()
 
-    this.popup.modifyPostDetailList.pipe(takeUntil(this.destroy$)).subscribe(curPostDetail => {
+    this.popup.addPostDetail.pipe(takeUntil(this.destroy$)).subscribe(newPostDetail => {
+      this.mission = this.store.selectSnapshot(DataQueries.getById('Mission', this.mission!.id))!
+      console.log('this.missions, ', this.mission);
+      this.updatePageOnlyDate()
+      this.cd.markForCheck()
+    })
+
+    this.popup.modifyPostDetail.pipe(takeUntil(this.destroy$)).subscribe(curPostDetail => {
       // this.updatePageOnlyDate()
       if(curPostDetail.checked && curPostDetail.date == this.dateOrigin.date){
         this.tasksGraphic.push({
@@ -211,10 +222,7 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
     }
   }
 
-  constructor(private cd: ChangeDetectorRef, private store: Store, private popup: PopupService) {
-    super();
-
-  }
+  
 
   async takePhoto() {
     const photo = await Camera.getPhoto({
@@ -263,6 +271,7 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
   updatePageOnlyDate() {
     this.dateOrigin = this.store.selectSnapshot(DataQueries.getById('DatePost', this.dateOrigin.id))!
     this.computeDate( this.dateOrigin)
+    console.log('tjos.date content computed', this.date);
     this.computeTasks(this.date)
     this.cd.markForCheck()
   }
