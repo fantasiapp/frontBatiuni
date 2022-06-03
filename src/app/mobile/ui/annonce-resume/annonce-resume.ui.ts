@@ -70,7 +70,7 @@ export type ApplyForm = {
             <li>Horaires du chantier : {{ post.hourlyStart }} - {{ post.hourlyEnd }}</li>
             <li>Date de présence : {{ toLocateDate(post.startDate) }} -
             {{ toLocateDate(post.endDate) }}</li>
-            <li>Adresse du chantier : {{ post?.address }}</li>
+            <li>Adresse du chantier : {{ hideAdress(post?.address) }}</li>
             <li>Nom du contact : {{post.contactName }}</li>
           </ul>
           <span class='date'> Date d’échéance Le {{ toLocateDate(post?.dueDate) }} 
@@ -174,6 +174,9 @@ export class UIAnnonceResume extends Destroy$ {
 
   @Input()
   application: boolean = true;
+
+  @Input()
+  hideExactAdress: boolean = false;
 
   company: Company | null = null;
   user: User | null = null;
@@ -313,7 +316,6 @@ export class UIAnnonceResume extends Destroy$ {
   });
 
   showPopUp(){
-    console.log("ce post",this.post)
     this.popup.onApply(this.post, this);
   }
 
@@ -327,6 +329,7 @@ export class UIAnnonceResume extends Destroy$ {
       amount: formValue.amount,
       devis: formValue.devis[0].name,
     });
+    this.popup.onApplyConfirm(this);
   }
 
   // Permet de reset la value lorsque l'on sort d'une annonce, notament lorsqu'on passe d'une annonce a une autre ou le montant afficher restait le meme
@@ -339,5 +342,13 @@ export class UIAnnonceResume extends Destroy$ {
     if (this._post) amount = this.searchCandidate(this._post)?.amount;
     else amount = null;
     this.form.get("amount")?.setValue(amount);
+  }
+
+  hideAdress(adress?: string) {
+    if (adress && this.hideExactAdress) {
+      return adress!.replace(/\d+/, "").trim();
+    } else {
+      return adress;
+    }
   }
 }

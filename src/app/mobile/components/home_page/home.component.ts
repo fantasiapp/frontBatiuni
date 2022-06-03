@@ -64,6 +64,7 @@ import { STFilterForm } from "src/app/shared/forms/STFilter.form";
 import { PMEFilterForm } from "src/app/shared/forms/PMEFilter.form";
 import { SearchbarComponent } from "src/app/shared/components/searchbar/searchbar.component";
 import { getUserDataService } from "src/app/shared/services/getUserData.service";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "home",
@@ -158,7 +159,8 @@ export class HomeComponent extends Destroy$ {
     private mobile: Mobile,
     private booleanService: BooleanService,
     private filterService: FilterService,
-    private getUserDataService: getUserDataService
+    private getUserDataService: getUserDataService,
+    private router: Router
   ) {
     super();
     this.isLoading = this.booleanService.isLoading
@@ -186,7 +188,6 @@ export class HomeComponent extends Destroy$ {
 
   async lateInit() {
       if (!this.isLoading) {
-        console.log('lateinit', this.store.selectSnapshot(DataQueries.getAll('BlockedCandidate')))
       this.info.alignWith("header_search");
       combineLatest([this.profile$, this.posts$])
         .pipe(takeUntil(this.destroy$))
@@ -208,7 +209,6 @@ export class HomeComponent extends Destroy$ {
           this.allUserOnlinePosts =
             mapping.get(this.symbols.userOnlinePost) || [];
           this.allOnlinePosts = [...otherOnlinePost, ...this.userOnlinePosts];
-          console.log("allOnlinePosts", profile.company)
           this.allMissions = this.store.selectSnapshot(DataQueries.getMany("Mission", profile.company.missions));
   
           if (this.filterST) {this.filterST.updatePosts(this.allOnlinePosts)}
@@ -416,6 +416,7 @@ export class HomeComponent extends Destroy$ {
       this.filterOn = false;
     } else {
       this.filterOn = true;
+      this.info.show("info","Vos filtres ont été appliqués", 3000);
     }
     this.cd.markForCheck;
   }
@@ -572,12 +573,13 @@ export class HomeComponent extends Destroy$ {
     this.draftMenu = assignCopy(this.draftMenu, { post, open: !!post });
   }
 
-  openPost(post: Post | null) {
+  openPost(post: Post | null, hideExactAdress?: boolean) {
     //mark as viewed
     this.postMenu = assignCopy(this.postMenu, {
       post,
       open: !!post,
       swipeup: false,
+      hideExactAdress: hideExactAdress
     });
     if (post) this.store.dispatch(new MarkViewed(post.id));
 
@@ -736,6 +738,8 @@ export class HomeComponent extends Destroy$ {
       .pipe(take(1))
       .subscribe(() => {
         this.openPost(null);
+        console.log("Dans block candidate")
+        // this.router.navigateByUrl('/home')
         this.cd.markForCheck();
       });
   }

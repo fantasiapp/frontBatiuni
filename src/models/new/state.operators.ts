@@ -30,35 +30,44 @@ namespace mutable {
   export function update(draft: any, target: DataTypes, values: Record<any>) {
     const targetObjects = draft[target],
       fields = draft.fields[target];
+    
+
+    // console.log('update');
     //translate data
     Object.entries<any>(values).forEach(([id, item]) => {
       //An horrible patch waiting for a true solution
       if (!targetObjects) return
-        const current = targetObjects[id];
+      const current = targetObjects[id];
+      // console.log('current ', current);
       //if not created create
       if ( !current ) {
-        
         if (typeof(item) != 'string') {
           for ( let i = 0; i < item.length; i++ ) {
             if ( typeof item[i] == 'object' ) {
+              // console.log('upoadte in 1', fields[i], item[i])
               mutable.update(draft, fields[i], item[i]);
               item[i] = Object.keys(item[i]).map(id => +id);
             }
           }
         }
-      // else update
+        // else update
       } else {
         if (typeof(item) != 'string') {
           for ( let i = 0; i < current.length; i++ ) {
             //special treatement for arrays
+            // console.log('current[i]', current[i], current[i].length, i, Array.isArray(current[i]), fields[i]);
             if ( Array.isArray(current[i]) ) {
-              if ( current[i].length ) {
-                mutable.deleteIds(draft, fields[i], current[i]);
-              }
-              mutable.update(draft, fields[i], item[i]);
-              // if (fields[i] != "DatePost") {
+              if ( !!current[i].length ) {
+                // console.log('current DeleteIds', fields[i], current[i]);
+                // mutable.deleteIds(draft, fields[i], current[i]);
+              } else {
+
+                // console.log('upoadte in 2', fields[i], item[i]);
+                mutable.update(draft, fields[i], item[i]);
+                // if (fields[i] != "DatePost") {
                 item[i] = Object.keys(item[i]).map(id => +id);
-              // }
+                  // }
+              }
             }
           }
         }

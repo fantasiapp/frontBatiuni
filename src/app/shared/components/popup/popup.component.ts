@@ -131,6 +131,9 @@ export class UIPopup extends DimensionMenu {
   @ViewChild("onApply", { read: TemplateRef, static: true })
   onApply!: TemplateRef<any>;
 
+  @ViewChild("onApplyConfirm", { read: TemplateRef, static: true })
+  onApplyConfirm!: TemplateRef<any>;
+
   @Input()
   content?: Exclude<PopupView, ContextUpdate>;
 
@@ -231,15 +234,17 @@ export class UIPopup extends DimensionMenu {
     return !!postDetails.length ? postDetails[0].checked : false
   }
 
-  addNewTask(e: Event,assignDate: assignDateType, input: HTMLInputElement) {
+  addNewTask(e: Event,assignDate: assignDateType, newTaskForm: FormGroup) {
     // this.store.dispatch(new CreateDetailedPost(assignDate.postDateAvailableTask, input.value, assignDate!.date!.date!.date))
 
+    let formControl = newTaskForm.get('task')!
+    let value = formControl.value
     // console.log('addNewTask', missionId, input.value, date);
     console.log('object');
     console.log('assing', assignDate);
-    this.store.dispatch(new CreateDetailedPost(assignDate.missionId, input.value, assignDate.datePostId)).pipe(take(1)).subscribe(() => {
-      input.value = "";
-      
+    this.store.dispatch(new CreateDetailedPost(assignDate.missionId, value, assignDate.datePostId)).pipe(take(1)).subscribe(() => {
+      formControl.reset()
+            
       console.log('assing', assignDate);
       const mission = this.store.selectSnapshot(DataQueries.getById("Mission", assignDate.missionId))
       const missionPostDetail = this.store.selectSnapshot(DataQueries.getMany("DetailedPost", mission!.details)) as Task[];
@@ -262,10 +267,18 @@ export class UIPopup extends DimensionMenu {
       assignDate.date.allPostDetails.push(detailDate)
       console.log('detailDAte,', detailDate);
       assignDate.date.postDetails.push(detailDate)
-      this.popupService.modifyPostDetailList.next(detailDate)
+      this.popupService.addPostDetail.next(detailDate)
+      this.popupService.modifyPostDetail.next(detailDate)
 
       this.cd.markForCheck();
     });
+  }
+
+  clearInput(newTaskForm: FormGroup){
+    if(newTaskForm){
+      let formControl = newTaskForm.get('task')!
+      formControl.reset()
+    }
   }
 
 
@@ -280,7 +293,7 @@ export class UIPopup extends DimensionMenu {
       newDetailDate.date = assignDate.date.date
       console.log('newDetailDate', newDetailDate);
       
-      this.popupService.modifyPostDetailList.next(newDetailDate)
+      this.popupService.modifyPostDetail.next(newDetailDate)
 
       this.cd.markForCheck();
     });
@@ -321,7 +334,7 @@ export class UIPopup extends DimensionMenu {
 
 export type PredefinedPopups<T = any> = {
   readonly type: "predefined";
-  name: "deletePost" | "sign" | "setDate" | "closeMission" | "validateCandidate" | "refuseCandidate" | "blockCandidate" | "boostPost" | "onApply"; // | 'closeMission'
+  name: "deletePost" | "sign" | "setDate" | "closeMission" | "validateCandidate" | "refuseCandidate" | "blockCandidate" | "boostPost" | "onApply" | "onApplyConfirm"; // | 'closeMission'
   context?: TemplateContext;
 };
 
@@ -340,8 +353,8 @@ export type PopupView = (
 export class PopupService {
   popups$ = new Subject<PopupView>();
   dimension$ = new Subject<Dimension>();
-  modifyPostDetailList = new Subject<PostDetailGraphic>();
-  addPostDetailList = new Subject<PostDetail>();
+  modifyPostDetail = new Subject<PostDetailGraphic>();
+  addPostDetail = new Subject<PostDetailGraphic>();
   defaultDimension: Dimension = {
     left: "20px",
     top: "30px",
@@ -676,6 +689,32 @@ export class PopupService {
           if (context.$implicit.isActive) {
             object.onApply();
           }
+          closed$.next();
+        },
+      });
+
+      first = false;
+    }
+  }
+
+  onApplyConfirm(object: UIAnnonceResume) {
+
+    let first: boolean = true;
+    const closed$ = new Subject<void>();
+
+    const context = {
+      $implicit: {
+        isActive: false,
+      },
+    };
+
+    if (first) {
+      this.dimension$.next(this.defaultDimension);
+      this.popups$.next({
+        type: "predefined",
+        name: "onApplyConfirm",
+        context,
+        close: () => {
           closed$.next();
         },
       });

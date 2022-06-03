@@ -71,7 +71,7 @@ export class ExtendedProfileComponent extends Destroy$ {
   showStar: boolean = true;
 
   deblock: boolean = false;
-
+  
   constructor(
     private store: Store,
     private popup: PopupService,
@@ -128,10 +128,9 @@ export class ExtendedProfileComponent extends Destroy$ {
       .pipe(take(1))
       .subscribe(() => {
         console.log('Débloque le contact')
-        // this.router.navigateByUrl(['/blocked_contacts'])
+        this.router.navigateByUrl('/home')
         this.cd.markForCheck();
       });
-      console.log('All blocked companies',this.store.selectSnapshot(DataQueries.getAll('BlockedCandidate')))
   }
 
   @Output()

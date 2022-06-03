@@ -21,6 +21,7 @@ import { UISwitchComponent } from "../components/switch/switch.component";
 import { Filter } from "../directives/filter.directive";
 import { FilterService } from "../services/filter.service";
 import { getLevenshteinDistance } from "src/app/shared/services/levenshtein";
+import { InfoService } from "../components/info/info.component";
 
 @Component({
   selector: "st-filter-form",
@@ -245,7 +246,7 @@ export class STFilterForm {
     });
   }
 
-  constructor(private store: Store, private cd: ChangeDetectorRef, private filterService: FilterService) {}
+  constructor(private store: Store, private cd: ChangeDetectorRef, private filterService: FilterService, private info: InfoService) {}
 
   ngOnInit() {
 
@@ -402,6 +403,7 @@ export class STFilterForm {
       this.filterOnST.emit(false)
     } else {
       this.filterOnST.emit(true);
+      this.info.show("info","Vos filtres ont été appliqués", 3000);
     }
     this.cd.markForCheck;
   }

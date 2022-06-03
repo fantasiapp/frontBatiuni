@@ -31,6 +31,7 @@ export class NotificationAgendaComponent {
   }
 
   validateHour(b: boolean, e: Event) {
+    
     this.store.dispatch(new ValidateMissionDate(this.card.mission.id, this.field, b, "")).pipe().subscribe(() => {
       this.cardUpdate.emit();
      });
@@ -40,7 +41,7 @@ export class NotificationAgendaComponent {
   deleted(b: boolean, deleting: boolean) {
     this.field = "date";
 
-    console.log('validateMissionDate');
+    console.log('validateMissionDate', this.card.mission.id, this.field, b, this.date);
     this.store.dispatch(new ValidateMissionDate(this.card.mission.id, this.field, b, this.date)).pipe().subscribe(() => {
       this.card.change = { 
         validate: deleting ? !b : b,
