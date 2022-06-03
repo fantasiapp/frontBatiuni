@@ -167,6 +167,7 @@ export class MissionsComponent extends Destroy$ {
       this.filterOn = false;
     } else {
       this.filterOn = true;
+      this.info.show("info","Vos filtres ont été appliqués", 5000);
     }
   }
 
@@ -250,6 +251,12 @@ export class MissionsComponent extends Destroy$ {
     });
     console.log("est ce que je dispatch ou pas ?", !mission)
     if (mission) this.store.dispatch(new MarkViewed(mission.id));
+    if (mission?.isClosed) {
+      this.info.show(
+      "info",
+      "Mission clôturée",
+      Infinity
+    );}
   }
 
   ngOnDestroy(): void {

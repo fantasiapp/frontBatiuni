@@ -58,6 +58,10 @@ ul, li {
   margin-bottom: 1rem;
 }
 
+.blockCandidate, .refuseCandidate {
+  height:50px;
+}
+
 // .date::ng-deep { color: $secondaryBackground; }
 
 
@@ -143,4 +147,18 @@ form {
 
 .disabled {
   pointer-events: none;
+}
+
+.validateImage{
+  padding-bottom: 5rem;
+}
+
+.boostPostLabel, .postuleLabel{
+  padding-right: 2rem;
+  padding-left: 2rem;
+}
+
+.boostStrong{
+  color:#0D6191;
+  font-weight: bold;
 }

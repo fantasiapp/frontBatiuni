@@ -12,24 +12,25 @@
   
     <section class="job-description full-width flex column space-children-margin">
       <h4 class="text-light-emphasis">Nom de l'entreprise : <span class="value">{{profile.company.name}}</span></h4>
+
+      <h4 class="text-light-emphasis">Téléphone fixe : <span class="value">{{profile.company.companyPhone | space: 2:1 }}</span></h4>
+      
+      <h4 class="text-light-emphasis" *ngIf="profile.company.webSite">Site internet : <span class="value link"><a [href]="profile.company.webSite">{{profile.company.webSite}}</a></span></h4>
+
       <h4 class="text-light-emphasis">N SIRET : <span class="value">{{profile.company.siret}}</span></h4>
+
       <h4 class="text-light-emphasis" *ngIf = "profile.company.allQualifications">Métier : <span class="value">TCE<br/></span>
       <span *ngFor="let job of companyJobs; let i = index" class="value">{{ job.number }} {{ jobs[i].name }}, </span></h4>
 
       <h4 class="text-light-emphasis" *ngIf = "!profile.company.allQualifications">Métier : 
       <span *ngFor="let job of companyJobs; let i = index" class="value">{{ job.number }} {{ jobs[i].name }}, </span></h4>
     
-      <h4 class="text-light-emphasis">Chiffres d'affaires : <span class="value">{{profile.company.revenue | currency: 'EUR':'symbol':'1.0-0' }}</span></h4>
+      <h4 class="text-light-emphasis" *ngIf="profile.company.revenue">Chiffres d'affaires : <span class="value">{{profile.company.revenue | currency: 'EUR':'symbol':'1.0-0' }}</span></h4>
     
-      <h4 class="text-light-emphasis">Capital : <span class="value">{{profile.company.capital | currency: 'EUR':'symbol':'1.0-0' }}</span></h4>
-      <!-- 
-        <h4 class="text-light-emphasis">Numéro fixe : <span class="value">{{profile.company.companyPhone | space: 2:1 }}</span></h4>
-      -->
-      <!-- 
-        <h4 class="text-light-emphasis">Site internet : <span class="value link"><a [href]="profile.company.webSite">{{profile.company.webSite}}</a></span></h4>
-      </span> -->
+      <h4 class="text-light-emphasis" *ngIf="profile.company.capital">Capital : <span class="value">{{profile.company.capital | currency: 'EUR':'symbol':'1.0-0' }}</span></h4>
       
-      <h4 class="text-light-emphasis">Montant Horaire moyen : <span class="value">{{ profile.company.amount ? profile.company.amount + ' €' : 'Non renseigné'}} </span></h4>
+      <h4 class="text-light-emphasis">Taux Horaire moyen : <span class="value">{{ profile.company.amount ? profile.company.amount + ' €' : 'Non renseigné'}} </span></h4>
+     
       <span class="text-light-emphasis" *ngIf="profile.company.saturdayDisponibility">Disponible pour des missions les samedis</span>
     </section>
     

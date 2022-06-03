@@ -64,6 +64,7 @@ import { STFilterForm } from "src/app/shared/forms/STFilter.form";
 import { PMEFilterForm } from "src/app/shared/forms/PMEFilter.form";
 import { SearchbarComponent } from "src/app/shared/components/searchbar/searchbar.component";
 import { getUserDataService } from "src/app/shared/services/getUserData.service";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "home",
@@ -158,7 +159,8 @@ export class HomeComponent extends Destroy$ {
     private mobile: Mobile,
     private booleanService: BooleanService,
     private filterService: FilterService,
-    private getUserDataService: getUserDataService
+    private getUserDataService: getUserDataService,
+    private router: Router
   ) {
     super();
     this.isLoading = this.booleanService.isLoading
@@ -416,6 +418,7 @@ export class HomeComponent extends Destroy$ {
       this.filterOn = false;
     } else {
       this.filterOn = true;
+      this.info.show("info","Vos filtres ont été appliqués", 5000);
     }
     this.cd.markForCheck;
   }
@@ -506,7 +509,9 @@ export class HomeComponent extends Destroy$ {
 
   selectSearchMission(searchForm:  string){
     this.missions = [];
+    console.log("searchMission before", this.allMissions)
     this.allMissions.sort((a, b) => {return Number(a["isClosed"]) - Number(b["isClosed"]);});
+    console.log("searchMission after", this.allMissions)
     if (searchForm == "" || searchForm == null)  {
       this.missions = this.allMissions
     } else {
@@ -520,6 +525,7 @@ export class HomeComponent extends Destroy$ {
       this.allMissions.sort((a: any,b: any)=>keys.indexOf(a) - keys.indexOf(b));
       this.missions = this.allMissions
     }
+    console.log("searchMission ", this.missions)
     this.cd.markForCheck();
   }
 
@@ -572,12 +578,13 @@ export class HomeComponent extends Destroy$ {
     this.draftMenu = assignCopy(this.draftMenu, { post, open: !!post });
   }
 
-  openPost(post: Post | null) {
+  openPost(post: Post | null, hideExactAdress?: boolean) {
     //mark as viewed
     this.postMenu = assignCopy(this.postMenu, {
       post,
       open: !!post,
       swipeup: false,
+      hideExactAdress: hideExactAdress
     });
     if (post) this.store.dispatch(new MarkViewed(post.id));
 
@@ -714,7 +721,8 @@ export class HomeComponent extends Destroy$ {
     .pipe(take(1))
     .subscribe(() => {
       //if successful, quit the slidemenu
-      this.openPost(null);
+      // this.openPost(null);
+      this.router.navigateByUrl('/home')
       this.cd.markForCheck();
     });
   }
@@ -736,6 +744,7 @@ export class HomeComponent extends Destroy$ {
       .pipe(take(1))
       .subscribe(() => {
         this.openPost(null);
+        this.router.navigateByUrl('/home_page')
         this.cd.markForCheck();
       });
   }

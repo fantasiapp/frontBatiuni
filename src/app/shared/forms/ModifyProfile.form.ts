@@ -226,7 +226,7 @@ import { SpacingPipe } from "../pipes/spacing.pipe";
               <label>Chiffres d'affaires</label>
               <input
                 class="form-element"
-                type="text"
+                type="number"
                 maxlength="11"
                 formControlName="UserProfile.Company.revenue"
               />
@@ -236,7 +236,7 @@ import { SpacingPipe } from "../pipes/spacing.pipe";
               <label>Capital</label>
               <input
                 class="form-element"
-                type="text"
+                type="number"
                 maxlength="11"
                 formControlName="UserProfile.Company.capital"
               />
@@ -246,7 +246,7 @@ import { SpacingPipe } from "../pipes/spacing.pipe";
               <label>Taux horaire moyen</label>
               <input
                 class="form-element"
-                type="text"
+                type="number"
                 formControlName="UserProfile.Company.amount"
               />
             </div>
