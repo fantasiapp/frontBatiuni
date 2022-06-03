@@ -20,7 +20,7 @@ import { DataQueries } from "src/models/new/data.state";
 })
 export class NotificationAgendaComponent {
   @Input() card!: calendarItem;
-  @Input() field!: string;
+  // @Input() field!: string;
   @Input() date!: string;
 
   @Output() cardUpdate: EventEmitter<any> = new EventEmitter();
@@ -31,23 +31,27 @@ export class NotificationAgendaComponent {
   }
 
   validateHour(b: boolean, e: Event) {
-    
-    this.store.dispatch(new ValidateMissionDate(this.card.mission.id, this.field, b, "")).pipe().subscribe(() => {
-      this.cardUpdate.emit();
+    console.log('validate HOUR ');
+    let field = 'hourly'
+    this.store.dispatch(new ValidateMissionDate(this.card.mission.id, field, b, "")).pipe().subscribe(() => {
+      this.card.change.schedule = !b
+      this.cardUpdate.emit(this.card.change);
      });
   }
 
 
   deleted(b: boolean, deleting: boolean) {
-    this.field = "date";
+    let field = "date";
 
-    console.log('validateMissionDate', this.card.mission.id, this.field, b, this.date);
-    this.store.dispatch(new ValidateMissionDate(this.card.mission.id, this.field, b, this.date)).pipe().subscribe(() => {
+    console.log('validateMissionDate', this.card.mission.id, field, b, this.date);
+    this.store.dispatch(new ValidateMissionDate(this.card.mission.id, field, b, this.date)).pipe().subscribe(() => {
+      console.log('validateMission 1 card change', this.card);
       this.card.change = { 
         validate: deleting ? !b : b,
         deleted: deleting && b,
         schedule: this.card.change.schedule
       }
+      console.log('validateMission 2 card change', this.card);
       this.cardUpdate.emit(this.card.change);
     });
   }
