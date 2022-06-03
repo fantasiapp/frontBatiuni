@@ -153,7 +153,7 @@ import { Mobile } from "../services/mobile-footer.service";
         <div class="form-input">
           <label>Horaires du chantier</label>
           <div class="flex row space-between">
-            <span>
+            <span class="flex row">
               De:
               <input
                 type="time"
@@ -161,7 +161,7 @@ import { Mobile } from "../services/mobile-footer.service";
                 formControlName="hourlyStart"
               />
             </span>
-            <span>
+            <span class="flex row">
               Jusqu'à:
               <input
                 type="time"
@@ -279,7 +279,7 @@ import { Mobile } from "../services/mobile-footer.service";
     }
 
     input{
-      margin-top: 20px;
+      /* margin-top: 20px; */
     }
 
     switch{
@@ -309,6 +309,7 @@ import { Mobile } from "../services/mobile-footer.service";
 
       .time-picker {
         margin-left: 20px;
+        width: unset
       }
 
       .submit-container {
