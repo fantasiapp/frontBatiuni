@@ -403,7 +403,7 @@ export class STFilterForm {
       this.filterOnST.emit(false)
     } else {
       this.filterOnST.emit(true);
-      this.info.show("info","Vos filtres ont été appliqués", 5000);
+      this.info.show("info","Vos filtres ont été appliqués", 3000);
     }
     this.cd.markForCheck;
   }

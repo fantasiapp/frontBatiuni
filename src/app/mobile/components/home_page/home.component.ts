@@ -188,7 +188,6 @@ export class HomeComponent extends Destroy$ {
 
   async lateInit() {
       if (!this.isLoading) {
-        console.log('lateinit', this.store.selectSnapshot(DataQueries.getAll('BlockedCandidate')))
       this.info.alignWith("header_search");
       combineLatest([this.profile$, this.posts$])
         .pipe(takeUntil(this.destroy$))
@@ -210,7 +209,6 @@ export class HomeComponent extends Destroy$ {
           this.allUserOnlinePosts =
             mapping.get(this.symbols.userOnlinePost) || [];
           this.allOnlinePosts = [...otherOnlinePost, ...this.userOnlinePosts];
-          console.log("allOnlinePosts", profile.company)
           this.allMissions = this.store.selectSnapshot(DataQueries.getMany("Mission", profile.company.missions));
   
           if (this.filterST) {this.filterST.updatePosts(this.allOnlinePosts)}
@@ -418,7 +416,7 @@ export class HomeComponent extends Destroy$ {
       this.filterOn = false;
     } else {
       this.filterOn = true;
-      this.info.show("info","Vos filtres ont été appliqués", 5000);
+      this.info.show("info","Vos filtres ont été appliqués", 3000);
     }
     this.cd.markForCheck;
   }
@@ -509,9 +507,7 @@ export class HomeComponent extends Destroy$ {
 
   selectSearchMission(searchForm:  string){
     this.missions = [];
-    console.log("searchMission before", this.allMissions)
     this.allMissions.sort((a, b) => {return Number(a["isClosed"]) - Number(b["isClosed"]);});
-    console.log("searchMission after", this.allMissions)
     if (searchForm == "" || searchForm == null)  {
       this.missions = this.allMissions
     } else {
@@ -525,7 +521,6 @@ export class HomeComponent extends Destroy$ {
       this.allMissions.sort((a: any,b: any)=>keys.indexOf(a) - keys.indexOf(b));
       this.missions = this.allMissions
     }
-    console.log("searchMission ", this.missions)
     this.cd.markForCheck();
   }
 
@@ -721,8 +716,7 @@ export class HomeComponent extends Destroy$ {
     .pipe(take(1))
     .subscribe(() => {
       //if successful, quit the slidemenu
-      // this.openPost(null);
-      this.router.navigateByUrl('/home')
+      this.openPost(null);
       this.cd.markForCheck();
     });
   }
@@ -744,7 +738,8 @@ export class HomeComponent extends Destroy$ {
       .pipe(take(1))
       .subscribe(() => {
         this.openPost(null);
-        this.router.navigateByUrl('/home_page')
+        console.log("Dans block candidate")
+        // this.router.navigateByUrl('/home')
         this.cd.markForCheck();
       });
   }

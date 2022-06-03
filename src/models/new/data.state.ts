@@ -641,10 +641,26 @@ export class DataState {
 
   @Action(BlockCompany)
   blockCompany(ctx: StateContext<DataModel>, block: BlockCompany) {
+    const user = this.store.selectSnapshot(DataQueries.currentUser);
     return this.http.get("data", block).pipe(
       tap((response: any) => {
         if (response[block.action] !== "OK") this.inZone(() => this.info.show("error", response.messages, 3000))
-        else {delete response[block.action]; this.inZone(() => this.info.show("success", response.messages, 2000));}
+        else {
+          delete response[block.action]; this.inZone(() => this.info.show("success", response.messages, 2000))
+          let BlockedCandidates = this.store.selectSnapshot(DataQueries.getAll("BlockedCandidate"))
+          let theBlocked = BlockedCandidates.filter((candidate) => candidate.blocked == block.companyId && candidate.blocker == user.company)[0]
+          console.log("theBlocked", theBlocked, block)
+          console.log( "BlockedCandidates", BlockedCandidates)  
+          console.log('response', response) // je suis entrain de m'entrainer 
+          if(theBlocked) {
+            console.log("J'essaye de débloquer/bloquer mais ça marche mal")
+            ctx.setState(update("BlockedCandidate", response))
+          }
+          else {
+            console.log("J'essaye de bloquer un nouveau candidat")
+            ctx.setState(addValues("BlockedCandidate", response))
+          }
+        }
       })
 
     )
