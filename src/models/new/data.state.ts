@@ -796,9 +796,8 @@ export class DataState {
         }
         delete response[application.action];
         console.log('Response', response)
-        ctx.setState(
-          addComplexChildren("Company", profile.company.id, "Mission", response)
-        );
+        ctx.setState(update("Mission", response));
+
       })
     );
   }
@@ -814,10 +813,8 @@ export class DataState {
         }
         delete response[application.action];
         console.log('ReponseST', response)
-        ctx.setState(
-          addComplexChildren("Company", profile.company.id, "Mission", response)
-        );
-        console.log("Dans CloseMissionST", this.store.selectSnapshot(DataQueries.getAll("Mission")))
+        ctx.setState(update("Mission", response));
+        // console.log("Dans CloseMissionST", this.store.selectSnapshot(DataQueries.getAll("Mission")))
       })
     );
   }

@@ -30,6 +30,8 @@ namespace mutable {
   export function update(draft: any, target: DataTypes, values: Record<any>) {
     const targetObjects = draft[target],
       fields = draft.fields[target];
+    
+    // console.log('update');
     //translate data
     Object.entries<any>(values).forEach(([id, item]) => {
       //An horrible patch waiting for a true solution
@@ -41,6 +43,7 @@ namespace mutable {
         if (typeof(item) != 'string') {
           for ( let i = 0; i < item.length; i++ ) {
             if ( typeof item[i] == 'object' ) {
+              // console.log('upoadte in 1', fields[i], item[i])
               mutable.update(draft, fields[i], item[i]);
               item[i] = Object.keys(item[i]).map(id => +id);
             }
@@ -55,6 +58,7 @@ namespace mutable {
               if ( current[i].length ) {
                 mutable.deleteIds(draft, fields[i], current[i]);
               }
+              // console.log('upoadte in 2', fields[i], item[i]);
               mutable.update(draft, fields[i], item[i]);
               // if (fields[i] != "DatePost") {
                 item[i] = Object.keys(item[i]).map(id => +id);
