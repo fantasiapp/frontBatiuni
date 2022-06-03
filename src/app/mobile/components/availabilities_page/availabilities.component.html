@@ -4,13 +4,13 @@
     <span class="current-availability" [class]="currentAvailability"></span>
   </header>
 
-  <form [formGroup]="jobForm" class="formjob">
+  <!-- <form [formGroup]="jobForm" class="formjob">
     <div class="form-input">
       <label>Veuillez choisir un métier</label>
       <options [options]="allJobs" formControlName="job"></options>
     </div>
   </form>
-  
+   -->
   <div class="hosted-page flex column center-cross space-children-margin page-content">
     <calendar [disableBeforeToday]="true" [value]="availabilities" (dayClick)="onDayClicked($event)" #calendar></calendar>
   </div>
