@@ -654,7 +654,7 @@ export class DataState {
           console.log('response', response) // je suis entrain de m'entrainer 
           if(theBlocked) {
             console.log("J'essaye de débloquer/bloquer mais ça marche mal")
-            ctx.setState(replaceChildren("BlockedCandidate", response.id, "BlockedCandidate", response))
+            ctx.setState(update("BlockedCandidate", response))
           }
           else {
             console.log("J'essaye de bloquer un nouveau candidat")

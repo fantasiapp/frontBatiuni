@@ -131,7 +131,6 @@ export class ExtendedProfileComponent extends Destroy$ {
         this.router.navigateByUrl('/home')
         this.cd.markForCheck();
       });
-      console.log('All blocked companies',this.store.selectSnapshot(DataQueries.getAll('BlockedCandidate')))
   }
 
   @Output()
