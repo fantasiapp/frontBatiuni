@@ -91,12 +91,13 @@ export class RatingComponent extends UIOpenMenu {
         }
       }
       let recommandations = this.store.selectSnapshot(DataQueries.getAll('Recommandation'))
+      console.log("recommandation", recommandations)
       for (const recommandation of recommandations) {
-        if(recommandation.idCompany == company.id) {
+        if(recommandation.companyRecommanded == company.id) {
           let ratingInfo: ratingInfo = {
-            contactName: recommandation.firstName + recommandation.lastName,
+            contactName: recommandation.firstNameRecommanding + recommandation.lastNameRecommanding,
             subContractorName: '',
-            companyContractor: recommandation.company,
+            companyContractor: recommandation.companyNameRecommanding,
             subContractorContact: '',
             qualityVibe: recommandation.qualityStars,
             qualityVibeComment: recommandation.qualityComment,
@@ -106,6 +107,7 @@ export class RatingComponent extends UIOpenMenu {
             organisationComment: recommandation.organisationComment,
           }
           this.recommandationInfos.push(ratingInfo)
+          console.log("recommandationInfos", this.recommandationInfos)
         }
       }
     } else {

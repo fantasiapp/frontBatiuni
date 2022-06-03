@@ -253,6 +253,7 @@ export class DataState {
   }
 
   updateLocalData(ctx: StateContext<DataModel>, response: any) {
+    console.log('response', response)
     if(this.booleanService.isConnected){
       console.log("update local data", response)
       const loadOperations = this.reader.readInitialData(response),
@@ -965,9 +966,9 @@ export class DataState {
   }
 
   @Action(GiveRecommandation)
-  giveRecommandation(ctx: StateContext<DataModel>, application : AskRecommandation){
+  giveRecommandation(ctx: StateContext<DataModel>, application : GiveRecommandation){
     const user = this.store.selectSnapshot(DataQueries.currentUser);
-    return this.http.get("data", application).pipe(
+    return this.http.post("data", application).pipe(
       tap((response: any) => {
         //write code to manage the response
         ctx.setState(addValues("Recommandation", response))

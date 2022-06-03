@@ -22,10 +22,10 @@ export class GiveARecommandation extends Destroy$ {
   hasSentRecommandation: boolean = false;
   recommandation: Recommandation = {
     id:-1,
-    firstName: "",
-    lastName: "",
-    company: "",
-    idCompany : this.companyId,
+    firstNameRecommanding: "",
+    lastNameRecommanding: "",
+    companyNameRecommanding: "",
+    companyRecommanded : this.companyId,
     qualityStars : 0,
     qualityComment : "",
     securityStars : 0,
@@ -81,17 +81,17 @@ export class GiveARecommandation extends Destroy$ {
       let content = document.getElementById(
         "textLastName"
       ) as HTMLTextAreaElement;
-      this.recommandation!.lastName = content!.value;
+      this.recommandation!.lastNameRecommanding = content!.value;
     } else if (nature == "firstName") {
       let content = document.getElementById(
         "textFirstName"
       ) as HTMLTextAreaElement;
-      this.recommandation!.firstName = content!.value;
+      this.recommandation!.firstNameRecommanding = content!.value;
     } else if (nature == "companyName") {
       let content = document.getElementById(
         "textCompanyName"
       ) as HTMLTextAreaElement;
-      this.recommandation!.company = content!.value;
+      this.recommandation!.companyNameRecommanding = content!.value;
     }
   }
 
@@ -130,10 +130,10 @@ export class GiveARecommandation extends Destroy$ {
     if (this.hasGeneralStars){
       console.log('coucou je note')
       this.store.dispatch(new GiveRecommandation(
-            this.recommandation!.idCompany,
-            this.recommandation!.firstName,
-            this.recommandation!.lastName,
-            this.recommandation!.company,
+            this.recommandation!.companyRecommanded,
+            this.recommandation!.firstNameRecommanding,
+            this.recommandation!.lastNameRecommanding,
+            this.recommandation!.companyNameRecommanding,
             this.recommandation!.qualityStars,
             this.recommandation!.qualityComment,
             this.recommandation!.securityStars,

@@ -46,7 +46,7 @@
 
         </div>
       </div>
-      <div *ngFor="let ratingInfo of recommandationInfos" class="company-recommandation">
+      <div *ngFor="let ratingInfo of recommandationInfos" class="company-rate">
         <span class="company-name">Recommandé par {{ view == 'ST' ?  ratingInfo.contactName : ratingInfo.subContractorName }} de {{ view == 'ST' ? ratingInfo.companyContractor : ratingInfo.subContractorContact }}</span>
         <div class="criterion">
           <div class="flex center-cross">

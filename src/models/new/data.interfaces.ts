@@ -189,10 +189,10 @@ export interface Establishement {
 
 export interface Recommandation {
   id: Ref<Recommandation>;
-  idCompany: Ref<Company>;
-  firstName: string;
-  lastName: string;
-  company: string;
+  companyRecommanded: Ref<Company>;
+  firstNameRecommanding: string;
+  lastNameRecommanding: string;
+  companyNameRecommanding: string;
   qualityStars: number;
   qualityComment: string;
   securityStars: number;
