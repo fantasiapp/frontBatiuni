@@ -65,9 +65,9 @@ namespace mutable {
                 console.log('upoadte in 2', fields[i], item[i]);
                 mutable.update(draft, fields[i], item[i]);
                 // if (fields[i] != "DatePost") {
-                  item[i] = Object.keys(item[i]).map(id => +id);
+                item[i] = Object.keys(item[i]).map(id => +id);
                   // }
-                }
+              }
             }
           }
         }
