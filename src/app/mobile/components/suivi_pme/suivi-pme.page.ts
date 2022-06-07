@@ -326,7 +326,7 @@ export class SuiviPME extends Destroy${
   }
 
   saveToBackAdFormDate() {
-    console.log('start saveToBack');
+    console.log('start saveToBack', this.dates);
     const selectedDate: string[] = this.calendarForm!.value.map(
       (dayState: DayState) => {
         return dayState.date;
@@ -341,7 +341,7 @@ export class SuiviPME extends Destroy${
       if (!Array.isArray(this.mission.dates)) arrayDateId = Object.keys(this.mission.dates).map(date => +date)
       else arrayDateId = this.mission.dates
       this.dates = this.store.selectSnapshot(DataQueries.getMany('DatePost', arrayDateId))
-
+      console.log('COMPUTED DATES from back', this.dates);
       this.cd.markForCheck();
       console.log('end saveToBack');
     });
@@ -349,20 +349,15 @@ export class SuiviPME extends Destroy${
   }
 
   computeBlockedDate(): string[] {
-    console.log('Start blocked', this.mission);
+    console.log('Start blocked', this.mission, this.dates);
     if(!this.mission){
       return []
     }
     let listBlockedDate: string[] = [];
-    let listDetailedPost = this.mission!.details;
+    let listDatePost = this.dates
     
-    listDetailedPost.forEach((detailId) => {
-      let detailDate = this.store.selectSnapshot(DataQueries.getById("DetailedPost", detailId))!;
-      // si la date a une Task, la considerer bloquer
-      if (detailDate && detailDate.date && !listBlockedDate.includes(detailDate.date))
-      listBlockedDate.push(detailDate.date);
-    });
-    console.log('end blocked');
+    listBlockedDate = listDatePost.filter(date => date && (!!date.supervisions.length || !!date.details.length)).map(date => date.date)
+    console.log('listBlockedDate', listBlockedDate);
     return listBlockedDate;
   }
 

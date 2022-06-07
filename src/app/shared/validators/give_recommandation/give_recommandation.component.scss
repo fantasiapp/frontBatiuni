@@ -5,7 +5,20 @@
 :host {
   font-family: "Poppins";
   @extend %absolute-cover;
-  background-color: $buttonGradient;
+}
+
+h4 {
+  span {
+    color: $primary
+  }
+  margin-bottom: 2rem;
+}
+
+.give-recommandation {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  height: 100%
 }
 
 .recommandation {   
@@ -16,19 +29,40 @@
   }
 }
 
-button {
-  background-color: $infosColor;
-  color:#FFFFFF;
-  width: 60%;
-  max-width: 200px;
+.form-input {
+  > p {
+    font-family: 'Roboto', sans-serif;
+  }
+  > textarea {
+    resize: vertical;
+    width: 100%;
+    font-size: 1rem;
+    border: 1px solid $light;
+    height: 5rem;
+    padding: 0.5rem
+  }
 }
 
-p {
-  color: #FFFFFF;
-  margin-top: 25px;
-  margin-bottom: 100px;
+.star-container {
+  height: 1.75rem;
+  img {
+    width: 1.75rem;
+  }
 }
 
 .ripple {
   @extend %ripple;
+}
+
+.submitDisable {
+  background-color: $light;
+  color: white;
+}
+
+.submitActivated {
+  background-color: $primary;
+}
+
+.footer-button {
+  margin-top: auto;
 }
