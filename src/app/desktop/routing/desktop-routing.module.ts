@@ -4,6 +4,7 @@ import { AuthGuard } from "src/app/mobile/routing/auth/auth.guard";
 import { AuthResolver } from "src/app/mobile/routing/auth/auth.resolver";
 import { DocusignPage } from "src/app/shared/components/docusign_page/docusign.page";
 import { EmailConfirmation } from "src/app/shared/validators/email_confirmation/emailconfirmation.component";
+import { GiveARecommandation } from "src/app/shared/validators/give_recommandation/give_recommandation.component";
 import { RegistrationSuccess } from "src/app/shared/validators/registration_success/registrationsuccess.component";
 import { AnnoncePage } from "../components/annonce_page/annonce.page";
 import { AnnonceValidePage } from "../components/annonce_valider/annonce.valide";
@@ -45,7 +46,10 @@ const routes: Routes = [{
 {
   path: 'success',
   component: RegistrationSuccess
-}, {
+},{
+  path: 'give_recommandation/:token',
+  component: GiveARecommandation
+},{
   path: 'home',
   component: MainPageComponent,
   canActivate: [AuthGuard],

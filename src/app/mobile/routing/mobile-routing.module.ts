@@ -91,7 +91,10 @@ const routes: Routes = [{
   }, {
     path: 'accordion',
     component: UIAccordion
-  }, {
+  },{
+    path: 'give_recommandation/:token',
+    component: GiveARecommandation
+  },{
     path: 'home',
     component: MainPage,
     canActivate: [AuthGuard],
@@ -109,9 +112,6 @@ const routes: Routes = [{
   }, {
     path: '**',
     redirectTo: 'landing',
-  },{
-    path: 'give_recommandation/:token',
-    component: GiveARecommandation
   }
 ];
 
