@@ -354,15 +354,9 @@ export class SuiviPME extends Destroy${
       return []
     }
     let listBlockedDate: string[] = [];
-    let listDetailedPost = this.mission!.details;
+    let listDatePost = this.dates
     
-    listDetailedPost.forEach((detailId) => {
-      let detailDate = this.store.selectSnapshot(DataQueries.getById("DetailedPost", detailId))!;
-      // si la date a une Task, la considerer bloquer
-      if (detailDate && detailDate.date && !listBlockedDate.includes(detailDate.date))
-      listBlockedDate.push(detailDate.date);
-    });
-    console.log('end blocked');
+    listBlockedDate = listDatePost.filter(date => date && !!date.supervisions.length && !!date.details.length).map(date => date.date)
     return listBlockedDate;
   }
 
