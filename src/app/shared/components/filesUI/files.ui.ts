@@ -21,7 +21,7 @@ export type BasicFile = {
   nature: string;
   name: string;
   ext: string;
-  content: string;
+  content: string[];
 };
 
 export type FileUIOutput = BasicFile & { expirationDate: string; id?: number };
@@ -31,7 +31,7 @@ export function defaultFileUIOuput(
   name?: string
 ): FileUIOutput {
   return {
-    content: "",
+    content: [""],
     expirationDate: date || "",
     ext: "???",
     name: name || "Veuillez télécharger un document",
@@ -83,6 +83,8 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
   @ViewChild("input", { static: true, read: ElementRef })
   inputRef!: ElementRef;
 
+  modified: boolean = false;
+
   constructor(
     cd: ChangeDetectorRef,
     private popup: PopupService,
@@ -94,7 +96,7 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
 
   ngOnInit() {
     this.value = {
-      content: "",
+      content: [""],
       expirationDate: "",
       ext: "???",
       name: "Veuillez télécharger un document",
@@ -131,7 +133,7 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
 
     return {
       ...this.value,
-      content: base64.slice(getFileType(ext).length + 13),
+      content: [base64.slice(getFileType(ext).length + 13)],
       name,
       ext,
     } as FileUIOutput;
@@ -148,6 +150,7 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
 
   openInput() {
     this.inputRef.nativeElement.click();
+    this.modified = true;
   }
 
   private async takePhoto() {
@@ -162,7 +165,7 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
       nature: "",
       name: photo.path || "image du caméra",
       ext: photo.format,
-      content: photo.base64String as string,
+      content: [photo.base64String as string],
     };
   }
 
@@ -211,7 +214,8 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
             if (!this.value || (!this.value.content && this.value.id == void 0))
               return this.info.show("error", "Aucun fichier à affichier", 3000);
 
-            this.popup.openFile(this.value);
+            let canOpenPDF = !this.modified;
+            this.popup.openFile(this.value, canOpenPDF);
           },
         },
       ],
