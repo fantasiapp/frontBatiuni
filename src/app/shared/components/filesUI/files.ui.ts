@@ -151,6 +151,7 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
 
   openInput() {
     this.inputRef.nativeElement.click();
+    if (this.value?.nature == "admin") {this.popup.newFile(this.filename, this);}
   }
 
   private async takePhoto() {
@@ -169,6 +170,19 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
     };
   }
 
+  deleteFile(){
+    this.kill.emit(this.filename);
+    this.value = {
+      content: "",
+      expirationDate: "",
+      ext: "???",
+      name: "Veuillez télécharger un document",
+      nature: this.filename,
+    };
+    this.cd.markForCheck()
+    
+  }
+
   onFileInputClicked(e: Event) {
     if (e.isTrusted) e.preventDefault();
 
@@ -179,7 +193,18 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
         {
           name: "Supprimer un fichier",
           click: () => {
-            //search file having the same name and delete it
+            if (this.value?.nature == "admin") {this.popup.deleteFile(this.filename, this)}
+            if (this.value?.nature == "post") {
+              this.value = {
+                content: "",
+                expirationDate: "",
+                ext: "???",
+                name: "Veuillez télécharger un document",
+                nature: this.value.nature,
+              };
+              this.kill.emit();
+              this.cd.markForCheck()
+            }
           },
         },
         {

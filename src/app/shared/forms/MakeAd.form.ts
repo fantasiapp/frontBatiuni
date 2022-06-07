@@ -212,7 +212,7 @@ import { Mobile } from "../services/mobile-footer.service";
             <fileinput
               [includeDate]="false"
               [editName]="document.get('name')!"
-              [closeButton]="false"
+              (kill)="removeDocument(i)"
               comment=""
               placeholder=""
               formControlName="fileData"
@@ -571,9 +571,9 @@ export class MakeAdForm {
   }
 
   removeDocument(index: number) {
-    const documents = this.makeAdForm.get("documents") as FormArray,
-      item = documents.at(index).value.fileData;
-    documents.removeAt(index);
+    let documents = this.makeAdForm.get("documents") as FormArray,
+    item = documents.at(index).value.fileData;
+    documents.at(index).value.fileData = {content: '', expirationDate: '', ext: '???', name: 'Veuillez télécharger un document', nature: 'post'}
     if (item.id) this.store.dispatch(new DeleteFile(item.id));
   }
 
