@@ -1,5 +1,5 @@
-<div *ngIf="!hasSentRecommandation" class="recommandation cover-parent flex column center">
-  <div class="cloture-swipeup">
+<div *ngIf="!hasSentRecommandation" class="center-text container">
+  <!-- <div class="cloture-swipeup"> -->
     <h3>Noter l'entreprise</h3>
     <!-- <h6>{{ mission!.subContractorName }}</h6> -->
     <div>
@@ -37,7 +37,7 @@
       <textarea (focusout)="textStarAction('organisation')" placeholder="Ajouter un commentaire" rows="5" cols="30" id="starTextOrganisation">{{ recommandation!.organisationComment }}</textarea>
     </div>
     <button [ngClass]="classSubmit" (click)="submitRecommandation()">Envoyer la recommandation</button>
-  </div>
+  <!-- </div> -->
 </div>
 
 <ng-template *ngIf="hasSentRecommandation" #waiting_tpl>
