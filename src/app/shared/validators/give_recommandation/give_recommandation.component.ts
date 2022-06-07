@@ -36,6 +36,8 @@ export class GiveARecommandation extends Destroy$ {
 
   constructor(private store: Store, private cd: ChangeDetectorRef, private route: ActivatedRoute) {
     super();
+    const companyId = this.route.snapshot.params.company;
+    console.log("les params", this.route.snapshot.params)
   }
 
   starAction(index: number, nature: string) {
