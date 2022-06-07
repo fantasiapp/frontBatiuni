@@ -54,7 +54,7 @@
       <div class="star-container">
         <img *ngFor="let flag of getArrayStar('quality'); let index=index;" (click)="starAction(index, 'quality')" [src]="flag ? 'assets/starFull.svg' : 'assets/starEmpty.svg'">
       </div>
-      <textarea (focusout)="textStarAction('quality')" placeholder="Ajouter un commentaire" rows="5" cols="30" id="starTextQuality">{{ mission!.qualityComment }}</textarea>
+      <textarea (focusout)="textStarAction('quality')" placeholder="Ajouter un commentaire" rows="4" id="starTextQuality">{{ mission!.qualityComment }}</textarea>
     </div>
     
     <div *ngIf="mission" class="form-input">
@@ -62,7 +62,7 @@
       <div class="star-container">
         <img *ngFor="let flag of getArrayStar('security'); let index=index;" (click)="starAction(index, 'security')" [src]="flag ? 'assets/starFull.svg' : 'assets/starEmpty.svg'">
       </div>
-      <textarea (focusout)="textStarAction('security')" placeholder="Ajouter un commentaire" rows="5" cols="30" id="starTextSecurity">{{ mission!.securityComment }}</textarea>
+      <textarea (focusout)="textStarAction('security')" placeholder="Ajouter un commentaire" rows="4" id="starTextSecurity">{{ mission!.securityComment }}</textarea>
     </div>
 
     <div *ngIf="mission" class="form-input">

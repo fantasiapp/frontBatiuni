@@ -1,42 +1,40 @@
-<div *ngIf="!hasSentRecommandation" class="center-text container">
+<div *ngIf="!hasSentRecommandation" class="give-recommandation">
   <!-- <div class="cloture-swipeup"> -->
-    <h3>Noter l'entreprise</h3>
-    <!-- <h6>{{ mission!.subContractorName }}</h6> -->
-    <div>
-      <textarea (focusout)="getCompanyInfoByText('lastName')" placeholder="Entrer votre nom" id="textLastName" cols="15" rows="1">{{ recommandation!.lastNameRecommanding }}</textarea>
-      <textarea (focusout)="getCompanyInfoByText('firstName')" placeholder="Entrer votre prénom" id="textFirstName" cols="15" rows="1">{{ recommandation!.firstNameRecommanding }}</textarea>
-    </div>
-    <div>
-      <textarea (focusout)="getCompanyInfoByText('companyName')" placeholder="Entrer le nom de votre entreprise" id="textCompanyName" cols="35" rows="1">{{ recommandation!.companyNameRecommanding }}</textarea>
-    </div>
-    <div class="star-container" *ngIf="hasGeneralStars">
-      <img  *ngFor="let flag of getArrayStar('general'); let index=index;" [src]="flag ? 'assets/starFull.svg' : 'assets/starEmpty.svg'">
-    </div>
+    <h4>Noter l'entreprise {{ company?.name || 'Fantasiapp'}} sur <span>BatiUni</span></h4>
+    <form class="form-input" [formGroup]="userNameForm">
+      <input (focusout)="getCompanyInfoByText('lastName', lastNameControl)"class="form-element" placeholder="Entrer votre nom" formControlName="lastName" #lastNameControl/>
+      <input (focusout)="getCompanyInfoByText('firstName', firstNameControl)"placeholder="Entrer votre prénom" class="form-element" formControlName="firstName" #firstNameControl/>
+      <input (focusout)="getCompanyInfoByText('companyName', companyControl)"placeholder="Entrer le nom de votre entreprise" class="form-element" style='margin-bottom: 1rem;' formControlName="firstName" #companyControl/>
 
-    <div class="form-input">
-      <p>Qualité du travail fourni</p>
-      <div class="star-container">
-        <img *ngFor="let flag of getArrayStar('quality'); let index=index;" (click)="starAction(index, 'quality')" [src]="flag ? 'assets/starFull.svg' : 'assets/starEmpty.svg'">
+      <!-- <div class="star-container" *ngIf="hasGeneralStars">
+        <img  *ngFor="let flag of getArrayStar('general'); let index=index;" [src]="flag ? 'assets/starFull.svg' : 'assets/starEmpty.svg'">
+      </div> -->
+  
+      <div class="form-input">
+        <p>Qualité du travail fourni</p>
+        <div class="star-container">
+          <img *ngFor="let flag of getArrayStar('quality'); let index=index;" (click)="starAction(index, 'quality')" [src]="flag ? 'assets/starFull.svg' : 'assets/starEmpty.svg'">
+        </div>
+        <textarea (focusout)="textStarAction('quality', quality)" placeholder="Ajouter un commentaire" rows="5" cols="30" id="starTextQuality" #quality>{{ recommandation!.qualityComment }}</textarea>
       </div>
-      <textarea (focusout)="textStarAction('quality')" placeholder="Ajouter un commentaire" rows="5" cols="30" id="starTextQuality">{{ recommandation!.qualityComment }}</textarea>
-    </div>
-    
-    <div class="form-input">
-      <p>Respect de la sécurité et de la propreté du chantier</p>
-      <div class="star-container">
-        <img *ngFor="let flag of getArrayStar('security'); let index=index;" (click)="starAction(index, 'security')" [src]="flag ? 'assets/starFull.svg' : 'assets/starEmpty.svg'">
+      
+      <div class="form-input">
+        <p>Respect de la sécurité et de la propreté du chantier</p>
+        <div class="star-container">
+          <img *ngFor="let flag of getArrayStar('security'); let index=index;" (click)="starAction(index, 'security')" [src]="flag ? 'assets/starFull.svg' : 'assets/starEmpty.svg'">
+        </div>
+        <textarea (focusout)="textStarAction('security', security)" placeholder="Ajouter un commentaire" rows="5" cols="30" id="starTextSecurity" #security>{{ recommandation!.securityComment }}</textarea>
       </div>
-      <textarea (focusout)="textStarAction('security')" placeholder="Ajouter un commentaire" rows="5" cols="30" id="starTextSecurity">{{ recommandation!.securityComment }}</textarea>
-    </div>
-
-    <div class="form-input">
-      <p>Organisation</p>
-      <div class="star-container">
-        <img *ngFor="let flag of getArrayStar('organisation'); let index=index;" (click)="starAction(index, 'organisation')" [src]="flag ? 'assets/starFull.svg' : 'assets/starEmpty.svg'">
+  
+      <div class="form-input">
+        <p>Organisation</p>
+        <div class="star-container">
+          <img *ngFor="let flag of getArrayStar('organisation'); let index=index;" (click)="starAction(index, 'organisation')" [src]="flag ? 'assets/starFull.svg' : 'assets/starEmpty.svg'">
+        </div>
+        <textarea (focusout)="textStarAction('organisation', organisation)" placeholder="Ajouter un commentaire" rows="5" cols="30" id="starTextOrganisation" #organisation>{{ recommandation!.organisationComment }}</textarea>
       </div>
-      <textarea (focusout)="textStarAction('organisation')" placeholder="Ajouter un commentaire" rows="5" cols="30" id="starTextOrganisation">{{ recommandation!.organisationComment }}</textarea>
-    </div>
-    <button [ngClass]="classSubmit" (click)="submitRecommandation()">Envoyer la recommandation</button>
+    </form>
+    <button [ngClass]="classSubmit" class="footer-button" (click)="submitRecommandation()">Envoyer la recommandation</button>
   <!-- </div> -->
 </div>
 

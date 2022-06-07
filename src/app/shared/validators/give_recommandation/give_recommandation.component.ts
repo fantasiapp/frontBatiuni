@@ -1,11 +1,12 @@
-import { ThrowStmt } from "@angular/compiler";
 import {  ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from "@angular/core";
+import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
 import { Store } from "@ngxs/store";
 import { interval, race } from "rxjs";
 import { take, takeUntil } from "rxjs/operators";
 import { Destroy$ } from "src/app/shared/common/classes";
-import { Recommandation } from "src/models/new/data.interfaces";
+import { Company, Recommandation } from "src/models/new/data.interfaces";
+import { DataQueries } from "src/models/new/data.state";
 import { GiveRecommandation } from "src/models/new/user/user.actions"
 
 @Component({
@@ -34,8 +35,24 @@ export class GiveARecommandation extends Destroy$ {
     organisationComment : ""
   };
 
+  company: Company | null;
+
+  userNameForm: FormGroup = new FormGroup({
+    lastName: new FormControl('', [Validators.required]),
+    firstName: new FormControl('', [Validators.required])
+  })
+  
+  ngOnInit() {
+    
+  }
+
   constructor(private store: Store, private cd: ChangeDetectorRef, private route: ActivatedRoute) {
     super();
+    this.company = this.companyId ? this.store.selectSnapshot(DataQueries.getById("Company", this.companyId)) : null
+  }
+
+  onSubmit(e: any){
+
   }
 
   starAction(index: number, nature: string) {
@@ -50,14 +67,14 @@ export class GiveARecommandation extends Destroy$ {
   }
 
   get classSubmit() {
-    if (this.hasGeneralStars) {
+    if (this.hasGeneralStars && this.recommandation.companyNameRecommanding && this.recommandation.firstNameRecommanding && this.recommandation.lastNameRecommanding) {
       return "submitActivated";
     } else {
       return "submitDisable";
     }
   }
 
-  textStarAction(nature: string) {
+  textStarAction(nature: string, textarea: HTMLTextAreaElement) {
     if (nature == "quality") {
       let content = document.getElementById(
         "starTextQuality"
@@ -76,22 +93,13 @@ export class GiveARecommandation extends Destroy$ {
     }
   }
 
-  getCompanyInfoByText(nature: string) {
+  getCompanyInfoByText(nature: string, input: HTMLInputElement) {
     if (nature == "lastName") {
-      let content = document.getElementById(
-        "textLastName"
-      ) as HTMLTextAreaElement;
-      this.recommandation!.lastNameRecommanding = content!.value;
+      this.recommandation!.lastNameRecommanding = input.value;
     } else if (nature == "firstName") {
-      let content = document.getElementById(
-        "textFirstName"
-      ) as HTMLTextAreaElement;
-      this.recommandation!.firstNameRecommanding = content!.value;
+      this.recommandation!.firstNameRecommanding = input.value;
     } else if (nature == "companyName") {
-      let content = document.getElementById(
-        "textCompanyName"
-      ) as HTMLTextAreaElement;
-      this.recommandation!.companyNameRecommanding = content!.value;
+      this.recommandation!.companyNameRecommanding = input.value;
     }
   }
 
