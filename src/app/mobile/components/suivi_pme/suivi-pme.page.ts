@@ -326,7 +326,7 @@ export class SuiviPME extends Destroy${
   }
 
   saveToBackAdFormDate() {
-    console.log('start saveToBack');
+    console.log('start saveToBack', this.dates);
     const selectedDate: string[] = this.calendarForm!.value.map(
       (dayState: DayState) => {
         return dayState.date;
@@ -341,7 +341,7 @@ export class SuiviPME extends Destroy${
       if (!Array.isArray(this.mission.dates)) arrayDateId = Object.keys(this.mission.dates).map(date => +date)
       else arrayDateId = this.mission.dates
       this.dates = this.store.selectSnapshot(DataQueries.getMany('DatePost', arrayDateId))
-
+      console.log('COMPUTED DATES from back', this.dates);
       this.cd.markForCheck();
       console.log('end saveToBack');
     });
