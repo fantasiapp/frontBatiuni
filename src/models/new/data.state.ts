@@ -486,6 +486,7 @@ export class DataState {
           throw response.messages;
         }
         delete response[application.action];
+        console.log('duplicatePost', response);
         ctx.setState(
           addComplexChildren("Company", profile.company.id, "Post", response)
         );
@@ -579,9 +580,8 @@ export class DataState {
           throw response.messages;
         }
         delete response[application.action];
-        ctx.setState(
-          addComplexChildren("Company", profile.company.id, "Post", response)
-        );
+        console.log('CandidateViewed', response);
+        ctx.setState(addComplexChildren("Company", profile.company.id, "Post", response));
       })
     );
   }
@@ -643,10 +643,26 @@ export class DataState {
 
   @Action(BlockCompany)
   blockCompany(ctx: StateContext<DataModel>, block: BlockCompany) {
+    const user = this.store.selectSnapshot(DataQueries.currentUser);
     return this.http.get("data", block).pipe(
       tap((response: any) => {
         if (response[block.action] !== "OK") this.inZone(() => this.info.show("error", response.messages, 3000))
-        else {delete response[block.action]; this.inZone(() => this.info.show("success", response.messages, 2000));}
+        else {
+          delete response[block.action]; this.inZone(() => this.info.show("success", response.messages, 2000))
+          let BlockedCandidates = this.store.selectSnapshot(DataQueries.getAll("BlockedCandidate"))
+          let theBlocked = BlockedCandidates.filter((candidate) => candidate.blocked == block.companyId && candidate.blocker == user.company)[0]
+          console.log("theBlocked", theBlocked, block)
+          console.log( "BlockedCandidates", BlockedCandidates)  
+          console.log('response', response) // je suis entrain de m'entrainer 
+          if(theBlocked) {
+            console.log("J'essaye de débloquer/bloquer mais ça marche mal")
+            ctx.setState(update("BlockedCandidate", response))
+          }
+          else {
+            console.log("J'essaye de bloquer un nouveau candidat")
+            ctx.setState(addValues("BlockedCandidate", response))
+          }
+        }
       })
 
     )
@@ -744,6 +760,8 @@ export class DataState {
         }
         delete response[application.action];
         
+        console.log('modifyMissionDate', response);
+        
         ctx.setState(addComplexChildren('Mission', response.mission.id,'DatePost', response.datePost))
       })
     );
@@ -752,8 +770,10 @@ export class DataState {
   @Action(ValidateMissionDate)
   validateMissionDate(ctx: StateContext<DataModel>, application: ValidateMissionDate) {
     const profile = this.store.selectSnapshot(DataQueries.currentProfile)!;
+    console.log('validateMissionDate', ctx, application);
     return this.http.post("data", application).pipe(
       tap((response: any) => {
+        console.log('response', response);
         if (response[application.action] !== "OK") {
           this.inZone(() => this.info.show("error", response.messages, 3000));
           throw response.messages;
@@ -763,7 +783,17 @@ export class DataState {
           );
           delete response[application.action];
           console.log('validateMissionDate', response)
-          ctx.setState(addComplexChildren('Mission', response.mission.id,'DatePost', response.datePost))
+
+          if(response.hasOwnProperty('update')){
+            ctx.setState(update(response.type, response[response.type]))
+          } else {
+            if(response.hasOwnProperty('deleted')) {
+              ctx.setState(deleteIds("DatePost", [response["fatherId"]]));
+              ctx.setState(update('Mission', response["mission"]));
+            } else {
+              ctx.setState(addComplexChildren(response.type, response.fatherId,'DatePost', response.datePost))
+            }
+          }
           // console.log('validateMissionDate', profile.company.id, response.mission)
           // ctx.setState(addComplexChildren('Company', profile.company.id,'Mission', response.mission))
         }
@@ -782,9 +812,8 @@ export class DataState {
         }
         delete response[application.action];
         console.log('Response', response)
-        ctx.setState(
-          addComplexChildren("Company", profile.company.id, "Mission", response)
-        );
+        ctx.setState(update("Mission", response));
+
       })
     );
   }
@@ -800,10 +829,8 @@ export class DataState {
         }
         delete response[application.action];
         console.log('ReponseST', response)
-        ctx.setState(
-          addComplexChildren("Company", profile.company.id, "Mission", response)
-        );
-        console.log("Dans CloseMissionST", this.store.selectSnapshot(DataQueries.getAll("Mission")))
+        ctx.setState(update("Mission", response));
+        // console.log("Dans CloseMissionST", this.store.selectSnapshot(DataQueries.getAll("Mission")))
       })
     );
   }
@@ -948,7 +975,7 @@ export class DataState {
             boost.postId,
             "boostTimestamp",
             () => {
-              return response.UserProfile[boost.postId][21];
+              return response.UserProfile[boost.postId][22];
             }
           ));
       })

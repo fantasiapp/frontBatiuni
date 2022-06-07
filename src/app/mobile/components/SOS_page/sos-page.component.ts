@@ -149,7 +149,7 @@ export class SOSPageComponent extends Destroy$ {
       this.filterOn = false;
     } else {
       this.filterOn = true;
-      this.info.show("info","Vos filtres ont été appliqués", 5000);
+      this.info.show("info","Vos filtres ont été appliqués", 3000);
     }
   }
 

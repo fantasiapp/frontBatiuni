@@ -1,7 +1,7 @@
 <div class="cover" [class.open]="open && !willClose"></div>
 
 <div class="menu cover-parent background-white flex column center space-children-margin center-text" [class.open]="open && !willClose">
-  <img src="assets/X.svg" (click)="close()" class="position-absolute close-button"/>
+  <img src="assets/X.svg" (click)="close(); clearInput(newTaskForm)" class="position-absolute close-button"/>
   <ng-container #view>
     <ng-content></ng-content>
   </ng-container>
@@ -35,11 +35,11 @@
       <li *ngFor="let detailedPost of assignDate.date.allPostDetails" 
       (click)="modifyDetailedPostDate(detailedPost, checkbox, assignDate); checkbox.onChange($event)" 
       [ngClass]="{'disabled': detailedPost.checked && (detailedPost.validated || detailedPost.refused)}">
-        <checkbox style="pointer-events: none;" [value]="detailedPost.checked" #checkbox></checkbox>
+        <checkbox style="pointer-events: none; flex-shrink: 0;" [value]="detailedPost.checked" #checkbox></checkbox>
         <span >{{ detailedPost.content }}</span>
       </li>
     </ul>
-    <form (ngSubmit)="addNewTask($event, assignDate, addTask)" [formGroup]="newTaskForm">
+    <form (ngSubmit)="addNewTask($event, assignDate, newTaskForm)" [formGroup]="newTaskForm">
       <input id="addTask" type="text" placeholder="Ajouter une nouvelle tâche" formControlName="task" #addTask>
     </form>
   </div>

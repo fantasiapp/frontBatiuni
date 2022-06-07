@@ -90,6 +90,14 @@ export class MissionsComponent extends Destroy$ {
       let usedDay: number[] = []
       for ( let mission of this.allMyMissions ) {
         mission = this.store.selectSnapshot(DataQueries.getById('Mission', mission.id)) as Mission
+
+        // console.log('mission', mission);
+        // console.log('mission truc',
+        //   this.store.selectSnapshot(DataQueries.getMany('DetailedPost', mission.details)),
+        //   this.store.selectSnapshot(DataQueries.getMany('DatePost', mission.dates)),
+        //   this.store.selectSnapshot(DataQueries.getMany('File', mission.files)),
+        //   this.store.selectSnapshot(DataQueries.getMany('Candidate', mission.candidates))
+        // );
         const availabilities = this.store.selectSnapshot(DataQueries.getMany('Disponibility', profile.company.availabilities))
         const start = moment(mission.startDate),
           end = moment(mission.endDate),
@@ -106,10 +114,10 @@ export class MissionsComponent extends Destroy$ {
         else missionDatesId = mission.dates
         let dateAlreadyParsedFromMission:string[] = []
 
+
         for(let i= 0; i < missionDatesId.length; i++){
           const dateid = missionDatesId[i]
           let date = this.store.selectSnapshot(DataQueries.getById('DatePost', dateid))
-  
           dateAlreadyParsedFromMission.push(date!.date)
   
           this.detailedDays.push({
@@ -159,7 +167,7 @@ export class MissionsComponent extends Destroy$ {
       this.filterOn = false;
     } else {
       this.filterOn = true;
-      this.info.show("info","Vos filtres ont été appliqués", 5000);
+      this.info.show("info","Vos filtres ont été appliqués", 3000);
     }
   }
 

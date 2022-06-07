@@ -64,6 +64,7 @@ import { STFilterForm } from "src/app/shared/forms/STFilter.form";
 import { PMEFilterForm } from "src/app/shared/forms/PMEFilter.form";
 import { SearchbarComponent } from "src/app/shared/components/searchbar/searchbar.component";
 import { getUserDataService } from "src/app/shared/services/getUserData.service";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "home",
@@ -158,7 +159,8 @@ export class HomeComponent extends Destroy$ {
     private mobile: Mobile,
     private booleanService: BooleanService,
     private filterService: FilterService,
-    private getUserDataService: getUserDataService
+    private getUserDataService: getUserDataService,
+    private router: Router
   ) {
     super();
     this.isLoading = this.booleanService.isLoading
@@ -412,7 +414,7 @@ export class HomeComponent extends Destroy$ {
       this.filterOn = false;
     } else {
       this.filterOn = true;
-      this.info.show("info","Vos filtres ont été appliqués", 5000);
+      this.info.show("info","Vos filtres ont été appliqués", 3000);
     }
     this.cd.markForCheck;
   }
@@ -734,6 +736,8 @@ export class HomeComponent extends Destroy$ {
       .pipe(take(1))
       .subscribe(() => {
         this.openPost(null);
+        console.log("Dans block candidate")
+        // this.router.navigateByUrl('/home')
         this.cd.markForCheck();
       });
   }

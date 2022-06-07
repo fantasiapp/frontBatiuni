@@ -25,7 +25,7 @@ export class OptionsModel extends UIDefaultAccessor<Option[]> {
     if ( this.showDropDown ) {
       setTimeout(() => {
         const searchInput = this.ref.nativeElement.querySelector('input[type=text]');
-        searchInput?.scrollIntoView(true);
+        searchInput?.scrollIntoView({behavior: "smooth", block: "start", inline: "nearest"});
       });
     }
   }
