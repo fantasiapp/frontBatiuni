@@ -164,7 +164,7 @@ export class DownloadFile {
   action = 'downloadFile';
   static readonly type = '[File] Download';
   get companyFile() {return true;};
-  constructor(public id: number, public notify: boolean = false) {}
+  constructor(public id: number, public notify: boolean = false, public forceDownload: boolean = false) {}
 };
 
 export class DeletePost {

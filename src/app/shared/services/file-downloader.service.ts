@@ -52,12 +52,12 @@ export class FileDownloader {
     fileContext.url.length && URL.revokeObjectURL(fileContext.url[0]);
   }
 
-  downloadFile(file: File | number, notify: boolean = false): Observable<File> {
+  downloadFile(file: File | number, notify: boolean = false, forceDownload: boolean = false): Observable<File> {
     let id: number;
     if (typeof file == "number") id = file;
     else if (file.content) return of(file);
     else id = file.id;
-    return this.store.dispatch(new DownloadFile(id, notify)).pipe(
+    return this.store.dispatch(new DownloadFile(id, notify, forceDownload)).pipe(
       take(1), //will unsubscribe
       map((_) => {
         // console.log("hello")

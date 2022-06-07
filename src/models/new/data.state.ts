@@ -508,9 +508,8 @@ export class DataState {
       file = ctx.getState()["File"][download.id];
 
     //check if the file is already downloaded
-    if (file && file[contentIndex]) {
-      console.log("download File", typeof(file.content))
-      return file.content;
+    if (file && file[contentIndex] && !download.forceDownload) {
+      return file[contentIndex];
     }
 
     //check if we are currently downloading the file
@@ -682,6 +681,8 @@ export class DataState {
           this.inZone(() => this.info.show("error", response.messages, 3000));
           throw response.messages;
         }
+        let mission = this.store.selectSnapshot(DataQueries.getById("Mission", application.missionId))
+        SingleCache.deleteValueByName("File" + mission?.contract.toString());
         delete response[application.action];
         ctx.setState(
           addComplexChildren("Company", profile.company.id, "Mission", response)
