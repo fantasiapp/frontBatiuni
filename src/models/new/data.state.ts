@@ -1002,7 +1002,7 @@ export class DataState {
   @Action(GiveRecommandation)
   giveRecommandation(ctx: StateContext<DataModel>, application : GiveRecommandation){
     const user = this.store.selectSnapshot(DataQueries.currentUser);
-    return this.http.post("data", application).pipe(
+    return this.http.post("initialize", application).pipe(
       tap((response: any) => {
         //write code to manage the response
         ctx.setState(addValues("Recommandation", response))
