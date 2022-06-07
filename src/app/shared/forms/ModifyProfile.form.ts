@@ -584,8 +584,8 @@ export class ModifyProfileForm {
     });
 
     const filesInput = this.form.controls["UserProfile.Company.admin"];
-    this.companyFiles.forEach(({ name }) => {
-      filesInput.get(name)?.patchValue({ name });
+    this.companyFiles.forEach((file) => {
+      filesInput.get(file.name)?.patchValue(file);
     });
 
     this.form.controls["UserProfile.lastName"]?.setValue(user.lastName);
