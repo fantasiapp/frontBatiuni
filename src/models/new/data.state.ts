@@ -72,6 +72,7 @@ import { transformAll } from "@angular/compiler/src/render3/r3_ast";
 import { BooleanService } from "src/app/shared/services/boolean.service";
 import { getUserDataService } from "src/app/shared/services/getUserData.service";
 import { AppComponent } from "src/app/app.component";
+import { SingleCache } from "src/app/shared/services/SingleCache";
 
 export interface DataModel {
   fields: Record<string[]>;
@@ -375,18 +376,23 @@ export class DataState {
           contentIndex = fields["File"].indexOf("content");
 
         upload.assignedId = assignedId;
-        response[assignedId][contentIndex] = upload.fileBase64;
+        response[assignedId][contentIndex] = "";
+
         if (upload.category == "Company") {
           //add it to company
           const company = this.store.selectSnapshot(DataQueries.currentCompany);
           ctx.setState(
-            addSimpleChildren("Company", company.id, "File", response, "name")
+            compose(addSimpleChildren("Company", company.id, "File", response, "name"))
           );
         } else if (upload.category == "Post") {
           ctx.setState(
-            addSimpleChildren("Post", upload.target, "File", response, "name")
+            compose(addSimpleChildren("Post", upload.target, "File", response, "name"))
           );
         }
+        let name: string = "File" + upload.assignedId!.toString()
+          if (SingleCache.checkValueInCache(name)) {
+            SingleCache.deleteValueByName(name)
+          }
       })
     );
   }
@@ -968,7 +974,7 @@ export class DataState {
             boost.postId,
             "boostTimestamp",
             () => {
-              return response.UserProfile[boost.postId][21];
+              return response.UserProfile[boost.postId][22];
             }
           ));
       })

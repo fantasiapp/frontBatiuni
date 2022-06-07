@@ -375,7 +375,7 @@ export class PopupService {
     this.dimension$.next({ ...this.defaultDimension, ...(dimension || {}) });
   }
 
-  openFile(file: BasicFile | File) {
+  openFile(file: BasicFile | File, canOpenPDF: boolean = true) {
     if (!file.content) {
       let name: string = "File" + (file as File).id!.toString()
       if (SingleCache.checkValueInCache(name)) {
@@ -390,14 +390,13 @@ export class PopupService {
         })}
       return;
     }
-    console.log("openFile popup", file)
     let context = this.downloader.createFileContext(file);
-    console.log(context)
     this.popups$.next({
       type: "component",
       component: FileViewer,
       init: (viewer: FileViewer) => {
         viewer.fileContext = context;
+        viewer.canOpenPDF = canOpenPDF;
       },
       close: () => {
         this.downloader.clearContext(context);
