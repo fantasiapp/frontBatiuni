@@ -985,9 +985,16 @@ export class DataState {
   @Action(AskRecommandation)
   askRecommandation(ctx: StateContext<DataModel>, demand: AskRecommandation){
     const user = this.store.selectSnapshot(DataQueries.currentUser);
+    console.log("i sent it")
     return this.http.get("data", demand).pipe(
       tap((response: any) => {
-        //write code to manage the response
+        console.log('response in askRecommandation', response)
+        if (response[demand.action] !== "OK") {
+          this.inZone(() => this.info.show("error", response.messages, 3000));
+        } else {
+                this.info.show("info", response.messages, 3000)
+                ctx.setState(addValues("Recommandation", response))
+      }
       })
     )
   }
