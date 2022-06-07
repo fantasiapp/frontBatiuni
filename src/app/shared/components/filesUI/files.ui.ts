@@ -80,6 +80,9 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
   @Input()
   includeDate: boolean = true;
 
+  @Input()
+  closeButton: boolean = true;
+
   @ViewChild("input", { static: true, read: ElementRef })
   inputRef!: ElementRef;
 
@@ -160,7 +163,7 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
     this.value = {
       expirationDate: "",
       nature: "",
-      name: photo.path || "image du caméra",
+      name: photo.path || "Image téléchargée depuis les photos",
       ext: photo.format,
       content: photo.base64String as string,
     };

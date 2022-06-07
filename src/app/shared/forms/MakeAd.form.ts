@@ -212,7 +212,7 @@ import { Mobile } from "../services/mobile-footer.service";
             <fileinput
               [includeDate]="false"
               [editName]="document.get('name')!"
-              (kill)="removeDocument(i)"
+              [closeButton]="false"
               comment=""
               placeholder=""
               formControlName="fileData"

@@ -2,7 +2,7 @@
   <ng-container *ngIf="editName; else simpleName">
     <span class="position-relative">
       <input *ngIf="editName; else simpleName" type="text" placeholder="Nom du document..." class="full-width form-element editName" (input)="onFilenameChange($event)" [formControl]="editName"/>   
-      <img (click)="close()" src="assets/X.svg" class="position-absolute close-button"/>
+      <img  *ngIf="closeButton" (click)="close()" src="assets/X.svg" class="position-absolute close-button"/>
     </span>
   </ng-container>
   <ng-template #simpleName>
