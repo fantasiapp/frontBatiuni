@@ -96,7 +96,7 @@ export class ExtendedProfileComponent extends Destroy$ {
 
 
   get attachedFiles(): any[] {
-    console.log('files', this.files)
+    // console.log('files', this.files)
     return this.files.filter(
       (file) => file.nature == "admin" || file.nature == "labels"
     );
