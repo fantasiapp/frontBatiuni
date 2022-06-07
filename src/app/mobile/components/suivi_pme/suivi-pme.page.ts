@@ -349,14 +349,15 @@ export class SuiviPME extends Destroy${
   }
 
   computeBlockedDate(): string[] {
-    console.log('Start blocked', this.mission);
+    console.log('Start blocked', this.mission, this.dates);
     if(!this.mission){
       return []
     }
     let listBlockedDate: string[] = [];
     let listDatePost = this.dates
     
-    listBlockedDate = listDatePost.filter(date => date && !!date.supervisions.length && !!date.details.length).map(date => date.date)
+    listBlockedDate = listDatePost.filter(date => date && (!!date.supervisions.length || !!date.details.length)).map(date => date.date)
+    console.log('listBlockedDate', listBlockedDate);
     return listBlockedDate;
   }
 
