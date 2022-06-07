@@ -88,7 +88,7 @@ export class CalendarUI extends UIDefaultAccessor<DayState[]> {
   @Input()
   blockedDate: string[] = []
 
-  constructor(cd: ChangeDetectorRef) {
+  constructor(public cd: ChangeDetectorRef) {
     super(cd);
     // this.blockedDays = this.computeBlockedDate()
     let now = new Date(Date.now());
