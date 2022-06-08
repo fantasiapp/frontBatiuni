@@ -34,6 +34,7 @@ import {
   JobForCompany,
 } from "src/models/new/data.interfaces";
 import { SpacingPipe } from "../pipes/spacing.pipe";
+import { DeleteFile } from "src/models/new/user/user.actions";
 
 @Component({
   selector: "modify-profile-form",
@@ -257,6 +258,7 @@ import { SpacingPipe } from "../pipes/spacing.pipe";
                 [showtitle]="false"
                 filename="Kbis"
                 formControlName="Kbis"
+                (kill)="removeDocument($event)"
               >
                 <file-svg name="Kbis" color="#156C9D" image></file-svg>
               </fileinput>
@@ -265,6 +267,7 @@ import { SpacingPipe } from "../pipes/spacing.pipe";
                 [showtitle]="false"
                 filename="Attestation travail dissimulé"
                 formControlName="Trav Dis"
+                (kill)="removeDocument($event)"
               >
                 <file-svg name="Trav Dis" color="#054162" image></file-svg>
               </fileinput>
@@ -273,6 +276,7 @@ import { SpacingPipe } from "../pipes/spacing.pipe";
                 [showtitle]="false"
                 filename="Attestation RC + DC"
                 formControlName="RC + DC"
+                (kill)="removeDocument($event)"
               >
                 <file-svg name="RC + DC" color="#999999" image></file-svg>
               </fileinput>
@@ -281,6 +285,7 @@ import { SpacingPipe } from "../pipes/spacing.pipe";
                 [showtitle]="false"
                 filename="URSSAF"
                 formControlName="URSSAF"
+                (kill)="removeDocument($event)"
               >
                 <file-svg name="URSSAF" color="#F9C067" image></file-svg>
               </fileinput>
@@ -289,6 +294,7 @@ import { SpacingPipe } from "../pipes/spacing.pipe";
                 [showtitle]="false"
                 filename="Impôts"
                 formControlName="Impôts"
+                (kill)="removeDocument($event)"
               >
                 <file-svg name="Impôts" color="#52D1BD" image></file-svg>
               </fileinput>
@@ -297,6 +303,7 @@ import { SpacingPipe } from "../pipes/spacing.pipe";
                 [showtitle]="false"
                 filename="Congés payés"
                 formControlName="Congés Payés"
+                (kill)="removeDocument($event)"
               >
                 <file-svg name="Congés Payés" color="#32A290" image></file-svg>
               </fileinput>
@@ -449,7 +456,7 @@ export class ModifyProfileForm {
   onSubmit() {
     this.form.controls["UserProfile.Company.companyPhone"].setValue(this.form.controls["UserProfile.Company.companyPhone"].value.replace(/\s/g, ""));
     this.form.controls["UserProfile.cellPhone"].setValue(this.form.controls["UserProfile.cellPhone"].value.replace(/\s/g, ""));
-    console.log(this.form.value);
+    console.log("modifier le profil",this.form.value);
     this.submit.emit(this.form);
   }
   @Output() submit = new EventEmitter<FormGroup>();
@@ -505,11 +512,11 @@ export class ModifyProfileForm {
     ]),
     "UserProfile.Company.LabelForCompany": new FormArray([]),
     "UserProfile.Company.admin": new FormGroup({
-      Kbis: new FormControl(defaultFileUIOuput("admin")),
+      "Kbis": new FormControl(defaultFileUIOuput("admin")),
       "Trav Dis": new FormControl(defaultFileUIOuput("admin")),
       "RC + DC": new FormControl(defaultFileUIOuput("admin")),
-      URSSAF: new FormControl(defaultFileUIOuput("admin")),
-      Impôts: new FormControl(defaultFileUIOuput("admin")),
+      "URSSAF": new FormControl(defaultFileUIOuput("admin")),
+      "Impôts": new FormControl(defaultFileUIOuput("admin")),
       "Congés Payés": new FormControl(defaultFileUIOuput("admin")),
     }),
   });
@@ -584,8 +591,8 @@ export class ModifyProfileForm {
     });
 
     const filesInput = this.form.controls["UserProfile.Company.admin"];
-    this.companyFiles.forEach(({ name }) => {
-      filesInput.get(name)?.patchValue({ name });
+    this.companyFiles.forEach((file) => {
+      filesInput.get(file.name)?.patchValue(file);
     });
 
     this.form.controls["UserProfile.lastName"]?.setValue(user.lastName);
@@ -723,6 +730,13 @@ export class ModifyProfileForm {
     this.selectedLabels = labelOptions;
     labelControl.markAsDirty();
   }
+
+  removeDocument(filename: string) {
+    const documents = this.form.controls[ "UserProfile.Company.admin"]
+    documents.get(filename)?.setValue({content: '', expirationDate: '', ext: '???', name: 'Veuillez télécharger un document', nature: 'admin'})
+    let file = this.companyFiles.filter(file => file.name == filename)[0]
+    if (file?.id){ this.store.dispatch(new DeleteFile(file?.id))}
+  } 
 
   addingField: boolean = false;
 }

@@ -120,7 +120,7 @@ export class UploadFile<K extends DataTypes = any> {
 
   //tell JLW to unify formats
   constructor(src: FileUIOutput, nature: string, name?: string, category?: K) {
-    this.fileBase64 = src.content;
+    this.fileBase64 = src.content[0]; //only one file
     this.expirationDate = src.expirationDate;
     this.ext = src.ext;
     this.name = name || src.nature;

@@ -23,8 +23,6 @@ export class FileDownloader {
   }
 
   createFileContext(file: any): FileContext {
-    console.log("creating file context", file)
-
     const type = getFileType(file.ext)
     let blobType = type
     if (type == 'application/pdf') {
@@ -47,7 +45,6 @@ export class FileDownloader {
           }),
       };
 
-    console.log("context", context);
     return context;
   }
 
