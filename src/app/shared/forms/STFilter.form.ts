@@ -75,7 +75,7 @@ import { InfoService } from "../components/info/info.component";
 
 
     <div class="form-input">
-      <label>Estimation de la rémunération horaire</label>
+      <label>Estimation de la rémunération</label>
       <ngx-slider [options]="imports.SalarySliderConfig" [highValue]="100000" formControlName="salary"></ngx-slider>
     </div>
 
