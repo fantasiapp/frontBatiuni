@@ -142,7 +142,7 @@ export type ApplyForm = {
                 class="grow form-element"
                 placeholder="Montant"
                 formControlName="amount"
-              />
+              /> € HT
             </div>
           </div>
         </form>

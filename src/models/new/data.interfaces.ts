@@ -120,7 +120,7 @@ export interface File {
   ext: string;
   expirationDate: string;
   timestamp: number;
-  content: string;
+  content: string[];
 };
 
 export interface JobForCompany {

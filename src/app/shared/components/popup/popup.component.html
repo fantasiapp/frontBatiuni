@@ -108,3 +108,20 @@
   <label>Votre candidature a bien été prise en compte !</label>  
   <label>L'entreprise reviendra vers vous dans les plus brefs délais</label>  
 </ng-template>
+
+<ng-template #newFile let-context>
+  <label class="postuleLabel">Veuillez ajouter une date de validité pour le document <span class='boostStrong'> {{ context.name }} </span> </label>  
+  <div style="height:5%;"></div>
+  <div class="controls cloture">
+    <button class="button active" (click)="close()">OK</button>
+  </div>
+</ng-template>
+
+<ng-template #deleteFile let-context>
+  <label class="postuleLabel">Souhaitez-vous supprimer le document <span class='boostStrong'> {{ context.name }} </span> ?</label>  
+  <div style="height:5%;"></div>
+  <div class="controls cloture">
+    <button class="button active" (click)="openActionClose(context)">Oui, je supprime </button>
+    <button class="button passive" (click)="close()">Non, merci</button>
+  </div>
+</ng-template>

@@ -83,7 +83,6 @@ export class ExtendedProfileComponent extends Destroy$ {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-
     if (changes["profile$"] && !changes["profile$"].isFirstChange()) {
       this.initSubscribeProfile()
     }
@@ -96,7 +95,6 @@ export class ExtendedProfileComponent extends Destroy$ {
 
 
   get attachedFiles(): any[] {
-    // console.log('files', this.files)
     return this.files.filter(
       (file) => file.nature == "admin" || file.nature == "labels"
     );
@@ -118,7 +116,6 @@ export class ExtendedProfileComponent extends Destroy$ {
 
   //easier than requestFile, we can have direct access
   openFile(file: File) {
-    console.log("openFile", file);
     this.popup.openFile(file);
   }
 

@@ -23,7 +23,7 @@ export type BasicFile = {
   nature: string;
   name: string;
   ext: string;
-  content: string;
+  content: string[];
 };
 
 export type FileUIOutput = BasicFile & { expirationDate: string; id?: number };
@@ -33,7 +33,7 @@ export function defaultFileUIOuput(
   name?: string
 ): FileUIOutput {
   return {
-    content: "",
+    content: [""],
     expirationDate: date || "",
     ext: "???",
     name: name || "Veuillez télécharger un document",
@@ -82,8 +82,13 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
   @Input()
   includeDate: boolean = true;
 
+  @Input()
+  closeButton: boolean = true;
+
   @ViewChild("input", { static: true, read: ElementRef })
   inputRef!: ElementRef;
+
+  modified: boolean = false;
 
   constructor(
     cd: ChangeDetectorRef,
@@ -96,7 +101,7 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
 
   ngOnInit() {
     this.value = {
-      content: "",
+      content: [""],
       expirationDate: "",
       ext: "???",
       name: "Veuillez télécharger un document",
@@ -133,7 +138,7 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
 
     return {
       ...this.value,
-      content: base64.slice(getFileType(ext).length + 13),
+      content: [base64.slice(getFileType(ext).length + 13)],
       name,
       ext,
     } as FileUIOutput;
@@ -150,6 +155,8 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
 
   openInput() {
     this.inputRef.nativeElement.click();
+    if (this.value?.nature == "admin") {this.popup.newFile(this.filename, this);}
+    this.modified = true;
   }
 
   private async takePhoto() {
@@ -163,10 +170,23 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
     this.value = {
       expirationDate: "",
       nature: "",
-      name: photo.path || "image du caméra",
+      name: photo.path || "Image téléchargée depuis les photos",
       ext: photo.format,
-      content: photo.base64String as string,
+      content: [photo.base64String as string],
     };
+  }
+
+  deleteFile(){
+    this.kill.emit(this.filename);
+    this.value = {
+      content: [""],
+      expirationDate: "",
+      ext: "???",
+      name: "Veuillez télécharger un document",
+      nature: this.filename,
+    };
+    this.cd.markForCheck()
+    
   }
 
    private async scanDocument() {
@@ -202,7 +222,18 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
         {
           name: "Supprimer un fichier",
           click: () => {
-            //search file having the same name and delete it
+            if (this.value?.nature == "admin") {this.popup.deleteFile(this.filename, this)}
+            if (this.value?.nature == "post") {
+              this.value = {
+                content: [""],
+                expirationDate: "",
+                ext: "???",
+                name: "Veuillez télécharger un document",
+                nature: this.value.nature,
+              };
+              this.kill.emit();
+              this.cd.markForCheck()
+            }
           },
         },
         {
@@ -237,7 +268,8 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
             if (!this.value || (!this.value.content && this.value.id == void 0))
               return this.info.show("error", "Aucun fichier à affichier", 3000);
 
-            this.popup.openFile(this.value);
+            let canOpenPDF = !this.modified;
+            this.popup.openFile(this.value, canOpenPDF);
           },
         },
       ],

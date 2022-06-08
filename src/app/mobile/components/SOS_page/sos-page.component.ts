@@ -90,6 +90,7 @@ export class SOSPageComponent extends Destroy$ {
   }
 
   callbackFilter = (filter: any): void => {
+    console.log("filter sos", filter)
     this.selectCompany(filter);
     this.isFilterOn(filter);
   };
@@ -145,7 +146,7 @@ export class SOSPageComponent extends Destroy$ {
   }
 
   isFilterOn(filter: any){
-    if (filter.address == "" && this.arrayEquals(filter.amount, [0, 400]) && filter.jobs.length == 0 && filter.radius == 2000 && filter.sortDisponibleProfils == false && filter.sortFullProfils == false && filter.sortNotation == false){
+    if (filter.address == "" && (filter.amount == null || this.arrayEquals(filter.amount, [0, 400])) && filter.jobs.length == 0 && filter.radius == 2000 && filter.sortDisponibleProfils == false && filter.sortFullProfils == false && filter.sortNotation == false){
       this.filterOn = false;
     } else {
       this.filterOn = true;

@@ -19,6 +19,9 @@ export class FileViewer {
   @Input()
   fileContext!: FileContext;
 
+  @Input()
+  canOpenPDF: boolean = true;
+
   displayModal: boolean = false;
   modalImage: SafeResourceUrl = "";
 
