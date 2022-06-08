@@ -302,7 +302,7 @@ export class DataState {
         if(response.hasOwnProperty('jobs')){
           for (let job of response.jobs) {
             ctx.setState(addValues('Job', job))            
-          }ç
+          }
         }
 
         this.inZone(() =>
