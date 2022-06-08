@@ -45,7 +45,7 @@ export class AppComponent extends Destroy$ {
 
   title = 'af-notification'
   message : any = null
-  isConnected: boolean;
+  isConnected: boolean = false;
   isWhileOn: boolean = false;
   app: any
 
@@ -53,14 +53,16 @@ export class AppComponent extends Destroy$ {
     super();
     this.mobile.init();
     this.isConnected = booleanService.isConnected
-    // this.booleanService.getConnectedChangeEmitter().subscribe((value) => {
-    //   this.isConnected = value
-    //   console.log("je suis dedans", this.isConnected)
-    //   if(value && !this.isWhileOn){
-    //     this.updateUserData()
-    //   }
-    //   this.isWhileOn = value
-    // })
+    this.booleanService.getConnectedChangeEmitter().subscribe((value) => {
+      this.isConnected = value
+      console.log("je suis dedans", this.isConnected)
+      if(value && !this.isWhileOn){
+        console.log("je lance la fonction updateUserData")
+        this.updateUserData()
+      }
+      this.isWhileOn = value
+    })
+    console.log("je lance la fonction updateUserData")
     this.updateUserData()
   }
 
@@ -84,25 +86,25 @@ export class AppComponent extends Destroy$ {
   }
 
   async updateUserData() {
-    console.log("je suis appelé (updataUserData)")
-    while(false) {
-      console.log("dans le while")
+    console.log("je suis appelé (updataUserData)",this.readyToUpdate)
+    while(this.isConnected) {
+      if (this.readyToUpdate){
+        this.readyToUpdate = false
+        console.log("dans le while", this.isWhileOn, "et suis-je connecté ? ", this.isConnected)
       if (!this.firstAttemptAlreadyTried){
-        this.firstAttemptAlreadyTried = true
-        this.readyToUpdate = false
-        await delay(20000)
-        this.readyToUpdate = true
-      }
-      else if (this.readyToUpdate) {
         this.executeGetGeneralData() 
-        this.readyToUpdate = false
+        this.firstAttemptAlreadyTried = true
+      }
+      else{
         this.getUserData()
-        await delay(20000)
         this.notifService.checkNotif()
         this.notifService.emitNotifChangeEvent()
-        this.readyToUpdate = true
-      }}
-  }
+      }
+      this.readyToUpdate = true
+      await delay(20000)
+      }
+    }
+    }
 
   getUserData() {
     let token = this.store.selectSnapshot(AuthState.token);

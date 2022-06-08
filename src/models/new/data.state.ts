@@ -254,6 +254,7 @@ export class DataState {
   }
 
   updateLocalData(ctx: StateContext<DataModel>, response: any) {
+    console.log('response', response)
     if(this.booleanService.isConnected){
       console.log("update local data", response)
       const loadOperations = this.reader.readInitialData(response),
@@ -277,6 +278,7 @@ export class DataState {
     this.flagUpdate = true
     this.isFirstTime = true
     this.booleanService.emitConnectedChangeEvent(false)
+    this.booleanService.emitLoadingChangeEvent(false)
     ctx.setState({ fields: {}, session: { view: "ST", currentUser: -1 , time: 0} });
     ctx.dispatch(new GetGeneralData()); // a sign to decouple this from DataModel
   }
@@ -517,9 +519,8 @@ export class DataState {
       file = ctx.getState()["File"][download.id];
 
     //check if the file is already downloaded
-    if (file && file[contentIndex]) {
-      console.log("download File", typeof(file.content))
-      return file.content;
+    if (file && file[contentIndex] && !download.forceDownload) {
+      return file[contentIndex];
     }
 
     //check if we are currently downloading the file
@@ -686,6 +687,8 @@ export class DataState {
           this.inZone(() => this.info.show("error", response.messages, 3000));
           throw response.messages;
         }
+        let mission = this.store.selectSnapshot(DataQueries.getById("Mission", application.missionId))
+        SingleCache.deleteValueByName("File" + mission?.contract.toString());
         delete response[application.action];
         ctx.setState(
           addComplexChildren("Company", profile.company.id, "Mission", response)
@@ -993,17 +996,24 @@ export class DataState {
   @Action(AskRecommandation)
   askRecommandation(ctx: StateContext<DataModel>, demand: AskRecommandation){
     const user = this.store.selectSnapshot(DataQueries.currentUser);
+    console.log("i sent it")
     return this.http.get("data", demand).pipe(
       tap((response: any) => {
-        //write code to manage the response
+        console.log('response in askRecommandation', response)
+        if (response[demand.action] !== "OK") {
+          this.inZone(() => this.info.show("error", response.messages, 3000));
+        } else {
+                this.info.show("info", response.messages, 3000)
+                ctx.setState(addValues("Recommandation", response))
+      }
       })
     )
   }
 
   @Action(GiveRecommandation)
-  giveRecommandation(ctx: StateContext<DataModel>, application : AskRecommandation){
+  giveRecommandation(ctx: StateContext<DataModel>, application : GiveRecommandation){
     const user = this.store.selectSnapshot(DataQueries.currentUser);
-    return this.http.get("data", application).pipe(
+    return this.http.post("initialize", application).pipe(
       tap((response: any) => {
         //write code to manage the response
         ctx.setState(addValues("Recommandation", response))

@@ -1,11 +1,13 @@
 import {  ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from "@angular/core";
+import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
 import { Store } from "@ngxs/store";
 import { interval, race } from "rxjs";
 import { take, takeUntil } from "rxjs/operators";
 import { Destroy$ } from "src/app/shared/common/classes";
-import { ConfirmAccount } from "src/models/auth/auth.actions";
-import { Recommandation } from "src/models/new/data.interfaces";
+import { Company, Recommandation } from "src/models/new/data.interfaces";
+import { DataQueries } from "src/models/new/data.state";
+import { GiveRecommandation } from "src/models/new/user/user.actions"
 
 @Component({
   selector: 'give_recommandation',
@@ -13,17 +15,19 @@ import { Recommandation } from "src/models/new/data.interfaces";
   styleUrls: ['give_recommandation.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class GiveRecommandation extends Destroy$ {
+export class GiveARecommandation extends Destroy$ {
 
   @Input()
   companyId: number = -1;
+  companyNameRecommended: string;
 
+  hasSentRecommandation: boolean = false;
   recommandation: Recommandation = {
     id:-1,
-    firstName: "",
-    lastName: "",
-    company: "",
-    idCompany : this.companyId,
+    firstNameRecommanding: "",
+    lastNameRecommanding: "",
+    companyNameRecommanding: "",
+    companyRecommanded : this.companyId,
     qualityStars : 0,
     qualityComment : "",
     securityStars : 0,
@@ -32,8 +36,20 @@ export class GiveRecommandation extends Destroy$ {
     organisationComment : ""
   };
 
+  userNameForm: FormGroup = new FormGroup({
+    lastName: new FormControl('', [Validators.required]),
+    firstName: new FormControl('', [Validators.required])
+  })
+  
+  ngOnInit() {
+    
+  }
+
   constructor(private store: Store, private cd: ChangeDetectorRef, private route: ActivatedRoute) {
     super();
+    this.companyId = this.route.snapshot.params.companyId;
+    this.recommandation.companyRecommanded = this.companyId
+    this.companyNameRecommended = this.route.snapshot.params.companyName
   }
 
   starAction(index: number, nature: string) {
@@ -48,14 +64,14 @@ export class GiveRecommandation extends Destroy$ {
   }
 
   get classSubmit() {
-    if (this.hasGeneralStars) {
+    if (this.hasGeneralStars && this.recommandation.companyNameRecommanding && this.recommandation.firstNameRecommanding && this.recommandation.lastNameRecommanding) {
       return "submitActivated";
     } else {
       return "submitDisable";
     }
   }
 
-  textStarAction(nature: string) {
+  textStarAction(nature: string, textarea: HTMLTextAreaElement) {
     if (nature == "quality") {
       let content = document.getElementById(
         "starTextQuality"
@@ -74,22 +90,13 @@ export class GiveRecommandation extends Destroy$ {
     }
   }
 
-  getCompanyInfoByText(nature: string) {
+  getCompanyInfoByText(nature: string, input: HTMLInputElement) {
     if (nature == "lastName") {
-      let content = document.getElementById(
-        "textLastName"
-      ) as HTMLTextAreaElement;
-      this.recommandation!.lastName = content!.value;
+      this.recommandation!.lastNameRecommanding = input.value;
     } else if (nature == "firstName") {
-      let content = document.getElementById(
-        "textFirstName"
-      ) as HTMLTextAreaElement;
-      this.recommandation!.firstName = content!.value;
+      this.recommandation!.firstNameRecommanding = input.value;
     } else if (nature == "companyName") {
-      let content = document.getElementById(
-        "textCompanyName"
-      ) as HTMLTextAreaElement;
-      this.recommandation!.company = content!.value;
+      this.recommandation!.companyNameRecommanding = input.value;
     }
   }
 
@@ -124,26 +131,27 @@ export class GiveRecommandation extends Destroy$ {
     return array;
   }
 
-  submitStar() {
+  submitRecommandation() {
     if (this.hasGeneralStars){
       console.log('coucou je note')
-      // this.store
-      //   .dispatch(
-      //     new Closerecommandation(
-      //       this.recommandation!.id,
-      //       this.recommandation!.qualityStars,
-      //       this.recommandation!.qualityComment,
-      //       this.recommandation!.securityStars,
-      //       this.recommandation!.securityComment,
-      //       this.recommandation!.organisationStars,
-      //       this.recommandation!.organisationComment
-      //     )
-      //   )
-      //   .pipe(take(1))
-      //   .subscribe(() => {
-      //     // this._recommandationMenu.swipeupCloserecommandation = false;
-      //     this.cd.markForCheck();
-      //   });
+      this.store.dispatch(new GiveRecommandation(
+            this.recommandation!.companyRecommanded,
+            this.recommandation!.firstNameRecommanding,
+            this.recommandation!.lastNameRecommanding,
+            this.recommandation!.companyNameRecommanding,
+            this.recommandation!.qualityStars,
+            this.recommandation!.qualityComment,
+            this.recommandation!.securityStars,
+            this.recommandation!.securityComment,
+            this.recommandation!.organisationStars,
+            this.recommandation!.organisationComment
+          )
+        )
+        .pipe(take(1))
+        .subscribe(() => {
+          this.hasSentRecommandation = true
+          this.cd.markForCheck();
+        });
     }
   }
 
