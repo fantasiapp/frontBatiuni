@@ -19,6 +19,7 @@ export class GiveARecommandation extends Destroy$ {
 
   @Input()
   companyId: number = -1;
+  companyNameRecommended: string;
 
   hasSentRecommandation: boolean = false;
   recommandation: Recommandation = {
@@ -46,8 +47,9 @@ export class GiveARecommandation extends Destroy$ {
 
   constructor(private store: Store, private cd: ChangeDetectorRef, private route: ActivatedRoute) {
     super();
-    const companyId = this.route.snapshot.params.company;
-    console.log("les params", this.route.snapshot.params)
+    this.companyId = this.route.snapshot.params.companyId;
+    this.recommandation.companyRecommanded = this.companyId
+    this.companyNameRecommended = this.route.snapshot.params.companyName
   }
 
   starAction(index: number, nature: string) {
