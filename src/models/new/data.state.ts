@@ -290,12 +290,21 @@ export class DataState {
 
     return req.pipe(
       tap((response: any) => {
+
+        console.log("response ModifyUserData", response)
         if (response[modify.action] !== "OK") {
           this.inZone(() => this.info.show("error", response.messages, 3000));
           throw response.messages;
         }
         delete response[modify.action];
         ctx.setState(compose(...this.reader.readUpdates(response)));
+
+        if(response.hasOwnProperty('jobs')){
+          for (let job of response.jobs) {
+            ctx.setState(addValues('Job', job))            
+          }ç
+        }
+
         this.inZone(() =>
           this.info.show("success", "Profil modifié avec succès", 2000)
         );

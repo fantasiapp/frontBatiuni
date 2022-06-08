@@ -161,6 +161,7 @@ export class ProfileComponent extends Destroy$ {
   
   modifyProfile(form: any /*FormGroup*/) {
     this.profile$.pipe(take(1)).subscribe(profile => {
+      console.log("On est dans profile component", form.value, profile)
       const action = this.store.dispatch(new UserActions.ModifyUserProfile({profile: profile, form}))
       this.info.show("info", "Mise à jour en cours...", Infinity);
       action.pipe(take(1))
