@@ -166,7 +166,7 @@ export class HomeComponent extends Destroy$ {
     this.isLoading = this.booleanService.isLoading
     this.searchbar = new SearchbarComponent(store);
   }
-
+  
   ngOnInit() {
     this.booleanService.getLoadingChangeEmitter().subscribe((bool : boolean) => {
       this.isLoading = bool
@@ -192,7 +192,6 @@ export class HomeComponent extends Destroy$ {
       combineLatest([this.profile$, this.posts$])
         .pipe(takeUntil(this.destroy$))
         .subscribe(([profile, posts]) => {
-
           const mapping = splitByOutput(posts, (post) => {
             //0 -> userOnlinePosts | 1 -> userDrafts
             if (profile.company.posts.includes(post.id))

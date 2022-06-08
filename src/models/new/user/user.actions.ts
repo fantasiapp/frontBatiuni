@@ -206,7 +206,8 @@ export class UploadPost {
 
     const files: any = {};
     documents.forEach(doc => {
-      files[doc.name] = doc.fileData;
+      let fileData: any = doc.fileData
+      fileData.ext == "???" || (files[doc.name] = doc.fileData);
     });
     
     return new UploadPost(
