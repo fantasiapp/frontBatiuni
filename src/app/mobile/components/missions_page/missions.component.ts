@@ -122,6 +122,7 @@ export class MissionsComponent extends Destroy$ {
   
           this.detailedDays.push({
             date: date!.date,
+            datePost: date!,
             mission: mission,
             title: 'Chantier de ' + contractor.name,
             tasks: []

@@ -72,6 +72,7 @@ import { transformAll } from "@angular/compiler/src/render3/r3_ast";
 import { BooleanService } from "src/app/shared/services/boolean.service";
 import { getUserDataService } from "src/app/shared/services/getUserData.service";
 import { AppComponent } from "src/app/app.component";
+import { SingleCache } from "src/app/shared/services/SingleCache";
 
 export interface DataModel {
   fields: Record<string[]>;
@@ -377,18 +378,23 @@ export class DataState {
           contentIndex = fields["File"].indexOf("content");
 
         upload.assignedId = assignedId;
-        response[assignedId][contentIndex] = upload.fileBase64;
+        response[assignedId][contentIndex] = "";
+
         if (upload.category == "Company") {
           //add it to company
           const company = this.store.selectSnapshot(DataQueries.currentCompany);
           ctx.setState(
-            addSimpleChildren("Company", company.id, "File", response, "name")
+            compose(addSimpleChildren("Company", company.id, "File", response, "name"))
           );
         } else if (upload.category == "Post") {
           ctx.setState(
-            addSimpleChildren("Post", upload.target, "File", response, "name")
+            compose(addSimpleChildren("Post", upload.target, "File", response, "name"))
           );
         }
+        let name: string = "File" + upload.assignedId!.toString()
+          if (SingleCache.checkValueInCache(name)) {
+            SingleCache.deleteValueByName(name)
+          }
       })
     );
   }
@@ -651,15 +657,10 @@ export class DataState {
           delete response[block.action]; this.inZone(() => this.info.show("success", response.messages, 2000))
           let BlockedCandidates = this.store.selectSnapshot(DataQueries.getAll("BlockedCandidate"))
           let theBlocked = BlockedCandidates.filter((candidate) => candidate.blocked == block.companyId && candidate.blocker == user.company)[0]
-          console.log("theBlocked", theBlocked, block)
-          console.log( "BlockedCandidates", BlockedCandidates)  
-          console.log('response', response) // je suis entrain de m'entrainer 
           if(theBlocked) {
-            console.log("J'essaye de débloquer/bloquer mais ça marche mal")
             ctx.setState(update("BlockedCandidate", response))
           }
           else {
-            console.log("J'essaye de bloquer un nouveau candidat")
             ctx.setState(addValues("BlockedCandidate", response))
           }
         }

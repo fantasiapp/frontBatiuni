@@ -34,7 +34,7 @@ import {
   ViewTemplate,
 } from "../../common/types";
 import { FileDownloader } from "../../services/file-downloader.service";
-import { BasicFile } from "../filesUI/files.ui";
+import { BasicFile, FileUI } from "../filesUI/files.ui";
 import {
   File,
   Company,
@@ -133,6 +133,12 @@ export class UIPopup extends DimensionMenu {
 
   @ViewChild("onApplyConfirm", { read: TemplateRef, static: true })
   onApplyConfirm!: TemplateRef<any>;
+
+  @ViewChild("newFile", { read: TemplateRef, static: true })
+  newFile!: TemplateRef<any>;
+
+  @ViewChild("deleteFile", { read: TemplateRef, static: true })
+  deleteFile!: TemplateRef<any>;
 
   @Input()
   content?: Exclude<PopupView, ContextUpdate>;
@@ -334,7 +340,7 @@ export class UIPopup extends DimensionMenu {
 
 export type PredefinedPopups<T = any> = {
   readonly type: "predefined";
-  name: "deletePost" | "sign" | "setDate" | "closeMission" | "validateCandidate" | "refuseCandidate" | "blockCandidate" | "boostPost" | "onApply" | "onApplyConfirm"; // | 'closeMission'
+  name: "deletePost" | "sign" | "setDate" | "closeMission" | "validateCandidate" | "refuseCandidate" | "blockCandidate" | "boostPost" | "onApply" | "onApplyConfirm" | "newFile" | "deleteFile"; // | 'closeMission'
   context?: TemplateContext;
 };
 
@@ -369,8 +375,7 @@ export class PopupService {
     this.dimension$.next({ ...this.defaultDimension, ...(dimension || {}) });
   }
 
-  openFile(file: BasicFile | File) {
-    console.log('openFile start');
+  openFile(file: BasicFile | File, canOpenPDF: boolean = true) {
     if (!file.content) {
       console.log('openFile !file.content');
       let name: string = "File" + (file as File).id!.toString()
@@ -387,14 +392,13 @@ export class PopupService {
         })}
       return;
     }
-    console.log("openFile popup", file)
     let context = this.downloader.createFileContext(file);
-    console.log(context)
     this.popups$.next({
       type: "component",
       component: FileViewer,
       init: (viewer: FileViewer) => {
         viewer.fileContext = context;
+        viewer.canOpenPDF = canOpenPDF;
       },
       close: () => {
         this.downloader.clearContext(context);
@@ -718,6 +722,63 @@ export class PopupService {
         name: "onApplyConfirm",
         context,
         close: () => {
+          closed$.next();
+        },
+      });
+
+      first = false;
+    }
+  }
+
+  newFile(name: any, object: FileUI) {
+
+    let first: boolean = true;
+    const closed$ = new Subject<void>();
+
+    const context = {
+      $implicit: {
+        name: name,
+        isActive: false,
+      },
+    };
+
+    if (first) {
+      this.dimension$.next(this.defaultDimension);
+      this.popups$.next({
+        type: "predefined",
+        name: "newFile",
+        context,
+        close: () => {
+          closed$.next();
+        },
+      });
+
+      first = false;
+    }
+  }
+
+  deleteFile(name: any, object: FileUI) {
+
+    let first: boolean = true;
+    const closed$ = new Subject<void>();
+
+    const context = {
+      $implicit: {
+        name: name,
+        isActive: false,
+      },
+    };
+
+    if (first) {
+      this.dimension$.next(this.defaultDimension);
+      this.popups$.next({
+        type: "predefined",
+        name: "deleteFile",
+        context,
+        close: () => {
+          if (context.$implicit.isActive) {
+            object.deleteFile();
+          }
           closed$.next();
         },
       });
