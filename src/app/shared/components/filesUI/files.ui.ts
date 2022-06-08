@@ -207,7 +207,7 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
         nature: "",
         name: "Document scanné",
         ext: 'jpg',
-        content: scannedImages[0] as string,
+        content: [scannedImages[0] as string],
       };
     }
   }
