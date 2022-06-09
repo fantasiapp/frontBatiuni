@@ -305,17 +305,19 @@ export class DataState {
         delete response[modify.action];
         ctx.setState(compose(...this.reader.readUpdates(response)));
 
-        if(response.hasOwnProperty('JobForCompany')){
+        if(response.hasOwnProperty('JobForCompany') && Array.isArray(response.JobForCompany)){
           for (let job of response.JobForCompany) {
             ctx.setState(addValues('JobForCompany', job))            
           }
         }
 
-        if(response.hasOwnProperty('LabelForCompany')){
+        if(response.hasOwnProperty('LabelForCompany') && Array.isArray(response.LabelForCompany)){
           for (let label of response.LabelForCompany) {
             ctx.setState(addValues('LabelForCompany', label))            
           }
         }
+
+        
 
         this.inZone(() =>
           this.info.show("success", "Profil modifié avec succès", 2000)
