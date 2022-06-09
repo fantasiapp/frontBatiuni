@@ -70,7 +70,7 @@ import { NotificationAgendaComponent } from './components/notification-agenda/no
 import { ApplicationForm } from "./forms/application.form";
 import { ModalImage } from "./components/modal-image/modal-image.component";
 import { AskRecommandationComponent } from "./components/ask_recommandation/ask_recommandation.component";
-import { GiveRecommandation } from "./validators/give_recommandation/give_recommandation.component";
+import { GiveARecommandation } from "./validators/give_recommandation/give_recommandation.component";
 @NgModule({
   declarations: [
     UICheckboxComponent,
@@ -141,7 +141,7 @@ import { GiveRecommandation } from "./validators/give_recommandation/give_recomm
     NotificationAgendaComponent,
     ModalImage,
     AskRecommandationComponent,
-    GiveRecommandation
+    GiveARecommandation
   ],
   imports: [
     CommonModule,
@@ -216,7 +216,7 @@ import { GiveRecommandation } from "./validators/give_recommandation/give_recomm
     FileViewer,
     RatingComponent,
     SlideProfileComponent,
-    GiveRecommandation
+    GiveARecommandation
   ],
   providers: [ImageGenerator, FileDownloader, FilterService, Mobile]
 })

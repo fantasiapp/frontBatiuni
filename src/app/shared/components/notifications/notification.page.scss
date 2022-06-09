@@ -48,6 +48,9 @@ section {
   margin-right: 0.5em;
   height: 50px;
   width: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   flex: 0 0 50px;
   border-radius: 50%;
   overflow: hidden;

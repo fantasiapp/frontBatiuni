@@ -164,7 +164,7 @@ export class DownloadFile {
   action = 'downloadFile';
   static readonly type = '[File] Download';
   get companyFile() {return true;};
-  constructor(public id: number, public notify: boolean = false) {}
+  constructor(public id: number, public notify: boolean = false, public forceDownload: boolean = false) {}
 };
 
 export class DeletePost {
@@ -380,13 +380,13 @@ export class BoostPost {
 export class AskRecommandation {
   static readonly type = 'ask for a recommandation';
   action = 'askRecommandation';
-  constructor(public mail: string, public register: boolean) {}
+  constructor(public email: string) {}
 }
 
 export class GiveRecommandation {
   static readonly type = 'give a recommandation';
   action = 'giveRecommandation';
-  constructor(public companyId: number, public firstName: string, public lastName: string, public company: string, public qualityStars:number, public qualityComment:string, public securityStars:number, public securityComment:string, public organisationStars:number, public organisationComment:string) {}
+  constructor(public companyRecommanded: number, public firstNameRecommanding: string, public lastNameRecommanding: string, public companyNameRecommanding: string, public qualityStars:number, public qualityComment:string, public securityStars:number, public securityComment:string, public organisationStars:number, public organisationComment:string) {}
 }
 
 // export class ContractSignature {

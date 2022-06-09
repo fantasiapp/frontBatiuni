@@ -18,6 +18,7 @@ import {
   transition,
 } from "@angular/animations";
 import {
+  DatePost,
   Disponibility,
   Mission,
   PostDetail,
@@ -32,6 +33,7 @@ import { Store } from "@ngxs/store";
 
 export type MissionDetailedDay = {
   date: string;
+  datePost: DatePost;
   mission: Mission;
   title: string;
   tasks: PostDetail[];
@@ -127,11 +129,20 @@ export class HorizontaleCalendar implements OnInit {
   }
 
   toCalendarDays(workDays: MissionDetailedDay[]): DayState[] {
+    for (const detailDay of workDays) {
+      detailDay.datePost = this.store.selectSnapshot(DataQueries.getById('DatePost', detailDay.datePost.id))!
+    }
     this.detailedDays = workDays;
-    return workDays.map((workDay) => ({
+    return workDays.map((workDay) => 
+      ({
       date: workDay.date,
-      availability: this.getNotification(workDay.date, workDay.mission) ? 'notification' : "selected",
+      availability: this.newgetNotification(workDay.datePost, workDay.mission) ? 'notification' : "selected",
     }));
+  }
+
+  newgetNotification(date: DatePost, mission: Mission){
+    
+    return date.deleted || (mission.hourlyEndChange || mission.hourlyStartChange) || !date.validated
   }
 
   setSelectedDays() {
@@ -356,7 +367,8 @@ export class HorizontaleCalendar implements OnInit {
       console.log('curretneCardCalendard,', this.currentCardCalendars);
     }
 
-    this.cd.markForCheck();
+    this.cd.markForCheck()
+    this.calendar.cd.markForCheck()
   }
 
   fieldValidation(card: calendarItem) {

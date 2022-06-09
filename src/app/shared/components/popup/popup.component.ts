@@ -377,7 +377,9 @@ export class PopupService {
 
   openFile(file: BasicFile | File, canOpenPDF: boolean = true) {
     if (!file.content) {
+      console.log('openFile !file.content');
       let name: string = "File" + (file as File).id!.toString()
+      console.log('openFile !file.content File name', name);
       if (SingleCache.checkValueInCache(name)) {
         this.openFile(SingleCache.getValueByName(name))
       }
@@ -433,7 +435,7 @@ export class PopupService {
       .select(DataQueries.getById("Mission", mission.id))
       .pipe(
         switchMap((mission) => {
-          return this.downloader.downloadFile(mission!.contract).pipe(
+          return this.downloader.downloadFile(mission!.contract, false, true).pipe(
             map((file) => ({
               mission,
               file,

@@ -10,6 +10,8 @@ import {
 } from "@angular/core";
 import { NG_VALUE_ACCESSOR } from "@angular/forms";
 import { Camera, CameraResultType, CameraSource } from "@capacitor/camera";
+import { Capacitor } from "@capacitor/core";
+import { DocumentScanner, ResponseType } from "capacitor-document-scanner";
 import { UIAsyncAccessor } from "src/app/shared/common/classes";
 import { File } from "src/models/new/data.interfaces";
 import { getFileType } from "../../common/functions";
@@ -164,6 +166,7 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
       source: CameraSource.Photos,
     });
 
+    console.log('take photo', photo.path);
     this.value = {
       expirationDate: "",
       nature: "",
@@ -184,6 +187,29 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
     };
     this.cd.markForCheck()
     
+  }
+
+   private async scanDocument() {
+    // start the document scanner
+    const {scannedImages} = await DocumentScanner.scanDocument({
+      maxNumDocuments: 1,
+      responseType: ResponseType.Base64,
+    })
+    
+    console.log('scanenrImages', scannedImages);
+    if (scannedImages && scannedImages.length > 0) {
+
+      // let base64 = Capacitor.convertFileSrc(scannedImages[0])
+      // let extension = base64.split(".").pop()!;
+      // console.log('base64', base64);
+      this.value = {
+        expirationDate: "",
+        nature: "",
+        name: "Document scanné",
+        ext: 'jpg',
+        content: [scannedImages[0] as string],
+      };
+    }
   }
 
   onFileInputClicked(e: Event) {
@@ -211,7 +237,7 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
           },
         },
         {
-          name: "Accéder à l'appareil photo",
+          name: "Scanner un ficher avec la camera",
           click: async () => {
             let permissions = await Camera.checkPermissions();
             if (permissions.camera != "granted") {
@@ -226,8 +252,8 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
                   3000
                 );
 
-              this.takePhoto();
-            } else this.takePhoto();
+              this.scanDocument();
+            } else this.scanDocument();
           },
         },
         {

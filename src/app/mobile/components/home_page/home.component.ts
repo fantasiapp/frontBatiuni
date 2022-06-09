@@ -206,11 +206,9 @@ export class HomeComponent extends Destroy$ {
           });
           const otherOnlinePost = mapping.get(this.symbols.otherOnlinePost) || [];
           this.allUserDrafts = mapping.get(this.symbols.userDraft) || [];
-          this.allUserOnlinePosts =
-            mapping.get(this.symbols.userOnlinePost) || [];
+          this.allUserOnlinePosts = mapping.get(this.symbols.userOnlinePost) || [];
           this.allOnlinePosts = [...otherOnlinePost, ...this.userOnlinePosts];
           this.allMissions = this.store.selectSnapshot(DataQueries.getMany("Mission", profile.company.missions));
-  
           if (this.filterST) {this.filterST.updatePosts(this.allOnlinePosts)}
           this.selectDraft(null);
           this.selectUserOnline(null);

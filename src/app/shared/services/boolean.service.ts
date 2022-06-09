@@ -16,7 +16,7 @@ export class BooleanService {
   emitLoadingChangeEvent(bool : boolean) {
     console.log("j'associe (loading)", bool)
     this.isLoading = bool
-    console.log("j'envoie (loading)", this.isConnected)
+    console.log("j'envoie (loading)", this.isLoading)
     this.isLoadingNavChange.emit(this.isLoading);
   }
 

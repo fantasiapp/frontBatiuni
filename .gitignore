@@ -55,3 +55,4 @@ build.sh
 /src/assets/fonts/Roboto
 /src/assets/fonts/Poppins
 /src/environments
+.angular
