@@ -86,7 +86,6 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
 
     this.popup.addPostDetail.pipe(takeUntil(this.destroy$)).subscribe(newPostDetail => {
       this.mission = this.store.selectSnapshot(DataQueries.getById('Mission', this.mission!.id))!
-      console.log('this.missions, ', this.mission);
       this.updatePageOnlyDate()
       this.cd.markForCheck()
     })
@@ -275,7 +274,6 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
   updatePageOnlyDate() {
     this.dateOrigin = this.store.selectSnapshot(DataQueries.getById('DatePost', this.dateOrigin.id))!
     this.computeDate( this.dateOrigin)
-    console.log('tjos.date content computed', this.date);
     this.computeTasks(this.date)
     this.cd.markForCheck()
   }
