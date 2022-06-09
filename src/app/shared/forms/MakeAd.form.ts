@@ -596,9 +596,10 @@ export class MakeAdForm {
   }
 
   submit(e:any, draft: boolean) {
-    e.preventDefault()
+    // e.preventDefault()
     console.log('draft', draft);
     if (this.post) {
+      // le brouillon existe deja
       if (!draft) {
         this.info.show("info", "Mise en ligne de l'annonce...", Infinity);
         const action = this.makeAdForm.touched
