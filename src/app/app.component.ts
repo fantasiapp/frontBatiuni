@@ -87,7 +87,8 @@ export class AppComponent extends Destroy$ {
 
   async updateUserData() {
     console.log("je suis appelé (updataUserData)",this.readyToUpdate)
-    while(this.isConnected) {
+    // false à remplacer par this.isConnected
+    while(false) {
       if (this.readyToUpdate){
         this.readyToUpdate = false
         console.log("dans le while", this.isWhileOn, "et suis-je connecté ? ", this.isConnected)
