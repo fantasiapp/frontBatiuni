@@ -37,17 +37,17 @@ namespace mutable {
     Object.entries<any>(values).forEach(([id, item]) => {
       //An horrible patch waiting for a true solution
       if (!targetObjects) {
-        console.log("je m'arrete la ");
+        // console.log("je m'arrete la ");
         return
       } 
       const current = targetObjects[id];
-      console.log('current ', current);
+      // console.log('current ', current);
       //if not created create
       if ( !current ) {
         if (typeof(item) != 'string') {
           for ( let i = 0; i < item.length; i++ ) {
             if ( typeof item[i] == 'object' && !Array.isArray(item[i])) {
-              console.log('upoadte in 1', fields[i], item[i])
+              // console.log('upoadte in 1', fields[i], item[i])
               mutable.update(draft, fields[i], item[i]);
               item[i] = Object.keys(item[i]).map(id => +id);
             }
@@ -58,14 +58,14 @@ namespace mutable {
         if (typeof(item) != 'string') {
           for ( let i = 0; i < current.length; i++ ) {
             //special treatement for arrays
-            console.log('current[i]', current[i], current[i].length, i, Array.isArray(current[i]), fields[i]);
+            // console.log('current[i]', current[i], current[i].length, i, Array.isArray(current[i]), fields[i]);
             if ( Array.isArray(current[i]) ) {
               if ( !!current[i].length ) {
-                console.log('current DeleteIds', fields[i], current[i]);
+                // console.log('current DeleteIds', fields[i], current[i]);
                 // mutable.deleteIds(draft, fields[i], current[i]);
               } else {
 
-                console.log('upoadte in 2', fields[i], item[i]);
+                // console.log('upoadte in 2', fields[i], item[i]);
                 // mutable.update(draft, fields[i], item[i]);
                 // if (fields[i] != "DatePost") {
                 
@@ -208,7 +208,6 @@ export function addSimpleChildren<K extends DataTypes>(parent: DataTypes, parent
 };
 
 export function addComplexChildren<K extends DataTypes>(parent: DataTypes, parentId: number, child: K, values: Record<any>) {
-  console.log("addComplexChildren start", parent, parentId, child, values)
   return produce(draft => mutable.addComplexChildren(draft, parent, parentId, child, values));
 };
 

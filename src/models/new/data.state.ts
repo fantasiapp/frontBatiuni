@@ -25,6 +25,7 @@ import {
   AskRecommandation,
   GiveRecommandation,
   GiveNotificationToken,
+  ModifyFile,
 } from "./user/user.actions";
 import {
   ApplyPost,
@@ -290,6 +291,7 @@ export class DataState {
   modifyUser(ctx: StateContext<DataModel>, modify: ModifyUserProfile) {
     console.log("Modification vqu'on envoie à JL", modify)
     const { labelFiles, adminFiles, onlyFiles, ...modifyAction } = modify;
+    let companyLabels = this.store.selectSnapshot(DataQueries.getAll('File')).filter(file => file.nature == "labels")
     let req;
     if (onlyFiles) req = of({ [modify.action]: "OK" });
     else req = this.http.post("data", modifyAction);
@@ -311,7 +313,7 @@ export class DataState {
           }
         }
         
-        if(response.hasOwnProperty('LabelForCompany' && Array.isArray(response['LabelForCompany']))){
+        if (response.hasOwnProperty('LabelForCompany') && Array.isArray(response['LabelForCompany'])){
           for (let label of response.LabelForCompany) {
             ctx.setState(addValues('LabelForCompany', label))            
           }
@@ -319,21 +321,37 @@ export class DataState {
         
         // delete response['LabelForCompany']
         // delete response['JobForCompany']
-        ctx.setState(compose(...this.reader.readUpdates(response)));
+        // ctx.setState(compose(...this.reader.readUpdates(response)));
 
-        
+        if (response.hasOwnProperty('Company')){ctx.setState(update('Company', response.Company))}
+        if (response.hasOwnProperty('UserProfile')){ctx.setState(update('UserProfile', response.UserProfile))}
+
 
         this.inZone(() =>
           this.info.show("success", "Profil modifié avec succès", 2000)
         );
       }),
       concatMap(() => {
-        labelFiles.forEach((file) => ctx.dispatch(new UploadFile(file, "labels", file.nature, "Company")));
-        Object.keys(adminFiles).forEach((name) => ctx.dispatch(new UploadFile(adminFiles[name], "admin", name, "Company")));
+        labelFiles.forEach((file) => 
+        // {
+        // // if (companyLabels.some(label => label.name != file.nature)) {
+        // //   console.log("file", file, "labelFile", labelFiles)
+        //   console.log("dfghjfksgsfdhgldjfghldfjkghdflgjkhdfg", file)
+          ctx.dispatch(new UploadFile(file, "labels", file.nature, "Company"))
+        // } else {
+          
+        //   ctx.dispatch(new ModifyFile(file, "labels", response.LabelForCompany.id, file.name, "Company"))
+        // }}
+        );
+        Object.keys(adminFiles).forEach((name) => {
+          ctx.dispatch(new UploadFile(adminFiles[name], "admin", name, "Company"))
+        });
         return of(true);
       })
     );
   }
+
+
 
   @Action(ChangeProfilePicture)
   changeProfilePicture(ctx: StateContext<DataModel>, picture: ChangeProfilePicture) {
@@ -419,6 +437,15 @@ export class DataState {
           if (SingleCache.checkValueInCache(name)) {
             SingleCache.deleteValueByName(name)
           }
+      })
+    );
+  }
+
+  @Action(ModifyFile)
+  modifyFile(ctx: StateContext<DataModel>, modify: ModifyFile) {
+    return this.http.post("data", modify).pipe(
+      tap((response: any) => {
+        if (response[modify.action] != "OK") throw response["messages"];
       })
     );
   }

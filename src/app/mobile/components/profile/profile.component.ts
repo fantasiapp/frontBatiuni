@@ -200,7 +200,7 @@ export class ProfileComponent extends Destroy$ {
     this.openModifyPicture = false;
     this.store.dispatch(new UserActions.ChangeProfilePicture(photo, 'image'));
     this.updateProfile();
-    this.info.show("info", "Votre photo de profil a bien été enregistrée", 3000)
+    this.info.show("info", "Votre photo de profil a bien été enregistrée ", 3000)
 
     this.cd.markForCheck();
   }
