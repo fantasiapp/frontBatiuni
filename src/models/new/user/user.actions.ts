@@ -395,12 +395,6 @@ export class GiveNotificationToken {
   constructor(public token: string) {}
 }
 
-export class SendSecondMail {
-  static readonly type = 'send a second mail';
-  action = 'giveNotificationToken';
-  constructor(public token: string) {}
-}
-
 // export class ContractSignature {
 //   static readonly type = '[User] Contract Signature';
 //   action = 'downloadContract';
