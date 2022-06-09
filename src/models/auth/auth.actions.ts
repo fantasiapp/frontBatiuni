@@ -17,6 +17,7 @@ export class ConfirmAccount {
 
 export class Register {
   static readonly type = '[Auth] Register';
+  action = "register"
   private constructor(
     public firstname: string,
     public lastname: string,
@@ -25,10 +26,11 @@ export class Register {
     public company: any,
     public Role: number,
     public proposer: string,
-    public jobs: string[]
+    public jobs: string[],
+    public again: boolean
   ) {}
 
-  static fromFormGroup(group: FormGroup) {
+  static fromFormGroup(group: FormGroup, again: boolean) {
     let input = group.value;
     return new Register(
       input.firstPage.firstname,
@@ -38,7 +40,8 @@ export class Register {
       input.secondPage.company,
       +input.secondPage.role[0].id,
       input.secondPage.proposer,
-      input.secondPage.jobs.map((job: Option) => job.id)
+      input.secondPage.jobs.map((job: Option) => job.id),
+      again
     );
   };
 };

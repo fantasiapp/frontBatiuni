@@ -2,8 +2,10 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  EventEmitter,
   HostBinding,
   Input,
+  Output,
   ViewChild,
 } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
@@ -33,6 +35,7 @@ import { Destroy$ } from "../common/classes";
 import { SnapshotAll } from "src/models/new/data.state";
 import { Establishement, Job, Role } from "src/models/new/data.interfaces";
 import { GetCompanies } from "src/models/new/search/search.actions";
+import { getUserDataService } from "../services/getUserData.service";
 
 @Component({
   selector: "register-form",
@@ -268,7 +271,8 @@ export class RegisterForm extends Destroy$ {
   constructor(
     private store: Store,
     private router: Router,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    private getUserDataService: getUserDataService
   ) {
     super();
   }
@@ -287,7 +291,7 @@ export class RegisterForm extends Destroy$ {
 
   pending: boolean = false;
 
-  registerForm = new FormGroup(
+  public registerForm = new FormGroup(
     {
       firstPage: new FormGroup(
         {
@@ -323,10 +327,11 @@ export class RegisterForm extends Destroy$ {
     if (!this.pending) {
       this.pending = true;
       this.store
-        .dispatch(Register.fromFormGroup(this.registerForm))
+        .dispatch(Register.fromFormGroup(this.registerForm, false))
         .pipe(take(1))
         .subscribe(
           (success) => {
+            this.getUserDataService.setRegisterForm(this.registerForm)
             this.router.navigate(["", "success"]);
           },
           (errors) => {
