@@ -321,6 +321,8 @@ export class DataState {
         // delete response['JobForCompany']
         ctx.setState(compose(...this.reader.readUpdates(response)));
 
+        
+
         this.inZone(() =>
           this.info.show("success", "Profil modifié avec succès", 2000)
         );

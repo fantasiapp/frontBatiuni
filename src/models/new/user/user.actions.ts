@@ -64,6 +64,7 @@ export class ModifyUserProfile {
   //for now we mark job as dirty, but we should take it directly from the form
   constructor({profile, form}: {profile: Profile, form: FormGroup}) {    
     const changes = getDirtyValues(form);
+    console.log("changes", changes)
     if ( Object.keys(changes).length == 0 ) return;
 
     const jobsForm = changes['UserProfile.Company.JobForCompany'],
@@ -87,7 +88,7 @@ export class ModifyUserProfile {
     if ( adminFiles ) {
       const keys = Object.keys(adminFiles);
       for ( const key of keys ) {
-        if ( !adminFiles[key].content ) continue;
+        if ( !adminFiles[key].content && !adminFiles[key].expirationDate) continue;
         
         this.adminFiles[key] = adminFiles[key];
       }
