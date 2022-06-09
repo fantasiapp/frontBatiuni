@@ -421,6 +421,10 @@ export class DataState {
 
         delete response[deletion.action];
         ctx.setState(deleteIds("File", [deletion.id]));
+
+        // if(response.hasOwnProperty('Company')) {
+        //   ctx.dispatch()
+        // }
       })
     );
   }

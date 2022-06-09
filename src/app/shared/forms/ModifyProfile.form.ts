@@ -735,7 +735,11 @@ export class ModifyProfileForm {
     const documents = this.form.controls[ "UserProfile.Company.admin"]
     documents.get(filename)?.setValue({content: '', expirationDate: '', ext: '???', name: 'Veuillez télécharger un document', nature: 'admin'})
     let file = this.companyFiles.filter(file => file.name == filename)[0]
-    if (file?.id){ this.store.dispatch(new DeleteFile(file?.id))}
+    if (file?.id){ 
+      this.store.dispatch(new DeleteFile(file?.id)).subscribe(()=> {
+        // this.store.dispatch(new ModifyProfileForm())
+      })
+    }
   } 
 
   addingField: boolean = false;
