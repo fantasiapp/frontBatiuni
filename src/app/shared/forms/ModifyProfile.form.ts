@@ -752,6 +752,7 @@ export class ModifyProfileForm {
     }
 
     this.selectedLabels = labelOptions;
+    console.log("mark labels as dirty")
     labelControl.markAsDirty();
   }
 
@@ -760,6 +761,7 @@ export class ModifyProfileForm {
     documents.get(filename)?.setValue({content: [""], expirationDate: '', ext: '???', name: 'Veuillez télécharger un document', nature: 'admin'})
     let file = this.companyFiles.filter(file => file.name == filename)[0]
     if (file?.id){ this.store.dispatch(new DeleteFile(file?.id))}
+    this.form.controls["UserProfile.Company.JobForCompany"].markAsDirty()
   } 
 
   removeLabel(filename: string) {
@@ -774,6 +776,7 @@ export class ModifyProfileForm {
     let label = allFiles.filter(file => file.name == filename)[0]
     if (label?.id) {this.store.dispatch(new DeleteFile(label.id))}
     this.selectedLabels = this.selectedLabels.filter(label => label.name != filename)
+    this.form.controls["UserProfile.Company.LabelForCompany"].markAsDirty();
   }
 
   addingField: boolean = false;

@@ -90,7 +90,7 @@ export class AppComponent extends Destroy$ {
     while(this.isConnected) {
       if (this.readyToUpdate){
         this.readyToUpdate = false
-        console.log("dans le while", this.isWhileOn, "et suis-je connecté ? ", this.isConnected)
+        // console.log("dans le while", this.isWhileOn, "et suis-je connecté ? ", this.isConnected)
       if (!this.firstAttemptAlreadyTried){
         this.executeGetGeneralData() 
         this.firstAttemptAlreadyTried = true
