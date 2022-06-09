@@ -517,7 +517,7 @@ export class MakeAdForm {
   }
 
   makeAdForm = new FormGroup({
-    dueDate: new FormControl(this.datePipe.transform(new Date(), "yyyy-MM-dd"), [
+    dueDate: new FormControl(moment(new Date(Date.now())).add(1,'days').format('YYYY-MM-DD'), [
       Validators.required,
       this.dueDateValidator,
     ]),
