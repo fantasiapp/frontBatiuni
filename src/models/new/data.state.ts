@@ -297,25 +297,29 @@ export class DataState {
     return req.pipe(
       tap((response: any) => {
 
-        console.log("response ModifyUserData", response)
+        const rep = response
+        console.log("response ModifyUserData", rep)
         if (response[modify.action] !== "OK") {
           this.inZone(() => this.info.show("error", response.messages, 3000));
           throw response.messages;
         }
         delete response[modify.action];
-        ctx.setState(compose(...this.reader.readUpdates(response)));
-
-        if(response.hasOwnProperty('JobForCompany') && Array.isArray(response.JobForCompany)){
+        
+        if(response.hasOwnProperty('JobForCompany') && Array.isArray(response['JobsForCompany'])){
           for (let job of response.JobForCompany) {
             ctx.setState(addValues('JobForCompany', job))            
           }
         }
-
-        if(response.hasOwnProperty('LabelForCompany') && Array.isArray(response.LabelForCompany)){
+        
+        if(response.hasOwnProperty('LabelForCompany' && Array.isArray(response['LabelForCompany']))){
           for (let label of response.LabelForCompany) {
             ctx.setState(addValues('LabelForCompany', label))            
           }
         }
+        
+        // delete response['LabelForCompany']
+        // delete response['JobForCompany']
+        ctx.setState(compose(...this.reader.readUpdates(response)));
 
         
 
@@ -462,13 +466,28 @@ export class DataState {
 
     return req.pipe(
       map((response: any) => {
+        console.log('Upload Post ', response);
         if (response[post.action] !== "OK") throw response["messages"];
         delete response[post.action];
         
         //add post, return its id
         const assignedId = +Object.keys(response)[0];
-        ctx.setState(addValues('Post', response))
-        // ctx.setState(addComplexChildren("Company", profile.company.id, "Post", response));
+        // ctx.setState(addValues('Post', response))
+
+        ctx.setState(addComplexChildren("Company", profile.company.id, "Post", response['Post']));
+
+        if(response.hasOwnProperty('DatePost')){
+          for (const datePost of response['DatePost']) {
+            ctx.setState(addValues('DatePost', datePost))
+          }
+        }
+
+        if(response.hasOwnProperty('DetailedPost')){
+          for (const detailedPost of response['DetailedPost']) {
+            ctx.setState(addValues('DetailedPost', detailedPost))
+          }
+        }
+
         return assignedId;
       }),
       concatMap((postId: number) => {
@@ -588,12 +607,12 @@ export class DataState {
     //{Post: 1, amount: 500, devis: 'Par heure', action: 'applyPost'}
     return this.http.get("data", application).pipe(
       tap((response: any) => {
+        console.log('ApplyPost response', response);
         if (response[application.action] != "OK") throw response["messages"];
 
         delete response[application.action];
-        ctx.setState(
-          addComplexChildren("Company", profile.company.id, "Post", response)
-        );
+        ctx.setState(addValues('Candidate', response['Candidate']))
+        ctx.setState(update('Post', response['Post']));
       })
     );
   }
