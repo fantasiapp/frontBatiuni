@@ -472,7 +472,6 @@ export class DataState {
         const assignedId = +Object.keys(response)[0];
         // ctx.setState(addValues('Post', response))
 
-        // reponse est daubé, les id des dates Post sont pas les bon, des Supervision ? 
         ctx.setState(addComplexChildren("Company", profile.company.id, "Post", response['Post']));
 
         if(response.hasOwnProperty('DatePost')){
@@ -606,12 +605,12 @@ export class DataState {
     //{Post: 1, amount: 500, devis: 'Par heure', action: 'applyPost'}
     return this.http.get("data", application).pipe(
       tap((response: any) => {
+        console.log('ApplyPost response', response);
         if (response[application.action] != "OK") throw response["messages"];
 
         delete response[application.action];
-        ctx.setState(
-          addComplexChildren("Company", profile.company.id, "Post", response)
-        );
+        ctx.setState(addValues('Candidate', response['Candidate']))
+        ctx.setState(update('Post', response['Post']));
       })
     );
   }
