@@ -38,11 +38,10 @@
   <!-- </div> -->
 </div>
 
-<ng-template *ngIf="hasSentRecommandation" #waiting_tpl>
-  <div class="ripple">
-    <div></div>
-    <div></div>
-  </div>
+<div class="modal" *ngIf="this.hasSentRecommandation">
+  <!-- <div class="ripple">
+  </div> -->
+  <img src="assets/popup-valider.svg" alt="confirmed">
   <p class="confirmed-with-success">Merci pour votre recommandation</p>
 
-</ng-template>
+</div>
