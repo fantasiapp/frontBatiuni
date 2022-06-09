@@ -12,6 +12,8 @@ export class NotifService {
 
   notificationsUnseen: number = 0
 
+  token: string = 'y\'a pas de token'
+
   constructor(private store: Store) {}
   emitNotifChangeEvent(num?: number) {
     if (num !== undefined) {
@@ -27,6 +29,14 @@ export class NotifService {
     return this.navchange;
   }
 
+  setToken(token: string){
+    this.token = token
+  }
+
+  getToken(){
+    return this.token
+  }
+
   checkNotif() {
     this.notificationsUnseen = 0
     const view = this.store.selectSnapshot(DataState.view)
@@ -36,10 +46,13 @@ export class NotifService {
     if (profile.company?.Notification) {
       for (const notification of this.store.selectSnapshot(DataQueries.getMany('Notification', profile.company!.Notification)))
         if (view == notification!.role) {
+          // console.log("alllloooooo", notification)
+
           if (!notification!.hasBeenViewed) {
             this.notificationsUnseen++
           }
         }
+
     }
   }
 }

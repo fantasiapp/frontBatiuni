@@ -1,8 +1,14 @@
-import {  ChangeDetectionStrategy, ChangeDetectorRef, Component,} from "@angular/core";
+import {  ChangeDetectionStrategy, ChangeDetectorRef, Component, Input,} from "@angular/core";
+import { FormGroup } from "@angular/forms";
 import { Router } from "@angular/router";
 import { Store } from "@ngxs/store";
+import { take } from "rxjs/operators";
 import { AppState } from "src/app/app.state";
+import { Register } from "src/models/auth/auth.actions";
 import { AuthState } from "src/models/auth/auth.state";
+import { setErrors } from "src/validators/verify";
+import { RegisterForm } from "../../forms/register.form";
+import { getUserDataService } from "../../services/getUserData.service";
 
 @Component({
   selector: 'success',
@@ -13,8 +19,33 @@ import { AuthState } from "src/models/auth/auth.state";
 export class RegistrationSuccess {
   userEmail : string;
 
-  constructor(private store: Store) {
+  registerForm: FormGroup;
+
+  constructor(private store: Store,private cd: ChangeDetectorRef, private getUserDataService: getUserDataService) {
     const auth = this.store.selectSnapshot(AuthState);
     this.userEmail = auth.pendingEmail; //must delete later
+    this.registerForm = this.getUserDataService.getRegisterForm()!
+    console.log("l'amei sqdgfqslduflqjgffqs", this.registerForm)
   }
+
+  onSubmit(f: any) {
+      this.store
+        .dispatch(Register.fromFormGroup(this.registerForm!, true))
+        .pipe(take(1))
+        .subscribe(
+          (success) => {
+
+          },
+          (errors) => {
+            if (errors.email) {
+              errors.all = errors.all
+                ? errors.all + "\n" + errors.email
+                : errors.email;
+            }
+            setErrors(this.registerForm!, errors);
+            this.cd.markForCheck();
+          }
+        );
+  }
+  
 };

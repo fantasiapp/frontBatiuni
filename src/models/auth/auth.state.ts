@@ -19,6 +19,7 @@ import { Observable, of, throwError } from "rxjs";
 import * as strings from "../../app/shared/common/strings";
 import { Router } from "@angular/router";
 import { HttpService } from "src/app/services/http.service";
+import { RESOURCE_CACHE_PROVIDER } from "@angular/platform-browser-dynamic";
 
 @State<AuthModel>({
   name: "auth",
@@ -87,12 +88,14 @@ export class AuthState {
 
   @Action(Register)
   register(ctx: StateContext<AuthModel>, action: Register) {
+    console.log("alo?", action)
     const req = this.http.post("initialize", action);
     return req.pipe(
       catchError((err: HttpErrorResponse) => {
         return AuthState.handleError(err);
       }),
       map((response: any) => {
+        console.log(response)
         if (response["register"] == "OK") return true;
         throw response.messages;
       }),

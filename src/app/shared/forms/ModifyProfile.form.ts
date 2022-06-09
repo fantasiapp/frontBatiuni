@@ -35,6 +35,7 @@ import {
 } from "src/models/new/data.interfaces";
 import { SpacingPipe } from "../pipes/spacing.pipe";
 import { DeleteFile } from "src/models/new/user/user.actions";
+import { delay } from "../common/functions";
 
 @Component({
   selector: "modify-profile-form",
@@ -139,9 +140,10 @@ import { DeleteFile } from "src/models/new/user/user.actions";
                       <span class="number-name">{{
                         control.get("job")!.value.name
                       }}</span>
-                      <div class="position-absolute number-container">
+                      <number formControlName="number"></number>
+                      <!-- <div class="position-relative number-container">
                         <number formControlName="number"></number>
-                      </div>
+                      </div> -->
                     </ng-container>
                   </span>
                 </ng-container>
@@ -337,6 +339,7 @@ import { DeleteFile } from "src/models/new/user/user.actions";
                     [showtitle]="false"
                     [filename]="control.get('label')!.value.name"
                     formControlName="fileData"
+                    (kill)="removeLabel($event)"
                   >
                     <file-svg
                       [name]="control.get('label')!.value.name"
@@ -392,6 +395,13 @@ import { DeleteFile } from "src/models/new/user/user.actions";
       .metiers options {
         margin-bottom: 20px;
       }
+
+      .form-input span.number {
+        display: flex;
+        justify-content: space-between;
+        padding-bottom: 0.5rem;
+      }
+
       .number-name {
         display: block;
         white-space: pre;
@@ -454,6 +464,7 @@ export class ModifyProfileForm {
 
   //outputs
   onSubmit() {
+    console.log("onsubmit", this.form.controls["UserProfile.Company.JobForCompany"].value)
     this.form.controls["UserProfile.Company.companyPhone"].setValue(this.form.controls["UserProfile.Company.companyPhone"].value.replace(/\s/g, ""));
     this.form.controls["UserProfile.cellPhone"].setValue(this.form.controls["UserProfile.cellPhone"].value.replace(/\s/g, ""));
     console.log("modifier le profil",this.form.value);
@@ -478,6 +489,7 @@ export class ModifyProfileForm {
 
   companyJobs!: JobForCompany[];
   selectedJobs!: Label[];
+  initialSelectedJobs!: Label[];
 
   companyFiles!: File[];
 
@@ -541,6 +553,16 @@ export class ModifyProfileForm {
           permissions: ["camera", "photos"],
         });
       } catch (e) {}
+    // this.test()
+  }
+
+  async test(){
+    while(true){
+      console.log("Dans le while", this.store.selectSnapshot(
+        DataQueries.getMany("JobForCompany", this.profile.company.jobs)
+      ))
+      await delay(5000)
+    }
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -562,6 +584,7 @@ export class ModifyProfileForm {
     this.companyJobs = this.store.selectSnapshot(
       DataQueries.getMany("JobForCompany", this.profile.company.jobs)
     );
+    console.log("this.profile.company.jobs", this.profile.company.jobs, this.companyJobs)
 
     const jobMapping = new Map(),
       labelMapping = new Map();
@@ -576,6 +599,7 @@ export class ModifyProfileForm {
         this.selectedJobs.push(job);
       }
     });
+    this.initialSelectedJobs = this.selectedJobs;
 
     this.selectedLabels = [];
     this.allLabels.forEach((label) => {
@@ -591,6 +615,7 @@ export class ModifyProfileForm {
     });
 
     const filesInput = this.form.controls["UserProfile.Company.admin"];
+    console.log("companyFile", this.companyFiles)
     this.companyFiles.forEach((file) => {
       filesInput.get(file.name)?.patchValue(file);
     });
@@ -624,9 +649,8 @@ export class ModifyProfileForm {
       this.space(company.companyPhone)
     );
 
-    const jobControl = this.form.controls[
-      "UserProfile.Company.JobForCompany"
-    ] as FormArray;
+    console.log("companyJobs", this.companyJobs)
+    const jobControl = this.form.controls["UserProfile.Company.JobForCompany"] as FormArray;
     jobControl.clear();
       for (let jobForCompany of this.companyJobs) {
       const jobObject = jobMapping.get(jobForCompany.id)!;
@@ -637,13 +661,16 @@ export class ModifyProfileForm {
         })
       );
     }
+    console.log("JobControls", jobControl, "companyJobsControl", this.form.controls["UserProfile.Company.JobForCompany"])
 
-    const labelControl = this.form.controls[
-      "UserProfile.Company.LabelForCompany"
-    ] as FormArray;
+
+    const labelControl = this.form.controls["UserProfile.Company.LabelForCompany"] as FormArray;
+    // console.log("labelControl", labelControl.value)
     labelControl.clear();
+    // console.log("labelControl after", labelControl.value)
     for (let labelForCompany of this.companyLabels) {
       const labelObject = labelMapping.get(labelForCompany.id)!;
+      // console.log("labelObject", labelObject)
       labelControl.push(
         new FormGroup({
           label: new FormControl(labelObject),
@@ -658,20 +685,19 @@ export class ModifyProfileForm {
         })
       );
     }
+    // console.log("LabelControl after for", labelControl.value)
   }
 
   //make functions to help merge
   updateJobs(jobOptions: Option[]) {
     this.addingField = false;
-    const oldJobs = this.selectedJobs,
-      newJobs = jobOptions,
-      oldJobsId = new Set(oldJobs.map(({ id }) => id)),
-      overlap = newJobs.filter((job) => oldJobsId.has(job.id)),
-      difference = newJobs.filter((job) => !oldJobsId.has(job.id));
+    const oldJobs = this.initialSelectedJobs,
+    newJobs = jobOptions,
+    oldJobsId = new Set(oldJobs.map(({ id }) => id)),
+    overlap = newJobs.filter((job) => oldJobsId.has(job.id)),
+    difference = newJobs.filter((job) => !oldJobsId.has(job.id));
 
-    let jobControl = this.form.controls[
-      "UserProfile.Company.JobForCompany"
-    ] as FormArray;
+    let jobControl = this.form.controls["UserProfile.Company.JobForCompany"] as FormArray;
     jobControl.clear();
 
     for (const item of difference)
@@ -705,9 +731,7 @@ export class ModifyProfileForm {
     this.addingField = false;
     const newLabels = labelOptions;
 
-    let labelControl = this.form.controls[
-      "UserProfile.Company.LabelForCompany"
-    ] as FormArray;
+    let labelControl = this.form.controls["UserProfile.Company.LabelForCompany"] as FormArray;
     labelControl.clear();
     for (const item of newLabels) {
       const target = this.companyLabels.find(
@@ -720,7 +744,7 @@ export class ModifyProfileForm {
             defaultFileUIOuput(
               item.name,
               target?.date || "",
-              `Veillez télécharger un document.`
+              `Veuillez télécharger un document.`
             )
           ),
         })
@@ -728,19 +752,32 @@ export class ModifyProfileForm {
     }
 
     this.selectedLabels = labelOptions;
+    console.log("mark labels as dirty")
     labelControl.markAsDirty();
   }
 
   removeDocument(filename: string) {
     const documents = this.form.controls[ "UserProfile.Company.admin"]
-    documents.get(filename)?.setValue({content: '', expirationDate: '', ext: '???', name: 'Veuillez télécharger un document', nature: 'admin'})
+    documents.get(filename)?.setValue({content: [""], expirationDate: '', ext: '???', name: 'Veuillez télécharger un document', nature: 'admin'})
     let file = this.companyFiles.filter(file => file.name == filename)[0]
-    if (file?.id){ 
-      this.store.dispatch(new DeleteFile(file?.id)).subscribe(()=> {
-        // this.store.dispatch(new ModifyProfileForm())
-      })
-    }
+    if (file?.id){ this.store.dispatch(new DeleteFile(file?.id))}
+    this.form.controls["UserProfile.Company.JobForCompany"].markAsDirty()
   } 
+
+  removeLabel(filename: string) {
+    const documents = this.form.controls[ "UserProfile.Company.LabelForCompany"] as FormArray;
+    for (let i=0; i< documents.value.length; i++){
+      if(documents.value[i].label.name == filename) {
+        // documents.value[i].fileData = {content: [""], expirationDate: '', ext: '???', name: 'Veuillez télécharger un document', nature: 'admin'}
+        documents.removeAt(i)
+      }
+    }
+    let allFiles = this.store.selectSnapshot(DataQueries.getAll('File'))
+    let label = allFiles.filter(file => file.name == filename)[0]
+    if (label?.id) {this.store.dispatch(new DeleteFile(label.id))}
+    this.selectedLabels = this.selectedLabels.filter(label => label.name != filename)
+    this.form.controls["UserProfile.Company.LabelForCompany"].markAsDirty();
+  }
 
   addingField: boolean = false;
 }

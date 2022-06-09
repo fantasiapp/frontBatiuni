@@ -90,7 +90,7 @@ export class AppComponent extends Destroy$ {
     while(this.isConnected) {
       if (this.readyToUpdate){
         this.readyToUpdate = false
-        console.log("dans le while", this.isWhileOn, "et suis-je connecté ? ", this.isConnected)
+        // console.log("dans le while", this.isWhileOn, "et suis-je connecté ? ", this.isConnected)
       if (!this.firstAttemptAlreadyTried){
         this.executeGetGeneralData() 
         this.firstAttemptAlreadyTried = true
@@ -140,7 +140,10 @@ export class AppComponent extends Destroy$ {
     if ("serviceWorker" in navigator) {
       navigator.serviceWorker.register("./firebase-messaging-sw.js").then((registration) => {
         getToken(messaging, {vapidKey : environment.firebase.vapidKey, serviceWorkerRegistration: registration}).then((currentToken) => {
-          if (currentToken) {console.log("we got the token", currentToken)}
+          if (currentToken) {
+            this.notifService.setToken(currentToken)
+            console.log("we got the token", currentToken, "and sent it to ", this.notifService)
+          }
           else {console.log('No registration token available. Request permission to generate one.')}
         }).catch((err) => {
           console.log('An error occurred while retrieving token. ', err)

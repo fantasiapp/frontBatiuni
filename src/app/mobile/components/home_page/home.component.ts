@@ -105,6 +105,7 @@ export class HomeComponent extends Destroy$ {
   allMissions: Mission[] = [];
   filterOn: boolean = false;
   filterOnST: boolean = false;
+  isStillOnPage: boolean = true;
 
   get missionToClose() {
     return this.missions[0];
@@ -187,7 +188,7 @@ export class HomeComponent extends Destroy$ {
   }
 
   async lateInit() {
-      if (!this.isLoading) {
+    if (!this.isLoading && this.isStillOnPage) {
       this.info.alignWith("header_search");
       combineLatest([this.profile$, this.posts$])
         .pipe(takeUntil(this.destroy$))
@@ -232,6 +233,7 @@ export class HomeComponent extends Destroy$ {
   get footerHide(){return !this.showFooter}
 
   ngOnDestroy(): void {
+    this.isStillOnPage = false
     this.info.alignWith("last");
     this.getUserDataService.emitDataChangeEvent();
     super.ngOnDestroy();
@@ -868,9 +870,13 @@ export class HomeComponent extends Destroy$ {
 
   closeAdFilterMenu(value: any){
     this.openAdFilterMenu = value;
-    this.filterST.updateFilteredPosts(this.filterST.filterForm.value);
-    this.displayOnlinePosts = this.filterST.filteredPosts;
-    this.filterST.isFilterOn(this.filterST.filterForm.value);
+    this.view$.subscribe((view)=>{
+      if(view=='ST'){
+        this.filterST.updateFilteredPosts(this.filterST.filterForm.value);
+        this.displayOnlinePosts = this.filterST.filteredPosts;
+        this.filterST.isFilterOn(this.filterST.filterForm.value);
+      }
+    })
     this.cd.markForCheck();
-  }
+  }    
 }

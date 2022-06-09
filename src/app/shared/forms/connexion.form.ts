@@ -5,9 +5,11 @@ import { Store } from "@ngxs/store";
 import { take } from "rxjs/operators";
 import { Destroy$ } from "src/app/shared/common/classes";
 import { Login } from "src/models/auth/auth.actions";
+import { GiveNotificationToken } from "src/models/new/user/user.actions";
 import { Email } from "src/validators/persist";
 import { ComplexPassword, setErrors } from "src/validators/verify";
 import { BooleanService } from "../services/boolean.service";
+import { NotifService } from "../services/notif.service";
 
 @Component({
   selector: 'connexion-form',
@@ -77,7 +79,7 @@ export class ConnexionForm extends Destroy$ {
   private _errors: string[] = [];
   get errors() { return this._errors; }
 
-  constructor(private router: Router, private store: Store, private cd: ChangeDetectorRef, private isLoadingService: BooleanService) {
+  constructor(private router: Router, private store: Store, private cd: ChangeDetectorRef, private isLoadingService: BooleanService, private notifService: NotifService) {
     super();
   }
 
@@ -89,7 +91,8 @@ export class ConnexionForm extends Destroy$ {
       (success) => {
         if(success){
           const result = this.router.navigate(['', 'home']);
-          // this.isLoadingService.emitLoadingChangeEvent(false)
+          this.store.dispatch(new GiveNotificationToken(this.notifService.getToken()))
+          console.log("c'est bon j'ai envoyé le token", this.notifService.getToken())
           // if ( !result ) {
           //   setErrors(this.loginForm, {all: 'Erreur inattendue. (500 ?)'});
           //   this.cd.markForCheck();

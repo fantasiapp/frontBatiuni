@@ -390,6 +390,12 @@ export class GiveRecommandation {
   constructor(public companyRecommanded: number, public firstNameRecommanding: string, public lastNameRecommanding: string, public companyNameRecommanding: string, public qualityStars:number, public qualityComment:string, public securityStars:number, public securityComment:string, public organisationStars:number, public organisationComment:string) {}
 }
 
+export class GiveNotificationToken {
+  static readonly type = 'give the token for notification';
+  action = 'giveNotificationToken';
+  constructor(public token: string) {}
+}
+
 // export class ContractSignature {
 //   static readonly type = '[User] Contract Signature';
 //   action = 'downloadContract';
