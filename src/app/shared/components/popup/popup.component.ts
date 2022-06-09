@@ -435,7 +435,7 @@ export class PopupService {
       .select(DataQueries.getById("Mission", mission.id))
       .pipe(
         switchMap((mission) => {
-          return this.downloader.downloadFile(mission!.contract).pipe(
+          return this.downloader.downloadFile(mission!.contract, false, true).pipe(
             map((file) => ({
               mission,
               file,

@@ -1,14 +1,14 @@
 <div class="chantier-tache-container">
-    <div id="taskMain_{{date.id}}" *ngIf="view=='PME'&& !mission!.isClosed">
+    <div id="taskMain_{{date.id}}" *ngIf="view=='PME'">
         <div class="chantier-tache">
             <label>Choisir les tâches pour ce jour</label>
-            <img (click)="swipeMenu = true" src="assets/Option.svg"/>
+            <img (click)="swipeMenu = true" src="assets/Option.svg" *ngIf="!mission!.isClosed"/>
         </div>
     </div>
     <div class="taskByDate" *ngFor="let taskGraphic of tasksGraphic; let index = index">
         <div class="details chantier-tache">
           <span class="detail-name">{{ taskGraphic.selectedTask.content }}</span>
-          <div class="controls">
+          <div class="controls" *ngIf="!mission!.isClosed">
             <img (click)="validate(taskGraphic.selectedTask, validateImg)" id="control_validate_{{taskGraphic.selectedTask.id}}" [src]= "taskGraphic.validationImage" #validateImg/>
             <img (click)="refuse(taskGraphic.selectedTask, refuseImg)" id="control_refuse_{{taskGraphic.selectedTask.id}}" [src]= "taskGraphic.invalidationImage" #refuseImg/>
           </div>
@@ -33,12 +33,12 @@
     
 
     <div class="partenerComment-container">
-      <div *ngIf="!mission!.isClosed">
+      <div>
           <h2>Communiquer avec votre partenaire de chantier</h2>
           <div *ngFor="let supervision of date.supervisions; let isLast = last">
             <comment-suivi  [supervision]="supervision" #commentSuivi></comment-suivi>
             
-            <div class="partenerComment-addPhoto" *ngIf="!!date.supervisions[0] && isLast" (click)="cameraSwipe(supervision.id)">
+            <div class="partenerComment-addPhoto" *ngIf="!!date.supervisions[0] && isLast && !mission!.isClosed" (click)="cameraSwipe(supervision.id)">
               <span>Ajouter une photo : </span>
               <img class="partenerComment-icon"   src="assets/camera-outline.svg" alt="camera"/>
             </div>

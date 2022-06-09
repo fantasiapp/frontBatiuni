@@ -12,9 +12,9 @@
       <ad-form class="adform " [page]="false" [post]="post" #addForm ></ad-form>
 
       <div class="hiden-action flex  space-around center">
-        <button class="button active" (click)="addForm.submit(false)"
+        <button class="button active" (click)="addForm.submit($event,false)"
           [disabled]="!addForm.makeAdForm.valid">Valider</button>
-        <button class="button passive" (click)="addForm.submit(true)"
+        <button class="button passive" (click)="addForm.submit($event,true)"
           [disabled]="!addForm.makeAdForm.valid">Brouillon</button>
       </div>
     </div>
@@ -22,9 +22,9 @@
 
   <section class="info-sec flex">
     <div class="flex info space-children-margin">
-      <button class="button active" (click)="addForm.submit(false)"
+      <button class="button active" (click)="addForm.submit($event,false)"
         [disabled]="!addForm.makeAdForm.valid">Valider</button>
-      <button class="button passive" (click)="addForm.submit(true)"
+      <button class="button passive" (click)="addForm.submit($event,true)"
         [disabled]="!addForm.makeAdForm.valid">Brouillon</button>
     </div>
   </section>

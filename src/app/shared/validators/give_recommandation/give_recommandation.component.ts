@@ -132,6 +132,7 @@ export class GiveARecommandation extends Destroy$ {
   }
 
   submitRecommandation() {
+    this.hasSentRecommandation =true
     if (this.hasGeneralStars){
       console.log('coucou je note')
       this.store.dispatch(new GiveRecommandation(

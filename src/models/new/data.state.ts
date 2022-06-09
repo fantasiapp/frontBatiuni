@@ -295,12 +295,21 @@ export class DataState {
 
     return req.pipe(
       tap((response: any) => {
+
+        console.log("response ModifyUserData", response)
         if (response[modify.action] !== "OK") {
           this.inZone(() => this.info.show("error", response.messages, 3000));
           throw response.messages;
         }
         delete response[modify.action];
         ctx.setState(compose(...this.reader.readUpdates(response)));
+
+        if(response.hasOwnProperty('jobs')){
+          for (let job of response.jobs) {
+            ctx.setState(addValues('Job', job))            
+          }
+        }
+
         this.inZone(() =>
           this.info.show("success", "Profil modifié avec succès", 2000)
         );
@@ -369,7 +378,6 @@ export class DataState {
 
   @Action(UploadFile)
   uploadFile(ctx: StateContext<DataModel>, upload: UploadFile) {
-    console.log("upload", upload)
     const req = this.http.post("data", upload);
     return req.pipe(
       tap((response: any) => {
@@ -442,13 +450,11 @@ export class DataState {
       map((response: any) => {
         if (response[post.action] !== "OK") throw response["messages"];
         delete response[post.action];
-
+        
         //add post, return its id
         const assignedId = +Object.keys(response)[0];
-        ctx.setState(
-          addComplexChildren("Company", profile.company.id, "Post", response)
-        );
-
+        ctx.setState(addValues('Post', response))
+        // ctx.setState(addComplexChildren("Company", profile.company.id, "Post", response));
         return assignedId;
       }),
       concatMap((postId: number) => {
@@ -513,9 +519,8 @@ export class DataState {
       file = ctx.getState()["File"][download.id];
 
     //check if the file is already downloaded
-    if (file && file[contentIndex]) {
-      console.log("download File", typeof(file.content))
-      return file.content;
+    if (file && file[contentIndex] && !download.forceDownload) {
+      return file[contentIndex];
     }
 
     //check if we are currently downloading the file
@@ -682,6 +687,8 @@ export class DataState {
           this.inZone(() => this.info.show("error", response.messages, 3000));
           throw response.messages;
         }
+        let mission = this.store.selectSnapshot(DataQueries.getById("Mission", application.missionId))
+        SingleCache.deleteValueByName("File" + mission?.contract.toString());
         delete response[application.action];
         ctx.setState(
           addComplexChildren("Company", profile.company.id, "Mission", response)
