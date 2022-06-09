@@ -38,7 +38,7 @@
           <div *ngFor="let supervision of date.supervisions; let isLast = last">
             <comment-suivi  [supervision]="supervision" #commentSuivi></comment-suivi>
             
-            <div class="partenerComment-addPhoto" *ngIf="!!date.supervisions[0] && isLast && !mission!.isClosed" (click)="cameraSwipe(supervision.id)">
+            <div class="partenerComment-addPhoto" *ngIf="!!date.supervisions[0] && isLast && !mission!.isClosed && (user.firstName + ' ' + user.lastName) === supervision.author" (click)="cameraSwipe(supervision.id)">
               <span>Ajouter une photo : </span>
               <img class="partenerComment-icon"   src="assets/camera-outline.svg" alt="camera"/>
             </div>

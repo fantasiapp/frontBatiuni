@@ -1,6 +1,7 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { DataQueries, DataState } from 'src/models/new/data.state';
+import { Notification } from "src/models/new/data.interfaces";
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +14,7 @@ export class NotifService {
   notificationsUnseen: number = 0
 
   token: string = 'y\'a pas de token'
+  notifications: Notification[] = [];
 
   constructor(private store: Store) {}
   emitNotifChangeEvent(num?: number) {
@@ -38,6 +40,7 @@ export class NotifService {
   }
 
   checkNotif() {
+    this.notifications = []
     this.notificationsUnseen = 0
     const view = this.store.selectSnapshot(DataState.view)
     let profile = this.store.selectSnapshot(DataQueries.currentProfile)!
@@ -46,8 +49,7 @@ export class NotifService {
     if (profile.company?.Notification) {
       for (const notification of this.store.selectSnapshot(DataQueries.getMany('Notification', profile.company!.Notification)))
         if (view == notification!.role) {
-          // console.log("alllloooooo", notification)
-
+            this.notifications.push(notification!)
           if (!notification!.hasBeenViewed) {
             this.notificationsUnseen++
           }
