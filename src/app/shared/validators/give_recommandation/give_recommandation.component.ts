@@ -19,6 +19,7 @@ export class GiveARecommandation extends Destroy$ {
 
   @Input()
   companyId: number = -1;
+  companyNameRecommended: string;
 
   hasSentRecommandation: boolean = false;
   recommandation: Recommandation = {
@@ -35,8 +36,6 @@ export class GiveARecommandation extends Destroy$ {
     organisationComment : ""
   };
 
-  company: Company | null;
-
   userNameForm: FormGroup = new FormGroup({
     lastName: new FormControl('', [Validators.required]),
     firstName: new FormControl('', [Validators.required])
@@ -48,11 +47,9 @@ export class GiveARecommandation extends Destroy$ {
 
   constructor(private store: Store, private cd: ChangeDetectorRef, private route: ActivatedRoute) {
     super();
-    this.company = this.companyId ? this.store.selectSnapshot(DataQueries.getById("Company", this.companyId)) : null
-  }
-
-  onSubmit(e: any){
-
+    this.companyId = this.route.snapshot.params.companyId;
+    this.recommandation.companyRecommanded = this.companyId
+    this.companyNameRecommended = this.route.snapshot.params.companyName
   }
 
   starAction(index: number, nature: string) {

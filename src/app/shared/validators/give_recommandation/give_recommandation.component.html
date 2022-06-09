@@ -1,6 +1,6 @@
 <div *ngIf="!hasSentRecommandation" class="give-recommandation">
   <!-- <div class="cloture-swipeup"> -->
-    <h4>Noter l'entreprise {{ company?.name || 'Fantasiapp'}} sur <span>BatiUni</span></h4>
+    <h4>Noter l'entreprise {{ companyNameRecommended || 'Fantasiapp'}} sur <span>BatiUni</span></h4>
     <form class="form-input" [formGroup]="userNameForm">
       <input (focusout)="getCompanyInfoByText('lastName', lastNameControl)"class="form-element" placeholder="Entrer votre nom" formControlName="lastName" #lastNameControl/>
       <input (focusout)="getCompanyInfoByText('firstName', firstNameControl)"placeholder="Entrer votre prénom" class="form-element" formControlName="firstName" #firstNameControl/>
