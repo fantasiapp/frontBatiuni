@@ -285,6 +285,7 @@ export class DataState {
 
   @Action(ModifyUserProfile)
   modifyUser(ctx: StateContext<DataModel>, modify: ModifyUserProfile) {
+    console.log("Modification vqu'on envoie à JL", modify)
     const { labelFiles, adminFiles, onlyFiles, ...modifyAction } = modify;
     let req;
     if (onlyFiles) req = of({ [modify.action]: "OK" });
@@ -302,14 +303,14 @@ export class DataState {
         ctx.setState(compose(...this.reader.readUpdates(response)));
 
         if(response.hasOwnProperty('JobForCompany')){
-          for (let job in response.JobForCompany) {
-            ctx.setState(addValues('JobForCompany', response.JobForCompany[job]))            
+          for (let job of response.JobForCompany) {
+            ctx.setState(addValues('JobForCompany', job))            
           }
         }
 
         if(response.hasOwnProperty('LabelForCompany')){
-          for (let label in response.LabelForCompany) {
-            ctx.setState(addValues('LabelForCompany', response.LabelForCompany[label]))            
+          for (let label of response.LabelForCompany) {
+            ctx.setState(addValues('LabelForCompany', label))            
           }
         }
 
