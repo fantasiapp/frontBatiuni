@@ -237,14 +237,16 @@ export class UIAnnonceResume extends Destroy$ {
     const candidates = post.candidates;
     const companyId = this.profile.company.id;
     let goodCandidate = null;
-    candidates.forEach((candidateId) => {
-      let candidate = this.store.selectSnapshot(
+    if (candidates) {
+      candidates.forEach((candidateId) => {
+        let candidate = this.store.selectSnapshot(
         DataQueries.getById("Candidate", candidateId)
       );
       if (candidate?.company == companyId) {
         goodCandidate = candidate;
       }
     });
+  }
     return goodCandidate;
   }
 
