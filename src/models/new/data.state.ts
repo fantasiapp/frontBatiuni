@@ -436,14 +436,15 @@ export class DataState {
     const req = this.http.get("data", deletion);
     return req.pipe(
       tap((response: any) => {
+        console.log('delteFile response', response);
         if (response[deletion.action] !== "OK") throw response["messages"];
 
         delete response[deletion.action];
         ctx.setState(deleteIds("File", [deletion.id]));
 
-        // if(response.hasOwnProperty('Company')) {
-        //   ctx.dispatch()
-        // }
+        if(response.hasOwnProperty('Company')) {
+          ctx.setState(update('Company', response['Company']))
+        }
       })
     );
   }
