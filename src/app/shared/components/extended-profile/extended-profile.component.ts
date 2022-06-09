@@ -90,7 +90,6 @@ export class ExtendedProfileComponent extends Destroy$ {
 
   ngOnInit() {
     this.initSubscribeProfile()
-    // this.showView = "PME"
   }
 
 

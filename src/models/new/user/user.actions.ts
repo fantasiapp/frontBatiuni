@@ -81,7 +81,6 @@ export class ModifyUserProfile {
       changes['UserProfile.Company.LabelForCompany'] = Object.values<any>(labelsForm).map(
         ({label, fileData}) => ([label.id, fileData.expirationDate!])
       );
-
       this.labelFiles = Object.values<any>(labelsForm).map(({fileData}: {fileData: FileUIOutput}) => fileData);
     }
 
@@ -126,6 +125,37 @@ export class UploadFile<K extends DataTypes = any> {
     this.ext = src.ext;
     this.name = name || src.nature;
     this.nature = nature;
+    if ( category ) {
+      this.category = category;
+      (this as any)[category] = -1;
+    };
+  }
+
+  get target() { return (this as any)[this.category]; }
+  set target(x: number) { (this as any)[this.category] = x; }
+};
+
+export class ModifyFile<K extends DataTypes = any> {
+  static readonly type = '[File] Modify';
+  action = 'modifyFile';
+  ext: string;
+  name: string;
+  nature: string;
+  expirationDate: string;
+  fileBase64: string;
+  companyFile: boolean = true;
+  category?: K;
+  assignedId?: number = -1;
+  id: number;
+
+  //tell JLW to unify formats
+  constructor(src: FileUIOutput, nature: string, id: number, name?: string, category?: K) {
+    this.fileBase64 = src.content[0]; //only one file
+    this.expirationDate = src.expirationDate;
+    this.ext = src.ext;
+    this.name = name || src.nature;
+    this.nature = nature;
+    this.id =  id;
     if ( category ) {
       this.category = category;
       (this as any)[category] = -1;
@@ -203,13 +233,18 @@ export class UploadPost {
   };
 
   static fromPostForm(value: any, draft: boolean, id?: number) {
-    const documents: {fileData: File, name: string}[] = value.documents.filter((doc: any) => doc.fileData.content);
+    const documents: {fileData: File, name: string}[] = value.documents.filter((doc: {fileData: File, name: string}) => {
+      let fileData: any = doc.fileData
+      return fileData.ext !== "???"
+    });
 
     const files: any = {};
     documents.forEach(doc => {
       let fileData: any = doc.fileData
       fileData.ext == "???" || (files[doc.name] = doc.fileData);
     });
+
+    console.log('Document', documents);
     
     return new UploadPost(
       value.address,

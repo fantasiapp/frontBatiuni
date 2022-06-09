@@ -20,6 +20,7 @@ import {
   Ref,
   Supervision,
   Task,
+  User,
 } from "src/models/new/data.interfaces";
 import { DataQueries, DataState } from "src/models/new/data.state";
 import {
@@ -72,17 +73,19 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
 
   tasksGraphic: TaskGraphic[] = [];
 
+  user!: User;
+
   constructor(private cd: ChangeDetectorRef, private store: Store, private popup: PopupService) {
     super();
   }
 
   ngOnInit(){
+    this.user = this.store.selectSnapshot(DataQueries.currentUser)
     this.mission = this.store.selectSnapshot(DataQueries.getById('Mission', this.mission!.id))
     this.updatePageOnlyDate()
 
     this.popup.addPostDetail.pipe(takeUntil(this.destroy$)).subscribe(newPostDetail => {
       this.mission = this.store.selectSnapshot(DataQueries.getById('Mission', this.mission!.id))!
-      console.log('this.missions, ', this.mission);
       this.updatePageOnlyDate()
       this.cd.markForCheck()
     })
@@ -271,7 +274,6 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
   updatePageOnlyDate() {
     this.dateOrigin = this.store.selectSnapshot(DataQueries.getById('DatePost', this.dateOrigin.id))!
     this.computeDate( this.dateOrigin)
-    console.log('tjos.date content computed', this.date);
     this.computeTasks(this.date)
     this.cd.markForCheck()
   }

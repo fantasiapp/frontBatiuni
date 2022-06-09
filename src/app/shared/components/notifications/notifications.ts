@@ -4,7 +4,7 @@ import {
   Component,
   Input,
 } from "@angular/core";
-import { Store } from "@ngxs/store";
+import { Select, Store } from "@ngxs/store";
 import * as moment from "moment";
 import {
   Company,
@@ -14,12 +14,15 @@ import {
   Candidate,
 } from "src/models/new/data.interfaces";
 import { FileDownloader } from "../../services/file-downloader.service";
-import { DataQueries } from "src/models/new/data.state";
+import { DataQueries, DataState } from "src/models/new/data.state";
 import { ImageGenerator } from "../../services/image-generator.service";
 import { SafeResourceUrl } from "@angular/platform-browser";
 import { update } from "src/models/new/state.operators";
 import { SingleCache } from "../../services/SingleCache";
 import { delay } from "../../common/functions";
+import { SwipeupService } from "../swipeup/swipeup.component";
+import { Observable } from "rxjs";
+import { NotifService } from "../../services/notif.service";
 
 export interface NotificationDisplay {
   id: number;
@@ -38,14 +41,20 @@ export class Notifications {
   @Input()
   notifications: Notification[] = [];
 
+  @Select(DataState.view)
+  view$!: Observable<'ST' | 'PME'>;
+
   notificationsDisplay: NotificationDisplay[] = [];
 
   constructor(
     private store: Store,
     private downloader: FileDownloader,
     private imageGenerator: ImageGenerator,
-    private cd: ChangeDetectorRef
-  ) {}
+    private cd: ChangeDetectorRef,
+    private notifService: NotifService
+  ) {
+
+  }
 
   addNotification(
     notification: Notification,
@@ -62,6 +71,7 @@ export class Notifications {
   }
 
   today: NotificationDisplay[] = [];
+
   updateToday() {
     let todayDate = new Date(Date.now());
     const todayConst: NotificationDisplay[] = this.notificationsDisplay.filter(
@@ -72,6 +82,8 @@ export class Notifications {
 
     );
     this.today = todayConst.sort((not1:NotificationDisplay, not2:NotificationDisplay) => not1.date < not2.date ? 1 : -1)
+
+    console.log("notifications of today ", this.today)
   }
 
   month: NotificationDisplay[] = [];
@@ -112,6 +124,21 @@ export class Notifications {
   }
 
   ngOnInit() {
+    this.view$.subscribe((view) => {
+      this.notificationsDisplay = [];
+      this.today = []
+      this.month = []
+      this.notifService.checkNotif()
+      this.notifications = this.notifService.notifications
+      this.lateInit()
+    })
+    this.lateInit()
+  }
+
+
+  lateInit() {
+    console.log("----------------------------les notifs---------------------------")
+    console.log(this.notifications, this.store.selectSnapshot(DataState.view))
     this.notifications.forEach((notificationAny, index) => {
       let notification = notificationAny as Notification;
       let src: SafeResourceUrl | string = "assets/profile.png";
@@ -213,4 +240,5 @@ export class Notifications {
     this.updateToday();
     this.updateMonth();
   }
+
 }

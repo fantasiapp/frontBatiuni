@@ -555,15 +555,8 @@ export class ModifyProfileForm {
           permissions: ["camera", "photos"],
         });
       } catch (e) {}
-    // this.test()
   }
 
-  async test(){
-    while(true){
-      console.log("boutton", this.form.invalid || !this.formIsModified)
-      await delay(3000)
-    }
-  }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes["profile"]) this.reload();
@@ -574,6 +567,8 @@ export class ModifyProfileForm {
   }
 
   reload() {
+    console.log("FILE", this.store.selectSnapshot(DataQueries.getAll('File')))
+
     const { user, company } = this.profile as { user: User; company: Company };
     this.companyFiles = this.store.selectSnapshot(
       DataQueries.getMany("File", this.profile.company.files)
@@ -614,7 +609,6 @@ export class ModifyProfileForm {
     });
 
     const filesInput = this.form.controls["UserProfile.Company.admin"];
-    console.log("companyFile", this.companyFiles)
     this.companyFiles.forEach((file) => {
       filesInput.get(file.name)?.patchValue(file);
     });
@@ -662,7 +656,6 @@ export class ModifyProfileForm {
 
     const labelControl = this.form.controls["UserProfile.Company.LabelForCompany"] as FormArray;
     labelControl.clear();
-    console.log("CompanyLabel", this.companyLabels)
     for (let labelForCompany of this.companyLabels) {
       const labelObject = labelMapping.get(labelForCompany.id)!;
       labelControl.push(

@@ -82,7 +82,6 @@ export class SuiviComments {
 
   @Input()
   set supervision(supervision: Supervision) {
-    console.log("set supervision comment", supervision)
     this._supervision = supervision;
   }
 
