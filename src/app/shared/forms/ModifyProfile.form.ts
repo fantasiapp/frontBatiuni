@@ -574,6 +574,10 @@ export class ModifyProfileForm {
   }
 
   reload() {
+    console.log("FILE", this.store.selectSnapshot(DataQueries.getAll('File')))
+    console.log("LABEL", this.store.selectSnapshot(DataQueries.getAll('Label')))
+    console.log("LABELFORCOMPANY ", this.store.selectSnapshot(DataQueries.getAll('LabelForCompany')))
+
     const { user, company } = this.profile as { user: User; company: Company };
     this.companyFiles = this.store.selectSnapshot(
       DataQueries.getMany("File", this.profile.company.files)
@@ -581,6 +585,7 @@ export class ModifyProfileForm {
     this.companyLabels = this.store.selectSnapshot(
       DataQueries.getMany("LabelForCompany", this.profile.company.labels)
     );
+    console.log("CompanyLabel juste apres", this.companyLabels)
     this.companyJobs = this.store.selectSnapshot(
       DataQueries.getMany("JobForCompany", this.profile.company.jobs)
     );
@@ -614,7 +619,6 @@ export class ModifyProfileForm {
     });
 
     const filesInput = this.form.controls["UserProfile.Company.admin"];
-    console.log("companyFile", this.companyFiles)
     this.companyFiles.forEach((file) => {
       filesInput.get(file.name)?.patchValue(file);
     });
@@ -662,7 +666,6 @@ export class ModifyProfileForm {
 
     const labelControl = this.form.controls["UserProfile.Company.LabelForCompany"] as FormArray;
     labelControl.clear();
-    console.log("CompanyLabel", this.companyLabels)
     for (let labelForCompany of this.companyLabels) {
       const labelObject = labelMapping.get(labelForCompany.id)!;
       labelControl.push(
@@ -679,6 +682,7 @@ export class ModifyProfileForm {
         })
       );
     }
+    console.log("----------------coucou----------------------", labelControl)
   }
 
   //make functions to help merge
