@@ -1,5 +1,7 @@
 import { EventEmitter, Injectable } from '@angular/core';
+import { FormGroup } from '@angular/forms';
 import { Store } from '@ngxs/store';
+import { RegisterForm } from '../forms/register.form';
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +13,7 @@ export class getUserDataService {
 
   response: any;
   hasNewResponse: boolean = false;
+  registerForm: FormGroup | undefined;
 
   constructor(private store: Store) {}
 
@@ -29,4 +32,13 @@ export class getUserDataService {
   getDataChangeEmitter() {
     return this.navchange;
   }
+
+  setRegisterForm(registerForm: FormGroup) {
+    this.registerForm = registerForm
+  }
+
+  getRegisterForm() {
+    return this.registerForm
+  }
+
 }

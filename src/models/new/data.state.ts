@@ -24,6 +24,7 @@ import {
   BoostPost,
   AskRecommandation,
   GiveRecommandation,
+  GiveNotificationToken,
 } from "./user/user.actions";
 import {
   ApplyPost,
@@ -73,6 +74,7 @@ import { BooleanService } from "src/app/shared/services/boolean.service";
 import { getUserDataService } from "src/app/shared/services/getUserData.service";
 import { AppComponent } from "src/app/app.component";
 import { SingleCache } from "src/app/shared/services/SingleCache";
+import { NotifService } from "src/app/shared/services/notif.service";
 
 export interface DataModel {
   fields: Record<string[]>;
@@ -113,7 +115,8 @@ export class DataState {
     private swipeup: SwipeupService,
     private zone: NgZone,
     private booleanService: BooleanService,
-    private getUserDataService: getUserDataService
+    private getUserDataService: getUserDataService,
+    private notifService: NotifService
   ) {}
 
   private pending$: Record<Subject<any>> = {};
@@ -1021,6 +1024,16 @@ export class DataState {
       tap((response: any) => {
         //write code to manage the response
         ctx.setState(addValues("Recommandation", response))
+      })
+    )
+  }
+
+  @Action(GiveNotificationToken)
+  giveNotificationToken(ctx: StateContext<DataModel>, token : GiveNotificationToken){
+    const user = this.store.selectSnapshot(DataQueries.currentUser);
+    return this.http.get("data", token).pipe(
+      tap((response: any) => {
+        console.log(response)
       })
     )
   }

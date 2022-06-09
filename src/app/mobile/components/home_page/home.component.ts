@@ -105,6 +105,7 @@ export class HomeComponent extends Destroy$ {
   allMissions: Mission[] = [];
   filterOn: boolean = false;
   filterOnST: boolean = false;
+  isStillOnPage: boolean = true;
 
   get missionToClose() {
     return this.missions[0];
@@ -187,7 +188,7 @@ export class HomeComponent extends Destroy$ {
   }
 
   async lateInit() {
-      if (!this.isLoading) {
+    if (!this.isLoading && this.isStillOnPage) {
       this.info.alignWith("header_search");
       combineLatest([this.profile$, this.posts$])
         .pipe(takeUntil(this.destroy$))
@@ -232,6 +233,7 @@ export class HomeComponent extends Destroy$ {
   get footerHide(){return !this.showFooter}
 
   ngOnDestroy(): void {
+    this.isStillOnPage = false
     this.info.alignWith("last");
     this.getUserDataService.emitDataChangeEvent();
     super.ngOnDestroy();
