@@ -114,6 +114,7 @@ export class OfferComponent {
         let candidate = this.store.selectSnapshot(
           DataQueries.getById("Candidate", id)
         );
+        
         return candidate!.company;
       });
     }
