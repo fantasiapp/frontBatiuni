@@ -177,7 +177,8 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
   }
 
   deleteFile(){
-    this.kill.emit(this.filename);
+    if (this.value?.nature == "admin") {this.kill.emit(this.value?.name);}
+    else {this.kill.emit(this.filename);}
     this.value = {
       content: [""],
       expirationDate: "",
@@ -222,7 +223,6 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
         {
           name: "Supprimer un fichier",
           click: () => {
-            if (this.value?.nature == "admin") {this.popup.deleteFile(this.filename, this)}
             if (this.value?.nature == "post") {
               this.value = {
                 content: [""],
@@ -233,6 +233,8 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
               };
               this.kill.emit();
               this.cd.markForCheck()
+            } else {
+              this.popup.deleteFile(this.filename, this)
             }
           },
         },

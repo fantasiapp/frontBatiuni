@@ -868,9 +868,13 @@ export class HomeComponent extends Destroy$ {
 
   closeAdFilterMenu(value: any){
     this.openAdFilterMenu = value;
-    this.filterST.updateFilteredPosts(this.filterST.filterForm.value);
-    this.displayOnlinePosts = this.filterST.filteredPosts;
-    this.filterST.isFilterOn(this.filterST.filterForm.value);
+    this.view$.subscribe((view)=>{
+      if(view=='ST'){
+        this.filterST.updateFilteredPosts(this.filterST.filterForm.value);
+        this.displayOnlinePosts = this.filterST.filteredPosts;
+        this.filterST.isFilterOn(this.filterST.filterForm.value);
+      }
+    })
     this.cd.markForCheck();
-  }
+  }    
 }
