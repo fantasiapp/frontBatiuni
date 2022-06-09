@@ -555,15 +555,8 @@ export class ModifyProfileForm {
           permissions: ["camera", "photos"],
         });
       } catch (e) {}
-    // this.test()
   }
 
-  async test(){
-    while(true){
-      console.log("boutton", this.form.invalid || !this.formIsModified)
-      await delay(3000)
-    }
-  }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes["profile"]) this.reload();
@@ -575,8 +568,6 @@ export class ModifyProfileForm {
 
   reload() {
     console.log("FILE", this.store.selectSnapshot(DataQueries.getAll('File')))
-    console.log("LABEL", this.store.selectSnapshot(DataQueries.getAll('Label')))
-    console.log("LABELFORCOMPANY ", this.store.selectSnapshot(DataQueries.getAll('LabelForCompany')))
 
     const { user, company } = this.profile as { user: User; company: Company };
     this.companyFiles = this.store.selectSnapshot(
@@ -585,7 +576,6 @@ export class ModifyProfileForm {
     this.companyLabels = this.store.selectSnapshot(
       DataQueries.getMany("LabelForCompany", this.profile.company.labels)
     );
-    console.log("CompanyLabel juste apres", this.companyLabels)
     this.companyJobs = this.store.selectSnapshot(
       DataQueries.getMany("JobForCompany", this.profile.company.jobs)
     );
@@ -682,7 +672,6 @@ export class ModifyProfileForm {
         })
       );
     }
-    console.log("----------------coucou----------------------", labelControl)
   }
 
   //make functions to help merge

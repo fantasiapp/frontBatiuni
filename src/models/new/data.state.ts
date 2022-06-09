@@ -313,9 +313,8 @@ export class DataState {
           }
         }
         
-        if(response.hasOwnProperty('LabelForCompany' && Array.isArray(response['LabelForCompany']))){
+        if (response.hasOwnProperty('LabelForCompany') && Array.isArray(response['LabelForCompany'])){
           for (let label of response.LabelForCompany) {
-            console.log("Label dans ModifyProfile data state", label)
             ctx.setState(addValues('LabelForCompany', label))            
           }
         }
@@ -324,8 +323,8 @@ export class DataState {
         // delete response['JobForCompany']
         // ctx.setState(compose(...this.reader.readUpdates(response)));
 
-        ctx.setState(update('Company', response.Company))
-        ctx.setState(update('UserProfile', response.UserProfile))
+        if (response.hasOwnProperty('Company')){ctx.setState(update('Company', response.Company))}
+        if (response.hasOwnProperty('UserProfile')){ctx.setState(update('UserProfile', response.UserProfile))}
 
 
         this.inZone(() =>
@@ -334,19 +333,18 @@ export class DataState {
       }),
       concatMap(() => {
         labelFiles.forEach((file) => 
-        {
-        // if (companyLabels.some(label => label.name != file.nature)) {
-        //   console.log("file", file, "labelFile", labelFiles)
-          console.log("dfghjfksgsfdhgldjfghldfjkghdflgjkhdfg", file)
+        // {
+        // // if (companyLabels.some(label => label.name != file.nature)) {
+        // //   console.log("file", file, "labelFile", labelFiles)
+        //   console.log("dfghjfksgsfdhgldjfghldfjkghdflgjkhdfg", file)
           ctx.dispatch(new UploadFile(file, "labels", file.nature, "Company"))
         // } else {
           
         //   ctx.dispatch(new ModifyFile(file, "labels", response.LabelForCompany.id, file.name, "Company"))
-        }
+        // }}
         );
         Object.keys(adminFiles).forEach((name) => {
           ctx.dispatch(new UploadFile(adminFiles[name], "admin", name, "Company"))
-          console.log("je check un cetru", name)
         });
         return of(true);
       })
