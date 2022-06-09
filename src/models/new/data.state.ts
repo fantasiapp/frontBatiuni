@@ -301,9 +301,15 @@ export class DataState {
         delete response[modify.action];
         ctx.setState(compose(...this.reader.readUpdates(response)));
 
-        if(response.hasOwnProperty('jobs')){
-          for (let job of response.jobs) {
-            ctx.setState(addValues('Job', job))            
+        if(response.hasOwnProperty('JobForCompany')){
+          for (let job in response.JobForCompany) {
+            ctx.setState(addValues('JobForCompany', response.JobForCompany[job]))            
+          }
+        }
+
+        if(response.hasOwnProperty('LabelForCompany')){
+          for (let label in response.LabelForCompany) {
+            ctx.setState(addValues('LabelForCompany', response.LabelForCompany[label]))            
           }
         }
 
