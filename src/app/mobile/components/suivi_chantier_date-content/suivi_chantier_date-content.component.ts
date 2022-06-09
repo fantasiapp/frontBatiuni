@@ -20,6 +20,7 @@ import {
   Ref,
   Supervision,
   Task,
+  User,
 } from "src/models/new/data.interfaces";
 import { DataQueries, DataState } from "src/models/new/data.state";
 import {
@@ -72,11 +73,14 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
 
   tasksGraphic: TaskGraphic[] = [];
 
+  user!: User;
+
   constructor(private cd: ChangeDetectorRef, private store: Store, private popup: PopupService) {
     super();
   }
 
   ngOnInit(){
+    this.user = this.store.selectSnapshot(DataQueries.currentUser)
     this.mission = this.store.selectSnapshot(DataQueries.getById('Mission', this.mission!.id))
     this.updatePageOnlyDate()
 
