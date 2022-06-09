@@ -203,13 +203,18 @@ export class UploadPost {
   };
 
   static fromPostForm(value: any, draft: boolean, id?: number) {
-    const documents: {fileData: File, name: string}[] = value.documents.filter((doc: any) => doc.fileData.content);
+    const documents: {fileData: File, name: string}[] = value.documents.filter((doc: {fileData: File, name: string}) => {
+      let fileData: any = doc.fileData
+      return fileData.ext !== "???"
+    });
 
     const files: any = {};
     documents.forEach(doc => {
       let fileData: any = doc.fileData
       fileData.ext == "???" || (files[doc.name] = doc.fileData);
     });
+
+    console.log('Document', documents);
     
     return new UploadPost(
       value.address,

@@ -471,26 +471,36 @@ export class DataState {
         delete response[post.action];
         
         //add post, return its id
-        const assignedId = +Object.keys(response)[0];
+        const assignedId = +Object.keys(response['Post'])[0];
         // ctx.setState(addValues('Post', response))
 
-        ctx.setState(addComplexChildren("Company", profile.company.id, "Post", response['Post']));
-
+        
         if(response.hasOwnProperty('DatePost')){
           for (const datePost of response['DatePost']) {
             ctx.setState(addValues('DatePost', datePost))
           }
         }
-
+        
         if(response.hasOwnProperty('DetailedPost')){
           for (const detailedPost of response['DetailedPost']) {
             ctx.setState(addValues('DetailedPost', detailedPost))
           }
         }
+        // ctx.setState(addValues('Post', response['Post']))
+        // console.log('company', profile.company);
+        // const company = JSON.parse(JSON.stringify(profile.company));
+        // company.posts.push(+Object.keys(response['Post'])[0])
+        // ctx.setState(update('Company', company))
+        // ctx.setState(addSimpleChildren("Company", profile.company.id, "Post", response['Post'] ));
+        ctx.setState(addComplexChildren("Company", profile.company.id, "Post", response['Post'] ));
+
+        // uploads.forEach((upload) => (upload.target = postId));
+
 
         return assignedId;
       }),
       concatMap((postId: number) => {
+        console.log('post', postId);
         uploads.forEach((upload) => (upload.target = postId));
         //return this to wait for file downloads first
         return ctx.dispatch(uploads);

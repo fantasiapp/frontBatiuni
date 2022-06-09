@@ -46,7 +46,7 @@ namespace mutable {
       if ( !current ) {
         if (typeof(item) != 'string') {
           for ( let i = 0; i < item.length; i++ ) {
-            if ( typeof item[i] == 'object' ) {
+            if ( typeof item[i] == 'object' && !Array.isArray(item[i])) {
               console.log('upoadte in 1', fields[i], item[i])
               mutable.update(draft, fields[i], item[i]);
               item[i] = Object.keys(item[i]).map(id => +id);
@@ -68,7 +68,11 @@ namespace mutable {
                 console.log('upoadte in 2', fields[i], item[i]);
                 // mutable.update(draft, fields[i], item[i]);
                 // if (fields[i] != "DatePost") {
-                // item[i] = Object.keys(item[i]).map(id => +id);
+                
+                if(typeof item[i] === 'object' && !Array.isArray(item[i])){
+                  console.log('Tu ne devrais pas etre la');
+                  item[i] = Object.keys(item[i]).map(id => +id);
+                }
                   // }
               }
             }
