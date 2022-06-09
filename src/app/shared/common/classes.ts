@@ -182,6 +182,7 @@ export abstract class UIDefaultAccessor<T> implements ControlValueAccessor {
 
   onChange(e: any): any {
     if ( this.isDisabled ) { e.preventDefault?.(); return; }
+    console.log('coucou on est dans le onChange')
     this.set(this.getInput(e) as T);
     return this.value;
   };

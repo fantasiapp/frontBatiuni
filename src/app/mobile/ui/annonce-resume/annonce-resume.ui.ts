@@ -284,7 +284,7 @@ export class UIAnnonceResume extends Destroy$ {
     this.view = this.store.selectSnapshot(DataState.view);
   }
 
-  ngOnChange() {
+  ngOnChanges() {
     this.form = new FormGroup({
       amount: new FormControl(this.amount),
       devis: new FormControl([this.devis[0]]),

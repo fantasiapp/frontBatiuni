@@ -64,6 +64,7 @@ export class ModifyUserProfile {
   //for now we mark job as dirty, but we should take it directly from the form
   constructor({profile, form}: {profile: Profile, form: FormGroup}) {    
     const changes = getDirtyValues(form);
+    console.log("changes", changes)
     if ( Object.keys(changes).length == 0 ) return;
 
     const jobsForm = changes['UserProfile.Company.JobForCompany'],
@@ -87,7 +88,7 @@ export class ModifyUserProfile {
     if ( adminFiles ) {
       const keys = Object.keys(adminFiles);
       for ( const key of keys ) {
-        if ( !adminFiles[key].content ) continue;
+        if ( !adminFiles[key].content && !adminFiles[key].expirationDate) continue;
         
         this.adminFiles[key] = adminFiles[key];
       }
@@ -206,7 +207,8 @@ export class UploadPost {
 
     const files: any = {};
     documents.forEach(doc => {
-      files[doc.name] = doc.fileData;
+      let fileData: any = doc.fileData
+      fileData.ext == "???" || (files[doc.name] = doc.fileData);
     });
     
     return new UploadPost(
@@ -387,6 +389,12 @@ export class GiveRecommandation {
   static readonly type = 'give a recommandation';
   action = 'giveRecommandation';
   constructor(public companyRecommanded: number, public firstNameRecommanding: string, public lastNameRecommanding: string, public companyNameRecommanding: string, public qualityStars:number, public qualityComment:string, public securityStars:number, public securityComment:string, public organisationStars:number, public organisationComment:string) {}
+}
+
+export class GiveNotificationToken {
+  static readonly type = 'give the token for notification';
+  action = 'giveNotificationToken';
+  constructor(public token: string) {}
 }
 
 // export class ContractSignature {

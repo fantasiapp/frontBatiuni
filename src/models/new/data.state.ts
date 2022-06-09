@@ -24,6 +24,7 @@ import {
   BoostPost,
   AskRecommandation,
   GiveRecommandation,
+  GiveNotificationToken,
 } from "./user/user.actions";
 import {
   ApplyPost,
@@ -73,6 +74,7 @@ import { BooleanService } from "src/app/shared/services/boolean.service";
 import { getUserDataService } from "src/app/shared/services/getUserData.service";
 import { AppComponent } from "src/app/app.component";
 import { SingleCache } from "src/app/shared/services/SingleCache";
+import { NotifService } from "src/app/shared/services/notif.service";
 
 export interface DataModel {
   fields: Record<string[]>;
@@ -113,7 +115,8 @@ export class DataState {
     private swipeup: SwipeupService,
     private zone: NgZone,
     private booleanService: BooleanService,
-    private getUserDataService: getUserDataService
+    private getUserDataService: getUserDataService,
+    private notifService: NotifService
   ) {}
 
   private pending$: Record<Subject<any>> = {};
@@ -285,6 +288,7 @@ export class DataState {
 
   @Action(ModifyUserProfile)
   modifyUser(ctx: StateContext<DataModel>, modify: ModifyUserProfile) {
+    console.log("Modification vqu'on envoie à JL", modify)
     const { labelFiles, adminFiles, onlyFiles, ...modifyAction } = modify;
     let req;
     if (onlyFiles) req = of({ [modify.action]: "OK" });
@@ -292,12 +296,29 @@ export class DataState {
 
     return req.pipe(
       tap((response: any) => {
+
+        console.log("response ModifyUserData", response)
         if (response[modify.action] !== "OK") {
           this.inZone(() => this.info.show("error", response.messages, 3000));
           throw response.messages;
         }
         delete response[modify.action];
         ctx.setState(compose(...this.reader.readUpdates(response)));
+
+        if(response.hasOwnProperty('JobForCompany') && Array.isArray(response.JobForCompany)){
+          for (let job of response.JobForCompany) {
+            ctx.setState(addValues('JobForCompany', job))            
+          }
+        }
+
+        if(response.hasOwnProperty('LabelForCompany') && Array.isArray(response.LabelForCompany)){
+          for (let label of response.LabelForCompany) {
+            ctx.setState(addValues('LabelForCompany', label))            
+          }
+        }
+
+        
+
         this.inZone(() =>
           this.info.show("success", "Profil modifié avec succès", 2000)
         );
@@ -366,7 +387,6 @@ export class DataState {
 
   @Action(UploadFile)
   uploadFile(ctx: StateContext<DataModel>, upload: UploadFile) {
-    console.log("upload", upload)
     const req = this.http.post("data", upload);
     return req.pipe(
       tap((response: any) => {
@@ -418,10 +438,15 @@ export class DataState {
     const req = this.http.get("data", deletion);
     return req.pipe(
       tap((response: any) => {
+        console.log('delteFile response', response);
         if (response[deletion.action] !== "OK") throw response["messages"];
 
         delete response[deletion.action];
         ctx.setState(deleteIds("File", [deletion.id]));
+
+        if(response.hasOwnProperty('Company')) {
+          ctx.setState(update('Company', response['Company']))
+        }
       })
     );
   }
@@ -439,13 +464,11 @@ export class DataState {
       map((response: any) => {
         if (response[post.action] !== "OK") throw response["messages"];
         delete response[post.action];
-
+        
         //add post, return its id
         const assignedId = +Object.keys(response)[0];
-        ctx.setState(
-          addComplexChildren("Company", profile.company.id, "Post", response)
-        );
-
+        ctx.setState(addValues('Post', response))
+        // ctx.setState(addComplexChildren("Company", profile.company.id, "Post", response));
         return assignedId;
       }),
       concatMap((postId: number) => {
@@ -1008,6 +1031,16 @@ export class DataState {
       tap((response: any) => {
         //write code to manage the response
         ctx.setState(addValues("Recommandation", response))
+      })
+    )
+  }
+
+  @Action(GiveNotificationToken)
+  giveNotificationToken(ctx: StateContext<DataModel>, token : GiveNotificationToken){
+    const user = this.store.selectSnapshot(DataQueries.currentUser);
+    return this.http.get("data", token).pipe(
+      tap((response: any) => {
+        console.log(response)
       })
     )
   }

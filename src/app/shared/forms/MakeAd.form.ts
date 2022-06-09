@@ -239,13 +239,13 @@ import { Mobile } from "../services/mobile-footer.service";
     >
       <button
         class="button passive font-Poppins full-width"
-        (click)="submit(true)"
+        (click)="submit($event, true)"
       >
         {{ this.post ? "Enregistrer" : "Brouillon" }}
       </button>
       <button
         class="button gradient font-Poppins full-width"
-        (click)="submit(false)"
+        (click)="submit($event, false)"
         [disabled]="invalid"
       >
         Passer en ligne
@@ -509,6 +509,7 @@ export class MakeAdForm {
 
   // Valide un brouillon/annonce qui si la date d'echeance est dans le futur, c'est plus commode
   dueDateValidator(control: AbstractControl): { [key: string]: any } | null {
+    // console.log('due date', control);
     if (control.value && moment(control.value) <= moment()) {
       return { dueDateInvalid: true };
     }
@@ -548,7 +549,7 @@ export class MakeAdForm {
   });
   get invalid() {
     const calendar = this.makeAdForm.get("calendar")
-    console.log("invalid", this.makeAdForm.valid)
+    // console.log("invalid", this.makeAdForm.valid)
     return !this.makeAdForm.valid || calendar?.value.length == 0;
   }
 
@@ -594,7 +595,9 @@ export class MakeAdForm {
   eraseDateIfNecessary() {
   }
 
-  submit(draft: boolean) {
+  submit(e:any, draft: boolean) {
+    e.preventDefault()
+    console.log('draft', draft);
     if (this.post) {
       if (!draft) {
         this.info.show("info", "Mise en ligne de l'annonce...", Infinity);
