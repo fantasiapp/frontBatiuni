@@ -190,7 +190,7 @@ export class HomeComponent extends Destroy$ {
   async lateInit() {
     if (!this.isLoading && this.isStillOnPage) {
       this.info.alignWith("header_search");
-      combineLatest([this.profile$, this.posts$])
+      combineLatest([this.profile$, this.store.select(DataQueries.getAll('Post'))])
         .pipe(takeUntil(this.destroy$))
         .subscribe(([profile, posts]) => {
           const mapping = splitByOutput(posts, (post) => {
@@ -217,7 +217,7 @@ export class HomeComponent extends Destroy$ {
           this.selectSearchOnline("");
           this.selectSearchMission("");
 
-  
+          console.log('userDraft', this.userDrafts);
         });
       this.time = this.store.selectSnapshot(DataState.time);
       this.updatePage()

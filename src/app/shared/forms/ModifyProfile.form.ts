@@ -35,7 +35,7 @@ import {
 } from "src/models/new/data.interfaces";
 import { SpacingPipe } from "../pipes/spacing.pipe";
 import { DeleteFile } from "src/models/new/user/user.actions";
-import { delay } from "../common/functions";
+import { delay, getDirtyValues } from "../common/functions";
 
 @Component({
   selector: "modify-profile-form",
@@ -372,7 +372,7 @@ import { delay } from "../common/functions";
       <button
         class="button gradient full-width"
         (click)="onSubmit()"
-        [disabled]="form.invalid || null"
+        [disabled]="form.invalid || !formIsModified"
       >
         Enregistrer
       </button>
@@ -464,10 +464,8 @@ export class ModifyProfileForm {
 
   //outputs
   onSubmit() {
-    console.log("onsubmit", this.form.controls["UserProfile.Company.JobForCompany"].value)
     this.form.controls["UserProfile.Company.companyPhone"].setValue(this.form.controls["UserProfile.Company.companyPhone"].value.replace(/\s/g, ""));
     this.form.controls["UserProfile.cellPhone"].setValue(this.form.controls["UserProfile.cellPhone"].value.replace(/\s/g, ""));
-    console.log("modifier le profil",this.form.value);
     this.submit.emit(this.form);
   }
   @Output() submit = new EventEmitter<FormGroup>();
@@ -545,6 +543,10 @@ export class ModifyProfileForm {
     ).controls;
   }
 
+  get formIsModified() {
+    return Object.keys(getDirtyValues(this.form)).length != 0
+  }
+
   async ngOnInit() {
     let permissions = await Camera.checkPermissions();
     if (permissions.camera != "granted" || permissions.photos != "granted")
@@ -553,17 +555,8 @@ export class ModifyProfileForm {
           permissions: ["camera", "photos"],
         });
       } catch (e) {}
-    // this.test()
   }
 
-  async test(){
-    while(true){
-      console.log("Dans le while", this.store.selectSnapshot(
-        DataQueries.getMany("JobForCompany", this.profile.company.jobs)
-      ))
-      await delay(5000)
-    }
-  }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes["profile"]) this.reload();
@@ -574,6 +567,8 @@ export class ModifyProfileForm {
   }
 
   reload() {
+    console.log("FILE", this.store.selectSnapshot(DataQueries.getAll('File')))
+
     const { user, company } = this.profile as { user: User; company: Company };
     this.companyFiles = this.store.selectSnapshot(
       DataQueries.getMany("File", this.profile.company.files)
@@ -584,7 +579,6 @@ export class ModifyProfileForm {
     this.companyJobs = this.store.selectSnapshot(
       DataQueries.getMany("JobForCompany", this.profile.company.jobs)
     );
-    console.log("this.profile.company.jobs", this.profile.company.jobs, this.companyJobs)
 
     const jobMapping = new Map(),
       labelMapping = new Map();
@@ -615,7 +609,6 @@ export class ModifyProfileForm {
     });
 
     const filesInput = this.form.controls["UserProfile.Company.admin"];
-    console.log("companyFile", this.companyFiles)
     this.companyFiles.forEach((file) => {
       filesInput.get(file.name)?.patchValue(file);
     });
@@ -649,7 +642,6 @@ export class ModifyProfileForm {
       this.space(company.companyPhone)
     );
 
-    console.log("companyJobs", this.companyJobs)
     const jobControl = this.form.controls["UserProfile.Company.JobForCompany"] as FormArray;
     jobControl.clear();
       for (let jobForCompany of this.companyJobs) {
@@ -661,16 +653,11 @@ export class ModifyProfileForm {
         })
       );
     }
-    console.log("JobControls", jobControl, "companyJobsControl", this.form.controls["UserProfile.Company.JobForCompany"])
-
 
     const labelControl = this.form.controls["UserProfile.Company.LabelForCompany"] as FormArray;
-    // console.log("labelControl", labelControl.value)
     labelControl.clear();
-    // console.log("labelControl after", labelControl.value)
     for (let labelForCompany of this.companyLabels) {
       const labelObject = labelMapping.get(labelForCompany.id)!;
-      // console.log("labelObject", labelObject)
       labelControl.push(
         new FormGroup({
           label: new FormControl(labelObject),
@@ -685,7 +672,6 @@ export class ModifyProfileForm {
         })
       );
     }
-    // console.log("LabelControl after for", labelControl.value)
   }
 
   //make functions to help merge
@@ -730,6 +716,7 @@ export class ModifyProfileForm {
   updateLabels(labelOptions: Option[]) {
     this.addingField = false;
     const newLabels = labelOptions;
+    const allCompanyLabels = this.companyFiles.filter(file => file.nature == "labels" )
 
     let labelControl = this.form.controls["UserProfile.Company.LabelForCompany"] as FormArray;
     labelControl.clear();
@@ -751,8 +738,13 @@ export class ModifyProfileForm {
       );
     }
 
+    for (let label of allCompanyLabels){
+      if (!newLabels.some((newlabel) => newlabel.name == label.name)){
+        this.removeLabel(label.name)
+      }
+    }
+
     this.selectedLabels = labelOptions;
-    console.log("mark labels as dirty")
     labelControl.markAsDirty();
   }
 

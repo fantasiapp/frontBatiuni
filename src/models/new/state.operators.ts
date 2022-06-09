@@ -36,7 +36,10 @@ namespace mutable {
     //translate data
     Object.entries<any>(values).forEach(([id, item]) => {
       //An horrible patch waiting for a true solution
-      if (!targetObjects) return
+      if (!targetObjects) {
+        // console.log("je m'arrete la ");
+        return
+      } 
       const current = targetObjects[id];
       // console.log('current ', current);
       //if not created create
@@ -63,9 +66,9 @@ namespace mutable {
               } else {
 
                 // console.log('upoadte in 2', fields[i], item[i]);
-                mutable.update(draft, fields[i], item[i]);
+                // mutable.update(draft, fields[i], item[i]);
                 // if (fields[i] != "DatePost") {
-                item[i] = Object.keys(item[i]).map(id => +id);
+                // item[i] = Object.keys(item[i]).map(id => +id);
                   // }
               }
             }
@@ -201,7 +204,6 @@ export function addSimpleChildren<K extends DataTypes>(parent: DataTypes, parent
 };
 
 export function addComplexChildren<K extends DataTypes>(parent: DataTypes, parentId: number, child: K, values: Record<any>) {
-  console.log("addComplexChildren start", parent, parentId, child, values)
   return produce(draft => mutable.addComplexChildren(draft, parent, parentId, child, values));
 };
 

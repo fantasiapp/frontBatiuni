@@ -64,6 +64,7 @@ export class ModifyUserProfile {
   //for now we mark job as dirty, but we should take it directly from the form
   constructor({profile, form}: {profile: Profile, form: FormGroup}) {    
     const changes = getDirtyValues(form);
+    console.log("changes", changes)
     if ( Object.keys(changes).length == 0 ) return;
 
     const jobsForm = changes['UserProfile.Company.JobForCompany'],
@@ -80,14 +81,13 @@ export class ModifyUserProfile {
       changes['UserProfile.Company.LabelForCompany'] = Object.values<any>(labelsForm).map(
         ({label, fileData}) => ([label.id, fileData.expirationDate!])
       );
-
       this.labelFiles = Object.values<any>(labelsForm).map(({fileData}: {fileData: FileUIOutput}) => fileData);
     }
 
     if ( adminFiles ) {
       const keys = Object.keys(adminFiles);
       for ( const key of keys ) {
-        if ( !adminFiles[key].content ) continue;
+        if ( !adminFiles[key].content && !adminFiles[key].expirationDate) continue;
         
         this.adminFiles[key] = adminFiles[key];
       }
@@ -125,6 +125,37 @@ export class UploadFile<K extends DataTypes = any> {
     this.ext = src.ext;
     this.name = name || src.nature;
     this.nature = nature;
+    if ( category ) {
+      this.category = category;
+      (this as any)[category] = -1;
+    };
+  }
+
+  get target() { return (this as any)[this.category]; }
+  set target(x: number) { (this as any)[this.category] = x; }
+};
+
+export class ModifyFile<K extends DataTypes = any> {
+  static readonly type = '[File] Modify';
+  action = 'modifyFile';
+  ext: string;
+  name: string;
+  nature: string;
+  expirationDate: string;
+  fileBase64: string;
+  companyFile: boolean = true;
+  category?: K;
+  assignedId?: number = -1;
+  id: number;
+
+  //tell JLW to unify formats
+  constructor(src: FileUIOutput, nature: string, id: number, name?: string, category?: K) {
+    this.fileBase64 = src.content[0]; //only one file
+    this.expirationDate = src.expirationDate;
+    this.ext = src.ext;
+    this.name = name || src.nature;
+    this.nature = nature;
+    this.id =  id;
     if ( category ) {
       this.category = category;
       (this as any)[category] = -1;

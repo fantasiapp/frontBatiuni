@@ -25,6 +25,7 @@ import {
   AskRecommandation,
   GiveRecommandation,
   GiveNotificationToken,
+  ModifyFile,
 } from "./user/user.actions";
 import {
   ApplyPost,
@@ -288,7 +289,9 @@ export class DataState {
 
   @Action(ModifyUserProfile)
   modifyUser(ctx: StateContext<DataModel>, modify: ModifyUserProfile) {
+    console.log("Modification vqu'on envoie à JL", modify)
     const { labelFiles, adminFiles, onlyFiles, ...modifyAction } = modify;
+    let companyLabels = this.store.selectSnapshot(DataQueries.getAll('File')).filter(file => file.nature == "labels")
     let req;
     if (onlyFiles) req = of({ [modify.action]: "OK" });
     else req = this.http.post("data", modifyAction);
@@ -296,31 +299,59 @@ export class DataState {
     return req.pipe(
       tap((response: any) => {
 
-        console.log("response ModifyUserData", response)
+        const rep = response
+        console.log("response ModifyUserData", rep)
         if (response[modify.action] !== "OK") {
           this.inZone(() => this.info.show("error", response.messages, 3000));
           throw response.messages;
         }
         delete response[modify.action];
-        ctx.setState(compose(...this.reader.readUpdates(response)));
-
-        if(response.hasOwnProperty('jobs')){
-          for (let job of response.jobs) {
-            ctx.setState(addValues('Job', job))            
+        
+        if(response.hasOwnProperty('JobForCompany') && Array.isArray(response['JobsForCompany'])){
+          for (let job of response.JobForCompany) {
+            ctx.setState(addValues('JobForCompany', job))            
           }
         }
+        
+        if (response.hasOwnProperty('LabelForCompany') && Array.isArray(response['LabelForCompany'])){
+          for (let label of response.LabelForCompany) {
+            ctx.setState(addValues('LabelForCompany', label))            
+          }
+        }
+        
+        // delete response['LabelForCompany']
+        // delete response['JobForCompany']
+        // ctx.setState(compose(...this.reader.readUpdates(response)));
+
+        if (response.hasOwnProperty('Company')){ctx.setState(update('Company', response.Company))}
+        if (response.hasOwnProperty('UserProfile')){ctx.setState(update('UserProfile', response.UserProfile))}
+
 
         this.inZone(() =>
           this.info.show("success", "Profil modifié avec succès", 2000)
         );
       }),
       concatMap(() => {
-        labelFiles.forEach((file) => ctx.dispatch(new UploadFile(file, "labels", file.nature, "Company")));
-        Object.keys(adminFiles).forEach((name) => ctx.dispatch(new UploadFile(adminFiles[name], "admin", name, "Company")));
+        labelFiles.forEach((file) => 
+        // {
+        // // if (companyLabels.some(label => label.name != file.nature)) {
+        // //   console.log("file", file, "labelFile", labelFiles)
+        //   console.log("dfghjfksgsfdhgldjfghldfjkghdflgjkhdfg", file)
+          ctx.dispatch(new UploadFile(file, "labels", file.nature, "Company"))
+        // } else {
+          
+        //   ctx.dispatch(new ModifyFile(file, "labels", response.LabelForCompany.id, file.name, "Company"))
+        // }}
+        );
+        Object.keys(adminFiles).forEach((name) => {
+          ctx.dispatch(new UploadFile(adminFiles[name], "admin", name, "Company"))
+        });
         return of(true);
       })
     );
   }
+
+
 
   @Action(ChangeProfilePicture)
   changeProfilePicture(ctx: StateContext<DataModel>, picture: ChangeProfilePicture) {
@@ -410,6 +441,15 @@ export class DataState {
     );
   }
 
+  @Action(ModifyFile)
+  modifyFile(ctx: StateContext<DataModel>, modify: ModifyFile) {
+    return this.http.post("data", modify).pipe(
+      tap((response: any) => {
+        if (response[modify.action] != "OK") throw response["messages"];
+      })
+    );
+  }
+
   @Action(TakePicture)
   takePicture(ctx: StateContext<DataModel>, picture: TakePicture) {
     // return this.http.post('data', picture).pipe(
@@ -429,10 +469,15 @@ export class DataState {
     const req = this.http.get("data", deletion);
     return req.pipe(
       tap((response: any) => {
+        console.log('delteFile response', response);
         if (response[deletion.action] !== "OK") throw response["messages"];
 
         delete response[deletion.action];
         ctx.setState(deleteIds("File", [deletion.id]));
+
+        if(response.hasOwnProperty('Company')) {
+          ctx.setState(update('Company', response['Company']))
+        }
       })
     );
   }
@@ -448,13 +493,28 @@ export class DataState {
 
     return req.pipe(
       map((response: any) => {
+        console.log('Upload Post ', response);
         if (response[post.action] !== "OK") throw response["messages"];
         delete response[post.action];
         
         //add post, return its id
         const assignedId = +Object.keys(response)[0];
-        ctx.setState(addValues('Post', response))
-        // ctx.setState(addComplexChildren("Company", profile.company.id, "Post", response));
+        // ctx.setState(addValues('Post', response))
+
+        ctx.setState(addComplexChildren("Company", profile.company.id, "Post", response['Post']));
+
+        if(response.hasOwnProperty('DatePost')){
+          for (const datePost of response['DatePost']) {
+            ctx.setState(addValues('DatePost', datePost))
+          }
+        }
+
+        if(response.hasOwnProperty('DetailedPost')){
+          for (const detailedPost of response['DetailedPost']) {
+            ctx.setState(addValues('DetailedPost', detailedPost))
+          }
+        }
+
         return assignedId;
       }),
       concatMap((postId: number) => {
@@ -574,12 +634,12 @@ export class DataState {
     //{Post: 1, amount: 500, devis: 'Par heure', action: 'applyPost'}
     return this.http.get("data", application).pipe(
       tap((response: any) => {
+        console.log('ApplyPost response', response);
         if (response[application.action] != "OK") throw response["messages"];
 
         delete response[application.action];
-        ctx.setState(
-          addComplexChildren("Company", profile.company.id, "Post", response)
-        );
+        ctx.setState(addValues('Candidate', response['Candidate']))
+        ctx.setState(update('Post', response['Post']));
       })
     );
   }

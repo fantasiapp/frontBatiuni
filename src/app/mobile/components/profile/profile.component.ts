@@ -162,7 +162,6 @@ export class ProfileComponent extends Destroy$ {
   
   modifyProfile(form: any /*FormGroup*/) {
     this.profile$.pipe(take(1)).subscribe(profile => {
-      console.log("On est dans profile component", form.value, profile)
       const action = this.store.dispatch(new UserActions.ModifyUserProfile({profile: profile, form}))
       this.info.show("info", "Mise à jour en cours...", Infinity);
       action.pipe(take(1))
@@ -201,6 +200,7 @@ export class ProfileComponent extends Destroy$ {
     this.openModifyPicture = false;
     this.store.dispatch(new UserActions.ChangeProfilePicture(photo, 'image'));
     this.updateProfile();
+    this.info.show("info", "Votre photo de profil a bien été enregistrée ", 3000)
 
     this.cd.markForCheck();
   }
@@ -218,6 +218,7 @@ export class ProfileComponent extends Destroy$ {
       this.cd.markForCheck();
     });
     this.openModifyPicture = false;
+    this.info.show("info", "Votre photo de profil a bien été enregistrée", 3000)
   }
 
   openApplicationsMenu(){
