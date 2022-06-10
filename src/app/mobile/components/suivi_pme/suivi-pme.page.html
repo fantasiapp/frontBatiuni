@@ -36,7 +36,7 @@
 
 <swipeup [(open)]="missionMenu.swipeup">
   <li *ngIf="!mission?.isClosed" (click)="modifyTimeTable()">Modifier les horaires / les dates de présence</li>
-  <li>Appeler le 06 21 94 03 86</li>
+  <li>Appeler le 06 21 94 03 86 (click)=""</li>
   <li *ngIf="mission?.signedByCompany && mission?.signedBySubContractor && !mission?.isClosed" (click)="closeMission()">Clôturer la mission</li>
   <li (click)="duplicateMission()">Dupliquer l'annonce</li>
 </swipeup>
