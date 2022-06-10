@@ -22,6 +22,7 @@ import {
 import { DataQueries, DataState } from "src/models/new/data.state";
 import { Destroy$ } from "src/app/shared/common/classes";
 import { InfoService } from "src/app/shared/components/info/info.component";
+import { FieldType } from "src/validators/verify";
 
 export type ApplyForm = {
   amount: number;
@@ -136,7 +137,6 @@ export type ApplyForm = {
             <label>Montant</label>
             <div class="flex row space-between remuneration">
               <input
-                type="number"
                 min="0"
                 style="max-height: 51px"
                 class="grow form-element"
@@ -308,7 +308,7 @@ export class UIAnnonceResume extends Destroy$ {
     name,
   }));
   form = new FormGroup({
-    amount: new FormControl(this.amount),
+    amount: new FormControl(this.amount, [FieldType("number")]),
     devis: new FormControl([this.devis[0]]),
   });
 

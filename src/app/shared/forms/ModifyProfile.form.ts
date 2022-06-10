@@ -251,7 +251,6 @@ import { delay, getDirtyValues } from "../common/functions";
                 #input10
                 (click)="onClickInputScroll(input10)"
                 class="form-element"
-                type="number"
                 maxlength="11"
                 formControlName="UserProfile.Company.revenue"
               />
@@ -263,7 +262,6 @@ import { delay, getDirtyValues } from "../common/functions";
                 #input11
                 (click)="onClickInputScroll(input11)"
                 class="form-element"
-                type="number"
                 maxlength="11"
                 formControlName="UserProfile.Company.capital"
               />
@@ -275,7 +273,6 @@ import { delay, getDirtyValues } from "../common/functions";
                 #input12
                 (click)="onClickInputScroll(input12)"
                 class="form-element"
-                type="number"
                 formControlName="UserProfile.Company.amount"
               />
             </div>
