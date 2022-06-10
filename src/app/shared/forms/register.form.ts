@@ -58,21 +58,28 @@ import { getUserDataService } from "../services/getUserData.service";
         <h4 class="form-subtitle">Informations contact</h4>
         <div class="form-input">
           <label>Nom du contact</label>
-          <input class="form-element" type="text" formControlName="lastname" />
+          <input 
+          #input1 (click)="onClickInputScroll(input1)"
+          class="form-element" type="text" formControlName="lastname" />
         </div>
         <div class="form-input">
           <label>Prénom du contact</label>
-          <input class="form-element" type="text" formControlName="firstname" />
+          <input 
+          #input2 (click)="onClickInputScroll(input2)"
+          class="form-element" type="text" formControlName="firstname" />
         </div>
 
         <div class="form-input">
           <label>Adresse e-mail contact</label>
-          <input class="form-element" type="email" formControlName="email" />
+          <input 
+          #input3 (click)="onClickInputScroll(input3)"
+          class="form-element" type="email" formControlName="email" />
         </div>
 
         <div class="form-input">
           <label>Vérification addresse e-mail</label>
           <input
+          #input4 (click)="onClickInputScroll(input4)"
             class="form-element"
             type="email"
             formControlName="emailVerification"
@@ -82,6 +89,7 @@ import { getUserDataService } from "../services/getUserData.service";
         <div class="form-input">
           <label>Mot de passe</label>
           <input
+          #input5 (click)="onClickInputScroll(input5)"
             class="form-element"
             type="password"
             formControlName="password"
@@ -132,6 +140,7 @@ import { getUserDataService } from "../services/getUserData.service";
         <div class="form-input">
           <label>Nom de l'entreprise</label>
           <input
+          #input6 (click)="onClickInputScroll(input6)"
             class="form-element"
             type="text"
             class="form-element"
@@ -140,6 +149,7 @@ import { getUserDataService } from "../services/getUserData.service";
           />
           <span class="position-relative">
             <input
+
               type="text"
               class="form-element"
               autocomplete="off"
@@ -366,6 +376,15 @@ export class RegisterForm extends Destroy$ {
 
     this.registerForm.valueChanges.subscribe((value) => {
     })
+  }
+
+  onClickInputScroll(input: HTMLElement){
+    setTimeout(() => {
+      input.scrollIntoView({behavior: 'smooth', block: 'center', inline: 'nearest'})
+      setTimeout(() => {
+        input.scrollIntoView({behavior: 'smooth', block: 'center', inline: 'nearest'})
+      }, 500)
+    }, 100)
   }
 
   onNavigate(dx: number, done?: Function) {
