@@ -307,11 +307,12 @@ export class DataState {
         }
         delete response[modify.action];
         
-        if(response.hasOwnProperty('JobForCompany') && Array.isArray(response['JobsForCompany'])){
+        if(response.hasOwnProperty('JobForCompany') && Array.isArray(response['JobForCompany'])){
           for (let job of response.JobForCompany) {
             ctx.setState(addValues('JobForCompany', job))            
           }
         }
+        
         
         if (response.hasOwnProperty('LabelForCompany') && Array.isArray(response['LabelForCompany'])){
           for (let label of response.LabelForCompany) {
@@ -344,7 +345,13 @@ export class DataState {
         // }}
         );
         Object.keys(adminFiles).forEach((name) => {
-          ctx.dispatch(new UploadFile(adminFiles[name], "admin", name, "Company"))
+          if (adminFiles[name].id || adminFiles[name].id === 0) {
+            console.log("modify file", adminFiles[name])
+            ctx.dispatch(new ModifyFile(adminFiles[name], adminFiles[name].id, "Company"))
+          } else if (adminFiles[name].ext != "???" ) {
+            console.log("upload file", adminFiles[name])
+            ctx.dispatch(new UploadFile(adminFiles[name], "admin", name, "Company"))
+          }
         });
         return of(true);
       })
@@ -412,6 +419,7 @@ export class DataState {
     const req = this.http.post("data", upload);
     return req.pipe(
       tap((response: any) => {
+        console.log("response Upload file", response)
         if (response[upload.action] !== "OK") throw response["messages"];
         delete response[upload.action];
 
@@ -445,7 +453,36 @@ export class DataState {
   modifyFile(ctx: StateContext<DataModel>, modify: ModifyFile) {
     return this.http.post("data", modify).pipe(
       tap((response: any) => {
+        console.log("modify file response", response)
         if (response[modify.action] != "OK") throw response["messages"];
+        delete response[modify.action];
+
+        const fileId = +Object.keys(response)[0]
+        //   fields = ctx.getState()["fields"],
+        //   contentIndex = fields["File"].indexOf("content");
+
+
+        // modify.assignedId = assignedId;
+        // response[assignedId][contentIndex] = "";
+
+        // if (modify.category == "Company") {
+          //add it to company
+        //   const company = this.store.selectSnapshot(DataQueries.currentCompany);
+        //   ctx.setState(
+        //     compose(addSimpleChildren("Company", company.id, "File", response, "name"))
+        //   );
+        // } 
+        // else if (upload.category == "Post") {
+        //   ctx.setState(
+        //     compose(addSimpleChildren("Post", upload.target, "File", response, "name"))
+        //   );
+        // }
+        let name: string = "File" + fileId.toString()
+        console.log(name, SingleCache.checkValueInCache(name))
+        console.log(SingleCache.getCache())
+          if (SingleCache.checkValueInCache(name)) {
+            SingleCache.deleteValueByName(name)
+          }
       })
     );
   }
