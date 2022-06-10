@@ -600,10 +600,11 @@ export class MakeAdForm {
     console.log('draft', draft);
     if (this.post) {
       // le brouillon existe deja
+      let files = this.store.selectSnapshot(DataQueries.getMany('File', this.post.files))
       if (!draft) {
         this.info.show("info", "Mise en ligne de l'annonce...", Infinity);
         const action = this.makeAdForm.touched
-          ? UploadPost.fromPostForm(this.makeAdForm.value, draft, this.post.id)
+          ? UploadPost.fromPostForm(this.makeAdForm.value, draft, this.post.id, files)
           : new SwitchPostType(this.post.id);
         this.store
           .dispatch(action)
@@ -621,7 +622,7 @@ export class MakeAdForm {
         this.info.show("info", "Enregistrement de l'annonce...", Infinity);
         this.store
           .dispatch(
-            UploadPost.fromPostForm(this.makeAdForm.value, draft, this.post.id)
+            UploadPost.fromPostForm(this.makeAdForm.value, draft, this.post.id, files)
           )
           .pipe(take(1))
           .subscribe(
