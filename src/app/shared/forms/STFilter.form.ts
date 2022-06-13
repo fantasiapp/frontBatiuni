@@ -22,6 +22,7 @@ import { Filter } from "../directives/filter.directive";
 import { FilterService } from "../services/filter.service";
 import { getLevenshteinDistance } from "src/app/shared/services/levenshtein";
 import { InfoService } from "../components/info/info.component";
+import "hammerjs"
 
 @Component({
   selector: "st-filter-form",
