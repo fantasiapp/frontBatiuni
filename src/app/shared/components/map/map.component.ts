@@ -160,7 +160,7 @@ export class UIMapComponent {
       // this.showPosts();
     }
     else{
-      // this.showCompanies(); 
+      this.showCompanies(); 
     }
   }
 

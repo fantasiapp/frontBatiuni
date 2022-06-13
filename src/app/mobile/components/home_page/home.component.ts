@@ -570,6 +570,7 @@ export class HomeComponent extends Destroy$ {
     this.filterOnST = filterOnST;
   }
 
+
   //factor two menu into objects
   openDraft(post: Post | null) {
     this.draftMenu = assignCopy(this.draftMenu, { post, open: !!post });
