@@ -434,6 +434,7 @@ export class DataState {
         if (upload.category == "Company") {
           //add it to company
           const company = this.store.selectSnapshot(DataQueries.currentCompany);
+
           ctx.setState(
             compose(addSimpleChildren("Company", company.id, "File", response, "name"))
           );
@@ -459,31 +460,24 @@ export class DataState {
         delete response[modify.action];
 
         const fileId = +Object.keys(response)[0]
-        //   fields = ctx.getState()["fields"],
-        //   contentIndex = fields["File"].indexOf("content");
 
+        modify.fileId = fileId;
 
-        // modify.assignedId = assignedId;
-        // response[assignedId][contentIndex] = "";
+        if (modify.category == "Company") {
+          const company = this.store.selectSnapshot(DataQueries.currentCompany);
+          ctx.setState(compose(addSimpleChildren("Company", company.id, "File", response, "name")))
+        } else if (modify.category == "Post") {
+          ctx.setState(
+            compose(addSimpleChildren("Post", modify.target, "File", response, "name"))
+          );
+        }
+        
 
-        // if (modify.category == "Company") {
-          //add it to company
-        //   const company = this.store.selectSnapshot(DataQueries.currentCompany);
-        //   ctx.setState(
-        //     compose(addSimpleChildren("Company", company.id, "File", response, "name"))
-        //   );
-        // } 
-        // else if (upload.category == "Post") {
-        //   ctx.setState(
-        //     compose(addSimpleChildren("Post", upload.target, "File", response, "name"))
-        //   );
-        // }
         let name: string = "File" + fileId.toString()
-        console.log(name, SingleCache.checkValueInCache(name))
-        console.log(SingleCache.getCache())
-          if (SingleCache.checkValueInCache(name)) {
-            SingleCache.deleteValueByName(name)
-          }
+        if (SingleCache.checkValueInCache(name)) {
+          console.log("remove image from cache", name)
+          SingleCache.deleteValueByName(name)
+        }
       })
     );
   }

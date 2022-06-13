@@ -8,6 +8,7 @@ import { UISwitchComponent } from "../components/switch/switch.component";
 import { FilterService } from "../services/filter.service";
 import { Store } from "@ngxs/store";
 import { FormArray, FormControl, FormGroup } from "@angular/forms";
+import "hammerjs"
 
 @Component({
   selector: 'sos-filter-form',
