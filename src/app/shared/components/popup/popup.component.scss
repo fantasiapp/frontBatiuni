@@ -66,12 +66,6 @@ ul, li {
 // .date::ng-deep { color: $secondaryBackground; }
 
 
-// #addTask {
-//   width: 90%;
-//   margin-left:5%;
-//   margin-top:20px;
-// }
-
 .setDateTask {
   text-align: left;
   width:90%
@@ -84,6 +78,14 @@ ul, li {
   width: 12rem;
 }
 
+#addTask {
+  padding-right: 2rem;
+}
+#check-task {
+  width: 1.5rem;
+  position: absolute;
+  right: 2rem;
+}
 
 ////
 
