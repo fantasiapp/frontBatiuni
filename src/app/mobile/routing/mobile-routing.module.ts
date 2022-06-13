@@ -30,6 +30,8 @@ import { MailSender } from '../components/only_mail/only.mail';
 import { UIAccordion } from 'src/app/shared/components/accordion/accordion.ui';
 import { ApplicationsComponent } from 'src/app/mobile/components/applications/applications.component';
 import { GiveARecommandation } from 'src/app/shared/validators/give_recommandation/give_recommandation.component';
+import { FaqComponent } from '../components/faq/faq.component';
+import { MentionLegalComponent } from '../components/mention-legal/mention-legal.component';
 
 const routes: Routes = [{
     path: 'landing',
@@ -85,6 +87,12 @@ const routes: Routes = [{
   }, {
     path: 'blocked_contacts',
     component: BlockedContactsComponent,
+  }, {
+    path: 'faq',
+    component: FaqComponent,
+  }, {
+    path: 'mention-legal',
+    component: MentionLegalComponent,
   }, {
     path: 'factures',
     component: FacturePage,
