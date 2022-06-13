@@ -39,8 +39,9 @@
         <span >{{ detailedPost.content }}</span>
       </li>
     </ul>
-    <form (ngSubmit)="addNewTask($event, assignDate, newTaskForm)" [formGroup]="newTaskForm">
+    <form (ngSubmit)="addNewTask($event, assignDate, newTaskForm)" [formGroup]="newTaskForm" #formTask>
       <input id="addTask" type="text" placeholder="Ajouter une nouvelle tâche" formControlName="task" #addTask>
+      <img id="check-task" src="assets/checkmark-done-outline.svg" alt="done" (click)="taskSubmit($event, formTask)">
     </form>
   </div>
 </ng-template>
