@@ -26,6 +26,7 @@ import {
   GiveRecommandation,
   GiveNotificationToken,
   ModifyFile,
+  UnapplyPost,
 } from "./user/user.actions";
 import {
   ApplyPost,
@@ -680,6 +681,22 @@ export class DataState {
 
         delete response[application.action];
         ctx.setState(addValues('Candidate', response['Candidate']))
+        ctx.setState(update('Post', response['Post']));
+      })
+    );
+  }
+  
+  @Action(UnapplyPost)
+  unapplyPost(ctx: StateContext<DataModel>, application: UnapplyPost) {
+    const profile = this.store.selectSnapshot(DataQueries.currentProfile)!;
+    //{Post: 1, amount: 500, devis: 'Par heure', action: 'applyPost'}
+    return this.http.get("data", application).pipe(
+      tap((response: any) => {
+        console.log('ApplyPost response', response);
+        if (response[application.action] != "OK") throw response["messages"];
+
+        delete response[application.action];
+        ctx.setState(deleteIds('Candidate', [response['Candidate']]))
         ctx.setState(update('Post', response['Post']));
       })
     );

@@ -1,4 +1,4 @@
-<header class="clear-margin full-width sticky-header flex column white-header">
+<header class="clear-margin full-width sticky-header flex column white-header" id="bigHeader">
     <div class="pick flex row small-space-children-margin">
         <img class="left" [routerLink]="['','home','profile']"  src="assets/arrowlblack.svg" />
         <h1 class="grow center-text">Candidatures en cours</h1>
@@ -23,16 +23,30 @@
 </div>
 </div>
 
-<slidemenu [(open)]="postMenu.open" title="Candidatures en cours"> 
-    <!-- <header>
+<swipeup [(open)]="openAdFilterMenu" type="view">
+    <application-filter-form [callbackFilter]="callbackFilter" view></application-filter-form>
+</swipeup>
+
+<slidemenu [(open)]="postMenu.open" [header]="false" #slideOnlinePost> 
+    <header class="clear-margin full-width sticky-header flex center-cross annonce"
+    customHeader id="swipeupHeader">
         <img (click)="slideOnlinePostClose()" src="assets/arrowlblack.svg" />
-        <h1 class="grow center-text">Annonce candidatée</h1>
-    </header> -->
+        <h1 class="grow center-text">Candidature en cours</h1>
+        <img (click)="postMenu.swipeup = true" src="assets/Option.svg"/>    
+    </header>
+
     <ng-container content>
-        <annonce-resume class="hosted-page content-with-footer" [collapsible]="false" [application]="false" [post]="postMenu.post"></annonce-resume>
+        <annonce-resume 
+            class="hosted-page content-with-footer" 
+            [collapsible]="false" 
+            [application]="false" 
+            [post]="postMenu.post"
+        ></annonce-resume>
+
+        <swipeup [(open)]="postMenu.swipeup">
+            <li (click)="deleteCandidate(postMenu.post!.id)">
+              Retirer ma candidature
+            </li>
+        </swipeup>
     </ng-container>
 </slidemenu>
-
-<swipeup [(open)]="openAdFilterMenu" type="view">
-        <application-filter-form [callbackFilter]="callbackFilter" view></application-filter-form>
-    </swipeup>
