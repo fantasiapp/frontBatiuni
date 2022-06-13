@@ -587,8 +587,15 @@ export class ModifyProfileForm {
           permissions: ["camera", "photos"],
         });
       } catch (e) {}
+    this.test()
   }
 
+  async test(){
+    while (true) {
+      console.log("selected labels", this.selectedLabels);
+      await delay(5000);
+    }
+  }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes["profile"]) this.reload();
@@ -608,6 +615,7 @@ export class ModifyProfileForm {
     this.companyLabels = this.store.selectSnapshot(
       DataQueries.getMany("LabelForCompany", this.profile.company.labels)
     );
+    console.log("companyLabels", this.companyLabels)
     this.companyJobs = this.store.selectSnapshot(
       DataQueries.getMany("JobForCompany", this.profile.company.jobs)
     );
@@ -636,6 +644,7 @@ export class ModifyProfileForm {
       );
       if (used) {
         labelMapping.set(used.id, label);
+        console.log("new label", label);
         this.selectedLabels.push(label);
       }
     });
@@ -789,17 +798,23 @@ export class ModifyProfileForm {
   } 
 
   removeLabel(filename: string) {
+    console.log("removeLabel", filename)
     const documents = this.form.controls[ "UserProfile.Company.LabelForCompany"] as FormArray;
+    console.log(documents);
     for (let i=0; i< documents.value.length; i++){
       if(documents.value[i].label.name == filename) {
+        console.log("")
         // documents.value[i].fileData = {content: [""], expirationDate: '', ext: '???', name: 'Veuillez télécharger un document', nature: 'admin'}
         documents.removeAt(i)
       }
     }
     let allFiles = this.store.selectSnapshot(DataQueries.getAll('File'))
     let label = allFiles.filter(file => file.name == filename)[0]
-    if (label?.id) {this.store.dispatch(new DeleteFile(label.id))}
+    console.log(label);
+    if (label?.id) {console.log("deleeeete"); this.store.dispatch(new DeleteFile(label.id))}
+    console.log("all labels before", this.selectedLabels);
     this.selectedLabels = this.selectedLabels.filter(label => label.name != filename)
+    console.log("label removed", this.selectedLabels);
     this.form.controls["UserProfile.Company.LabelForCompany"].markAsDirty();
   }
 
