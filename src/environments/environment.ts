@@ -1,7 +1,7 @@
 export const environment = {
   production: false,
-  backUrl: "https://batiuni.fantasiapp.tech:5004",
-  // backUrl: 'http://localhost:8000',
+  // backUrl: "https://batiuni.fantasiapp.tech:5001",
+  backUrl: 'http://localhost:8000',
   version: "current",
   firebase: {
     apiKey: "AIzaSyAMVlZ-T4vt6YgMXRoIiTTVTtH5VwDvukk",

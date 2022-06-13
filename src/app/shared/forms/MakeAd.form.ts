@@ -12,6 +12,7 @@ import {
 } from "@angular/core";
 import {
   AbstractControl,
+  Form,
   FormArray,
   FormControl,
   FormGroup,
@@ -29,7 +30,7 @@ import {
   SwitchPostType,
   UploadPost,
 } from "src/models/new/user/user.actions";
-import { Required } from "src/validators/verify";
+import { FieldType, Required } from "src/validators/verify";
 import { CalendarUI, DayState } from "../components/calendar/calendar.ui";
 import { defaultFileUIOuput } from "../components/filesUI/files.ui";
 import { InfoService } from "../components/info/info.component";
@@ -45,7 +46,6 @@ import { Mobile } from "../services/mobile-footer.service";
         <div class="form-input">
           <label>Je recherche</label>
           <input
-            type="number"
             min="0"
             class="form-element"
             formControlName="numberOfPeople"
@@ -178,7 +178,6 @@ import { Mobile } from "../services/mobile-footer.service";
           <label>Montant</label>
           <div class="flex row remuneration">
             <input
-              type="number"
               min="0"
               style="max-height: 51px"
               class="grow form-element"
@@ -516,7 +515,7 @@ export class MakeAdForm {
     return null;
   }
 
-  makeAdForm = new FormGroup({
+  makeAdForm: FormGroup = new FormGroup({
     dueDate: new FormControl(moment(new Date(Date.now())).add(1,'days').format('YYYY-MM-DD'), [
       Validators.required,
       this.dueDateValidator,
@@ -526,7 +525,7 @@ export class MakeAdForm {
     address: new FormControl("1 Rue Joliot Curie, 91190 Gif-sur-Yvette", [
       Validators.required,
     ]),
-    numberOfPeople: new FormControl(1),
+    numberOfPeople: new FormControl("", [FieldType("number")]),
     counterOffer: new FormControl(false),
     hourlyStart: new FormControl("07:30:00"),
     hourlyEnd: new FormControl("17:30:00"),
@@ -534,7 +533,7 @@ export class MakeAdForm {
       this.currencies.filter((currency) => currency.name == "€")
     ),
     description: new FormControl(""),
-    amount: new FormControl(1),
+    amount: new FormControl(1, [FieldType("number")]),
     documents: new FormArray(
       this.commonDocuments.map(
         (name) =>
@@ -600,10 +599,11 @@ export class MakeAdForm {
     console.log('draft', draft);
     if (this.post) {
       // le brouillon existe deja
+      let files = this.store.selectSnapshot(DataQueries.getMany('File', this.post.files))
       if (!draft) {
         this.info.show("info", "Mise en ligne de l'annonce...", Infinity);
         const action = this.makeAdForm.touched
-          ? UploadPost.fromPostForm(this.makeAdForm.value, draft, this.post.id)
+          ? UploadPost.fromPostForm(this.makeAdForm.value, draft, this.post.id, files)
           : new SwitchPostType(this.post.id);
         this.store
           .dispatch(action)
@@ -621,7 +621,7 @@ export class MakeAdForm {
         this.info.show("info", "Enregistrement de l'annonce...", Infinity);
         this.store
           .dispatch(
-            UploadPost.fromPostForm(this.makeAdForm.value, draft, this.post.id)
+            UploadPost.fromPostForm(this.makeAdForm.value, draft, this.post.id, files)
           )
           .pipe(take(1))
           .subscribe(

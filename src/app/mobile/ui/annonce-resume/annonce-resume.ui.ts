@@ -22,6 +22,7 @@ import {
 import { DataQueries, DataState } from "src/models/new/data.state";
 import { Destroy$ } from "src/app/shared/common/classes";
 import { InfoService } from "src/app/shared/components/info/info.component";
+import { FieldType } from "src/validators/verify";
 
 export type ApplyForm = {
   amount: number;
@@ -136,11 +137,10 @@ export type ApplyForm = {
             <label>Montant</label>
             <div class="flex row space-between remuneration">
               <input
-                type="number"
                 min="0"
                 style="max-height: 51px"
                 class="grow form-element"
-                placeholder="Montant"
+                [placeholder]="post.amount"
                 formControlName="amount"
               /> € HT
             </div>
@@ -165,6 +165,7 @@ export class UIAnnonceResume extends Destroy$ {
   @Input()
   collapsed: boolean = false;
   collapsible: boolean = true;
+  defaultValue: boolean = true;
 
   @Input("collapsible")
   set collapsibleSet(value: boolean) {
@@ -195,7 +196,7 @@ export class UIAnnonceResume extends Destroy$ {
       );
     }
     return (
-      this.hasPostulated || (this.amount == null && this.post.counterOffer)
+      this.hasPostulated || (this.amount == null && this.post.counterOffer && !this.defaultValue) 
     );
   }
 
@@ -217,15 +218,10 @@ export class UIAnnonceResume extends Destroy$ {
 
   get amount(): number | null {
     if (this.form && this.form.get("amount")?.value) {
+      this.defaultValue  = false
       return this.form.get("amount")!.value;
     }
-    if (this._post?.counterOffer) {
-      let candidate = this.searchCandidate(this._post!);
-      this.form
-        .get("amount")
-        ?.setValue(candidate?.amount ? candidate!.amount : null);
-      return candidate?.amount ? candidate!.amount : null;
-    }
+    this.defaultValue = true
     return null;
   }
 
@@ -312,7 +308,7 @@ export class UIAnnonceResume extends Destroy$ {
     name,
   }));
   form = new FormGroup({
-    amount: new FormControl(this.amount),
+    amount: new FormControl(this.amount, [FieldType("number")]),
     devis: new FormControl([this.devis[0]]),
   });
 
@@ -321,8 +317,11 @@ export class UIAnnonceResume extends Destroy$ {
   }
 
   onApply() {
+    if(this.defaultValue) {
+      this.form.get("amount")?.setValue(this.post.amount);
+    }
     const formValue = this.form.value;
-    if (this.form.value == 0 || !this.form.valid) {
+    if (this.form.value == 0 || !this.form.value.amount) {
       this.info.show("error", "Montant incorrect", 2000);
       return;
     }
