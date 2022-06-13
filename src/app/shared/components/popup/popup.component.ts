@@ -280,6 +280,11 @@ export class UIPopup extends DimensionMenu {
     });
   }
 
+  taskSubmit(e:Event, input: HTMLFormElement) {
+    input.dispatchEvent(new Event("submit", {cancelable: true}))
+    e.preventDefault(); // Prevents the addition of a new line in the text field (not needed in a lot of cases)
+  }
+
   clearInput(newTaskForm: FormGroup){
     if(newTaskForm){
       let formControl = newTaskForm.get('task')!

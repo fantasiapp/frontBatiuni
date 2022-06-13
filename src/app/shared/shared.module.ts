@@ -141,7 +141,7 @@ import { GiveARecommandation } from "./validators/give_recommandation/give_recom
     NotificationAgendaComponent,
     ModalImage,
     AskRecommandationComponent,
-    GiveARecommandation
+    GiveARecommandation,
   ],
   imports: [
     CommonModule,

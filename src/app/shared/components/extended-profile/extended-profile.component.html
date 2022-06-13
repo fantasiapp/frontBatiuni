@@ -15,7 +15,7 @@
 
       <h4 class="text-light-emphasis">Téléphone fixe : <span class="value">{{profile.company.companyPhone | space: 2:1 }}</span></h4>
       
-      <h4 class="text-light-emphasis" *ngIf="profile.company.webSite">Site internet : <span class="value link"><a [href]="profile.company.webSite">{{profile.company.webSite}}</a></span></h4>
+      <h4 class="text-light-emphasis" *ngIf="profile.company.webSite">Site internet : <span class="value link"><a [href]="'http://' + profile.company.webSite">{{profile.company.webSite}}</a></span></h4>
 
       <h4 class="text-light-emphasis">N SIRET : <span class="value">{{profile.company.siret}}</span></h4>
 

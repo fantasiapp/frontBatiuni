@@ -26,8 +26,8 @@
     <li >Partager l'application</li>
     <li>Noter l'application</li>
     <li>Nous contacter</li>
-    <li>FAQ</li>
-    <li>Mentions légales</li>
+    <li [routerLink]="['', 'faq']">FAQ</li>
+    <li [routerLink]="['', 'mention-legal']">Mentions légales</li>
     <li class="spacer"></li>
     <li (click)="logout()">Se déconnecter</li>
   </swipeup>
