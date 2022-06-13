@@ -31,6 +31,9 @@ import { ModifyDetailedPost } from "src/models/new/user/user.actions";
 import { take } from "rxjs/operators";
 import { Store } from "@ngxs/store";
 
+export const HOURS_START = 8
+export const HOURS_END = 19
+
 export type MissionDetailedDay = {
   date: string;
   datePost: DatePost;
@@ -84,6 +87,7 @@ export class HorizontaleCalendar implements OnInit {
 
   onDayClicked([_, selection]: [MouseEvent, DayState[]]) {
     this.showAgenda(selection[0]);
+    this.updateSelectedDay()
   }
 
   @Input()
@@ -240,7 +244,7 @@ export class HorizontaleCalendar implements OnInit {
   someFunction() {
     const items: any = [];
     // From 08:00 tp 19:00
-    for (let i = 6; i < 20; i++) {
+    for (let i = HOURS_START; i <= HOURS_END; i++) {
       items.push(moment({ hour: i }).locale("fr").format("HH"));
     }
     this.hoursperday = items;
@@ -250,10 +254,13 @@ export class HorizontaleCalendar implements OnInit {
     let start = this.hoursTodecimal(workstart);
     let end = this.hoursTodecimal(workend);
 
-    this.greenCardFromTop = (start - 6) * 25 + 12.5;
+    start <= 8 && (start = 8);
+    end >= 19 && (end = 19)
+
+    this.greenCardFromTop = (start - HOURS_START) * 25 + 12.5;
     this.greenCardHeight = (end - start) * 25;
 
-    return [(start - 6) * 25 + 12.5, (end - start) * 25];
+    return [(start - HOURS_START) * 25 + 12.5, (end - start) * 25];
   }
   hoursTodecimal(time: string) {
     let hoursMinutes = time.split(/[.:]/);
@@ -331,6 +338,34 @@ export class HorizontaleCalendar implements OnInit {
 
   }
 
+  updateSelectedDay(){
+    for (const day of this.selectedDay) {
+      let notification = false
+      let status = false
+      day.selected = false
+      for (const curCard of this.currentCardCalendars) {
+        if(day.day[2] == curCard.date){
+          day.selected = true
+          this.showgrey(day)
+          if(!notification) {
+            notification = curCard.change.deleted || curCard.change.schedule || !curCard.change.validate
+          }
+          day.notification = notification
+
+
+          
+          if(!status) status = curCard.change.validate
+          day.status = status ? 'occupe' : ''
+
+          // if(!status){
+            //   day.notification = false
+            // }
+          console.log('notification', day.notification);
+          }
+      }
+    }
+  }
+
   onCardUpdate(state: any, card: calendarItem) {
     const cardChange = state
 
@@ -343,25 +378,7 @@ export class HorizontaleCalendar implements OnInit {
     card.cardHeight = heightTop[1];
     card.change = cardChange
     
-    for (const day of this.selectedDay) {
-      let notification = false
-      let status = false
-      for (const curCard of this.currentCardCalendars) {
-        if(day.day[2] == curCard.date){
-          if(!notification) {
-            notification = curCard.change.deleted || curCard.change.schedule || !curCard.change.validate
-          }
-          day.notification = notification
-
-          if(!status) status = curCard.change.validate
-          day.status = status ? 'occupe' : ''
-          if(!status){
-            day.notification = false
-          }
-        }
-      }
-    }
-
+    
     if (cardChange.deleted || (!card.change.deleted && !card.change.validate)) {
       let newCardCalendars: calendarItem[] = [];
       for (const curCard of this.currentCardCalendars) {
@@ -369,11 +386,24 @@ export class HorizontaleCalendar implements OnInit {
           newCardCalendars.push(curCard);
         }
       }
-
+      
       this.currentCardCalendars = newCardCalendars;
       console.log('curretneCardCalendard,', this.currentCardCalendars);
     }
+    
+    let curDay;
+    if(!this.currentCardCalendars.length){
+      curDay = card.date
+      for (const day of this.selectedDay) {
+        if(day.day[2] == curDay){
+          day.status = ''
+          day.selected = true
+          day.notification = false
+        }
+      }
+    }
 
+    else this.updateSelectedDay()
     this.cd.markForCheck()
     this.calendar.cd.markForCheck()
   }
