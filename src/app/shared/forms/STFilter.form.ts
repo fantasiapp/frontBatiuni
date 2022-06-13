@@ -22,6 +22,7 @@ import { Filter } from "../directives/filter.directive";
 import { FilterService } from "../services/filter.service";
 import { getLevenshteinDistance } from "src/app/shared/services/levenshtein";
 import { InfoService } from "../components/info/info.component";
+import "hammerjs"
 
 @Component({
   selector: "st-filter-form",
@@ -50,7 +51,7 @@ import { InfoService } from "../components/info/info.component";
       </div>
 
     <div class="form-input">
-      <label>Dans un rayon autour de</label>
+      <label>Dans un rayon autour deee</label>
       <ngx-slider [(value)]=valueDistance [options]="imports.DistanceSliderConfig" formControlName="radius"></ngx-slider>
     </div>
 

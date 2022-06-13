@@ -141,23 +141,19 @@ export class ModifyFile<K extends DataTypes = any> {
   static readonly type = '[File] Modify';
   action = 'modifyFile';
   ext: string;
-  name: string;
-  nature: string;
   expirationDate: string;
   fileBase64: string;
   companyFile: boolean = true;
   category?: K;
   assignedId?: number = -1;
-  id: number;
+  fileId: number;
 
   //tell JLW to unify formats
-  constructor(src: FileUIOutput, nature: string, id: number, name?: string, category?: K) {
+  constructor(src: FileUIOutput, fileId: number, category?: K) {
     this.fileBase64 = src.content[0]; //only one file
     this.expirationDate = src.expirationDate;
     this.ext = src.ext;
-    this.name = name || src.nature;
-    this.nature = nature;
-    this.id =  id;
+    this.fileId =  fileId;
     if ( category ) {
       this.category = category;
       (this as any)[category] = -1;
@@ -247,15 +243,20 @@ export class UploadPost {
     });
 
     // let fileToUpload = [];
-    const newFiles: any = {};
-    if(oldFiles){
-      for (const file of oldFiles) {
+    let newFiles: any = {};
+    if(oldFiles && oldFiles!.length !== 0){
+      console.log("oldFiles", oldFiles, "files", files)
+      for (const file of oldFiles!) {
         for (const key in files) {
           if(file.content != files[key].content){
             newFiles[key] = files[key]
           }
         }
       }
+    }
+    else{
+      console.log("")
+      newFiles = files
     }
 
     console.log('newFiles', newFiles, files);
@@ -316,6 +317,13 @@ export class ApplyPost {
   constructor(public Post: number, form: ApplyForm) {
     this.amount = form.amount;
     this.devis = form.devis;
+  }
+}
+
+export class UnapplyPost {
+  static readonly type = '[User.ST] Unapply Post';
+  action = 'unapplyPost';
+  constructor(public Post: number, candidateId : number) {
   }
 }
 

@@ -81,7 +81,7 @@ import { Mobile } from "../services/mobile-footer.service";
         <div class="form-input">
           <label>Date d'échéance de l'annonce</label>
           <input class="form-element" type="date" formControlName="dueDate" />
-          <img src="assets/calendar.png" />
+          <img src="assets/calendar.png" style='pointer-events: none'/>
         </div>
       </section>
 
@@ -596,7 +596,7 @@ export class MakeAdForm {
 
   submit(e:any, draft: boolean) {
     // e.preventDefault()
-    console.log('draft', draft);
+    console.log('draft', draft, "and the value", this.makeAdForm.value);
     if (this.post) {
       // le brouillon existe deja
       let files = this.store.selectSnapshot(DataQueries.getMany('File', this.post.files))

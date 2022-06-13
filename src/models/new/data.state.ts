@@ -26,6 +26,7 @@ import {
   GiveRecommandation,
   GiveNotificationToken,
   ModifyFile,
+  UnapplyPost,
 } from "./user/user.actions";
 import {
   ApplyPost,
@@ -307,11 +308,12 @@ export class DataState {
         }
         delete response[modify.action];
         
-        if(response.hasOwnProperty('JobForCompany') && Array.isArray(response['JobsForCompany'])){
+        if(response.hasOwnProperty('JobForCompany') && Array.isArray(response['JobForCompany'])){
           for (let job of response.JobForCompany) {
             ctx.setState(addValues('JobForCompany', job))            
           }
         }
+        
         
         if (response.hasOwnProperty('LabelForCompany') && Array.isArray(response['LabelForCompany'])){
           for (let label of response.LabelForCompany) {
@@ -344,7 +346,13 @@ export class DataState {
         // }}
         );
         Object.keys(adminFiles).forEach((name) => {
-          ctx.dispatch(new UploadFile(adminFiles[name], "admin", name, "Company"))
+          if (adminFiles[name].id || adminFiles[name].id === 0) {
+            console.log("modify file", adminFiles[name])
+            ctx.dispatch(new ModifyFile(adminFiles[name], adminFiles[name].id, "Company"))
+          } else if (adminFiles[name].ext != "???" ) {
+            console.log("upload file", adminFiles[name])
+            ctx.dispatch(new UploadFile(adminFiles[name], "admin", name, "Company"))
+          }
         });
         return of(true);
       })
@@ -412,6 +420,7 @@ export class DataState {
     const req = this.http.post("data", upload);
     return req.pipe(
       tap((response: any) => {
+        console.log("response Upload file", response)
         if (response[upload.action] !== "OK") throw response["messages"];
         delete response[upload.action];
 
@@ -425,6 +434,7 @@ export class DataState {
         if (upload.category == "Company") {
           //add it to company
           const company = this.store.selectSnapshot(DataQueries.currentCompany);
+
           ctx.setState(
             compose(addSimpleChildren("Company", company.id, "File", response, "name"))
           );
@@ -445,7 +455,29 @@ export class DataState {
   modifyFile(ctx: StateContext<DataModel>, modify: ModifyFile) {
     return this.http.post("data", modify).pipe(
       tap((response: any) => {
+        console.log("modify file response", response)
         if (response[modify.action] != "OK") throw response["messages"];
+        delete response[modify.action];
+
+        const fileId = +Object.keys(response)[0]
+
+        modify.fileId = fileId;
+
+        if (modify.category == "Company") {
+          const company = this.store.selectSnapshot(DataQueries.currentCompany);
+          ctx.setState(compose(addSimpleChildren("Company", company.id, "File", response, "name")))
+        } else if (modify.category == "Post") {
+          ctx.setState(
+            compose(addSimpleChildren("Post", modify.target, "File", response, "name"))
+          );
+        }
+        
+
+        let name: string = "File" + fileId.toString()
+        if (SingleCache.checkValueInCache(name)) {
+          console.log("remove image from cache", name)
+          SingleCache.deleteValueByName(name)
+        }
       })
     );
   }
@@ -649,6 +681,22 @@ export class DataState {
 
         delete response[application.action];
         ctx.setState(addValues('Candidate', response['Candidate']))
+        ctx.setState(update('Post', response['Post']));
+      })
+    );
+  }
+  
+  @Action(UnapplyPost)
+  unapplyPost(ctx: StateContext<DataModel>, application: UnapplyPost) {
+    const profile = this.store.selectSnapshot(DataQueries.currentProfile)!;
+    //{Post: 1, amount: 500, devis: 'Par heure', action: 'applyPost'}
+    return this.http.get("data", application).pipe(
+      tap((response: any) => {
+        console.log('ApplyPost response', response);
+        if (response[application.action] != "OK") throw response["messages"];
+
+        delete response[application.action];
+        ctx.setState(deleteIds('Candidate', [response['Candidate']]))
         ctx.setState(update('Post', response['Post']));
       })
     );

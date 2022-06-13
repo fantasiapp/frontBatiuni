@@ -15,7 +15,7 @@
 
       <h4 class="text-light-emphasis">Téléphone fixe : <span class="value">{{profile.company.companyPhone | space: 2:1 }}</span></h4>
       
-      <h4 class="text-light-emphasis" *ngIf="profile.company.webSite">Site internet : <span class="value link"><a [href]="profile.company.webSite">{{profile.company.webSite}}</a></span></h4>
+      <h4 class="text-light-emphasis" *ngIf="profile.company.webSite">Site internet : <span class="value link"><a [href]="'http://' + profile.company.webSite">{{profile.company.webSite}}</a></span></h4>
 
       <h4 class="text-light-emphasis">N SIRET : <span class="value">{{profile.company.siret}}</span></h4>
 
@@ -49,7 +49,7 @@
         <ul class="contact list flex space-around">
           <li><a [href]="'tel:+33' + profile.company.companyPhone"><img src="assets/missions/call.svg"/></a></li>
           <li><a [href]="'sms:+33' + profile.company.companyPhone"><img src="assets/missions/envoyer-un-message.svg"/></a></li>
-          <li><a [href]="'mailto:'" disabled><img src="assets/missions/envoyer-un-mail.svg"/></a></li>
+          <li><a [href]="'mailto:' + profile.company.companyMail"><img src="assets/missions/envoyer-un-mail.svg"/></a></li>
         </ul>
       </section>
     </ng-container>
