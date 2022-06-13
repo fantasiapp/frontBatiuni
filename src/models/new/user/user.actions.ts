@@ -6,6 +6,8 @@ import { DataTypes, Post, PostDetail, PostDetailGraphic, Profile, Mission, DateP
 import { CalendarUI, DayState } from "src/app/shared/components/calendar/calendar.ui";
 import { availabilityToName } from "../data.mapper";
 import { ApplyForm } from "src/app/mobile/ui/annonce-resume/annonce-resume.ui";
+import { DataQueries } from "../data.state";
+import { Store } from "@ngxs/store";
 
 export class ChangeProfileType {
   static readonly type = '[User] Change Profile Type';
@@ -228,18 +230,31 @@ export class UploadPost {
     else delete this['id'];
   };
 
-  static fromPostForm(value: any, draft: boolean, id?: number) {
+  static fromPostForm(value: any, draft: boolean, id?: Ref<Post>, oldFiles?: any[]) {
     const documents: {fileData: File, name: string}[] = value.documents.filter((doc: {fileData: File, name: string}) => {
       let fileData: any = doc.fileData
       return fileData.ext !== "???"
     });
-
+    
     const files: any = {};
     documents.forEach(doc => {
       let fileData: any = doc.fileData
       fileData.ext == "???" || (files[doc.name] = doc.fileData);
     });
 
+    // let fileToUpload = [];
+    const newFiles: any = {};
+    if(oldFiles){
+      for (const file of oldFiles) {
+        for (const key in files) {
+          if(file.content != files[key].content){
+            newFiles[key] = files[key]
+          }
+        }
+      }
+    }
+
+    console.log('newFiles', newFiles, files);
     console.log('Document', documents);
     
     return new UploadPost(
@@ -256,7 +271,7 @@ export class UploadPost {
       value.description,
       value.amount,
       value.detailedPost.map((detail: any) => detail.description),
-      files,
+      newFiles,
       draft,
       id
     );

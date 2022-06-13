@@ -19,7 +19,7 @@ import { Clear, Query, QueryAll } from "src/models/new/data.state";
 
     :host {
       width: 100%;
-      position: absolute;
+      /* position: absolute; */
       z-index: 10;
       max-height: 300px;
       overflow: hidden auto;

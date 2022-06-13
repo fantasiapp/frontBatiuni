@@ -8,6 +8,8 @@ import {
   Output,
   ChangeDetectorRef,
   SimpleChanges,
+  HostBinding,
+  ElementRef,
 } from "@angular/core";
 import { FormArray, FormControl, FormGroup } from "@angular/forms";
 import { Camera } from "@capacitor/camera";
@@ -55,6 +57,8 @@ import { delay, getDirtyValues } from "../common/functions";
             <div class="form-input">
               <label>Nom du contact</label>
               <input
+                #input1
+                (click)="onClickInputScroll(input1)"
                 class="form-element"
                 type="text"
                 formControlName="UserProfile.lastName"
@@ -63,6 +67,8 @@ import { delay, getDirtyValues } from "../common/functions";
             <div class="form-input">
               <label>Prénom du contact</label>
               <input
+                #input2
+                (click)="onClickInputScroll(input2)"
                 class="form-element"
                 type="text"
                 formControlName="UserProfile.firstName"
@@ -71,6 +77,8 @@ import { delay, getDirtyValues } from "../common/functions";
             <div class="form-input">
               <label>Adresse e-mail contact</label>
               <input
+                #input3
+                (click)="onClickInputScroll(input3)"
                 class="form-element"
                 type="email"
                 formControlName="UserProfile.userName"
@@ -79,6 +87,8 @@ import { delay, getDirtyValues } from "../common/functions";
             <div class="form-input">
               <label>Téléphone de l'entreprise</label>
               <input
+                #input4
+                (click)="onClickInputScroll(input4)"
                 class="form-element"
                 type="tel"
                 formControlName="UserProfile.Company.companyPhone"
@@ -87,6 +97,8 @@ import { delay, getDirtyValues } from "../common/functions";
             <div class="form-input">
               <label>Téléphone portable</label>
               <input
+                #input5
+                (click)="onClickInputScroll(input5)"
                 class="form-element"
                 type="tel"
                 formControlName="UserProfile.cellPhone"
@@ -95,6 +107,8 @@ import { delay, getDirtyValues } from "../common/functions";
             <div class="form-input">
               <label>Fonction dans l'entreprise</label>
               <input
+                #input6
+                (click)="onClickInputScroll(input6)"
                 class="form-element"
                 type="text"
                 formControlName="UserProfile.function"
@@ -113,6 +127,8 @@ import { delay, getDirtyValues } from "../common/functions";
             <div class="form-input">
               <label>Nom de l'entreprise</label>
               <input
+                #input7
+                (click)="onClickInputScroll(input7)"
                 class="form-element"
                 type="text"
                 formControlName="UserProfile.Company.name"
@@ -121,6 +137,8 @@ import { delay, getDirtyValues } from "../common/functions";
             <div class="form-input">
               <label>N SIRET</label>
               <input
+                #input8
+                (click)="onClickInputScroll(input8)"
                 class="form-element"
                 type="text"
                 formControlName="UserProfile.Company.siret"
@@ -219,6 +237,8 @@ import { delay, getDirtyValues } from "../common/functions";
             <div class="form-input">
               <label>Site internet</label>
               <input
+                #input9
+                (click)="onClickInputScroll(input9)"
                 class="form-element"
                 type="text"
                 formControlName="UserProfile.Company.webSite"
@@ -228,8 +248,9 @@ import { delay, getDirtyValues } from "../common/functions";
             <div class="form-input">
               <label>Chiffres d'affaires</label>
               <input
+                #input10
+                (click)="onClickInputScroll(input10)"
                 class="form-element"
-                type="number"
                 maxlength="11"
                 formControlName="UserProfile.Company.revenue"
               />
@@ -238,8 +259,9 @@ import { delay, getDirtyValues } from "../common/functions";
             <div class="form-input">
               <label>Capital</label>
               <input
+                #input11
+                (click)="onClickInputScroll(input11)"
                 class="form-element"
-                type="number"
                 maxlength="11"
                 formControlName="UserProfile.Company.capital"
               />
@@ -248,8 +270,9 @@ import { delay, getDirtyValues } from "../common/functions";
             <div class="form-input">
               <label>Taux horaire moyen</label>
               <input
+                #input12
+                (click)="onClickInputScroll(input12)"
                 class="form-element"
-                type="number"
                 formControlName="UserProfile.Company.amount"
               />
             </div>
@@ -462,6 +485,15 @@ export class ModifyProfileForm {
     this.slider.right();
   }
 
+  onClickInputScroll(input: HTMLElement){
+    setTimeout(() => {
+      input.scrollIntoView({behavior: 'smooth', block: 'center', inline: 'nearest'})
+      setTimeout(() => {
+        input.scrollIntoView({behavior: 'smooth', block: 'center', inline: 'nearest'})
+      }, 500)
+    }, 100)
+  }
+
   //outputs
   onSubmit() {
     this.form.controls["UserProfile.Company.companyPhone"].setValue(this.form.controls["UserProfile.Company.companyPhone"].value.replace(/\s/g, ""));
@@ -494,7 +526,7 @@ export class ModifyProfileForm {
   @Input() profile!: Profile;
   @Input() user: any;
 
-  constructor(private store: Store) {}
+  constructor(private store: Store, private ref: ElementRef) {}
 
   form: FormGroup = new FormGroup({
     // User
