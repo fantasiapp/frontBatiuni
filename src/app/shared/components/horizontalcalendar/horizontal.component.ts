@@ -129,9 +129,11 @@ export class HorizontaleCalendar implements OnInit {
   }
 
   toCalendarDays(workDays: MissionDetailedDay[]): DayState[] {
+    // console.log('workDays', workDays);
     for (const detailDay of workDays) {
       detailDay.datePost = this.store.selectSnapshot(DataQueries.getById('DatePost', detailDay.datePost.id))!
     }
+    // console.log('workDays', workDays);
     this.detailedDays = workDays;
     return workDays.map((workDay) => 
       ({
@@ -264,6 +266,7 @@ export class HorizontaleCalendar implements OnInit {
   }
 
   showAgenda(date: any) {
+    console.log('date', date);
     this.spanShowToday = moment(date, "YYYY-MM-DD")
       .locale("fr")
       .format("dddd D - MMMM - YYYY");
@@ -322,6 +325,10 @@ export class HorizontaleCalendar implements OnInit {
       isChange.schedule = !!mission.hourlyEndChange || !!mission.hourlyStartChange;
 
     return isChange;
+  }
+
+  onCalendarClick(){
+
   }
 
   onCardUpdate(state: any, card: calendarItem) {
