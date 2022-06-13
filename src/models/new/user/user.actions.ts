@@ -315,6 +315,13 @@ export class ApplyPost {
   }
 }
 
+export class UnapplyPost {
+  static readonly type = '[User.ST] Unapply Post';
+  action = 'unapplyPost';
+  constructor(public Post: number, candidateId : number) {
+  }
+}
+
 export class CandidateViewed {
   static readonly type = 'declare Candidate Viewed';
   action = 'candidateViewed';
