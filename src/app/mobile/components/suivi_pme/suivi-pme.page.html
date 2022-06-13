@@ -25,7 +25,7 @@
 <div class="full-width flex column">
   <ng-container *ngFor="let date of dates">
 
-    <suivi-chantier_date *ngIf="date.validated || (!date.validated && date.deleted)" [view]="view" [dateId]="date.id" [mission]="mission"></suivi-chantier_date>
+    <suivi-chantier_date *ngIf="date.validated || (!date.validated && date.deleted && view == 'ST')" [view]="view" [dateId]="date.id" [mission]="mission"></suivi-chantier_date>
   </ng-container>
   <!-- <div class="newDate">
     <img src="assets/plusBlue.svg">
@@ -36,7 +36,7 @@
 
 <swipeup [(open)]="missionMenu.swipeup">
   <li *ngIf="!mission?.isClosed" (click)="modifyTimeTable()">Modifier les horaires / les dates de présence</li>
-  <li>Appeler le 06 21 94 03 86 (click)=""</li>
+  <li>Appeler le 06 21 94 03 86 </li>
   <li *ngIf="mission?.signedByCompany && mission?.signedBySubContractor && !mission?.isClosed" (click)="closeMission()">Clôturer la mission</li>
   <li (click)="duplicateMission()">Dupliquer l'annonce</li>
 </swipeup>
