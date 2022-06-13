@@ -430,8 +430,6 @@ export class DataState {
         upload.assignedId = assignedId;
         response[assignedId][contentIndex] = "";
 
-        console.log("upload category", upload.category)
-        console.log("file to save", response)
         if (upload.category == "Company") {
           //add it to company
           const company = this.store.selectSnapshot(DataQueries.currentCompany);
@@ -462,8 +460,17 @@ export class DataState {
 
         const fileId = +Object.keys(response)[0]
 
-        const company = this.store.selectSnapshot(DataQueries.currentCompany);
-        ctx.setState(compose(addSimpleChildren("Company", company.id, "File", response, "name")))
+        modify.fileId = fileId;
+
+        if (modify.category == "Company") {
+          const company = this.store.selectSnapshot(DataQueries.currentCompany);
+          ctx.setState(compose(addSimpleChildren("Company", company.id, "File", response, "name")))
+        } else if (modify.category == "Post") {
+          ctx.setState(
+            compose(addSimpleChildren("Post", modify.target, "File", response, "name"))
+          );
+        }
+        
 
         let name: string = "File" + fileId.toString()
         if (SingleCache.checkValueInCache(name)) {
