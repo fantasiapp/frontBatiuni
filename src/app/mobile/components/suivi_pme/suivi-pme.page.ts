@@ -49,7 +49,6 @@ export class SuiviPME extends Destroy${
   subContractor: Company | null = null;
   track: { [key: string]: Map<PostDetail, Supervision[]> } = {};
   isNotSigned: boolean = true;
-  isNotSignedByUser: boolean = true;
   dates: DatePost[] = [];
   // datesNew: PostDateAvailableTask[] = []
   currentDateId: number | null = null;
@@ -73,6 +72,14 @@ export class SuiviPME extends Destroy${
     calendar: this.calendarForm
   });
 
+  get isNotSignedByUser(): boolean{
+    if(this.mission) {
+      return (!this.mission.signedByCompany && this.view == "PME") ||
+      (!this.mission.signedBySubContractor && this.view == "ST");
+    }
+    return true
+  }
+
   @Input()
   set missionMenu(mM: PostMenu<Mission>) {
     this._missionMenu = mM;
@@ -89,9 +96,6 @@ export class SuiviPME extends Destroy${
       this.isNotSigned = !(
         mission.signedByCompany && mission.signedBySubContractor
       );
-      this.isNotSignedByUser =
-        (!mission.signedByCompany && this.view == "PME") ||
-        (!mission.signedBySubContractor && this.view == "ST");
       let arrayDateId = []
       if (!Array.isArray(mission.dates)) arrayDateId = Object.keys(mission.dates).map(date => +date)
       else arrayDateId = mission.dates
