@@ -705,17 +705,19 @@ export class DataState {
   }
 
   @Action(CandidateViewed)
-  candidateViewed(ctx: StateContext<DataModel>, application: ApplyPost) {
+  candidateViewed(ctx: StateContext<DataModel>, application: CandidateViewed) {
+    console.log("candidateViewed", application)
     const profile = this.store.selectSnapshot(DataQueries.currentProfile)!;
     return this.http.get("data", application).pipe(
       tap((response: any) => {
+        console.log("candidateViewed response", response)
         if (response[application.action] !== "OK") {
           this.inZone(() => this.info.show("error", response.messages, 3000));
           throw response.messages;
         }
         delete response[application.action];
         console.log('CandidateViewed', response);
-        ctx.setState(addComplexChildren("Company", profile.company.id, "Post", response));
+        ctx.setState(transformField("Candidate", application.candidateId, "isViewed", () => true));
       })
     );
   }
@@ -746,8 +748,10 @@ export class DataState {
   @Action(HandleApplication)
   handleApplication(ctx: StateContext<DataModel>, handle: HandleApplication) {
     const { post, ...data } = handle;
+    console.log("handleAppication", handle)
     return this.http.get("data", data).pipe(
       tap((response: any) => {
+        console.log("handleApplication response", response);
         if (response[handle.action] !== "OK") {
           this.inZone(() => this.info.show("error", response.messages, 3000));
           throw response.messages;
@@ -765,13 +769,11 @@ export class DataState {
             )
           );
         } else
-          ctx.setState(
-            compose(
-              deleteIds("Post", [handle.post.id]),
-              addComplexChildren("Company", company.id, "Post", response)
-            )
-          );
+          ctx.setState(update('Post', response));
+          ctx.setState(transformField('Candidate', handle.Candidate, 'isRefused', () => true))
+
       })
+
     );
   }
 
