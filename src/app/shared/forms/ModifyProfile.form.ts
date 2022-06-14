@@ -11,12 +11,12 @@ import {
   HostBinding,
   ElementRef,
 } from "@angular/core";
-import { FormArray, FormControl, FormGroup } from "@angular/forms";
+import { FormArray, FormControl, FormGroup, Validators } from "@angular/forms";
 import { Camera } from "@capacitor/camera";
 import { Option } from "src/models/option";
 import { SlidesDirective } from "../directives/slides.directive";
 import { defaultFileUIOuput } from "../components/filesUI/files.ui";
-import { FieldType } from "src/validators/verify";
+import { FieldType, MatchField } from "src/validators/verify";
 import { PopupService } from "../components/popup/popup.component";
 import { InfoService } from "../components/info/info.component";
 import { Store } from "@ngxs/store";
@@ -38,6 +38,7 @@ import {
 import { SpacingPipe } from "../pipes/spacing.pipe";
 import { DeleteFile } from "src/models/new/user/user.actions";
 import { delay, getDirtyValues } from "../common/functions";
+import { Email } from "src/validators/persist";
 
 @Component({
   selector: "modify-profile-form",
@@ -533,7 +534,9 @@ export class ModifyProfileForm {
     "UserProfile.lastName": new FormControl("", []),
     "UserProfile.firstName": new FormControl("", []),
     "UserProfile.userName": new FormControl("", [
-      //Email()
+      // Validators.required,
+      // MatchField("email", "email", true)
+      Email()
     ]),
     "UserProfile.cellPhone": new FormControl("", [FieldType("phone")]),
     "UserProfile.function": new FormControl("", []),
