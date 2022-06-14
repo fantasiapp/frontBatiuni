@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { Store } from '@ngxs/store';
-import { Post, Profile, User } from 'src/models/new/data.interfaces';
+import { Company, Post, Profile, User } from 'src/models/new/data.interfaces';
 import { DataQueries } from 'src/models/new/data.state';
 import { UIOpenMenu } from '../../common/classes';
 
@@ -23,15 +23,19 @@ export class SlideProfileComponent extends UIOpenMenu {
   @Input()
   post!: Post;
 
+  @Input("isSuiviPME")
+  isSuiviPME: boolean = false
+
   @Input()
   view: 'ST' | 'PME' | null = 'PME'
 
   openRatings: boolean = false;
   user!: User;
+
+  subContractor: Company | null = null;
   
   constructor(private store: Store) {
     super();
-
     
   }
   
@@ -42,7 +46,7 @@ export class SlideProfileComponent extends UIOpenMenu {
       username: '',
       company: this.profile.company.id,
       firstName: '',
-      lastName: this.post.contactName,
+      lastName: this.isSuiviPME ? this.post.subContractorName : this.post.contactName,
       proposer: '',
       cellPhone: '',
       function: '',

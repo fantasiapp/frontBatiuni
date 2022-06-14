@@ -69,6 +69,7 @@ export class ApplicationsComponent extends Destroy$ {
     combineLatest([this.profile$, this.posts$])
       .pipe(takeUntil(this.destroy$))
       .subscribe(([profile, posts]) => {
+        console.log("DEBUT DE NGONINT")
       const mapping = splitByOutput(posts, (post) => {
           //0 -> userOnlinePosts | 1 -> userDrafts
           if (profile.company.posts.includes(post.id)){
@@ -97,9 +98,12 @@ export class ApplicationsComponent extends Destroy$ {
         this.allCandidatedPost.push(post)
       }
     }
+    console.log("ALLONLINEPOST", this.allOnlinePosts)
+    console.log("AllCandidatedPOst", this.allCandidatedPost)
     this.cd.markForCheck;
     this.selectPost(null);
     this.selectSearch('');
+    this.cd.markForCheck()
   }
 
   ngAfterViewInit() {
@@ -230,14 +234,16 @@ export class ApplicationsComponent extends Destroy$ {
 
   deleteCandidate(id: number){
     const profile = this.store.selectSnapshot(DataQueries.currentProfile);
-    let post: Post = this.allOnlinePosts.filter((post) => {
-      post.id == id
-    })[0]
-    let candidate = post.candidates.filter((candidateId) => {
-      let company = this.store.selectSnapshot(DataQueries.getById("Candidate", candidateId))?.company
-      company == profile.company.id
-    })[0]
+    let post = this.userOnlinePosts.filter(post => post.id == id)[0]
+    const candidateCompany = (candidateId: number) =>{
+      return this.store.selectSnapshot(DataQueries.getById("Candidate", candidateId))?.company
+    }
+    let candidate = post.candidates.filter(candidateId => candidateCompany(candidateId) == profile.company.id)[0]
     this.store.dispatch(new UnapplyPost(id, candidate))
+    this.userOnlinePosts = this.userOnlinePosts.filter(post => post.id != id)
+    // this.allCandidatedPost = this.userOnlinePosts
+    this.slideOnlinePostClose()
+    this.cd.markForCheck();    
   }
 
   
