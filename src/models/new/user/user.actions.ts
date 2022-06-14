@@ -198,6 +198,15 @@ export class DeleteFile {
   constructor(public id: number) {}
 };
 
+export class DeleteLabel {
+  static readonly type = '[Label] Delete';
+  action = 'removeLabelForCompany';
+
+  constructor(public labelId: number) {
+
+  }
+}
+
 export class DownloadFile {
   action = 'downloadFile';
   static readonly type = '[File] Download';
