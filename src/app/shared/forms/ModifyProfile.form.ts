@@ -531,9 +531,9 @@ export class ModifyProfileForm {
 
   form: FormGroup = new FormGroup({
     // User
-    "UserProfile.lastName": new FormControl("", []),
-    "UserProfile.firstName": new FormControl("", []),
-    "UserProfile.userName": new FormControl("", [
+    "UserProfile.lastName": new FormControl("", [Validators.required]),
+    "UserProfile.firstName": new FormControl("", [Validators.required]),
+    "UserProfile.userName": new FormControl("", [Validators.required,
       // Validators.required,
       // MatchField("email", "email", true)
       Email()
@@ -542,9 +542,9 @@ export class ModifyProfileForm {
     "UserProfile.function": new FormControl("", []),
     "UserProfile.Company.JobForCompany": new FormArray([]),
     //Company
-    "UserProfile.Company.name": new FormControl("", []),
+    "UserProfile.Company.name": new FormControl("", [Validators.required]),
     "UserProfile.Company.siret": new FormControl("", [
-      FieldType("number", ["un numéro de SIRET"]),
+      FieldType("number", ["un numéro de SIRET"])
     ]),
     "UserProfile.Company.capital": new FormControl("", [FieldType("number")]),
     "UserProfile.Company.revenue": new FormControl("", [FieldType("number")]),
@@ -552,9 +552,7 @@ export class ModifyProfileForm {
     "UserProfile.Company.allQualifications": new FormControl("", []),
     "UserProfile.Company.saturdayDisponibility": new FormControl("", []),
     "UserProfile.Company.webSite": new FormControl("", [FieldType("url")]),
-    "UserProfile.Company.companyPhone": new FormControl("", [
-      FieldType("phone"),
-    ]),
+    "UserProfile.Company.companyPhone": new FormControl("", [FieldType("phone")]),
     "UserProfile.Company.LabelForCompany": new FormArray([]),
     "UserProfile.Company.admin": new FormGroup({
       "Kbis": new FormControl(defaultFileUIOuput("admin")),
