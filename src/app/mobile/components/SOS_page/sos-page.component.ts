@@ -254,7 +254,6 @@ export class SOSPageComponent extends Destroy$ {
         component.showSwitch = false;
         component.showRecomandation = false;
         component.showStar = true;
-        component.showDeblockButton = false;
       },
     });
   }
