@@ -36,7 +36,7 @@ import {
   JobForCompany,
 } from "src/models/new/data.interfaces";
 import { SpacingPipe } from "../pipes/spacing.pipe";
-import { DeleteFile } from "src/models/new/user/user.actions";
+import { DeleteFile, ModifyUserProfile } from "src/models/new/user/user.actions";
 import { delay, getDirtyValues } from "../common/functions";
 
 @Component({
@@ -598,6 +598,7 @@ export class ModifyProfileForm {
   }
 
   ngOnChanges(changes: SimpleChanges) {
+    console.log("ngOnChanges", changes)
     if (changes["profile"]) this.reload();
   }
 
@@ -812,9 +813,11 @@ export class ModifyProfileForm {
     let label = allFiles.filter(file => file.name == filename)[0]
     console.log(label);
     if (label?.id) {console.log("deleeeete"); this.store.dispatch(new DeleteFile(label.id))}
+
     console.log("all labels before", this.selectedLabels);
     this.selectedLabels = this.selectedLabels.filter(label => label.name != filename)
     console.log("label removed", this.selectedLabels);
+    this.store.dispatch(new ModifyUserProfile({profile: this.profile, labels: this.selectedLabels}))
     this.form.controls["UserProfile.Company.LabelForCompany"].markAsDirty();
   }
 
