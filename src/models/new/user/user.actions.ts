@@ -52,10 +52,6 @@ export class GetUserData {
 };
 
 
-
-
-
-
 export class ModifyUserProfile {
   static readonly type = '[User] Change User Profile';
   readonly action = 'modifyUser';
@@ -64,47 +60,60 @@ export class ModifyUserProfile {
   adminFiles: any = {};
   
   //for now we mark job as dirty, but we should take it directly from the form
-  constructor({profile, form}: {profile: Profile, form: FormGroup}) {    
-    const changes = getDirtyValues(form);
-    console.log("changes", changes)
-    if ( Object.keys(changes).length == 0 ) return;
+  constructor({profile, form, labels}: {profile: Profile, form?: FormGroup, labels?: Array<any>}) {   
+    let changes: any; 
+    console.log("oh, la belle prise", labels);
+    if (labels) {
+      changes = []
+      console.log("coucouuu", labels)
+      this.labelFiles = labels
 
-    const jobsForm = changes['UserProfile.Company.JobForCompany'],
-      labelsForm = changes['UserProfile.Company.LabelForCompany'],
-      adminFiles = changes['UserProfile.Company.admin'];
-    
-    if ( jobsForm ) {
-      changes['UserProfile.Company.JobForCompany'] = Object.values<any>(jobsForm).map(
-        ({job, number}) => ([job.id, number])
-      );
-    }
+      changes.push({"UserProfile.Company.LabelForCompany": this.labelFiles})
+      console.log(changes);
+    } else {
+      changes = getDirtyValues(form);
+      console.log("changes", changes)
+      if ( Object.keys(changes).length == 0 ) return;
 
-    if ( labelsForm ) {
-      changes['UserProfile.Company.LabelForCompany'] = Object.values<any>(labelsForm).map(
-        ({label, fileData}) => ([label.id, fileData.expirationDate!])
-      );
-      this.labelFiles = Object.values<any>(labelsForm).map(({fileData}: {fileData: FileUIOutput}) => fileData);
-    }
-
-    if ( adminFiles ) {
-      const keys = Object.keys(adminFiles);
-      for ( const key of keys ) {
-        if ( !adminFiles[key].content && !adminFiles[key].expirationDate) continue;
-        
-        this.adminFiles[key] = adminFiles[key];
+      const jobsForm = changes['UserProfile.Company.JobForCompany'],
+        labelsForm = changes['UserProfile.Company.LabelForCompany'],
+        adminFiles = changes['UserProfile.Company.admin'];
+      
+      if ( jobsForm ) {
+        changes['UserProfile.Company.JobForCompany'] = Object.values<any>(jobsForm).map(
+          ({job, number}) => ([job.id, number])
+        );
       }
 
-      delete changes['UserProfile.Company.admin']; 
-    }
+      if ( labelsForm ) {
+        changes['UserProfile.Company.LabelForCompany'] = Object.values<any>(labelsForm).map(
+          ({label, fileData}) => ([label.id, fileData.expirationDate!])
+        );
+        this.labelFiles = Object.values<any>(labelsForm).map(({fileData}: {fileData: FileUIOutput}) => fileData);
+      }
 
-    if ( Object.keys(changes).length == 0 )
-      this.onlyFiles = true;
-    
+      if ( adminFiles ) {
+        const keys = Object.keys(adminFiles);
+        for ( const key of keys ) {
+          if ( !adminFiles[key].content && !adminFiles[key].expirationDate) continue;
+          
+          this.adminFiles[key] = adminFiles[key];
+        }
+
+        delete changes['UserProfile.Company.admin']; 
+      }
+
+      if ( Object.keys(changes).length == 0 )
+        this.onlyFiles = true;
+    }  
+
     const proxy = new Proxy(this, PropertyTrap);
     //write directly on this object
     proxy['UserProfile.id'] = profile.user!.id;
-    for ( const [field, value] of Object.entries<any>(changes) ) 
+    for ( const [field, value] of Object.entries<any>(changes) ) {
+      console.log("proxy", field, value);
       proxy[field] = value;
+    }
   }
 };
 
@@ -244,8 +253,7 @@ export class UploadPost {
 
     // let fileToUpload = [];
     let newFiles: any = {};
-    if(oldFiles!.length !== 0){
-      console.log("oldFiles", oldFiles, "files", files)
+    if(oldFiles && oldFiles!.length !== 0){
       for (const file of oldFiles!) {
         for (const key in files) {
           if(file.content != files[key].content){
@@ -255,7 +263,6 @@ export class UploadPost {
       }
     }
     else{
-      console.log("")
       newFiles = files
     }
 
