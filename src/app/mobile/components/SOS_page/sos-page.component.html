@@ -14,12 +14,12 @@
         </sos-card>
       </div>
     </ng-container>
-    <div class="map-container space-children-margin page-content-with-tabs">
+    <div class="map-container space-children-margin page-content-with-tabs" *ngSwitchCase="1">
       <mapbox-batiuni 
         [availableCompanies]="availableCompanies"
         (companyClick)="checkCompanyProfile($event)"
         class="space-children-margin" 
-        *ngSwitchCase="1">
+        >
       </mapbox-batiuni>
     </div>
   </ng-container>
