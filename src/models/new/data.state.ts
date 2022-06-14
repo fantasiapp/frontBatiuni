@@ -27,6 +27,7 @@ import {
   GiveNotificationToken,
   ModifyFile,
   UnapplyPost,
+  DeleteLabel,
 } from "./user/user.actions";
 import {
   ApplyPost,
@@ -514,6 +515,18 @@ export class DataState {
         }
       })
     );
+  }
+
+  @Action(DeleteLabel)
+  deleteLabel(ctx: StateContext<DataModel>, deletion: DeleteLabel) {
+    console.log("DeleteLabel",  deletion)
+
+    const req = this.http.get("data", deletion);
+    return req.pipe(
+      tap((response: any) => {
+        console.log("DeleteLabel response", response);
+      })
+    )
   }
 
   @Action(UploadPost)

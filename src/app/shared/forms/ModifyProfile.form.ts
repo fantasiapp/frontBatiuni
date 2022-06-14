@@ -36,7 +36,7 @@ import {
   JobForCompany,
 } from "src/models/new/data.interfaces";
 import { SpacingPipe } from "../pipes/spacing.pipe";
-import { DeleteFile, ModifyUserProfile } from "src/models/new/user/user.actions";
+import { DeleteFile, DeleteLabel, ModifyUserProfile } from "src/models/new/user/user.actions";
 import { delay, getDirtyValues } from "../common/functions";
 
 @Component({
@@ -800,11 +800,12 @@ export class ModifyProfileForm {
 
   removeLabel(filename: string) {
     console.log("removeLabel", filename)
+    console.log("company labels ", this.companyLabels)
+    let labelId = this.store.selectSnapshot(DataQueries.getAll("Label")).filter((label) => label.name == filename)[0].id;
+    let labelForCompanyId = this.companyLabels.filter((labelForCompany) => labelForCompany.label == labelId)[0].id
     const documents = this.form.controls[ "UserProfile.Company.LabelForCompany"] as FormArray;
-    console.log(documents);
     for (let i=0; i< documents.value.length; i++){
       if(documents.value[i].label.name == filename) {
-        console.log("")
         // documents.value[i].fileData = {content: [""], expirationDate: '', ext: '???', name: 'Veuillez télécharger un document', nature: 'admin'}
         documents.removeAt(i)
       }
@@ -812,12 +813,12 @@ export class ModifyProfileForm {
     let allFiles = this.store.selectSnapshot(DataQueries.getAll('File'))
     let label = allFiles.filter(file => file.name == filename)[0]
     console.log(label);
-    if (label?.id) {console.log("deleeeete"); this.store.dispatch(new DeleteFile(label.id))}
+    if (label?.id) {console.log("deleeeete"); this.store.dispatch(new DeleteLabel(label.id))}
 
     console.log("all labels before", this.selectedLabels);
     this.selectedLabels = this.selectedLabels.filter(label => label.name != filename)
     console.log("label removed", this.selectedLabels);
-    this.store.dispatch(new ModifyUserProfile({profile: this.profile, labels: this.selectedLabels}))
+
     this.form.controls["UserProfile.Company.LabelForCompany"].markAsDirty();
   }
 
