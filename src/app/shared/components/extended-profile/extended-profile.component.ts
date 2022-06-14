@@ -106,7 +106,8 @@ export class ExtendedProfileComponent extends Destroy$ {
         this.files = profile.company.files as any;
         this.companyJobs = profile.company.jobs as any;
         this.jobs = this.companyJobs.map(({ job }) => job) as any;
-      })
+        console.log("le init ", profile)
+  })
   }
 
   getFileColor(filename: string) {

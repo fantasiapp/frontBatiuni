@@ -143,7 +143,7 @@ export const b64toBlob = (
 
 let imageExtension = ["png", "jpeg", "jpg", "svg", "heic"];
 export function getFileType(ext: string) {
-  if (imageExtension.includes(ext)) return "image/" + ext;
+  if (imageExtension.includes(ext.toLowerCase())) return "image/" + ext;
   return "application/" + ext;
 }
 
