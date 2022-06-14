@@ -81,7 +81,7 @@ import { Mobile } from "../services/mobile-footer.service";
         <div class="form-input">
           <label>Date d'échéance de l'annonce</label>
           <input class="form-element" type="date" formControlName="dueDate" />
-          <img src="assets/calendar.png" />
+          <img src="assets/calendar.png" style='pointer-events: none'/>
         </div>
       </section>
 

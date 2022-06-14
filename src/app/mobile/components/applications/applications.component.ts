@@ -15,13 +15,14 @@ import { Post, PostMenu, Profile } from "src/models/new/data.interfaces";
 import { DataQueries, DataState, QueryAll } from "src/models/new/data.state";
 import { Destroy$ } from "src/app/shared/common/classes";
 import { delay, assignCopy, splitByOutput } from "../../../shared/common/functions";
-import { MarkViewed } from "src/models/new/user/user.actions";
+import { MarkViewed, UnapplyPost } from "src/models/new/user/user.actions";
 import { UIAnnonceResume } from "src/app/mobile/ui/annonce-resume/annonce-resume.ui";
 import { Input } from "hammerjs";
 import { getLevenshteinDistance } from "src/app/shared/services/levenshtein";
 import { AppComponent } from "src/app/app.component";
 import { InfoService } from "src/app/shared/components/info/info.component";
 import { SearchbarComponent } from "src/app/shared/components/searchbar/searchbar.component";
+import { SlidemenuService, UISlideMenuComponent } from "src/app/shared/components/slidemenu/slidemenu.component";
 
 // import { UISlideMenuComponent } from 'src/app/shared/components/slidemenu/slidemenu.component';
 
@@ -58,7 +59,7 @@ export class ApplicationsComponent extends Destroy$ {
   time: number = 0;
   searchbar!: SearchbarComponent;
 
-  constructor(private cd: ChangeDetectorRef, private info: InfoService, private store: Store, private appComponent: AppComponent) {
+  constructor(private cd: ChangeDetectorRef, private info: InfoService, private store: Store, private appComponent: AppComponent, private slideService: SlidemenuService,) {
     super();
     this.searchbar = new SearchbarComponent(store);
   }
@@ -209,5 +210,35 @@ export class ApplicationsComponent extends Destroy$ {
       return candidate!.company == profile.company.id && candidate!.isRefused;
     });
   }
+
+  updatePage() {
+    this.cd.markForCheck()
+  }
+
+  @ViewChild("slideOnlinePost") private slideOnlinePost!: UISlideMenuComponent;
+
+  @ViewChild(UIAnnonceResume, { static: false }) private annonceResume!: UIAnnonceResume;
+
+  slideOnlinePostClose() {
+    this.updatePage()
+    // Close View
+    this.slideOnlinePost.close();
+
+    // Update
+    this.annonceResume.close();
+  }
+
+  deleteCandidate(id: number){
+    const profile = this.store.selectSnapshot(DataQueries.currentProfile);
+    let post: Post = this.allOnlinePosts.filter((post) => {
+      post.id == id
+    })[0]
+    let candidate = post.candidates.filter((candidateId) => {
+      let company = this.store.selectSnapshot(DataQueries.getById("Candidate", candidateId))?.company
+      company == profile.company.id
+    })[0]
+    this.store.dispatch(new UnapplyPost(id, candidate))
+  }
+
   
 }

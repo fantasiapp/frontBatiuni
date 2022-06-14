@@ -71,6 +71,7 @@
               </ng-container>
     
               <mapbox-batiuni 
+                [refreshEvent]="refreshSubject.asObservable()"
                 [posts]="displayOnlinePosts" 
                 class="map-container space-children-margin" 
                 (postClick)="openPost($event.post, $event.hideExactAdress)" 

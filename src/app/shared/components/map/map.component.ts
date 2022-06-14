@@ -1,7 +1,7 @@
 import { Component, ChangeDetectionStrategy, Input, ViewChild, ElementRef, Output, EventEmitter, NgZone, asNativeElements, ChangeDetectorRef } from '@angular/core';
 import { Select, Store } from '@ngxs/store';
 import * as mapboxgl from 'mapbox-gl';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { availableCompanies } from 'src/app/mobile/components/SOS_page/sos-page.component';
 import { Company, Mission, Post } from 'src/models/new/data.interfaces';
 import { DataQueries, DataState } from 'src/models/new/data.state';
@@ -38,6 +38,11 @@ export class UIMapComponent {
     this._companies = this.store.selectSnapshot(DataQueries.getMany('Company', this.posts.map(post => post.company)));
     if ( this.initialized ) this.showPosts();
   }
+
+  @Input()
+  refreshEvent!: Observable<void>
+
+  refreshEventSubscription!: Subscription
 
   currentPost: Post | null = null
 
@@ -140,6 +145,13 @@ export class UIMapComponent {
       if(this.posts) this.showPosts();
     })
 
+    this.refreshEventSubscription = this.refreshEvent.subscribe(()=> {
+      this.refresh()
+    })
+  }
+
+  ngOnDestroy() {
+    this.refreshEventSubscription.unsubscribe();
   }
 
   refresh() {
@@ -147,8 +159,9 @@ export class UIMapComponent {
     if ( this.mode == 'post' ){
       // this.showPosts();
     }
-    else
+    else{
       this.showCompanies(); 
+    }
   }
 
   private aliveMarkers: mapboxgl.Marker[] = [];
@@ -192,9 +205,12 @@ export class UIMapComponent {
   reset() {
     this.mapbox.setZoom(5);
     this.mapbox.setCenter([this.center.longitude, this.center.latitude]);
-    for ( const marker of this.aliveMarkers )
-      marker.remove();
+    for ( const marker of this.aliveMarkers ){
+      marker.getElement().remove();
+    }
+    this.aliveMarkers = []
+    // console.log('this.aliveMarkers', this.aliveMarkers);
     
-    this.aliveMarkers.length = 0;
+    // this.aliveMarkers.length = 0;
   }
 }

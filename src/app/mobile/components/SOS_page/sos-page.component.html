@@ -1,4 +1,4 @@
-<page-header name="SOS" [(activeView)]="activeView" (filterClicked)="openSOSFilterMenu = true" [filterOpen]="filterOn" [callbackSearch]="callbackSearch">
+<page-header name="SOS" [(activeView)]="activeView" (filterClicked)="openSOSFilterMenu = true; updateFilterMap()" [filterOpen]="filterOn" [callbackSearch]="callbackSearch">
   <span tab_0>Vue liste</span>
   <span tab_1>Carte</span>
 </page-header>
@@ -16,6 +16,7 @@
     </ng-container>
     <div class="map-container space-children-margin page-content-with-tabs" *ngSwitchCase="1">
       <mapbox-batiuni 
+        [refreshEvent]="refreshSubject.asObservable()"
         [availableCompanies]="availableCompanies"
         (companyClick)="checkCompanyProfile($event)"
         class="space-children-margin" 

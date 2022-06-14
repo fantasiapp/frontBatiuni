@@ -253,7 +253,7 @@ export class UploadPost {
 
     // let fileToUpload = [];
     let newFiles: any = {};
-    if(oldFiles!.length !== 0){
+    if(oldFiles && oldFiles!.length !== 0){
       console.log("oldFiles", oldFiles, "files", files)
       for (const file of oldFiles!) {
         for (const key in files) {
@@ -326,6 +326,13 @@ export class ApplyPost {
   constructor(public Post: number, form: ApplyForm) {
     this.amount = form.amount;
     this.devis = form.devis;
+  }
+}
+
+export class UnapplyPost {
+  static readonly type = '[User.ST] Unapply Post';
+  action = 'unapplyPost';
+  constructor(public Post: number, candidateId : number) {
   }
 }
 

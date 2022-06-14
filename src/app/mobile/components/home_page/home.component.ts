@@ -563,9 +563,13 @@ export class HomeComponent extends Destroy$ {
     this.selectSearchST(search)
 }
 
+  refreshSubject: Subject<void> = new Subject<void>();
+
   updateFilterOnST(filterOnST: boolean){
+    this.refreshSubject.next();
     this.filterOnST = filterOnST;
   }
+
 
   //factor two menu into objects
   openDraft(post: Post | null) {

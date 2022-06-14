@@ -4,7 +4,7 @@ import {
   Component,
 } from "@angular/core";
 import { Select, Store } from "@ngxs/store";
-import { combineLatest, Observable, of } from "rxjs";
+import { combineLatest, Observable, of, Subject } from "rxjs";
 import { switchMap, takeUntil } from "rxjs/operators";
 import { AppComponent } from "src/app/app.component";
 import { Destroy$ } from "src/app/shared/common/classes";
@@ -55,6 +55,11 @@ export class SOSPageComponent extends Destroy$ {
 
   @Select(DataQueries.currentProfile)
   profile$!: Observable<Profile>;
+
+  refreshSubject: Subject<void> = new Subject<void>();
+  updateFilterMap(){
+    this.refreshSubject.next();
+  }
 
   constructor(
     private store: Store, 
