@@ -587,14 +587,6 @@ export class ModifyProfileForm {
           permissions: ["camera", "photos"],
         });
       } catch (e) {}
-    this.test()
-  }
-
-  async test(){
-    while (true) {
-      console.log("selected labels", this.selectedLabels);
-      await delay(5000);
-    }
   }
 
   ngOnChanges(changes: SimpleChanges) {

@@ -323,7 +323,7 @@ export class ApplyPost {
 export class UnapplyPost {
   static readonly type = '[User.ST] Unapply Post';
   action = 'unapplyPost';
-  constructor(public Post: number, candidateId : number) {
+  constructor(public postId: number, public candidateId : number) {
   }
 }
 
