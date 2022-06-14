@@ -235,7 +235,6 @@ export class DataState {
     if (this.flagUpdate){
       this.flagUpdate = false
       return req.pipe(tap((response: any) => {
-          console.log("lareponseeeeeeeee", response)
           this.getUserDataService.setNewResponse(response)
           if (this.isFirstTime) {
             this.getUserDataService.getDataChangeEmitter().subscribe((value) => {
