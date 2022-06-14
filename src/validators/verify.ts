@@ -69,7 +69,7 @@ export const FieldType = (type: 'phone' | 'number' | 'url', messages?: string[])
       if ( !((typeof content == 'number') || !content.match(regexNumber)) )
         errors['FIELD_TYPE'] = messages || ['un nombre'];
 
-      if(messages && messages[0] == "un numéro de SIRET" && content.length != 16) errors['FIELD_TYPE'] = ['un numéro de SIRET']
+      if(messages && messages[0] == "un numéro de SIRET" && content.length != 14) errors['FIELD_TYPE'] = ['un numéro de SIRET']
     } else if ( type == 'phone' ) {
       if ( !content.replace(/\s/g, '').match(phone) )
         errors['FIELD_TYPE'] = messages || ['un numéro de téléphone'];
