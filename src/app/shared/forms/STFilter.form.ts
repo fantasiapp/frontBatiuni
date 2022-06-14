@@ -269,6 +269,10 @@ export class STFilterForm {
     // Filter
     for (let post of allPosts) {
       const company = this.store.selectSnapshot(DataQueries.getById('Company', post.company))!;
+      const profile = this.store.selectSnapshot(DataQueries.currentProfile);
+
+      // Pour ne pas voir nos propres annonces dans BOTH
+      let isSameCompany = (post.company == profile.company.id)
       
       //Date de mission
       let isDifferentDate = (filter.date && post.startDate < filter.date)
@@ -318,7 +322,8 @@ export class STFilterForm {
       //CounterOffer
       let isNotCounterOffer = (filter.counterOffer && !post.counterOffer);
       
-      if ( isDifferentDate || 
+      if ( isSameCompany ||
+          isDifferentDate || 
           isDifferentManPower || 
           isNotIncludedJob || 
           isNotInRadius || 
