@@ -687,10 +687,10 @@ export class DataState {
   @Action(UnapplyPost)
   unapplyPost(ctx: StateContext<DataModel>, application: UnapplyPost) {
     const profile = this.store.selectSnapshot(DataQueries.currentProfile)!;
-    //{Post: 1, amount: 500, devis: 'Par heure', action: 'applyPost'}
+    console.log("UnapplyPOst ce que j'envoie au BACK", application)
     return this.http.get("data", application).pipe(
       tap((response: any) => {
-        console.log('ApplyPost response', response);
+        console.log('UnapplyPost response', response)
         if (response[application.action] != "OK") throw response["messages"];
 
         delete response[application.action];

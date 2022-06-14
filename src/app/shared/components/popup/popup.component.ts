@@ -241,13 +241,10 @@ export class UIPopup extends DimensionMenu {
   }
 
   addNewTask(e: Event,assignDate: assignDateType, newTaskForm: FormGroup) {
-    // this.store.dispatch(new CreateDetailedPost(assignDate.postDateAvailableTask, input.value, assignDate!.date!.date!.date))
 
     let formControl = newTaskForm.get('task')!
     let value = formControl.value
-    // console.log('addNewTask', missionId, input.value, date);
-    console.log('object');
-    console.log('assing', assignDate);
+    if(!value || value.trim() == '') return
     this.store.dispatch(new CreateDetailedPost(assignDate.missionId, value, assignDate.datePostId)).pipe(take(1)).subscribe(() => {
       formControl.reset()
             
@@ -280,9 +277,11 @@ export class UIPopup extends DimensionMenu {
     });
   }
 
-  taskSubmit(e:Event, input: HTMLFormElement) {
-    input.dispatchEvent(new Event("submit", {cancelable: true}))
+  taskSubmit(e:Event, form: HTMLFormElement, input: HTMLInputElement) {
+    if(!input.value || input.value.trim() == '') return
+    form.dispatchEvent(new Event("submit", {cancelable: true}))
     e.preventDefault(); // Prevents the addition of a new line in the text field (not needed in a lot of cases)
+
   }
 
   clearInput(newTaskForm: FormGroup){

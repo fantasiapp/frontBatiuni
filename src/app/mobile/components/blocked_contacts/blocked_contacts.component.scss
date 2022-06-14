@@ -13,6 +13,13 @@
     padding-top: 40px;
   }
 
+  #swipeupHeader {
+    display: block;
+    position: fixed;
+    background-color: white;
+    color: black
+  }
+
   .left {
     left: 8px;
   }

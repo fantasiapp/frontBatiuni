@@ -15,7 +15,7 @@
 
       <h4 class="text-light-emphasis">Téléphone fixe : <span class="value">{{profile.company.companyPhone | space: 2:1 }}</span></h4>
       
-      <h4 class="text-light-emphasis" *ngIf="profile.company.webSite">Site internet : <span class="value link"><a [href]="'http://' + profile.company.webSite">{{profile.company.webSite}}</a></span></h4>
+      <h4 class="text-light-emphasis" *ngIf="profile.company.webSite">Site internet : <span class="value link"><a [href]="computeWebSite(profile.company.webSite)">{{profile.company.webSite}}</a></span></h4>
 
       <h4 class="text-light-emphasis">N SIRET : <span class="value">{{profile.company.siret}}</span></h4>
 
@@ -54,22 +54,6 @@
       </section>
     </ng-container>
 
-    <ng-container *ngIf="showDeblockButton">
-      <footer
-      class="flex row space-between sticky-footer full-width submit-container"
-      style="background-color: white;"
-      >
-      <!-- <a [routerLink]="['','home']"> Test </a> -->
-      <button
-        [routerLink]="['../app/mobile/components/blocked_contacts']"
-        class="button gradient font-Poppins full-width"
-        (click)="deblockContact(profile.company.id)"
-      >
-        Débloquer le contact
-      </button>
-      </footer>
-      </ng-container>
 
-    <!-- <div style="height: 1rem; width: 100%;"></div> -->
-  </div>
+    </div>
 </ng-container>

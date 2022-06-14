@@ -6,6 +6,7 @@ import {
   Input,
   Output,
   SimpleChanges,
+  ViewChild,
 } from "@angular/core";
 import { Store } from "@ngxs/store";
 import * as UserActions from "src/models/new/user/user.actions";
@@ -29,6 +30,8 @@ import { getFileColor } from "../../common/functions";
 import { AppComponent } from "src/app/app.component";
 import { BlockCompany } from "src/models/new/user/user.actions";
 import { Router } from '@angular/router';
+import { UISlideMenuComponent } from "../slidemenu/slidemenu.component";
+import { UIAnnonceResume } from "src/app/mobile/ui/annonce-resume/annonce-resume.ui";
 
 @Component({
   selector: "extended-profile",
@@ -55,9 +58,6 @@ export class ExtendedProfileComponent extends Destroy$ {
   showContact: boolean = false;
 
   @Input()
-  showDeblockButton: boolean = false;
-
-  @Input()
   showSwitch: boolean = true;
 
   // rating demander recommandation button
@@ -69,8 +69,6 @@ export class ExtendedProfileComponent extends Destroy$ {
 
   @Input()
   showStar: boolean = true;
-
-  deblock: boolean = false;
   
   constructor(
     private store: Store,
@@ -119,21 +117,15 @@ export class ExtendedProfileComponent extends Destroy$ {
     this.popup.openFile(file);
   }
 
-  deblockContact(companyId: number){
-    this.store
-      .dispatch(new BlockCompany(companyId, false))
-      .pipe(take(1))
-      .subscribe(() => {
-        console.log('Débloque le contact')
-        this.router.navigateByUrl('/home')
-        this.cd.markForCheck();
-      });
-  }
-
   @Output()
   ratingsClicked = new EventEmitter();
 
   @Output()
   profileChanged = new EventEmitter<boolean>();
+
+  computeWebSite(websiteUrl: string){
+    if(websiteUrl.substring(0, 4) && websiteUrl.substring(0, 4) == 'http') return websiteUrl
+    return 'https://' + websiteUrl
+  }
 
 }
