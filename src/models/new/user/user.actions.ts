@@ -245,7 +245,6 @@ export class UploadPost {
     // let fileToUpload = [];
     let newFiles: any = {};
     if(oldFiles && oldFiles!.length !== 0){
-      console.log("oldFiles", oldFiles, "files", files)
       for (const file of oldFiles!) {
         for (const key in files) {
           if(file.content != files[key].content){
@@ -255,7 +254,6 @@ export class UploadPost {
       }
     }
     else{
-      console.log("")
       newFiles = files
     }
 
