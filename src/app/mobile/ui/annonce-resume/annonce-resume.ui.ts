@@ -18,11 +18,13 @@ import {
   Job,
   Mission,
   Candidate,
+  Profile,
 } from "src/models/new/data.interfaces";
-import { DataQueries, DataState } from "src/models/new/data.state";
+import { DataQueries, DataState, QueryProfile } from "src/models/new/data.state";
 import { Destroy$ } from "src/app/shared/common/classes";
 import { InfoService } from "src/app/shared/components/info/info.component";
 import { FieldType } from "src/validators/verify";
+import { Observable } from "rxjs";
 
 export type ApplyForm = {
   amount: number;
@@ -42,14 +44,14 @@ export type ApplyForm = {
           class="company-intro flex column center-cross space-children-margin"
         >
           <profile-image
-            [profile]="{ company: company!, user: user }"
+            [profile]="isSuiviPME ? profileST! : { company: company!, user: user }"
             (click)="openProfile()"
           ></profile-image>
-          <span class="company">{{ company!.name }}</span>
+          <span class="company">{{ isSuiviPME ? subContractor!.name : company!.name }}</span>
           <stars
             (click)="openRatings = true"
             class="stars"
-            value="{{ company!.starsPME }}"
+            value="{{ isSuiviPME ? subContractor!.starsST : company!.starsPME }}"
             disabled
           ></stars>
           <span class="ManPower">{{
@@ -112,15 +114,16 @@ export type ApplyForm = {
       </div>
 
       <rating
-        [view]="'PME'"
-        [profile]="{ company: company!, user: user }"
+        [view]="'ST'"
+        [profile]="isSuiviPME ? profileST! : { company: company!, user: user }"
         [(open)]="openRatings"
         [ngClass]="{ open: openRatings }"
       ></rating>
       <slide-profile
-        *ngIf="view == 'ST'"
+        *ngIf="view == 'PME'"
+        [isSuiviPME]="isSuiviPME"
         [(open)]="slideProfileOpen"
-        [profile]="{ company: company!, user: null }"
+        [profile]="isSuiviPME ? profileST! : { company: company!, user: user }"
         [post]="post"
         [ngClass]="{ open: slideProfileOpen }"
       ></slide-profile>
@@ -173,6 +176,9 @@ export class UIAnnonceResume extends Destroy$ {
     if (!value) this.collapsed = false;
   }
 
+  @Input("isSuiviPME")
+  isSuiviPME: boolean = false
+
   @Input()
   application: boolean = true;
 
@@ -180,12 +186,14 @@ export class UIAnnonceResume extends Destroy$ {
   hideExactAdress: boolean = false;
 
   company: Company | null = null;
+  subContractor: Company | null = null;
   user: User | null = null;
   job: Job | null = null;
   files: File[] = [];
   details: PostDetail[] = [];
   openRatings: boolean = false;
   profile = this.store.selectSnapshot(DataQueries.currentProfile);
+  profileST: Profile | null = null
 
   get disableValidation(): boolean {
     if (this.hasPostulated) {
@@ -252,9 +260,15 @@ export class UIAnnonceResume extends Destroy$ {
 
   @Input("post") set post(p: Post | null) {
     this._post = p;
+    console.log("-------------------le post----------------", p)
     this.company = p
       ? this.store.selectSnapshot(DataQueries.getById("Company", p.company))
       : null;
+    this.subContractor = p
+      ? this.store.selectSnapshot(DataQueries.getById("Company", p.subContractor))
+      : null;
+    console.log("-------------------le sub----------------", this.subContractor)
+    if (this.subContractor) {this.profileST = this.store.selectSnapshot(DataQueries.getProfileById(this.subContractor!.id))}
     this.files = p
       ? this.store.selectSnapshot(DataQueries.getMany("File", p.files))
       : [];
