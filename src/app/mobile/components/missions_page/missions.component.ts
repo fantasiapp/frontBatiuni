@@ -125,7 +125,7 @@ export class MissionsComponent extends Destroy$ {
             datePost: date!,
             mission: mission,
             title: 'Chantier de ' + contractor.name,
-            tasks: []
+            tasks: this.store.selectSnapshot(DataQueries.getMany('DetailedPost', date!.details))
           })
           for (const task of tasks) {
             if(date!.date == task.date){

@@ -317,7 +317,7 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
   mainComment(task:PostDetailGraphic | null, formGroup: FormGroup, formControlName: string) {
     let formControl = formGroup.get(formControlName)!
     let comment = formControl.value
-    
+    if(!comment || comment.trim() == '') return
     if (!this.mission!.isClosed) {
       let detailPostId: number | null = task ? task.id : null
       let datePostId: number | null = null;
