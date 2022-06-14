@@ -214,6 +214,8 @@ export type Notification = {
   content: string
   hasBeenViewed: boolean
   nature: string
+  // categorie: string
+  // title: string
 };
 
 export type Mission = Post & {

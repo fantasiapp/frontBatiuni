@@ -26,11 +26,32 @@
     <li >Partager l'application</li>
     <li>Noter l'application</li>
     <li>Nous contacter</li>
-    <li [routerLink]="['', 'faq']">FAQ</li>
-    <li [routerLink]="['', 'mention-legal']">Mentions légales</li>
+    <li (click)="openFaq = true">FAQ</li>
+    <li (click)="openMentionLegal = true">Mentions légales</li>
     <li class="spacer"></li>
     <li (click)="logout()">Se déconnecter</li>
   </swipeup>
+
+  <slidemenu [(open)]="openFaq" #faq>
+    <h1 class="center-text full-width" header>FAQ</h1>
+    <div class="modify-page hosted-page flex column center-cross space-children-margin" content>
+      <faq></faq>
+    </div>
+  </slidemenu>
+
+  <slidemenu [(open)]="openMentionLegal" #mentionLegal>
+    <h1 class="center-text full-width" header>Mentions légales</h1>
+    <div class="modify-page hosted-page flex column center-cross space-children-margin" content>
+      <app-mention-legal></app-mention-legal>
+    </div>
+  </slidemenu>
+
+  <!-- <slidemenu [(open)]="openBlockedContact" #blockedContact>
+    <h1 class="center-text full-width" header>Mes contacts bloqués</h1>
+    <div class="modify-page hosted-page flex column center-cross space-children-margin" content>
+      <blocked_contacts></blocked_contacts>
+    </div>
+  </slidemenu> -->
 
   <slidemenu [footer]="modifyPassword ? 'small' : 'medium'" [(open)]="openModifyMenu" #modifyMenu>    
     <h1 class="center-text full-width" header>Modifier mon Profil</h1>
