@@ -293,9 +293,11 @@ export class DataState {
     console.log("Modification vqu'on envoie à JL", modify)
     const { labelFiles, adminFiles, onlyFiles, ...modifyAction } = modify;
     let companyLabels = this.store.selectSnapshot(DataQueries.getAll('File')).filter(file => file.nature == "labels")
+    console.log("modify user profile", companyLabels, modifyAction)
     let req;
     if (onlyFiles) req = of({ [modify.action]: "OK" });
     else req = this.http.post("data", modifyAction);
+
 
     return req.pipe(
       tap((response: any) => {
