@@ -36,7 +36,6 @@ export class SlideProfileComponent extends UIOpenMenu {
   
   constructor(private store: Store) {
     super();
-    console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",this.post)
     
   }
   
@@ -55,7 +54,6 @@ export class SlideProfileComponent extends UIOpenMenu {
       favoritePosts: [],
       viewedPosts: []
     }
-    console.log("bbbbbbbbbbbbbbbbbbbbbb", fakeUser)
     this.profile.user = fakeUser
   }
 
@@ -64,7 +62,6 @@ export class SlideProfileComponent extends UIOpenMenu {
   }
 
   set open(value: boolean) {   
-    console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",this.post)
     this.openSlideProfile = value
     super.open = value   
   }
