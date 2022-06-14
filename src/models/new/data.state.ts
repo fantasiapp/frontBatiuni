@@ -148,19 +148,13 @@ export class DataState {
   clear(ctx: StateContext<DataModel>, clear: Clear) {
     const current = ctx.getState();
     if (clear.data) {
-      ctx.patchState({
-        [clear.data]: {},
-        fields: { ...current.fields, [clear.data]: [] },
-      });}
-    else
-      ctx.setState({
-        fields: {},
-        session: {
-          currentUser: -1,
-          view: "ST",
-          time: 0,
-        },
-      });
+      this.getUserDataService.emitDataChangeEvent()
+      ctx.patchState({[clear.data]: {},fields: { ...current.fields, [clear.data]: [] },});
+    }
+    else {
+      this.getUserDataService.emitDataChangeEvent()
+      ctx.setState({fields: {},session: {currentUser: -1,view: "ST",time: 0,},});
+    }
   }
 
   @Selector()
@@ -312,6 +306,7 @@ export class DataState {
         
         if(response.hasOwnProperty('JobForCompany') && Array.isArray(response['JobForCompany'])){
           for (let job of response.JobForCompany) {
+            this.getUserDataService.emitDataChangeEvent()
             ctx.setState(addValues('JobForCompany', job))            
           }
         }
@@ -319,6 +314,7 @@ export class DataState {
         
         if (response.hasOwnProperty('LabelForCompany') && Array.isArray(response['LabelForCompany'])){
           for (let label of response.LabelForCompany) {
+            this.getUserDataService.emitDataChangeEvent()
             ctx.setState(addValues('LabelForCompany', label))            
           }
         }
@@ -327,15 +323,21 @@ export class DataState {
         // delete response['JobForCompany']
         // ctx.setState(compose(...this.reader.readUpdates(response)));
 
-        if (response.hasOwnProperty('Company')){ctx.setState(update('Company', response.Company))}
-        if (response.hasOwnProperty('UserProfile')){ctx.setState(update('UserProfile', response.UserProfile))}
-
+        if (response.hasOwnProperty('Company')){
+          this.getUserDataService.emitDataChangeEvent()
+          ctx.setState(update('Company', response.Company))
+        }
+        if (response.hasOwnProperty('UserProfile')){
+          this.getUserDataService.emitDataChangeEvent()
+          ctx.setState(update('UserProfile', response.UserProfile))
+        }
 
         this.inZone(() =>
           this.info.show("success", "Profil modifié avec succès", 2000)
         );
       }),
       concatMap(() => {
+        this.getUserDataService.emitDataChangeEvent()
         labelFiles.forEach((file) => 
         // {
         // // if (companyLabels.some(label => label.name != file.nature)) {
@@ -373,6 +375,7 @@ export class DataState {
       tap((response: any) => {
         if (response[picture.action] !== "OK") throw response["messages"];
         delete response[picture.action];
+        this.getUserDataService.emitDataChangeEvent()
         ctx.setState(compose(addSimpleChildren("Company", profile.company.id, "File", response, "nature")));
       })
     );
@@ -392,6 +395,7 @@ export class DataState {
         let id = response.supervisionId
         delete response.supervisionId;
         response[parseInt(key[0])].push(picture.imageBase64)
+        this.getUserDataService.emitDataChangeEvent()
         ctx.setState(compose(addComplexChildren("Supervision", id, "File", response)))
       })
     );
@@ -409,12 +413,8 @@ export class DataState {
   @Action(ChangeProfileType)
   changeProfileType(ctx: StateContext<DataModel>, action: ChangeProfileType) {
     const state = ctx.getState();
-    return ctx.patchState({
-      session: {
-        ...state.session,
-        view: action.type ? "PME" : "ST",
-      },
-    });
+    this.getUserDataService.emitDataChangeEvent()
+    return ctx.patchState({session: {...state.session,view: action.type ? "PME" : "ST",},});
   }
 
   @Action(UploadFile)
@@ -427,28 +427,23 @@ export class DataState {
         delete response[upload.action];
 
         const assignedId = +Object.keys(response)[0],
-          fields = ctx.getState()["fields"],
-          contentIndex = fields["File"].indexOf("content");
+        fields = ctx.getState()["fields"],
+        contentIndex = fields["File"].indexOf("content");
 
         upload.assignedId = assignedId;
         response[assignedId][contentIndex] = "";
 
+        this.getUserDataService.emitDataChangeEvent()
         if (upload.category == "Company") {
           //add it to company
           const company = this.store.selectSnapshot(DataQueries.currentCompany);
-
-          ctx.setState(
-            compose(addSimpleChildren("Company", company.id, "File", response, "name"))
-          );
-        } else if (upload.category == "Post") {
-          ctx.setState(
-            compose(addSimpleChildren("Post", upload.target, "File", response, "name"))
-          );
+          ctx.setState(compose(addSimpleChildren("Company", company.id, "File", response, "name")));
+        } 
+        else if (upload.category == "Post") {
+          ctx.setState(compose(addSimpleChildren("Post", upload.target, "File", response, "name")));
         }
         let name: string = "File" + upload.assignedId!.toString()
-          if (SingleCache.checkValueInCache(name)) {
-            SingleCache.deleteValueByName(name)
-          }
+          if (SingleCache.checkValueInCache(name)) {SingleCache.deleteValueByName(name)}
       })
     );
   }
@@ -465,13 +460,13 @@ export class DataState {
 
         modify.fileId = fileId;
 
+        this.getUserDataService.emitDataChangeEvent()
         if (modify.category == "Company") {
           const company = this.store.selectSnapshot(DataQueries.currentCompany);
           ctx.setState(compose(addSimpleChildren("Company", company.id, "File", response, "name")))
-        } else if (modify.category == "Post") {
-          ctx.setState(
-            compose(addSimpleChildren("Post", modify.target, "File", response, "name"))
-          );
+        } 
+        else if (modify.category == "Post") {
+          ctx.setState(compose(addSimpleChildren("Post", modify.target, "File", response, "name")));
         }
         
 
@@ -501,17 +496,15 @@ export class DataState {
   @Action(DeleteFile)
   deleteFile(ctx: StateContext<DataModel>, deletion: DeleteFile) {
     const req = this.http.get("data", deletion);
-    return req.pipe(
-      tap((response: any) => {
+    return req.pipe(tap((response: any) => {
         console.log('delteFile response', response);
         if (response[deletion.action] !== "OK") throw response["messages"];
 
         delete response[deletion.action];
+        this.getUserDataService.emitDataChangeEvent()
         ctx.setState(deleteIds("File", [deletion.id]));
 
-        if(response.hasOwnProperty('Company')) {
-          ctx.setState(update('Company', response['Company']))
-        }
+        if(response.hasOwnProperty('Company')) {ctx.setState(update('Company', response['Company']))}
       })
     );
   }
@@ -536,6 +529,7 @@ export class DataState {
         // ctx.setState(addValues('Post', response))
 
         
+        this.getUserDataService.emitDataChangeEvent()
         if(response.hasOwnProperty('DatePost')){
           for (const datePost of response['DatePost']) {
             ctx.setState(addValues('DatePost', datePost))
@@ -576,9 +570,8 @@ export class DataState {
         if (response[switchType.action] !== "OK") throw response["messages"];
 
         delete response[switchType.action];
-        ctx.setState(
-          transformField("Post", switchType.id, "draft", (draft) => !draft)
-        );
+        this.getUserDataService.emitDataChangeEvent()
+        ctx.setState(transformField("Post", switchType.id, "draft", (draft) => !draft));
       })
     );
   }
@@ -590,6 +583,7 @@ export class DataState {
         if (response[deletion.action] !== "OK") throw response["messages"];
 
         delete response[deletion.action];
+        this.getUserDataService.emitDataChangeEvent()
         ctx.setState(deleteIds("Post", [deletion.id]));
       })
     );
@@ -606,9 +600,8 @@ export class DataState {
         }
         delete response[application.action];
         console.log('duplicatePost', response);
-        ctx.setState(
-          addComplexChildren("Company", profile.company.id, "Post", response)
-        );
+        this.getUserDataService.emitDataChangeEvent()
+        ctx.setState(addComplexChildren("Company", profile.company.id, "Post", response));
         this.inZone(() => this.info.show("info", "Duplication réalisée", 2000));
       })
     );
@@ -664,6 +657,7 @@ export class DataState {
             )
           );
         //overwrite
+        this.getUserDataService.emitDataChangeEvent()
         ctx.setState(addValues("File", response));
         //file is now downloaded
         pending!.next(response[contentIndex]);
@@ -682,6 +676,7 @@ export class DataState {
         if (response[application.action] != "OK") throw response["messages"];
 
         delete response[application.action];
+        this.getUserDataService.emitDataChangeEvent()
         ctx.setState(addValues('Candidate', response['Candidate']))
         ctx.setState(update('Post', response['Post']));
       })
@@ -698,7 +693,8 @@ export class DataState {
         if (response[application.action] != "OK") throw response["messages"];
 
         delete response[application.action];
-        ctx.setState(deleteIds('Candidate', response.Candidate))
+        this.getUserDataService.emitDataChangeEvent()
+        ctx.setState(deleteIds('Candidate', [response['Candidate']]))
         ctx.setState(update('Post', response['Post']));
       })
     );
@@ -715,6 +711,7 @@ export class DataState {
         }
         delete response[application.action];
         console.log('CandidateViewed', response);
+        this.getUserDataService.emitDataChangeEvent()
         ctx.setState(addComplexChildren("Company", profile.company.id, "Post", response));
       })
     );
@@ -732,12 +729,11 @@ export class DataState {
         delete response[availability.action];
         const company = this.store.selectSnapshot(DataQueries.currentCompany);
 
+        this.getUserDataService.emitDataChangeEvent()
         ctx.setState(
           //doest work because it leaves old values
           //pushChildValues('Company', company.id, 'Disponibility', response, 'date')
-          compose(
-            replaceChildren("Company", company.id, "Disponibility", response)
-          )
+          compose(replaceChildren("Company", company.id, "Disponibility", response))
         );
       })
     );
@@ -757,20 +753,12 @@ export class DataState {
         const company = this.store.selectSnapshot(DataQueries.currentCompany);
         this.inZone(() => this.info.show("success", "Réponse envoyée.", 3000));
         this.slide.hide();
+        this.getUserDataService.emitDataChangeEvent()
         if (data["response"]) {
-          ctx.setState(
-            compose(
-              deleteIds("Post", [handle.post.id]),
-              addComplexChildren("Company", company.id, "Mission", response)
-            )
-          );
-        } else
-          ctx.setState(
-            compose(
-              deleteIds("Post", [handle.post.id]),
-              addComplexChildren("Company", company.id, "Post", response)
-            )
-          );
+          ctx.setState(compose(deleteIds("Post", [handle.post.id]),addComplexChildren("Company", company.id, "Mission", response)));
+        } 
+        else
+          ctx.setState(compose(deleteIds("Post", [handle.post.id]),addComplexChildren("Company", company.id, "Post", response)));
       })
     );
   }
@@ -785,6 +773,7 @@ export class DataState {
           delete response[block.action]; this.inZone(() => this.info.show("success", response.messages, 2000))
           let BlockedCandidates = this.store.selectSnapshot(DataQueries.getAll("BlockedCandidate"))
           let theBlocked = BlockedCandidates.filter((candidate) => candidate.blocked == block.companyId && candidate.blocker == user.company)[0]
+          this.getUserDataService.emitDataChangeEvent()
           if(theBlocked) {
             ctx.setState(update("BlockedCandidate", response))
           }
@@ -810,9 +799,8 @@ export class DataState {
         let mission = this.store.selectSnapshot(DataQueries.getById("Mission", application.missionId))
         SingleCache.deleteValueByName("File" + mission?.contract.toString());
         delete response[application.action];
-        ctx.setState(
-          addComplexChildren("Company", profile.company.id, "Mission", response)
-        );
+        this.getUserDataService.emitDataChangeEvent()
+        ctx.setState(addComplexChildren("Company", profile.company.id, "Mission", response));
       })
     );
   }
@@ -830,6 +818,7 @@ export class DataState {
         // }
         // delete response[application.action];
         console.log("createDetailedPost", response)
+        this.getUserDataService.emitDataChangeEvent()
         ctx.setState(addComplexChildren(response["type"], response["fatherId"], "DetailedPost", response["detailedPost"]))
         if (response["detailedPost2"]){
           console.log('createDetailedPost add to Mission');
@@ -851,6 +840,7 @@ export class DataState {
         }
         delete response[application.action]
         console.log("modifyDetailedPost", response)
+        this.getUserDataService.emitDataChangeEvent()
         if (response["deleted"] == "yes") {
           console.log('modifyDetailedPost', response['detailedPostId']);
           ctx.setState(deleteIds("DetailedPost", [response["detailedPostId"]]));
@@ -874,6 +864,7 @@ export class DataState {
         }
         delete response[application.action];
         console.log("createSupervision", response, response["type"], response["type"] == "DatePost")
+        this.getUserDataService.emitDataChangeEvent()
         if (response["type"] == "DatePost") ctx.setState(addComplexChildren("DatePost", response["fatherId"], "Supervision", response["supervision"]))
         if (response["type"] == "DetailedPost") ctx.setState(addComplexChildren("DetailedPost",response["fatherId"], "Supervision", response["supervision"]))
       })
@@ -893,6 +884,7 @@ export class DataState {
         
         console.log('modifyMissionDate', response);
         
+        this.getUserDataService.emitDataChangeEvent()
         ctx.setState(addComplexChildren('Mission', response.mission.id,'DatePost', response.datePost))
       })
     );
@@ -915,9 +907,11 @@ export class DataState {
           delete response[application.action];
           console.log('validateMissionDate', response)
 
+          this.getUserDataService.emitDataChangeEvent()
           if(response.hasOwnProperty('update')){
             ctx.setState(update(response.type, response[response.type]))
-          } else {
+          } 
+          else {
             if(response.hasOwnProperty('deleted')) {
               ctx.setState(deleteIds("DatePost", [response["fatherId"]]));
               ctx.setState(update('Mission', response["mission"]));
@@ -943,6 +937,7 @@ export class DataState {
         }
         delete response[application.action];
         console.log('Response', response)
+        this.getUserDataService.emitDataChangeEvent()
         ctx.setState(update("Mission", response));
 
       })
@@ -960,6 +955,7 @@ export class DataState {
         }
         delete response[application.action];
         console.log('ReponseST', response)
+        this.getUserDataService.emitDataChangeEvent()
         ctx.setState(update("Mission", response));
         // console.log("Dans CloseMissionST", this.store.selectSnapshot(DataQueries.getAll("Mission")))
       })
@@ -979,16 +975,8 @@ export class DataState {
           throw response.messages;
         }
         delete response[application.action];
-        ctx.setState(
-          compose(
-            addSimpleChildren(
-              "Company",
-              profile.company.id,
-              "Notification",
-              response
-            )
-          )
-        );
+        this.getUserDataService.emitDataChangeEvent()
+        ctx.setState(compose(addSimpleChildren("Company",profile.company.id,"Notification",response)));
       })
     );
   }
@@ -999,19 +987,12 @@ export class DataState {
   getCompanies(ctx: StateContext<DataModel>, get: GetCompanies) {
     return this.http.get("initialize", get).pipe(
       tap((response: any) => {
-        ctx.setState(
-          compose(
-            this.reader.readInitialData(response)[0],
+        this.getUserDataService.emitDataChangeEvent()
+        ctx.setState(compose(this.reader.readInitialData(response)[0],
             //very error prone
             //i really hate doing this
             produce((draft: any) => {
-              draft.fields["Establishments"] = [
-                "name",
-                "address",
-                "activity",
-                "siret",
-                "ntva",
-              ];
+              draft.fields["Establishments"] = ["name","address","activity","siret","ntva",];
               return draft;
             })
           )
@@ -1025,11 +1006,10 @@ export class DataState {
     const id = this.store.selectSnapshot(DataState.currentUserId);
     return this.http.get("data", favorite).pipe(
       tap((response: any) => {
-        if (response[favorite.action] !== "OK")
-          this.inZone(() => this.info.show("error", response.messages, 3000));
+        if (response[favorite.action] !== "OK") {this.inZone(() => this.info.show("error", response.messages, 3000));}
 
-        ctx.setState(
-          transformField("UserProfile", id, "favoritePosts", (favorites) => {
+        this.getUserDataService.emitDataChangeEvent()
+        ctx.setState(transformField("UserProfile", id, "favoritePosts", (favorites) => {
             if (favorite.value) return [...favorites, favorite.Post];
             else return favorites.filter((id) => favorite.Post !== id);
           })
@@ -1054,16 +1034,8 @@ export class DataState {
 
     return this.http.get("data", view).pipe(
       tap((response: any) => {
-        ctx.setState(
-          transformField(
-            "UserProfile",
-            user.id,
-            "viewedPosts",
-            (viewed: any) => {
-              return [...viewed, view.Post];
-            }
-          )
-        );
+        this.getUserDataService.emitDataChangeEvent()
+        ctx.setState(transformField("UserProfile",user.id,"viewedPosts",(viewed: any) => {return [...viewed, view.Post];}));
       })
     );
   }
@@ -1082,14 +1054,8 @@ export class DataState {
               this.inZone(() =>
                 this.info.show("info", response.messages, 3000)
               );
-            ctx.setState(
-              transformField(
-                "UserProfile",
-                user.id,
-                "tokenFriend",
-                (draft) => token
-              )
-            );
+            this.getUserDataService.emitDataChangeEvent()
+            ctx.setState(transformField("UserProfile",user.id,"tokenFriend",(draft) => token));
           }
         }
       })
@@ -1100,15 +1066,8 @@ export class DataState {
   boostPost(ctx: StateContext<DataModel>, boost: BoostPost) {
     return this.http.post("data", boost).pipe(
       tap((response: any) => {
-        ctx.setState(
-          transformField(
-            "Post",
-            boost.postId,
-            "boostTimestamp",
-            () => {
-              return response.UserProfile[boost.postId][22];
-            }
-          ));
+        this.getUserDataService.emitDataChangeEvent()
+        ctx.setState(transformField("Post",boost.postId,"boostTimestamp",() => {return response.UserProfile[boost.postId][22];}));
       })
     );
   }
@@ -1122,9 +1081,11 @@ export class DataState {
         console.log('response in askRecommandation', response)
         if (response[demand.action] !== "OK") {
           this.inZone(() => this.info.show("error", response.messages, 3000));
-        } else {
-                this.info.show("info", response.messages, 3000)
-                ctx.setState(addValues("Recommandation", response))
+        } 
+        else {
+          this.info.show("info", response.messages, 3000)
+        this.getUserDataService.emitDataChangeEvent()
+        ctx.setState(addValues("Recommandation", response))
       }
       })
     )
@@ -1136,6 +1097,7 @@ export class DataState {
     return this.http.post("initialize", application).pipe(
       tap((response: any) => {
         //write code to manage the response
+        this.getUserDataService.emitDataChangeEvent()
         ctx.setState(addValues("Recommandation", response))
       })
     )
