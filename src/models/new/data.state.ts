@@ -234,8 +234,7 @@ export class DataState {
     }
     if (this.flagUpdate){
       this.flagUpdate = false
-      return req.pipe(
-        tap((response: any) => {
+      return req.pipe(tap((response: any) => {
           this.getUserDataService.setNewResponse(response)
           if (this.isFirstTime) {
             this.getUserDataService.getDataChangeEmitter().subscribe((value) => {
@@ -244,6 +243,8 @@ export class DataState {
             this.updateLocalData(ctx, response)
           }
           this.flagUpdate = true
+    }, (error: any) => {
+      this.flagUpdate = true
     })
       );
     }
