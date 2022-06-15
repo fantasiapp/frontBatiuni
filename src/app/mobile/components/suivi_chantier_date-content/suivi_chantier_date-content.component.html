@@ -1,4 +1,14 @@
-<div class="chantier-tache-container">
+<div class="chantier-tache-container" [ngClass]="{'suppression': date.deleted}">
+    <div *ngIf="date.deleted" style="position: relative; top: 1rem;">
+      
+      <div class="details chantier-tache">
+        <div class="detail-name"><span style="color: red;">Attention</span> : date en cours de suppression</div>
+        <div class="controls" *ngIf="!mission!.isClosed">
+          <img (click)="deleted(true, date.deleted)"  src= "assets/suivi-valider-OK.svg" #validateImg/>
+          <img (click)="deleted(false, date.deleted)" src= "assets/suivi-refuser-OK.svg" #refuseImg/>
+        </div>
+      </div>
+    </div>
     <div id="taskMain_{{date.id}}" *ngIf="view=='PME'">
         <div class="chantier-tache">
             <label>Choisir les tâches pour ce jour</label>

@@ -140,7 +140,18 @@ export class SuiviPME extends Destroy${
   ) {super()}
 
   ngOnInit(){
-    
+    if(!this.mission) return
+    console.log('object');
+    this.mission = this.store.selectSnapshot(DataQueries.getById('Mission', this.mission.id));
+  }
+
+  onComputeDate(){
+    console.log('onComputeDate',this.mission, this.dates);
+    if(!this.mission) return
+    this.mission = this.store.selectSnapshot(DataQueries.getById('Mission', this.mission.id));
+    if(!this.mission) return
+    this.dates = this.store.selectSnapshot(DataQueries.getMany('DatePost', this.mission.dates))
+    this.cd.markForCheck()
   }
 
   closeMission() {
@@ -275,6 +286,7 @@ export class SuiviPME extends Destroy${
   }
 
   submitAdFormDate(setup: boolean = false) {
+
     console.log('SUBmiTeAddd');
     let datesSelected: string[] = this.calendarForm!.value.filter((day : DayState) => day.availability == 'selected').map((day: DayState) => day.date)
     let blockedDates = this.computeBlockedDate();
@@ -349,14 +361,14 @@ export class SuiviPME extends Destroy${
   }
 
   computeBlockedDate(): string[] {
-    console.log('Start blocked', this.mission, this.dates);
+    
     if(!this.mission){
       return []
     }
-    // this.cd.detach()
+    console.log('Start blocked', this.mission, this.dates);
 
     let listBlockedDate: string[] = [];
-    let listDatePost = this.store.selectSnapshot(DataQueries.getMany('DatePost', this.mission.dates))
+    let listDatePost = this.store.selectSnapshot(DataQueries.getMany('DatePost', this.mission!.dates))
     // this.cd.reattach()
     listBlockedDate = listDatePost.filter(date => date && (!!date.supervisions.length || !!date.details.length)).map(date => date.date)
     console.log('listBlockedDate', listBlockedDate);

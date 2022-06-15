@@ -25,7 +25,7 @@
 <div class="full-width flex column">
   <ng-container *ngFor="let date of dates">
 
-    <suivi-chantier_date *ngIf="date.validated || (!date.validated && date.deleted && view == 'ST')" [view]="view" [dateId]="date.id" [mission]="mission"></suivi-chantier_date>
+    <suivi-chantier_date *ngIf="date.validated || (!date.validated && date.deleted && view == 'ST')" [view]="view" [dateId]="date.id" [mission]="mission" (computeDate)="onComputeDate()"></suivi-chantier_date>
   </ng-container>
   <!-- <div class="newDate">
     <img src="assets/plusBlue.svg">

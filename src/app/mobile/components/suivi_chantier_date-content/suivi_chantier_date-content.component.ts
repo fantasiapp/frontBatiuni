@@ -2,7 +2,9 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  EventEmitter,
   Input,
+  Output,
 } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { Camera, CameraResultType, CameraSource } from "@capacitor/camera";
@@ -28,6 +30,7 @@ import {
   CreateSupervision,
   ModifyDetailedPost,
   UploadImageSupervision,
+  ValidateMissionDate,
 } from "src/models/new/user/user.actions";
 import { SuiviPME } from "../suivi_pme/suivi-pme.page";
 
@@ -338,5 +341,21 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
     this.currentSupervisionId = supervsionId;
     this.swipeMenuImage = true; 
     this.cd.markForCheck()
+  }
+
+  @Output() computeDates: EventEmitter<any> = new EventEmitter();
+
+  deleted(b: boolean, deleting: boolean) {
+    let field = "date";
+    
+    this.store.dispatch(new ValidateMissionDate(this.mission!.id, field, b, this.date.date)).pipe().subscribe(() => {
+      let change = { 
+        validate: deleting ? !b : b,
+        deleted: deleting && b,
+        schedule: false
+      }
+      
+      if(deleting) this.computeDates.next()
+    });
   }
 }
