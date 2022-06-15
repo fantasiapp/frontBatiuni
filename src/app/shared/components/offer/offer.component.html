@@ -25,7 +25,7 @@
         <ng-template #favoritePosts><img src="assets/starFull.svg" alt="favoritePosts"></ng-template>
       </div>
       <img class="imageProfile" [src]="src">
-      <span *ngIf="true" [attr.data-notification-number]="4" class="notification"></span>
+      <span *ngIf="notificationsMissionUnseen !== 0" [attr.data-notification-number]="notificationsMissionUnseen" class="notification"></span>
       <span class="hasPostulated" *ngIf="hasPostulated && !isAppliedPage">Déjà postulé</span>
       <span class="ongoing" *ngIf="hasPostulated && isAppliedPage && !isRefused">En cours</span>
       <span class="refused" *ngIf="hasPostulated && isAppliedPage && isRefused">Refusé</span>

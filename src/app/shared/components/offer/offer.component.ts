@@ -49,6 +49,9 @@ export class OfferComponent {
   favoritePost: boolean = false;
 
   @Input()
+  notificationsMissionUnseen: number = 0
+
+  @Input()
   showCandidate: boolean = false;
 
   @Input()

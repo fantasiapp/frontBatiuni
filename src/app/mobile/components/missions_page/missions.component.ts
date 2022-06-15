@@ -29,6 +29,7 @@ import { AppComponent } from "src/app/app.component";
 import { SearchbarComponent } from "src/app/shared/components/searchbar/searchbar.component";
 import { getUserDataService } from "src/app/shared/services/getUserData.service";
 import { MissionFilterForm } from "src/app/shared/forms/missions.form";
+import { NotifService } from "src/app/shared/services/notif.service";
 
 @Component({
   selector: "missions",
@@ -69,7 +70,8 @@ export class MissionsComponent extends Destroy$ {
     private info: InfoService,
     private cd: ChangeDetectorRef,
     private appComponent: AppComponent,
-    private getUserDataService: getUserDataService
+    private getUserDataService: getUserDataService,
+    private notifService: NotifService
   ) {
     super();
     this.searchbar = new SearchbarComponent(store);

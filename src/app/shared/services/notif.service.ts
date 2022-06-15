@@ -12,6 +12,7 @@ export class NotifService {
   navchange: EventEmitter<number> = new EventEmitter();
 
   notificationsUnseen: number = 0
+  notificationsMission: Notification[] = []
 
   token: string = 'y\'a pas de token'
   notifications: Notification[] = [];
@@ -52,10 +53,19 @@ export class NotifService {
             this.notifications.push(notification!)
           if (!notification!.hasBeenViewed) {
             this.notificationsUnseen++
+            if(notification!.category == "supervision") {
+            this.notificationsMission.push(notification!)
+            }
           }
         }
 
     }
+  }
+
+  getNotificationUnseenMission(idMission: number){
+    this.checkNotif()
+    let notificationsMissionUnseen = this.notificationsMission.filter((notif) => !notif.hasBeenViewed && notif.missions == idMission)
+    return notificationsMissionUnseen.length
   }
 }
 
