@@ -22,6 +22,7 @@ import { DataQueries } from "src/models/new/data.state";
 import { DeletePost, SetFavorite } from "src/models/new/user/user.actions";
 import { FileDownloader } from "../../services/file-downloader.service";
 import { ImageGenerator } from "../../services/image-generator.service";
+import { NotifService } from "../../services/notif.service";
 import { SingleCache } from "../../services/SingleCache";
 import { PopupService } from "../popup/popup.component";
 
@@ -37,7 +38,8 @@ export class OfferComponent {
     private popup: PopupService,
     private cd: ChangeDetectorRef,
     private imageGenerator: ImageGenerator,
-    private downloader: FileDownloader
+    private downloader: FileDownloader,
+    private notifService: NotifService
   ) {}
 
   @Input() view: "ST" | "PME" = "PME";
@@ -48,8 +50,6 @@ export class OfferComponent {
   user$!: Observable<User>;
   favoritePost: boolean = false;
 
-  @Input()
-  notificationsMissionUnseen: number = 0
 
   @Input()
   showCandidate: boolean = false;
@@ -185,5 +185,10 @@ export class OfferComponent {
     } else {
       return adress;
     }
+  }
+
+  get notificationsMissionUnseen() {
+    console.log("dans le get de offer", this.notifService.getNotificationUnseenMission(this._post!.id))
+    return this.notifService.getNotificationUnseenMission(this._post!.id)
   }
 }

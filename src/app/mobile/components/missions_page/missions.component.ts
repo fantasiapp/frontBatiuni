@@ -376,6 +376,7 @@ export class MissionsComponent extends Destroy$ {
     }
     return array;
   }
+
 }
 
 function supervisionsTaks(supervisions: number[], supervisionsTaks: any): any {
