@@ -2,8 +2,8 @@
 @use 'src/styles/mixins' as *;
 
 :host {
-    @extend %page ;
-    @extend %no-navigation ;
+    // @extend %page ;
+    // @extend %no-navigation ;
 }
 
 .nav-container {
