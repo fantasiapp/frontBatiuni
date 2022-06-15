@@ -216,8 +216,6 @@ export class HomeComponent extends Destroy$ {
           this.selectSearchDraft("");
           this.selectSearchOnline("");
           this.selectSearchMission("");
-
-          console.log('userDraft', this.userDrafts);
         });
       this.time = this.store.selectSnapshot(DataState.time);
       this.updatePage()
@@ -341,12 +339,14 @@ export class HomeComponent extends Destroy$ {
       } 
 
       for (let post of this.allUserOnlinePosts) {
-
+        
+        const now = (new Date).toISOString().slice(0, 10);
+        let isBeforeDueDate = (post.dueDate < now)
         let isDifferentDate = (filter.date &&  post.startDate < filter.date)
         let isDifferentManPower = (filter.manPower && post.manPower != (filter.manPower === "true"))
         let isNotIncludedJob = (filter.jobs && filter.jobs.length && filter.jobs.every((job: any) => {return job.id != post.job}))
 
-        if ( isDifferentDate || isDifferentManPower || isNotIncludedJob) { continue }
+        if ( isDifferentDate || isDifferentManPower || isNotIncludedJob || isBeforeDueDate) { continue }
         this.userOnlinePosts.push(post)
       }  
     }
@@ -460,7 +460,7 @@ export class HomeComponent extends Destroy$ {
 
   selectSearchDraft(searchForm:  string){
     this.userDrafts = [];
-    this.allUserOnlinePosts.sort((post1, post2) => {
+    this.allUserDrafts.sort((post1, post2) => {
       let b1 = post1.boostTimestamp > this.time ? 1 : 0;
       let b2 = post2.boostTimestamp > this.time ? 1 : 0;
       return b2 - b1
@@ -482,24 +482,21 @@ export class HomeComponent extends Destroy$ {
   }
 
   selectSearchOnline(searchForm:  string){
-    this.userOnlinePosts = [];
-    this.allUserOnlinePosts.sort((post1, post2) => {
+    this.userOnlinePosts.sort((post1, post2) => {
       let b1 = post1.boostTimestamp > this.time ? 1 : 0;
       let b2 = post2.boostTimestamp > this.time ? 1 : 0;
       return b2 - b1
     });
     if (searchForm == "" || searchForm == null)  {
-      this.userOnlinePosts = this.allUserOnlinePosts
     } else {
       let levenshteinDist: any = [];
-      for (let post of this.allUserOnlinePosts) {
+      for (let post of this.userOnlinePosts) {
         let postString = this.searchbar.postToString(post)
         levenshteinDist.push([post,getLevenshteinDistance(postString.toLowerCase(),searchForm.toLowerCase()),]);
       }
       levenshteinDist.sort((a: any, b: any) => a[1] - b[1]);
       let keys = levenshteinDist.map((key: any) => { return key[0]; });
-      this.allUserOnlinePosts.sort((a: any,b: any)=>keys.indexOf(a) - keys.indexOf(b));
-      this.userOnlinePosts = this.allUserOnlinePosts
+      this.userOnlinePosts.sort((a: any,b: any)=>keys.indexOf(a) - keys.indexOf(b));
     }
     this.cd.markForCheck();
   }
@@ -525,6 +522,8 @@ export class HomeComponent extends Destroy$ {
 
   selectSearchST(searchForm:  string){
     this.displayOnlinePosts = [];
+    const now = new Date().toISOString().slice(0, 10);
+     this.allOnlinePosts = this.allOnlinePosts.filter((post) => post.dueDate > now)
     this.allOnlinePosts.sort((post1, post2) => {
       let b1 = post1.boostTimestamp > this.time ? 1 : 0;
       let b2 = post2.boostTimestamp > this.time ? 1 : 0;
