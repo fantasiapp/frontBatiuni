@@ -70,7 +70,6 @@ export class ApplicationsComponent extends Destroy$ {
     combineLatest([this.profile$, this.posts$])
       .pipe(takeUntil(this.destroy$))
       .subscribe(([profile, posts]) => {
-        console.log("DEBUT DE NGONINT")
       const mapping = splitByOutput(posts, (post) => {
           //0 -> userOnlinePosts | 1 -> userDrafts
           if (profile.company.posts.includes(post.id)){
