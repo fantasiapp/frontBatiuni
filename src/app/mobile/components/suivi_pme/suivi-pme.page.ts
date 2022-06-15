@@ -279,7 +279,6 @@ export class SuiviPME extends Destroy${
   }
 
   submitAdFormDate(setup: boolean = false) {
-    console.log('SUBmiTeAddd');
     let datesSelected: string[] = this.calendarForm!.value.filter((day : DayState) => day.availability == 'selected').map((day: DayState) => day.date)
     let blockedDates = this.computeBlockedDate();
     let pendingDates = this.computePendingDate()
@@ -330,7 +329,6 @@ export class SuiviPME extends Destroy${
   }
 
   saveToBackAdFormDate() {
-    console.log('start saveToBack', this.dates);
     const selectedDate: string[] = this.calendarForm!.value.map(
       (dayState: DayState) => {
         return dayState.date;
@@ -345,15 +343,11 @@ export class SuiviPME extends Destroy${
       if (!Array.isArray(this.mission.dates)) arrayDateId = Object.keys(this.mission.dates).map(date => +date)
       else arrayDateId = this.mission.dates
       this.dates = this.store.selectSnapshot(DataQueries.getMany('DatePost', arrayDateId))
-      console.log('COMPUTED DATES from back', this.dates);
       this.cd.markForCheck();
-      console.log('end saveToBack');
     });
-    console.log('end saveToBack 2');
   }
 
   computeBlockedDate(): string[] {
-    console.log('Start blocked', this.mission, this.dates);
     if(!this.mission){
       return []
     }
@@ -363,12 +357,10 @@ export class SuiviPME extends Destroy${
     let listDatePost = this.store.selectSnapshot(DataQueries.getMany('DatePost', this.mission.dates))
     // this.cd.reattach()
     listBlockedDate = listDatePost.filter(date => date && (!!date.supervisions.length || !!date.details.length)).map(date => date.date)
-    console.log('listBlockedDate', listBlockedDate);
     return listBlockedDate;
   }
 
   computePendingDate() :{pendingDeleted: string[], pendingValidated: string[]}{
-    console.log('Startpending');
     if(!this.mission || !this.mission.dates) return {pendingDeleted: [], pendingValidated: []}   
     let pendingDeleted: string[] = [] 
     let pendingValidated: string[] = []
@@ -381,7 +373,6 @@ export class SuiviPME extends Destroy${
       else if (!date.validated) pendingValidated.push(date.date)
     })
 
-    console.log('endpending');
     return {pendingDeleted: pendingDeleted, pendingValidated:pendingValidated}
   }
 }
