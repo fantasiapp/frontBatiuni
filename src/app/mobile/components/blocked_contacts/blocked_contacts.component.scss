@@ -6,11 +6,18 @@
     @extend %no-navigation ;
   }
   
-  header {
+  #bigHeader {
     display: block;
     position: fixed;
     height: 100px;
     padding-top: 40px;
+  }
+
+  #swipeupHeader {
+    display: block;
+    position: fixed;
+    background-color: white;
+    color: black
   }
 
   .left {

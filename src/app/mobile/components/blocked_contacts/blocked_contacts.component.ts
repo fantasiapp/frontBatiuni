@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewChild, } from "@angular/core";
 import { Select, Store } from "@ngxs/store";
 import { Company, Profile } from "src/models/new/data.interfaces";
 import { DataQueries, DataState, QueryAll } from "src/models/new/data.state";
@@ -6,12 +6,13 @@ import { Destroy$ } from "src/app/shared/common/classes";
 import { AppComponent } from "src/app/app.component";
 import { InfoService } from "src/app/shared/components/info/info.component";
 import { getUserDataService } from "src/app/shared/services/getUserData.service";
-import { SlidemenuService } from "src/app/shared/components/slidemenu/slidemenu.component";
+import { SlidemenuService, UISlideMenuComponent } from "src/app/shared/components/slidemenu/slidemenu.component";
 import { ExtendedProfileComponent } from "src/app/shared/components/extended-profile/extended-profile.component";
 import { Observable } from "rxjs";
 import { BlockCompany } from "src/models/new/user/user.actions";
 import { take } from "rxjs/operators";
 import { PopupService } from "src/app/shared/components/popup/popup.component";
+import { UIAnnonceResume } from "../../ui/annonce-resume/annonce-resume.ui";
 
 @Component({
     selector: "blocked_contacts",
@@ -23,6 +24,9 @@ import { PopupService } from "src/app/shared/components/popup/popup.component";
 export class BlockedContactsComponent extends Destroy$ {
 
     blockedCompanies: Company[] = [];
+    openCompanyProfile: boolean = false;
+    profile: Profile = this.store.selectSnapshot(DataQueries.currentProfile);
+    blockedCompany!: Company 
 
     @QueryAll("Company")
     companies$!: Observable<Company[]>;
@@ -42,6 +46,7 @@ export class BlockedContactsComponent extends Destroy$ {
     }
 
     ngOnInit() {
+      this.openCompanyProfile = false;
       this.info.alignWith('header_search');
       const user = this.store.selectSnapshot(DataQueries.currentUser);
       let userCompany = this.store.selectSnapshot(DataQueries.getById('Company', user.company))
@@ -49,33 +54,46 @@ export class BlockedContactsComponent extends Destroy$ {
       let blockedCompaniesData = allBlockedCompanies.filter((company) => company.blocker == userCompany!.id && company.status == true)
       let blockedCompaniesId = blockedCompaniesData.map(company => company.blocked)
       this.blockedCompanies = this.store.selectSnapshot(DataQueries.getMany('Company', blockedCompaniesId))
-      console.log("All companies blocked", this.store.selectSnapshot(DataQueries.getAll('BlockedCandidate')))
       this.cd.markForCheck;
     }
 
     ngAfterViewInit() {
     }
 
-    checkCompanyProfile(company: Company) {
-        this.slides.show(company.name, {
-          type: "component",
-          component: ExtendedProfileComponent,
-          init: (component: ExtendedProfileComponent) => {
-            component.profile$ = { company: company, user: null };
-            component.showContact = true;
-            component.showView = "ST";
-            component.showSwitch = false;
-            component.showRecomandation = false;
-            component.showStar = true;
-            component.showDeblockButton = true;
-          },
-        });
+    openProfile(company: Company) {
+       this.openCompanyProfile = true;
+       this.blockedCompany = company;
     }
 
     ngOnDestroy(): void {
         this.info.alignWith("last");
         this.getUserDataService.emitDataChangeEvent();
         super.ngOnDestroy();
+    }
+
+    updatePage() {
+      this.cd.markForCheck()
+    }
+  
+    @ViewChild("slideOnlinePost") private slideOnlinePost!: UISlideMenuComponent;
+  
+    @ViewChild(UIAnnonceResume, { static: false }) private annonceResume!: UIAnnonceResume;
+  
+    slideOnlinePostClose() {
+      this.updatePage()
+      // Close View
+      this.slideOnlinePost.close();
+    }
+
+    deblockContact(){
+      this.store
+        .dispatch(new BlockCompany(this.blockedCompany.id, false))
+        .pipe(take(1))
+        .subscribe(() => {
+          this.blockedCompanies = this.blockedCompanies.filter(company => company.id != this.blockedCompany.id)
+          this.slideOnlinePost.close();          
+          this.cd.markForCheck();
+        });
     }
 
 

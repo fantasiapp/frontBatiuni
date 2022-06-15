@@ -27,6 +27,7 @@ import {
   GiveNotificationToken,
   ModifyFile,
   UnapplyPost,
+  DeleteLabel,
 } from "./user/user.actions";
 import {
   ApplyPost,
@@ -234,8 +235,7 @@ export class DataState {
     }
     if (this.flagUpdate){
       this.flagUpdate = false
-      return req.pipe(
-        tap((response: any) => {
+      return req.pipe(tap((response: any) => {
           this.getUserDataService.setNewResponse(response)
           if (this.isFirstTime) {
             this.getUserDataService.getDataChangeEmitter().subscribe((value) => {
@@ -244,6 +244,8 @@ export class DataState {
             this.updateLocalData(ctx, response)
           }
           this.flagUpdate = true
+    }, (error: any) => {
+      this.flagUpdate = true
     })
       );
     }
@@ -509,6 +511,18 @@ export class DataState {
     );
   }
 
+  @Action(DeleteLabel)
+  deleteLabel(ctx: StateContext<DataModel>, deletion: DeleteLabel) {
+    console.log("DeleteLabel",  deletion)
+
+    const req = this.http.get("data", deletion);
+    return req.pipe(
+      tap((response: any) => {
+        console.log("DeleteLabel response", response);
+      })
+    )
+  }
+
   @Action(UploadPost)
   createPost(ctx: StateContext<DataModel>, post: UploadPost) {
     const profile = this.store.selectSnapshot(DataQueries.currentProfile),
@@ -686,10 +700,10 @@ export class DataState {
   @Action(UnapplyPost)
   unapplyPost(ctx: StateContext<DataModel>, application: UnapplyPost) {
     const profile = this.store.selectSnapshot(DataQueries.currentProfile)!;
-    //{Post: 1, amount: 500, devis: 'Par heure', action: 'applyPost'}
+    console.log("UnapplyPOst ce que j'envoie au BACK", application)
     return this.http.get("data", application).pipe(
       tap((response: any) => {
-        console.log('ApplyPost response', response);
+        console.log('UnapplyPost response', response)
         if (response[application.action] != "OK") throw response["messages"];
 
         delete response[application.action];
@@ -701,10 +715,12 @@ export class DataState {
   }
 
   @Action(CandidateViewed)
-  candidateViewed(ctx: StateContext<DataModel>, application: ApplyPost) {
+  candidateViewed(ctx: StateContext<DataModel>, application: CandidateViewed) {
+    console.log("candidateViewed", application)
     const profile = this.store.selectSnapshot(DataQueries.currentProfile)!;
     return this.http.get("data", application).pipe(
       tap((response: any) => {
+        console.log("candidateViewed response", response)
         if (response[application.action] !== "OK") {
           this.inZone(() => this.info.show("error", response.messages, 3000));
           throw response.messages;
@@ -712,7 +728,7 @@ export class DataState {
         delete response[application.action];
         console.log('CandidateViewed', response);
         this.getUserDataService.emitDataChangeEvent()
-        ctx.setState(addComplexChildren("Company", profile.company.id, "Post", response));
+        ctx.setState(transformField("Candidate", application.candidateId, "isViewed", () => true));
       })
     );
   }
@@ -742,8 +758,10 @@ export class DataState {
   @Action(HandleApplication)
   handleApplication(ctx: StateContext<DataModel>, handle: HandleApplication) {
     const { post, ...data } = handle;
+    console.log("handleAppication", handle)
     return this.http.get("data", data).pipe(
       tap((response: any) => {
+        console.log("handleApplication response", response);
         if (response[handle.action] !== "OK") {
           this.inZone(() => this.info.show("error", response.messages, 3000));
           throw response.messages;
@@ -755,11 +773,18 @@ export class DataState {
         this.slide.hide();
         this.getUserDataService.emitDataChangeEvent()
         if (data["response"]) {
-          ctx.setState(compose(deleteIds("Post", [handle.post.id]),addComplexChildren("Company", company.id, "Mission", response)));
-        } 
-        else
-          ctx.setState(compose(deleteIds("Post", [handle.post.id]),addComplexChildren("Company", company.id, "Post", response)));
+          ctx.setState(
+            compose(
+              deleteIds("Post", [handle.post.id]),
+              addComplexChildren("Company", company.id, "Mission", response)
+            )
+          );
+        } else
+          ctx.setState(update('Post', response));
+          ctx.setState(transformField('Candidate', handle.Candidate, 'isRefused', () => true))
+
       })
+
     );
   }
 

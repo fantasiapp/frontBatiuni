@@ -198,6 +198,15 @@ export class DeleteFile {
   constructor(public id: number) {}
 };
 
+export class DeleteLabel {
+  static readonly type = '[Label] Delete';
+  action = 'removeLabelForCompany';
+
+  constructor(public labelId: number) {
+
+  }
+}
+
 export class DownloadFile {
   action = 'downloadFile';
   static readonly type = '[File] Download';
@@ -330,7 +339,7 @@ export class ApplyPost {
 export class UnapplyPost {
   static readonly type = '[User.ST] Unapply Post';
   action = 'unapplyPost';
-  constructor(public Post: number, candidateId : number) {
+  constructor(public postId: number, public candidateId : number) {
   }
 }
 

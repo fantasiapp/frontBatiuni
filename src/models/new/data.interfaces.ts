@@ -138,6 +138,8 @@ export interface LabelForCompany {
 export interface Post {
   id: Ref<Post>;
   company: Ref<Company>;
+  subContractor: Ref<Company>;
+  subContractorName: string;
   job: Ref<Job>;
   numberOfPeople: number;
   address: string;
