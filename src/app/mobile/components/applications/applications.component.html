@@ -44,7 +44,7 @@
         ></annonce-resume>
 
         <swipeup [(open)]="postMenu.swipeup">
-            <li (click)="deleteCandidate(postMenu.post!.id)">
+            <li (click)="showPopUp(postMenu.post!)">
               Retirer ma candidature
             </li>
         </swipeup>

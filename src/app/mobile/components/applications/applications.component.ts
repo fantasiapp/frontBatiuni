@@ -23,6 +23,7 @@ import { AppComponent } from "src/app/app.component";
 import { InfoService } from "src/app/shared/components/info/info.component";
 import { SearchbarComponent } from "src/app/shared/components/searchbar/searchbar.component";
 import { SlidemenuService, UISlideMenuComponent } from "src/app/shared/components/slidemenu/slidemenu.component";
+import { PopupService } from "src/app/shared/components/popup/popup.component";
 
 // import { UISlideMenuComponent } from 'src/app/shared/components/slidemenu/slidemenu.component';
 
@@ -59,7 +60,7 @@ export class ApplicationsComponent extends Destroy$ {
   time: number = 0;
   searchbar!: SearchbarComponent;
 
-  constructor(private cd: ChangeDetectorRef, private info: InfoService, private store: Store, private appComponent: AppComponent, private slideService: SlidemenuService,) {
+  constructor(private cd: ChangeDetectorRef, private info: InfoService, private store: Store, private appComponent: AppComponent, private slideService: SlidemenuService, private popup: PopupService) {
     super();
     this.searchbar = new SearchbarComponent(store);
   }
@@ -228,6 +229,10 @@ export class ApplicationsComponent extends Destroy$ {
 
     // Update
     this.annonceResume.close();
+  }
+
+  showPopUp(post: Post){
+    this.popup.deleteCandidate(post, this);
   }
 
   deleteCandidate(id: number){
