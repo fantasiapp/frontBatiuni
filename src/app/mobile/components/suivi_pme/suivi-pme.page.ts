@@ -64,7 +64,7 @@ export class SuiviPME extends Destroy${
   get missionMenu() {
     return this._missionMenu;
   }
-  
+
   calendarForm = new FormControl([])
   AdFormDate = new FormGroup({
     hourlyStart: new FormControl("07:00"),
@@ -72,15 +72,7 @@ export class SuiviPME extends Destroy${
     calendar: this.calendarForm
   });
 
-  get isNotSignedByUser(): boolean{
-    if(this.mission) {
-      console.log("isNotSignedByUser", (!this.mission.signedByCompany && this.view == "PME") ||
-        (!this.mission.signedBySubContractor && this.view == "ST"))
-      return (!this.mission.signedByCompany && this.view == "PME") ||
-      (!this.mission.signedBySubContractor && this.view == "ST");
-    }
-    return true
-  }
+  isNotSignedByUser: boolean = true;
 
   @Input()
   set missionMenu(mM: PostMenu<Mission>) {
@@ -146,7 +138,17 @@ export class SuiviPME extends Destroy${
   ) {super()}
 
   ngOnInit(){
-    
+
+  }
+
+  updateMission() {
+    console.log("Je suis laaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+    console.log(this)
+    this.mission = this.store.selectSnapshot(DataQueries.getById("Mission", this.mission!.id))!;
+    this.isNotSignedByUser = (!this.mission.signedByCompany && this.view == "PME") ||
+    (!this.mission.signedBySubContractor && this.view == "ST");
+    console.log("updateMission", this.mission)
+    this.cd.markForCheck();
   }
 
   closeMission() {
@@ -261,7 +263,7 @@ export class SuiviPME extends Destroy${
 
   signContract() {
     console.log("sign contract")
-    this.popup.openSignContractDialog(this.mission!);
+    this.popup.openSignContractDialog(this.mission!, this.updateMission.bind(this));
   }
   modifyTimeTable() {
     this.missionMenu.swipeup = false;

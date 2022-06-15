@@ -850,6 +850,13 @@ export class DataState {
         delete response[application.action];
         this.getUserDataService.emitDataChangeEvent()
         ctx.setState(addComplexChildren("Company", profile.company.id, "Mission", response));
+
+        if(application.view == "ST"){
+          console.log("signed by ST")
+          ctx.setState(transformField("Mission", application.missionId, "signedBySubContractor", () => true));
+        } else if (application.view == "PME")
+          console.log("signed by PME")
+          ctx.setState(transformField("Mission", application.missionId, "signedByCompany", () => true));
       })
     );
   }
