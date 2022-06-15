@@ -74,6 +74,8 @@ export class SuiviPME extends Destroy${
 
   get isNotSignedByUser(): boolean{
     if(this.mission) {
+      console.log("isNotSignedByUser", (!this.mission.signedByCompany && this.view == "PME") ||
+        (!this.mission.signedBySubContractor && this.view == "ST"))
       return (!this.mission.signedByCompany && this.view == "PME") ||
       (!this.mission.signedBySubContractor && this.view == "ST");
     }

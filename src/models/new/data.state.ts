@@ -256,9 +256,9 @@ export class DataState {
   }
 
   updateLocalData(ctx: StateContext<DataModel>, response: any) {
-    console.log('response', response)
+    console.log('updateLocalData', response)
     if(this.booleanService.isConnected){
-      console.log("update local data", response)
+      console.log("update local data response", response)
       const loadOperations = this.reader.readInitialData(response),
       sessionOperation = this.reader.readCurrentSession(response);
       if (!this.isFirstTime) {
