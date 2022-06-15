@@ -63,7 +63,6 @@ export class OfferComponent {
         candidates = this.store.selectSnapshot(
           DataQueries.getMany("Candidate", candidatesIds)
         );
-      console.log("candidates", candidates)
       candidates.forEach((candidate) => {
         if (!candidate.isViewed) possibleCandidates++;
       });
