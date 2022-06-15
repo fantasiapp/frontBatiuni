@@ -15,43 +15,57 @@
   <swipeup [(open)]="openMenu">
     <li (click)="slideModifyMenu(false)">Modifier mon profil</li>
     <li (click)="slideModifyMenu(true)">Modifier mon mot de passe</li>
-    <li [routerLink]="['','applications']" *ngIf="this.view == 'ST'"> Candidatures en cours</li>
-    <li [routerLink]="['','blocked_contacts']" *ngIf="this.view == 'PME'"> Contacts bloqués</li>
+    <li (click)="openCandidature = true; openMenu = false" *ngIf="this.view == 'ST'"> Candidatures en cours</li>
+    <li (click)="openBlockedContact = true; openMenu = false" *ngIf="this.view == 'PME'"> Contacts bloqués</li>
 
     <li class="spacer"></li>
     <li [routerLink]="['','abonnement']">Gérer mes abonnements</li>
-    <li [routerLink]="['','factures']">Mes factures</li>
+    <li (click)="openFacture = true; openMenu = false">Mes factures</li>
     <li class="spacer"></li>
     <li (click)="slideInviteFriends()">Inviter vos amis</li>
     <li >Partager l'application</li>
     <li>Noter l'application</li>
     <li>Nous contacter</li>
-    <li (click)="openFaq = true">FAQ</li>
-    <li (click)="openMentionLegal = true">Mentions légales</li>
+    <li (click)="openFaq = true; openMenu = false">FAQ</li>
+    <li (click)="openMentionLegal = true; openMenu = false">Mentions légales</li>
     <li class="spacer"></li>
     <li (click)="logout()">Se déconnecter</li>
   </swipeup>
 
+  <slidemenu [(open)]="openFacture" #facture>
+    <h1 class="center-text full-width" header>Mes factures</h1>
+    <div class="modify-page hosted-page flex column center-cross space-children-margin" content>
+      <facture-page *ngIf="openFacture"></facture-page>
+    </div>
+  </slidemenu>
+
   <slidemenu [(open)]="openFaq" #faq>
     <h1 class="center-text full-width" header>FAQ</h1>
     <div class="modify-page hosted-page flex column center-cross space-children-margin" content>
-      <faq></faq>
+      <faq *ngIf="openFaq"></faq>
     </div>
   </slidemenu>
 
   <slidemenu [(open)]="openMentionLegal" #mentionLegal>
     <h1 class="center-text full-width" header>Mentions légales</h1>
     <div class="modify-page hosted-page flex column center-cross space-children-margin" content>
-      <app-mention-legal></app-mention-legal>
+      <app-mention-legal *ngIf="openMentionLegal"></app-mention-legal>
     </div>
   </slidemenu>
 
-  <!-- <slidemenu [(open)]="openBlockedContact" #blockedContact>
+  <slidemenu *ngIf="this.view == 'PME'" [(open)]="openBlockedContact" #blockedContact>
     <h1 class="center-text full-width" header>Mes contacts bloqués</h1>
     <div class="modify-page hosted-page flex column center-cross space-children-margin" content>
-      <blocked_contacts></blocked_contacts>
+      <blocked_contacts *ngIf="openBlockedContact"></blocked_contacts>
     </div>
-  </slidemenu> -->
+  </slidemenu>
+
+  <slidemenu *ngIf="this.view == 'ST'" [header]="false" [(open)]="openCandidature" #candidature>
+    <!-- <h1 class="center-text full-width" header>Candidatures en cours</h1> -->
+    <div class="modify-page hosted-page flex column center-cross space-children-margin" content>
+      <applications (closeEvent)="candidature.close()" *ngIf="openCandidature"></applications>
+    </div>
+  </slidemenu>
 
   <slidemenu [footer]="modifyPassword ? 'small' : 'medium'" [(open)]="openModifyMenu" #modifyMenu>    
     <h1 class="center-text full-width" header>Modifier mon Profil</h1>
