@@ -17,7 +17,7 @@
         [post]="onlinePost"
         (click)="openPost(onlinePost)"
         [isAppliedPage]="true"
-        [isRefused]="isRefused(onlinePost)"
+        [isRefused]="isRefused(onlinePost)!"
         [time]="time">
     </offer>
 </div>
@@ -32,7 +32,7 @@
     customHeader id="swipeupHeader">
         <img (click)="slideOnlinePostClose()" src="assets/arrowlblack.svg" />
         <h1 class="grow center-text">Candidature en cours</h1>
-        <img (click)="postMenu.swipeup = true" src="assets/Option.svg"/>    
+        <img *ngIf="!isRefused(postMenu.post)" (click)="postMenu.swipeup = true" src="assets/Option.svg"/>    
     </header>
 
     <ng-container content>

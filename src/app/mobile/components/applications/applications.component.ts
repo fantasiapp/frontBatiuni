@@ -98,8 +98,6 @@ export class ApplicationsComponent extends Destroy$ {
         this.allCandidatedPost.push(post)
       }
     }
-    console.log("ALLONLINEPOST", this.allOnlinePosts)
-    console.log("AllCandidatedPOst", this.allCandidatedPost)
     this.cd.markForCheck;
     this.selectPost(null);
     this.selectSearch('');
@@ -207,9 +205,9 @@ export class ApplicationsComponent extends Destroy$ {
     super.ngOnDestroy();
   }
 
-  isRefused(onlinePost: Post) {
+  isRefused(onlinePost: Post | null) {
     const profile = this.store.selectSnapshot(DataQueries.currentProfile);
-    return onlinePost.candidates.some((id) => {
+    return onlinePost?.candidates.some((id) => {
       let candidate = this.store.selectSnapshot(DataQueries.getById("Candidate", id));
       return candidate!.company == profile.company.id && candidate!.isRefused;
     });
