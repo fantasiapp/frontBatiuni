@@ -32,11 +32,11 @@
     <li (click)="logout()">Se déconnecter</li>
   </swipeup>
 
-  <slidemenu [footer]="modifyPassword ? 'small' : 'medium'" [(open)]="openModifyMenu" #modifyMenu>    
+  <slidemenu [footer]="modifyPassword ? 'small' : 'medium'" [(open)]="openModifyMenu" #modifyMenu>
     <h1 class="center-text full-width" header>Modifier mon Profil</h1>
     <div class="modify-page hosted-page flex column center-cross space-children-margin" content>
       <swipeup [(open)]="openModifyPicture" #modifyPicture>
-        <li (click)="takePhoto()">Accédez à l'appareil photo</li>
+        <li (click)="takePhoto()">Accéder à l'appareil photo</li>
         <li (click)="selectPhoto()">Télécharger une image</li>
       </swipeup>
       <profile-resume [profile]="profile" [canChangePicture]="!modifyPassword" class="flex column center-cross space-children-margin" (changePicture)="swipeModifyPicture()"></profile-resume>
