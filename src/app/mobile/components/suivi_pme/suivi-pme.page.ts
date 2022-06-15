@@ -102,7 +102,7 @@ export class SuiviPME extends Destroy${
       this.companyName =
         this.view == "ST" ? this.company!.name : this.subContractor!.name;
       this.contactName =
-        this.view == "ST" ? "" : this.mission!.subContractorContact ;
+        this.view == "ST" ? this.mission!.contactName : this.mission!.subContractorContact ;
     }
     if (mission) this.updateDate(mission!);
   }

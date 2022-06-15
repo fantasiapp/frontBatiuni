@@ -900,8 +900,9 @@ export class DataState {
     return this.http.post("data", application).pipe(
       tap((response: any) => {
         console.log('response', response);
+        
         if (response[application.action] !== "OK") {
-          this.inZone(() => this.info.show("error", response.messages, 3000));
+        this.inZone(() => this.info.show("error", response.messages, 3000));
           throw response.messages;
         } else {
           this.inZone(() =>
