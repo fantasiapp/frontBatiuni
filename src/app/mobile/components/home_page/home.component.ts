@@ -678,7 +678,6 @@ export class HomeComponent extends Destroy$ {
         if (!candidate.isRefused) {
           possibleCandidates.push(candidate);
         }
-        console.log("hjgfqhgfqljfbqzejfqkfh", possibleCandidates)
         return possibleCandidates;
       },
       []

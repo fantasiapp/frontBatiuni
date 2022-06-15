@@ -83,8 +83,6 @@ export class MissionsComponent extends Destroy$ {
     combineLatest([this.profile$, this.missions$]).pipe(takeUntil(this.destroy$)).subscribe(([profile, missions]) => {
       //filter own missions
       //for now accept all missions
-      console.log("la requete en local", this.store.selectSnapshot(DataQueries.getAll("Mission")))
-      console.log("Missions", missions)
       this.allMyMissions = missions.filter(mission => mission.subContractor == profile.company.id);
       //compute work days
 
