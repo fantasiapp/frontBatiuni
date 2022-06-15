@@ -49,7 +49,6 @@ export class SuiviPME extends Destroy${
   subContractor: Company | null = null;
   track: { [key: string]: Map<PostDetail, Supervision[]> } = {};
   isNotSigned: boolean = true;
-  isNotSignedByUser: boolean = true;
   dates: DatePost[] = [];
   // datesNew: PostDateAvailableTask[] = []
   currentDateId: number | null = null;
@@ -65,13 +64,15 @@ export class SuiviPME extends Destroy${
   get missionMenu() {
     return this._missionMenu;
   }
-  
+
   calendarForm = new FormControl([])
   AdFormDate = new FormGroup({
     hourlyStart: new FormControl("07:00"),
     hourlyEnd: new FormControl("17:30:00"),
     calendar: this.calendarForm
   });
+
+  isNotSignedByUser: boolean = true;
 
   @Input()
   set missionMenu(mM: PostMenu<Mission>) {
@@ -89,9 +90,6 @@ export class SuiviPME extends Destroy${
       this.isNotSigned = !(
         mission.signedByCompany && mission.signedBySubContractor
       );
-      this.isNotSignedByUser =
-        (!mission.signedByCompany && this.view == "PME") ||
-        (!mission.signedBySubContractor && this.view == "ST");
       let arrayDateId = []
       if (!Array.isArray(mission.dates)) arrayDateId = Object.keys(mission.dates).map(date => +date)
       else arrayDateId = mission.dates
@@ -140,9 +138,6 @@ export class SuiviPME extends Destroy${
   ) {super()}
 
   ngOnInit(){
-    if(!this.mission) return
-    console.log('object');
-    this.mission = this.store.selectSnapshot(DataQueries.getById('Mission', this.mission.id));
   }
 
   onComputeDate(){
@@ -152,6 +147,17 @@ export class SuiviPME extends Destroy${
     if(!this.mission) return
     this.dates = this.store.selectSnapshot(DataQueries.getMany('DatePost', this.mission.dates))
     this.cd.markForCheck()
+
+  }
+
+  updateMission() {
+    console.log("Je suis laaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+    console.log(this)
+    this.mission = this.store.selectSnapshot(DataQueries.getById("Mission", this.mission!.id))!;
+    this.isNotSignedByUser = (!this.mission.signedByCompany && this.view == "PME") ||
+    (!this.mission.signedBySubContractor && this.view == "ST");
+    console.log("updateMission", this.mission)
+    this.cd.markForCheck();
   }
 
   closeMission() {
@@ -266,7 +272,7 @@ export class SuiviPME extends Destroy${
 
   signContract() {
     console.log("sign contract")
-    this.popup.openSignContractDialog(this.mission!);
+    this.popup.openSignContractDialog(this.mission!, this.updateMission.bind(this));
   }
   modifyTimeTable() {
     this.missionMenu.swipeup = false;
@@ -286,8 +292,6 @@ export class SuiviPME extends Destroy${
   }
 
   submitAdFormDate(setup: boolean = false) {
-
-    console.log('SUBmiTeAddd');
     let datesSelected: string[] = this.calendarForm!.value.filter((day : DayState) => day.availability == 'selected').map((day: DayState) => day.date)
     let blockedDates = this.computeBlockedDate();
     let pendingDates = this.computePendingDate()
@@ -338,7 +342,6 @@ export class SuiviPME extends Destroy${
   }
 
   saveToBackAdFormDate() {
-    console.log('start saveToBack', this.dates);
     const selectedDate: string[] = this.calendarForm!.value.map(
       (dayState: DayState) => {
         return dayState.date;
@@ -353,15 +356,11 @@ export class SuiviPME extends Destroy${
       if (!Array.isArray(this.mission.dates)) arrayDateId = Object.keys(this.mission.dates).map(date => +date)
       else arrayDateId = this.mission.dates
       this.dates = this.store.selectSnapshot(DataQueries.getMany('DatePost', arrayDateId))
-      console.log('COMPUTED DATES from back', this.dates);
       this.cd.markForCheck();
-      console.log('end saveToBack');
     });
-    console.log('end saveToBack 2');
   }
 
   computeBlockedDate(): string[] {
-    
     if(!this.mission){
       return []
     }
@@ -374,7 +373,6 @@ export class SuiviPME extends Destroy${
   }
 
   computePendingDate() :{pendingDeleted: string[], pendingValidated: string[]}{
-    console.log('Startpending');
     if(!this.mission || !this.mission.dates) return {pendingDeleted: [], pendingValidated: []}   
     let pendingDeleted: string[] = [] 
     let pendingValidated: string[] = []
@@ -387,7 +385,6 @@ export class SuiviPME extends Destroy${
       else if (!date.validated) pendingValidated.push(date.date)
     })
 
-    console.log('endpending');
     return {pendingDeleted: pendingDeleted, pendingValidated:pendingValidated}
   }
 }

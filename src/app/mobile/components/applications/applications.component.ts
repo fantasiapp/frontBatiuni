@@ -23,6 +23,7 @@ import { AppComponent } from "src/app/app.component";
 import { InfoService } from "src/app/shared/components/info/info.component";
 import { SearchbarComponent } from "src/app/shared/components/searchbar/searchbar.component";
 import { SlidemenuService, UISlideMenuComponent } from "src/app/shared/components/slidemenu/slidemenu.component";
+import { PopupService } from "src/app/shared/components/popup/popup.component";
 
 // import { UISlideMenuComponent } from 'src/app/shared/components/slidemenu/slidemenu.component';
 
@@ -60,8 +61,8 @@ export class ApplicationsComponent extends Destroy$ {
   filterOn: boolean = false;
   time: number = 0;
   searchbar!: SearchbarComponent;
-  
-  constructor(private cd: ChangeDetectorRef, private info: InfoService, private store: Store, private appComponent: AppComponent, private slideService: SlidemenuService,) {
+
+  constructor(private cd: ChangeDetectorRef, private info: InfoService, private store: Store, private appComponent: AppComponent, private slideService: SlidemenuService, private popup: PopupService) {
     super();
     this.searchbar = new SearchbarComponent(store);
   }
@@ -69,9 +70,8 @@ export class ApplicationsComponent extends Destroy$ {
   ngOnInit(): void {
     this.info.alignWith('header_search');
     combineLatest([this.profile$, this.posts$])
-    .pipe(takeUntil(this.destroy$))
-    .subscribe(([profile, posts]) => {
-      console.log("DEBUT DE NGONINT")
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(([profile, posts]) => {
       const mapping = splitByOutput(posts, (post) => {
         //0 -> userOnlinePosts | 1 -> userDrafts
         if (profile.company.posts.includes(post.id)){
@@ -90,27 +90,25 @@ export class ApplicationsComponent extends Destroy$ {
       let companiesId;
       if (post) {
         companiesId = post.candidates?.map((id: number) => {
-          let candidate = this.store.selectSnapshot(
-            DataQueries.getById("Candidate", id)
-            );
-            return candidate!.company;
-          });
-        }
-        if (companiesId?.includes(profile.company.id)) {
-          this.allCandidatedPost.push(post)
-        }
+          let candidate = this.store.selectSnapshot(DataQueries.getById("Candidate", id));
+          return candidate!.company;
+        });
       }
-      console.log("ALLONLINEPOST", this.allOnlinePosts)
-      console.log("AllCandidatedPOst", this.allCandidatedPost)
-      this.cd.markForCheck;
-      this.selectPost(null);
-      this.selectSearch('');
-      this.cd.markForCheck()
+      if (companiesId?.includes(profile.company.id)) {
+        this.allCandidatedPost.push(post)
+      }
     }
-    
-    ngAfterViewInit() {
-      this.cd.markForCheck;
-    }
+    console.log("ALLONLINEPOST", this.allOnlinePosts)
+    console.log("AllCandidatedPOst", this.allCandidatedPost)
+    this.cd.markForCheck;
+    this.selectPost(null);
+    this.selectSearch('');
+    this.cd.markForCheck()
+  }
+
+  ngAfterViewInit() {
+    this.cd.markForCheck;
+  }
 
     close() {
       this.closeEvent.next()
@@ -213,9 +211,9 @@ export class ApplicationsComponent extends Destroy$ {
     super.ngOnDestroy();
   }
 
-  isRefused(onlinePost: Post) {
+  isRefused(onlinePost: Post | null) {
     const profile = this.store.selectSnapshot(DataQueries.currentProfile);
-    return onlinePost.candidates.some((id) => {
+    return onlinePost?.candidates.some((id) => {
       let candidate = this.store.selectSnapshot(DataQueries.getById("Candidate", id));
       return candidate!.company == profile.company.id && candidate!.isRefused;
     });
@@ -236,6 +234,10 @@ export class ApplicationsComponent extends Destroy$ {
 
     // Update
     this.annonceResume.close();
+  }
+
+  showPopUp(post: Post){
+    this.popup.deleteCandidate(post, this);
   }
 
   deleteCandidate(id: number){

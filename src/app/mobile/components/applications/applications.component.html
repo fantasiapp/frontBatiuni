@@ -15,7 +15,7 @@
     [post]="onlinePost"
     (click)="openPost(onlinePost)"
     [isAppliedPage]="true"
-    [isRefused]="isRefused(onlinePost)"
+    [isRefused]="isRefused(onlinePost)!"
     [time]="time">
 </offer>
 
@@ -28,7 +28,7 @@
     customHeader id="swipeupHeader">
         <img (click)="slideOnlinePostClose()" src="assets/arrowlblack.svg" />
         <h1 class="grow center-text">Candidature en cours</h1>
-        <img (click)="postMenu.swipeup = true" src="assets/Option.svg"/>    
+        <img *ngIf="!isRefused(postMenu.post)" (click)="postMenu.swipeup = true" src="assets/Option.svg"/>    
     </header>
 
     <ng-container content>
@@ -40,7 +40,7 @@
         ></annonce-resume>
 
         <swipeup [(open)]="postMenu.swipeup">
-            <li (click)="deleteCandidate(postMenu.post!.id)">
+            <li (click)="showPopUp(postMenu.post!)">
               Retirer ma candidature
             </li>
         </swipeup>

@@ -3,13 +3,13 @@
   <!-- CONTRAT DOCUSIGN URL -->
   <div *ngIf="isNotSigned" class="contrat">
     <h3>
-      Le contrat
-    </h3> 
+      Le contrats
+    </h3>
     <div class="flex center-cross space-around" (click)="signContract()">
       <file-svg name="Contrat" color="red"></file-svg>
       <h4 *ngIf="isNotSignedByUser" class="contrat-title font-Poppins">
         Signer le contrat
-      </h4> 
+      </h4>
   </div>
 </div>
 <!-- ENDBLOCK CONTRAT -->
@@ -36,7 +36,7 @@
 
 <swipeup [(open)]="missionMenu.swipeup">
   <li *ngIf="!mission?.isClosed" (click)="modifyTimeTable()">Modifier les horaires / les dates de présence</li>
-  <li (click)="true"><a [href]="'tel:+33' + company?.companyPhone"></a>Appeler le {{company?.companyPhone}}</li>
+  <a [href]="'tel:+33' + company?.companyPhone"><li >Appeler le {{ subContractor?.companyPhone}}</li></a>
   <li *ngIf="mission?.signedByCompany && mission?.signedBySubContractor && !mission?.isClosed" (click)="closeMission()">Clôturer la mission</li>
   <li (click)="duplicateMission()">Dupliquer l'annonce</li>
 </swipeup>

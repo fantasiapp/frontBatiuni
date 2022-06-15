@@ -12,6 +12,7 @@ export class NotifService {
   navchange: EventEmitter<number> = new EventEmitter();
 
   notificationsUnseen: number = 0
+  notificationsMission: Notification[] = []
 
   token: string = 'y\'a pas de token'
   notifications: Notification[] = [];
@@ -41,6 +42,7 @@ export class NotifService {
 
   checkNotif() {
     this.notifications = []
+    this.notificationsMission = []
     this.notificationsUnseen = 0
     const view = this.store.selectSnapshot(DataState.view)
     let profile = this.store.selectSnapshot(DataQueries.currentProfile)!
@@ -51,11 +53,25 @@ export class NotifService {
         if (view == notification!.role) {
             this.notifications.push(notification!)
           if (!notification!.hasBeenViewed) {
-            this.notificationsUnseen++
+            this.notificationsUnseen++}
+          if(notification!.category == "supervision") {
+            this.notificationsMission.push(notification!)
           }
+          
         }
 
     }
+  }
+
+  getNotificationUnseenMission(idMission: number){
+    this.checkNotif()
+    let notificationsMissionUnseen = this.notificationsMission.filter((notif) => !notif.hasBeenViewed && notif.missions == idMission) // !notif.hasBeenViewed && (à rajouter)
+    console.log("les notifs de la mission", notificationsMissionUnseen)
+    return notificationsMissionUnseen.length
+  }
+
+  markedNotifMissionAsViewed(idMission: number) {
+    
   }
 }
 

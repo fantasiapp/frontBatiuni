@@ -104,7 +104,7 @@
     </swipeup>
 
     <!-- Component one -->
-    <slidemenu [(open)]="draftMenu.open" [header]="true">
+    <slidemenu [(open)]="draftMenu.open" [header]="true" (openChange)="updatePage()">
       <h1 class="grow center-text" header>Brouillon</h1>
       <div
         class="hosted-page flex column center-cross space-children-margin"
@@ -120,7 +120,7 @@
     </slidemenu>
 
     <!-- Component two -->
-    <slidemenu [(open)]="postMenu.open" [header]="false" #slideOnlinePost>
+    <slidemenu [(open)]="postMenu.open" [header]="false" (openChange)="lateInit()" #slideOnlinePost>
       <header
         class="clear-margin full-width sticky-header flex center-cross annonce"
         customHeader
@@ -184,7 +184,7 @@
 
     </slidemenu> -->
     <!-- Component Mission -->
-    <slidemenu [(open)]="missionMenu.open" [header]="false" #slideMission>
+    <slidemenu [(open)]="missionMenu.open" [header]="false" (openChange)="updatePage()" #slideMission>
       <header
         class="clear-margin full-width sticky-header flex center-cross annonce"
         customHeader
@@ -230,7 +230,7 @@
   </div>
 </ng-template>
 
-<ng-template #candidates let-possibleCandidates let-job="job">
+<ng-template #candidates let-possibleCoandidates let-job="job">
   <div class="hosted-page">
     <p class="font-Poppins" style="margin-bottom: 2rem">
       Vous avez : {{ possibleCandidates.length }} réponse(s)
