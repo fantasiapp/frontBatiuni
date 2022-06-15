@@ -349,13 +349,9 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
     let field = "date";
     
     this.store.dispatch(new ValidateMissionDate(this.mission!.id, field, b, this.date.date)).pipe().subscribe(() => {
-      let change = { 
-        validate: deleting ? !b : b,
-        deleted: deleting && b,
-        schedule: false
-      }
-      
-      if(deleting) this.computeDates.next()
+      this.date.deleted = b
+      this.cd.markForCheck()
+      if(b) this.computeDates.next()
     });
   }
 }

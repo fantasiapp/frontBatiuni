@@ -365,13 +365,11 @@ export class SuiviPME extends Destroy${
     if(!this.mission){
       return []
     }
-    console.log('Start blocked', this.mission, this.dates);
 
     let listBlockedDate: string[] = [];
     let listDatePost = this.store.selectSnapshot(DataQueries.getMany('DatePost', this.mission!.dates))
     // this.cd.reattach()
     listBlockedDate = listDatePost.filter(date => date && (!!date.supervisions.length || !!date.details.length)).map(date => date.date)
-    console.log('listBlockedDate', listBlockedDate);
     return listBlockedDate;
   }
 
