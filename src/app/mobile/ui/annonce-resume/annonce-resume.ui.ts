@@ -120,7 +120,7 @@ export type ApplyForm = {
         [ngClass]="{ open: openRatings }"
       ></rating>
       <slide-profile
-        *ngIf="view == 'PME'"
+       
         [isSuiviPME]="isSuiviPME"
         [(open)]="slideProfileOpen"
         [profile]="isSuiviPME ? profileST! : { company: company!, user: user }"

@@ -32,7 +32,8 @@ import {
   UploadImageSupervision,
   ValidateMissionDate,
 } from "src/models/new/user/user.actions";
-import { SuiviPME } from "../suivi_pme/suivi-pme.page";
+import { getUserDataService } from "src/app/shared/services/getUserData.service";
+
 
 export interface TaskGraphic {
   selectedTask: PostDetailGraphic,
@@ -78,7 +79,7 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
 
   user!: User;
 
-  constructor(private cd: ChangeDetectorRef, private store: Store, private popup: PopupService) {
+  constructor(private cd: ChangeDetectorRef, private store: Store, private popup: PopupService, private getUserDataService: getUserDataService) {
     super();
   }
 
@@ -327,12 +328,14 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
       if (!detailPostId) {
         datePostId = this.dateOrigin.id
       }
-      this.store.dispatch(new CreateSupervision(detailPostId, datePostId, comment)).pipe(take(1)).subscribe((response) => {
-        formControl.reset()
-
-        
-        this.updatePageOnlyDate()
-      })
+      try {
+        this.store.dispatch(new CreateSupervision(detailPostId, datePostId, comment)).pipe(take(1)).subscribe((response) => {
+          formControl.reset()
+          this.updatePageOnlyDate()
+        })
+      } catch {
+        this.getUserDataService.emitDataChangeEvent()
+      }
     }
   }
 

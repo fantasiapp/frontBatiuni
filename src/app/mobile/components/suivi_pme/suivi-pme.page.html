@@ -1,5 +1,5 @@
 <div class="container hosted-page space-children-margin">
-  <annonce-resume [collapsed]="true" [application]="false" [post]="mission" [isSuiviPME]="true"></annonce-resume>
+  <annonce-resume [collapsed]="true" [application]="false" [post]="mission" [isSuiviPME]="view == 'PME'"></annonce-resume>
   <!-- CONTRAT DOCUSIGN URL -->
   <div *ngIf="isNotSigned" class="contrat">
     <h3>
