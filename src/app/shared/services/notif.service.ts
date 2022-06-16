@@ -70,8 +70,5 @@ export class NotifService {
     return notificationsMissionUnseen.length
   }
 
-  markedNotifMissionAsViewed(idMission: number) {
-    
-  }
 }
 
