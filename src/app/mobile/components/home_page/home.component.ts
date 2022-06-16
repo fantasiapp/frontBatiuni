@@ -305,6 +305,7 @@ export class HomeComponent extends Destroy$ {
       }
     }
     this.cd.markForCheck();
+    console.log("ALL DRAFTS POSTS", this.userDrafts)
   }
 
   selectUserOnline(filter: any) {
@@ -356,6 +357,7 @@ export class HomeComponent extends Destroy$ {
       }  
     }
     this.cd.markForCheck();
+    console.log("ALL ONLINE POSTS", this.userOnlinePosts)
   }
 
   selectMission(filter: any) {
@@ -399,6 +401,7 @@ export class HomeComponent extends Destroy$ {
       }
     }
     this.cd.markForCheck();
+    console.log("ALL MISSIONS POSTS", this.missions)
   }
 
   swipeupMenu() {
