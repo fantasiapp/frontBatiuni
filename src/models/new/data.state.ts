@@ -1017,7 +1017,6 @@ export class DataState {
   closeMission(ctx: StateContext<DataModel>, application: CloseMission) {
     console.log("closeMission", application)
     const profile = this.store.selectSnapshot(DataQueries.currentProfile)!;
-    if(application.action != 'closeMission') return
     return this.http.post("data", application).pipe(
       tap((response: any) => {
         if (response[application.action] !== "OK") {
@@ -1038,7 +1037,6 @@ export class DataState {
   closeMissionST(ctx: StateContext<DataModel>, application: CloseMissionST) {
     console.log("closeMissionST", application)
     const profile = this.store.selectSnapshot(DataQueries.currentProfile)!;
-    if(application.action != 'closeMissionST') return
     return this.http.post("data", application).pipe(
       tap((response: any) => {
         if (response[application.action] !== "OK") {

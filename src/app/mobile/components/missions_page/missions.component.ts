@@ -302,7 +302,7 @@ export class MissionsComponent extends Destroy$ {
 
   submitStarST(button: HTMLButtonElement) {
     if (!this.hasGeneralStarsST) return
-    
+    console.log('submitStartST');
     this.store.dispatch(new CloseMissionST(this.missionToClose!.id, this.missionToClose!.vibeST, this.missionToClose!.vibeCommentST, this.missionToClose!.securityST, this.missionToClose!.securityCommentST, this.missionToClose!.organisationST, this.missionToClose!.organisationCommentST)).pipe(take(1)).subscribe(() => {
       this.doClose = true;
       this.openCloseMission = false;
