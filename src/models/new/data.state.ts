@@ -436,7 +436,8 @@ export class DataState {
         console.log("upload file response", response)
         if (response[upload.action] !== "OK") throw response["messages"];
         delete response[upload.action];
-
+        delete response["timestamp"]
+        console.log("upload file response", response)
         const assignedId = +Object.keys(response)[0],
         fields = ctx.getState()["fields"],
         contentIndex = fields["File"].indexOf("content");
@@ -467,7 +468,7 @@ export class DataState {
         console.log("modify file response", response)
         if (response[modify.action] != "OK") throw response["messages"];
         delete response[modify.action];
-
+        delete response["timestamp"];
         const fileId = +Object.keys(response)[0]
 
         modify.fileId = fileId;
@@ -679,6 +680,7 @@ export class DataState {
           throw response["messages"];
         }
         delete response[download.action];
+        delete response["timestamp"];
         if (download.notify)
           this.inZone(() =>
             this.info.show(
