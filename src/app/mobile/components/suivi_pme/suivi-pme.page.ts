@@ -33,6 +33,7 @@ import {
   DayState,
 } from "src/app/shared/components/calendar/calendar.ui";
 import { Destroy$ } from "src/app/shared/common/classes";
+import * as moment from "moment";
 
 // export type Task = PostDetail & {validationImage:string, invalidationImage:string}
 
@@ -95,6 +96,7 @@ export class SuiviPME extends Destroy${
       else arrayDateId = mission.dates
       console.log("dates missionMenu", arrayDateId)
       this.dates = this.store.selectSnapshot(DataQueries.getMany('DatePost', arrayDateId))
+      this.dates = this.sortDate(this.dates)
       
       // this.computeDates(mission);
       this.companyName =
@@ -146,8 +148,13 @@ export class SuiviPME extends Destroy${
     this.mission = this.store.selectSnapshot(DataQueries.getById('Mission', this.mission.id));
     if(!this.mission) return
     this.dates = this.store.selectSnapshot(DataQueries.getMany('DatePost', this.mission.dates))
+    this.dates = this.sortDate(this.dates)
     this.cd.markForCheck()
 
+  }
+
+  sortDate(date: DatePost[]){
+    return date.sort((date1, date2) => moment(date1.date).diff(moment(date2.date)))
   }
 
   updateMission() {
@@ -356,6 +363,7 @@ export class SuiviPME extends Destroy${
       if (!Array.isArray(this.mission.dates)) arrayDateId = Object.keys(this.mission.dates).map(date => +date)
       else arrayDateId = this.mission.dates
       this.dates = this.store.selectSnapshot(DataQueries.getMany('DatePost', arrayDateId))
+      this.dates = this.sortDate(this.dates)
       this.cd.markForCheck();
     });
   }

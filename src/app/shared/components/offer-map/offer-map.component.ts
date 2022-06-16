@@ -51,6 +51,7 @@ export class OfferMapComponent {
   @Input()
   showCandidate: boolean = false;
 
+  @Input()
   metier?: Job;
 
   get unseenCandidate(): number {
@@ -86,10 +87,7 @@ export class OfferMapComponent {
   deletable: boolean = false;
 
   company: Company | null = null;
-  private _post!: Post | null;
-  get post() {
-    return this._post;
-  }
+  
 
   get isClosed() {
     let mission = this._post as Mission;
@@ -119,9 +117,12 @@ export class OfferMapComponent {
 
   @Input() set post(p: Post | null) {
     this._post = p;
-    this.company = p
-      ? this.store.selectSnapshot(DataQueries.getById("Company", p.company))
-      : null;
+    this.company = p ? this.store.selectSnapshot(DataQueries.getById("Company", p.company)) : null;
+  }
+
+  private _post!: Post | null;
+  get post() {
+    return this._post;
   }
 
   @Input()
@@ -164,8 +165,7 @@ export class OfferMapComponent {
     });
 
     this.metier =
-      this.store.selectSnapshot(DataQueries.getById("Job", this.post!.job)) ||
-      undefined;
+      this.store.selectSnapshot(DataQueries.getById("Job", this.post!.job))!
   }
 
   toggleFavorite(e: Event) {

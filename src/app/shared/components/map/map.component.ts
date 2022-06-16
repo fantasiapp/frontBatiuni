@@ -3,7 +3,7 @@ import { Select, Store } from '@ngxs/store';
 import * as mapboxgl from 'mapbox-gl';
 import { Observable, Subscription } from 'rxjs';
 import { availableCompanies } from 'src/app/mobile/components/SOS_page/sos-page.component';
-import { Company, Mission, Post } from 'src/models/new/data.interfaces';
+import { Company, Job, Mission, Post } from 'src/models/new/data.interfaces';
 import { DataQueries, DataState } from 'src/models/new/data.state';
 import { Availability } from '../calendar/calendar.ui';
 
@@ -89,6 +89,7 @@ export class UIMapComponent {
 
   currentCompany: Company | null = null;
   currentAvailability: MarkerType = 'unavailable';
+  jobs: Job[] = []
 
   createPopup() {
     let span = document.createElement('span');
@@ -101,10 +102,20 @@ export class UIMapComponent {
 
   loadPopup(company: Company, post?: Post, availability?: MarkerType) {
     this.popupContent.innerHTML = `${company.name}`;
-
+    this.currentPost = null
+    this.currentCompany = null
+    this.cd.markForCheck()
 
     this.currentCompany = company
-    if(post) this.currentPost = post
+
+    console.log('newPost', post);
+    if(post) {
+      this.currentPost = post
+      this.jobs = [this.store.selectSnapshot(DataQueries.getById('Job', post.job))!]
+    } else {
+      const jobsForCompany = this.store.selectSnapshot(DataQueries.getMany('JobForCompany', company!.jobs));
+      this.jobs = this.store.selectSnapshot(DataQueries.getMany('Job', jobsForCompany.map(({job}) => job)))
+    }
     if (!availability) availability = 'unavailable';
     this.currentAvailability = availability
     this.popupContainer.nativeElement.style.display = 'block'
