@@ -252,6 +252,7 @@ export class MissionsComponent extends Destroy$ {
     console.log("activeview adns les missions", this.activeView)
     this.store.dispatch(new PostNotificationViewed(mission!.id, "ST"))
     this.notifService.emitNotifChangeEvent()
+    console.log('missions', mission);
     this.missionMenu = assignCopy(this.missionMenu, {
       post: mission,
       open: !!mission,
@@ -301,6 +302,7 @@ export class MissionsComponent extends Destroy$ {
 
   submitStarST(button: HTMLButtonElement) {
     if (!this.hasGeneralStarsST) return
+    
     this.store.dispatch(new CloseMissionST(this.missionToClose!.id, this.missionToClose!.vibeST, this.missionToClose!.vibeCommentST, this.missionToClose!.securityST, this.missionToClose!.securityCommentST, this.missionToClose!.organisationST, this.missionToClose!.organisationCommentST)).pipe(take(1)).subscribe(() => {
       this.doClose = true;
       this.openCloseMission = false;
