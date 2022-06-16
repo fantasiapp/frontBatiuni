@@ -170,6 +170,8 @@ export class OfferComponent {
     this.metier =
       this.store.selectSnapshot(DataQueries.getById("Job", this.post!.job)) ||
       undefined;
+
+    console.log("time", this.time, this.post?.boostTimestamp);
   }
 
   toggleFavorite(e: Event) {
