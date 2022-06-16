@@ -188,7 +188,7 @@ export class OfferComponent {
   }
 
   get notificationsMissionUnseen() {
-    console.log("dans le get de offer", this.notifService.getNotificationUnseenMission(this._post!.id))
+    // console.log("dans le get de offer", this.notifService.getNotificationUnseenMission(this._post!.id))
     return this.notifService.getNotificationUnseenMission(this._post!.id)
   }
 }
