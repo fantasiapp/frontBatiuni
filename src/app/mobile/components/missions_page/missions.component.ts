@@ -79,9 +79,6 @@ export class MissionsComponent extends Destroy$ {
 
   ngOnInit() {
     this.info.alignWith('header_search');
-    this.notifService.getNotifChangeEmitter().subscribe(() => {
-      this.cd.markForCheck()
-    })
 
     combineLatest([this.profile$, this.missions$]).pipe(takeUntil(this.destroy$)).subscribe(([profile, missions]) => {
       //filter own missions

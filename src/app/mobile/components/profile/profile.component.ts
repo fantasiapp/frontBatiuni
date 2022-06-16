@@ -94,7 +94,8 @@ export class ProfileComponent extends Destroy$ {
     this.notifService.getNotifChangeEmitter().subscribe((notifUnseen) => {
       this.notificationsUnseen = notifUnseen
     })
-    this.notifService.emitNotifChangeEvent()
+    this.notifService.checkNotif()
+    this.notifications = this.notifService.notifications
   }
 
 

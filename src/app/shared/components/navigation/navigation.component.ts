@@ -93,8 +93,6 @@ export class NavigationMenu extends Destroy$ {
   navigationType$!: Observable<"ST" | "PME">;
 
   ngOnInit() {
-    this.notifService.checkNotif()
-    this.notificationUnseen = this.notifService.notificationsUnseen
     this.navigationType$.pipe(takeUntil(this.destroy$)).subscribe(type => {
       const nextMenu = type == 'PME' ? PMEMenu : STMenu;
       this.menu.next(nextMenu);
@@ -104,6 +102,8 @@ export class NavigationMenu extends Destroy$ {
       this.notificationUnseen = value;
       this.cd.markForCheck()
     })
+    this.notifService.checkNotif()
+    this.notificationUnseen = this.notifService.notificationsUnseen
   }
 
   redirectHome() {
