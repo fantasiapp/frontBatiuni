@@ -36,7 +36,7 @@
 
 <swipeup [(open)]="missionMenu.swipeup">
   <li *ngIf="!mission?.isClosed" (click)="modifyTimeTable()">Modifier les horaires / les dates de présence</li>
-  <a [href]="'tel:+33' + company?.companyPhone"><li >Appeler le {{ subContractor?.companyPhone}}</li></a>
+  <a [href]="'tel:+33' + company?.companyPhone" style="padding: 0.5rem 0; display: block;"><li >Appeler le {{ subContractor?.companyPhone}}</li></a>
   <li *ngIf="mission?.signedByCompany && mission?.signedBySubContractor && !mission?.isClosed" (click)="closeMission()">Clôturer la mission</li>
   <li (click)="duplicateMission()">Dupliquer l'annonce</li>
 </swipeup>
@@ -72,7 +72,7 @@
       </div>
       <textarea (focusout)="textStarAction('organisation')" placeholder="Ajouter un commentaire" rows="5" cols="30" id="starTextOrganisation">{{ mission!.organisationComment }}</textarea>
     </div>
-    <button [ngClass]="classSubmit" (click)="submitStar()">Valider</button>
+    <button [ngClass]="classSubmit" class="button font-Poppins full-width" (click)="submitStar()">Valider</button>
   </div>
 </swipeup>
 
