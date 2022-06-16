@@ -34,7 +34,6 @@ export class NavigationMenu extends Destroy$ {
   mobileView = window.innerWidth <= 768;
 
   menu: BehaviorSubject<MenuItem[]>;
-  sub: any
   @Output()
   routeChange = new EventEmitter<string>();
   notificationUnseen: number = 0;
@@ -101,7 +100,7 @@ export class NavigationMenu extends Destroy$ {
       this.menu.next(nextMenu);
       this.getIndexFromUrl(this.router.url);
     });
-    this.sub = this.notifService.getNotifChangeEmitter().subscribe(value => {
+    this.notifService.getNotifChangeEmitter().subscribe(value => {
       this.notificationUnseen = value;
       this.cd.markForCheck()
     })
