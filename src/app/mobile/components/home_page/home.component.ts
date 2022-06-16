@@ -38,6 +38,7 @@ import {
   MarkViewed,
   SetFavorite,
   SwitchPostType,
+  PostNotificationViewed,
 } from "src/models/new/user/user.actions";
 import { DataQueries, DataState, QueryAll } from "src/models/new/data.state";
 import {
@@ -65,6 +66,7 @@ import { PMEFilterForm } from "src/app/shared/forms/PMEFilter.form";
 import { SearchbarComponent } from "src/app/shared/components/searchbar/searchbar.component";
 import { getUserDataService } from "src/app/shared/services/getUserData.service";
 import { Router } from "@angular/router";
+import { NotifService } from "src/app/shared/services/notif.service";
 
 @Component({
   selector: "home",
@@ -161,7 +163,8 @@ export class HomeComponent extends Destroy$ {
     private booleanService: BooleanService,
     private filterService: FilterService,
     private getUserDataService: getUserDataService,
-    private router: Router
+    private router: Router,
+    private notifService: NotifService
   ) {
     super();
     this.isLoading = this.booleanService.isLoading
@@ -209,6 +212,8 @@ export class HomeComponent extends Destroy$ {
           this.allUserOnlinePosts = mapping.get(this.symbols.userOnlinePost) || [];
           this.allOnlinePosts = [...otherOnlinePost, ...this.userOnlinePosts];
           this.allMissions = this.store.selectSnapshot(DataQueries.getMany("Mission", profile.company.missions));
+          const now = (new Date).toISOString().slice(0, 10);
+          this.allUserOnlinePosts = this.allUserOnlinePosts.filter((post) => post.dueDate > now)
           if (this.filterST) {this.filterST.updatePosts(this.allOnlinePosts)}
           this.selectDraft(null);
           this.selectUserOnline(null);
@@ -304,6 +309,8 @@ export class HomeComponent extends Destroy$ {
 
   selectUserOnline(filter: any) {
     this.userOnlinePosts = [];
+    const now = (new Date).toISOString().slice(0, 10);
+    this.allUserOnlinePosts = this.allUserOnlinePosts.filter((post) => post.dueDate > now)
     this.allUserOnlinePosts.sort((post1, post2) => {
       let b1 = post1.boostTimestamp > this.time ? 1 : 0;
       let b2 = post2.boostTimestamp > this.time ? 1 : 0;
@@ -340,13 +347,11 @@ export class HomeComponent extends Destroy$ {
 
       for (let post of this.allUserOnlinePosts) {
         
-        const now = (new Date).toISOString().slice(0, 10);
-        let isBeforeDueDate = (post.dueDate < now)
         let isDifferentDate = (filter.date &&  post.startDate < filter.date)
         let isDifferentManPower = (filter.manPower && post.manPower != (filter.manPower === "true"))
         let isNotIncludedJob = (filter.jobs && filter.jobs.length && filter.jobs.every((job: any) => {return job.id != post.job}))
 
-        if ( isDifferentDate || isDifferentManPower || isNotIncludedJob || isBeforeDueDate) { continue }
+        if ( isDifferentDate || isDifferentManPower || isNotIncludedJob) { continue }
         this.userOnlinePosts.push(post)
       }  
     }
@@ -596,6 +601,10 @@ export class HomeComponent extends Destroy$ {
   }
 
   openMission(mission: Mission | null) {
+    let company = this.store.selectSnapshot(DataQueries.currentCompany)
+    console.log("activeview", this.activeView)
+    this.store.dispatch(new PostNotificationViewed(mission!.id, "PME"))
+    this.notifService.emitNotifChangeEvent()
     this.missionMenu = assignCopy(this.missionMenu, {
       post: mission,
       open: !!mission,
@@ -609,6 +618,7 @@ export class HomeComponent extends Destroy$ {
   }
 
   duplicatePost(id: number) {
+    console.log("ALL POSTS ONLINE BEFORE DUPLICATE", this.store.selectSnapshot(DataQueries.getAll('Post')))
     this.info.show("info", "Duplication en cours...", Infinity);
     this.store
       .dispatch(new DuplicatePost(id))
@@ -622,6 +632,7 @@ export class HomeComponent extends Destroy$ {
           this.info.show("error", "Erreur lors de la duplication de l'annonce");
         }
       );
+      console.log("ALL POSTS ONLINE AFTER DUPLICATE", this.store.selectSnapshot(DataQueries.getAll('Post')))
   }
 
   pausePost(id: number) {
@@ -678,7 +689,6 @@ export class HomeComponent extends Destroy$ {
         if (!candidate.isRefused) {
           possibleCandidates.push(candidate);
         }
-        console.log("hjgfqhgfqljfbqzejfqkfh", possibleCandidates)
         return possibleCandidates;
       },
       []
@@ -741,7 +751,6 @@ export class HomeComponent extends Destroy$ {
       .pipe(take(1))
       .subscribe(() => {
         this.openPost(null);
-        console.log("Dans block candidate")
         // this.router.navigateByUrl('/home')
         this.cd.markForCheck();
       });

@@ -43,14 +43,13 @@
 
 <swipeup [(open)]="missionMenu.swipeupCloseMission">
   <div class="cloture-swipeup">
-    <h3>Noter l'entreprise</h3>
-    <h6 *ngIf="mission">{{ mission!.subContractorName }}</h6>
+    <h3 *ngIf="mission" class="notation"> Noter {{ mission?.subContractorContact }} de l'entreprise {{ mission?.subContractorName}}</h3>
     <div class="star-container" *ngIf="hasGeneralStars">
       <img  *ngFor="let flag of getArrayStar('general'); let index=index;" [src]="flag ? 'assets/starFull.svg' : 'assets/starEmpty.svg'">
     </div>
 
     <div *ngIf="mission" class="form-input">
-      <p>Qualité du travail fourni</p>
+      <p class="titleForm">Qualité du travail fourni</p>
       <div class="star-container">
         <img *ngFor="let flag of getArrayStar('quality'); let index=index;" (click)="starAction(index, 'quality')" [src]="flag ? 'assets/starFull.svg' : 'assets/starEmpty.svg'">
       </div>
@@ -58,7 +57,7 @@
     </div>
     
     <div *ngIf="mission" class="form-input">
-      <p>Respect de la sécurité et de la propreté du chantier</p>
+      <p class="titleForm">Respect de la sécurité et de la propreté du chantier</p>
       <div class="star-container">
         <img *ngFor="let flag of getArrayStar('security'); let index=index;" (click)="starAction(index, 'security')" [src]="flag ? 'assets/starFull.svg' : 'assets/starEmpty.svg'">
       </div>
@@ -66,7 +65,7 @@
     </div>
 
     <div *ngIf="mission" class="form-input">
-      <p>Organisation</p>
+      <p class="titleForm">Organisation</p>
       <div class="star-container">
         <img *ngFor="let flag of getArrayStar('organisation'); let index=index;" (click)="starAction(index, 'organisation')" [src]="flag ? 'assets/starFull.svg' : 'assets/starEmpty.svg'">
       </div>

@@ -109,6 +109,8 @@ export class OfferComponent {
   @Input()
   isRefused: boolean = false;
 
+  notificationsMissionUnseen: number = 0;
+
   get hasPostulated() {
     const profile = this.store.selectSnapshot(DataQueries.currentProfile);
     let companiesId;
@@ -140,6 +142,11 @@ export class OfferComponent {
   }
 
   ngOnInit() {
+    this.notifService.getNotifChangeEmitter().subscribe(() => {
+      this.notificationsMissionUnseen = this.notifService.getNotificationUnseenMission(this._post!.id)
+      console.log("le get qui n'est pas un get ", this.notificationsMissionUnseen)
+      this.cd.markForCheck()
+    })
     if (!this.src) {
       if (SingleCache.checkValueInCache("companyImage" + this.company!.id.toString())) {
         this.src = SingleCache.getValueByName("companyImage" + this.company!.id.toString())
@@ -170,6 +177,8 @@ export class OfferComponent {
     this.metier =
       this.store.selectSnapshot(DataQueries.getById("Job", this.post!.job)) ||
       undefined;
+
+    console.log("time", this.time, this.post?.boostTimestamp);
   }
 
   toggleFavorite(e: Event) {
@@ -187,8 +196,4 @@ export class OfferComponent {
     }
   }
 
-  get notificationsMissionUnseen() {
-    // console.log("dans le get de offer", this.notifService.getNotificationUnseenMission(this._post!.id))
-    return this.notifService.getNotificationUnseenMission(this._post!.id)
-  }
 }
