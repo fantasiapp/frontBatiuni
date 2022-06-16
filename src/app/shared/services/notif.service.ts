@@ -19,6 +19,7 @@ export class NotifService {
 
   constructor(private store: Store) {}
   emitNotifChangeEvent(num?: number) {
+    this.checkNotif()
     if (num !== undefined) {
       this.notificationsUnseen = num
       this.navchange.emit(this.notificationsUnseen);

@@ -20,7 +20,7 @@ import {
   Ref,
 } from "src/models/new/data.interfaces";
 import { DataQueries, QueryAll } from "src/models/new/data.state";
-import { CloseMissionST, MarkViewed } from "src/models/new/user/user.actions";
+import { CloseMissionST, MarkViewed, PostNotificationViewed } from "src/models/new/user/user.actions";
 import { UIAnnonceResume } from "../../ui/annonce-resume/annonce-resume.ui";
 import { getLevenshteinDistance } from "src/app/shared/services/levenshtein";
 
@@ -79,6 +79,9 @@ export class MissionsComponent extends Destroy$ {
 
   ngOnInit() {
     this.info.alignWith('header_search');
+    this.notifService.getNotifChangeEmitter().subscribe(() => {
+      this.cd.markForCheck()
+    })
 
     combineLatest([this.profile$, this.missions$]).pipe(takeUntil(this.destroy$)).subscribe(([profile, missions]) => {
       //filter own missions
@@ -245,6 +248,10 @@ export class MissionsComponent extends Destroy$ {
   }
 
   openMission(mission: Mission | null) {
+    let company = this.store.selectSnapshot(DataQueries.currentCompany)
+    console.log("activeview adns les missions", this.activeView)
+    this.store.dispatch(new PostNotificationViewed(mission!.id, "ST"))
+    this.notifService.emitNotifChangeEvent()
     this.missionMenu = assignCopy(this.missionMenu, {
       post: mission,
       open: !!mission,

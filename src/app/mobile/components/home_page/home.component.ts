@@ -38,6 +38,7 @@ import {
   MarkViewed,
   SetFavorite,
   SwitchPostType,
+  PostNotificationViewed,
 } from "src/models/new/user/user.actions";
 import { DataQueries, DataState, QueryAll } from "src/models/new/data.state";
 import {
@@ -65,6 +66,7 @@ import { PMEFilterForm } from "src/app/shared/forms/PMEFilter.form";
 import { SearchbarComponent } from "src/app/shared/components/searchbar/searchbar.component";
 import { getUserDataService } from "src/app/shared/services/getUserData.service";
 import { Router } from "@angular/router";
+import { NotifService } from "src/app/shared/services/notif.service";
 
 @Component({
   selector: "home",
@@ -161,7 +163,8 @@ export class HomeComponent extends Destroy$ {
     private booleanService: BooleanService,
     private filterService: FilterService,
     private getUserDataService: getUserDataService,
-    private router: Router
+    private router: Router,
+    private notifService: NotifService
   ) {
     super();
     this.isLoading = this.booleanService.isLoading
@@ -596,6 +599,10 @@ export class HomeComponent extends Destroy$ {
   }
 
   openMission(mission: Mission | null) {
+    let company = this.store.selectSnapshot(DataQueries.currentCompany)
+    console.log("activeview", this.activeView)
+    this.store.dispatch(new PostNotificationViewed(mission!.id, "PME"))
+    this.notifService.emitNotifChangeEvent()
     this.missionMenu = assignCopy(this.missionMenu, {
       post: mission,
       open: !!mission,

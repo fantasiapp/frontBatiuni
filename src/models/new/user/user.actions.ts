@@ -447,6 +447,12 @@ export class MarkViewed {
   constructor(public Post: number) {}
 };
 
+export class PostNotificationViewed {
+  static readonly type = '[User.ST] View Post Notification';
+  action = 'notificationPostViewed';
+  constructor(public postId: number, public role: string) {}
+};
+
 export class BoostPost {
   static readonly type = '[Data] Boost Post';
   action = 'boostPost';

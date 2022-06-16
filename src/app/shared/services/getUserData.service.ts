@@ -19,23 +19,26 @@ export class getUserDataService {
 
   constructor(private store: Store) {}
 
-  emitDataChangeEvent(timeStamp?: number) {
-    if (timeStamp){
-      this.lastTimeStamp = timeStamp
+  emitDataChangeEvent(timestamp?: number) {
+    if (timestamp){
+      this.lastTimeStamp = timestamp
     }
+    console.log("les times stamp, lastTimeStamp :", this.lastTimeStamp, "l'autre qui doit être plus petit", this.getUserDataTimeStamp)
     if(this.hasNewResponse && this.lastTimeStamp < this.getUserDataTimeStamp) {
+      console.log("update data daaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaans le service")
       this.navchange.emit(this.response);
       this.hasNewResponse = false
     }
   }
 
   setNewResponse(response: any) {
+    this.getUserDataTimeStamp = response.timestamp
     this.hasNewResponse = true
     this.response = response
   }
 
-  setGetUserDataTimeStamp(timeStamp : number){
-    this.getUserDataTimeStamp = timeStamp
+  setGetUserDataTimeStamp(timestamp : number){
+    this.getUserDataTimeStamp = timestamp
   }
 
   getDataChangeEmitter() {
@@ -48,6 +51,11 @@ export class getUserDataService {
 
   getRegisterForm() {
     return this.registerForm
+  }
+
+  resetTimestamp() {
+    this.getUserDataTimeStamp = 0
+    this.lastTimeStamp = 0
   }
 
 }

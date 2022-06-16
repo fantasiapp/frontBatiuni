@@ -97,7 +97,6 @@ export class AppComponent extends Destroy$ {
       }
       else{
         this.getUserData()
-        this.notifService.checkNotif()
         this.notifService.emitNotifChangeEvent()
       }
       this.readyToUpdate = true
