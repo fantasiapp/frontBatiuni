@@ -305,7 +305,6 @@ export class HomeComponent extends Destroy$ {
       }
     }
     this.cd.markForCheck();
-    console.log("ALL DRAFTS POSTS", this.userDrafts)
   }
 
   selectUserOnline(filter: any) {
@@ -357,7 +356,6 @@ export class HomeComponent extends Destroy$ {
       }  
     }
     this.cd.markForCheck();
-    console.log("ALL ONLINE POSTS", this.userOnlinePosts)
   }
 
   selectMission(filter: any) {
@@ -401,7 +399,6 @@ export class HomeComponent extends Destroy$ {
       }
     }
     this.cd.markForCheck();
-    console.log("ALL MISSIONS POSTS", this.missions)
   }
 
   swipeupMenu() {
@@ -635,7 +632,6 @@ export class HomeComponent extends Destroy$ {
           this.info.show("error", "Erreur lors de la duplication de l'annonce");
         }
       );
-      console.log("ALL POSTS ONLINE AFTER DUPLICATE", this.store.selectSnapshot(DataQueries.getAll('Post')))
   }
 
   pausePost(id: number) {
@@ -753,7 +749,9 @@ export class HomeComponent extends Destroy$ {
       .dispatch(new BlockCompany(candidate!.company, true))
       .pipe(take(1))
       .subscribe(() => {
-        this.openPost(null);
+        // this.openPost(null);
+        this.slideOnlinePost.close();
+        // this.slideOnlinePostClose()
         // this.router.navigateByUrl('/home')
         this.cd.markForCheck();
       });
