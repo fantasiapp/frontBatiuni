@@ -1016,7 +1016,8 @@ export class DataState {
   @Action(CloseMission)
   closeMission(ctx: StateContext<DataModel>, application: CloseMission) {
     console.log("closeMission", application)
-    // const profile = this.store.selectSnapshot(DataQueries.currentProfile)!;
+    const profile = this.store.selectSnapshot(DataQueries.currentProfile)!;
+    if(application.action != 'closeMission') return
     return this.http.post("data", application).pipe(
       tap((response: any) => {
         if (response[application.action] !== "OK") {
@@ -1024,19 +1025,20 @@ export class DataState {
           throw response.messages;
         }
         delete response[application.action];
-        console.log('Response', response)
+        console.log('Response closeMission', response)
         this.getUserDataService.emitDataChangeEvent(response.timestamp)
         delete response["timestamp"];
         ctx.setState(update("Mission", response));
-
+        
       })
     );
   }
-
+  
   @Action(CloseMissionST)
   closeMissionST(ctx: StateContext<DataModel>, application: CloseMissionST) {
     console.log("closeMissionST", application)
     const profile = this.store.selectSnapshot(DataQueries.currentProfile)!;
+    if(application.action != 'closeMissionST') return
     return this.http.post("data", application).pipe(
       tap((response: any) => {
         if (response[application.action] !== "OK") {
@@ -1044,7 +1046,7 @@ export class DataState {
           throw response.messages;
         }
         delete response[application.action];
-        console.log('ReponseST', response)
+        console.log('Reponse closeMissionST', response)
         this.getUserDataService.emitDataChangeEvent(response.timestamp)
         delete response["timestamp"];
         ctx.setState(update("Mission", response));
