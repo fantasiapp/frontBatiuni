@@ -126,6 +126,12 @@ export class OfferComponent {
     return companiesId?.includes(profile.company.id);
   }
 
+  get isViewed() {
+    const user = this.store.selectSnapshot(DataQueries.currentUser);
+    console.log(this._post, user.viewedPosts?.includes(this._post!.id))
+    return user.viewedPosts?.includes(this._post!.id);
+  }
+
   @Input() set post(p: Post | null) {
     this._post = p;
     this.company = p
