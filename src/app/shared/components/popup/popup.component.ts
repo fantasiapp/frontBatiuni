@@ -432,7 +432,7 @@ export class PopupService {
     return new EventEmitter();
   }
 
-  openSignContractDialog(mission: Mission) {
+  openSignContractDialog(mission: Mission, onClosePopup: Function) {
     const view = this.store.selectSnapshot(DataState.view),
       closed$ = new Subject<void>();
 
@@ -475,6 +475,7 @@ export class PopupService {
             close: () => {
               this.downloader.clearContext(fileContext);
               closed$.next();
+              onClosePopup();
             },
           });
           first = false;
