@@ -253,24 +253,24 @@ export class SuiviPME extends Destroy${
   submitStar(button: HTMLButtonElement) {
     button.classList.add('submitDisable');
     button.classList.remove('submitActivated')
-    setTimeout(()=>{
-      button.classList.remove('submitDisable');
-      button.classList.add('submitActivated')
-    
-    }, 1500)
-    console.log('this.hasgeneralStars', this.hasGeneralStars);
-    if (!this.hasGeneralStars) return
-    // try {
-    this.store.dispatch(new CloseMission(this.mission!.id, this.mission!.quality, this.mission!.qualityComment, this.mission!.security, this.mission!.securityComment, this.mission!.organisation, this.mission!.organisationComment)).pipe(take(1)).subscribe(() => {
-      this.mission!.isClosed = true
-      this._missionMenu.swipeupCloseMission = false;
-      this.cd.markForCheck();
-    });
-    // } catch {
-    //   console.log('catched error');
+    // setTimeout(()=>{
     //   button.classList.remove('submitDisable');
     //   button.classList.add('submitActivated')
-    // }
+    
+    // }, 1500)
+    console.log('this.hasgeneralStars', this.hasGeneralStars);
+    if (!this.hasGeneralStars) return
+    try {
+      this.store.dispatch(new CloseMission(this.mission!.id, this.mission!.quality, this.mission!.qualityComment, this.mission!.security, this.mission!.securityComment, this.mission!.organisation, this.mission!.organisationComment)).pipe(take(1)).subscribe(() => {
+        this.mission!.isClosed = true
+        this._missionMenu.swipeupCloseMission = false;
+        this.cd.markForCheck();
+      });
+    } catch {
+      console.log('catched error');
+      button.classList.remove('submitDisable');
+      button.classList.add('submitActivated')
+    }
   }
 
   @Select(DataQueries.currentProfile)
