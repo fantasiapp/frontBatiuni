@@ -991,7 +991,7 @@ export class DataState {
   @Action(CloseMission)
   closeMission(ctx: StateContext<DataModel>, application: CloseMission) {
     console.log("closeMission", application)
-    const profile = this.store.selectSnapshot(DataQueries.currentProfile)!;
+    // const profile = this.store.selectSnapshot(DataQueries.currentProfile)!;
     return this.http.post("data", application).pipe(
       tap((response: any) => {
         if (response[application.action] !== "OK") {
