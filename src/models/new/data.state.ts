@@ -312,7 +312,6 @@ export class DataState {
 
         if(response.hasOwnProperty('JobForCompany') && Array.isArray(response['JobForCompany'])){
           for (let job of response.JobForCompany) {
-            this.getUserDataService.emitDataChangeEvent(response.timestamp)
             ctx.setState(addValues('JobForCompany', job))            
           }
         }
@@ -320,7 +319,6 @@ export class DataState {
 
         if (response.hasOwnProperty('LabelForCompany') && Array.isArray(response['LabelForCompany'])){
           for (let label of response.LabelForCompany) {
-            this.getUserDataService.emitDataChangeEvent(response.timestamp)
             ctx.setState(addValues('LabelForCompany', label))
           }
         }
