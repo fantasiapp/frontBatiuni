@@ -10,6 +10,7 @@ import { Store } from "@ngxs/store";
 import { take } from "rxjs/internal/operators/take";
 import { takeUntil } from "rxjs/operators";
 import { Destroy$ } from "src/app/shared/common/classes";
+import { InfoService } from "src/app/shared/components/info/info.component";
 import { PopupService } from "src/app/shared/components/popup/popup.component";
 import {
   PostDateAvailableTask,
@@ -75,7 +76,7 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
 
   user!: User;
 
-  constructor(private cd: ChangeDetectorRef, private store: Store, private popup: PopupService) {
+  constructor(private cd: ChangeDetectorRef, private store: Store, private popup: PopupService, private info: InfoService) {
     super();
   }
 
@@ -247,11 +248,20 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
       source: CameraSource.Photos,
     });
 
-    this.store.dispatch(new UploadImageSupervision(photo, this.currentSupervisionId)).pipe(take(1)).subscribe(() => {
-      // let supervisions = this.store.selectSnapshot(DataQueries.getMany('Supervision', this.mission!.supervisions))
+    console.log("selectPhoto", photo.format);
+    let acceptedFormat = ["jpeg", "png", "jpg", "bmp"];
+    console.log("acceptedFormat", acceptedFormat.includes(photo.format));
+    if (acceptedFormat.includes(photo.format)) {
+      this.store.dispatch(new UploadImageSupervision(photo, this.currentSupervisionId)).pipe(take(1)).subscribe(() => {
+        // let supervisions = this.store.selectSnapshot(DataQueries.getMany('Supervision', this.mission!.supervisions))
+        this.updatePageOnlyDate();
+        this.swipeMenuImage = false;
+      });
+    } else {
       this.updatePageOnlyDate();
       this.swipeMenuImage = false;
-    });
+      this.info.show("error", "Format d'image non supporté", 3000);
+    }
   }
 
   addTaskToPost() {
