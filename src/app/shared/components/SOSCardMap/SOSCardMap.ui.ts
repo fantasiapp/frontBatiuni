@@ -34,6 +34,8 @@ export class UISOSCardMap {
   @QueryProfile()
   @Input('profile')
   profile$!: number | Profile | Observable<Profile>;
+
+  @Input()
   jobs: Job[] = [];
 
   @Input()
