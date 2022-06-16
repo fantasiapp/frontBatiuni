@@ -72,7 +72,7 @@
       </div>
       <textarea (focusout)="textStarAction('organisation')" placeholder="Ajouter un commentaire" rows="5" cols="30" id="starTextOrganisation">{{ mission!.organisationComment }}</textarea>
     </div>
-    <button [ngClass]="classSubmit" class="button font-Poppins full-width" (click)="submitStar()">Valider</button>
+    <button [ngClass]="classSubmit" class="button font-Poppins full-width" (click)="submitStar(submitStarButton)" #submitStarButton>Valider</button>
   </div>
 </swipeup>
 

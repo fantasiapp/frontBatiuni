@@ -253,8 +253,14 @@ export class SuiviPME extends Destroy${
     return array;
   }
 
-  submitStar() {
-    if (this.hasGeneralStars)
+  submitStar(button: HTMLButtonElement) {
+    button.classList.add('submitDisable');
+    button.classList.remove('submitActivated')
+    setTimeout(() => {
+      
+    }, 1500);
+    if (!this.hasGeneralStars) return
+    try {
       this.store
         .dispatch(
           new CloseMission(
@@ -272,6 +278,10 @@ export class SuiviPME extends Destroy${
           this._missionMenu.swipeupCloseMission = false;
           this.cd.markForCheck();
         });
+    } catch {
+      button.classList.remove('submitDisable');
+      button.classList.add('submitActivated')
+    }
   }
 
   @Select(DataQueries.currentProfile)
