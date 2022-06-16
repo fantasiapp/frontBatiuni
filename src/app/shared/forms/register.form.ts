@@ -36,6 +36,7 @@ import { SnapshotAll } from "src/models/new/data.state";
 import { Establishement, Job, Role } from "src/models/new/data.interfaces";
 import { GetCompanies } from "src/models/new/search/search.actions";
 import { getUserDataService } from "../services/getUserData.service";
+import { InfoService } from "../components/info/info.component";
 
 @Component({
   selector: "register-form",
@@ -282,10 +283,12 @@ export class RegisterForm extends Destroy$ {
     private store: Store,
     private router: Router,
     private cd: ChangeDetectorRef,
-    private getUserDataService: getUserDataService
+    private getUserDataService: getUserDataService,
+    private info: InfoService,
   ) {
     super();
   }
+
 
   @ViewChild(UISuggestionBox)
   suggestionBox?: UISuggestionBox;
@@ -300,6 +303,29 @@ export class RegisterForm extends Destroy$ {
   showSubmitButton: boolean = true;
 
   pending: boolean = false;
+
+  ngOnInit() {
+
+    this.info.alignWith('header')
+    const ev = this.searchEvent.pipe(takeUntil(this.destroy$)),
+      eachFour = ev.pipe(
+        bufferCount(4),
+        map((l: Event[]) => l[l.length - 1])
+      ),
+      eachSecond = ev.pipe(debounceTime(1000));
+
+    let lastValue = "";
+    merge(eachFour, eachSecond).subscribe((e: Event) => {
+      const value = (e.target as HTMLInputElement).value;
+      if (value !== lastValue) {
+        lastValue = value;
+        this.searchQuery.next(value);
+      }
+    });
+
+    this.registerForm.valueChanges.subscribe((value) => {
+    })
+  }
 
   public registerForm = new FormGroup(
     {
@@ -346,6 +372,9 @@ export class RegisterForm extends Destroy$ {
             this.pending = false;
           },
           (errors) => {
+            if(errors.hasOwnProperty('company')){
+              this.info.show("error","Il existe déjà un compte avec cette entreprise", 3000);
+            }
             if (errors.email) {
               errors.all = errors.all
                 ? errors.all + "\n" + errors.email
@@ -359,26 +388,7 @@ export class RegisterForm extends Destroy$ {
     }
   }
 
-  ngOnInit() {
-    const ev = this.searchEvent.pipe(takeUntil(this.destroy$)),
-      eachFour = ev.pipe(
-        bufferCount(4),
-        map((l: Event[]) => l[l.length - 1])
-      ),
-      eachSecond = ev.pipe(debounceTime(1000));
 
-    let lastValue = "";
-    merge(eachFour, eachSecond).subscribe((e: Event) => {
-      const value = (e.target as HTMLInputElement).value;
-      if (value !== lastValue) {
-        lastValue = value;
-        this.searchQuery.next(value);
-      }
-    });
-
-    this.registerForm.valueChanges.subscribe((value) => {
-    })
-  }
 
   onClickInputScroll(input: HTMLElement){
     setTimeout(() => {
