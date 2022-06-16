@@ -602,7 +602,6 @@ export class HomeComponent extends Destroy$ {
 
   openMission(mission: Mission | null) {
     let company = this.store.selectSnapshot(DataQueries.currentCompany)
-    console.log("activeview", this.activeView)
     this.store.dispatch(new PostNotificationViewed(mission!.id, "PME"))
     this.notifService.emitNotifChangeEvent()
     this.missionMenu = assignCopy(this.missionMenu, {
@@ -618,7 +617,6 @@ export class HomeComponent extends Destroy$ {
   }
 
   duplicatePost(id: number) {
-    console.log("ALL POSTS ONLINE BEFORE DUPLICATE", this.store.selectSnapshot(DataQueries.getAll('Post')))
     this.info.show("info", "Duplication en cours...", Infinity);
     this.store
       .dispatch(new DuplicatePost(id))
@@ -632,7 +630,6 @@ export class HomeComponent extends Destroy$ {
           this.info.show("error", "Erreur lors de la duplication de l'annonce");
         }
       );
-      console.log("ALL POSTS ONLINE AFTER DUPLICATE", this.store.selectSnapshot(DataQueries.getAll('Post')))
   }
 
   pausePost(id: number) {

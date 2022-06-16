@@ -96,6 +96,7 @@ export class ProfileComponent extends Destroy$ {
     })
     this.notifService.checkNotif()
     this.notifications = this.notifService.notifications
+    this.notificationsUnseen = this.notifService.notificationsUnseen
   }
 
 

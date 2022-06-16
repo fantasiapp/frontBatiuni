@@ -246,7 +246,6 @@ export class MissionsComponent extends Destroy$ {
 
   openMission(mission: Mission | null) {
     let company = this.store.selectSnapshot(DataQueries.currentCompany)
-    console.log("activeview adns les missions", this.activeView)
     this.store.dispatch(new PostNotificationViewed(mission!.id, "ST"))
     this.notifService.emitNotifChangeEvent()
     this.missionMenu = assignCopy(this.missionMenu, {
