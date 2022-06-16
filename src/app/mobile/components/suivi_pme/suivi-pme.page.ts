@@ -100,7 +100,7 @@ export class SuiviPME extends Destroy${
       this.companyName =
         this.view == "ST" ? this.company!.name : this.subContractor!.name;
       this.contactName =
-        this.view == "ST" ? "" : this.mission!.subContractorContact ;
+        this.view == "ST" ? this.mission!.contactName : this.mission!.subContractorContact ;
     }
     if (mission) this.updateDate(mission!);
   }
@@ -138,6 +138,15 @@ export class SuiviPME extends Destroy${
   ) {super()}
 
   ngOnInit(){
+  }
+
+  onComputeDate(){
+    console.log('onComputeDate',this.mission, this.dates);
+    if(!this.mission) return
+    this.mission = this.store.selectSnapshot(DataQueries.getById('Mission', this.mission.id));
+    if(!this.mission) return
+    this.dates = this.store.selectSnapshot(DataQueries.getMany('DatePost', this.mission.dates))
+    this.cd.markForCheck()
 
   }
 
@@ -355,10 +364,9 @@ export class SuiviPME extends Destroy${
     if(!this.mission){
       return []
     }
-    // this.cd.detach()
 
     let listBlockedDate: string[] = [];
-    let listDatePost = this.store.selectSnapshot(DataQueries.getMany('DatePost', this.mission.dates))
+    let listDatePost = this.store.selectSnapshot(DataQueries.getMany('DatePost', this.mission!.dates))
     // this.cd.reattach()
     listBlockedDate = listDatePost.filter(date => date && (!!date.supervisions.length || !!date.details.length)).map(date => date.date)
     return listBlockedDate;

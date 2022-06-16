@@ -10,6 +10,10 @@
   > *:not(:last-child) {
     padding-inline: 2rem;
   }
+
+  &.suppression > *:not(:first-child) {
+    pointer-events: none;
+  }
 }
 
 .chantier-tache {

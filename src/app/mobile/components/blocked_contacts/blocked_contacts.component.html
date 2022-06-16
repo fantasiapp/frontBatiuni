@@ -1,19 +1,9 @@
-<header class="clear-margin full-width sticky-header flex column white-header" id="bigHeader">
-    <div class="pick flex row small-space-children-margin">
-        <img class="left" [routerLink]="['','home','profile']"  src="assets/arrowlblack.svg" />
-        <h1 class="grow center-text">Mes contacts bloqués</h1>
-    </div>
-</header>
+<blocked-contact-card
+    (click)="openProfile(company) " 
+    *ngFor="let company of blockedCompanies" 
+    [profile]="{company: company}" >
+</blocked-contact-card>
 
-<div class="cards">
-<div class="hosted-page space-children-margin">
-    <blocked-contact-card
-      (click)="openProfile(company) " 
-      *ngFor="let company of blockedCompanies" 
-      [profile]="{company: company}" >
-    </blocked-contact-card>
-</div>
-</div>
 
 <slidemenu [(open)]="openCompanyProfile" [header]="false" #slideOnlinePost> 
     <header class="clear-margin full-width sticky-header flex center-cross annonce"

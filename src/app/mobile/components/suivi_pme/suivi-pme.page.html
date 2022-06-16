@@ -1,5 +1,5 @@
 <div class="container hosted-page space-children-margin">
-  <annonce-resume [collapsed]="true" [application]="false" [post]="mission" [isSuiviPME]="true"></annonce-resume>
+  <annonce-resume [collapsed]="true" [application]="false" [post]="mission" [isSuiviPME]="view == 'PME'"></annonce-resume>
   <!-- CONTRAT DOCUSIGN URL -->
   <div *ngIf="isNotSigned" class="contrat">
     <h3>
@@ -20,12 +20,12 @@
 </div>
 <div class="suivi-notification">
   <h4 class="font-Poppins">Suivi de chantier</h4>
-  <p class="font-Roboto">Avec {{contactName}} entreprise {{ companyName }} </p>
+  <p class="font-Roboto">Avec {{ contactName }} entreprise {{ companyName }} </p>
 </div>
 <div class="full-width flex column">
   <ng-container *ngFor="let date of dates">
 
-    <suivi-chantier_date *ngIf="date.validated || (!date.validated && date.deleted && view == 'ST')" [view]="view" [dateId]="date.id" [mission]="mission"></suivi-chantier_date>
+    <suivi-chantier_date *ngIf="date.validated || (!date.validated && date.deleted && view == 'ST')" [view]="view" [dateId]="date.id" [mission]="mission" (computeDate)="onComputeDate()"></suivi-chantier_date>
   </ng-container>
   <!-- <div class="newDate">
     <img src="assets/plusBlue.svg">

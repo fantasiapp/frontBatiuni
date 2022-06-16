@@ -2,7 +2,9 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  EventEmitter,
   Input,
+  Output,
 } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { Camera, CameraResultType, CameraSource } from "@capacitor/camera";
@@ -29,8 +31,10 @@ import {
   CreateSupervision,
   ModifyDetailedPost,
   UploadImageSupervision,
+  ValidateMissionDate,
 } from "src/models/new/user/user.actions";
-import { SuiviPME } from "../suivi_pme/suivi-pme.page";
+import { getUserDataService } from "src/app/shared/services/getUserData.service";
+
 
 export interface TaskGraphic {
   selectedTask: PostDetailGraphic,
@@ -76,7 +80,7 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
 
   user!: User;
 
-  constructor(private cd: ChangeDetectorRef, private store: Store, private popup: PopupService, private info: InfoService) {
+  constructor(private cd: ChangeDetectorRef, private store: Store, private popup: PopupService, private getUserDataService: getUserDataService, private info: InfoService) {
     super();
   }
 
@@ -334,12 +338,14 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
       if (!detailPostId) {
         datePostId = this.dateOrigin.id
       }
-      this.store.dispatch(new CreateSupervision(detailPostId, datePostId, comment)).pipe(take(1)).subscribe((response) => {
-        formControl.reset()
-
-        
-        this.updatePageOnlyDate()
-      })
+      try {
+        this.store.dispatch(new CreateSupervision(detailPostId, datePostId, comment)).pipe(take(1)).subscribe((response) => {
+          formControl.reset()
+          this.updatePageOnlyDate()
+        })
+      } catch {
+        this.getUserDataService.emitDataChangeEvent()
+      }
     }
   }
 
@@ -348,5 +354,17 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
     this.currentSupervisionId = supervsionId;
     this.swipeMenuImage = true; 
     this.cd.markForCheck()
+  }
+
+  @Output() computeDates: EventEmitter<any> = new EventEmitter();
+
+  deleted(b: boolean, deleting: boolean) {
+    let field = "date";
+    
+    this.store.dispatch(new ValidateMissionDate(this.mission!.id, field, b, this.date.date)).pipe().subscribe(() => {
+      this.date.deleted = b
+      this.cd.markForCheck()
+      if(b) this.computeDates.next()
+    });
   }
 }

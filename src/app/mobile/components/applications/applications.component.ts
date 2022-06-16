@@ -3,6 +3,7 @@ import {
   ChangeDetectorRef,
   Component,
   EventEmitter,
+  Input,
   OnDestroy,
   OnInit,
   Output,
@@ -17,7 +18,6 @@ import { Destroy$ } from "src/app/shared/common/classes";
 import { delay, assignCopy, splitByOutput } from "../../../shared/common/functions";
 import { MarkViewed, UnapplyPost } from "src/models/new/user/user.actions";
 import { UIAnnonceResume } from "src/app/mobile/ui/annonce-resume/annonce-resume.ui";
-import { Input } from "hammerjs";
 import { getLevenshteinDistance } from "src/app/shared/services/levenshtein";
 import { AppComponent } from "src/app/app.component";
 import { InfoService } from "src/app/shared/components/info/info.component";
@@ -48,11 +48,13 @@ export class ApplicationsComponent extends Destroy$ {
     discard: -1,
   };
 
+  @Output() closeEvent: EventEmitter<void> = new EventEmitter()
 
+  
   openAdFilterMenu: boolean = false;
-
+  
   postMenu = new PostMenu();
-
+  
   userOnlinePosts: Post[] = [];
   allOnlinePosts: Post[] = [];
   allCandidatedPost: Post[] = [];
@@ -64,33 +66,31 @@ export class ApplicationsComponent extends Destroy$ {
     super();
     this.searchbar = new SearchbarComponent(store);
   }
-
+  
   ngOnInit(): void {
     this.info.alignWith('header_search');
     combineLatest([this.profile$, this.posts$])
       .pipe(takeUntil(this.destroy$))
       .subscribe(([profile, posts]) => {
       const mapping = splitByOutput(posts, (post) => {
-          //0 -> userOnlinePosts | 1 -> userDrafts
-          if (profile.company.posts.includes(post.id)){
-            return post.draft ? this.symbols.userDraft : this.symbols.userOnlinePost;
-          }
-          return post.draft ? this.symbols.discard : this.symbols.otherOnlinePost;
-        });
-        const otherOnlinePost = mapping.get(this.symbols.otherOnlinePost) || [];
-        this.allOnlinePosts = [...otherOnlinePost, ...this.userOnlinePosts];
-
+        //0 -> userOnlinePosts | 1 -> userDrafts
+        if (profile.company.posts.includes(post.id)){
+          return post.draft ? this.symbols.userDraft : this.symbols.userOnlinePost;
+        }
+        return post.draft ? this.symbols.discard : this.symbols.otherOnlinePost;
       });
+      const otherOnlinePost = mapping.get(this.symbols.otherOnlinePost) || [];
+      this.allOnlinePosts = [...otherOnlinePost, ...this.userOnlinePosts];
+      
+    });
     this.time = this.store.selectSnapshot(DataState.time);
-
+    
     for (let post of this.allOnlinePosts){
       const profile = this.store.selectSnapshot(DataQueries.currentProfile);
       let companiesId;
       if (post) {
         companiesId = post.candidates?.map((id: number) => {
-          let candidate = this.store.selectSnapshot(
-            DataQueries.getById("Candidate", id)
-         );
+          let candidate = this.store.selectSnapshot(DataQueries.getById("Candidate", id));
           return candidate!.company;
         });
       }
@@ -98,6 +98,8 @@ export class ApplicationsComponent extends Destroy$ {
         this.allCandidatedPost.push(post)
       }
     }
+    console.log("ALLONLINEPOST", this.allOnlinePosts)
+    console.log("AllCandidatedPOst", this.allCandidatedPost)
     this.cd.markForCheck;
     this.selectPost(null);
     this.selectSearch('');
@@ -108,15 +110,19 @@ export class ApplicationsComponent extends Destroy$ {
     this.cd.markForCheck;
   }
 
-  selectPost(filter: any) {
-    this.userOnlinePosts = [];
-    if (filter == null) {  
-      this.userOnlinePosts = this.allCandidatedPost;
-    } else {
-      // Trie les posts selon leur distance de levenshtein
-      let levenshteinDist: any = [];
-      if (filter.address) {
-        for (let post of this.allCandidatedPost) {levenshteinDist.push([post,getLevenshteinDistance(post.address.toLowerCase(),filter.address.toLowerCase()),]);}
+    close() {
+      this.closeEvent.next()
+    }
+    
+    selectPost(filter: any) {
+      this.userOnlinePosts = [];
+      if (filter == null) {  
+        this.userOnlinePosts = this.allCandidatedPost;
+      } else {
+        // Trie les posts selon leur distance de levenshtein
+        let levenshteinDist: any = [];
+        if (filter.address) {
+          for (let post of this.allCandidatedPost) {levenshteinDist.push([post,getLevenshteinDistance(post.address.toLowerCase(),filter.address.toLowerCase()),]);}
         levenshteinDist.sort((a: any, b: any) => a[1] - b[1]);
         let keys = levenshteinDist.map((key: any) => {return key[0];});
         this.allCandidatedPost.sort((a: any,b: any)=>keys.indexOf(a) - keys.indexOf(b));
