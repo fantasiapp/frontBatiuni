@@ -307,8 +307,7 @@ import { Mobile } from "../services/mobile-footer.service";
       }
 
       .time-picker {
-        margin-left: 20px;
-        width: unset
+        margin-left: 10px;
       }
 
       .submit-container {
