@@ -170,6 +170,8 @@ export class OfferComponent {
     this.metier =
       this.store.selectSnapshot(DataQueries.getById("Job", this.post!.job)) ||
       undefined;
+
+    console.log("time", this.time, this.post?.boostTimestamp);
   }
 
   toggleFavorite(e: Event) {
@@ -188,7 +190,6 @@ export class OfferComponent {
   }
 
   get notificationsMissionUnseen() {
-    console.log("dans le get de offer", this.notifService.getNotificationUnseenMission(this._post!.id))
     return this.notifService.getNotificationUnseenMission(this._post!.id)
   }
 }

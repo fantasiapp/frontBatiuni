@@ -343,6 +343,7 @@ export class RegisterForm extends Destroy$ {
           (success) => {
             this.getUserDataService.setRegisterForm(this.registerForm)
             this.router.navigate(["", "success"]);
+            this.pending = false;
           },
           (errors) => {
             if (errors.email) {
@@ -351,6 +352,7 @@ export class RegisterForm extends Destroy$ {
                 : errors.email;
             }
             setErrors(this.registerForm, errors);
+            this.pending = false;
             this.cd.markForCheck();
           }
         );

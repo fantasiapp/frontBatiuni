@@ -101,7 +101,7 @@ export class Clear {
     session: {
       currentUser: -1,
       view: "ST",
-      time: 0,
+      time: 8640000000000000,
     },
   },
 })
