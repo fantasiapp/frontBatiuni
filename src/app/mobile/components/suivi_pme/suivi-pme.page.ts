@@ -33,6 +33,7 @@ import {
   DayState,
 } from "src/app/shared/components/calendar/calendar.ui";
 import { Destroy$ } from "src/app/shared/common/classes";
+import * as moment from "moment";
 
 // export type Task = PostDetail & {validationImage:string, invalidationImage:string}
 
@@ -94,12 +95,13 @@ export class SuiviPME extends Destroy${
       if (!Array.isArray(mission.dates)) arrayDateId = Object.keys(mission.dates).map(date => +date)
       else arrayDateId = mission.dates
       this.dates = this.store.selectSnapshot(DataQueries.getMany('DatePost', arrayDateId))
+      this.dates = this.sortDate(this.dates)
       
       // this.computeDates(mission);
       this.companyName =
         this.view == "ST" ? this.company!.name : this.subContractor!.name;
       this.contactName =
-        this.view == "ST" ? "" : this.mission!.subContractorContact ;
+        this.view == "ST" ? this.mission!.contactName : this.mission!.subContractorContact ;
     }
     if (mission) this.updateDate(mission!);
   }
@@ -137,7 +139,21 @@ export class SuiviPME extends Destroy${
   ) {super()}
 
   ngOnInit(){
+  }
 
+  onComputeDate(){
+    console.log('onComputeDate',this.mission, this.dates);
+    if(!this.mission) return
+    this.mission = this.store.selectSnapshot(DataQueries.getById('Mission', this.mission.id));
+    if(!this.mission) return
+    this.dates = this.store.selectSnapshot(DataQueries.getMany('DatePost', this.mission.dates))
+    this.dates = this.sortDate(this.dates)
+    this.cd.markForCheck()
+
+  }
+
+  sortDate(date: DatePost[]){
+    return date.sort((date1, date2) => moment(date1.date).diff(moment(date2.date)))
   }
 
   updateMission() {
@@ -234,8 +250,14 @@ export class SuiviPME extends Destroy${
     return array;
   }
 
-  submitStar() {
-    if (this.hasGeneralStars)
+  submitStar(button: HTMLButtonElement) {
+    button.classList.add('submitDisable');
+    button.classList.remove('submitActivated')
+    setTimeout(() => {
+      
+    }, 1500);
+    if (!this.hasGeneralStars) return
+    try {
       this.store
         .dispatch(
           new CloseMission(
@@ -253,6 +275,10 @@ export class SuiviPME extends Destroy${
           this._missionMenu.swipeupCloseMission = false;
           this.cd.markForCheck();
         });
+    } catch {
+      button.classList.remove('submitDisable');
+      button.classList.add('submitActivated')
+    }
   }
 
   @Select(DataQueries.currentProfile)
@@ -343,6 +369,7 @@ export class SuiviPME extends Destroy${
       if (!Array.isArray(this.mission.dates)) arrayDateId = Object.keys(this.mission.dates).map(date => +date)
       else arrayDateId = this.mission.dates
       this.dates = this.store.selectSnapshot(DataQueries.getMany('DatePost', arrayDateId))
+      this.dates = this.sortDate(this.dates)
       this.cd.markForCheck();
     });
   }
@@ -351,10 +378,9 @@ export class SuiviPME extends Destroy${
     if(!this.mission){
       return []
     }
-    // this.cd.detach()
 
     let listBlockedDate: string[] = [];
-    let listDatePost = this.store.selectSnapshot(DataQueries.getMany('DatePost', this.mission.dates))
+    let listDatePost = this.store.selectSnapshot(DataQueries.getMany('DatePost', this.mission!.dates))
     // this.cd.reattach()
     listBlockedDate = listDatePost.filter(date => date && (!!date.supervisions.length || !!date.details.length)).map(date => date.date)
     return listBlockedDate;

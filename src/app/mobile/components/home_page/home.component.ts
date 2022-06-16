@@ -212,6 +212,8 @@ export class HomeComponent extends Destroy$ {
           this.allUserOnlinePosts = mapping.get(this.symbols.userOnlinePost) || [];
           this.allOnlinePosts = [...otherOnlinePost, ...this.userOnlinePosts];
           this.allMissions = this.store.selectSnapshot(DataQueries.getMany("Mission", profile.company.missions));
+          const now = (new Date).toISOString().slice(0, 10);
+          this.allUserOnlinePosts = this.allUserOnlinePosts.filter((post) => post.dueDate > now)
           if (this.filterST) {this.filterST.updatePosts(this.allOnlinePosts)}
           this.selectDraft(null);
           this.selectUserOnline(null);
@@ -307,6 +309,8 @@ export class HomeComponent extends Destroy$ {
 
   selectUserOnline(filter: any) {
     this.userOnlinePosts = [];
+    const now = (new Date).toISOString().slice(0, 10);
+    this.allUserOnlinePosts = this.allUserOnlinePosts.filter((post) => post.dueDate > now)
     this.allUserOnlinePosts.sort((post1, post2) => {
       let b1 = post1.boostTimestamp > this.time ? 1 : 0;
       let b2 = post2.boostTimestamp > this.time ? 1 : 0;
@@ -343,13 +347,11 @@ export class HomeComponent extends Destroy$ {
 
       for (let post of this.allUserOnlinePosts) {
         
-        const now = (new Date).toISOString().slice(0, 10);
-        let isBeforeDueDate = (post.dueDate < now)
         let isDifferentDate = (filter.date &&  post.startDate < filter.date)
         let isDifferentManPower = (filter.manPower && post.manPower != (filter.manPower === "true"))
         let isNotIncludedJob = (filter.jobs && filter.jobs.length && filter.jobs.every((job: any) => {return job.id != post.job}))
 
-        if ( isDifferentDate || isDifferentManPower || isNotIncludedJob || isBeforeDueDate) { continue }
+        if ( isDifferentDate || isDifferentManPower || isNotIncludedJob) { continue }
         this.userOnlinePosts.push(post)
       }  
     }
@@ -616,6 +618,7 @@ export class HomeComponent extends Destroy$ {
   }
 
   duplicatePost(id: number) {
+    console.log("ALL POSTS ONLINE BEFORE DUPLICATE", this.store.selectSnapshot(DataQueries.getAll('Post')))
     this.info.show("info", "Duplication en cours...", Infinity);
     this.store
       .dispatch(new DuplicatePost(id))
@@ -629,6 +632,7 @@ export class HomeComponent extends Destroy$ {
           this.info.show("error", "Erreur lors de la duplication de l'annonce");
         }
       );
+      console.log("ALL POSTS ONLINE AFTER DUPLICATE", this.store.selectSnapshot(DataQueries.getAll('Post')))
   }
 
   pausePost(id: number) {

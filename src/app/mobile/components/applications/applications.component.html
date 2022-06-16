@@ -1,6 +1,6 @@
 <header class="clear-margin full-width sticky-header flex column white-header" id="bigHeader">
     <div class="pick flex row small-space-children-margin">
-        <img class="left" [routerLink]="['','home','profile']"  src="assets/arrowlblack.svg" />
+        <img class="left" (click)="close()" src="assets/arrowlblack.svg" />
         <h1 class="grow center-text">Candidatures en cours</h1>
     </div>
     <div class="pick flex center-cross">
@@ -9,19 +9,15 @@
     </div>
 </header>
 
-<div class="cards">
-<div class="hosted-page space-children-margin">
-    <offer 
-        *ngFor="let onlinePost of userOnlinePosts"    
-        [deletable]="false"
-        [post]="onlinePost"
-        (click)="openPost(onlinePost)"
-        [isAppliedPage]="true"
-        [isRefused]="isRefused(onlinePost)!"
-        [time]="time">
-    </offer>
-</div>
-</div>
+<offer 
+    *ngFor="let onlinePost of userOnlinePosts"    
+    [deletable]="false"
+    [post]="onlinePost"
+    (click)="openPost(onlinePost)"
+    [isAppliedPage]="true"
+    [isRefused]="isRefused(onlinePost)!"
+    [time]="time">
+</offer>
 
 <swipeup [(open)]="openAdFilterMenu" type="view">
     <application-filter-form [callbackFilter]="callbackFilter" view></application-filter-form>

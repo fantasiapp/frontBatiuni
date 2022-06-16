@@ -50,6 +50,12 @@ export class ProfileComponent extends Destroy$ {
   notifications: Notification[] = []
   companyId:number = -1;
 
+  openFacture: boolean = false;
+  openFaq: boolean = false;
+  openMentionLegal: boolean = false;
+  openBlockedContact: boolean = false;
+  openCandidature: boolean = false;
+
 
   view = this.store.selectSnapshot(DataState.view)
 

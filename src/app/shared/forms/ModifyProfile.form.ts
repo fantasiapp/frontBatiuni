@@ -76,6 +76,16 @@ import { Email } from "src/validators/persist";
               />
             </div>
             <div class="form-input">
+              <label>Fonction dans l'entreprise *</label>
+              <input
+                #input6
+                (click)="onClickInputScroll(input6)"
+                class="form-element"
+                type="text"
+                formControlName="UserProfile.function"
+              />
+            </div>
+            <div class="form-input">
               <label>Adresse e-mail contact</label>
               <input
                 #input3
@@ -86,7 +96,7 @@ import { Email } from "src/validators/persist";
               />
             </div>
             <div class="form-input">
-              <label>Téléphone de l'entreprise</label>
+              <label>Téléphone de l'entreprise *</label>
               <input
                 #input4
                 (click)="onClickInputScroll(input4)"
@@ -103,16 +113,6 @@ import { Email } from "src/validators/persist";
                 class="form-element"
                 type="tel"
                 formControlName="UserProfile.cellPhone"
-              />
-            </div>
-            <div class="form-input">
-              <label>Fonction dans l'entreprise</label>
-              <input
-                #input6
-                (click)="onClickInputScroll(input6)"
-                class="form-element"
-                type="text"
-                formControlName="UserProfile.function"
               />
             </div>
           </div>

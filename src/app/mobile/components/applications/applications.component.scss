@@ -2,8 +2,8 @@
 @use 'src/styles/mixins' as *;
 
 :host {
-    @extend %page;
-    @extend %no-navigation ;
+    width: 100%;
+    margin-top: 5rem;
   }
   
   #bigHeader {

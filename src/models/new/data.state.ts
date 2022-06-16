@@ -102,7 +102,7 @@ export class Clear {
     session: {
       currentUser: -1,
       view: "ST",
-      time: 0,
+      time: 8640000000000000,
     },
   },
 })
@@ -437,7 +437,8 @@ export class DataState {
         console.log("upload file response", response)
         if (response[upload.action] !== "OK") throw response["messages"];
         delete response[upload.action];
-
+        delete response["timestamp"]
+        console.log("upload file response", response)
         const assignedId = +Object.keys(response)[0],
         fields = ctx.getState()["fields"],
         contentIndex = fields["File"].indexOf("content");
@@ -469,7 +470,7 @@ export class DataState {
         console.log("modify file response", response)
         if (response[modify.action] != "OK") throw response["messages"];
         delete response[modify.action];
-
+        delete response["timestamp"];
         const fileId = +Object.keys(response)[0]
 
         modify.fileId = fileId;
@@ -688,6 +689,7 @@ export class DataState {
           throw response["messages"];
         }
         delete response[download.action];
+        delete response["timestamp"];
         if (download.notify)
           this.inZone(() =>
             this.info.show(
@@ -934,8 +936,10 @@ export class DataState {
   createSupervision(ctx: StateContext<DataModel>, application: CreateSupervision) {
     console.log("createSupervision", application)
     const profile = this.store.selectSnapshot(DataQueries.currentProfile)!;
+    console.log('createSupervision', application);
     return this.http.post("data", application).pipe(
       tap((response: any) => {
+        console.log('createSupervision', response);
         if (response[application.action] !== "OK") {
           this.inZone(() => this.info.show("error", response.messages, 3000));
           throw response.messages;
@@ -979,7 +983,7 @@ export class DataState {
       tap((response: any) => {
         console.log('validateMissionDate response', response);
         if (response[application.action] !== "OK") {
-          this.inZone(() => this.info.show("error", response.messages, 3000));
+        this.inZone(() => this.info.show("error", response.messages, 3000));
           throw response.messages;
         } else {
           this.inZone(() =>
@@ -996,8 +1000,10 @@ export class DataState {
             if(response.hasOwnProperty('deleted')) {
               ctx.setState(deleteIds("DatePost", [response["fatherId"]]));
               ctx.setState(update('Mission', response["mission"]));
-            } else {
+            } else if (application.state) {
               ctx.setState(addComplexChildren(response.type, response.fatherId,'DatePost', response.datePost))
+            } else {
+              ctx.setState(update('DatePost', response['datePost']))
             }
           }
           // console.log('validateMissionDate', profile.company.id, response.mission)

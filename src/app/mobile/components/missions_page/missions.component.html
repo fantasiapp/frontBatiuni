@@ -35,8 +35,7 @@
 <!-- <swipeup [(open)]="openCloseMission" [doClose]="doClose"> -->
 <swipeup [(open)]="openCloseMission" [doClose]="doClose">
   <div *ngIf="missionToClose" class="cloture-swipeup">
-    <h3>Noter l'entreprise</h3>
-    <h6 >{{ missionCompany }}, contact: {{ missionToClose.contactName }}</h6>
+    <h3 class="notation">Noter {{ missionToClose.contactName }} de l'entreprise {{ missionCompany }}</h3>
     <div class="star-container" *ngIf="hasGeneralStarsST">
       <img  *ngFor="let flag of getArrayStarST('generalST'); let index=index;" [src]="flag ? 'assets/starFull.svg' : 'assets/starEmpty.svg'">
     </div>
@@ -46,7 +45,7 @@
       <div class="star-container">
         <img *ngFor="let flag of getArrayStarST('vibeST'); let index=index;" (click)="starActionST(index, 'vibeST')" [src]="flag ? 'assets/starFull.svg' : 'assets/starEmpty.svg'">
       </div>
-      <textarea (focusout)="textStarActionST('vibeST')" placeholder="Ajouter un commentaire" rows="5" cols="30" id="starTextVibeST">{{ missionToClose!.vibeCommentST }}</textarea>
+      <textarea class="form-element" (focusout)="textStarActionST('vibeST')" placeholder="Ajouter un commentaire" id="starTextVibeST">{{ missionToClose!.vibeCommentST }}</textarea>
     </div>
     
     <div *ngIf="missionToClose" class="form-input">
@@ -54,7 +53,7 @@
       <div class="star-container">
         <img *ngFor="let flag of getArrayStarST('securityST'); let index=index;" (click)="starActionST(index, 'securityST')" [src]="flag ? 'assets/starFull.svg' : 'assets/starEmpty.svg'">
       </div>
-      <textarea (focusout)="textStarActionST('securityST')" placeholder="Ajouter un commentaire" rows="5" cols="30" id="starTextSecurityST">{{ missionToClose!.securityCommentST }}</textarea>
+      <textarea (focusout)="textStarActionST('securityST')" placeholder="Ajouter un commentaire" id="starTextSecurityST">{{ missionToClose!.securityCommentST }}</textarea>
     </div>
 
     <div *ngIf="missionToClose" class="form-input">
@@ -62,7 +61,7 @@
       <div class="star-container">
         <img *ngFor="let flag of getArrayStarST('organisationST'); let index=index;" (click)="starActionST(index, 'organisationST')" [src]="flag ? 'assets/starFull.svg' : 'assets/starEmpty.svg'">
       </div>
-      <textarea (focusout)="textStarActionST('organisationST')" placeholder="Ajouter un commentaire" rows="5" cols="30" id="starTextOrganisationST">{{ missionToClose?.organisationCommentST }}</textarea>
+      <textarea (focusout)="textStarActionST('organisationST')" placeholder="Ajouter un commentaire" id="starTextOrganisationST">{{ missionToClose?.organisationCommentST }}</textarea>
     </div>
     <button [ngClass]="classSubmit" (click)="submitStarST()">Valider</button>
   </div>
