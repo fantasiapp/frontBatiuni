@@ -47,6 +47,18 @@
   position: relative;
 }
 
+.offres-infos-postulated{
+
+  &::after{
+    content: '';
+    display: block;
+    width: 100%;
+    height: 100%;
+    background-color: hsl(0deg 0% 96% / 69%);
+    position: absolute;
+  }
+}
+
 .boosted {
   border-color: rgb(255, 196, 37);
   border-width: 3px;
