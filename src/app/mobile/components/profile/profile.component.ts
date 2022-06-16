@@ -83,6 +83,14 @@ export class ProfileComponent extends Destroy$ {
     });
   }
 
+  ngOnInit() {
+
+    this.notifService.getNotifChangeEmitter().subscribe((notifUnseen) => {
+      this.notificationsUnseen = notifUnseen
+    })
+    this.notifService.emitNotifChangeEvent()
+  }
+
 
   updateProfile(profile?: Profile) {
 
@@ -90,21 +98,10 @@ export class ProfileComponent extends Destroy$ {
       profile = this.store.selectSnapshot(DataQueries.currentProfile)
     }
     
-    this.notifications = []
-    this.notificationsUnseen = 0
-      // Arnaque du bug
-      this.companyId = profile.user?.company!
-      profile.company = this.store.selectSnapshot(DataQueries.getById('Company', this.companyId))!
-      if (profile.company?.Notification) {
-        for (const notification of this.store.selectSnapshot(DataQueries.getMany('Notification', profile.company!.Notification)))
-          if (this.view == notification!.role) {
-            this.notifications.push(notification!)
-            if (!notification!.hasBeenViewed) {
-              this.notificationsUnseen++
-            }
-          }
-      }
-      this.profileResume?.profileImage.updateProfile(profile);
+    this.notifService.emitNotifChangeEvent()
+    this.companyId = profile.user?.company!
+    profile.company = this.store.selectSnapshot(DataQueries.getById('Company', this.companyId))!
+    this.profileResume?.profileImage.updateProfile(profile);
 
   }
 
