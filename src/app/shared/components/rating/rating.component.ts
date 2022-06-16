@@ -107,7 +107,6 @@ export class RatingComponent extends UIOpenMenu {
             organisationComment: recommandation.organisationComment,
           }
           this.recommandationInfos.push(ratingInfo)
-          console.log("recommandationInfos", this.recommandationInfos)
         }
       }
     } else {
