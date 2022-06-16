@@ -308,10 +308,6 @@ export class STFilterForm {
       let isNotBetween51And100 = (!filter.employees[3] && (count >= 51 && count <= 100))
       let isNotMoreThan100 = (!filter.employees[4] && count > 100)
 
-      //Viewed
-      let isNotViewed = (filter.viewed && !user.viewedPosts.includes(post.id));
-      console.log("POSTS DEJA VU", post, user.viewedPosts.includes(post.id))
-
       //Favorite
       let isNotFavorite = (filter.favorite && !user.favoritePosts.includes(post.id));
 
@@ -319,6 +315,9 @@ export class STFilterForm {
       let candidates = this.store.selectSnapshot(DataQueries.getMany("Candidate", post.candidates))
       let companies = candidates.map(candidate => candidate.company)
       let isNotCandidate = (filter.candidate && !companies.includes(user.company));
+
+      //Viewed
+      let isNotViewed = (filter.viewed && !user.viewedPosts.includes(post.id) && !companies.includes(user.company));
 
       //CounterOffer
       let isNotCounterOffer = (filter.counterOffer && !post.counterOffer);
@@ -344,6 +343,24 @@ export class STFilterForm {
     }
 
     // Sort
+
+    // is Viewed
+    this.filteredPosts.sort((post1, post2) => {
+      let p1 = user.viewedPosts.includes(post1.id)  ? 1: 0;
+      let p2 = user.viewedPosts.includes(post2.id)  ? 1 : 0;
+      return p1-p2
+    })
+
+    // HAs postulated
+    this.filteredPosts.sort((post1, post2) => {
+      let candidate1 = this.store.selectSnapshot(DataQueries.getMany("Candidate", post1.candidates))
+      let company1 = candidate1.map(candidate => candidate.company)
+      let candidate2 = this.store.selectSnapshot(DataQueries.getMany("Candidate", post2.candidates))
+      let company2 = candidate2.map(candidate => candidate.company)
+      let p1 = company1.includes(user.company) ? 1: 0;
+      let p2 = company2.includes(user.company) ? 1 : 0;
+      return p1-p2
+    })
 
     //Boosted post
     this.filteredPosts.sort((post1, post2) => {
