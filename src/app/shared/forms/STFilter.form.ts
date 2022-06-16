@@ -310,6 +310,7 @@ export class STFilterForm {
 
       //Viewed
       let isNotViewed = (filter.viewed && !user.viewedPosts.includes(post.id));
+      console.log("POSTS DEJA VU", post, user.viewedPosts.includes(post.id))
 
       //Favorite
       let isNotFavorite = (filter.favorite && !user.favoritePosts.includes(post.id));
