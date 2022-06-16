@@ -88,7 +88,6 @@ export class AuthState {
 
   @Action(Register)
   register(ctx: StateContext<AuthModel>, action: Register) {
-    console.log("alo?", action)
     const req = this.http.post("initialize", action);
     return req.pipe(
       catchError((err: HttpErrorResponse) => {

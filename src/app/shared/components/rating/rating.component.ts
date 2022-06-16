@@ -91,7 +91,6 @@ export class RatingComponent extends UIOpenMenu {
         }
       }
       let recommandations = this.store.selectSnapshot(DataQueries.getAll('Recommandation'))
-      console.log("recommandation", recommandations)
       for (const recommandation of recommandations) {
         if(recommandation.companyRecommanded == company.id) {
           let ratingInfo: ratingInfo = {

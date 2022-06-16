@@ -25,7 +25,6 @@ export class RegistrationSuccess {
     const auth = this.store.selectSnapshot(AuthState);
     this.userEmail = auth.pendingEmail; //must delete later
     this.registerForm = this.getUserDataService.getRegisterForm()!
-    console.log("l'amei sqdgfqslduflqjgffqs", this.registerForm)
   }
 
   onSubmit(f: any) {

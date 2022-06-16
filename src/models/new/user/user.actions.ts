@@ -62,17 +62,14 @@ export class ModifyUserProfile {
   //for now we mark job as dirty, but we should take it directly from the form
   constructor({profile, form, labels}: {profile: Profile, form?: FormGroup, labels?: Array<any>}) {   
     let changes: any; 
-    console.log("oh, la belle prise", labels);
     if (labels) {
       changes = []
-      console.log("coucouuu", labels)
       this.labelFiles = labels
 
       changes.push({"UserProfile.Company.LabelForCompany": this.labelFiles})
       console.log(changes);
     } else {
       changes = getDirtyValues(form);
-      console.log("changes", changes)
       if ( Object.keys(changes).length == 0 ) return;
 
       const jobsForm = changes['UserProfile.Company.JobForCompany'],
@@ -111,7 +108,6 @@ export class ModifyUserProfile {
     //write directly on this object
     proxy['UserProfile.id'] = profile.user!.id;
     for ( const [field, value] of Object.entries<any>(changes) ) {
-      console.log("proxy", field, value);
       proxy[field] = value;
     }
   }
@@ -445,6 +441,12 @@ export class MarkViewed {
   static readonly type = '[User.ST] View Post';
   action = 'isViewed';
   constructor(public Post: number) {}
+};
+
+export class PostNotificationViewed {
+  static readonly type = '[User.ST] View Post Notification';
+  action = 'notificationPostViewed';
+  constructor(public postId: number, public role: string) {}
 };
 
 export class BoostPost {

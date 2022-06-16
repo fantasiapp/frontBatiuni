@@ -19,6 +19,7 @@ export class NotifService {
 
   constructor(private store: Store) {}
   emitNotifChangeEvent(num?: number) {
+    this.checkNotif()
     if (num !== undefined) {
       this.notificationsUnseen = num
       this.navchange.emit(this.notificationsUnseen);
@@ -66,7 +67,6 @@ export class NotifService {
   getNotificationUnseenMission(idMission: number){
     this.checkNotif()
     let notificationsMissionUnseen = this.notificationsMission.filter((notif) => !notif.hasBeenViewed && notif.missions == idMission) // !notif.hasBeenViewed && (à rajouter)
-    // console.log("les notifs de la mission", notificationsMissionUnseen)
     return notificationsMissionUnseen.length
   }
 
