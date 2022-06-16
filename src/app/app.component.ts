@@ -55,14 +55,11 @@ export class AppComponent extends Destroy$ {
     this.isConnected = booleanService.isConnected
     this.booleanService.getConnectedChangeEmitter().subscribe((value) => {
       this.isConnected = value
-      console.log("je suis dedans", this.isConnected)
       if(value && !this.isWhileOn){
-        console.log("je lance la fonction updateUserData")
         this.updateUserData()
       }
       this.isWhileOn = value
     })
-    console.log("je lance la fonction updateUserData")
     this.updateUserData()
   }
 
@@ -86,7 +83,6 @@ export class AppComponent extends Destroy$ {
   }
 
   async updateUserData() {
-    console.log("je suis appelé (updataUserData)",this.readyToUpdate)
     while(this.isConnected) {
       if (this.readyToUpdate){
         this.readyToUpdate = false

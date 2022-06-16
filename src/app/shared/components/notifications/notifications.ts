@@ -83,7 +83,6 @@ export class Notifications {
     );
     this.today = todayConst.sort((not1:NotificationDisplay, not2:NotificationDisplay) => not1.date < not2.date ? 1 : -1)
 
-    console.log("notifications of today ", this.today)
   }
 
   month: NotificationDisplay[] = [];

@@ -79,7 +79,6 @@ export class ProfileComponent extends Destroy$ {
   constructor(private store: Store, private cd: ChangeDetectorRef, private info: InfoService, private popup: PopupService, private notifService: NotifService, private getUserDataService: getUserDataService) {
     super();
     this.profile$.subscribe(profile => {
-      console.log("vas y je change ")
       this.updateProfile(profile)
     });
   }

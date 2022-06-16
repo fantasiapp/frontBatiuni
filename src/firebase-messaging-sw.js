@@ -11,4 +11,3 @@ firebase.initializeApp({
     measurementId: "G-5T8VEBRJ80"
    });
    const messaging = firebase.messaging();
-   console.log("le messaging du fichier avec un long nom que j'ai la flemme de tapé", messaging)

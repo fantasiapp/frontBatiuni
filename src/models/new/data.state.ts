@@ -228,7 +228,6 @@ export class DataState {
 
   @Action(GetUserData)
   getUserData(ctx: StateContext<DataModel>, action: GetUserData) {
-    console.log("getUserData", action);
     const req = this.http.get("data", { action: action.action });
     if (this.isFirstTime) {
       this.booleanService.emitLoadingChangeEvent(true)
@@ -344,7 +343,6 @@ export class DataState {
         // {
         // // if (companyLabels.some(label => label.name != file.nature)) {
         // //   console.log("file", file, "labelFile", labelFiles)
-        //   console.log("dfghjfksgsfdhgldjfghldfjkghdflgjkhdfg", file)
           ctx.dispatch(new UploadFile(file, "labels", file.nature, "Company"))
         // } else {
 

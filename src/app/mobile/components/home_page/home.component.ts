@@ -747,7 +747,6 @@ export class HomeComponent extends Destroy$ {
       .pipe(take(1))
       .subscribe(() => {
         this.openPost(null);
-        console.log("Dans block candidate")
         // this.router.navigateByUrl('/home')
         this.cd.markForCheck();
       });

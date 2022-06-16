@@ -257,7 +257,6 @@ export class MissionsComponent extends Destroy$ {
       open: !!mission,
       swipeup: false,
     });
-    console.log("est ce que je dispatch ou pas ?", !mission)
     if (mission) this.store.dispatch(new MarkViewed(mission.id));
     if (mission?.isClosed) {
       this.info.show(
@@ -270,9 +269,7 @@ export class MissionsComponent extends Destroy$ {
   ngOnDestroy(): void {
     this.info.alignWith("last");
     this.getUserDataService.emitDataChangeEvent();
-    console.log("on check les missions avant de tout détruire", this.store.selectSnapshot(DataQueries.getAll("Mission")))
     super.ngOnDestroy();
-    console.log("on check les missions après avoir tout détruit", this.store.selectSnapshot(DataQueries.getAll("Mission")))
   }
 
   get missionToClose(): Mission | null {

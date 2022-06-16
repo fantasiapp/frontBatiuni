@@ -248,9 +248,7 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
       source: CameraSource.Photos,
     });
 
-    console.log("selectPhoto", photo.format);
     let acceptedFormat = ["jpeg", "png", "jpg", "bmp"];
-    console.log("acceptedFormat", acceptedFormat.includes(photo.format));
     if (acceptedFormat.includes(photo.format)) {
       this.store.dispatch(new UploadImageSupervision(photo, this.currentSupervisionId)).pipe(take(1)).subscribe(() => {
         // let supervisions = this.store.selectSnapshot(DataQueries.getMany('Supervision', this.mission!.supervisions))

@@ -29,7 +29,7 @@ export class FileViewer {
   }
 
   ngOnInit() {
-    console.log("init", this.fileContext)
+    // console.log("init", this.fileContext)
   }
 
   openWindow(url: string) {

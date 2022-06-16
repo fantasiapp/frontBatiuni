@@ -177,7 +177,6 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
   }
 
   deleteFile(){
-    console.log("deleteFile", this.filename, this.value)
     if (this.value?.nature == "admin") {this.kill.emit(this.value?.name);}
     else {this.kill.emit(this.filename);}
     this.value = {
@@ -224,7 +223,6 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
         {
           name: "Supprimer un fichier",
           click: () => {
-            console.log("supprimer un fichier", this.value)
             if (this.value?.nature == "post") {
               this.value = {
                 content: [""],

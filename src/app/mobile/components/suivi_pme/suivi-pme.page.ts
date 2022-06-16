@@ -93,7 +93,6 @@ export class SuiviPME extends Destroy${
       let arrayDateId = []
       if (!Array.isArray(mission.dates)) arrayDateId = Object.keys(mission.dates).map(date => +date)
       else arrayDateId = mission.dates
-      console.log("dates missionMenu", arrayDateId)
       this.dates = this.store.selectSnapshot(DataQueries.getMany('DatePost', arrayDateId))
       
       // this.computeDates(mission);
@@ -142,12 +141,10 @@ export class SuiviPME extends Destroy${
   }
 
   updateMission() {
-    console.log("Je suis laaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
     console.log(this)
     this.mission = this.store.selectSnapshot(DataQueries.getById("Mission", this.mission!.id))!;
     this.isNotSignedByUser = (!this.mission.signedByCompany && this.view == "PME") ||
     (!this.mission.signedBySubContractor && this.view == "ST");
-    console.log("updateMission", this.mission)
     this.cd.markForCheck();
   }
 
@@ -262,7 +259,6 @@ export class SuiviPME extends Destroy${
   currentProfile$!: Observable<Profile>;
 
   signContract() {
-    console.log("sign contract")
     this.popup.openSignContractDialog(this.mission!, this.updateMission.bind(this));
   }
   modifyTimeTable() {
