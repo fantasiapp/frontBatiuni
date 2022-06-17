@@ -687,7 +687,7 @@ export class PopupService {
 
     const context = {
       $implicit: {
-        address: post.address,
+        address: post.address.replace(/\d+/, "").trim(),
         name: post.contactName,
         startDate: post.startDate,
         endDate: post.endDate,
@@ -803,7 +803,7 @@ export class PopupService {
 
     const context = {
       $implicit: {
-        address: post.address,
+        address: post.address.replace(/\d+/, "").trim(),
         name: post.contactName,
         isActive: false,
       },

@@ -96,8 +96,9 @@ import { Mobile } from "../services/mobile-footer.service";
           <label>Description du chantier</label>
           <textarea
             class="form-element"
+            id='descriptionChantier'
             formControlName="description"
-            placeholder="..."
+            placeholder="Ajouter une description"
           ></textarea>
         </div>
 
@@ -299,6 +300,10 @@ import { Mobile } from "../services/mobile-footer.service";
         border: 2px solid #aaa;
         outline: none;
         border-radius: 3px;
+        padding-left:1rem;
+        padding-right: 1rem;
+        padding-top: 0.5rem;
+        font-size: small;
       }
 
       .option-container {
