@@ -157,7 +157,6 @@ export class SuiviPME extends Destroy${
   }
 
   updateMission() {
-    console.log(this)
     this.mission = this.store.selectSnapshot(DataQueries.getById("Mission", this.mission!.id))!;
     this.isNotSignedByUser = (!this.mission.signedByCompany && this.view == "PME") ||
     (!this.mission.signedBySubContractor && this.view == "ST");

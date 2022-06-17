@@ -94,7 +94,6 @@ export class AuthState {
         return AuthState.handleError(err);
       }),
       map((response: any) => {
-        console.log(response)
         if (response["register"] == "OK") return true;
         throw response.messages;
       }),

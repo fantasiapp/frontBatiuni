@@ -798,7 +798,6 @@ export class ModifyProfileForm {
     }
     let allFiles = this.store.selectSnapshot(DataQueries.getAll('File'))
     let label = allFiles.filter(file => file.name == filename)[0]
-    console.log(label);
     if (label?.id) {this.store.dispatch(new DeleteLabel(label.id))}
 
     this.selectedLabels = this.selectedLabels.filter(label => label.name != filename)

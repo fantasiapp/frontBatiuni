@@ -1072,8 +1072,11 @@ export class DataState {
         delete response[application.action];
         this.getUserDataService.emitDataChangeEvent(response.timestamp)
         delete response["timestamp"];
+        console.log(this.store.selectSnapshot(DataQueries.getAll("Notification")))
         console.log("les notifs ", response.Notification)
-        ctx.setState(compose(addSimpleChildren("Company",profile.company.id,"Notification",response.Notification)));
+        ctx.setState(replaceChildren("Company",profile.company.id,"Notification",response.Notification));
+        console.log(this.store.selectSnapshot(DataQueries.getById("Company", profile.company.id)))
+        console.log(this.store.selectSnapshot(DataQueries.getAll("Notification")))
       })
     );
   }

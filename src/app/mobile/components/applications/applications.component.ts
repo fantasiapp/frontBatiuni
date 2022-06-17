@@ -98,8 +98,6 @@ export class ApplicationsComponent extends Destroy$ {
         this.allCandidatedPost.push(post)
       }
     }
-    console.log("ALLONLINEPOST", this.allOnlinePosts)
-    console.log("AllCandidatedPOst", this.allCandidatedPost)
     this.cd.markForCheck;
     this.selectPost(null);
     this.selectSearch('');
