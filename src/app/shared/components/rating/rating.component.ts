@@ -90,24 +90,7 @@ export class RatingComponent extends UIOpenMenu {
           this.ratingInfos.push(ratingInfo);
         }
       }
-      let recommandations = this.store.selectSnapshot(DataQueries.getAll('Recommandation'))
-      for (const recommandation of recommandations) {
-        if(recommandation.companyRecommanded == company.id) {
-          let ratingInfo: ratingInfo = {
-            contactName: recommandation.firstNameRecommanding + " " + recommandation.lastNameRecommanding,
-            subContractorName: '',
-            companyContractor: recommandation.companyNameRecommanding,
-            subContractorContact: '',
-            qualityVibe: recommandation.qualityStars,
-            qualityVibeComment: recommandation.qualityComment,
-            security: recommandation.securityStars,
-            securityComment: recommandation.securityComment,
-            organisation: recommandation.organisationStars,
-            organisationComment: recommandation.organisationComment,
-          }
-          this.recommandationInfos.push(ratingInfo)
-        }
-      }
+      this.getRecommandations(company)
     } else {
       let missions = this.store.selectSnapshot(DataQueries.getMany('Mission', company.missions))
       for (const mission of missions) {
@@ -127,6 +110,7 @@ export class RatingComponent extends UIOpenMenu {
           this.ratingInfos.push(ratingInfo)
         }
       }
+      this.getRecommandations(company)
     }
   }
   
@@ -142,5 +126,27 @@ export class RatingComponent extends UIOpenMenu {
   close() {
     this.openRatings = false
     this.openChange.emit(this.openRatings)
+  }
+
+  getRecommandations(company: Company) {
+    let recommandations = this.store.selectSnapshot(DataQueries.getAll('Recommandation'))
+    console.log("les reco ", recommandations)
+    for (const recommandation of recommandations) {
+      if(recommandation.companyRecommanded == company.id) {
+        let ratingInfo: ratingInfo = {
+          contactName: '',
+          subContractorName: recommandation.firstNameRecommanding + " " + recommandation.lastNameRecommanding,
+          companyContractor: '',
+          subContractorContact: recommandation.companyNameRecommanding,
+          qualityVibe: recommandation.qualityStars,
+          qualityVibeComment: recommandation.qualityComment,
+          security: recommandation.securityStars,
+          securityComment: recommandation.securityComment,
+          organisation: recommandation.organisationStars,
+          organisationComment: recommandation.organisationComment,
+        }
+        this.recommandationInfos!.push(ratingInfo)
+      }
+    }
   }
 }
