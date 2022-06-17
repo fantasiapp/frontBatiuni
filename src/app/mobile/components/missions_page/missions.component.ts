@@ -248,7 +248,6 @@ export class MissionsComponent extends Destroy$ {
     let company = this.store.selectSnapshot(DataQueries.currentCompany)
     this.store.dispatch(new PostNotificationViewed(mission!.id, "ST"))
     this.notifService.emitNotifChangeEvent()
-    console.log('missions', mission);
     this.missionMenu = assignCopy(this.missionMenu, {
       post: mission,
       open: !!mission,
