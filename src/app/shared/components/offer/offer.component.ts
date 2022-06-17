@@ -128,7 +128,6 @@ export class OfferComponent {
 
   get isViewed() {
     const user = this.store.selectSnapshot(DataQueries.currentUser);
-    console.log(this._post, user.viewedPosts?.includes(this._post!.id))
     return user.viewedPosts?.includes(this._post!.id);
   }
 
