@@ -369,6 +369,7 @@ export class HomeComponent extends Destroy$ {
   selectMission(filter: any) {
     this.missions = [];
     this.allMissions.sort((a, b) => {return Number(a["isClosed"]) - Number(b["isClosed"]);});
+    console.log("this.allMissions", this.allMissions)
     if (filter == null) {
       this.missions = this.allMissions;
     } else {

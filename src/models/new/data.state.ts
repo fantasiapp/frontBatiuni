@@ -637,7 +637,6 @@ export class DataState {
           throw response.messages;
         }
         delete response[application.action];
-        console.log('duplicatePost', response);
         this.getUserDataService.emitDataChangeEvent(response.timestamp)
         delete response["timestamp"];
         ctx.setState(addComplexChildren("Company", profile.company.id, "Post", response));
