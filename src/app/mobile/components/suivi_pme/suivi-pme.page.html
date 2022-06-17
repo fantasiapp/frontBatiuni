@@ -77,7 +77,7 @@
 
 <swipeup [(open)]="swipeupModifyDate">
   <form class="full-width form-control section-host" [formGroup]="AdFormDate">
-    <section class="form-section">
+    <section class="">
       <div class="form-input">
         <label>Horaires du chantier</label>
         <div class="flex row space-between">
@@ -95,7 +95,7 @@
       <label>Dates du chantier</label>
       <calendar [blockedDate]="computeBlockedDate()" [mission]="mission" [useEvents]="false" formControlName="calendar" [mode]="'single'"></calendar>
     </div>
-    <div style="min-height:100px">
+    <div style="min-height: 40px">
       <p>{{ alert }}</p>
     </div>
     <button class="button active" (click)="submitAdFormDate()">Valider</button>
