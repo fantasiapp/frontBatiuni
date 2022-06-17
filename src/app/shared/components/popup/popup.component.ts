@@ -296,11 +296,12 @@ export class UIPopup extends DimensionMenu {
   }
 
 
-  modifyDetailedPostDate(detailDate: PostDetailGraphic, checkbox: UICheckboxComponent, assignDate: assignDateType ) {
+  modifyDetailedPostDate(detailDate: PostDetailGraphic, checkbox: UICheckboxComponent, assignDate: assignDateType, e: Event ) {
     // let unset = checkbox.value
     let datePostId: Ref<DatePost> = assignDate.datePostId
     
-    this.store.dispatch(new ModifyDetailedPost(detailDate, detailDate.checked, datePostId)).pipe(take(1)).subscribe(() => {
+    this.store.dispatch(new ModifyDetailedPost(detailDate, detailDate.checked, datePostId)).pipe(take(1)).subscribe(result => {
+      checkbox.onChange(e)
       console.log('detailDate', detailDate);
       detailDate.checked = !detailDate.checked
       const newDetailDate = detailDate
@@ -310,7 +311,7 @@ export class UIPopup extends DimensionMenu {
       this.popupService.modifyPostDetail.next(newDetailDate)
 
       this.cd.markForCheck();
-    });
+    }, error => {});
   }
 
   findTaskWithDate(date: DateG, task: PostDetailGraphic, missionId: Ref<Mission>, unset: boolean) {
