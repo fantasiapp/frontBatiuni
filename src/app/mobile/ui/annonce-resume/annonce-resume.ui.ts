@@ -72,46 +72,46 @@ export type ApplyForm = {
             </li>
             <li>Horaires du chantier : {{ post.hourlyStart }} - {{ post.hourlyEnd }}</li>
             <li>Nom du contact : {{post.contactName }}</li>
+
+            <ng-container *ngIf="!collapsed">
+              <li>
+                  {{ post?.numberOfPeople || 1 }} {{ job?.name || "Employé" }}
+                </li>
+                <li>Horaires du chantier : {{ post.hourlyStart }} - {{ post.hourlyEnd }}</li>
+                <li>Date de présence : {{ toLocateDate(post.startDate) }} -
+                {{ toLocateDate(post.endDate) }}</li>
+                <li>Adresse du chantier : {{ hideAdress(post?.address) }}</li>
+                <li>Nom du contact : {{post.contactName }}</li>
+                <span class='date'> Date d’échéance Le {{ toLocateDate(post?.dueDate) }} 
+                </span>
+            </ng-container>
           </ul>
 
         </div>
-
-        <div class="needs">
-          <span class="title  ">Nous avons besoin...</span>
-          <ul>
-            <li>
-              {{ post?.numberOfPeople || 1 }} {{ job?.name || "Employé" }}
-            </li>
-            <li>Horaires du chantier : {{ post.hourlyStart }} - {{ post.hourlyEnd }}</li>
-            <li>Date de présence : {{ toLocateDate(post.startDate) }} -
-            {{ toLocateDate(post.endDate) }}</li>
-            <li>Adresse du chantier : {{ hideAdress(post?.address) }}</li>
-            <li>Nom du contact : {{post.contactName }}</li>
-          </ul>
-          <span class='date'> Date d’échéance Le {{ toLocateDate(post?.dueDate) }} 
-          </span>
-        </div>
-
-        <div class="description">
-          <span class="title  ">Description des missions</span>
-          <p>{{ post.description }}</p>
-        </div>
-
-        <div class="detail">
-          <span class="title  ">Détail de la prestation</span>
-          <ul>
-            <li *ngFor="let detail of details">{{ detail.content }}</li>
-          </ul>
-        </div>
-
-        <div class="documents">
-          <span class="title  ">Documents importants</span>
-          <ul>
-            <li *ngFor="let file of files">
-              <a (click)="openFile(file)">{{ file.name }}</a>
-            </li>
-          </ul>
-        </div>
+        <ng-container *ngIf="!collapsed">
+          
+  
+          <div class="description">
+            <span class="title  ">Description des missions</span>
+            <p>{{ post.description }}</p>
+          </div>
+  
+          <div class="detail">
+            <span class="title  ">Détail de la prestation</span>
+            <ul>
+              <li *ngFor="let detail of details">{{ detail.content }}</li>
+            </ul>
+          </div>
+  
+          <div class="documents">
+            <span class="title  ">Documents importants</span>
+            <ul>
+              <li *ngFor="let file of files">
+                <a (click)="openFile(file)">{{ file.name }}</a>
+              </li>
+            </ul>
+          </div>
+        </ng-container>
       </div>
       <div
         *ngIf="collapsible"

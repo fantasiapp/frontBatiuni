@@ -412,9 +412,9 @@ input[type=number] {
 }
 
 .is-collapsed {
-  height: $collapse-min-height + $collapse-extra-height;
+  // height: $collapse-min-height + $collapse-extra-height;
 
-  & > .collapse-content { height: $collapse-min-height; }
+  // & > .collapse-content { height: $collapse-min-height; }
   & > .collapse-controller {
     margin-top: math.div($collapse-extra-height, 2);
   }
