@@ -21,6 +21,14 @@ switch::ng-deep .slider {
   color: #0D5A87;
 }
 
+#swipeupHeader {
+  display: block;
+  position: fixed;
+  background-color: white;
+  color: black
+
+}
+
 p{
   margin-bottom: 0.5rem;
   font-family: Roboto;

@@ -15,6 +15,7 @@
         *ngFor="let mission of myMissions" 
         [post]="mission" 
         (click)="openMission(mission)" 
+        [isMissionPage]="true"
         [view]="'ST'">
       </offer>
     </ng-container>
@@ -24,7 +25,14 @@
   </ng-container>
 </div>
 
-<slidemenu [(open)]="missionMenu.open" title="Mission">
+<slidemenu [(open)]="missionMenu.open" [header]="false" #slideOnlinePost>
+  <header
+        class="clear-margin full-width sticky-header flex center-cross annonce"
+        customHeader id="swipeupHeader"
+      >
+        <img (click)="slideOnlinePostClose()" src="assets/arrowlblack.svg" />
+        <h1 class="grow center-text">Mission</h1>
+      </header>
   <suivi-chantier [missionMenu]="missionMenu" content></suivi-chantier>
 </slidemenu>
 

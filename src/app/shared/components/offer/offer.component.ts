@@ -107,6 +107,9 @@ export class OfferComponent {
   isAppliedPage: boolean = false;
 
   @Input()
+  isMissionPage: boolean = false;
+
+  @Input()
   isRefused: boolean = false;
 
   notificationsMissionUnseen: number = 0;
@@ -128,7 +131,7 @@ export class OfferComponent {
 
   get isViewed() {
     const user = this.store.selectSnapshot(DataQueries.currentUser);
-    console.log(this._post, user.viewedPosts?.includes(this._post!.id))
+    // console.log(this._post, user.viewedPosts?.includes(this._post!.id))
     return user.viewedPosts?.includes(this._post!.id);
   }
 
@@ -150,7 +153,7 @@ export class OfferComponent {
   ngOnInit() {
     this.notifService.getNotifChangeEmitter().subscribe(() => {
       this.notificationsMissionUnseen = this.notifService.getNotificationUnseenMission(this._post!.id)
-      console.log("le get qui n'est pas un get ", this.notificationsMissionUnseen)
+      // console.log("le get qui n'est pas un get ", this.notificationsMissionUnseen)
       this.cd.markForCheck()
     })
     if (!this.src) {
@@ -184,7 +187,7 @@ export class OfferComponent {
       this.store.selectSnapshot(DataQueries.getById("Job", this.post!.job)) ||
       undefined;
 
-    console.log("time", this.time, this.post?.boostTimestamp);
+    // console.log("time", this.time, this.post?.boostTimestamp);
   }
 
   toggleFavorite(e: Event) {
