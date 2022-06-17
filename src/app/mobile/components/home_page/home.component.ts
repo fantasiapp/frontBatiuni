@@ -149,6 +149,8 @@ export class HomeComponent extends Destroy$ {
   postMenu = new PostMenu();
   missionMenu = new PostMenu<Mission>();
 
+  searchBarEmpty: boolean = true;
+
   showFooter: boolean = true;
   constructor(
     private cd: ChangeDetectorRef,
@@ -547,6 +549,7 @@ export class HomeComponent extends Destroy$ {
       this.allOnlinePosts.sort((a: any,b: any)=>keys.indexOf(a) - keys.indexOf(b));
       this.displayOnlinePosts = this.allOnlinePosts
     }
+    
     this.cd.markForCheck();
   }
 
@@ -564,11 +567,15 @@ export class HomeComponent extends Destroy$ {
   };
 
   callbackSearchST = (search: string): void => {
+    console.log('search', search, !search);
+    this.searchBarEmptySubject.next(!search)
+    this.refreshSubject.next();
     this.selectSearchST(search)
   }
 
+  searchBarEmptySubject: Subject<boolean> = new Subject<boolean>();
   refreshSubject: Subject<void> = new Subject<void>();
-
+  
   updateFilterOnST(filterOnST: boolean){
     this.refreshSubject.next();
     this.filterOnST = filterOnST;
@@ -748,8 +755,10 @@ export class HomeComponent extends Destroy$ {
       .dispatch(new BlockCompany(candidate!.company, true))
       .pipe(take(1))
       .subscribe(() => {
-        // this.openPost(null);
-        this.slideOnlinePost.close();
+
+        this.slideService.hide()
+        this.openPost(null);
+        // this.slideOnlinePost.close();
         // this.slideOnlinePostClose()
         // this.router.navigateByUrl('/home')
         this.cd.markForCheck();

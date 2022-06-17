@@ -10,14 +10,15 @@
     <span class="value">{{card.mission.hourlyStartChange || card.mission.hourlyStart }} jusqu'à {{card.mission.hourlyEndChange || card.mission.hourlyEnd}}</span>
 </ng-template>
 
+
+<div *ngIf="card.change.deleted || !card.change.validate;else changeHour" class="btn-container">
+    <img src="assets/suivi-valider-OK.svg" alt="valider" (click)="deleted(true, card.change.deleted)">
+    <img src="assets/suivi-refuser-OK.svg" alt="refuser" (click)="deleted(false, card.change.deleted)">
+</div>
+
 <ng-template #changeHour>
     <div class="btn-container">
         <img src="assets/suivi-valider-OK.svg" alt="valider" (click)="validateHour(true, $event)">
         <img src="assets/suivi-refuser-OK.svg" alt="refuser" (click)="validateHour(false, $event)">
     </div>
 </ng-template>
-
-<div *ngIf="card.change.deleted || !card.change.validate;else changeHour" class="btn-container">
-    <img src="assets/suivi-valider-OK.svg" alt="valider" (click)="deleted(true, card.change.deleted)">
-    <img src="assets/suivi-refuser-OK.svg" alt="refuser" (click)="deleted(false, card.change.deleted)">
-</div>

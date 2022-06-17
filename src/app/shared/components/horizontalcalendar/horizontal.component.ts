@@ -328,8 +328,8 @@ export class HorizontaleCalendar implements OnInit {
       isChange.deleted = datePost.deleted
     })
 
-    if (!isChange.deleted)
-      isChange.schedule = !!mission.hourlyEndChange || !!mission.hourlyStartChange;
+    // if (!isChange.deleted)
+    isChange.schedule = !!mission.hourlyEndChange || !!mission.hourlyStartChange;
 
     return isChange;
   }
@@ -373,6 +373,7 @@ export class HorizontaleCalendar implements OnInit {
     let mission = this.store.selectSnapshot(DataQueries.getById("Mission", card.mission.id));
     let heightTop = this.calculator(mission!.hourlyStart, mission!.hourlyEnd);
 
+    console.log('card', card);
     card.mission = mission!;
     card.cardFromTop = heightTop[0];
     card.cardHeight = heightTop[1];
