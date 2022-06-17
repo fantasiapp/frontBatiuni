@@ -215,7 +215,6 @@ export class ProfileComponent extends Destroy$ {
       source: CameraSource.Photos,
     });
 
-    console.log(photo)
     this.store.dispatch(new UserActions.ChangeProfilePicture(photo, 'image')).subscribe(() => {
       this.updateProfile();
       this.cd.markForCheck();

@@ -971,7 +971,9 @@ export class DataState {
         
         this.getUserDataService.emitDataChangeEvent(response.timestamp)
         delete response["timestamp"];
-        ctx.setState(addComplexChildren('Mission', response.mission.id,'DatePost', response.datePost))
+        if(response.hasOwnProperty('DatePost')){
+          ctx.setState(addComplexChildren('Mission', response.mission.id,'DatePost', response['DatePost']))
+        }
       })
     );
   }

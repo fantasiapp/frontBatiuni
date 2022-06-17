@@ -30,6 +30,7 @@ import { SearchbarComponent } from "src/app/shared/components/searchbar/searchba
 import { getUserDataService } from "src/app/shared/services/getUserData.service";
 import { MissionFilterForm } from "src/app/shared/forms/missions.form";
 import { NotifService } from "src/app/shared/services/notif.service";
+import { UISlideMenuComponent } from "src/app/shared/components/slidemenu/slidemenu.component";
 
 @Component({
   selector: "missions",
@@ -147,6 +148,7 @@ export class MissionsComponent extends Destroy$ {
       this._openCloseMission = false;
     }
     this.selectMissions(null);
+    this.filterOn = false;
   }
 
   ngAfterViewInit() {
@@ -156,10 +158,13 @@ export class MissionsComponent extends Destroy$ {
     if (headerActiveView == 0){
       this.searchbar.resetSearch()
       this.viewList = true;
+      this.filterMission.resetFilter();
+      this.filterOn = false;
     }  
     if (headerActiveView == 1) {
       this.searchbar.resetSearch()
       this.viewList = false;
+      this.filterOn = false;
     }    
   }
 
@@ -168,7 +173,7 @@ export class MissionsComponent extends Destroy$ {
       this.filterOn = false;
     } else {
       this.filterOn = true;
-      this.info.show("info","Vos filtres ont été appliqués", 3000);
+      this.info.show("info","Vos filtres ont été appliqués", 1000);
     }
   }
 
@@ -248,7 +253,6 @@ export class MissionsComponent extends Destroy$ {
     let company = this.store.selectSnapshot(DataQueries.currentCompany)
     this.store.dispatch(new PostNotificationViewed(mission!.id, "ST"))
     this.notifService.emitNotifChangeEvent()
-    console.log('missions', mission);
     this.missionMenu = assignCopy(this.missionMenu, {
       post: mission,
       open: !!mission,
@@ -261,7 +265,26 @@ export class MissionsComponent extends Destroy$ {
       "Mission clôturée",
       Infinity
     );}
+    // this.searchbar.resetSearch()
+    // this.filterOn = false;
+    // this.filterMission.resetFilter()
   }
+
+
+  @ViewChild("slideOnlinePost") private slideOnlinePost!: UISlideMenuComponent;
+
+  slideOnlinePostClose() {
+    this.cd.markForCheck()
+    // Close View
+    this.slideOnlinePost.close();
+
+    // reset searchbar
+    this.searchbar.resetSearch()
+    this.filterMission.resetFilter()
+    this.filterOn= false;
+
+  }
+
 
   ngOnDestroy(): void {
     this.info.alignWith("last");

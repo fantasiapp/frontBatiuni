@@ -33,7 +33,6 @@ export class FileViewer {
   }
 
   openWindow(url: string) {
-    console.log(this.fileContext)
     window.open(url);
   }
 

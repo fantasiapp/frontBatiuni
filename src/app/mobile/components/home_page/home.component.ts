@@ -828,8 +828,39 @@ export class HomeComponent extends Destroy$ {
     // Close View
     this.slideOnlinePost.close();
 
+    // reset searchbar
+    this.searchbar.resetSearch()
+
+    // reset filter PME
+    this.view$.subscribe((view)=>{
+      if(view=='PME'){
+        this.filterPME.resetFilter()
+        this.filterOn = false;
+    }})
+
+    this.view$.subscribe((view)=>{
+      if(view=='ST'){
+        this.filterST.updateFilteredPosts(this.filterST.filterForm.value)
+        this.filterST.updateEvent.emit(this.filterST.filteredPosts);
+        this.filterService.emitFilterChangeEvent(this.filterST.filteredPosts)
+    }})
+
     // Update
     this.annonceResume.close();
+  }
+
+  @ViewChild("slideMission") private slideMission!: UISlideMenuComponent;
+
+  slideMissionClose() {
+    this.cd.markForCheck()
+    // Close View
+    this.slideMission.close();
+
+    // reset searchbar
+    this.searchbar.resetSearch()
+    this.filterPME.resetFilter()
+    this.filterOn = false;
+  
   }
 
   // Notifications in header /////

@@ -107,6 +107,9 @@ export class OfferComponent {
   isAppliedPage: boolean = false;
 
   @Input()
+  isMissionPage: boolean = false;
+
+  @Input()
   isRefused: boolean = false;
 
   notificationsMissionUnseen: number = 0;
