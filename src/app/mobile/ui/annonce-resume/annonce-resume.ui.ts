@@ -64,6 +64,18 @@ export type ApplyForm = {
           <span class='amount'>{{ this.amountOrigin || 0 }} {{ this.post.currency }} HT par mission </span>
         </div>
 
+        <div class="resume-mission">
+          <span class="title  ">Résumé de la mission</span>
+          <ul>
+            <li>
+              {{ post?.numberOfPeople || 1 }} {{ job?.name || "Employé" }}
+            </li>
+            <li>Horaires du chantier : {{ post.hourlyStart }} - {{ post.hourlyEnd }}</li>
+            <li>Nom du contact : {{post.contactName }}</li>
+          </ul>
+
+        </div>
+
         <div class="needs">
           <span class="title  ">Nous avons besoin...</span>
           <ul>
