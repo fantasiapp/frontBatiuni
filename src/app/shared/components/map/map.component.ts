@@ -22,6 +22,14 @@ export type MarkerType = Exclude<Availability, 'nothing'>;
 })
 export class UIMapComponent {
 
+  @Input()
+  searchBarEmptyEvent!: Observable<boolean>
+
+  searchBarEmptyEventSubscription!: Subscription
+
+
+  searchBarIsEmpty: boolean = true;
+
   @Select(DataState.view)
   view$!: Observable<"PME" | "ST">;
   view!: 'PME' | 'ST'
@@ -159,6 +167,10 @@ export class UIMapComponent {
     this.refreshEventSubscription = this.refreshEvent.subscribe(()=> {
       this.refresh()
     })
+
+    this.searchBarEmptyEventSubscription = this.searchBarEmptyEvent.subscribe((isEmpty)=> {
+      this.searchBarIsEmpty = isEmpty
+    })
   }
 
   ngOnDestroy() {
@@ -178,7 +190,13 @@ export class UIMapComponent {
   private aliveMarkers: mapboxgl.Marker[] = [];
 
   private showPosts() {
-    this.posts.forEach((post, i) => {
+    let posts;
+    
+    posts = this.searchBarIsEmpty ? this.posts : [this.posts[0]]
+
+    console.log('this.searchBarIsEmpty', this.searchBarIsEmpty);
+
+    posts.forEach((post, i) => {
       if ( post.latitude == null || post.longitude == null ) return;
 
       let marker = new mapboxgl.Marker(this.createMarker())
@@ -192,10 +210,17 @@ export class UIMapComponent {
       this.aliveMarkers.push(marker);
       return marker;
     });
+    
   }
 
   private showCompanies() {
-    this.availableCompanies.forEach((availableCompany)=> {
+    let companies;
+    
+    companies = this.searchBarIsEmpty ? this.availableCompanies : [this.availableCompanies[0]]
+
+    console.log('this.searchBarIsEmpty', this.searchBarIsEmpty);
+
+    companies.forEach((availableCompany)=> {
       let company = availableCompany.company;
       let availability = availableCompany.availability;
       if ( company.latitude == null || company.longitude == null ) return;
@@ -214,8 +239,8 @@ export class UIMapComponent {
   }
 
   reset() {
-    this.mapbox.setZoom(5);
-    this.mapbox.setCenter([this.center.longitude, this.center.latitude]);
+    // this.mapbox.setZoom(5);
+    // this.mapbox.setCenter([this.center.longitude, this.center.latitude]);
     for ( const marker of this.aliveMarkers ){
       marker.getElement().remove();
     }

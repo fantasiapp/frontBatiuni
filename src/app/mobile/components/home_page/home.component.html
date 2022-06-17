@@ -73,6 +73,7 @@
               <mapbox-batiuni 
                 [refreshEvent]="refreshSubject.asObservable()"
                 [posts]="displayOnlinePosts" 
+                [searchBarEmptyEvent]="searchBarEmptySubject.asObservable()"
                 class="map-container space-children-margin" 
                 (postClick)="openPost($event.post, $event.hideExactAdress)" 
                 *ngSwitchCase="1" 
