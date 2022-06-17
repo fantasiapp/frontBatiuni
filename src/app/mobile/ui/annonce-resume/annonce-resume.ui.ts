@@ -105,6 +105,7 @@ export type ApplyForm = {
         *ngIf="collapsible"
         (click)="collapsed = !collapsed"
         class="collapse-controller full-width center-text"
+        id='collapse'
       >
         <span>{{ collapsed ? "Lire la suite" : "Lire moins" }}</span>
         <img
