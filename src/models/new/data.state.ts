@@ -1024,15 +1024,15 @@ export class DataState {
           throw response.messages;
         }
         delete response[application.action];
-        console.log('Response', response)
+        console.log('Response closeMission', response)
         this.getUserDataService.emitDataChangeEvent(response.timestamp)
         delete response["timestamp"];
         ctx.setState(update("Mission", response));
-
+        
       })
     );
   }
-
+  
   @Action(CloseMissionST)
   closeMissionST(ctx: StateContext<DataModel>, application: CloseMissionST) {
     console.log("closeMissionST", application)
@@ -1044,7 +1044,7 @@ export class DataState {
           throw response.messages;
         }
         delete response[application.action];
-        console.log('ReponseST', response)
+        console.log('Reponse closeMissionST', response)
         this.getUserDataService.emitDataChangeEvent(response.timestamp)
         delete response["timestamp"];
         ctx.setState(update("Mission", response));

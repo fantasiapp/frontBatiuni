@@ -2,21 +2,22 @@
   <!-- <app-banner *ngIf="(isClosed)" [post]="post"></app-banner> -->
   <div class="container grow flex center-cross space-between" 
       [ngClass]="{'offres-infos-closed': isClosed, 
-                  'offres-infos-postulated': hasPostulated && !isAppliedPage,
+                  'offres-infos-postulated': view == 'ST' &&  hasPostulated && !isAppliedPage,
+                  'offres-infos-isViewed': view == 'ST' && isViewed && !hasPostulated && !isAppliedPage,
                   'boosted': post.boostTimestamp >= time }">
     <div class="offres-infos" >
       <ng-container *ngIf="view == 'PME';else stTemplate" #stTemplate>
         <span class="metier">{{metier?.name}}</span>
-        <span class="address text-dark">{{post?.address || 'addresse'}}</span>
+        <span class="address text-dark">{{post?.address}}</span>
         <span class="man-pow">{{post?.manPower ? 'Main d\'oeuvre' : 'Fourniture et Pose'}}</span>
-        <span class="date text-dark">{{post?.dueDate ?  toLocateDate(post.dueDate) : '19 Janvier 2038'}}</span>
+        <span class="date text-dark">{{toLocateDate(post.dueDate)}}</span>
       </ng-container>
       <ng-template #stTemplate>
-        <span class="entreprise text-dark">{{company?.name || 'Entreprise'}}</span>
+        <span class="entreprise text-dark">{{company?.name}}</span>
         <span class="man-pow">{{post?.manPower ? 'Main d\'oeuvre' : 'Fourniture et Pose'}}</span>
         <span class="metier text-dark">{{metier?.name}}</span>
-        <span class="address">{{hideAdress(post?.address) || 'addresse'}}</span>
-        <span class="date text-dark">{{post?.dueDate ?  toLocateDate(post.dueDate) : '19 Janvier 2038'}}</span>
+        <span class="address">{{hideAdress(post?.address)}}</span>
+        <span class="date text-dark">{{toLocateDate(post.dueDate)}}</span>
       </ng-template>
     </div>
     <div class="offer-logo flex center">
@@ -26,6 +27,7 @@
       </div>
       <img class="imageProfile" [src]="src">
       <span *ngIf="notificationsMissionUnseen !== 0" [attr.data-notification-number]="notificationsMissionUnseen" class="notification"></span>
+      <span class="hasPostulated" *ngIf="view == 'ST' && isViewed && !hasPostulated && !isAppliedPage">Déjà vu</span>
       <span class="hasPostulated" *ngIf="hasPostulated && !isAppliedPage">Déjà postulé</span>
       <span class="ongoing" *ngIf="hasPostulated && isAppliedPage && !isRefused">En cours</span>
       <span class="refused" *ngIf="hasPostulated && isAppliedPage && isRefused">Refusé</span>

@@ -248,6 +248,7 @@ export class MissionsComponent extends Destroy$ {
     let company = this.store.selectSnapshot(DataQueries.currentCompany)
     this.store.dispatch(new PostNotificationViewed(mission!.id, "ST"))
     this.notifService.emitNotifChangeEvent()
+    console.log('missions', mission);
     this.missionMenu = assignCopy(this.missionMenu, {
       post: mission,
       open: !!mission,
@@ -295,27 +296,15 @@ export class MissionsComponent extends Destroy$ {
     return this.getArrayStarST("generalST")[0] == true;
   }
 
-  submitStarST() {
-    if (this.hasGeneralStarsST)
-      this.store
-        .dispatch(
-          new CloseMissionST(
-            this.missionToClose!.id,
-            this.missionToClose!.vibeST,
-            this.missionToClose!.vibeCommentST,
-            this.missionToClose!.securityST,
-            this.missionToClose!.securityCommentST,
-            this.missionToClose!.organisationST,
-            this.missionToClose!.organisationCommentST
-          )
-        )
-        .pipe(take(1))
-        .subscribe(() => {
-          this.doClose = true;
-          this.openCloseMission = false;
-          this.cd.markForCheck();
-          this.submitStarsST = true;
-  });
+  submitStarST(button: HTMLButtonElement) {
+    if (!this.hasGeneralStarsST) return
+    console.log('submitStartST');
+    this.store.dispatch(new CloseMissionST(this.missionToClose!.id, this.missionToClose!.vibeST, this.missionToClose!.vibeCommentST, this.missionToClose!.securityST, this.missionToClose!.securityCommentST, this.missionToClose!.organisationST, this.missionToClose!.organisationCommentST)).pipe(take(1)).subscribe(() => {
+      this.doClose = true;
+      this.openCloseMission = false;
+      this.cd.markForCheck();
+      this.submitStarsST = true;
+    });
   }
 
   starActionST(index: number, nature: string) {

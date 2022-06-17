@@ -398,16 +398,18 @@ export class ValidateMissionDate {
 }
 
 export class CloseMission {
-  static readonly type = '[Data] set stars and comments';
+  static readonly type = '[Data] set PME stars and comments';
   action = 'closeMission'
   constructor(public missionId: number, public qualityStars:number, public qualityComment:string, public securityStars:number, public securityComment:string, public organisationStars:number, public organisationComment:string) {
+    console.log('CloseMission constructor', this.action);
   }
 }
 
 export class CloseMissionST {
-  static readonly type = '[Data] set stars and comments';
+  static readonly type = '[Data] set ST stars and comments';
   action = 'closeMissionST'
   constructor(public missionId: number, public vibeSTStars:number, public vibeSTComment:string, public securitySTStars:number, public securitySTComment:string, public organisationSTStars:number, public organisationSTComment:string) {
+    console.log('CloseMissionST constructor', this.action);
   }
 }
 

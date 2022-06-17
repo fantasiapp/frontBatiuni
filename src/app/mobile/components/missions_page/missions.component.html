@@ -32,7 +32,6 @@
   <mission-filter-form [callbackFilter]="callbackFilter" view></mission-filter-form>
 </swipeup>
 
-<!-- <swipeup [(open)]="openCloseMission" [doClose]="doClose"> -->
 <swipeup [(open)]="openCloseMission" [doClose]="doClose">
   <div *ngIf="missionToClose" class="cloture-swipeup">
     <h3 class="notation">Noter {{ missionToClose.contactName }} de l'entreprise {{ missionCompany }}</h3>
@@ -63,6 +62,6 @@
       </div>
       <textarea (focusout)="textStarActionST('organisationST')" placeholder="Ajouter un commentaire" id="starTextOrganisationST">{{ missionToClose?.organisationCommentST }}</textarea>
     </div>
-    <button [ngClass]="classSubmit" (click)="submitStarST()">Valider</button>
+    <button [ngClass]="classSubmit" class="button font-Poppins full-width" (click)="submitStarST(submitButtonST)" #submitButtonST>Valider</button>
   </div>
 </swipeup>
