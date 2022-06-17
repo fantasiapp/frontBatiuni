@@ -80,9 +80,6 @@ export class MissionsComponent extends Destroy$ {
 
   ngOnInit() {
     this.info.alignWith('header_search');
-    this.notifService.getNotifChangeEmitter().subscribe(() => {
-      this.cd.markForCheck()
-    })
 
     combineLatest([this.profile$, this.missions$]).pipe(takeUntil(this.destroy$)).subscribe(([profile, missions]) => {
       //filter own missions
@@ -254,10 +251,8 @@ export class MissionsComponent extends Destroy$ {
 
   openMission(mission: Mission | null) {
     let company = this.store.selectSnapshot(DataQueries.currentCompany)
-    console.log("activeview adns les missions", this.activeView)
     this.store.dispatch(new PostNotificationViewed(mission!.id, "ST"))
     this.notifService.emitNotifChangeEvent()
-    console.log('missions', mission);
     this.missionMenu = assignCopy(this.missionMenu, {
       post: mission,
       open: !!mission,
@@ -326,7 +321,7 @@ export class MissionsComponent extends Destroy$ {
 
   submitStarST(button: HTMLButtonElement) {
     if (!this.hasGeneralStarsST) return
-    
+    console.log('submitStartST');
     this.store.dispatch(new CloseMissionST(this.missionToClose!.id, this.missionToClose!.vibeST, this.missionToClose!.vibeCommentST, this.missionToClose!.securityST, this.missionToClose!.securityCommentST, this.missionToClose!.organisationST, this.missionToClose!.organisationCommentST)).pipe(take(1)).subscribe(() => {
       this.doClose = true;
       this.openCloseMission = false;

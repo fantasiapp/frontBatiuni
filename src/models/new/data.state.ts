@@ -970,7 +970,9 @@ export class DataState {
         
         this.getUserDataService.emitDataChangeEvent(response.timestamp)
         delete response["timestamp"];
-        ctx.setState(addComplexChildren('Mission', response.mission.id,'DatePost', response.datePost))
+        if(response.hasOwnProperty('DatePost')){
+          ctx.setState(addComplexChildren('Mission', response.mission.id,'DatePost', response['DatePost']))
+        }
       })
     );
   }
@@ -1017,7 +1019,6 @@ export class DataState {
   closeMission(ctx: StateContext<DataModel>, application: CloseMission) {
     console.log("closeMission", application)
     const profile = this.store.selectSnapshot(DataQueries.currentProfile)!;
-    if(application.action != 'closeMission') return
     return this.http.post("data", application).pipe(
       tap((response: any) => {
         if (response[application.action] !== "OK") {
@@ -1038,7 +1039,6 @@ export class DataState {
   closeMissionST(ctx: StateContext<DataModel>, application: CloseMissionST) {
     console.log("closeMissionST", application)
     const profile = this.store.selectSnapshot(DataQueries.currentProfile)!;
-    if(application.action != 'closeMissionST') return
     return this.http.post("data", application).pipe(
       tap((response: any) => {
         if (response[application.action] !== "OK") {
@@ -1072,8 +1072,11 @@ export class DataState {
         delete response[application.action];
         this.getUserDataService.emitDataChangeEvent(response.timestamp)
         delete response["timestamp"];
+        console.log(this.store.selectSnapshot(DataQueries.getAll("Notification")))
         console.log("les notifs ", response.Notification)
-        ctx.setState(compose(addSimpleChildren("Company",profile.company.id,"Notification",response.Notification)));
+        ctx.setState(replaceChildren("Company",profile.company.id,"Notification",response.Notification));
+        console.log(this.store.selectSnapshot(DataQueries.getById("Company", profile.company.id)))
+        console.log(this.store.selectSnapshot(DataQueries.getAll("Notification")))
       })
     );
   }

@@ -92,7 +92,6 @@ export class ConnexionForm extends Destroy$ {
         if(success){
           const result = this.router.navigate(['', 'home']);
           this.store.dispatch(new GiveNotificationToken(this.notifService.getToken()))
-          console.log("c'est bon j'ai envoyé le token", this.notifService.getToken())
           // if ( !result ) {
           //   setErrors(this.loginForm, {all: 'Erreur inattendue. (500 ?)'});
           //   this.cd.markForCheck();
