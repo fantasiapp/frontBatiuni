@@ -747,8 +747,10 @@ export class HomeComponent extends Destroy$ {
       .dispatch(new BlockCompany(candidate!.company, true))
       .pipe(take(1))
       .subscribe(() => {
-        // this.openPost(null);
-        this.slideOnlinePost.close();
+
+        this.slideService.hide()
+        this.openPost(null);
+        // this.slideOnlinePost.close();
         // this.slideOnlinePostClose()
         // this.router.navigateByUrl('/home')
         this.cd.markForCheck();
