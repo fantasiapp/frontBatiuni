@@ -52,7 +52,6 @@
                     <span>- {{ task.content }}</span>
 
                 </div>
-                <span>{{ card.change.schedule ? 'schedule' : 'caca' }}</span>
             </div>
             
             <notification-agenda (click)="$event.stopPropagation()" *ngIf="card.change.deleted || card.change.schedule || !card.change.validate" [card]="card" [date]="card.date" (cardUpdate)="onCardUpdate($event, card)"></notification-agenda>
