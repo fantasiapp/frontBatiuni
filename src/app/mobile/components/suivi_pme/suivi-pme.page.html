@@ -1,15 +1,15 @@
 <div class="container hosted-page space-children-margin">
-  <annonce-resume [collapsed]="true" [application]="false" [post]="mission" [isSuiviPME]="true"></annonce-resume>
+  <annonce-resume [collapsed]="true" [application]="false" [post]="mission" [isSuiviPME]="view == 'PME'"></annonce-resume>
   <!-- CONTRAT DOCUSIGN URL -->
   <div *ngIf="isNotSigned" class="contrat">
     <h3>
-      Le contrat
-    </h3> 
+      Le contrats
+    </h3>
     <div class="flex center-cross space-around" (click)="signContract()">
       <file-svg name="Contrat" color="red"></file-svg>
       <h4 *ngIf="isNotSignedByUser" class="contrat-title font-Poppins">
         Signer le contrat
-      </h4> 
+      </h4>
   </div>
 </div>
 <!-- ENDBLOCK CONTRAT -->
@@ -20,12 +20,12 @@
 </div>
 <div class="suivi-notification">
   <h4 class="font-Poppins">Suivi de chantier</h4>
-  <p class="font-Roboto">Avec {{contactName}} entreprise {{ companyName }} </p>
+  <p class="font-Roboto">Avec {{ contactName }} entreprise {{ companyName }} </p>
 </div>
 <div class="full-width flex column">
   <ng-container *ngFor="let date of dates">
 
-    <suivi-chantier_date *ngIf="date.validated || (!date.validated && date.deleted && view == 'ST')" [view]="view" [dateId]="date.id" [mission]="mission"></suivi-chantier_date>
+    <suivi-chantier_date *ngIf="date.validated || (!date.validated && date.deleted && view == 'ST')" [view]="view" [dateId]="date.id" [mission]="mission" (computeDate)="onComputeDate()"></suivi-chantier_date>
   </ng-container>
   <!-- <div class="newDate">
     <img src="assets/plusBlue.svg">
@@ -36,21 +36,20 @@
 
 <swipeup [(open)]="missionMenu.swipeup">
   <li *ngIf="!mission?.isClosed" (click)="modifyTimeTable()">Modifier les horaires / les dates de présence</li>
-  <a [href]="'tel:+33' + company?.companyPhone"><li >Appeler le {{ subContractor?.companyPhone}}</li></a>
+  <a [href]="'tel:+33' + company?.companyPhone" style="padding: 0.5rem 0; display: block;"><li >Appeler le {{ subContractor?.companyPhone}}</li></a>
   <li *ngIf="mission?.signedByCompany && mission?.signedBySubContractor && !mission?.isClosed" (click)="closeMission()">Clôturer la mission</li>
   <li (click)="duplicateMission()">Dupliquer l'annonce</li>
 </swipeup>
 
 <swipeup [(open)]="missionMenu.swipeupCloseMission">
   <div class="cloture-swipeup">
-    <h3>Noter l'entreprise</h3>
-    <h6 *ngIf="mission">{{ mission!.subContractorName }}</h6>
+    <h3 *ngIf="mission" class="notation"> Noter {{ mission?.subContractorContact }} de l'entreprise {{ mission?.subContractorName}}</h3>
     <div class="star-container" *ngIf="hasGeneralStars">
       <img  *ngFor="let flag of getArrayStar('general'); let index=index;" [src]="flag ? 'assets/starFull.svg' : 'assets/starEmpty.svg'">
     </div>
 
     <div *ngIf="mission" class="form-input">
-      <p>Qualité du travail fourni</p>
+      <p class="titleForm">Qualité du travail fourni</p>
       <div class="star-container">
         <img *ngFor="let flag of getArrayStar('quality'); let index=index;" (click)="starAction(index, 'quality')" [src]="flag ? 'assets/starFull.svg' : 'assets/starEmpty.svg'">
       </div>
@@ -58,7 +57,7 @@
     </div>
     
     <div *ngIf="mission" class="form-input">
-      <p>Respect de la sécurité et de la propreté du chantier</p>
+      <p class="titleForm">Respect de la sécurité et de la propreté du chantier</p>
       <div class="star-container">
         <img *ngFor="let flag of getArrayStar('security'); let index=index;" (click)="starAction(index, 'security')" [src]="flag ? 'assets/starFull.svg' : 'assets/starEmpty.svg'">
       </div>
@@ -66,13 +65,13 @@
     </div>
 
     <div *ngIf="mission" class="form-input">
-      <p>Organisation</p>
+      <p class="titleForm">Organisation</p>
       <div class="star-container">
         <img *ngFor="let flag of getArrayStar('organisation'); let index=index;" (click)="starAction(index, 'organisation')" [src]="flag ? 'assets/starFull.svg' : 'assets/starEmpty.svg'">
       </div>
       <textarea (focusout)="textStarAction('organisation')" placeholder="Ajouter un commentaire" rows="5" cols="30" id="starTextOrganisation">{{ mission!.organisationComment }}</textarea>
     </div>
-    <button [ngClass]="classSubmit" (click)="submitStar()">Valider</button>
+    <button [ngClass]="classSubmit" class="button font-Poppins full-width" (click)="submitStar(submitStarButton)" #submitStarButton>Valider</button>
   </div>
 </swipeup>
 

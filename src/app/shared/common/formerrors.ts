@@ -4,7 +4,7 @@ import { takeUntil } from "rxjs/operators";
 import { Destroy$ } from "./classes";
 
 const forms = {
-  FIELD_MISMATCH: 'Le nouveau mot de passe doit être identique $2<().',
+  FIELD_MISMATCH: 'Les champs doivent être identique $2<().',
   REQUIRED_FIELD: '$1=(Ce champ) est obligatoire.',
   MIN_LENGTH: '$2=(Ce champ) doit contenir au moins $1=(8) caractères',
   CASE: '$2=(Ce champ) doit contenir une lettre en $1=(miniscule)',

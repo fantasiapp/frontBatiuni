@@ -2,7 +2,9 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  EventEmitter,
   Input,
+  Output,
 } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { Camera, CameraResultType, CameraSource } from "@capacitor/camera";
@@ -10,6 +12,7 @@ import { Store } from "@ngxs/store";
 import { take } from "rxjs/internal/operators/take";
 import { takeUntil } from "rxjs/operators";
 import { Destroy$ } from "src/app/shared/common/classes";
+import { InfoService } from "src/app/shared/components/info/info.component";
 import { PopupService } from "src/app/shared/components/popup/popup.component";
 import {
   PostDateAvailableTask,
@@ -28,8 +31,10 @@ import {
   CreateSupervision,
   ModifyDetailedPost,
   UploadImageSupervision,
+  ValidateMissionDate,
 } from "src/models/new/user/user.actions";
-import { SuiviPME } from "../suivi_pme/suivi-pme.page";
+import { getUserDataService } from "src/app/shared/services/getUserData.service";
+
 
 export interface TaskGraphic {
   selectedTask: PostDetailGraphic,
@@ -75,7 +80,7 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
 
   user!: User;
 
-  constructor(private cd: ChangeDetectorRef, private store: Store, private popup: PopupService) {
+  constructor(private cd: ChangeDetectorRef, private store: Store, private popup: PopupService, private getUserDataService: getUserDataService, private info: InfoService) {
     super();
   }
 
@@ -247,11 +252,18 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
       source: CameraSource.Photos,
     });
 
-    this.store.dispatch(new UploadImageSupervision(photo, this.currentSupervisionId)).pipe(take(1)).subscribe(() => {
-      // let supervisions = this.store.selectSnapshot(DataQueries.getMany('Supervision', this.mission!.supervisions))
+    let acceptedFormat = ["jpeg", "png", "jpg", "bmp"];
+    if (acceptedFormat.includes(photo.format)) {
+      this.store.dispatch(new UploadImageSupervision(photo, this.currentSupervisionId)).pipe(take(1)).subscribe(() => {
+        // let supervisions = this.store.selectSnapshot(DataQueries.getMany('Supervision', this.mission!.supervisions))
+        this.updatePageOnlyDate();
+        this.swipeMenuImage = false;
+      });
+    } else {
       this.updatePageOnlyDate();
       this.swipeMenuImage = false;
-    });
+      this.info.show("error", "Format d'image non supporté", 3000);
+    }
   }
 
   addTaskToPost() {
@@ -324,12 +336,14 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
       if (!detailPostId) {
         datePostId = this.dateOrigin.id
       }
-      this.store.dispatch(new CreateSupervision(detailPostId, datePostId, comment)).pipe(take(1)).subscribe((response) => {
-        formControl.reset()
-
-        
-        this.updatePageOnlyDate()
-      })
+      try {
+        this.store.dispatch(new CreateSupervision(detailPostId, datePostId, comment)).pipe(take(1)).subscribe((response) => {
+          formControl.reset()
+          this.updatePageOnlyDate()
+        })
+      } catch {
+        this.getUserDataService.emitDataChangeEvent()
+      }
     }
   }
 
@@ -338,5 +352,17 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
     this.currentSupervisionId = supervsionId;
     this.swipeMenuImage = true; 
     this.cd.markForCheck()
+  }
+
+  @Output() computeDates: EventEmitter<any> = new EventEmitter();
+
+  deleted(b: boolean, deleting: boolean) {
+    let field = "date";
+    
+    this.store.dispatch(new ValidateMissionDate(this.mission!.id, field, b, this.date.date)).pipe().subscribe(() => {
+      this.date.deleted = b
+      this.cd.markForCheck()
+      if(b) this.computeDates.next()
+    });
   }
 }

@@ -120,7 +120,7 @@ export type ApplyForm = {
         [ngClass]="{ open: openRatings }"
       ></rating>
       <slide-profile
-        *ngIf="view == 'PME'"
+       
         [isSuiviPME]="isSuiviPME"
         [(open)]="slideProfileOpen"
         [profile]="isSuiviPME ? profileST! : { company: company!, user: user }"
@@ -260,14 +260,12 @@ export class UIAnnonceResume extends Destroy$ {
 
   @Input("post") set post(p: Post | null) {
     this._post = p;
-    console.log("-------------------le post----------------", p)
     this.company = p
       ? this.store.selectSnapshot(DataQueries.getById("Company", p.company))
       : null;
     this.subContractor = p
       ? this.store.selectSnapshot(DataQueries.getById("Company", p.subContractor))
       : null;
-    console.log("-------------------le sub----------------", this.subContractor)
     if (this.subContractor) {this.profileST = this.store.selectSnapshot(DataQueries.getProfileById(this.subContractor!.id))}
     this.files = p
       ? this.store.selectSnapshot(DataQueries.getMany("File", p.files))

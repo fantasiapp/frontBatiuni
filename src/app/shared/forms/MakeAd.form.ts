@@ -307,8 +307,7 @@ import { Mobile } from "../services/mobile-footer.service";
       }
 
       .time-picker {
-        margin-left: 20px;
-        width: unset
+        margin-left: 10px;
       }
 
       .submit-container {
@@ -548,7 +547,6 @@ export class MakeAdForm {
   });
   get invalid() {
     const calendar = this.makeAdForm.get("calendar")
-    // console.log("invalid", this.makeAdForm.valid)
     return !this.makeAdForm.valid || calendar?.value.length == 0;
   }
 

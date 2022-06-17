@@ -15,8 +15,8 @@
 .notification {
   @extend %has-notifications;
   position:absolute;
-  top:20px;
-  right:20px;
+  top:55px;
+  right:55px;
 
   &::after{
     position: relative;
@@ -45,6 +45,19 @@
   box-shadow: 10px 24px 54px #00000024; // x y spread outline color
   overflow: hidden;
   position: relative;
+}
+
+.offres-infos-postulated, .offres-infos-isViewed{
+
+  &::after{
+    content: '';
+    display: block;
+    width: 100%;
+    height: 100%;
+    background-color: hsl(0deg 0% 96% / 69%);
+    position: absolute;
+    pointer-events: none;
+  }
 }
 
 .boosted {

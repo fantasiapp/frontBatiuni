@@ -22,6 +22,7 @@ import { DataQueries } from "src/models/new/data.state";
 import { DeletePost, SetFavorite } from "src/models/new/user/user.actions";
 import { FileDownloader } from "../../services/file-downloader.service";
 import { ImageGenerator } from "../../services/image-generator.service";
+import { NotifService } from "../../services/notif.service";
 import { SingleCache } from "../../services/SingleCache";
 import { PopupService } from "../popup/popup.component";
 
@@ -37,7 +38,8 @@ export class OfferComponent {
     private popup: PopupService,
     private cd: ChangeDetectorRef,
     private imageGenerator: ImageGenerator,
-    private downloader: FileDownloader
+    private downloader: FileDownloader,
+    private notifService: NotifService
   ) {}
 
   @Input() view: "ST" | "PME" = "PME";
@@ -47,6 +49,7 @@ export class OfferComponent {
   @Select(DataQueries.currentUser)
   user$!: Observable<User>;
   favoritePost: boolean = false;
+
 
   @Input()
   showCandidate: boolean = false;
@@ -63,7 +66,6 @@ export class OfferComponent {
         candidates = this.store.selectSnapshot(
           DataQueries.getMany("Candidate", candidatesIds)
         );
-      console.log("candidates", candidates)
       candidates.forEach((candidate) => {
         if (!candidate.isViewed) possibleCandidates++;
       });
@@ -107,6 +109,8 @@ export class OfferComponent {
   @Input()
   isRefused: boolean = false;
 
+  notificationsMissionUnseen: number = 0;
+
   get hasPostulated() {
     const profile = this.store.selectSnapshot(DataQueries.currentProfile);
     let companiesId;
@@ -120,6 +124,12 @@ export class OfferComponent {
       });
     }
     return companiesId?.includes(profile.company.id);
+  }
+
+  get isViewed() {
+    const user = this.store.selectSnapshot(DataQueries.currentUser);
+    console.log(this._post, user.viewedPosts?.includes(this._post!.id))
+    return user.viewedPosts?.includes(this._post!.id);
   }
 
   @Input() set post(p: Post | null) {
@@ -138,6 +148,11 @@ export class OfferComponent {
   }
 
   ngOnInit() {
+    this.notifService.getNotifChangeEmitter().subscribe(() => {
+      this.notificationsMissionUnseen = this.notifService.getNotificationUnseenMission(this._post!.id)
+      console.log("le get qui n'est pas un get ", this.notificationsMissionUnseen)
+      this.cd.markForCheck()
+    })
     if (!this.src) {
       if (SingleCache.checkValueInCache("companyImage" + this.company!.id.toString())) {
         this.src = SingleCache.getValueByName("companyImage" + this.company!.id.toString())
@@ -168,6 +183,8 @@ export class OfferComponent {
     this.metier =
       this.store.selectSnapshot(DataQueries.getById("Job", this.post!.job)) ||
       undefined;
+
+    console.log("time", this.time, this.post?.boostTimestamp);
   }
 
   toggleFavorite(e: Event) {
@@ -184,4 +201,5 @@ export class OfferComponent {
       return adress;
     }
   }
+
 }

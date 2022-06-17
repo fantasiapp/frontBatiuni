@@ -20,7 +20,7 @@ import {
   Ref,
 } from "src/models/new/data.interfaces";
 import { DataQueries, QueryAll } from "src/models/new/data.state";
-import { CloseMissionST, MarkViewed } from "src/models/new/user/user.actions";
+import { CloseMissionST, MarkViewed, PostNotificationViewed } from "src/models/new/user/user.actions";
 import { UIAnnonceResume } from "../../ui/annonce-resume/annonce-resume.ui";
 import { getLevenshteinDistance } from "src/app/shared/services/levenshtein";
 
@@ -29,6 +29,7 @@ import { AppComponent } from "src/app/app.component";
 import { SearchbarComponent } from "src/app/shared/components/searchbar/searchbar.component";
 import { getUserDataService } from "src/app/shared/services/getUserData.service";
 import { MissionFilterForm } from "src/app/shared/forms/missions.form";
+import { NotifService } from "src/app/shared/services/notif.service";
 
 @Component({
   selector: "missions",
@@ -69,7 +70,8 @@ export class MissionsComponent extends Destroy$ {
     private info: InfoService,
     private cd: ChangeDetectorRef,
     private appComponent: AppComponent,
-    private getUserDataService: getUserDataService
+    private getUserDataService: getUserDataService,
+    private notifService: NotifService
   ) {
     super();
     this.searchbar = new SearchbarComponent(store);
@@ -77,12 +79,13 @@ export class MissionsComponent extends Destroy$ {
 
   ngOnInit() {
     this.info.alignWith('header_search');
+    this.notifService.getNotifChangeEmitter().subscribe(() => {
+      this.cd.markForCheck()
+    })
 
     combineLatest([this.profile$, this.missions$]).pipe(takeUntil(this.destroy$)).subscribe(([profile, missions]) => {
       //filter own missions
       //for now accept all missions
-      console.log("la requete en local", this.store.selectSnapshot(DataQueries.getAll("Mission")))
-      console.log("Missions", missions)
       this.allMyMissions = missions.filter(mission => mission.subContractor == profile.company.id);
       //compute work days
 
@@ -245,12 +248,16 @@ export class MissionsComponent extends Destroy$ {
   }
 
   openMission(mission: Mission | null) {
+    let company = this.store.selectSnapshot(DataQueries.currentCompany)
+    console.log("activeview adns les missions", this.activeView)
+    this.store.dispatch(new PostNotificationViewed(mission!.id, "ST"))
+    this.notifService.emitNotifChangeEvent()
+    console.log('missions', mission);
     this.missionMenu = assignCopy(this.missionMenu, {
       post: mission,
       open: !!mission,
       swipeup: false,
     });
-    console.log("est ce que je dispatch ou pas ?", !mission)
     if (mission) this.store.dispatch(new MarkViewed(mission.id));
     if (mission?.isClosed) {
       this.info.show(
@@ -263,9 +270,7 @@ export class MissionsComponent extends Destroy$ {
   ngOnDestroy(): void {
     this.info.alignWith("last");
     this.getUserDataService.emitDataChangeEvent();
-    console.log("on check les missions avant de tout détruire", this.store.selectSnapshot(DataQueries.getAll("Mission")))
     super.ngOnDestroy();
-    console.log("on check les missions après avoir tout détruit", this.store.selectSnapshot(DataQueries.getAll("Mission")))
   }
 
   get missionToClose(): Mission | null {
@@ -295,27 +300,15 @@ export class MissionsComponent extends Destroy$ {
     return this.getArrayStarST("generalST")[0] == true;
   }
 
-  submitStarST() {
-    if (this.hasGeneralStarsST)
-      this.store
-        .dispatch(
-          new CloseMissionST(
-            this.missionToClose!.id,
-            this.missionToClose!.vibeST,
-            this.missionToClose!.vibeCommentST,
-            this.missionToClose!.securityST,
-            this.missionToClose!.securityCommentST,
-            this.missionToClose!.organisationST,
-            this.missionToClose!.organisationCommentST
-          )
-        )
-        .pipe(take(1))
-        .subscribe(() => {
-          this.doClose = true;
-          this.openCloseMission = false;
-          this.cd.markForCheck();
-          this.submitStarsST = true;
-  });
+  submitStarST(button: HTMLButtonElement) {
+    if (!this.hasGeneralStarsST) return
+    
+    this.store.dispatch(new CloseMissionST(this.missionToClose!.id, this.missionToClose!.vibeST, this.missionToClose!.vibeCommentST, this.missionToClose!.securityST, this.missionToClose!.securityCommentST, this.missionToClose!.organisationST, this.missionToClose!.organisationCommentST)).pipe(take(1)).subscribe(() => {
+      this.doClose = true;
+      this.openCloseMission = false;
+      this.cd.markForCheck();
+      this.submitStarsST = true;
+    });
   }
 
   starActionST(index: number, nature: string) {
@@ -374,6 +367,7 @@ export class MissionsComponent extends Destroy$ {
     }
     return array;
   }
+
 }
 
 function supervisionsTaks(supervisions: number[], supervisionsTaks: any): any {

@@ -76,6 +76,16 @@ import { Email } from "src/validators/persist";
               />
             </div>
             <div class="form-input">
+              <label>Fonction dans l'entreprise *</label>
+              <input
+                #input6
+                (click)="onClickInputScroll(input6)"
+                class="form-element"
+                type="text"
+                formControlName="UserProfile.function"
+              />
+            </div>
+            <div class="form-input">
               <label>Adresse e-mail contact</label>
               <input
                 #input3
@@ -86,7 +96,7 @@ import { Email } from "src/validators/persist";
               />
             </div>
             <div class="form-input">
-              <label>Téléphone de l'entreprise</label>
+              <label>Téléphone de l'entreprise *</label>
               <input
                 #input4
                 (click)="onClickInputScroll(input4)"
@@ -103,16 +113,6 @@ import { Email } from "src/validators/persist";
                 class="form-element"
                 type="tel"
                 formControlName="UserProfile.cellPhone"
-              />
-            </div>
-            <div class="form-input">
-              <label>Fonction dans l'entreprise</label>
-              <input
-                #input6
-                (click)="onClickInputScroll(input6)"
-                class="form-element"
-                type="text"
-                formControlName="UserProfile.function"
               />
             </div>
           </div>
@@ -591,7 +591,6 @@ export class ModifyProfileForm {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    console.log("ngOnChanges", changes)
     if (changes["profile"]) this.reload();
   }
 
@@ -600,8 +599,6 @@ export class ModifyProfileForm {
   }
 
   reload() {
-    console.log("FILE", this.store.selectSnapshot(DataQueries.getAll('File')))
-
     const { user, company } = this.profile as { user: User; company: Company };
     this.companyFiles = this.store.selectSnapshot(
       DataQueries.getMany("File", this.profile.company.files)
@@ -609,7 +606,6 @@ export class ModifyProfileForm {
     this.companyLabels = this.store.selectSnapshot(
       DataQueries.getMany("LabelForCompany", this.profile.company.labels)
     );
-    console.log("companyLabels", this.companyLabels)
     this.companyJobs = this.store.selectSnapshot(
       DataQueries.getMany("JobForCompany", this.profile.company.jobs)
     );
@@ -638,7 +634,6 @@ export class ModifyProfileForm {
       );
       if (used) {
         labelMapping.set(used.id, label);
-        console.log("new label", label);
         this.selectedLabels.push(label);
       }
     });
@@ -792,8 +787,6 @@ export class ModifyProfileForm {
   } 
 
   removeLabel(filename: string) {
-    console.log("removeLabel", filename)
-    console.log("company labels ", this.companyLabels)
     let labelId = this.store.selectSnapshot(DataQueries.getAll("Label")).filter((label) => label.name == filename)[0].id;
     let labelForCompanyId = this.companyLabels.filter((labelForCompany) => labelForCompany.label == labelId)[0].id
     const documents = this.form.controls[ "UserProfile.Company.LabelForCompany"] as FormArray;
@@ -806,11 +799,9 @@ export class ModifyProfileForm {
     let allFiles = this.store.selectSnapshot(DataQueries.getAll('File'))
     let label = allFiles.filter(file => file.name == filename)[0]
     console.log(label);
-    if (label?.id) {console.log("deleeeete"); this.store.dispatch(new DeleteLabel(label.id))}
+    if (label?.id) {this.store.dispatch(new DeleteLabel(label.id))}
 
-    console.log("all labels before", this.selectedLabels);
     this.selectedLabels = this.selectedLabels.filter(label => label.name != filename)
-    console.log("label removed", this.selectedLabels);
 
     this.form.controls["UserProfile.Company.LabelForCompany"].markAsDirty();
   }

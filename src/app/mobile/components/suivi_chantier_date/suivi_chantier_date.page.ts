@@ -45,4 +45,10 @@ export class SuiviChantierDate extends Destroy${
   
   @ViewChild('accordion') accordion!:UIAccordion;
   
+  @Output() computeDate: EventEmitter<any> = new EventEmitter();
+
+  onComputeDate(){
+    console.log('object');
+    this.computeDate.next()
+  }
 }

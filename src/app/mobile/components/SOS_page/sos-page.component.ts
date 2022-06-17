@@ -95,7 +95,6 @@ export class SOSPageComponent extends Destroy$ {
   }
 
   callbackFilter = (filter: any): void => {
-    console.log("filter sos", filter)
     this.selectCompany(filter);
     this.isFilterOn(filter);
   };

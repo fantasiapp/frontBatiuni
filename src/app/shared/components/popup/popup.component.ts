@@ -64,6 +64,7 @@ import { SingleCache } from "../../services/SingleCache";
 import { HomeComponent } from "src/app/mobile/components/home_page/home.component";
 import { BoosterPage } from "src/app/mobile/components/booster/booster.page";
 import { UIAnnonceResume } from "src/app/mobile/ui/annonce-resume/annonce-resume.ui";
+import { ApplicationsComponent } from "src/app/mobile/components/applications/applications.component"
 
 const TRANSITION_DURATION = 200;
 
@@ -139,6 +140,9 @@ export class UIPopup extends DimensionMenu {
 
   @ViewChild("deleteFile", { read: TemplateRef, static: true })
   deleteFile!: TemplateRef<any>;
+
+  @ViewChild("deleteCandidate", { read: TemplateRef, static: true })
+  deleteCandidate!: TemplateRef<any>;
 
   @Input()
   content?: Exclude<PopupView, ContextUpdate>;
@@ -344,7 +348,7 @@ export class UIPopup extends DimensionMenu {
 
 export type PredefinedPopups<T = any> = {
   readonly type: "predefined";
-  name: "deletePost" | "sign" | "setDate" | "closeMission" | "validateCandidate" | "refuseCandidate" | "blockCandidate" | "boostPost" | "onApply" | "onApplyConfirm" | "newFile" | "deleteFile"; // | 'closeMission'
+  name: "deletePost" | "sign" | "setDate" | "closeMission" | "validateCandidate" | "refuseCandidate" | "blockCandidate" | "boostPost" | "onApply" | "onApplyConfirm" | "newFile" | "deleteFile" | "deleteCandidate"; // | 'closeMission'
   context?: TemplateContext;
 };
 
@@ -428,7 +432,7 @@ export class PopupService {
     return new EventEmitter();
   }
 
-  openSignContractDialog(mission: Mission) {
+  openSignContractDialog(mission: Mission, onClosePopup: Function) {
     const view = this.store.selectSnapshot(DataState.view),
       closed$ = new Subject<void>();
 
@@ -471,6 +475,7 @@ export class PopupService {
             close: () => {
               this.downloader.clearContext(fileContext);
               closed$.next();
+              onClosePopup();
             },
           });
           first = false;
@@ -782,6 +787,37 @@ export class PopupService {
         close: () => {
           if (context.$implicit.isActive) {
             object.deleteFile();
+          }
+          closed$.next();
+        },
+      });
+
+      first = false;
+    }
+  }
+
+  deleteCandidate(post: Post, object: ApplicationsComponent) {
+
+    let first: boolean = true;
+    const closed$ = new Subject<void>();
+
+    const context = {
+      $implicit: {
+        address: post.address,
+        name: post.contactName,
+        isActive: false,
+      },
+    };
+
+    if (first) {
+      this.dimension$.next(this.defaultDimension);
+      this.popups$.next({
+        type: "predefined",
+        name: "deleteCandidate",
+        context,
+        close: () => {
+          if (context.$implicit.isActive) {
+            object.deleteCandidate(post.id);
           }
           closed$.next();
         },

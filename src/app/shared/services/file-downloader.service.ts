@@ -68,7 +68,7 @@ export class FileDownloader {
     return this.store.dispatch(new DownloadFile(id, notify, forceDownload)).pipe(
       take(1), //will unsubscribe
       map((_) => {
-        // console.log("hello")
+        // hello")
         return this.store.selectSnapshot(DataQueries.getById("File", id))!;
       })
     );
