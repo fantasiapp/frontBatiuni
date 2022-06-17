@@ -305,7 +305,6 @@ export class HomeComponent extends Destroy$ {
       }
     }
     this.cd.markForCheck();
-    console.log("ALL DRAFTS POSTS", this.userDrafts)
   }
 
   selectUserOnline(filter: any) {
@@ -357,7 +356,6 @@ export class HomeComponent extends Destroy$ {
       }  
     }
     this.cd.markForCheck();
-    console.log("ALL ONLINE POSTS", this.userOnlinePosts)
   }
 
   selectMission(filter: any) {
@@ -401,7 +399,6 @@ export class HomeComponent extends Destroy$ {
       }
     }
     this.cd.markForCheck();
-    console.log("ALL MISSIONS POSTS", this.missions)
   }
 
   swipeupMenu() {
@@ -605,7 +602,6 @@ export class HomeComponent extends Destroy$ {
 
   openMission(mission: Mission | null) {
     let company = this.store.selectSnapshot(DataQueries.currentCompany)
-    console.log("activeview", this.activeView)
     this.store.dispatch(new PostNotificationViewed(mission!.id, "PME"))
     this.notifService.emitNotifChangeEvent()
     this.missionMenu = assignCopy(this.missionMenu, {
@@ -621,7 +617,6 @@ export class HomeComponent extends Destroy$ {
   }
 
   duplicatePost(id: number) {
-    console.log("ALL POSTS ONLINE BEFORE DUPLICATE", this.store.selectSnapshot(DataQueries.getAll('Post')))
     this.info.show("info", "Duplication en cours...", Infinity);
     this.store
       .dispatch(new DuplicatePost(id))
@@ -635,7 +630,6 @@ export class HomeComponent extends Destroy$ {
           this.info.show("error", "Erreur lors de la duplication de l'annonce");
         }
       );
-      console.log("ALL POSTS ONLINE AFTER DUPLICATE", this.store.selectSnapshot(DataQueries.getAll('Post')))
   }
 
   pausePost(id: number) {
@@ -753,7 +747,9 @@ export class HomeComponent extends Destroy$ {
       .dispatch(new BlockCompany(candidate!.company, true))
       .pipe(take(1))
       .subscribe(() => {
-        this.openPost(null);
+        // this.openPost(null);
+        this.slideOnlinePost.close();
+        // this.slideOnlinePostClose()
         // this.router.navigateByUrl('/home')
         this.cd.markForCheck();
       });
@@ -832,8 +828,39 @@ export class HomeComponent extends Destroy$ {
     // Close View
     this.slideOnlinePost.close();
 
+    // reset searchbar
+    this.searchbar.resetSearch()
+
+    // reset filter PME
+    this.view$.subscribe((view)=>{
+      if(view=='PME'){
+        this.filterPME.resetFilter()
+        this.filterOn = false;
+    }})
+
+    this.view$.subscribe((view)=>{
+      if(view=='ST'){
+        this.filterST.updateFilteredPosts(this.filterST.filterForm.value)
+        this.filterST.updateEvent.emit(this.filterST.filteredPosts);
+        this.filterService.emitFilterChangeEvent(this.filterST.filteredPosts)
+    }})
+
     // Update
     this.annonceResume.close();
+  }
+
+  @ViewChild("slideMission") private slideMission!: UISlideMenuComponent;
+
+  slideMissionClose() {
+    this.cd.markForCheck()
+    // Close View
+    this.slideMission.close();
+
+    // reset searchbar
+    this.searchbar.resetSearch()
+    this.filterPME.resetFilter()
+    this.filterOn = false;
+  
   }
 
   // Notifications in header /////

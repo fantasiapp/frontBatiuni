@@ -76,6 +76,7 @@ export class SOSPageComponent extends Destroy$ {
   ngOnInit() {
     this.info.alignWith('header_search');
     const now = new Date().toISOString().slice(0, 10);
+    const user = this.store.selectSnapshot(DataQueries.currentUser)
     this.companies$.subscribe((companies) => {
       for (const company of companies) {
         const ownAvailabilities = this.store.selectSnapshot(DataQueries.getMany("Disponibility", company.availabilities));
@@ -86,7 +87,12 @@ export class SOSPageComponent extends Destroy$ {
           }
         } 
       }
-    })      
+    })
+    let allBlockedCandidates = this.store.selectSnapshot(DataQueries.getAll('BlockedCandidate'))
+    let blockedCandidates = allBlockedCandidates.filter(candidate => candidate.blocker == user.company && candidate.status == true)
+    for (let companyBlocked of blockedCandidates) {
+      this.allAvailableCompanies = this.allAvailableCompanies.filter(company => company.id != companyBlocked.blocked)
+    }  
     this.cd.markForCheck;
     this.selectCompany(null);
   }

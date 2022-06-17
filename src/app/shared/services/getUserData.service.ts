@@ -23,9 +23,7 @@ export class getUserDataService {
     if (timestamp){
       this.lastTimeStamp = timestamp
     }
-    console.log("les times stamp, lastTimeStamp :", this.lastTimeStamp, "l'autre qui doit être plus petit", this.getUserDataTimeStamp)
-    if(this.hasNewResponse && this.lastTimeStamp < this.getUserDataTimeStamp) {
-      console.log("update data daaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaans le service")
+    if(this.hasNewResponse) { //  && this.lastTimeStamp < this.getUserDataTimeStamp
       this.navchange.emit(this.response);
       this.hasNewResponse = false
     }

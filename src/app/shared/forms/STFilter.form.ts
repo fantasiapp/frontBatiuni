@@ -431,5 +431,10 @@ export class STFilterForm {
     }
     this.cd.markForCheck;
   }
+
+  // resetFilter(){
+  //   this.filterForm.reset();
+  //   this.filterForm.get('radius')?.setValue(2000)
+  // }
 }
 

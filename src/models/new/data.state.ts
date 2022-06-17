@@ -970,7 +970,9 @@ export class DataState {
         
         this.getUserDataService.emitDataChangeEvent(response.timestamp)
         delete response["timestamp"];
-        ctx.setState(addComplexChildren('Mission', response.mission.id,'DatePost', response.datePost))
+        if(response.hasOwnProperty('DatePost')){
+          ctx.setState(addComplexChildren('Mission', response.mission.id,'DatePost', response['DatePost']))
+        }
       })
     );
   }
@@ -1016,7 +1018,7 @@ export class DataState {
   @Action(CloseMission)
   closeMission(ctx: StateContext<DataModel>, application: CloseMission) {
     console.log("closeMission", application)
-    // const profile = this.store.selectSnapshot(DataQueries.currentProfile)!;
+    const profile = this.store.selectSnapshot(DataQueries.currentProfile)!;
     return this.http.post("data", application).pipe(
       tap((response: any) => {
         if (response[application.action] !== "OK") {
@@ -1024,15 +1026,15 @@ export class DataState {
           throw response.messages;
         }
         delete response[application.action];
-        console.log('Response', response)
+        console.log('Response closeMission', response)
         this.getUserDataService.emitDataChangeEvent(response.timestamp)
         delete response["timestamp"];
         ctx.setState(update("Mission", response));
-
+        
       })
     );
   }
-
+  
   @Action(CloseMissionST)
   closeMissionST(ctx: StateContext<DataModel>, application: CloseMissionST) {
     console.log("closeMissionST", application)
@@ -1044,7 +1046,7 @@ export class DataState {
           throw response.messages;
         }
         delete response[application.action];
-        console.log('ReponseST', response)
+        console.log('Reponse closeMissionST', response)
         this.getUserDataService.emitDataChangeEvent(response.timestamp)
         delete response["timestamp"];
         ctx.setState(update("Mission", response));
@@ -1070,8 +1072,11 @@ export class DataState {
         delete response[application.action];
         this.getUserDataService.emitDataChangeEvent(response.timestamp)
         delete response["timestamp"];
+        console.log(this.store.selectSnapshot(DataQueries.getAll("Notification")))
         console.log("les notifs ", response.Notification)
-        ctx.setState(compose(addSimpleChildren("Company",profile.company.id,"Notification",response.Notification)));
+        ctx.setState(replaceChildren("Company",profile.company.id,"Notification",response.Notification));
+        console.log(this.store.selectSnapshot(DataQueries.getById("Company", profile.company.id)))
+        console.log(this.store.selectSnapshot(DataQueries.getAll("Notification")))
       })
     );
   }

@@ -25,10 +25,10 @@ export class NotifService {
       this.navchange.emit(this.notificationsUnseen);
     }
     else {
-      this.checkNotif()
       this.navchange.emit(this.notificationsUnseen);
     }
   }
+  
   getNotifChangeEmitter() {
     return this.navchange;
   }
@@ -70,8 +70,5 @@ export class NotifService {
     return notificationsMissionUnseen.length
   }
 
-  markedNotifMissionAsViewed(idMission: number) {
-    
-  }
 }
 

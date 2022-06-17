@@ -94,7 +94,9 @@ export class ProfileComponent extends Destroy$ {
     this.notifService.getNotifChangeEmitter().subscribe((notifUnseen) => {
       this.notificationsUnseen = notifUnseen
     })
-    this.notifService.emitNotifChangeEvent()
+    this.notifService.checkNotif()
+    this.notifications = this.notifService.notifications
+    this.notificationsUnseen = this.notifService.notificationsUnseen
   }
 
 
@@ -198,7 +200,6 @@ export class ProfileComponent extends Destroy$ {
       resultType: CameraResultType.Base64,
       source: CameraSource.Camera
     });
-    console.log(photo);
     this.openModifyPicture = false;
     this.store.dispatch(new UserActions.ChangeProfilePicture(photo, 'image'));
     this.updateProfile();
@@ -214,7 +215,6 @@ export class ProfileComponent extends Destroy$ {
       source: CameraSource.Photos,
     });
 
-    console.log(photo)
     this.store.dispatch(new UserActions.ChangeProfilePicture(photo, 'image')).subscribe(() => {
       this.updateProfile();
       this.cd.markForCheck();

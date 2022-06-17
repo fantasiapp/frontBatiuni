@@ -2,8 +2,8 @@
   <!-- <app-banner *ngIf="(isClosed)" [post]="post"></app-banner> -->
   <div class="container grow flex center-cross space-between" 
       [ngClass]="{'offres-infos-closed': isClosed, 
-                  'offres-infos-postulated': view == 'ST' &&  hasPostulated && !isAppliedPage,
-                  'offres-infos-isViewed': view == 'ST' && isViewed && !hasPostulated && !isAppliedPage,
+                  'offres-infos-postulated': view == 'ST' &&  hasPostulated && !isAppliedPage && !isMissionPage,
+                  'offres-infos-isViewed': view == 'ST' && isViewed && !hasPostulated && !isAppliedPage && !isMissionPage,
                   'boosted': post.boostTimestamp >= time }">
     <div class="offres-infos" >
       <ng-container *ngIf="view == 'PME';else stTemplate" #stTemplate>
@@ -27,10 +27,10 @@
       </div>
       <img class="imageProfile" [src]="src">
       <span *ngIf="notificationsMissionUnseen !== 0" [attr.data-notification-number]="notificationsMissionUnseen" class="notification"></span>
-      <span class="hasPostulated" *ngIf="view == 'ST' && isViewed && !hasPostulated && !isAppliedPage">Déjà vu</span>
-      <span class="hasPostulated" *ngIf="hasPostulated && !isAppliedPage">Déjà postulé</span>
-      <span class="ongoing" *ngIf="hasPostulated && isAppliedPage && !isRefused">En cours</span>
-      <span class="refused" *ngIf="hasPostulated && isAppliedPage && isRefused">Refusé</span>
+      <span class="hasPostulated" *ngIf="view == 'ST' && isViewed && !hasPostulated && !isAppliedPage && !isMissionPage">Déjà vu</span>
+      <span class="hasPostulated" *ngIf="hasPostulated && !isAppliedPage && !isMissionPage">Déjà postulé</span>
+      <span class="ongoing" *ngIf="hasPostulated && isAppliedPage && !isRefused && !isMissionPage">En cours</span>
+      <span class="refused" *ngIf="hasPostulated && isAppliedPage && isRefused && !isMissionPage">Refusé</span>
     </div>
   </div>
   <span *ngIf="unseenCandidate && showCandidate" [attr.data-notification-number]="unseenCandidate" class="notification"></span>
