@@ -573,7 +573,7 @@ export class HomeComponent extends Destroy$ {
 
   callbackSearchST = (search: string): void => {
     this.selectSearchST(search)
-}
+  }
 
   refreshSubject: Subject<void> = new Subject<void>();
 
@@ -631,6 +631,7 @@ export class HomeComponent extends Destroy$ {
       .pipe(take(1))
       .subscribe(
         () => {
+          this.activeView = 0;
           this.openPost(null);
           this.cd.markForCheck();
         },
