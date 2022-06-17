@@ -173,7 +173,7 @@ export class MissionsComponent extends Destroy$ {
       this.filterOn = false;
     } else {
       this.filterOn = true;
-      this.info.show("info","Vos filtres ont été appliqués", 1000);
+      // this.info.show("info","Vos filtres ont été appliqués", 1000);
     }
   }
 
