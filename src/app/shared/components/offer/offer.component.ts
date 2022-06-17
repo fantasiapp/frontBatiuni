@@ -179,10 +179,8 @@ export class OfferComponent {
       }
     });
 
-    this.metier =
-      this.store.selectSnapshot(DataQueries.getById("Job", this.post!.job)) ||
-      undefined;
-
+    this.metier = this.store.selectSnapshot(DataQueries.getById("Job", this.post!.job)) || undefined;
+    this.post!.address = this.hideAdress(this.post!.address)
   }
 
   toggleFavorite(e: Event) {
@@ -192,7 +190,7 @@ export class OfferComponent {
     this.store.dispatch(new SetFavorite(this.favoritePost, this.post!.id));
   }
 
-  hideAdress(adress?: string) {
+  hideAdress(adress: string) {
     if (adress && this.hideExactAdress) {
       return adress!.replace(/\d+/, "").trim();
     } else {
