@@ -134,9 +134,9 @@ export class RatingComponent extends UIOpenMenu {
     for (const recommandation of recommandations) {
       if(recommandation.companyRecommanded == company.id) {
         let ratingInfo: ratingInfo = {
-          contactName: '',
+          contactName:recommandation.firstNameRecommanding + " " + recommandation.lastNameRecommanding,
           subContractorName: recommandation.firstNameRecommanding + " " + recommandation.lastNameRecommanding,
-          companyContractor: '',
+          companyContractor: recommandation.companyNameRecommanding,
           subContractorContact: recommandation.companyNameRecommanding,
           qualityVibe: recommandation.qualityStars,
           qualityVibeComment: recommandation.qualityComment,
