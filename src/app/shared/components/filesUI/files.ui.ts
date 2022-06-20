@@ -153,9 +153,13 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
     this.kill.emit();
   }
 
-  openInput() {
-    this.inputRef.nativeElement.click();
-    if (this.value?.nature == "admin") {this.popup.newFile(this.filename, this);}
+  async openInput() {
+    await this.inputRef.nativeElement.click();
+    // console.log("FILE", this.value)
+    // if (this.value?.nature == "admin") {
+    //   this.popup.newFile(this.filename, this);
+    //   console.log("heheheheeh",this.inputRef)
+    // }
     this.modified = true;
   }
 

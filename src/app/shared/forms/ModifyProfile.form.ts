@@ -527,7 +527,7 @@ export class ModifyProfileForm {
   @Input() profile!: Profile;
   @Input() user: any;
 
-  constructor(private store: Store, private ref: ElementRef) {}
+  constructor(private store: Store, private ref: ElementRef, private popup: PopupService) {}
 
   form: FormGroup = new FormGroup({
     // User
@@ -582,12 +582,13 @@ export class ModifyProfileForm {
 
   async ngOnInit() {
     let permissions = await Camera.checkPermissions();
-    if (permissions.camera != "granted" || permissions.photos != "granted")
+    if (permissions.camera != "granted" || permissions.photos != "granted"){
       try {
         await Camera.requestPermissions({
           permissions: ["camera", "photos"],
         });
       } catch (e) {}
+    }
   }
 
   ngOnChanges(changes: SimpleChanges) {
