@@ -639,19 +639,22 @@ export class DataState {
         delete response[application.action];
         this.getUserDataService.emitDataChangeEvent(response.timestamp)
         delete response["timestamp"];
-
-        if(response.hasOwnProperty('DatePost')){
-          for (const datePost of response['DatePost']) {
-            ctx.setState(addValues('DatePost', datePost))
+        if ("DetailedPost" in response) {
+          for (let detail of response.DetailedPost) {
+            ctx.setState(addValues('DetailedPost', detail))         
           }
         }
-
-        if(response.hasOwnProperty('DetailedPost')){
-          for (const detailedPost of response['DetailedPost']) {
-            ctx.setState(addValues('DetailedPost', detailedPost))
+        if ("DatePost" in response) {
+          for (let date of response.DatePost) {
+            ctx.setState(addValues('DatePost', date))         
           }
         }
-        
+        if ("File" in response) {
+          for (let file of response.File) {
+            ctx.setState(addValues('File', file))
+            console.log("File", file)         
+          }
+        }
         ctx.setState(addComplexChildren("Company", profile.company.id, "Post", response.Post));
         this.inZone(() => this.info.show("info", "Duplication réalisée", 2000));
       })

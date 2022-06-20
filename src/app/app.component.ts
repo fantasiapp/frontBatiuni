@@ -84,7 +84,8 @@ export class AppComponent extends Destroy$ {
 
   async updateUserData() {
     while(this.isConnected) {
-      if (this.readyToUpdate){
+      // this.readyToUpdate
+      if (false){
         this.readyToUpdate = false
         // console.log("dans le while", this.isWhileOn, "et suis-je connecté ? ", this.isConnected)
       if (!this.firstAttemptAlreadyTried){
@@ -99,7 +100,8 @@ export class AppComponent extends Destroy$ {
       await delay(20000)
       }
     }
-    }
+    console.log("test")
+  }
 
   getUserData() {
     let token = this.store.selectSnapshot(AuthState.token);
