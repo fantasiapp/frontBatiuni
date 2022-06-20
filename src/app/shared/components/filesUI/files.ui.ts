@@ -154,31 +154,10 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
   }
 
   openInput(e:Event) {
-    // this.inputRef.nativeElement.click();
-    // if (this.value?.nature == "admin") {
-    //   this.popup.newFile(this.filename, this);
-    // }
-    // this.modified = true;
 
-    console.log('e', e);
+
       
   }
-
-  readUploadedFileAsText = (inputFile:any) => {
-    const temporaryFileReader = new FileReader();
-
-    return new Promise((resolve, reject) => {
-      temporaryFileReader.onerror = () => {
-        temporaryFileReader.abort();
-        reject(new DOMException("Problem parsing input file."));
-      };
-
-      temporaryFileReader.onload = () => {
-        resolve(temporaryFileReader.result);
-      };
-      temporaryFileReader.readAsText(inputFile);
-    });
-  };
 
   private async takePhoto() {
     const photo = await Camera.getPhoto({
