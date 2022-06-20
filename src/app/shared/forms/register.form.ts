@@ -238,10 +238,7 @@ import { InfoService } from "../components/info/info.component";
       }
 
       :host(.footerHideMobile) {
-        height: calc(
-          100vh - #{$paging-height} - #{$paging-decoration-height} -
-            env(safe-area-inset-top)
-        );
+        height: calc(100vh - #{$paging-height} - #{$paging-decoration-height} - env(safe-area-inset-top)) !important;
       }
 
       :host(:not(.mobile-view)) {
