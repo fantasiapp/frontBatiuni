@@ -34,6 +34,7 @@ import { FieldType, Required } from "src/validators/verify";
 import { CalendarUI, DayState } from "../components/calendar/calendar.ui";
 import { defaultFileUIOuput } from "../components/filesUI/files.ui";
 import { InfoService } from "../components/info/info.component";
+import { ActiveViewService } from "../services/activeView.service";
 import { Mobile } from "../services/mobile-footer.service";
 
 @Component({
@@ -497,6 +498,7 @@ export class MakeAdForm {
     private cd: ChangeDetectorRef,
     private router: Router,
     private datePipe: DatePipe,
+    private activeViewService: ActiveViewService
   ) {
     // setInterval(()=>{
     //   this.mobile.test1()
@@ -649,6 +651,7 @@ export class MakeAdForm {
           () => {
             this.info.show("success", "Annonce Envoyée", 2000);
             this.done.emit();
+            this.activeViewService.emitActiveViewChangeEvent(1)
             this.router.navigate(["", "home"]);
           },
           () => {

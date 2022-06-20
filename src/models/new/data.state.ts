@@ -403,7 +403,6 @@ export class DataState {
         response[parseInt(key[0])].push(picture.imageBase64)
         this.getUserDataService.emitDataChangeEvent(response.timestamp)
         delete response["timestamp"];
-        console.log("super ", response)
         ctx.setState(compose(addComplexChildren("Supervision", id, "File", response)))
       })
     );
@@ -638,10 +637,25 @@ export class DataState {
           throw response.messages;
         }
         delete response[application.action];
-        console.log('duplicatePost', response);
         this.getUserDataService.emitDataChangeEvent(response.timestamp)
         delete response["timestamp"];
-        ctx.setState(addComplexChildren("Company", profile.company.id, "Post", response));
+        if ("DetailedPost" in response) {
+          for (let detail of response.DetailedPost) {
+            ctx.setState(addValues('DetailedPost', detail))         
+          }
+        }
+        if ("DatePost" in response) {
+          for (let date of response.DatePost) {
+            ctx.setState(addValues('DatePost', date))         
+          }
+        }
+        if ("File" in response) {
+          for (let file of response.File) {
+            ctx.setState(addValues('File', file))
+            console.log("File", file)         
+          }
+        }
+        ctx.setState(addComplexChildren("Company", profile.company.id, "Post", response.Post));
         this.inZone(() => this.info.show("info", "Duplication réalisée", 2000));
       })
     );
@@ -816,11 +830,13 @@ export class DataState {
               addComplexChildren("Company", company.id, "Mission", response)
             )
           );
-        } else
+        } else {
+          console.log("tous les Posts avant", this.store.selectSnapshot(DataQueries.getAll("Post")))
           ctx.setState(update('Post', response));
+          console.log("dans le else", response)
           ctx.setState(transformField('Candidate', handle.Candidate, 'isRefused', () => true))
-
-      })
+          console.log("tous les Posts après", this.store.selectSnapshot(DataQueries.getAll("Post")))
+  }})
 
     );
   }
@@ -1001,7 +1017,10 @@ export class DataState {
           else {
             if(response.hasOwnProperty('deleted')) {
               ctx.setState(deleteIds("DatePost", [response["fatherId"]]));
+              console.log("dans le validate mission date", response["mission"])
+              console.log("toutes les missions avant", this.store.selectSnapshot(DataQueries.getAll("Mission")))
               ctx.setState(update('Mission', response["mission"]));
+              console.log("toutes les missions après", this.store.selectSnapshot(DataQueries.getAll("Mission")))
             } else if (application.state) {
               ctx.setState(addComplexChildren(response.type, response.fatherId,'DatePost', response.datePost))
             } else {
@@ -1064,19 +1083,18 @@ export class DataState {
     const profile = this.store.selectSnapshot(DataQueries.currentProfile)!;
     return this.http.post("data", application).pipe(
       tap((response: any) => {
-        console.log('notificationViewed response', response);
-        if (response[application.action] !== "OK") {
-          this.inZone(() => this.info.show("error", response.messages, 3000));
-          throw response.messages;
-        }
-        delete response[application.action];
+        console.log('notificationViewed response', response, application);
+        // if (response[application.action] !== "OK") {
+        //   this.inZone(() => this.info.show("error", response.messages, 3000));
+        //   throw response.messages;
+        // }
+        // delete response[application.action];
         this.getUserDataService.emitDataChangeEvent(response.timestamp)
         delete response["timestamp"];
-        console.log(this.store.selectSnapshot(DataQueries.getAll("Notification")))
-        console.log("les notifs ", response.Notification)
-        ctx.setState(replaceChildren("Company",profile.company.id,"Notification",response.Notification));
-        console.log(this.store.selectSnapshot(DataQueries.getById("Company", profile.company.id)))
-        console.log(this.store.selectSnapshot(DataQueries.getAll("Notification")))
+
+        response.Notification.forEach((element: any) => {
+          ctx.setState(update("Notification", element));
+        })
       })
     );
   }
@@ -1095,7 +1113,9 @@ export class DataState {
         delete response[application.action];
         this.getUserDataService.emitDataChangeEvent(response.timestamp)
         delete response["timestamp"];
-        ctx.setState(compose(addSimpleChildren("Company",profile.company.id,"Notification",response.Notification)));
+        response.Notification.forEach((element: any) => {
+          ctx.setState(update("Notification", element));
+        })
       })
     );
   }
