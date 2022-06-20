@@ -35,7 +35,7 @@ import {
 import { Destroy$ } from "src/app/shared/common/classes";
 import * as moment from "moment";
 import { ActiveViewService } from "src/app/shared/services/activeView.service";
-import { HomeComponent } from "../home_page/home.component";
+// import { HomeComponent } from "../home_page/home.component";
 
 // export type Task = PostDetail & {validationImage:string, invalidationImage:string}
 
@@ -68,7 +68,7 @@ export class SuiviPME extends Destroy${
     private popup: PopupService,
     private cd: ChangeDetectorRef,
     private activeViewService: ActiveViewService,
-    private homeComponent: HomeComponent
+    // private homeComponent: HomeComponent
   ) {super()}
 
   ngOnInit(){
@@ -82,7 +82,7 @@ export class SuiviPME extends Destroy${
   calendarForm = new FormControl([])
   AdFormDate = new FormGroup({
     hourlyStart: new FormControl("07:00"),
-    hourlyEnd: new FormControl("17:30:00"),
+    hourlyEnd: new FormControl("17:30"),
     calendar: this.calendarForm
   });
 
@@ -297,7 +297,7 @@ export class SuiviPME extends Destroy${
         (success) => {
           this.activeViewService.emitActiveViewChangeEvent(0)
           this.missionMenu.swipeup = false;
-          this.homeComponent.slideMissionClose()
+          // this.homeComponent.slideMissionClose()
         },
         (error) => {
           // this.info.show("error", "Erreur lors de la duplication de l'annonce");
