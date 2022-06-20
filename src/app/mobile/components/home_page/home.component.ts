@@ -67,6 +67,7 @@ import { SearchbarComponent } from "src/app/shared/components/searchbar/searchba
 import { getUserDataService } from "src/app/shared/services/getUserData.service";
 import { Router } from "@angular/router";
 import { NotifService } from "src/app/shared/services/notif.service";
+import { ActiveViewService } from "src/app/shared/services/activeView.service";
 
 @Component({
   selector: "home",
@@ -139,7 +140,7 @@ export class HomeComponent extends Destroy$ {
 
   searchbar!: SearchbarComponent;
 
-  activeView: number = 0;
+  activeView: number;
   _openCloseMission: boolean = false;
   openAdFilterMenu: boolean = false;
   toogle: boolean = false;
@@ -166,11 +167,13 @@ export class HomeComponent extends Destroy$ {
     private filterService: FilterService,
     private getUserDataService: getUserDataService,
     private router: Router,
-    private notifService: NotifService
+    private notifService: NotifService,
+    private activeViewService: ActiveViewService
   ) {
     super();
     this.isLoading = this.booleanService.isLoading
     this.searchbar = new SearchbarComponent(store);
+    this.activeView = activeViewService.activeView
   }
   
   ngOnInit() {
@@ -189,10 +192,15 @@ export class HomeComponent extends Destroy$ {
     this.getUserDataService.getDataChangeEmitter().subscribe((value: boolean) => {
       this.lateInit()
     })
+    this.activeViewService.getActiveViewChangeEmitter().subscribe((num: number) => {
+      this.activeView = num
+      console.log("j'ai changé", this.activeView)
+    })
     this.lateInit()
   }
 
   async lateInit() {
+    this.activeViewService.setActiveView(0)
     if (!this.isLoading && this.isStillOnPage) {
       this.info.alignWith("header_search");
       combineLatest([this.profile$, this.store.select(DataQueries.getAll('Post'))])
@@ -363,6 +371,7 @@ export class HomeComponent extends Destroy$ {
   selectMission(filter: any) {
     this.missions = [];
     this.allMissions.sort((a, b) => {return Number(a["isClosed"]) - Number(b["isClosed"]);});
+    console.log("this.allMissions", this.allMissions)
     if (filter == null) {
       this.missions = this.allMissions;
     } else {
