@@ -616,6 +616,7 @@ export class MakeAdForm {
           .subscribe(
             () => {
               this.info.show("success", "Annonce mise en ligne", 2000);
+              this.activeViewService.emitActiveViewChangeEvent(1)
               this.done.emit();
             },
             () => {
@@ -651,7 +652,9 @@ export class MakeAdForm {
           () => {
             this.info.show("success", "Annonce Envoyée", 2000);
             this.done.emit();
-            this.activeViewService.emitActiveViewChangeEvent(1)
+            if (!draft) {
+              this.activeViewService.emitActiveViewChangeEvent(1)
+            }
             this.router.navigate(["", "home"]);
           },
           () => {
