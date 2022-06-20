@@ -641,7 +641,23 @@ export class DataState {
         console.log('duplicatePost', response);
         this.getUserDataService.emitDataChangeEvent(response.timestamp)
         delete response["timestamp"];
-        ctx.setState(addComplexChildren("Company", profile.company.id, "Post", response));
+        if ("DetailedPost" in response) {
+          for (let detail of response.DetailedPost) {
+            ctx.setState(addValues('DetailedPost', detail))         
+          }
+        }
+        if ("DatePost" in response) {
+          for (let date of response.DatePost) {
+            ctx.setState(addValues('DatePost', date))         
+          }
+        }
+        if ("File" in response) {
+          for (let file of response.File) {
+            ctx.setState(addValues('File', file))
+            console.log("File", file)         
+          }
+        }
+        ctx.setState(addComplexChildren("Company", profile.company.id, "Post", response.Post));
         this.inZone(() => this.info.show("info", "Duplication réalisée", 2000));
       })
     );
