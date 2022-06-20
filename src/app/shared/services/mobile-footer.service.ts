@@ -7,17 +7,18 @@ import { BehaviorSubject } from "rxjs";
 export class Mobile {
   showFooter: boolean = true;
 
-    footerStateSubject = new BehaviorSubject(true)
-    footerState = this.footerStateSubject.asObservable()
+  footerStateSubject = new BehaviorSubject(true)
+  footerState = this.footerStateSubject.asObservable()
     
-
+  isInited: boolean = false
     
 
   constructor() {}
   init() {
-    if (Capacitor.getPlatform() !== "web") {
+    // this.footerStateSubject.next(false);
+    if (Capacitor.getPlatform() !== "web" && !this.isInited) {
       Keyboard.setAccessoryBarVisible({ isVisible: true });
-      Keyboard.addListener("keyboardDidShow", (info: any) => {
+      Keyboard.addListener("keyboardWillShow", (info: any) => {
         
         this.footerStateSubject.next(false);
       });
@@ -25,11 +26,15 @@ export class Mobile {
         this.footerStateSubject.next(true);
       });
     }
+    // if(!this.isInited) this.test()
+    this.isInited = true
   }
   test(){
     setInterval(()=>{
-        this.test1()
-        setTimeout(()=>{
+      console.log('tic');
+      this.test1()
+      setTimeout(()=>{
+          console.log('tac');
             this.test2()
         },1000)
     },2000)

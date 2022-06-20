@@ -28,7 +28,6 @@ export class MainPage {
       this.showFooter = b
       this.cd.detectChanges()
     })
-
     this.mobile.init()
   }
 
