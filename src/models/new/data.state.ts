@@ -228,17 +228,21 @@ export class DataState {
 
   @Action(GetUserData)
   getUserData(ctx: StateContext<DataModel>, action: GetUserData) {
+    console.log("hellllllllllllo")
     const req = this.http.get("data", { action: action.action });
+    console.log("j'ai lancé", this.flagUpdate)
     if (this.isFirstTime) {
-      this.booleanService.emitLoadingChangeEvent(true)
-      this.booleanService.emitConnectedChangeEvent(true)
+      console.log("tout va bien")
     }
+    console.log("j'ai lancé", this.flagUpdate)
     if (this.flagUpdate){
       this.flagUpdate = false
       return req.pipe(tap((response: any) => {
         console.log("getUserData response", response);
           this.getUserDataService.setNewResponse(response)
           if (this.isFirstTime) {
+            this.booleanService.emitLoadingChangeEvent(true)
+            this.booleanService.emitConnectedChangeEvent(true)
             this.getUserDataService.getDataChangeEmitter().subscribe((value) => {
               this.updateLocalData(ctx, value)
             })

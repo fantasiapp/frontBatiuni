@@ -178,6 +178,7 @@ export class HomeComponent extends Destroy$ {
   
   ngOnInit() {
     this.booleanService.getLoadingChangeEmitter().subscribe((bool : boolean) => {
+      console.log("tout va bien")
       this.isLoading = bool
       this.cd.markForCheck()
     })
@@ -193,6 +194,7 @@ export class HomeComponent extends Destroy$ {
       this.lateInit()
     })
     this.activeViewService.getActiveViewChangeEmitter().subscribe((num: number) => {
+      this.slideMissionClose()
       this.activeView = num
       console.log("j'ai changé", this.activeView)
     })

@@ -54,13 +54,15 @@ export class AppComponent extends Destroy$ {
     this.mobile.init()
     this.isConnected = booleanService.isConnected
     this.booleanService.getConnectedChangeEmitter().subscribe((value) => {
+      console.log("tout va bien")
       this.isConnected = value
       if(value && !this.isWhileOn){
+        console.log("tout va bien dedans")
         this.updateUserData()
       }
       this.isWhileOn = value
     })
-    this.updateUserData()
+    // this.updateUserData()
   }
 
   ready$ = new AsyncSubject<true>();
@@ -84,7 +86,6 @@ export class AppComponent extends Destroy$ {
 
   async updateUserData() {
     while(this.isConnected) {
-      // if (false){
       if (this.readyToUpdate){
         this.readyToUpdate = false
         // console.log("dans le while", this.isWhileOn, "et suis-je connecté ? ", this.isConnected)
@@ -95,10 +96,10 @@ export class AppComponent extends Destroy$ {
       else{
         this.getUserData()
         this.notifService.emitNotifChangeEvent()
-      }
+      }}
       this.readyToUpdate = true
       await delay(20000)
-      }
+      
     }
     console.log("test")
   }

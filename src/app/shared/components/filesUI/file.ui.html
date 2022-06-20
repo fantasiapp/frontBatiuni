@@ -16,7 +16,7 @@
     <input class="form-search" (change)="onChange({origin: 'file', event: $event})" type="file" #input/>
     <span class="placeholder full-width text-ellipsis position-absolute"> {{ value!.name }} </span>
   </span>
-  <img src="assets/Attachement.svg" (click)="onFileInputClicked($event)">
+  <img src="assets/Attachement.svg" (click)="onFileInputClicked($event, input)">
 </div>
 <div *ngIf="includeDate" class="file-date flex">
   <img *ngIf="imgsrc; else div" class="image" [src]="imgsrc">
