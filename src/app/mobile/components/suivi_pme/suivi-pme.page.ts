@@ -35,7 +35,7 @@ import {
 import { Destroy$ } from "src/app/shared/common/classes";
 import * as moment from "moment";
 import { ActiveViewService } from "src/app/shared/services/activeView.service";
-// import { HomeComponent } from "../home_page/home.component";
+import { HomeComponent } from "../home_page/home.component";
 
 // export type Task = PostDetail & {validationImage:string, invalidationImage:string}
 

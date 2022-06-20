@@ -178,6 +178,7 @@ export class HomeComponent extends Destroy$ {
   
   ngOnInit() {
     this.booleanService.getLoadingChangeEmitter().subscribe((bool : boolean) => {
+      console.log("tout va bien")
       this.isLoading = bool
       this.cd.markForCheck()
     })
