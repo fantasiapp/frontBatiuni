@@ -221,6 +221,9 @@ import { InfoService } from "../components/info/info.component";
       @use "src/styles/mixins" as *;
       @use "src/styles/variables" as *;
 
+      :host{
+        transition: height 200ms
+      }
       :host(.mobile-view) {
         @extend %overflow-y;
         @include with-set-safe-area(
@@ -234,11 +237,8 @@ import { InfoService } from "../components/info/info.component";
         );
       }
 
-      :host(.footerHide) {
-        height: calc(
-          100vh - #{$paging-height} - #{$paging-decoration-height} -
-            env(safe-area-inset-top)
-        );
+      :host(.footerHideMobile) {
+        height: calc(100vh - #{$paging-height} - #{$paging-decoration-height} - env(safe-area-inset-top)) !important;
       }
 
       :host(:not(.mobile-view)) {

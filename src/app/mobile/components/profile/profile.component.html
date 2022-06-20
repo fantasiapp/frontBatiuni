@@ -74,7 +74,7 @@
         <li (click)="takePhoto()">Accéder à l'appareil photo</li>
         <li (click)="selectPhoto()">Télécharger une image</li>
       </swipeup>
-      <profile-resume [profile]="profile" [canChangePicture]="!modifyPassword" class="flex column center-cross space-children-margin" (changePicture)="swipeModifyPicture()"></profile-resume>
+      <profile-resume [profile]="profile" [canChangePicture]="!modifyPassword" [showView]="view" class="flex column center-cross space-children-margin" (changePicture)="swipeModifyPicture()"></profile-resume>
       <modify-password-form *ngIf="modifyPassword" class="grow" (submit)="changePassword($event)"></modify-password-form>
       <modify-profile-form *ngIf="!modifyPassword" class="grow" [profile]="profile" (submit)="modifyProfile($event)" #modifyForm></modify-profile-form>
     </div>

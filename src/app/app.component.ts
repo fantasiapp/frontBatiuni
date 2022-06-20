@@ -51,7 +51,7 @@ export class AppComponent extends Destroy$ {
 
   constructor(private store: Store, private mobile: Mobile, private notifService: NotifService, private booleanService: BooleanService) {
     super();
-    this.mobile.init();
+    this.mobile.init()
     this.isConnected = booleanService.isConnected
     this.booleanService.getConnectedChangeEmitter().subscribe((value) => {
       console.log("tout va bien")
