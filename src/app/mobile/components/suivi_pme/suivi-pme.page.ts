@@ -34,6 +34,8 @@ import {
 } from "src/app/shared/components/calendar/calendar.ui";
 import { Destroy$ } from "src/app/shared/common/classes";
 import * as moment from "moment";
+import { ActiveViewService } from "src/app/shared/services/activeView.service";
+// import { HomeComponent } from "../home_page/home.component";
 
 // export type Task = PostDetail & {validationImage:string, invalidationImage:string}
 
@@ -61,6 +63,17 @@ export class SuiviPME extends Destroy${
   swipeupModifyDate: boolean = false;
   alert: string = "";
 
+  constructor(
+    private store: Store,
+    private popup: PopupService,
+    private cd: ChangeDetectorRef,
+    private activeViewService: ActiveViewService,
+    // private homeComponent: HomeComponent
+  ) {super()}
+
+  ngOnInit(){
+  }
+
   _missionMenu: PostMenu<Mission> = new PostMenu<Mission>();
   get missionMenu() {
     return this._missionMenu;
@@ -69,7 +82,7 @@ export class SuiviPME extends Destroy${
   calendarForm = new FormControl([])
   AdFormDate = new FormGroup({
     hourlyStart: new FormControl("07:00"),
-    hourlyEnd: new FormControl("17:30:00"),
+    hourlyEnd: new FormControl("17:30"),
     calendar: this.calendarForm
   });
 
@@ -132,14 +145,7 @@ export class SuiviPME extends Destroy${
 
   @ViewChild(CalendarUI, { static: false }) calendar!: CalendarUI;
 
-  constructor(
-    private store: Store,
-    private popup: PopupService,
-    private cd: ChangeDetectorRef,
-  ) {super()}
 
-  ngOnInit(){
-  }
 
   onComputeDate(){
     console.log('onComputeDate',this.mission, this.dates);
@@ -285,11 +291,15 @@ export class SuiviPME extends Destroy${
   }
 
   duplicateMission() {
-    this.missionMenu.swipeup = false;
+
     // this.info.show("info", "Duplication en cours...", Infinity);
     this.store.dispatch(new DuplicatePost(this.mission!.id)).pipe(take(1)).subscribe(
-        () => {},
-        () => {
+        (success) => {
+          this.activeViewService.emitActiveViewChangeEvent(0)
+          this.missionMenu.swipeup = false;
+          // this.homeComponent.slideMissionClose()
+        },
+        (error) => {
           // this.info.show("error", "Erreur lors de la duplication de l'annonce");
         }
       );

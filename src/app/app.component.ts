@@ -41,6 +41,7 @@ import { BooleanService } from "./shared/services/boolean.service";
     ]),
   ],
 })
+
 export class AppComponent extends Destroy$ {
 
   title = 'af-notification'
@@ -51,7 +52,7 @@ export class AppComponent extends Destroy$ {
 
   constructor(private store: Store, private mobile: Mobile, private notifService: NotifService, private booleanService: BooleanService) {
     super();
-    this.mobile.init();
+    this.mobile.init()
     this.isConnected = booleanService.isConnected
     this.booleanService.getConnectedChangeEmitter().subscribe((value) => {
       this.isConnected = value
@@ -84,7 +85,7 @@ export class AppComponent extends Destroy$ {
 
   async updateUserData() {
     while(this.isConnected) {
-      // this.readyToUpdate
+      // if (false){
       if (this.readyToUpdate){
         this.readyToUpdate = false
         // console.log("dans le while", this.isWhileOn, "et suis-je connecté ? ", this.isConnected)

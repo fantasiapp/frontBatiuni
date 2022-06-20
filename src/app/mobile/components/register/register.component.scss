@@ -5,6 +5,7 @@
   display: block;
   @extend %overflow-y;
   @extend %absolute-cover;
+  position: fixed;
 }
 
 .big-sticky-footer {

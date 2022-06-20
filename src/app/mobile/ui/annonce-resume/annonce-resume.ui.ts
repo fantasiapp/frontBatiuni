@@ -74,14 +74,9 @@ export type ApplyForm = {
             <li>Nom du contact : {{post.contactName }}</li>
 
             <ng-container *ngIf="!collapsed">
-              <li>
-                  {{ post?.numberOfPeople || 1 }} {{ job?.name || "Employé" }}
-                </li>
-                <li>Horaires du chantier : {{ post.hourlyStart }} - {{ post.hourlyEnd }}</li>
                 <li>Date de présence : {{ toLocateDate(post.startDate) }} -
                 {{ toLocateDate(post.endDate) }}</li>
                 <li>Adresse du chantier : {{ hideAdress(post?.address) }}</li>
-                <li>Nom du contact : {{post.contactName }}</li>
                 <span class='date'> Date d’échéance Le {{ toLocateDate(post?.dueDate) }} 
                 </span>
             </ng-container>
