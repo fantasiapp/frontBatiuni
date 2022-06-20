@@ -73,6 +73,7 @@
               <mapbox-batiuni 
                 [refreshEvent]="refreshSubject.asObservable()"
                 [posts]="displayOnlinePosts" 
+                [searchBarEmptyEvent]="searchBarEmptySubject.asObservable()"
                 class="map-container space-children-margin" 
                 (postClick)="openPost($event.post, $event.hideExactAdress)" 
                 *ngSwitchCase="1" 
@@ -276,13 +277,6 @@
 <ng-template #booster let-post>
   <booster-page [post]="post"></booster-page>
 </ng-template>
-<!-- <swipeup [(open)]="missionMenu.swipeup">
-  <li >Modifier les horaires / les dates de présence</li>
-  <li>Appeler le 06 34 09 06 94</li>
-  <li (click)="closeMission()">Clôturer la mission</li>
-  <li>Dupliquer l'annonce</li>
-</swipeup> -->
-
 
 <div *ngIf="isLoading" class="loadingScreen" >
   <div class="custom-loading-spinner"></div>

@@ -16,7 +16,7 @@
         <span class="entreprise text-dark">{{company?.name}}</span>
         <span class="man-pow">{{post?.manPower ? 'Main d\'oeuvre' : 'Fourniture et Pose'}}</span>
         <span class="metier text-dark">{{metier?.name}}</span>
-        <span class="address">{{hideAdress(post?.address)}}</span>
+        <span class="address">{{post?.address}}</span>
         <span class="date text-dark">{{toLocateDate(post.dueDate)}}</span>
       </ng-template>
     </div>

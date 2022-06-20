@@ -407,12 +407,14 @@ input[type=number] {
   transition: height 250ms ease-out 0s;
 }
 
-.collapse-content { overflow: hidden; }
+.collapse-content { 
+  overflow: hidden;
+}
 
 .is-collapsed {
-  height: $collapse-min-height + $collapse-extra-height;
+  // height: $collapse-min-height + $collapse-extra-height;
 
-  & > .collapse-content { height: $collapse-min-height; }
+  // & > .collapse-content { height: $collapse-min-height; }
   & > .collapse-controller {
     margin-top: math.div($collapse-extra-height, 2);
   }
