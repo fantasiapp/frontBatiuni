@@ -22,7 +22,8 @@
     <li [routerLink]="['','abonnement']">Gérer mes abonnements</li>
     <li (click)="openFacture = true; openMenu = false">Mes factures</li>
     <li class="spacer"></li>
-    <li (click)="slideInviteFriends()">Inviter vos amis</li>
+    <li (click)="openRecommendation = true; openMenu = false"  >Demander une recommandation</li>
+    <li (click)="slideInviteFriends()">Parrainer vos amis</li>
     <li >Partager l'application</li>
     <li>Noter l'application</li>
     <li>Nous contacter</li>
@@ -66,6 +67,8 @@
       <applications (closeEvent)="candidature.close()" *ngIf="openCandidature"></applications>
     </div>
   </slidemenu>
+
+  <rating [view]="showView" [profile]="profile" [(open)]="openRecommendation" [ngClass]="{'open' : openRecommendation}" [profileRecommandation]="showRecomandation"></rating>
 
   <slidemenu [footer]="modifyPassword ? 'small' : 'medium'" [(open)]="openModifyMenu" #modifyMenu>    
     <h1 class="center-text full-width" header>Modifier mon Profil</h1>
