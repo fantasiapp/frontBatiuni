@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, OnInit, QueryList, ViewChildren } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, QueryList, ViewChildren } from "@angular/core";
 import { DistanceSliderConfig, SOSSalarySliderConfig } from "src/app/shared/common/sliderConfig";
 import { Company, Job, Post, Profile } from "src/models/new/data.interfaces";
 import { NgxSliderModule } from '@angular-slider/ngx-slider';
@@ -27,13 +27,13 @@ import "hammerjs"
 
     <div class="form-input">
       <label>Dans un rayon autour de</label>
-      <ngx-slider [(value)]=valueDistance [options]="imports.DistanceSliderConfig" formControlName="radius"></ngx-slider>
+      <ngx-slider [(value)]=valueDistance [options]="imports.DistanceSliderConfig" formControlName="radius" (userChange)="detectChange()"></ngx-slider>
     </div>
 
 
     <div class="form-input">
       <label>Estimation de salaire</label>
-      <ngx-slider [options]="imports.SOSSalarySliderConfig" [value]="0" [highValue]="400" formControlName="amount"></ngx-slider>
+      <ngx-slider [options]="imports.SOSSalarySliderConfig" [value]="0" [highValue]="400" formControlName="amount" (userChange)="detectChange()"></ngx-slider>
     </div>
 
 
@@ -92,7 +92,7 @@ export class SOSFilterForm implements OnInit {
     {}
   );
 
-  constructor(private store: Store){}
+  constructor(private store: Store, private cd: ChangeDetectorRef){}
 
   @SnapshotAll('Job')
   allJobs!: Job[];
@@ -102,6 +102,10 @@ export class SOSFilterForm implements OnInit {
     this.filterForm.valueChanges.subscribe(value => {
       this.callbackFilter(value);
     })
+  }
+
+  detectChange(){
+    this.cd.detectChanges();
   }
 
 }

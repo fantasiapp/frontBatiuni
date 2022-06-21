@@ -137,7 +137,6 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
       ext = fullname.slice(lastDot + 1);
 
 
-    // if(e.popup) this.popup.newFile(this.filename, this);
     console.log('nature', this.value?.nature, this.value);
     if (this.value?.nature != 'post') {
       this.popup.newFile(this.filename, this);
@@ -162,8 +161,6 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
   }
 
   async openInput(input:HTMLInputElement, e: Event) {
-    // await this.inputRef.nativeElement.click();
-    console.log("FILE", this.inputRef.nativeElement, input)
 
     input.click()
 
@@ -271,7 +268,7 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
         },
         {
           name: "Télécharger un fichier",
-          click: async () => {
+          click: () => {
             this.openInput(input, e);
             
           },

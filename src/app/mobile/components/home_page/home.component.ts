@@ -110,6 +110,8 @@ export class HomeComponent extends Destroy$ {
   filterOnST: boolean = false;
   isStillOnPage: boolean = true;
 
+  possibleCandidates: Candidate[] = [];
+
   get missionToClose() {
     return this.missions[0];
   }
@@ -263,6 +265,7 @@ export class HomeComponent extends Destroy$ {
   }
 
   updatePage() {
+    this.updatePossibleCandidates();
     this.cd.markForCheck()
   }
 
@@ -695,20 +698,14 @@ export class HomeComponent extends Destroy$ {
     });
   }
 
-  get possibleCandidates() {
-    const candidatesIds = this.postMenu.post?.candidates || [],
-      candidates = this.store.selectSnapshot(
+  updatePossibleCandidates() {
+    const candidatesIds = this.postMenu.post?.candidates || []
+    const candidates = this.store.selectSnapshot(
         DataQueries.getMany("Candidate", candidatesIds)
       );
-    return candidates.reduce(
-      (possibleCandidates: Candidate[], candidate: Candidate) => {
-        if (!candidate.isRefused) {
-          possibleCandidates.push(candidate);
-        }
-        return possibleCandidates;
-      },
-      []
-    );
+    this.possibleCandidates = candidates.filter((candidate) => {
+      return !candidate.isRefused
+    })
   }
 
   showCandidates() {
