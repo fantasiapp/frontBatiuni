@@ -275,6 +275,7 @@ export class DataState {
         ctx.setState(compose(...loadOperations, sessionOperation));
         this.isFirstTime = false
         }
+        this.notifService.emitNotifChangeEvent()
         this.booleanService.emitLoadingChangeEvent(false)}
   }
 
@@ -1119,7 +1120,8 @@ export class DataState {
         delete response["timestamp"];
         response.Notification.forEach((element: any) => {
           ctx.setState(update("Notification", element));
-        })
+      })
+      this.notifService.emitNotifChangeEvent()
       })
     );
   }
