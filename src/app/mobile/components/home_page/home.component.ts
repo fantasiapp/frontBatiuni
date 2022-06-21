@@ -208,8 +208,10 @@ export class HomeComponent extends Destroy$ {
       combineLatest([this.profile$, this.store.select(DataQueries.getAll('Post'))])
         .pipe(takeUntil(this.destroy$))
         .subscribe(([profile, posts]) => {
+          console.log(posts)
           const mapping = splitByOutput(posts, (post) => {
             //0 -> userOnlinePosts | 1 -> userDrafts
+            console.log(post)
             if (profile.company.posts.includes(post.id))
               return post.draft
                 ? this.symbols.userDraft
@@ -219,10 +221,12 @@ export class HomeComponent extends Destroy$ {
               ? this.symbols.discard
               : this.symbols.otherOnlinePost;
           });
+          console.log(mapping, this.symbols.otherOnlinePost)
           const otherOnlinePost = mapping.get(this.symbols.otherOnlinePost) || [];
           this.allUserDrafts = mapping.get(this.symbols.userDraft) || [];
           this.allUserOnlinePosts = mapping.get(this.symbols.userOnlinePost) || [];
           this.allOnlinePosts = [...otherOnlinePost, ...this.userOnlinePosts];
+          console.log("tout, allOnlinePosts",this.allOnlinePosts, this.allUserDrafts)
           this.allMissions = this.store.selectSnapshot(DataQueries.getMany("Mission", profile.company.missions));
           const now = (new Date).toISOString().slice(0, 10);
           this.allUserOnlinePosts = this.allUserOnlinePosts.filter((post) => post.dueDate > now)
@@ -696,6 +700,7 @@ export class HomeComponent extends Destroy$ {
   }
 
   get possibleCandidates() {
+    console.log("ça fait beaucoup là non")
     const candidatesIds = this.postMenu.post?.candidates || [],
       candidates = this.store.selectSnapshot(
         DataQueries.getMany("Candidate", candidatesIds)
