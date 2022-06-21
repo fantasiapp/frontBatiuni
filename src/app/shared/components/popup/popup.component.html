@@ -135,3 +135,12 @@
     <button class="button passive" (click)="close()">Annuler</button>
   </div>
 </ng-template>
+
+<ng-template #missKbis let-context>
+  <label class="postuleLabel" *ngIf="context.actualView == 'PME'">Veuillez ajouter le document <span class='boostStrong'>Kbis</span>  pour accéder à <span class='boostStrong'> Créer une annonce </span></label> 
+  <label class="postuleLabel" *ngIf="context.actualView == 'ST'">Veuillez ajouter le document <span class='boostStrong'>Kbis</span>  pour accéder à <span class='boostStrong'> Annonces qui peuvent vous intéresser</span></label>   
+  <div style="height:5%;"></div>
+  <div class="controls cloture">
+    <button class="button active" (click)="close()">OK</button>
+  </div>
+</ng-template>
