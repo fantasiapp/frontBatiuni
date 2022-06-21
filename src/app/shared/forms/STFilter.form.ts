@@ -52,7 +52,7 @@ import "hammerjs"
 
     <div class="form-input">
       <label>Dans un rayon autour deee</label>
-      <ngx-slider [(value)]=valueDistance [options]="imports.DistanceSliderConfig" formControlName="radius" (userChange)="detectChanges()"></ngx-slider>
+      <ngx-slider [value]='valueDistance' [options]="imports.DistanceSliderConfig" formControlName="radius"></ngx-slider>
     </div>
 
     <div class="form-input form-spacer">
@@ -77,7 +77,7 @@ import "hammerjs"
 
     <div class="form-input">
       <label>Estimation de la rémunération</label>
-      <ngx-slider [options]="imports.SalarySliderConfig" [highValue]="100000" formControlName="salary" (userChange)="detectChanges()"></ngx-slider>
+      <ngx-slider [options]="imports.SalarySliderConfig" [highValue]="100000" formControlName="salary"></ngx-slider>
     </div>
 
       <div class="form-input space-children-margin">
@@ -439,6 +439,6 @@ export class STFilterForm {
   // }
 
   detectChanges() {
-    this.cd.markForCheck();
+    // this.cd.markForCheck();
   }
 }
