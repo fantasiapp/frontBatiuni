@@ -77,7 +77,7 @@ import "hammerjs"
 
     <div class="form-input">
       <label>Estimation de la rémunération</label>
-      <ngx-slider [options]="imports.SalarySliderConfig" [highValue]="100000" formControlName="salary"></ngx-slider>
+      <ngx-slider [options]="imports.SalarySliderConfig" [highValue]="100000" formControlName="salary" (userChange)="detectChanges()")></ngx-slider>
     </div>
 
       <div class="form-input space-children-margin">
@@ -437,5 +437,8 @@ export class STFilterForm {
   //   this.filterForm.reset();
   //   this.filterForm.get('radius')?.setValue(2000)
   // }
-}
 
+  detectChanges() {
+    this.cd.markForCheck();
+  }
+}
