@@ -52,7 +52,7 @@ import "hammerjs"
 
     <div class="form-input">
       <label>Dans un rayon autour deee</label>
-      <ngx-slider [(value)]=valueDistance [options]="imports.DistanceSliderConfig" formControlName="radius"></ngx-slider>
+      <ngx-slider [(value)]=valueDistance [options]="imports.DistanceSliderConfig" formControlName="radius" (userChange)="detectChanges()")></ngx-slider>
     </div>
 
     <div class="form-input form-spacer">
