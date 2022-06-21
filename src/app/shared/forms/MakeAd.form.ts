@@ -362,7 +362,7 @@ import { Mobile } from "../services/mobile-footer.service";
         footer {
           bottom: $navigation-height;
           &.footerHide {
-            transform: translateY(100%)
+            visibility: hidden
           }
         }
       }

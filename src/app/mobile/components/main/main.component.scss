@@ -6,3 +6,7 @@
   height: 100vh;
   @extend %fixed
 }
+
+.footerHide {
+  visibility: hidden
+}

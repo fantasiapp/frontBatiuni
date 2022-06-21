@@ -26,7 +26,7 @@ export class Mobile {
         this.footerStateSubject.next(true);
       });
     }
-    // if(!this.isInited) this.test()
+    if(!this.isInited) this.test()
     this.isInited = true
   }
   test(){

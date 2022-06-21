@@ -1,4 +1,4 @@
 <div [@routeAnimation]="prepareRoute(outlet)" class="router">
   <router-outlet #outlet="outlet"></router-outlet>
 </div>
-<navigation [@footerTranslate]="showFooter"></navigation>
+<navigation [ngClass]="{'footerHide': !showFooter}"></navigation>
