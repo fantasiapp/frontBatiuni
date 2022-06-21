@@ -114,5 +114,8 @@
       }
     }
   },
-  "defaultProject": "batiuni"
+  "defaultProject": "batiuni",
+  "cli": {
+    "analytics": false
+  }
 }
