@@ -3,10 +3,20 @@
 
 :host {
   @extend %page;
+
+  .footerHide & {
+    height: calc(100vh - env(safe-area-inset-bottom));
+  }
 }
 
 switch::ng-deep .slider {
   background: #ccc;
+}
+
+.hosted-page {
+  &.footerHide {
+    height: calc(100vh - #{$sticky-header-height})
+  }
 }
 
 .submitActivated {

@@ -8,7 +8,7 @@
   <span tab_1>Calendrier</span>
 </page-header>
 
-<div class="hosted-page space-children-margin page-content-with-tabs">
+<div class="hosted-page space-children-margin page-content-with-tabs" [ngClass]="{'footerHide': !showFooter}">
   <ng-container [ngSwitch]="activeView">
     <ng-container *ngSwitchCase="0">
       <offer 

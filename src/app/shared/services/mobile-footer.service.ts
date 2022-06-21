@@ -17,7 +17,7 @@ export class Mobile {
   init() {
     // this.footerStateSubject.next(false);
     if (Capacitor.getPlatform() !== "web" && !this.isInited) {
-      Keyboard.setAccessoryBarVisible({ isVisible: true });
+      // Keyboard.setAccessoryBarVisible({ isVisible: true });
       Keyboard.addListener("keyboardWillShow", (info: any) => {
         
         this.footerStateSubject.next(false);
@@ -26,8 +26,8 @@ export class Mobile {
         this.footerStateSubject.next(true);
       });
     }
-    // if(!this.isInited) this.test()
-    // this.isInited = true
+    if(!this.isInited) this.test()
+    this.isInited = true
   }
   test(){
     setInterval(()=>{
