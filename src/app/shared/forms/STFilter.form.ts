@@ -53,6 +53,7 @@ import "hammerjs"
     <div class="form-input">
       <label>Dans un rayon autour deee</label>
       <ngx-slider [(value)]=valueDistance [options]="imports.DistanceSliderConfig" formControlName="radius" (userChange)="detectChanges()"></ngx-slider>
+
     </div>
 
     <div class="form-input form-spacer">
@@ -439,6 +440,6 @@ export class STFilterForm {
   // }
 
   detectChanges() {
-    this.cd.markForCheck();
+    this.cd.detectChanges();
   }
 }
