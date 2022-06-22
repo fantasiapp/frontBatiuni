@@ -1,6 +1,6 @@
 <section class="section">
   <!-- <profile-image [profile]="profile" [style.--color1]="color1" [style.--color2]="color2" [style.--color3]="color3" [style.--color4]="color4"></profile-image> -->
-  <profile-image [profile]="profile"></profile-image>
+  <profile-image [profile]="profile" (click)="changePicture.emit()"></profile-image>
   <img *ngIf="canChangePicture" src="assets/icons/modify.svg" class="modify-icon image" (click)="changePicture.emit()"/>
 </section>
 
