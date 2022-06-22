@@ -9,12 +9,14 @@ import { GiveNotificationToken } from "src/models/new/user/user.actions";
 import { Email } from "src/validators/persist";
 import { ComplexPassword, setErrors } from "src/validators/verify";
 import { BooleanService } from "../services/boolean.service";
+import { Mobile } from "../services/mobile-footer.service";
 import { NotifService } from "../services/notif.service";
 
 @Component({
   selector: 'connexion-form',
   template: `
   <!-- Form -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css" />
   <form class="full-height form-control section-host curved-border" [formGroup]="loginForm" (ngSubmit)="onSubmit($event)">
   <!-- Main title ex: Je me connecte, Créer un compte  -->
     <section class="form-section">
@@ -29,7 +31,8 @@ import { NotifService } from "../services/notif.service";
       </div>
       <div class="form-input">
           <label >Mot de passe</label>
-          <input type="password" class="form-element" formControlName="password"/>
+          <input type="password" class="form-element" formControlName="password" id="idPassword">
+          <div class="bi bi-eye-slash" (click)="togglePassword()" style="position: absolute; cursor: pointer; bottom: 0; right: 0" id="togglePassword"></div>
           <!-- <div *ngIf="loginForm.get('password')!.touched && loginForm.get('password')!.errors?.minlength" class="error">Doit contenir au moins 8 caractères</div> -->
           <!-- <div *ngIf="loginForm.get('password')!.touched && loginForm.get('password')!.errors?.uppercase" class="error">Doit contenir au moins une lettre en majuscule</div> -->
           <!-- <div *ngIf="loginForm.get('password')!.touched && loginForm.get('password')!.errors?.lowercase" class="error">Doit contenir au moins une lettre en miniscule</div> -->
@@ -79,7 +82,7 @@ export class ConnexionForm extends Destroy$ {
   private _errors: string[] = [];
   get errors() { return this._errors; }
 
-  constructor(private router: Router, private store: Store, private cd: ChangeDetectorRef, private isLoadingService: BooleanService, private notifService: NotifService) {
+  constructor(private router: Router, private store: Store, private cd: ChangeDetectorRef, private isLoadingService: BooleanService, private notifService: NotifService, private mobileFooterService: Mobile) {
     super();
   }
 
@@ -104,5 +107,18 @@ export class ConnexionForm extends Destroy$ {
         this.cd.markForCheck();
       }
     );
+  }
+
+  togglePassword() {
+    const togglePassword = document.querySelector('#togglePassword');
+    const password = document.querySelector('#idPassword');
+    let type = password?.getAttribute('type') === 'password' ? 'text' : 'password'
+    let toggleClass = password?.getAttribute('type') === 'password' ? 'bi bi-eye' : 'bi bi-eye-slash'
+    password?.setAttribute('type', type)
+    togglePassword?.setAttribute('class', toggleClass)
+  }
+
+  hide(){
+    this.mobileFooterService.hide()
   }
 };

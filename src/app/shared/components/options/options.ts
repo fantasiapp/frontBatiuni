@@ -99,7 +99,7 @@ export class OptionsModel extends UIDefaultAccessor<Option[]> {
 
   getInput(action: ['delete' | 'toggle', number]) {
     const isRadio = this._type[0] != 'checkbox';
-
+    console.log(action, isRadio)
     if ( action[0] == 'delete' ) {
       let idx = action[1],
         id = this.value![idx].id;

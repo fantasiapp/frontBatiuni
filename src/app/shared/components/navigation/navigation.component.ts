@@ -118,6 +118,7 @@ export class NavigationMenu extends Destroy$ {
     });
     this.notifService.getNotifChangeEmitter().subscribe(value => {
       this.notificationUnseen = value;
+      console.log("je cd ")
       this.cd.markForCheck()
     })
     this.notifService.checkNotif()

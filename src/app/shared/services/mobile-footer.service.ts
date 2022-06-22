@@ -52,4 +52,8 @@ export class Mobile {
       Keyboard.removeAllListeners();
     }
   }
+
+  hide() {
+    Keyboard.hide()
+  }
 }
