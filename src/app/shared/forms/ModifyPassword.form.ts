@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Output } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { ComplexPassword, MatchField } from "src/validators/verify";
+import { returnInputKeyboard } from '../common/classes'
 
 @Component({
   selector: 'modify-password-form',
@@ -8,15 +9,15 @@ import { ComplexPassword, MatchField } from "src/validators/verify";
   <form class="form-control" style="height: 100%;" [formGroup]="form" >
     <div class="form-input">
       <label>Ancien mot de passe</label>
-      <input class="form-element" type="password" formControlName="oldPwd"/>
+      <input class="form-element" type="password" (keyup)="returnInputKeyboard($event, input1)" formControlName="oldPwd" #input1/>
     </div>
     <div class="form-input">
       <label>Nouveau mot de passe</label>
-      <input class="form-element" type="password" formControlName="newPwd"/>
+      <input class="form-element" type="password" (keyup)="returnInputKeyboard($event, input1)" formControlName="newPwd" #input2/>
     </div>
     <div class="form-input">
       <label>Confirmation nouveau mot de passe</label>
-      <input class="form-element" type="password" formControlName="newPwdConfirmation"/>
+      <input class="form-element" type="password" (keyup)="returnInputKeyboard($event, input1)" formControlName="newPwdConfirmation" #input3/>
     </div>
   </form>
 
@@ -32,19 +33,21 @@ import { ComplexPassword, MatchField } from "src/validators/verify";
     @use 'src/styles/mixins' as *;
     @use 'src/styles/forms' as *;
 
-    :host { width: 100%; }
+    :host { width: 100%;
+     }
 
     .sticky-footer {
       box-shadow: 0 -3px 3px 0 #ddd;
       background-color: white;
       @extend %sticky-footer;
-      transform: translateY(-100%)
     }
 
   `],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ModifyPasswordForm {
+
+  returnInputKeyboard = returnInputKeyboard
   constructor() {}
 
   @Output() submit = new EventEmitter<FormGroup>();
