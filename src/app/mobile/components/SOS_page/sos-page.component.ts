@@ -25,6 +25,7 @@ import {
   nameToAvailability,
 } from "src/models/new/data.mapper";
 import { DataQueries, Query, QueryAll } from "src/models/new/data.state";
+import { Mobile } from "src/app/shared/services/mobile-footer.service";
 
 export interface availableCompanies {
   company: Company,
@@ -67,13 +68,21 @@ export class SOSPageComponent extends Destroy$ {
     private info: InfoService, 
     private appComponent: AppComponent, 
     private cd: ChangeDetectorRef,
-    private getUserDataService: getUserDataService
+    private getUserDataService: getUserDataService,
+    private mobileFooterService: Mobile
   ) {
     super();
     this.searchbar = new SearchbarComponent(store);
   }
 
+  showFooter: boolean = true;
+
+
   ngOnInit() {
+    this.mobileFooterService.footerStateSubject.subscribe(b => {
+      this.showFooter = b
+      this.cd.detectChanges()
+    })
     this.info.alignWith('header_search');
     const now = new Date().toISOString().slice(0, 10);
     const user = this.store.selectSnapshot(DataQueries.currentUser)

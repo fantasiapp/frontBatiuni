@@ -534,3 +534,9 @@ input[type=number] {
   from {transform:scale(0)}
   to {transform:scale(1)}
 }
+
+.wrapper__searchbar__clickcatcher {
+  position: absolute;
+  height: calc(100vh  - 70px - env(safe-area-inset-bottom));
+  z-index: 10
+}
