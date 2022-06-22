@@ -80,7 +80,7 @@ import { Mobile } from "../services/mobile-footer.service";
           </div>
         </div>
         <div class="form-input">
-          <label>Date d'échéance de l'annonce</label>
+          <label>Annonce valable jusqu'au :</label>
           <input class="form-element" type="date" formControlName="dueDate" />
           <img src="assets/calendar.png" style='pointer-events: none'/>
         </div>

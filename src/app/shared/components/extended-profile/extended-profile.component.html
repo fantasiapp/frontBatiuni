@@ -19,12 +19,15 @@
 
       <h4 class="text-light-emphasis">N SIRET : <span class="value">{{profile.company.siret}}</span></h4>
 
-      <h4 class="text-light-emphasis" *ngIf = "profile.company.allQualifications">Métier : <span class="value">TCE<br/></span>
-      <span *ngFor="let job of companyJobs; let i = index" class="value">{{ job.number }} {{ jobs[i].name }}, </span></h4>
+      <!-- <h4 class="text-light-emphasis" *ngIf = "profile.company.allQualifications">Métier : 
+      <span class="value">TCE<br/></span>
+      <span *ngFor="let job of companyJobs; let i = index" class="value">{{ job.number }} {{ jobs[i].name }}, </span></h4> -->
 
-      <h4 class="text-light-emphasis" *ngIf = "!profile.company.allQualifications">Métier : 
-      <span *ngFor="let job of companyJobs; let i = index" class="value">{{ job.number }} {{ jobs[i].name }}, </span></h4>
-    
+      <h4 class="text-light-emphasis flex row"><div style="flex-shrink: 0;">Métier :</div>
+        <ul style="list-style: unset" class="metier-list">
+          <li  class="metier-list-item" *ngFor="let job of companyJobs; let i = index"><span class="value">{{ jobs[i].name }}</span></li>
+        </ul>
+      </h4>
       <h4 class="text-light-emphasis" *ngIf="profile.company.revenue">Chiffres d'affaires : <span class="value">{{profile.company.revenue | currency: 'EUR':'symbol':'1.0-0' }}</span></h4>
     
       <h4 class="text-light-emphasis" *ngIf="profile.company.capital">Capital : <span class="value">{{profile.company.capital | currency: 'EUR':'symbol':'1.0-0' }}</span></h4>
