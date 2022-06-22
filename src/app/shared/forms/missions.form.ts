@@ -16,6 +16,8 @@ import { SnapshotAll } from "src/models/new/data.state";
 import { UISwitchComponent } from "../components/switch/switch.component";
 import { Filter } from "../directives/filter.directive";
 import { FilterService } from "../services/filter.service";
+import { returnInputKeyboard } from '../common/classes'
+
 
 @Component({
   selector: "mission-filter-form",
@@ -168,10 +170,5 @@ export class MissionFilterForm extends Filter<Mission> {
     this.filterForm.reset();
   }
 
-  returnInputKeyboard(e: any, input: HTMLInputElement){
-    console.log('object', e.keyCode);
-    if(e.keyCode == 13){
-      input.blur()
-    }
-  }
+  returnInputKeyboard = returnInputKeyboard
 }

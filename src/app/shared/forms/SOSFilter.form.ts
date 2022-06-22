@@ -8,6 +8,7 @@ import { UISwitchComponent } from "../components/switch/switch.component";
 import { FilterService } from "../services/filter.service";
 import { Store } from "@ngxs/store";
 import { FormArray, FormControl, FormGroup } from "@angular/forms";
+import { returnInputKeyboard } from '../common/classes'
 import "hammerjs"
 
 @Component({
@@ -108,10 +109,5 @@ export class SOSFilterForm implements OnInit {
     this.cd.detectChanges();
   }
 
-  returnInputKeyboard(e: any, input: HTMLInputElement){
-    console.log('object', e.keyCode);
-    if(e.keyCode == 13){
-      input.blur()
-    }
-  }
+  returnInputKeyboard = returnInputKeyboard
 }

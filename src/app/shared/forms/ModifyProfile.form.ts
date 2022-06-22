@@ -39,6 +39,7 @@ import { SpacingPipe } from "../pipes/spacing.pipe";
 import { DeleteFile, DeleteLabel, ModifyUserProfile } from "src/models/new/user/user.actions";
 import { delay, getDirtyValues } from "../common/functions";
 import { Email } from "src/validators/persist";
+import { returnInputKeyboard } from '../common/classes'
 
 @Component({
   selector: "modify-profile-form",
@@ -63,6 +64,7 @@ import { Email } from "src/validators/persist";
                 class="form-element"
                 type="text"
                 formControlName="UserProfile.lastName"
+                (keyup)="returnInputKeyboard($event, input1)"
               />
             </div>
             <div class="form-input">
@@ -70,6 +72,7 @@ import { Email } from "src/validators/persist";
               <input
                 #input2
                 (click)="onClickInputScroll(input2)"
+                (keyup)="returnInputKeyboard($event, input2)"
                 class="form-element"
                 type="text"
                 formControlName="UserProfile.firstName"
@@ -80,6 +83,7 @@ import { Email } from "src/validators/persist";
               <input
                 #input6
                 (click)="onClickInputScroll(input6)"
+                (keyup)="returnInputKeyboard($event, input6)"
                 class="form-element"
                 type="text"
                 formControlName="UserProfile.function"
@@ -90,6 +94,7 @@ import { Email } from "src/validators/persist";
               <input
                 #input3
                 (click)="onClickInputScroll(input3)"
+                (keyup)="returnInputKeyboard($event, input3)"
                 class="form-element"
                 type="email"
                 formControlName="UserProfile.userName"
@@ -100,6 +105,7 @@ import { Email } from "src/validators/persist";
               <input
                 #input4
                 (click)="onClickInputScroll(input4)"
+                (keyup)="returnInputKeyboard($event, input4)"
                 class="form-element"
                 type="tel"
                 formControlName="UserProfile.Company.companyPhone"
@@ -110,6 +116,7 @@ import { Email } from "src/validators/persist";
               <input
                 #input5
                 (click)="onClickInputScroll(input5)"
+                (keyup)="returnInputKeyboard($event, input5)"
                 class="form-element"
                 type="tel"
                 formControlName="UserProfile.cellPhone"
@@ -130,6 +137,7 @@ import { Email } from "src/validators/persist";
               <input
                 #input7
                 (click)="onClickInputScroll(input7)"
+                (keyup)="returnInputKeyboard($event, input7)"
                 class="form-element"
                 type="text"
                 formControlName="UserProfile.Company.name"
@@ -140,6 +148,7 @@ import { Email } from "src/validators/persist";
               <input
                 #input8
                 (click)="onClickInputScroll(input8)"
+                (keyup)="returnInputKeyboard($event, input8)"
                 class="form-element"
                 type="text"
                 formControlName="UserProfile.Company.siret"
@@ -240,6 +249,7 @@ import { Email } from "src/validators/persist";
               <input
                 #input9
                 (click)="onClickInputScroll(input9)"
+                (keyup)="returnInputKeyboard($event, input9)"
                 class="form-element"
                 type="text"
                 formControlName="UserProfile.Company.webSite"
@@ -251,6 +261,7 @@ import { Email } from "src/validators/persist";
               <input
                 #input10
                 (click)="onClickInputScroll(input10)"
+                (keyup)="returnInputKeyboard($event, input10)"
                 class="form-element"
                 maxlength="11"
                 formControlName="UserProfile.Company.revenue"
@@ -262,6 +273,7 @@ import { Email } from "src/validators/persist";
               <input
                 #input11
                 (click)="onClickInputScroll(input11)"
+                (keyup)="returnInputKeyboard($event, input11)"
                 class="form-element"
                 maxlength="11"
                 formControlName="UserProfile.Company.capital"
@@ -273,6 +285,7 @@ import { Email } from "src/validators/persist";
               <input
                 #input12
                 (click)="onClickInputScroll(input12)"
+                (keyup)="returnInputKeyboard($event, input12)"
                 class="form-element"
                 formControlName="UserProfile.Company.amount"
               />
@@ -807,4 +820,6 @@ export class ModifyProfileForm {
   }
 
   addingField: boolean = false;
+
+  returnInputKeyboard = returnInputKeyboard
 }

@@ -22,6 +22,7 @@ import { Filter } from "../directives/filter.directive";
 import { FilterService } from "../services/filter.service";
 import { getLevenshteinDistance } from "src/app/shared/services/levenshtein";
 import { InfoService } from "../components/info/info.component";
+import { returnInputKeyboard } from '../common/classes'
 import "hammerjs"
 
 @Component({
@@ -440,10 +441,7 @@ export class STFilterForm {
     this.cd.detectChanges();
   }
 
-  returnInputKeyboard(e: any, input: HTMLInputElement){
-    console.log('object', e.keyCode);
-    if(e.keyCode == 13){
-      input.blur()
-    }
-  }
+  returnInputKeyboard = returnInputKeyboard
+  
 }
+

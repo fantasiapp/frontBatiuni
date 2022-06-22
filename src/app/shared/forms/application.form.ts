@@ -6,6 +6,7 @@ import { SnapshotAll } from "src/models/new/data.state";
 import { FilterService } from "../services/filter.service";
 import { UISwitchComponent } from "../components/switch/switch.component";
 import { Filter } from "../directives/filter.directive";
+import { returnInputKeyboard } from '../common/classes'
 
 @Component({
   selector: "application-filter-form",
@@ -131,11 +132,6 @@ export class ApplicationForm extends Filter<Post>  {
       });
     }
 
-    returnInputKeyboard(e: any, input: HTMLInputElement){
-      console.log('object', e.keyCode);
-      if(e.keyCode == 13){
-        input.blur()
-      }
-    }
+    returnInputKeyboard = returnInputKeyboard
 
 }    
