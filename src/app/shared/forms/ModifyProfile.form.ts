@@ -192,28 +192,6 @@ import { Email } from "src/validators/persist";
             </div>
 
             <div class="form-input">
-              <label>Êtes vous une entreprise TCE</label>
-              <div class="flex row radio-container">
-                <div class="radio-item">
-                  <radiobox
-                    class="grow"
-                    [onselect]="false"
-                    formControlName="UserProfile.Company.allQualifications"
-                  ></radiobox>
-                  <span>Non</span>
-                </div>
-                <div class="radio-item">
-                  <radiobox
-                    class="grow"
-                    [onselect]="true"
-                    formControlName="UserProfile.Company.allQualifications"
-                  ></radiobox>
-                  <span>Oui</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="form-input">
               <label>Êtes-vous disponible pour des missions les samedis</label>
               <div class="flex row radio-container">
                 <div class="radio-item">
@@ -265,16 +243,6 @@ import { Email } from "src/validators/persist";
                 class="form-element"
                 maxlength="11"
                 formControlName="UserProfile.Company.capital"
-              />
-            </div>
-
-            <div class="form-input">
-              <label>Taux horaire moyen</label>
-              <input
-                #input12
-                (click)="onClickInputScroll(input12)"
-                class="form-element"
-                formControlName="UserProfile.Company.amount"
               />
             </div>
 
