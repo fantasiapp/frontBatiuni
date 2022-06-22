@@ -19,10 +19,10 @@ import { Filter } from "../directives/filter.directive";
 
         <div class="form-input">
           <label>Date de mission</label>
-          <div class="flex row space-between">
-            <label>À partir de : </label>
-            <input type="date" class="form-element" formControlName="missionDate" #inputDateMission/>
-            <img src="assets/calendar.png" (click)="inputDateMission.select()" class="img-calendar-since"/>
+          <div class="form-input flex row space-between">
+            <label style="flex-shrink: 0">À partir de : </label>
+            <input type="date" style="padding-left: 0.5rem;" class="form-element" formControlName="date" #inputDateMission/>
+            <img src="assets/calendar.png" (click)="inputDateMission.select()" class="img-calendar-since" style="pointer-events: none;"/>
           </div>
         </div>
 
