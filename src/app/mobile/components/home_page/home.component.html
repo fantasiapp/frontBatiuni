@@ -231,14 +231,14 @@
   </div>
 </ng-template>
 
-<ng-template #candidates let-possibleCoandidates let-job="job">
+<ng-template #candidates let-postCandidates let-job="job">
   <div class="hosted-page">
     <p class="font-Poppins" style="margin-bottom: 2rem">
-      Vous avez : {{ possibleCandidates.length }} réponse(s)
+      Vous avez : {{ postCandidates.length }} réponse(s)
     </p>
     <div class="wrapper" style="row-gap: 1rem; display: flex; flex-direction: column;">
       <profile-card
-        *ngFor="let candidate of possibleCandidates"
+        *ngFor="let candidate of postCandidates"
         (click)="showCompany(candidate.company, candidate.id)"
         [job]="job"
         [profile]="candidate.company"

@@ -120,7 +120,7 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
 
   //override
 
-  async getInput(e: { origin: string; event: any }): Promise<FileUIOutput> {
+  async getInput(e: { origin: string; event: any, popup?: boolean }): Promise<FileUIOutput> {
     let input = e.event.target as HTMLInputElement;
     if (e.origin == "date") {
       if (!input.value) return this.value!;
@@ -135,6 +135,13 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
       lastDot = fullname.lastIndexOf("."),
       name = fullname.slice(0, lastDot),
       ext = fullname.slice(lastDot + 1);
+
+
+    console.log('nature', this.value?.nature, this.value);
+    if (this.value?.nature != 'post') {
+      this.popup.newFile(this.filename, this);
+    }
+
 
     return {
       ...this.value,
@@ -153,13 +160,10 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
     this.kill.emit();
   }
 
-  async openInput() {
-    await this.inputRef.nativeElement.click();
-    // console.log("FILE", this.value)
-    // if (this.value?.nature == "admin") {
-    //   this.popup.newFile(this.filename, this);
-    //   console.log("heheheheeh",this.inputRef)
-    // }
+  async openInput(input:HTMLInputElement, e: Event) {
+
+    input.click()
+
     this.modified = true;
   }
 
@@ -217,7 +221,7 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
     }
   }
 
-  onFileInputClicked(e: Event) {
+  onFileInputClicked(e: Event, input: HTMLInputElement) {
     if (e.isTrusted) e.preventDefault();
 
     this.swipeup.show({
@@ -265,7 +269,8 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
         {
           name: "Télécharger un fichier",
           click: () => {
-            this.openInput();
+            this.openInput(input, e);
+            
           },
         },
         {

@@ -22,7 +22,7 @@
     <li [routerLink]="['','abonnement']">Gérer mes abonnements</li>
     <li (click)="openFacture = true; openMenu = false">Mes factures</li>
     <li class="spacer"></li>
-    <li (click)="openRecommandation()">Demander une recommandation</li>
+    <li (click)="openRecommendation = true; openMenu = false"  >Demander une recommandation</li>
     <li (click)="slideInviteFriends()">Parrainer vos amis</li>
     <li >Partager l'application</li>
     <li>Noter l'application</li>
@@ -68,6 +68,8 @@
     </div>
   </slidemenu>
 
+  <rating [view]="showView" [profile]="profile" [(open)]="openRecommendation" [ngClass]="{'open' : openRecommendation}" [profileRecommandation]="showRecomandation"></rating>
+
   <slidemenu [footer]="modifyPassword ? 'small' : 'medium'" [(open)]="openModifyMenu" #modifyMenu>    
     <h1 class="center-text full-width" header>Modifier mon Profil</h1>
     <div class="modify-page hosted-page flex column center-cross space-children-margin" content>
@@ -92,9 +94,3 @@
     <notifications class="hosted-page flex column center-cross space-children-margin" [notifications]="notifications" content></notifications>
   </slidemenu>
 </ng-container>
-
-<slidemenu [(open)]="openRecommandationMenu" #askRecommandation>
-  <div class="modify-page hosted-page flex column center-cross space-children-margin" content>
-    <ask_recommandation class="flex column center-cross space-children-margin"></ask_recommandation>
-  </div>
-</slidemenu>
