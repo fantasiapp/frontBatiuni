@@ -10,9 +10,9 @@
     <profile-image [profile]="profile"></profile-image>
     <span class="company">{{ profile.company!.name }}</span>
     <stars (click)='openRatings = true' class="stars" value="{{ view == 'ST' ? profile.company!.starsST : profile.company!.starsPME  }}" disabled></stars>
-    <button *ngIf="profileRecommandation" class="recommendation-button button active" (click)="openRecommandation()"><img src="assets/mail-outline.svg" alt="recommandation">
+    <!-- <button *ngIf="profileRecommandation" class="recommendation-button button active" (click)="openRecommandation()"><img src="assets/mail-outline.svg" alt="recommandation">
       Demander une recommandation
-    </button>
+    </button> -->
     <section class="full-width section modify-profile">
       <div *ngFor="let ratingInfo of ratingInfos" class="company-rate">
         <span class="company-name">Note par {{ view == 'ST' ?  ratingInfo.contactName : ratingInfo.subContractorName }} de {{ view == 'ST' ? ratingInfo.companyContractor : ratingInfo.subContractorContact }}</span>
@@ -82,8 +82,3 @@
   </div>
 </slidemenu>
 
-<slidemenu [(open)]="openRecommandationMenu" #askRecommandation>
-  <div class="modify-page hosted-page flex column center-cross space-children-margin" content>
-    <ask_recommandation class="flex column center-cross space-children-margin"></ask_recommandation>
-  </div>
-</slidemenu>

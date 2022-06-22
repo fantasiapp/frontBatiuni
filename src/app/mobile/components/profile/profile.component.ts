@@ -55,6 +55,7 @@ export class ProfileComponent extends Destroy$ {
   openMentionLegal: boolean = false;
   openBlockedContact: boolean = false;
   openCandidature: boolean = false;
+  openRecommandationMenu: boolean = false;
 
 
   view = this.store.selectSnapshot(DataState.view)
@@ -234,4 +235,8 @@ export class ProfileComponent extends Destroy$ {
     super.ngOnDestroy();
   }
 
+  openRecommandation() {
+    this.openMenu = false;
+    this.openRecommandationMenu = true
+  }
 };
