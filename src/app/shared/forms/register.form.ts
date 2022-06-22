@@ -94,8 +94,11 @@ import { InfoService } from "../components/info/info.component";
             class="form-element"
             type="password"
             formControlName="password"
+            id="idPassword"
           />
-        </div>
+          <div (click)="togglePassword()" style="position: absolute; cursor: pointer; bottom: 0; right: 0; z=100">
+            <img class="eye" src="assets/Oeil_Fermé.svg" id="togglePassword"></div>
+          </div>
         <div class="form-action">
           <button
             *ngIf="showSubmitButton"
@@ -435,4 +438,13 @@ export class RegisterForm extends Destroy$ {
 
   @SnapshotAll("Role")
   roles!: Role[];
+
+  togglePassword() {
+    const togglePassword = document.querySelector('#togglePassword');
+    const password = document.querySelector('#idPassword');
+    let type = password?.getAttribute('type') === 'password' ? 'text' : 'password'
+    let toggleClass = password?.getAttribute('type') === 'password' ? 'assets/Oeil_ouvert.svg' : 'assets/Oeil_Fermé.svg'
+    password?.setAttribute('type', type)
+    togglePassword?.setAttribute('src', toggleClass)
+  }
 }
