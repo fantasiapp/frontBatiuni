@@ -149,7 +149,7 @@ import { Email } from "src/validators/persist";
             <!-- all elements are selected -->
             <div class="form-input metiers">
               <ng-container *ngIf="!addingField; else addfield_tpl">
-                <label>Métiers</label>
+                <label>Activités</label>
                 <ng-container formArrayName="UserProfile.Company.JobForCompany">
                   <span
                     class="number form-element"
@@ -159,10 +159,6 @@ import { Email } from "src/validators/persist";
                       <span class="number-name">{{
                         control.get("job")!.value.name
                       }}</span>
-                      <number formControlName="number"></number>
-                      <!-- <div class="position-relative number-container">
-                        <number formControlName="number"></number>
-                      </div> -->
                     </ng-container>
                   </span>
                 </ng-container>
