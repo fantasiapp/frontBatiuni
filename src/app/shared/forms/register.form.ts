@@ -97,7 +97,8 @@ import { InfoService } from "../components/info/info.component";
             id="idPassword"
           />
           <div (click)="togglePassword()" style="position: absolute; cursor: pointer; bottom: 0; right: 0; z=100">
-            <img class="eye" src="assets/Oeil_Fermé.svg" id="togglePassword"></div>
+            <img class="eye" src="assets/Oeil_Fermé.svg" id="togglePassword">
+          </div>
           </div>
         <div class="form-action">
           <button
