@@ -22,7 +22,7 @@ import "hammerjs"
 
     <div class="form-input">
       <label>Adresse de chantier</label>
-      <input type="text" class="form-element" formControlName="address"/>
+      <input type="text" class="form-element" formControlName="address" (keyup)="returnInputKeyboard($event, inputAddress)" #inputAddress/>
     </div>
 
     <div class="form-input">
@@ -108,4 +108,10 @@ export class SOSFilterForm implements OnInit {
     this.cd.detectChanges();
   }
 
+  returnInputKeyboard(e: any, input: HTMLInputElement){
+    console.log('object', e.keyCode);
+    if(e.keyCode == 13){
+      input.blur()
+    }
+  }
 }

@@ -78,7 +78,7 @@ export class MissionsComponent extends Destroy$ {
     private mobileFooterService: Mobile
   ) {
     super();
-    this.searchbar = new SearchbarComponent(store);
+    this.searchbar = new SearchbarComponent(store, cd);
   }
 
   ngOnInit() {

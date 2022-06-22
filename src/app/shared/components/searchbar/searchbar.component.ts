@@ -24,11 +24,12 @@ export class SearchbarComponent  implements OnInit{
 
   searchForm = new FormGroup({
     search: new FormControl(""),
-  },
-    {}
+  }
   );
 
-  constructor(private store: Store){}
+  constructor(private store: Store, private cd: ChangeDetectorRef){
+    
+  }
 
   ngOnInit(){
     this.callbackSearch(this.searchForm.value.search);
@@ -75,6 +76,12 @@ export class SearchbarComponent  implements OnInit{
 
   submitSearch(searchInput: HTMLInputElement){
     searchInput.dispatchEvent(new Event("submit", {cancelable: true}))
+  }
+
+
+  onSubmit(image: HTMLImageElement, searchInput: HTMLInputElement){
+    searchInput.blur()
+    // image.click()
   }
 
 };

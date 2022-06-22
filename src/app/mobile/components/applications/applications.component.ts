@@ -64,7 +64,7 @@ export class ApplicationsComponent extends Destroy$ {
 
   constructor(private cd: ChangeDetectorRef, private info: InfoService, private store: Store, private appComponent: AppComponent, private slideService: SlidemenuService, private popup: PopupService) {
     super();
-    this.searchbar = new SearchbarComponent(store);
+    this.searchbar = new SearchbarComponent(store, cd);
   }
   
   ngOnInit(): void {

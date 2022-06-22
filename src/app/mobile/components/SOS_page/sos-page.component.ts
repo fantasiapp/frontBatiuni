@@ -72,7 +72,7 @@ export class SOSPageComponent extends Destroy$ {
     private mobileFooterService: Mobile
   ) {
     super();
-    this.searchbar = new SearchbarComponent(store);
+    this.searchbar = new SearchbarComponent(store, cd);
   }
 
   showFooter: boolean = true;

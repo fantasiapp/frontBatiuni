@@ -174,7 +174,7 @@ export class HomeComponent extends Destroy$ {
   ) {
     super();
     this.isLoading = this.booleanService.isLoading
-    this.searchbar = new SearchbarComponent(store);
+    this.searchbar = new SearchbarComponent(store, cd);
     this.activeView = activeViewService.activeView
   }
   

@@ -27,7 +27,7 @@ import "hammerjs"
 @Component({
   selector: "st-filter-form",
   template: `
-    <form class="form-control full-width" [formGroup]="filterForm">
+    <form class="form-control full-width" [formGroup]="filterForm" >
       <div class="form-input">
         <label>Date de mission</label>
         <div class="flex row space-between">
@@ -36,8 +36,9 @@ import "hammerjs"
           type="date"
           class="form-element"
           formControlName="date"
+          #inputDateMission
         />
-        <img src="assets/calendar.png" />
+        <img src="assets/calendar.png" (click)="inputDateMission.select()" class="img-calendar-since"/>
         </div>
       </div>
 
@@ -47,6 +48,7 @@ import "hammerjs"
           type="text"
           class="form-element"
           formControlName="address"
+          (keyup)="returnInputKeyboard($event, inputAddress)" #inputAddress
         />
       </div>
 
@@ -441,5 +443,12 @@ export class STFilterForm {
 
   detectChanges() {
     this.cd.detectChanges();
+  }
+
+  returnInputKeyboard(e: any, input: HTMLInputElement){
+    console.log('object', e.keyCode);
+    if(e.keyCode == 13){
+      input.blur()
+    }
   }
 }

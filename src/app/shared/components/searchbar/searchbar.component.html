@@ -1,7 +1,7 @@
 <ng-container [ngSwitch]="activeView">
-<form [formGroup]="searchForm" id="form">
+<form [formGroup]="searchForm" id="form" (ngSubmit)="onSubmit(imgRechercher, searchInput)">
+    <img src="assets/Rechercher.svg" (click)="true" #imgRechercher>
     <input inputmode="search" [placeholder]="placeholder" formControlName="search" id="searchb" #searchInput/>
-    <img src="assets/Rechercher.svg" (click)="submitSearch(searchInput)">
     <!-- <img src="assets/checkmark-done-outline.svg" alt="search"> -->
 </form>
 </ng-container>

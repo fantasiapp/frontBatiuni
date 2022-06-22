@@ -24,21 +24,21 @@ import { FilterService } from "../services/filter.service";
       <div class="form-input">
         <label>Date de validation</label>
         <input type="date" formControlName="validationDate" />
-        <img src="assets/calendar.png" />
+        <img src="assets/calendar.png" class="img-calendar"/>
       </div>
 
       <div class="form-input">
         <label>Date de mission</label>
         <div class="flex row space-between">
-          <label>À partir de : </label>
-          <input type="date" formControlName="missionDate" />
-          <img src="assets/calendar.png" />
+          <label >À partir de : </label>
+          <input type="date" class="form-element" formControlName="missionDate" #inputDateMission/>
+          <img src="assets/calendar.png" (click)="inputDateMission.select()" class="img-calendar-since"/>
         </div>  
       </div>
 
       <div class="form-input">
         <label>Adresse de chantier</label>
-        <input type="text" formControlName="address" />
+        <input type="text" formControlName="address" (keyup)="returnInputKeyboard($event, inputAddress)" #inputAddress/>
       </div>
 
       <div class="form-input">
@@ -166,5 +166,12 @@ export class MissionFilterForm extends Filter<Mission> {
 
   resetFilter(){
     this.filterForm.reset();
+  }
+
+  returnInputKeyboard(e: any, input: HTMLInputElement){
+    console.log('object', e.keyCode);
+    if(e.keyCode == 13){
+      input.blur()
+    }
   }
 }
