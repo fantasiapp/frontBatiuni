@@ -18,7 +18,7 @@
     <span *ngIf="!ratingDetails && profile.user.username">{{ profile.user!.username }}</span>
     <span *ngIf="!ratingDetails && profile.user.cellPhone">{{ profile.user!.cellPhone | space: 2:1 }}</span>
   </ng-container>
-  <stars *ngIf="star" (click)='openRatings = true' value="{{ showView == 'ST' ? profile.company.starsST : profile.company.starsPME }}" disabled></stars>
+  <stars [isRatings]="hasRatings" *ngIf="star" (click)='openRatings = true' value="{{ showView == 'ST' ? profile.company.starsST : profile.company.starsPME }}" disabled></stars>
 </section>
 
 <rating [view]="showView" [profile]="profile" [(open)]="openRatings" [ngClass]="{'open' : openRatings}" [profileRecommandation]="showRecomandation"></rating>

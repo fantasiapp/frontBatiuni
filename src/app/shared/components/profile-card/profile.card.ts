@@ -27,11 +27,7 @@ import { DataQueries, QueryProfile, Snapshot } from "src/models/new/data.state";
         <span *ngIf="candidate?.amount"
           >Contre Offre : {{ candidate!.amount }} €</span
         >
-        <stars
-          class="stars"
-          value="{{ profile.company.starsST }}"
-          disabled
-        ></stars>
+        <stars [isRatings]="profile.company.starsST ? true : false" class="stars" value="{{ profile.company.starsST ? profile.company.starsST : profile.company.starsRecoST }}"  disabled></stars>
       </div>
     </ng-container>
   `,
