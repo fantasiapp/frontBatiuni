@@ -50,6 +50,7 @@ export interface Company {
   ntva: string;
   capital: string;
   revenue: number;
+  size: number;
   logo: any;
   starsST: string;
   starsPME: string;  
@@ -203,6 +204,7 @@ export interface Recommandation {
   securityComment: string;
   organisationStars: number;
   organisationComment: string;
+  LastWorksiteDate: string;
 }
 
 export type Notification = {

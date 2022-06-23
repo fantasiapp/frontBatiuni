@@ -466,7 +466,7 @@ export class AskRecommandation {
 export class GiveRecommandation {
   static readonly type = 'give a recommandation';
   action = 'giveRecommandation';
-  constructor(public companyRecommanded: number, public firstNameRecommanding: string, public lastNameRecommanding: string, public companyNameRecommanding: string, public qualityStars:number, public qualityComment:string, public securityStars:number, public securityComment:string, public organisationStars:number, public organisationComment:string) {}
+  constructor(public companyRecommanded: number, public firstNameRecommanding: string, public lastNameRecommanding: string, public companyNameRecommanding: string, public qualityStars:number, public qualityComment:string, public securityStars:number, public securityComment:string, public organisationStars:number, public organisationComment:string, public lastWorksiteDate: string) {}
 }
 
 export class GiveNotificationToken {
