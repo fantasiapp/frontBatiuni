@@ -258,3 +258,11 @@ export const PropertyTrap: ProxyHandler<any> = {
     return true;
   }
 };
+
+
+export function returnInputKeyboard(e: any, input: HTMLInputElement){
+  console.log('object', e.keyCode);
+  if(e.keyCode == 13){
+    input.blur()
+  }
+}

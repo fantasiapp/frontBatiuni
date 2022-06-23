@@ -31,6 +31,7 @@ import { getUserDataService } from "src/app/shared/services/getUserData.service"
 import { MissionFilterForm } from "src/app/shared/forms/missions.form";
 import { NotifService } from "src/app/shared/services/notif.service";
 import { UISlideMenuComponent } from "src/app/shared/components/slidemenu/slidemenu.component";
+import { Mobile } from "src/app/shared/services/mobile-footer.service";
 
 @Component({
   selector: "missions",
@@ -65,6 +66,7 @@ export class MissionsComponent extends Destroy$ {
 
   @ViewChild(MissionFilterForm)
   filterMission!: MissionFilterForm;
+  showFooter: boolean = false;
 
   constructor(
     private store: Store,
@@ -72,13 +74,18 @@ export class MissionsComponent extends Destroy$ {
     private cd: ChangeDetectorRef,
     private appComponent: AppComponent,
     private getUserDataService: getUserDataService,
-    private notifService: NotifService
+    private notifService: NotifService,
+    private mobileFooterService: Mobile
   ) {
     super();
-    this.searchbar = new SearchbarComponent(store);
+    this.searchbar = new SearchbarComponent(store, cd);
   }
 
   ngOnInit() {
+    this.mobileFooterService.footerStateSubject.subscribe((b) => {
+      this.showFooter = b;
+      this.cd.markForCheck();
+    });
     this.info.alignWith('header_search');
 
     combineLatest([this.profile$, this.missions$]).pipe(takeUntil(this.destroy$)).subscribe(([profile, missions]) => {

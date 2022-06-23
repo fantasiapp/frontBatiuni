@@ -72,7 +72,7 @@ export type ApplyForm = {
                 <li>Date de présence : {{ toLocateDate(post.startDate) }} -
                 {{ toLocateDate(post.endDate) }}</li>
                 <li>Adresse du chantier : {{ hideAdress(post?.address) }}</li>
-                <span class='date'> Date d’échéance Le {{ toLocateDate(post?.dueDate) }} 
+                <span class='date'>Répondre avant le {{ toLocateDate(post?.dueDate) }} 
                 </span>
             </ng-container>
           </ul>

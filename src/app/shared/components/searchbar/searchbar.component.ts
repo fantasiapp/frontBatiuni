@@ -14,7 +14,7 @@ import { Store } from "@ngxs/store";
 export class SearchbarComponent  implements OnInit{
 
   @Input()
-  placeholder: string = "Rechercher une annonce";
+  placeholder: string = "Rechercher";
 
   @Input()
   activeView: number = 0;
@@ -24,11 +24,12 @@ export class SearchbarComponent  implements OnInit{
 
   searchForm = new FormGroup({
     search: new FormControl(""),
-  },
-    {}
+  }
   );
 
-  constructor(private store: Store){}
+  constructor(private store: Store, private cd: ChangeDetectorRef){
+    
+  }
 
   ngOnInit(){
     this.callbackSearch(this.searchForm.value.search);
@@ -71,6 +72,16 @@ export class SearchbarComponent  implements OnInit{
     // let supervisionsContent = supervisions.map((supervision: { comment: any; }) => supervision.comment).toString();
     let adString = ad.id.toString() + " " + ad.address + " " + company?.name + " " + detailContent + " " + job?.name + " " + ad.contactName + " " + ad.description + " " + manPower + " " + ad.dueDate + " " + ad.startDate + " " + ad.endDate + " " + ad.organisationComment + " " + ad.organisationCommentST + " " + ad.qualityComment + " " + ad.securityComment + " " + ad.securityCommentST + " " + ad.subContractorContact + " " + ad.subContractorName 
     return adString
+  }
+
+  submitSearch(searchInput: HTMLInputElement){
+    searchInput.dispatchEvent(new Event("submit", {cancelable: true}))
+  }
+
+
+  onSubmit(image: HTMLImageElement, searchInput: HTMLInputElement){
+    searchInput.blur()
+    // image.click()
   }
 
 };

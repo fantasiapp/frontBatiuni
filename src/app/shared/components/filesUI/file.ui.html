@@ -1,7 +1,7 @@
 <label>
   <ng-container *ngIf="editName; else simpleName">
     <span class="position-relative">
-      <input *ngIf="editName; else simpleName" type="text" placeholder="Nom du document..." class="full-width form-element editName" (input)="onFilenameChange($event)" [formControl]="editName"/>   
+      <input *ngIf="editName; else simpleName" type="text" placeholder="Nom du document..." class="full-width form-element editName" (input)="onFilenameChange($event)" (keyup)="returnInputKeyboard($event, editInput)" [formControl]="editName" #editInput/>   
       <!-- <img  *ngIf="closeButton" (click)="close()" src="assets/X.svg" class="position-absolute close-button"/> -->
     </span>
   </ng-container>
@@ -13,7 +13,7 @@
 <label *ngIf="showtitle"  class="label-input" for="filename">Télécharger la certification {{filename}}</label>
 <div class="file-form flex grow">
   <span class="file-input position-relative">
-    <input class="form-search" (change)="onChange({origin: 'file', event: $event})" type="file" #input/>
+    <input class="form-search" (change)="onChange({origin: 'file', event: $event})" (keyup)="returnInputKeyboard($event, input)" type="file" #input/>
     <span class="placeholder full-width text-ellipsis position-absolute"> {{ value!.name }} </span>
   </span>
   <img src="assets/Attachement.svg" (click)="onFileInputClicked($event, input)">
@@ -26,7 +26,7 @@
     </div>
   </ng-template>
   <div class="date grow flex column center-main">
-    <label class="label-input text-emphasis">Date du document</label>
-    <input class="full-width" [value]="value!.expirationDate" (change)="onChange({origin: 'date', event: $event})" type="date"/>
+    <label class="label-input text-emphasis">{{value?.nature == 'admin' ? 'Date de document' : 'Date de fin de validité'}}</label>
+    <input class="full-width" [value]="value!.expirationDate" (change)="onChange({origin: 'date', event: $event})" (keyup)="returnInputKeyboard($event, inputdate)" type="date" #inputdate/>
   </div>
 </div>

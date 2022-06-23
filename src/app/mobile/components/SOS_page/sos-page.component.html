@@ -2,6 +2,8 @@
   <span tab_0>Vue liste</span>
   <span tab_1>Carte</span>
 </page-header>
+<div class="wrapper__searchbar__clickcatcher page-content-with-tabs" [ngClass]="{'footerHide': !showFooter}" *ngIf="!showFooter"></div>
+
 
 <ng-container [ngSwitch]="activeView">
   <ng-container *ngSwitchCase="0">

@@ -65,6 +65,7 @@ import { HomeComponent } from "src/app/mobile/components/home_page/home.componen
 import { BoosterPage } from "src/app/mobile/components/booster/booster.page";
 import { UIAnnonceResume } from "src/app/mobile/ui/annonce-resume/annonce-resume.ui";
 import { ApplicationsComponent } from "src/app/mobile/components/applications/applications.component"
+import { returnInputKeyboard } from '../../common/classes'
 
 const TRANSITION_DURATION = 200;
 
@@ -157,6 +158,7 @@ export class UIPopup extends DimensionMenu {
   keepAlive: boolean = true;
 
   missionId?: Ref<Mission>;
+
 
   ngOnInit() {
     if (!this.fromService) return;

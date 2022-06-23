@@ -10,6 +10,9 @@
 
   height: (calc(100vh - #{$sticky-header-height} - #{$big-sticky-footer-height} - env(safe-area-inset-bottom)));
 
+  &.footerHideMobile {
+    height: (calc(100vh - #{$sticky-header-height} - env(safe-area-inset-bottom)));
+  }
   overflow-y: scroll;
 }
 

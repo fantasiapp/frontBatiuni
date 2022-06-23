@@ -55,8 +55,11 @@ import { InfoService } from "../components/info/info.component";
         class="full-width form-control curved-border"
         formGroupName="firstPage"
       >
-        <h3 class="form-title">Créer un compte !</h3>
-        <h4 class="form-subtitle">Informations contact</h4>
+      <div class="title-container">
+        <h3 class="form-title" style="font-size: 1.25rem; font-weight: 600">Créer un compte !</h3>
+        <span class="title-subtitle">Créer un compte avec 1 mois d'essai gratuit</span>
+      </div>
+        <h4 style="font-weight: 500;">Informations contact</h4>
         <div class="form-input">
           <label>Nom du contact</label>
           <input 
@@ -248,6 +251,16 @@ import { InfoService } from "../components/info/info.component";
       :host(:not(.mobile-view)) {
         max-height: 768px;
         align-self: center;
+      }
+
+      .form-title {
+        font-size: 1.25rem;
+        font-weight: 600
+      }
+
+      .title-subtitle {
+        font-size: 0.95rem;
+        color: $primary
       }
 
       .parrain {

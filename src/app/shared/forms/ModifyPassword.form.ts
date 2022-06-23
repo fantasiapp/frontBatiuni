@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Output } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { ComplexPassword, MatchField } from "src/validators/verify";
+import { returnInputKeyboard } from '../common/classes'
 
 @Component({
   selector: 'modify-password-form',
@@ -41,19 +42,21 @@ import { ComplexPassword, MatchField } from "src/validators/verify";
     @use 'src/styles/mixins' as *;
     @use 'src/styles/forms' as *;
 
-    :host { width: 100%; }
+    :host { width: 100%;
+     }
 
     .sticky-footer {
       box-shadow: 0 -3px 3px 0 #ddd;
       background-color: white;
       @extend %sticky-footer;
-      transform: translateY(-100%)
     }
 
   `],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ModifyPasswordForm {
+
+  returnInputKeyboard = returnInputKeyboard
   constructor() {}
 
   @Output() submit = new EventEmitter<FormGroup>();

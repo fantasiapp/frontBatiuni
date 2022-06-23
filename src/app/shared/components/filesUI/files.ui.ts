@@ -18,6 +18,7 @@ import { getFileType } from "../../common/functions";
 import { InfoService } from "../info/info.component";
 import { PopupService } from "../popup/popup.component";
 import { SwipeupService } from "../swipeup/swipeup.component";
+import { returnInputKeyboard } from '../../common/classes'
 
 export type BasicFile = {
   nature: string;
@@ -55,6 +56,7 @@ export function defaultFileUIOuput(
   ],
 })
 export class FileUI extends UIAsyncAccessor<FileUIOutput> {
+  returnInputKeyboard = returnInputKeyboard
   @Input()
   filename: string = "Kbis";
 
