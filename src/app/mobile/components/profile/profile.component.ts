@@ -55,7 +55,7 @@ export class ProfileComponent extends Destroy$ {
   openMentionLegal: boolean = false;
   openBlockedContact: boolean = false;
   openCandidature: boolean = false;
-  openRecommendation: boolean = false;
+  openRecommandationMenu: boolean = false;
 
   @Input()
   showView!: 'ST' | 'PME';
