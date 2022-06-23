@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, ChangeDetectorRef } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ChangeDetectorRef, Input } from '@angular/core';
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { Store } from "@ngxs/store";
 import { take } from "rxjs/operators";
@@ -22,6 +22,9 @@ export class AskRecommandationComponent extends Destroy$ {
     super()
   }
 
+  @Input() 
+  profileEmail: string = ''
+  
   disabled:boolean = true
   token:string = ''
 

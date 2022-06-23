@@ -41,6 +41,7 @@ export class NavigationMenu extends Destroy$ {
 
   private changeRouteOnMenu(menu: MenuItem[], index: number) {
     let route = menu[index].route;
+    console.log('ROUTE', route);
     let view = this.store.selectSnapshot(DataState.view);
     const user = this.store.selectSnapshot(DataQueries.currentUser);
     let userFiles = this.store.selectSnapshot(DataQueries.getById('Company', user.company))?.files
@@ -52,15 +53,15 @@ export class NavigationMenu extends Destroy$ {
     }
     if (route == 'make' && Kbis.length == 0){
       this.popup.missKbis('PME')
+      route = menu[3].route
     } 
     else if (view == 'ST' && route == '' && Kbis.length == 0){
       this.popup.missKbis('PME')
+      route = menu[3].route
     }
-    else {
-      this.routeChange.emit(route);
-      this.router.navigate(route ? ['', 'home', route, ...this.segments] : ['', 'home']);
-      this.segments = [];
-    }
+    this.routeChange.emit(route);
+    this.router.navigate(route ? ['', 'home', route, ...this.segments] : ['', 'home']);
+    this.segments = [];
   }
 
   changeRoute(index: number) {
@@ -111,6 +112,9 @@ export class NavigationMenu extends Destroy$ {
   navigationType$!: Observable<"ST" | "PME">;
 
   ngOnInit() {
+    this.changeRouteOnMenu(this.menu.getValue(), this.currentIndex.getValue());
+
+
     this.navigationType$.pipe(takeUntil(this.destroy$)).subscribe(type => {
       const nextMenu = type == 'PME' ? PMEMenu : STMenu;
       this.menu.next(nextMenu);
