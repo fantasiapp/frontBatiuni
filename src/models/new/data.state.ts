@@ -551,7 +551,7 @@ export class DataState {
         (key) => new UploadFile<"Post">(files[key], "post", key, "Post")
       ),
       req = this.http.post("data", form);
-
+    console.log("les uploads", uploads)
     return req.pipe(
       map((response: any) => {
         console.log('create post reponse', response);
