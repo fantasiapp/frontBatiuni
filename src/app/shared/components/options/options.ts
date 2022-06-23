@@ -94,6 +94,7 @@ export class OptionsModel extends UIDefaultAccessor<Option[]> {
 }
 
   get availableOptions() {
+    console.log("options", this.options)
     return this.options.filter(option => option.name.toLowerCase().includes(this.search.toLowerCase()));
   }
 
