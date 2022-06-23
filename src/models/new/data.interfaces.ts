@@ -50,6 +50,7 @@ export interface Company {
   ntva: string;
   capital: string;
   revenue: number;
+  size: number;
   logo: any;
   starsST: string;
   starsPME: string;  

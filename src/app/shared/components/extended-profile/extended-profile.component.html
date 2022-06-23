@@ -22,6 +22,8 @@
       <h4 class="text-light-emphasis" *ngIf = "!profile.company.allQualifications">Activités : 
       <span *ngFor="let job of companyJobs; let i = index" class="value">{{ jobs[i].name }}, </span></h4>
     
+      <h4 class="text-light-emphasis" *ngIf="profile.company.size">Effectif de la boite : <span class="value">{{profile.company.size}}</span></h4>
+
       <h4 class="text-light-emphasis" *ngIf="profile.company.revenue">Chiffres d'affaires : <span class="value">{{profile.company.revenue | currency: 'EUR':'symbol':'1.0-0' }}</span></h4>
     
       <h4 class="text-light-emphasis" *ngIf="profile.company.capital">Capital : <span class="value">{{profile.company.capital | currency: 'EUR':'symbol':'1.0-0' }}</span></h4>

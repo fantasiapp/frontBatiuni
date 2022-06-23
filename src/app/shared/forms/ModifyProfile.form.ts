@@ -221,6 +221,17 @@ import { Email } from "src/validators/persist";
             </div>
 
             <div class="form-input">
+              <label>Effectif de la boite</label>
+              <input
+                #input10
+                (click)="onClickInputScroll(input10)"
+                class="form-element"
+                maxlength="11"
+                formControlName="UserProfile.Company.size"
+              />
+            </div>
+
+            <div class="form-input">
               <label>Chiffres d'affaires</label>
               <input
                 #input10
@@ -512,6 +523,7 @@ export class ModifyProfileForm {
     ]),
     "UserProfile.Company.capital": new FormControl("", [FieldType("number")]),
     "UserProfile.Company.revenue": new FormControl("", [FieldType("number")]),
+    "UserProfile.Company.size": new FormControl("", [FieldType("number")]),
     "UserProfile.Company.amount": new FormControl("", [FieldType("number")]),
     "UserProfile.Company.allQualifications": new FormControl("", []),
     "UserProfile.Company.saturdayDisponibility": new FormControl("", []),
@@ -619,6 +631,9 @@ export class ModifyProfileForm {
     this.form.controls["UserProfile.Company.siret"]?.setValue(company.siret);
     this.form.controls["UserProfile.Company.revenue"]?.setValue(
       company.revenue
+    );
+    this.form.controls["UserProfile.Company.size"]?.setValue(
+      company.size
     );
     this.form.controls["UserProfile.Company.capital"]?.setValue(
       company.capital
