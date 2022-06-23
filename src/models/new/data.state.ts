@@ -582,6 +582,7 @@ export class DataState {
         // company.posts.push(+Object.keys(response['Post'])[0])
         // ctx.setState(update('Company', company))
         // ctx.setState(addSimpleChildren("Company", profile.company.id, "Post", response['Post'] ));
+        console.log("la réponse ", response['Post'] )
         ctx.setState(addComplexChildren("Company", profile.company.id, "Post", response['Post'] ));
 
         // uploads.forEach((upload) => (upload.target = postId));

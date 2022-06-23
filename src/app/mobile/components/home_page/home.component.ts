@@ -213,7 +213,6 @@ export class HomeComponent extends Destroy$ {
           console.log(posts)
           const mapping = splitByOutput(posts, (post) => {
             //0 -> userOnlinePosts | 1 -> userDrafts
-            console.log(post)
             if (profile.company.posts.includes(post.id))
               return post.draft
                 ? this.symbols.userDraft
@@ -223,12 +222,10 @@ export class HomeComponent extends Destroy$ {
               ? this.symbols.discard
               : this.symbols.otherOnlinePost;
           });
-          console.log(mapping, this.symbols.otherOnlinePost)
           const otherOnlinePost = mapping.get(this.symbols.otherOnlinePost) || [];
           this.allUserDrafts = mapping.get(this.symbols.userDraft) || [];
           this.allUserOnlinePosts = mapping.get(this.symbols.userOnlinePost) || [];
           this.allOnlinePosts = [...otherOnlinePost, ...this.userOnlinePosts];
-          console.log("tout, allOnlinePosts",this.allOnlinePosts, this.allUserDrafts)
           this.allMissions = this.store.selectSnapshot(DataQueries.getMany("Mission", profile.company.missions));
           const now = (new Date).toISOString().slice(0, 10);
           this.allUserOnlinePosts = this.allUserOnlinePosts.filter((post) => post.dueDate > now)
