@@ -13,7 +13,15 @@
 			<li *ngFor="let day of week; let index = index" class="day-name center-text">{{day | slice:0:1}}</li>
 			<li (click)="onDayClicked(day.date, $event)"
 				[style.gridColumnStart]="first ? day?.indexWeek : 'auto'"
-				*ngFor="let day of monthSelect;let first = first" [class]="day.availability" [ngClass]="{'preselected': rangeMomentStart?.format('YYYY-MM-DD') == day.date, 'past-date': day.blockedDay && disableBeforeToday, 'blocked-date': day.blockedDay && !disableBeforeToday}" class="center-text">
+				*ngFor="let day of monthSelect;let first = first" 
+				[class]="day.availability" 
+				[ngClass]="{
+					'preselected': rangeMomentStart?.format('YYYY-MM-DD') == day.date, 
+					'past-date': day.blockedDay && disableBeforeToday, 
+					'blocked-date': day.blockedDay && !disableBeforeToday,
+					'today': day.date == today
+				}" 
+				class="center-text">
 				{{day?.value}}
 			</li>
 		</ol>
