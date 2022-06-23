@@ -4,9 +4,10 @@ import { Select, Store } from "@ngxs/store";
 import { BehaviorSubject, Observable } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { Destroy$ } from "src/app/shared/common/classes";
-import { DataState } from "src/models/new/data.state";
+import { DataQueries, DataState } from "src/models/new/data.state";
 import { NotifService } from "../../services/notif.service";
 import { InfoService } from "../info/info.component";
+import { PopupService } from "../popup/popup.component";
 
 const STMenu = [
   { name: "Home", src: "assets/navigation/st/home.svg", route: '', },
@@ -40,9 +41,26 @@ export class NavigationMenu extends Destroy$ {
 
   private changeRouteOnMenu(menu: MenuItem[], index: number) {
     let route = menu[index].route;
-    this.routeChange.emit(route);
-    this.router.navigate(route ? ['', 'home', route, ...this.segments] : ['', 'home']);
-    this.segments = [];
+    let view = this.store.selectSnapshot(DataState.view);
+    const user = this.store.selectSnapshot(DataQueries.currentUser);
+    let userFiles = this.store.selectSnapshot(DataQueries.getById('Company', user.company))?.files
+    console.log("COUOU0", menu, this.store.selectSnapshot(DataState.view), route)
+    let Kbis = [];
+    if (userFiles) {
+      let files = this.store.selectSnapshot(DataQueries.getMany('File', userFiles))
+      Kbis = files.filter(file => file.name == 'Kbis') 
+    }
+    if (route == 'make' && Kbis.length == 0){
+      this.popup.missKbis('PME')
+    } 
+    else if (view == 'ST' && route == '' && Kbis.length == 0){
+      this.popup.missKbis('PME')
+    }
+    else {
+      this.routeChange.emit(route);
+      this.router.navigate(route ? ['', 'home', route, ...this.segments] : ['', 'home']);
+      this.segments = [];
+    }
   }
 
   changeRoute(index: number) {
@@ -51,7 +69,7 @@ export class NavigationMenu extends Destroy$ {
     this.changeRouteOnMenu(menu, index);
   }
 
-  constructor(private router: Router, private store: Store, info: InfoService, private notifService: NotifService, private cd: ChangeDetectorRef) {
+  constructor(private router: Router, private store: Store, info: InfoService, private notifService: NotifService, private cd: ChangeDetectorRef, private popup: PopupService) {
     super();
     this.menu = new BehaviorSubject(this.store.selectSnapshot(DataState.view) == 'PME' ? PMEMenu : STMenu);
     this.router.events.pipe(takeUntil(this.destroy$)).subscribe((event) => {
@@ -100,6 +118,7 @@ export class NavigationMenu extends Destroy$ {
     });
     this.notifService.getNotifChangeEmitter().subscribe(value => {
       this.notificationUnseen = value;
+      console.log("je cd ")
       this.cd.markForCheck()
     })
     this.notifService.checkNotif()

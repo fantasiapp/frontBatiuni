@@ -48,12 +48,7 @@ export type ApplyForm = {
             (click)="openProfile()"
           ></profile-image>
           <span class="company">{{ isSuiviPME ? subContractor!.name : company!.name }}</span>
-          <stars
-            (click)="openRatings = true"
-            class="stars"
-            value="{{ isSuiviPME ? subContractor!.starsST : company!.starsPME }}"
-            disabled
-          ></stars>
+          <stars (click)="openRatings = true" [isRatings]="isSuiviPME ? subContractor!.starsST ? true : false : company!.starsPME ? true : false" class="stars" value="{{isSuiviPME ? subContractor!.starsST ? subContractor!.starsST : subContractor!.starsRecoST : company!.starsPME ? company!.starsPME : company!.starsRecoPME}}" disabled></stars>
           <span class="ManPower">{{
             post.manPower ? "Main d'oeuvre" : "Fourniture et pose"
           }}</span>

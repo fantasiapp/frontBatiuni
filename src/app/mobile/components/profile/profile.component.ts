@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, ViewChild } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, Input, ViewChild } from "@angular/core";
 import { Select, Store } from "@ngxs/store";
 import { Observable, Subscriber } from "rxjs";
 import * as UserActions from "src/models/new/user/user.actions";
@@ -55,6 +55,13 @@ export class ProfileComponent extends Destroy$ {
   openMentionLegal: boolean = false;
   openBlockedContact: boolean = false;
   openCandidature: boolean = false;
+  openRecommendation: boolean = false;
+
+  @Input()
+  showView!: 'ST' | 'PME';
+
+  @Input()
+  showRecomandation: boolean = true;
 
 
   view = this.store.selectSnapshot(DataState.view)

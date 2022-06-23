@@ -210,8 +210,10 @@ export class HomeComponent extends Destroy$ {
       combineLatest([this.profile$, this.store.select(DataQueries.getAll('Post'))])
         .pipe(takeUntil(this.destroy$))
         .subscribe(([profile, posts]) => {
+          console.log(posts)
           const mapping = splitByOutput(posts, (post) => {
             //0 -> userOnlinePosts | 1 -> userDrafts
+            console.log(post)
             if (profile.company.posts.includes(post.id))
               return post.draft
                 ? this.symbols.userDraft
@@ -221,10 +223,12 @@ export class HomeComponent extends Destroy$ {
               ? this.symbols.discard
               : this.symbols.otherOnlinePost;
           });
+          console.log(mapping, this.symbols.otherOnlinePost)
           const otherOnlinePost = mapping.get(this.symbols.otherOnlinePost) || [];
           this.allUserDrafts = mapping.get(this.symbols.userDraft) || [];
           this.allUserOnlinePosts = mapping.get(this.symbols.userOnlinePost) || [];
           this.allOnlinePosts = [...otherOnlinePost, ...this.userOnlinePosts];
+          console.log("tout, allOnlinePosts",this.allOnlinePosts, this.allUserDrafts)
           this.allMissions = this.store.selectSnapshot(DataQueries.getMany("Mission", profile.company.missions));
           const now = (new Date).toISOString().slice(0, 10);
           this.allUserOnlinePosts = this.allUserOnlinePosts.filter((post) => post.dueDate > now)
@@ -331,6 +335,22 @@ export class HomeComponent extends Destroy$ {
       let b2 = post2.boostTimestamp > this.time ? 1 : 0;
       return b2 - b1
     });
+
+    // Trie Posts selon leurs réponses
+    let responses = [];
+    for (let post of this.allUserOnlinePosts) {
+      const candidatesIds = post.candidates || [],
+      candidates = this.store.selectSnapshot(DataQueries.getMany("Candidate", candidatesIds));
+      let possCandidate = candidates.reduce((possibleCandidates: Candidate[], candidate: Candidate) => { 
+        if (!candidate.isRefused) {possibleCandidates.push(candidate)}
+        return possibleCandidates; 
+      }, []);
+      responses.push([post, possCandidate.length])
+    }
+    responses.sort((a: any,b: any) => b[1] - a[1]);
+    let keys = responses.map((key: any) => { return key[0] });    
+    this.allUserOnlinePosts.sort((a: any,b: any)=>keys.indexOf(a) - keys.indexOf(b));
+    
     if (filter == null) {
       this.userOnlinePosts = this.allUserOnlinePosts;
     } else {
@@ -342,23 +362,7 @@ export class HomeComponent extends Destroy$ {
         let keys = levenshteinDist.map((key: any) => { return key[0] })
         this.allUserOnlinePosts.sort((a: any, b: any) => keys.indexOf(a) - keys.indexOf(b))
       } 
-
-      // Trie Posts selon leurs réponses
-      if (filter.sortPostResponse === true) {
-        let responses = [];
-        for (let post of this.allUserOnlinePosts) {
-          const candidatesIds = post.candidates || [],
-          candidates = this.store.selectSnapshot(DataQueries.getMany("Candidate", candidatesIds));
-          let possCandidate = candidates.reduce((possibleCandidates: Candidate[], candidate: Candidate) => { 
-            if (!candidate.isRefused) {possibleCandidates.push(candidate)}
-            return possibleCandidates; 
-          }, []);
-          responses.push([post, possCandidate.length])
-        }
-        responses.sort((a: any,b: any) => b[1] - a[1]);
-        let keys = responses.map((key: any) => { return key[0] });    
-        this.allUserOnlinePosts.sort((a: any,b: any)=>keys.indexOf(a) - keys.indexOf(b));
-      } 
+      
 
       for (let post of this.allUserOnlinePosts) {
         
@@ -432,7 +436,7 @@ export class HomeComponent extends Destroy$ {
   };
 
   isFilterOn(filter: any){
-    if ((filter.address == "" || filter.address == null) && (filter.date == "" || filter.date == null)&& (filter.jobs == null || filter.jobs.length == 0) && filter.manPower == null && (filter.sortDraftDate == false ||filter.sortDraftDate ==  null) && (filter.sortDraftFull == false ||filter.sortDraftFull == null) && (filter.sortPostResponse == false || filter.sortPostResponse == null) && (filter.sortMissionNotifications == false || filter.sortMissionNotifications == null)){
+    if ((filter.address == "" || filter.address == null) && (filter.date == "" || filter.date == null)&& (filter.jobs == null || filter.jobs.length == 0) && filter.manPower == null && (filter.sortDraftDate == false ||filter.sortDraftDate ==  null) && (filter.sortDraftFull == false ||filter.sortDraftFull == null) && (filter.sortMissionNotifications == false || filter.sortMissionNotifications == null)){
       this.filterOn = false;
     } else {
       this.filterOn = true;
@@ -508,6 +512,22 @@ export class HomeComponent extends Destroy$ {
       let b2 = post2.boostTimestamp > this.time ? 1 : 0;
       return b2 - b1
     });
+
+    // Trie Posts selon leurs réponses
+    let responses = [];
+    for (let post of this.allUserOnlinePosts) {
+      const candidatesIds = post.candidates || [],
+      candidates = this.store.selectSnapshot(DataQueries.getMany("Candidate", candidatesIds));
+      let possCandidate = candidates.reduce((possibleCandidates: Candidate[], candidate: Candidate) => { 
+        if (!candidate.isRefused) {possibleCandidates.push(candidate)}
+        return possibleCandidates; 
+      }, []);
+      responses.push([post, possCandidate.length])
+    }
+    responses.sort((a: any,b: any) => b[1] - a[1]);
+    let keys = responses.map((key: any) => { return key[0] });    
+    this.allUserOnlinePosts.sort((a: any,b: any)=>keys.indexOf(a) - keys.indexOf(b));
+    
     if (searchForm == "" || searchForm == null)  {
     } else {
       let levenshteinDist: any = [];

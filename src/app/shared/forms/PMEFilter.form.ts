@@ -43,8 +43,8 @@ import { SnapshotAll } from "src/models/new/data.state";
         </div>
 
         <div class="form-input">
-          <label class="form-title">Réorganiser la liste selon</label>
           <ng-container *ngSwitchCase="0">
+          <label class="form-title">Réorganiser la liste selon</label>
             <div class="switch-container flex center-cross">
               <span class="criteria" (click)="sortDraftDate.onChangeCall()">Les brouillons les plus anciens</span> 
               <switch class="default" formControlName="sortDraftDate" #sortDraftDate></switch>
@@ -54,13 +54,8 @@ import { SnapshotAll } from "src/models/new/data.state";
               <switch class="default" formControlName="sortDraftFull" #sortDraftFull></switch>
             </div>
           </ng-container>
-          <ng-container *ngSwitchCase="1">
-            <div class="switch-container flex center-cross">
-              <span class="criteria" (click)="sortPostResponse.onChangeCall()">Annonces contentant des réponses en premier</span> 
-              <switch class="default" formControlName="sortPostResponse" #sortPostResponse></switch>
-            </div>
-          </ng-container>
           <ng-container *ngSwitchCase="2">
+          <label class="form-title">Réorganiser la liste selon</label>
             <div class="switch-container flex center-cross">
               <span class="criteria" (click)="sortMissionNotifications.onChangeCall()">Annonces contentant des notifications en premier</span> 
               <switch class="default" formControlName="sortMissionNotifications" #sortMissionNotifications></switch>
@@ -108,7 +103,6 @@ export class PMEFilterForm implements OnInit {
     manPower: new FormControl(undefined),
     sortDraftDate: new FormControl(false),
     sortDraftFull: new FormControl(false),
-    sortPostResponse: new FormControl(false),
     sortMissionNotifications: new FormControl(false),
   },
     {}

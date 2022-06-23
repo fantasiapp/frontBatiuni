@@ -28,7 +28,13 @@ import "hammerjs"
 @Component({
   selector: "st-filter-form",
   template: `
-    <form class="form-control full-width" [formGroup]="filterForm" >
+    <form class="form-control full-width" [formGroup]="filterForm">
+
+    <div class="form-input form-spacer">
+      <label>Métier</label>
+      <options [options]="allJobs" formControlName="jobs"></options>
+    </div>
+    
       <div class="form-input">
         <label>Date de mission</label>
         <div class="form-input flex row space-between">
@@ -52,11 +58,6 @@ import "hammerjs"
       <label>Dans un rayon autour deee</label>
       <ngx-slider [(value)]=valueDistance [options]="imports.DistanceSliderConfig" formControlName="radius" (userChange)="detectChanges()"></ngx-slider>
 
-    </div>
-
-    <div class="form-input form-spacer">
-      <label>Métier</label>
-      <options [options]="allJobs" formControlName="jobs"></options>
     </div>
 
     <div class="form-input form-spacer">

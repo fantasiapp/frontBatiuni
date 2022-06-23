@@ -158,7 +158,7 @@ import { returnInputKeyboard } from '../common/classes'
             <!-- all elements are selected -->
             <div class="form-input metiers">
               <ng-container *ngIf="!addingField; else addfield_tpl">
-                <label>Métiers</label>
+                <label>Activités</label>
                 <ng-container formArrayName="UserProfile.Company.JobForCompany">
                   <span
                     class="number form-element"
@@ -168,10 +168,6 @@ import { returnInputKeyboard } from '../common/classes'
                       <span class="number-name">{{
                         control.get("job")!.value.name
                       }}</span>
-                      <number formControlName="number"></number>
-                      <!-- <div class="position-relative number-container">
-                        <number formControlName="number"></number>
-                      </div> -->
                     </ng-container>
                   </span>
                 </ng-container>
@@ -198,28 +194,6 @@ import { returnInputKeyboard } from '../common/classes'
                   </button>
                 </div>
               </ng-template>
-            </div>
-
-            <div class="form-input">
-              <label>Êtes vous une entreprise TCE</label>
-              <div class="flex row radio-container">
-                <div class="radio-item">
-                  <radiobox
-                    class="grow"
-                    [onselect]="false"
-                    formControlName="UserProfile.Company.allQualifications"
-                  ></radiobox>
-                  <span>Non</span>
-                </div>
-                <div class="radio-item">
-                  <radiobox
-                    class="grow"
-                    [onselect]="true"
-                    formControlName="UserProfile.Company.allQualifications"
-                  ></radiobox>
-                  <span>Oui</span>
-                </div>
-              </div>
             </div>
 
             <div class="form-input">
@@ -277,17 +251,6 @@ import { returnInputKeyboard } from '../common/classes'
                 class="form-element"
                 maxlength="11"
                 formControlName="UserProfile.Company.capital"
-              />
-            </div>
-
-            <div class="form-input">
-              <label>Taux horaire moyen</label>
-              <input
-                #input12
-                (click)="onClickInputScroll(input12)"
-                (keyup)="returnInputKeyboard($event, input12)"
-                class="form-element"
-                formControlName="UserProfile.Company.amount"
               />
             </div>
 

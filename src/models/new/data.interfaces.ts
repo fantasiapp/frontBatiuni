@@ -52,7 +52,9 @@ export interface Company {
   revenue: number;
   logo: any;
   starsST: string;
-  starsPME: string;
+  starsPME: string;  
+  starsRecoST: string;
+  starsRecoPME: string;
   latitude: number;
   longitude: number;
   companyPhone: string;
