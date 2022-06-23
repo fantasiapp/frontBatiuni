@@ -204,6 +204,7 @@ export interface Recommandation {
   securityComment: string;
   organisationStars: number;
   organisationComment: string;
+  LastWorksiteDate: string;
 }
 
 export type Notification = {
