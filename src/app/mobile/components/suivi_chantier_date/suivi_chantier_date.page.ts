@@ -48,7 +48,6 @@ export class SuiviChantierDate extends Destroy${
   @Output() computeDate: EventEmitter<any> = new EventEmitter();
 
   onComputeDate(){
-    console.log('object');
     this.computeDate.next()
   }
 }

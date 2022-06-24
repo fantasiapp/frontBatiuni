@@ -566,12 +566,7 @@ export class MakeAdForm {
 
   addDocument() {
     const documents = this.makeAdForm.get("documents") as FormArray;
-    documents.push(
-      new FormGroup({
-        name: new FormControl(""),
-        fileData: new FormControl(defaultFileUIOuput("post")),
-      })
-    );
+    documents.push(new FormGroup({ name: new FormControl(""), fileData: new FormControl(defaultFileUIOuput("post")),}));
   }
 
   removeDocument(index: number) {

@@ -78,7 +78,6 @@ export class FileIcon {
       this.allLabelsName.push(label.name)
     })
     if (this.allLabelsName.includes(this.originalName)) {
-      console.log("alllllooooààààààààààào")
       this.isLabel = true
     }
 

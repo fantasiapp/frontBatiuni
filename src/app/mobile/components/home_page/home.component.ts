@@ -180,7 +180,6 @@ export class HomeComponent extends Destroy$ {
   
   ngOnInit() {
     this.booleanService.getLoadingChangeEmitter().subscribe((bool : boolean) => {
-      console.log("tout va bien")
       this.isLoading = bool
       this.cd.markForCheck()
     })
@@ -198,7 +197,6 @@ export class HomeComponent extends Destroy$ {
     this.activeViewService.getActiveViewChangeEmitter().subscribe((num: number) => {
       this.slideMissionClose()
       this.activeView = num
-      console.log("j'ai changé", this.activeView)
     })
     this.lateInit()
   }
@@ -210,7 +208,6 @@ export class HomeComponent extends Destroy$ {
       combineLatest([this.profile$, this.store.select(DataQueries.getAll('Post'))])
         .pipe(takeUntil(this.destroy$))
         .subscribe(([profile, posts]) => {
-          console.log(posts)
           const mapping = splitByOutput(posts, (post) => {
             //0 -> userOnlinePosts | 1 -> userDrafts
             if (profile.company.posts.includes(post.id))
@@ -377,7 +374,6 @@ export class HomeComponent extends Destroy$ {
   selectMission(filter: any) {
     this.missions = [];
     this.allMissions.sort((a, b) => {return Number(a["isClosed"]) - Number(b["isClosed"]);});
-    console.log("this.allMissions", this.allMissions)
     if (filter == null) {
       this.missions = this.allMissions;
     } else {
@@ -598,7 +594,6 @@ export class HomeComponent extends Destroy$ {
   };
 
   callbackSearchST = (search: string): void => {
-    console.log('search', search, !search);
     this.searchBarEmptySubject.next(!search)
     this.refreshSubject.next();
     this.selectSearchST(search)

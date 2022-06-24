@@ -82,6 +82,9 @@ export class CalendarUI extends UIDefaultAccessor<DayState[]> {
   currentYear: number = 1;
   store: any;
   
+  get today() {
+    return moment(Date.now()).format('YYYY-MM-DD');
+  }
   @Input()
   mission: Mission | null= null;
 
