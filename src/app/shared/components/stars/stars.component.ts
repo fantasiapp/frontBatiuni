@@ -62,7 +62,6 @@ export class UIStarsComponent extends UIDefaultAccessor<string | number> {
 
   get fullStarUrl() {
     if (this.isRatings) {
-      console.log("je renvoie le full")
       return `url(assets/starFull.svg)`}
     else return `url(assets/greyFullStar.svg)`;
   }

@@ -373,7 +373,6 @@ export class STFilterForm {
   }
 
   isFilterOn(filter: any){
-    console.log("filer", filter)
     if (filter.address == "" && filter.date == "" && filter.jobs.length == 0 && filter.manPower == null && filter.candidate == false && filter.counterOffer == false &&  filter.dueDateSort == false && this.arrayEquals(filter.employees, [true, true, true, true, true]) && this.arrayEquals(filter.salary, [0, 100000]) && filter.favorite == false && filter.radius == 2000 && filter.startDateSort == false && filter.viewed == false){
       this.filterOnST.emit(false)
     } else {

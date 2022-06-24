@@ -44,7 +44,6 @@ export class NavigationMenu extends Destroy$ {
     let view = this.store.selectSnapshot(DataState.view);
     const user = this.store.selectSnapshot(DataQueries.currentUser);
     let userFiles = this.store.selectSnapshot(DataQueries.getById('Company', user.company))?.files
-    console.log("COUOU0", menu, this.store.selectSnapshot(DataState.view), route)
     let Kbis = [];
     if (userFiles) {
       let files = this.store.selectSnapshot(DataQueries.getMany('File', userFiles))
@@ -118,7 +117,6 @@ export class NavigationMenu extends Destroy$ {
     });
     this.notifService.getNotifChangeEmitter().subscribe(value => {
       this.notificationUnseen = value;
-      console.log("je cd ")
       this.cd.markForCheck()
     })
     this.notifService.checkNotif()

@@ -31,10 +31,8 @@ export class Mobile {
   }
   test(){
     setInterval(()=>{
-      console.log('tic');
       this.test1()
       setTimeout(()=>{
-          console.log('tac');
             this.test2()
         },1000)
     },2000)

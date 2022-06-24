@@ -228,13 +228,9 @@ export class DataState {
 
   @Action(GetUserData)
   getUserData(ctx: StateContext<DataModel>, action: GetUserData) {
-    console.log("hellllllllllllo")
     const req = this.http.get("data", { action: action.action });
-    console.log("j'ai lancé", this.flagUpdate)
     if (this.isFirstTime) {
-      console.log("tout va bien")
     }
-    console.log("j'ai lancé", this.flagUpdate)
     if (this.flagUpdate){
       this.flagUpdate = false
       return req.pipe(tap((response: any) => {
@@ -293,7 +289,6 @@ export class DataState {
 
   @Action(ModifyUserProfile)
   modifyUser(ctx: StateContext<DataModel>, modify: ModifyUserProfile) {
-    console.log("Modification qu'on envoie à JL", modify)
     const { labelFiles, adminFiles, onlyFiles, ...modifyAction } = modify;
     let companyLabels = this.store.selectSnapshot(DataQueries.getAll('File')).filter(file => file.nature == "labels")
     console.log("modify user profile", companyLabels, modifyAction)
