@@ -378,20 +378,28 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
 
   slideCommentOpen = false
 
-  slideCommentMenu : {
-    taskGraphic: TaskGraphic | null,
-    slideCommentOpen: boolean
-  } = {
+  slideCommentMenu: slideCommentMenu = {
      taskGraphic: null,
-     slideCommentOpen: false
+     slideCommentOpen: false,
+     formControlName: '',
+     selectedTask: null
   }
 
-  slideComment(taskGraphic: TaskGraphic | null, e: Event){
+  slideComment(taskGraphic: TaskGraphic | null, e: Event, formControlName: string, selectedTask: PostDetailGraphic){
     e.preventDefault()
     this.slideCommentOpen = true
     this.slideCommentMenu = {
       taskGraphic: taskGraphic,
-      slideCommentOpen: true
+      slideCommentOpen: true,
+      formControlName: formControlName,
+      selectedTask: selectedTask
     }
   }
+}
+
+export interface slideCommentMenu {
+  taskGraphic: TaskGraphic | null,
+  slideCommentOpen: boolean,
+  formControlName: string,
+  selectedTask: PostDetailGraphic | null
 }
