@@ -1,5 +1,5 @@
-import { ChangeDetectionStrategy, Component, ChangeDetectorRef } from '@angular/core';
-import { FormControl, FormGroup, Validators } from "@angular/forms";
+import { ChangeDetectionStrategy, Component, ChangeDetectorRef, Input } from '@angular/core';
+import { AbstractControl, FormControl, FormGroup, Validators } from "@angular/forms";
 import { Store } from "@ngxs/store";
 import { take } from "rxjs/operators";
 import { AskRecommandation } from "src/models/new/user/user.actions";
@@ -16,12 +16,21 @@ import { email } from 'src/validators/regex';
 })
 
 export class AskRecommandationComponent extends Destroy$ {
-  emailForm = new FormGroup({email: new FormControl('', [Validators.required, Email()])}, {})
+  emailForm = new FormGroup({email: new FormControl('', [Validators.required, Email(), 
+  (() => {
+    return (control: AbstractControl) => {
+      return control.value == this.profileEmail ? {SELF_RECOMMANDATION: ['profile-email']} : null    
+    }
+  })()
+  ])}, {})
 
   constructor(private store: Store, private cd: ChangeDetectorRef) {
     super()
   }
 
+  @Input() 
+  profileEmail: string = ''
+  
   disabled:boolean = true
   token:string = ''
 

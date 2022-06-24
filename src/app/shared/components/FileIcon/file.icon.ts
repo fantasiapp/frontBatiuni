@@ -19,7 +19,7 @@ import { DataQueries, SnapshotAll } from "src/models/new/data.state";
     </defs>
     <g transform="translate(1.374 6)">
       <g transform="translate(0 0)">
-        <g transform="matrix(1, 0, 0, 1, -1.37, -6)" filter="url(#box-shadow)">
+        <g transform="matrix(1, 0, 0, 1, -1.37, -6)" filter="drop-shadow( 0px 3px 6px #00000029)">
           <rect data-name="container" width="60.198" height="84.748" rx="7" transform="translate(9 15)" fill="#fff"/>
         </g>
         <path data-name="filename arrow"  d="M6000.1,11956.382l7.747,8.433v-8.433Z" transform="translate(-6000.102 -11917.76)" [style.fill]="arrowColor"/>
@@ -34,7 +34,7 @@ import { DataQueries, SnapshotAll } from "src/models/new/data.state";
       </g>
     </g>
   </svg>
-<img class="icon-logo" *ngIf="isLabel" src="assets/{{originalName}}.png" alt="">
+<img class="icon-logo" *ngIf="isLabel" src="assets/{{originalName}}.png" alt="label">
   `,
   styles: [`
     :host { display: inline-block; }

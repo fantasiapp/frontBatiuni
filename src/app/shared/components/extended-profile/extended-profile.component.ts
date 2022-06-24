@@ -32,6 +32,7 @@ import { BlockCompany } from "src/models/new/user/user.actions";
 import { Router } from '@angular/router';
 import { UISlideMenuComponent } from "../slidemenu/slidemenu.component";
 import { UIAnnonceResume } from "src/app/mobile/ui/annonce-resume/annonce-resume.ui";
+import { InfoService } from "../info/info.component";
 
 @Component({
   selector: "extended-profile",
@@ -75,9 +76,11 @@ export class ExtendedProfileComponent extends Destroy$ {
     private popup: PopupService,
     private cd: ChangeDetectorRef,
     private appComponent: AppComponent,
-    private router: Router
+    private router: Router,
+    private info: InfoService
   ) {
     super();
+    this.info.alignWith('header')
   }
 
   ngOnChanges(changes: SimpleChanges) {
