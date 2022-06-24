@@ -266,7 +266,6 @@ export class HomeComponent extends Destroy$ {
   }
 
   updatePage() {
-    this.updatePossibleCandidates();
     this.cd.markForCheck()
   }
 
@@ -903,7 +902,9 @@ export class HomeComponent extends Destroy$ {
 
   updateCurrentPost(p: Post) {
     this.currentPost = p;
+    this.updatePossibleCandidates()
   }
+
   // Used in notification
   get currentCandidates(): number {
     let possibleCandidates: number = 0;
