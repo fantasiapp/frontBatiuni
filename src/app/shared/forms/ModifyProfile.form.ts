@@ -11,7 +11,7 @@ import {
   HostBinding,
   ElementRef,
 } from "@angular/core";
-import { FormArray, FormControl, FormGroup, Validators } from "@angular/forms";
+import { AbstractControl, FormArray, FormControl, FormGroup, ValidationErrors, Validators } from "@angular/forms";
 import { Camera } from "@capacitor/camera";
 import { Option } from "src/models/option";
 import { SlidesDirective } from "../directives/slides.directive";
@@ -754,7 +754,13 @@ export class ModifyProfileForm {
               item.name,
               target?.date || "",
               `Veuillez télécharger un document.`
-            )
+            ),
+            [
+              //formControl validator
+              (control: AbstractControl): ValidationErrors | null => {
+                return control.value.expirationDate ? null : {forbiddenVoidDate: {value: "Void"}} 
+              }
+            ]
           ),
         })
       );
