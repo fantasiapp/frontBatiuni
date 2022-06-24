@@ -1,4 +1,5 @@
 import { Options } from "@angular-slider/ngx-slider";
+import { footerTranslate } from "src/animations/footer.animation";
 
 export const DistanceSliderConfig: Options = {
     floor: 0,
@@ -63,4 +64,13 @@ export const SOSSalarySliderConfig: Options = {
   translate(value: number): string {
     return value + ' €';
   }
-}  
+}
+
+export const EmployeesSliderConfig: Options = {
+  floor: 0,
+  ceil: 100,
+  translate(value: number): string{
+    if (value == 0 || value == 1) return value + " employé"
+    return (value == 100 ? value + "+" : value)+" employés"
+  }
+}

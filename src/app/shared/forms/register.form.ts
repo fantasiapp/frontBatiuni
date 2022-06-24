@@ -409,9 +409,9 @@ export class RegisterForm extends Destroy$ {
 
   onClickInputScroll(input: HTMLElement){
     setTimeout(() => {
-      input.scrollIntoView({behavior: 'smooth', block: 'center', inline: 'nearest'})
+      input.scrollIntoView({behavior: 'smooth', block: 'start', inline: 'nearest'})
       setTimeout(() => {
-        input.scrollIntoView({behavior: 'smooth', block: 'center', inline: 'nearest'})
+        input.scrollIntoView({behavior: 'smooth', block: 'start', inline: 'nearest'})
       }, 500)
     }, 100)
   }

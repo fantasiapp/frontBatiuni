@@ -69,7 +69,8 @@
   </slidemenu>
 
   <slidemenu [footer]="modifyPassword ? 'small' : 'medium'" [(open)]="openModifyMenu" #modifyMenu>    
-    <h1 class="center-text full-width" header>Modifier mon Profil</h1>
+    <h1 class="center-text full-width" header *ngIf="!modifyPassword">Modifier mon profil</h1>
+    <h1 class="center-text full-width" header *ngIf="modifyPassword">Modifier mon mot de passe</h1>
     <div class="modify-page hosted-page flex column center-cross space-children-margin" content>
       <swipeup [(open)]="openModifyPicture" #modifyPicture>
         <li (click)="takePhoto()">Accéder à l'appareil photo</li>
