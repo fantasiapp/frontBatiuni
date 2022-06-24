@@ -34,6 +34,7 @@ import {
   ValidateMissionDate,
 } from "src/models/new/user/user.actions";
 import { getUserDataService } from "src/app/shared/services/getUserData.service";
+import { Mobile } from "src/app/shared/services/mobile-footer.service";
 
 
 export interface TaskGraphic {
@@ -48,6 +49,7 @@ export interface TaskGraphic {
   templateUrl: "./suivi_chantier_date-content.component.html",
   styleUrls: ["./suivi_chantier_date-content.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [Mobile]
 })
 export class SuiviChantierDateContentComponent extends Destroy$ {
   swipeMenu: boolean = false;
@@ -69,6 +71,8 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
 
   date:PostDateAvailableTask = {id:5, date:'12-12-2022', validated: false, deleted:false, supervisions: [], postDetails: [], allPostDetails: []}
 
+  showFooter: boolean = true;
+
   // @Input()
   // _accordionOpen: boolean = false;
   // get accordionOpen(){  return this._accordionOpen}
@@ -80,11 +84,13 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
 
   user!: User;
 
-  constructor(private cd: ChangeDetectorRef, private store: Store, private popup: PopupService, private getUserDataService: getUserDataService, private info: InfoService) {
+  constructor(public mobile: Mobile, private cd: ChangeDetectorRef, private store: Store, private popup: PopupService, private getUserDataService: getUserDataService, private info: InfoService) {
     super();
   }
 
   ngOnInit(){
+    
+
     this.user = this.store.selectSnapshot(DataQueries.currentUser)
     this.mission = this.store.selectSnapshot(DataQueries.getById('Mission', this.mission!.id))
     this.updatePageOnlyDate()
@@ -380,7 +386,8 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
      slideCommentOpen: false
   }
 
-  slideComment(taskGraphic: TaskGraphic | null){
+  slideComment(taskGraphic: TaskGraphic | null, e: Event){
+    e.preventDefault()
     this.slideCommentOpen = true
     this.slideCommentMenu = {
       taskGraphic: taskGraphic,

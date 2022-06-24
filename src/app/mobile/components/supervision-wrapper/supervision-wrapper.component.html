@@ -1,0 +1,15 @@
+<div class="slideMenu__comment__wrapper" content>
+    <div class="slideMenu__comment__wrapper__container">
+        <div class="partenerComment-container" *ngFor="let supervision of taskGraphic?.selectedTask?.supervisions; let isLast = last">
+          <comment-suivi  [supervision]="supervision" #commentSuivi ></comment-suivi>
+          
+        </div>
+    </div>
+</div>
+<div class="slideMenu__comment__input__wrapper" [ngClass]="{'resetPadding': !showFooter}">
+  <div class="divComment">
+    <form  #formMainTest>
+      <input class="inputComment " type="text" placeholder="Ajouter un commentaire" #comment>
+    </form>
+  </div>
+</div>

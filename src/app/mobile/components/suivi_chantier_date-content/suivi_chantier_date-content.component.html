@@ -25,16 +25,16 @@
         </div>
         <div class="comment-container" *ngIf="!taskGraphic.selectedTask.supervisions.length">
           <div *ngIf="!mission!.isClosed" class="divComment">
-            <form [formGroup]="taskGraphic.formGroup" (ngSubmit)="onSubmit(taskGraphic.selectedTask, taskGraphic.formGroup, 'comment')">
-              <input id="input_{{taskGraphic.selectedTask.id}}" class="inputComment" type="text" placeholder="Ajouter un commentaire" formControlName="comment" (click)="slideComment(taskGraphic)" #comment>
+            <form (click)="slideComment(taskGraphic, $event)" [formGroup]="taskGraphic.formGroup" (ngSubmit)="onSubmit(taskGraphic.selectedTask, taskGraphic.formGroup, 'comment')">
+              <input style="pointer-events: none;" id="input_{{taskGraphic.selectedTask.id}}" class="inputComment" type="text" placeholder="Ajouter un commentaire" formControlName="comment"  #comment>
             </form>
           </div>
         </div>
         <div class="comment-container" *ngFor="let supervision of taskGraphic.selectedTask.supervisions; let isLast = last">
           <comment-suivi  [supervision]="supervision"></comment-suivi>
           <div *ngIf="!mission!.isClosed && isLast" class="divComment">
-            <form [formGroup]="taskGraphic.formGroup" (ngSubmit)="onSubmit(taskGraphic.selectedTask, taskGraphic.formGroup, 'comment')">
-              <input id="input_{{taskGraphic.selectedTask.id}}" class="inputComment" type="text" placeholder="Ajouter un commentaire" formControlName="comment" (click)="slideComment(taskGraphic)" #comment>
+            <form [formGroup]="taskGraphic.formGroup" (ngSubmit)="onSubmit(taskGraphic.selectedTask, taskGraphic.formGroup, 'comment')" (click)="slideComment(taskGraphic, $event)">
+              <input style="pointer-events: none;" id="input_{{taskGraphic.selectedTask.id}}" class="inputComment" type="text" placeholder="Ajouter un commentaire" formControlName="comment" #comment>
             </form>
             <img (click)="cameraSwipe(supervision.id)" src="assets/camera-outline.svg"/>
           </div>
@@ -66,15 +66,9 @@
 </div>
 
 <slidemenu [(open)]="slideCommentMenu.slideCommentOpen" #slideMenuComment>
-  <h1 class="center-text full-width" header>Mes factures</h1>
+  <h1 class="center-text full-width" header>Commentaires</h1>
 
-  <div class="mx-2" content>
-
-    <div class="partenerComment-container" *ngFor="let supervision of slideCommentMenu.taskGraphic?.selectedTask?.supervisions; let isLast = last">
-      <comment-suivi  [supervision]="supervision" #commentSuivi ></comment-suivi>
-      
-    </div>
-  </div>
+  <app-supervision-wrapper *ngIf="slideCommentMenu.slideCommentOpen" [taskGraphic]="slideCommentMenu.taskGraphic" content></app-supervision-wrapper>
 </slidemenu>
 
 
