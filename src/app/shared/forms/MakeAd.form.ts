@@ -639,10 +639,7 @@ export class MakeAdForm {
     } else {
       this.info.show("info", "Envoi de l'annonce...", Infinity);
       const calendar: any[] = this.makeAdForm.get("calendar")!.value;
-      this.store
-        .dispatch(UploadPost.fromPostForm(this.makeAdForm.value, draft))
-        .pipe(take(1))
-        .subscribe(
+      this.store.dispatch(UploadPost.fromPostForm(this.makeAdForm.value, draft)).pipe(take(1)).subscribe(
           () => {
             this.info.show("success", "Annonce Envoyée", 2000);
             this.done.emit();
