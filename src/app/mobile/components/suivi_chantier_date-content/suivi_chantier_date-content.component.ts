@@ -234,7 +234,7 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
 
   async takePhoto() {
     const photo = await Camera.getPhoto({
-      allowEditing: false,
+      allowEditing: true,
       resultType: CameraResultType.Base64,
       source: CameraSource.Camera,
     });
@@ -247,9 +247,13 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
 
   async selectPhoto() {
     const photo = await Camera.getPhoto({
-      allowEditing: false,
       resultType: CameraResultType.Base64,
       source: CameraSource.Photos,
+      presentationStyle: 'fullscreen',
+      webUseInput: true,
+      quality: 90,
+      allowEditing: true,
+      saveToGallery: true
     });
 
     let acceptedFormat = ["jpeg", "png", "jpg", "bmp"];
@@ -364,5 +368,23 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
       this.cd.markForCheck()
       if(b) this.computeDates.next()
     });
+  }
+
+  slideCommentOpen = false
+
+  slideCommentMenu : {
+    taskGraphic: TaskGraphic | null,
+    slideCommentOpen: boolean
+  } = {
+     taskGraphic: null,
+     slideCommentOpen: false
+  }
+
+  slideComment(taskGraphic: TaskGraphic | null){
+    this.slideCommentOpen = true
+    this.slideCommentMenu = {
+      taskGraphic: taskGraphic,
+      slideCommentOpen: true
+    }
   }
 }

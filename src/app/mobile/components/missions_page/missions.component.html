@@ -28,12 +28,12 @@
 
 <slidemenu [(open)]="missionMenu.open" [header]="false" #slideOnlinePost>
   <header
-        class="clear-margin full-width sticky-header flex center-cross annonce"
-        customHeader id="swipeupHeader"
-      >
-        <img (click)="slideOnlinePostClose()" src="assets/arrowlblack.svg" />
-        <h1 class="grow center-text">Mission</h1>
-      </header>
+    class="clear-margin full-width sticky-header flex center-cross annonce"
+    customHeader id="swipeupHeader"
+  >
+    <img (click)="slideOnlinePostClose()" src="assets/arrowlblack.svg" />
+    <h1 class="grow center-text">Mission</h1>
+  </header>
   <suivi-chantier [missionMenu]="missionMenu" content></suivi-chantier>
 </slidemenu>
 
