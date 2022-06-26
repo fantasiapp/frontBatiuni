@@ -4,9 +4,10 @@ import { Select, Store } from "@ngxs/store";
 import { BehaviorSubject, Observable } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { Destroy$ } from "src/app/shared/common/classes";
-import { DataState } from "src/models/new/data.state";
+import { DataQueries, DataState } from "src/models/new/data.state";
 import { NotifService } from "../../services/notif.service";
 import { InfoService } from "../info/info.component";
+import { PopupService } from "../popup/popup.component";
 
 const STMenu = [
   { name: "Home", src: "assets/navigation/st/home.svg", route: '', },
@@ -40,6 +41,23 @@ export class NavigationMenu extends Destroy$ {
 
   private changeRouteOnMenu(menu: MenuItem[], index: number) {
     let route = menu[index].route;
+    console.log('ROUTE', route);
+    let view = this.store.selectSnapshot(DataState.view);
+    const user = this.store.selectSnapshot(DataQueries.currentUser);
+    let userFiles = this.store.selectSnapshot(DataQueries.getById('Company', user.company))?.files
+    let Kbis = [];
+    if (userFiles) {
+      let files = this.store.selectSnapshot(DataQueries.getMany('File', userFiles))
+      Kbis = files.filter(file => file.name == 'Kbis') 
+    }
+    if (route == 'make' && Kbis.length == 0){
+      this.popup.missKbis('PME')
+      route = menu[3].route
+    } 
+    else if (view == 'ST' && route == '' && Kbis.length == 0){
+      this.popup.missKbis('PME')
+      route = menu[3].route
+    }
     this.routeChange.emit(route);
     this.router.navigate(route ? ['', 'home', route, ...this.segments] : ['', 'home']);
     this.segments = [];
@@ -51,7 +69,7 @@ export class NavigationMenu extends Destroy$ {
     this.changeRouteOnMenu(menu, index);
   }
 
-  constructor(private router: Router, private store: Store, info: InfoService, private notifService: NotifService, private cd: ChangeDetectorRef) {
+  constructor(private router: Router, private store: Store, info: InfoService, private notifService: NotifService, private cd: ChangeDetectorRef, private popup: PopupService) {
     super();
     this.menu = new BehaviorSubject(this.store.selectSnapshot(DataState.view) == 'PME' ? PMEMenu : STMenu);
     this.router.events.pipe(takeUntil(this.destroy$)).subscribe((event) => {
@@ -93,6 +111,9 @@ export class NavigationMenu extends Destroy$ {
   navigationType$!: Observable<"ST" | "PME">;
 
   ngOnInit() {
+    this.changeRouteOnMenu(this.menu.getValue(), this.currentIndex.getValue());
+
+
     this.navigationType$.pipe(takeUntil(this.destroy$)).subscribe(type => {
       const nextMenu = type == 'PME' ? PMEMenu : STMenu;
       this.menu.next(nextMenu);

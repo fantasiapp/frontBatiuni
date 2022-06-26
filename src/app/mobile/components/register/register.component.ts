@@ -30,10 +30,10 @@ export class RegisterComponent {
   }
 
   ngOnInit(){
-    // this.mobile.init()
-    // this.mobile.footerState.subscribe(b => {
-    //   this.showFooter = b;
-    //   this.cd.detectChanges()
-    // })
+    this.mobile.init()
+    this.mobile.footerState.subscribe(b => {
+      this.showFooter = b
+      this.cd.detectChanges()
+    })
   }
 };

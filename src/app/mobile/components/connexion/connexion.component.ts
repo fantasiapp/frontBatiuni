@@ -14,7 +14,6 @@ export class ConnexionComponent {
   constructor(private cd: ChangeDetectorRef ,private isLoadingService: BooleanService) {
     this.isLoading = isLoadingService.isLoading
     this.isLoadingService.getLoadingChangeEmitter().subscribe((bool) => {
-      console.log("tout va bien")
       this.isLoading = bool
       this.cd.markForCheck()
     })

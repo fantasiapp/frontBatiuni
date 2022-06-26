@@ -5,6 +5,7 @@ import { UIOpenMenu } from 'src/app/shared/common/classes';
 import { InfoService } from 'src/app/shared/components/info/info.component';
 import { Company, Mission, Profile } from 'src/models/new/data.interfaces';
 import { DataQueries, DataState } from 'src/models/new/data.state';
+import { BooleanService } from '../../services/boolean.service';
 
 interface ratingInfo {
   contactName: string;
@@ -28,6 +29,7 @@ export class RatingComponent extends UIOpenMenu {
   
   
   openRatings: boolean = false;
+  hasRatings: boolean = false;
   
   // @Select(DataQueries.currentProfile)
   // profile$!: Observable<Profile>;
@@ -40,15 +42,15 @@ export class RatingComponent extends UIOpenMenu {
   profileRecommandation: boolean = false
 
   @Input()
-  view: 'ST' | 'PME' | null = 'PME'
+  view: 'ST' | 'PME' | null = null;
 
   missions: Mission[] | undefined;
   ratingInfos?: ratingInfo[];
   recommandationInfos?: ratingInfo[];
   company: Company | undefined;
   openRecommandationMenu: boolean = false;
-  
-  constructor(private info: InfoService, private store: Store) {
+
+    constructor(private info: InfoService, private store: Store, private booleanService: BooleanService) {
     super()
   }
 
@@ -112,6 +114,10 @@ export class RatingComponent extends UIOpenMenu {
       }
       this.getRecommandations(company)
     }
+    if (this.ratingInfos.length != 0) {
+      this.hasRatings = true
+      this.booleanService.emithasRatingsChangeEvent(this.hasRatings)
+    }
   }
   
   set open(value: boolean) {   
@@ -130,7 +136,6 @@ export class RatingComponent extends UIOpenMenu {
 
   getRecommandations(company: Company) {
     let recommandations = this.store.selectSnapshot(DataQueries.getAll('Recommandation'))
-    console.log("les reco ", recommandations)
     for (const recommandation of recommandations) {
       if(recommandation.companyRecommanded == company.id) {
         let ratingInfo: ratingInfo = {

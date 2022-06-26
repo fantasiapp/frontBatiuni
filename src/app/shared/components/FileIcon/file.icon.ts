@@ -1,10 +1,13 @@
 import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
+import { Store } from "@ngxs/store";
 import { shadeColor } from "src/app/shared/common/functions";
+import { Label } from "src/models/new/data.interfaces";
+import { DataQueries, SnapshotAll } from "src/models/new/data.state";
 
 @Component({
   selector: 'file-svg',
   template: `
-  <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="84.626" height="103.938" viewBox="0 0 84.626 103.938">
+  <svg *ngIf="!isLabel" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="84.626" height="103.938" viewBox="0 0 84.626 103.938">
     <defs>
       <filter id="box-shadow" x="0" y="0" width="84.626" height="103.938" filterUnits="userSpaceOnUse">
         <feOffset dy="3" input="SourceAlpha"/>
@@ -16,7 +19,7 @@ import { shadeColor } from "src/app/shared/common/functions";
     </defs>
     <g transform="translate(1.374 6)">
       <g transform="translate(0 0)">
-        <g transform="matrix(1, 0, 0, 1, -1.37, -6)" filter="url(#box-shadow)">
+        <g transform="matrix(1, 0, 0, 1, -1.37, -6)" filter="drop-shadow( 0px 3px 6px #00000029)">
           <rect data-name="container" width="60.198" height="84.748" rx="7" transform="translate(9 15)" fill="#fff"/>
         </g>
         <path data-name="filename arrow"  d="M6000.1,11956.382l7.747,8.433v-8.433Z" transform="translate(-6000.102 -11917.76)" [style.fill]="arrowColor"/>
@@ -31,15 +34,33 @@ import { shadeColor } from "src/app/shared/common/functions";
       </g>
     </g>
   </svg>
+<img class="icon-logo" *ngIf="isLabel" src="assets/{{originalName}}.png" alt="label">
   `,
   styles: [`
     :host { display: inline-block; }
+
+    .icon-logo{
+      width: 100%;
+      height: 100%;
+      object-fit: contain 
+    }
   `],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FileIcon {
   public name: string = 'Fichier';
+  public allLabelsName: string[] = []
+  public isLabel: boolean = false
+  public originalName: string = '';
+  public allLabels: Label[];
+
+  constructor(private store: Store) {
+    this.allLabels = this.store.selectSnapshot(DataQueries.getAll("Label"))
+  }
+
+
   @Input('name') set _name(name: string) {
+    this.originalName = name
     if ( name.length > 7 )
       this.name = name.slice(0, 7) + '-';
     else this.name = name;
@@ -50,5 +71,15 @@ export class FileIcon {
 
   get arrowColor() {
     return shadeColor(this.color, -20);
+  }
+
+  ngOnInit() {
+    this.allLabels.forEach((label) => {
+      this.allLabelsName.push(label.name)
+    })
+    if (this.allLabelsName.includes(this.originalName)) {
+      this.isLabel = true
+    }
+
   }
 }

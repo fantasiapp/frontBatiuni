@@ -18,6 +18,7 @@ import { getFileType } from "../../common/functions";
 import { InfoService } from "../info/info.component";
 import { PopupService } from "../popup/popup.component";
 import { SwipeupService } from "../swipeup/swipeup.component";
+import { returnInputKeyboard } from '../../common/classes'
 
 export type BasicFile = {
   nature: string;
@@ -55,6 +56,7 @@ export function defaultFileUIOuput(
   ],
 })
 export class FileUI extends UIAsyncAccessor<FileUIOutput> {
+  returnInputKeyboard = returnInputKeyboard
   @Input()
   filename: string = "Kbis";
 
@@ -120,7 +122,7 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
 
   //override
 
-  async getInput(e: { origin: string; event: any }): Promise<FileUIOutput> {
+  async getInput(e: { origin: string; event: any, popup?: boolean }): Promise<FileUIOutput> {
     let input = e.event.target as HTMLInputElement;
     if (e.origin == "date") {
       if (!input.value) return this.value!;
@@ -135,6 +137,12 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
       lastDot = fullname.lastIndexOf("."),
       name = fullname.slice(0, lastDot),
       ext = fullname.slice(lastDot + 1);
+
+
+    if (this.value?.nature != 'post') {
+      this.popup.newFile(this.filename, this);
+    }
+
 
     return {
       ...this.value,
@@ -153,13 +161,10 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
     this.kill.emit();
   }
 
-  async openInput() {
-    await this.inputRef.nativeElement.click();
-    // console.log("FILE", this.value)
-    // if (this.value?.nature == "admin") {
-    //   this.popup.newFile(this.filename, this);
-    //   console.log("heheheheeh",this.inputRef)
-    // }
+  async openInput(input:HTMLInputElement, e: Event) {
+
+    input.click()
+
     this.modified = true;
   }
 
@@ -170,7 +175,6 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
       source: CameraSource.Photos,
     });
 
-    console.log('take photo', photo.path);
     this.value = {
       expirationDate: "",
       nature: "",
@@ -201,7 +205,6 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
       responseType: ResponseType.Base64,
     })
     
-    console.log('scanenrImages', scannedImages);
     if (scannedImages && scannedImages.length > 0) {
 
       // let base64 = Capacitor.convertFileSrc(scannedImages[0])
@@ -217,7 +220,7 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
     }
   }
 
-  onFileInputClicked(e: Event) {
+  onFileInputClicked(e: Event, input: HTMLInputElement) {
     if (e.isTrusted) e.preventDefault();
 
     this.swipeup.show({
@@ -265,7 +268,8 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
         {
           name: "Télécharger un fichier",
           click: () => {
-            this.openInput();
+            this.openInput(input, e);
+            
           },
         },
         {

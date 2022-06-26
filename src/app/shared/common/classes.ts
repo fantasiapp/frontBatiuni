@@ -182,7 +182,6 @@ export abstract class UIDefaultAccessor<T> implements ControlValueAccessor {
 
   onChange(e: any): any {
     if ( this.isDisabled ) { e.preventDefault?.(); return; }
-    console.log('coucou on est dans le onChange')
     this.set(this.getInput(e) as T);
     return this.value;
   };
@@ -258,3 +257,10 @@ export const PropertyTrap: ProxyHandler<any> = {
     return true;
   }
 };
+
+
+export function returnInputKeyboard(e: any, input: HTMLInputElement){
+  if(e.keyCode == 13){
+    input.blur()
+  }
+}

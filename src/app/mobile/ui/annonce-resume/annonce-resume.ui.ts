@@ -48,12 +48,7 @@ export type ApplyForm = {
             (click)="openProfile()"
           ></profile-image>
           <span class="company">{{ isSuiviPME ? subContractor!.name : company!.name }}</span>
-          <stars
-            (click)="openRatings = true"
-            class="stars"
-            value="{{ isSuiviPME ? subContractor!.starsST : company!.starsPME }}"
-            disabled
-          ></stars>
+          <stars (click)="openRatings = true" [isRatings]="isSuiviPME ? subContractor!.starsST ? true : false : company!.starsPME ? true : false" class="stars" value="{{isSuiviPME ? subContractor!.starsST ? subContractor!.starsST : subContractor!.starsRecoST : company!.starsPME ? company!.starsPME : company!.starsRecoPME}}" disabled></stars>
           <span class="ManPower">{{
             post.manPower ? "Main d'oeuvre" : "Fourniture et pose"
           }}</span>
@@ -77,7 +72,7 @@ export type ApplyForm = {
                 <li>Date de présence : {{ toLocateDate(post.startDate) }} -
                 {{ toLocateDate(post.endDate) }}</li>
                 <li>Adresse du chantier : {{ hideAdress(post?.address) }}</li>
-                <span class='date'> Date d’échéance Le {{ toLocateDate(post?.dueDate) }} 
+                <span class='date'>Répondre avant le {{ toLocateDate(post?.dueDate) }} 
                 </span>
             </ng-container>
           </ul>
@@ -98,6 +93,11 @@ export type ApplyForm = {
             </ul>
           </div>
   
+          <div class="condition">
+            <span class="title  ">Condition de paiement</span>
+            <p>{{ post.paymentCondition }}</p>
+          </div>  
+
           <div class="documents">
             <span class="title  ">Documents importants</span>
             <ul>

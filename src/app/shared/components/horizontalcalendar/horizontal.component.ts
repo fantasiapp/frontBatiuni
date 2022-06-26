@@ -273,7 +273,6 @@ export class HorizontaleCalendar implements OnInit {
   }
 
   showAgenda(date: any) {
-    console.log('date', date);
     this.spanShowToday = moment(date, "YYYY-MM-DD")
       .locale("fr")
       .format("dddd D - MMMM - YYYY");
@@ -360,7 +359,6 @@ export class HorizontaleCalendar implements OnInit {
           // if(!status){
             //   day.notification = false
             // }
-          console.log('notification', day.notification);
           }
       }
     }
@@ -373,7 +371,6 @@ export class HorizontaleCalendar implements OnInit {
     let mission = this.store.selectSnapshot(DataQueries.getById("Mission", card.mission.id));
     let heightTop = this.calculator(mission!.hourlyStart, mission!.hourlyEnd);
 
-    console.log('card', card);
     card.mission = mission!;
     card.cardFromTop = heightTop[0];
     card.cardHeight = heightTop[1];
@@ -389,7 +386,6 @@ export class HorizontaleCalendar implements OnInit {
       }
       
       this.currentCardCalendars = newCardCalendars;
-      console.log('curretneCardCalendard,', this.currentCardCalendars);
     }
     
     let curDay;

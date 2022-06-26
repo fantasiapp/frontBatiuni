@@ -55,10 +55,8 @@ export class AppComponent extends Destroy$ {
     this.mobile.init()
     this.isConnected = booleanService.isConnected
     this.booleanService.getConnectedChangeEmitter().subscribe((value) => {
-      console.log("tout va bien")
       this.isConnected = value
       if(value && !this.isWhileOn){
-        console.log("tout va bien dedans")
         this.updateUserData()
       }
       this.isWhileOn = value
@@ -102,7 +100,6 @@ export class AppComponent extends Destroy$ {
       await delay(20000)
       
     }
-    console.log("test")
   }
 
   getUserData() {

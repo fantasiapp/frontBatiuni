@@ -228,13 +228,9 @@ export class DataState {
 
   @Action(GetUserData)
   getUserData(ctx: StateContext<DataModel>, action: GetUserData) {
-    console.log("hellllllllllllo")
     const req = this.http.get("data", { action: action.action });
-    console.log("j'ai lancé", this.flagUpdate)
     if (this.isFirstTime) {
-      console.log("tout va bien")
     }
-    console.log("j'ai lancé", this.flagUpdate)
     if (this.flagUpdate){
       this.flagUpdate = false
       return req.pipe(tap((response: any) => {
@@ -275,6 +271,7 @@ export class DataState {
         ctx.setState(compose(...loadOperations, sessionOperation));
         this.isFirstTime = false
         }
+        this.notifService.emitNotifChangeEvent()
         this.booleanService.emitLoadingChangeEvent(false)}
   }
 
@@ -292,7 +289,6 @@ export class DataState {
 
   @Action(ModifyUserProfile)
   modifyUser(ctx: StateContext<DataModel>, modify: ModifyUserProfile) {
-    console.log("Modification qu'on envoie à JL", modify)
     const { labelFiles, adminFiles, onlyFiles, ...modifyAction } = modify;
     let companyLabels = this.store.selectSnapshot(DataQueries.getAll('File')).filter(file => file.nature == "labels")
     console.log("modify user profile", companyLabels, modifyAction)
@@ -550,7 +546,7 @@ export class DataState {
         (key) => new UploadFile<"Post">(files[key], "post", key, "Post")
       ),
       req = this.http.post("data", form);
-
+    console.log("les uploads", uploads)
     return req.pipe(
       map((response: any) => {
         console.log('create post reponse', response);
@@ -581,6 +577,7 @@ export class DataState {
         // company.posts.push(+Object.keys(response['Post'])[0])
         // ctx.setState(update('Company', company))
         // ctx.setState(addSimpleChildren("Company", profile.company.id, "Post", response['Post'] ));
+        console.log("la réponse ", response['Post'] )
         ctx.setState(addComplexChildren("Company", profile.company.id, "Post", response['Post'] ));
 
         // uploads.forEach((upload) => (upload.target = postId));
@@ -1119,7 +1116,8 @@ export class DataState {
         delete response["timestamp"];
         response.Notification.forEach((element: any) => {
           ctx.setState(update("Notification", element));
-        })
+      })
+      this.notifService.emitNotifChangeEvent()
       })
     );
   }

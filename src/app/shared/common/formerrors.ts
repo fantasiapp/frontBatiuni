@@ -9,6 +9,7 @@ const forms = {
   MIN_LENGTH: '$2=(Ce champ) doit contenir au moins $1=(8) caractères',
   CASE: '$2=(Ce champ) doit contenir une lettre en $1=(miniscule)',
   INVALID_FORMAT: 'Le format $1<() est invalide',
+  SELF_RECOMMANDATION: 'Vous ne pouvez pas utiliser votre propre e-mail pour une recommandation',
   MESSAGE: '$1',
   FIELD_TYPE: 'Ce champs attend $1.'
   //server: '$1'

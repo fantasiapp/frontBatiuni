@@ -1,4 +1,4 @@
-<div *ngIf="ready$ | async" [@routeAnimation]="prepareRoute(outlet)" class="router">
+<div *ngIf="ready$ | async" [@routeAnimation]="prepareRoute(outlet)" (click)="true" class="router">
   <router-outlet #outlet="outlet"></router-outlet>
 </div>
 <div *ngIf="message">

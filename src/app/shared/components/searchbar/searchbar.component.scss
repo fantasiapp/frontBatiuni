@@ -18,14 +18,16 @@ img {
   position: absolute;
   width: $searchbar-icon-size; height: $searchbar-icon-size;
   left: $searchbar-icon-padding;
-  pointer-events: none;
+  // pointer-events: none;
   // top: 50%; transform: translateY(-50%);
+  // right: $searchbar-icon-padding;
 }
 
 input {
   font-size: 1rem;
   // padding: $searchbar-padding;
   padding-left: $searchbar-icon-size + 2*$searchbar-icon-padding;
+  // padding-left: $searchbar-icon-size;
   border-radius: 12px;
   width: 100%;
   height: 100%;

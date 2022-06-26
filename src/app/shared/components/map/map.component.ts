@@ -116,7 +116,6 @@ export class UIMapComponent {
 
     this.currentCompany = company
 
-    console.log('newPost', post);
     if(post) {
       this.currentPost = post
       this.jobs = [this.store.selectSnapshot(DataQueries.getById('Job', post.job))!]
@@ -194,7 +193,6 @@ export class UIMapComponent {
     
     posts = this.searchBarIsEmpty ? this.posts : [this.posts[0]]
 
-    console.log('this.searchBarIsEmpty', this.searchBarIsEmpty);
 
     posts.forEach((post, i) => {
       if ( post.latitude == null || post.longitude == null ) return;
@@ -218,7 +216,6 @@ export class UIMapComponent {
     
     companies = this.searchBarIsEmpty ? this.availableCompanies : [this.availableCompanies[0]]
 
-    console.log('this.searchBarIsEmpty', this.searchBarIsEmpty);
 
     companies.forEach((availableCompany)=> {
       let company = availableCompany.company;

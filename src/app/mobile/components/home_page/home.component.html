@@ -10,13 +10,15 @@
       (filterClicked)="openAdFilterMenu = true"
       [filterOpen]="view == 'PME' ? filterOn : filterOnST"
       [callbackSearch]="view == 'PME' ? callbackSearch : callbackSearchST"
+      
     >
       <span tab_0>{{ view == "PME" ? "Brouillon" : "Vue liste" }}</span>
       <span tab_1>{{ view == "PME" ? "En ligne" : "Carte" }}</span>
       <span tab_2>Validées</span>
     </page-header>
-    
-      <div class="hosted-page space-children-margin page-content-with-tabs" [ngClass]="{'footerHide': !showFooter}">
+    <div class="wrapper__searchbar__clickcatcher page-content-with-tabs" *ngIf="!showFooter"></div>
+
+      <div  class="hosted-page space-children-margin page-content-with-tabs" [ngClass]="{'footerHide': !showFooter}">
           <!-- Page pour PME -->
           <ng-container *ngIf="view == 'PME'; else stview">
             <ng-container *ngIf="(posts$ | async) as posts" [ngSwitch]="activeView">
@@ -231,14 +233,14 @@
   </div>
 </ng-template>
 
-<ng-template #candidates let-possibleCoandidates let-job="job">
+<ng-template #candidates let-postCandidates let-job="job">
   <div class="hosted-page">
     <p class="font-Poppins" style="margin-bottom: 2rem">
-      Vous avez : {{ possibleCandidates.length }} réponse(s)
+      Vous avez : {{ postCandidates.length }} réponse(s)
     </p>
     <div class="wrapper" style="row-gap: 1rem; display: flex; flex-direction: column;">
       <profile-card
-        *ngFor="let candidate of possibleCandidates"
+        *ngFor="let candidate of postCandidates"
         (click)="showCompany(candidate.company, candidate.id)"
         [job]="job"
         [profile]="candidate.company"

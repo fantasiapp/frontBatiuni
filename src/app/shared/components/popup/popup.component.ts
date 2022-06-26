@@ -65,6 +65,7 @@ import { HomeComponent } from "src/app/mobile/components/home_page/home.componen
 import { BoosterPage } from "src/app/mobile/components/booster/booster.page";
 import { UIAnnonceResume } from "src/app/mobile/ui/annonce-resume/annonce-resume.ui";
 import { ApplicationsComponent } from "src/app/mobile/components/applications/applications.component"
+import { returnInputKeyboard } from '../../common/classes'
 
 const TRANSITION_DURATION = 200;
 
@@ -144,6 +145,9 @@ export class UIPopup extends DimensionMenu {
   @ViewChild("deleteCandidate", { read: TemplateRef, static: true })
   deleteCandidate!: TemplateRef<any>;
 
+  @ViewChild("missKbis", { read: TemplateRef, static: true })
+  missKbis!: TemplateRef<any>;
+
   @Input()
   content?: Exclude<PopupView, ContextUpdate>;
 
@@ -154,6 +158,7 @@ export class UIPopup extends DimensionMenu {
   keepAlive: boolean = true;
 
   missionId?: Ref<Mission>;
+
 
   ngOnInit() {
     if (!this.fromService) return;
@@ -240,7 +245,6 @@ export class UIPopup extends DimensionMenu {
 
   detailedPostCheck(postDateAvailableTask: PostDateAvailableTask, detailedPost: PostDetail){
     const postDetails = postDateAvailableTask.postDetails.filter(postDetail => postDetail.id == detailedPost.id)
-    console.log('checked', !!postDetails.length ? postDetails[0].checked : false);
     return !!postDetails.length ? postDetails[0].checked : false
   }
 
@@ -252,12 +256,9 @@ export class UIPopup extends DimensionMenu {
     this.store.dispatch(new CreateDetailedPost(assignDate.missionId, value, assignDate.datePostId)).pipe(take(1)).subscribe(() => {
       formControl.reset()
             
-      console.log('assing', assignDate);
       const mission = this.store.selectSnapshot(DataQueries.getById("Mission", assignDate.missionId))
       const missionPostDetail = this.store.selectSnapshot(DataQueries.getMany("DetailedPost", mission!.details)) as Task[];
-      console.log('assing', assignDate);
       const newTask = missionPostDetail[missionPostDetail.length - 1];
-      console.log('NewTask,', newTask);
       
       // assignDate.date.allPostDetails = this.store.selectSnapshot(DataQueries.getMany("DetailedPost", mission!.details));
       // this.popupService.addPostDetailList.next(newTask);
@@ -272,7 +273,6 @@ export class UIPopup extends DimensionMenu {
         checked: true
       }
       assignDate.date.allPostDetails.push(detailDate)
-      console.log('detailDAte,', detailDate);
       assignDate.date.postDetails.push(detailDate)
       this.popupService.addPostDetail.next(detailDate)
       this.popupService.modifyPostDetail.next(detailDate)
@@ -302,11 +302,9 @@ export class UIPopup extends DimensionMenu {
     
     this.store.dispatch(new ModifyDetailedPost(detailDate, detailDate.checked, datePostId)).pipe(take(1)).subscribe(result => {
       checkbox.onChange(e)
-      console.log('detailDate', detailDate);
       detailDate.checked = !detailDate.checked
       const newDetailDate = detailDate
       newDetailDate.date = assignDate.date.date
-      console.log('newDetailDate', newDetailDate);
       
       this.popupService.modifyPostDetail.next(newDetailDate)
 
@@ -349,7 +347,7 @@ export class UIPopup extends DimensionMenu {
 
 export type PredefinedPopups<T = any> = {
   readonly type: "predefined";
-  name: "deletePost" | "sign" | "setDate" | "closeMission" | "validateCandidate" | "refuseCandidate" | "blockCandidate" | "boostPost" | "onApply" | "onApplyConfirm" | "newFile" | "deleteFile" | "deleteCandidate"; // | 'closeMission'
+  name: "deletePost" | "sign" | "setDate" | "closeMission" | "validateCandidate" | "refuseCandidate" | "blockCandidate" | "boostPost" | "onApply" | "onApplyConfirm" | "newFile" | "deleteFile" | "deleteCandidate" | "missKbis"; // | 'closeMission'
   context?: TemplateContext;
 };
 
@@ -386,9 +384,7 @@ export class PopupService {
 
   openFile(file: BasicFile | File, canOpenPDF: boolean = true) {
     if (!file.content) {
-      console.log('openFile !file.content');
       let name: string = "File" + (file as File).id!.toString()
-      console.log('openFile !file.content File name', name);
       if (SingleCache.checkValueInCache(name)) {
         this.openFile(SingleCache.getValueByName(name))
       }
@@ -820,6 +816,33 @@ export class PopupService {
           if (context.$implicit.isActive) {
             object.deleteCandidate(post.id);
           }
+          closed$.next();
+        },
+      });
+
+      first = false;
+    }
+  }
+
+  missKbis(actualView: string) {
+
+    let first: boolean = true;
+    const closed$ = new Subject<void>();
+
+    const context = {
+      $implicit: {
+        actualView: actualView,
+        isActive: false,
+      },
+    };
+
+    if (first) {
+      this.dimension$.next(this.defaultDimension);
+      this.popups$.next({
+        type: "predefined",
+        name: "missKbis",
+        context,
+        close: () => {
           closed$.next();
         },
       });

@@ -220,6 +220,7 @@ import { FaqComponent } from "./components/faq/faq.component";
     RatingComponent,
     SlideProfileComponent,
     GiveARecommandation,
+    AskRecommandationComponent,
     FaqComponent
   ],
   providers: [ImageGenerator, FileDownloader, FilterService, Mobile]

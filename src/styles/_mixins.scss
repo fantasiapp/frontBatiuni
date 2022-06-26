@@ -228,6 +228,10 @@
   @include with-set-safe-area(margin, top, #{$mission-header-height});
   @include with-set-safe-area(margin, bottom);
   height: calc(100vh - #{$mission-header-height} - #{$navigation-height} - env(safe-area-inset-bottom));
+  
+  &.footerHide {
+    height: calc(100vh - #{$mission-header-height}) ;
+  }
 }
 
 %pull-down {

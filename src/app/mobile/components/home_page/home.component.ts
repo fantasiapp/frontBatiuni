@@ -110,6 +110,8 @@ export class HomeComponent extends Destroy$ {
   filterOnST: boolean = false;
   isStillOnPage: boolean = true;
 
+  possibleCandidates: Candidate[] = [];
+
   get missionToClose() {
     return this.missions[0];
   }
@@ -172,13 +174,12 @@ export class HomeComponent extends Destroy$ {
   ) {
     super();
     this.isLoading = this.booleanService.isLoading
-    this.searchbar = new SearchbarComponent(store);
+    this.searchbar = new SearchbarComponent(store, cd);
     this.activeView = activeViewService.activeView
   }
   
   ngOnInit() {
     this.booleanService.getLoadingChangeEmitter().subscribe((bool : boolean) => {
-      console.log("tout va bien")
       this.isLoading = bool
       this.cd.markForCheck()
     })
@@ -196,7 +197,6 @@ export class HomeComponent extends Destroy$ {
     this.activeViewService.getActiveViewChangeEmitter().subscribe((num: number) => {
       this.slideMissionClose()
       this.activeView = num
-      console.log("j'ai changé", this.activeView)
     })
     this.lateInit()
   }
@@ -328,6 +328,22 @@ export class HomeComponent extends Destroy$ {
       let b2 = post2.boostTimestamp > this.time ? 1 : 0;
       return b2 - b1
     });
+
+    // Trie Posts selon leurs réponses
+    let responses = [];
+    for (let post of this.allUserOnlinePosts) {
+      const candidatesIds = post.candidates || [],
+      candidates = this.store.selectSnapshot(DataQueries.getMany("Candidate", candidatesIds));
+      let possCandidate = candidates.reduce((possibleCandidates: Candidate[], candidate: Candidate) => { 
+        if (!candidate.isRefused) {possibleCandidates.push(candidate)}
+        return possibleCandidates; 
+      }, []);
+      responses.push([post, possCandidate.length])
+    }
+    responses.sort((a: any,b: any) => b[1] - a[1]);
+    let keys = responses.map((key: any) => { return key[0] });    
+    this.allUserOnlinePosts.sort((a: any,b: any)=>keys.indexOf(a) - keys.indexOf(b));
+    
     if (filter == null) {
       this.userOnlinePosts = this.allUserOnlinePosts;
     } else {
@@ -339,23 +355,7 @@ export class HomeComponent extends Destroy$ {
         let keys = levenshteinDist.map((key: any) => { return key[0] })
         this.allUserOnlinePosts.sort((a: any, b: any) => keys.indexOf(a) - keys.indexOf(b))
       } 
-
-      // Trie Posts selon leurs réponses
-      if (filter.sortPostResponse === true) {
-        let responses = [];
-        for (let post of this.allUserOnlinePosts) {
-          const candidatesIds = post.candidates || [],
-          candidates = this.store.selectSnapshot(DataQueries.getMany("Candidate", candidatesIds));
-          let possCandidate = candidates.reduce((possibleCandidates: Candidate[], candidate: Candidate) => { 
-            if (!candidate.isRefused) {possibleCandidates.push(candidate)}
-            return possibleCandidates; 
-          }, []);
-          responses.push([post, possCandidate.length])
-        }
-        responses.sort((a: any,b: any) => b[1] - a[1]);
-        let keys = responses.map((key: any) => { return key[0] });    
-        this.allUserOnlinePosts.sort((a: any,b: any)=>keys.indexOf(a) - keys.indexOf(b));
-      } 
+      
 
       for (let post of this.allUserOnlinePosts) {
         
@@ -373,7 +373,6 @@ export class HomeComponent extends Destroy$ {
   selectMission(filter: any) {
     this.missions = [];
     this.allMissions.sort((a, b) => {return Number(a["isClosed"]) - Number(b["isClosed"]);});
-    console.log("this.allMissions", this.allMissions)
     if (filter == null) {
       this.missions = this.allMissions;
     } else {
@@ -429,7 +428,7 @@ export class HomeComponent extends Destroy$ {
   };
 
   isFilterOn(filter: any){
-    if ((filter.address == "" || filter.address == null) && (filter.date == "" || filter.date == null)&& (filter.jobs == null || filter.jobs.length == 0) && filter.manPower == null && (filter.sortDraftDate == false ||filter.sortDraftDate ==  null) && (filter.sortDraftFull == false ||filter.sortDraftFull == null) && (filter.sortPostResponse == false || filter.sortPostResponse == null) && (filter.sortMissionNotifications == false || filter.sortMissionNotifications == null)){
+    if ((filter.address == "" || filter.address == null) && (filter.date == "" || filter.date == null)&& (filter.jobs == null || filter.jobs.length == 0) && filter.manPower == null && (filter.sortDraftDate == false ||filter.sortDraftDate ==  null) && (filter.sortDraftFull == false ||filter.sortDraftFull == null) && (filter.sortMissionNotifications == false || filter.sortMissionNotifications == null)){
       this.filterOn = false;
     } else {
       this.filterOn = true;
@@ -505,6 +504,22 @@ export class HomeComponent extends Destroy$ {
       let b2 = post2.boostTimestamp > this.time ? 1 : 0;
       return b2 - b1
     });
+
+    // Trie Posts selon leurs réponses
+    let responses = [];
+    for (let post of this.allUserOnlinePosts) {
+      const candidatesIds = post.candidates || [],
+      candidates = this.store.selectSnapshot(DataQueries.getMany("Candidate", candidatesIds));
+      let possCandidate = candidates.reduce((possibleCandidates: Candidate[], candidate: Candidate) => { 
+        if (!candidate.isRefused) {possibleCandidates.push(candidate)}
+        return possibleCandidates; 
+      }, []);
+      responses.push([post, possCandidate.length])
+    }
+    responses.sort((a: any,b: any) => b[1] - a[1]);
+    let keys = responses.map((key: any) => { return key[0] });    
+    this.allUserOnlinePosts.sort((a: any,b: any)=>keys.indexOf(a) - keys.indexOf(b));
+    
     if (searchForm == "" || searchForm == null)  {
     } else {
       let levenshteinDist: any = [];
@@ -578,7 +593,6 @@ export class HomeComponent extends Destroy$ {
   };
 
   callbackSearchST = (search: string): void => {
-    console.log('search', search, !search);
     this.searchBarEmptySubject.next(!search)
     this.refreshSubject.next();
     this.selectSearchST(search)
@@ -695,20 +709,14 @@ export class HomeComponent extends Destroy$ {
     });
   }
 
-  get possibleCandidates() {
-    const candidatesIds = this.postMenu.post?.candidates || [],
-      candidates = this.store.selectSnapshot(
+  updatePossibleCandidates() {
+    const candidatesIds = this.postMenu.post?.candidates || []
+    const candidates = this.store.selectSnapshot(
         DataQueries.getMany("Candidate", candidatesIds)
       );
-    return candidates.reduce(
-      (possibleCandidates: Candidate[], candidate: Candidate) => {
-        if (!candidate.isRefused) {
-          possibleCandidates.push(candidate);
-        }
-        return possibleCandidates;
-      },
-      []
-    );
+    this.possibleCandidates = candidates.filter((candidate) => {
+      return !candidate.isRefused
+    })
   }
 
   showCandidates() {
@@ -889,7 +897,9 @@ export class HomeComponent extends Destroy$ {
 
   updateCurrentPost(p: Post) {
     this.currentPost = p;
+    this.updatePossibleCandidates()
   }
+
   // Used in notification
   get currentCandidates(): number {
     let possibleCandidates: number = 0;

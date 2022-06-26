@@ -6,3 +6,10 @@
   height: 100vh;
   @extend %fixed
 }
+
+
+navigation {
+  .footerHide & {
+    visibility: hidden
+  }
+}

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, OnInit, QueryList, ViewChildren } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, QueryList, ViewChildren } from "@angular/core";
 import { DistanceSliderConfig, SOSSalarySliderConfig } from "src/app/shared/common/sliderConfig";
 import { Company, Job, Post, Profile } from "src/models/new/data.interfaces";
 import { NgxSliderModule } from '@angular-slider/ngx-slider';
@@ -8,6 +8,7 @@ import { UISwitchComponent } from "../components/switch/switch.component";
 import { FilterService } from "../services/filter.service";
 import { Store } from "@ngxs/store";
 import { FormArray, FormControl, FormGroup } from "@angular/forms";
+import { returnInputKeyboard } from '../common/classes'
 import "hammerjs"
 
 @Component({
@@ -22,18 +23,18 @@ import "hammerjs"
 
     <div class="form-input">
       <label>Adresse de chantier</label>
-      <input type="text" class="form-element" formControlName="address"/>
+      <input type="text" class="form-element" formControlName="address" (keyup)="returnInputKeyboard($event, inputAddress)" #inputAddress/>
     </div>
 
     <div class="form-input">
       <label>Dans un rayon autour de</label>
-      <ngx-slider [(value)]=valueDistance [options]="imports.DistanceSliderConfig" formControlName="radius"></ngx-slider>
+      <ngx-slider [(value)]=valueDistance [options]="imports.DistanceSliderConfig" formControlName="radius" (userChange)="detectChange()"></ngx-slider>
     </div>
 
 
     <div class="form-input">
       <label>Estimation de salaire</label>
-      <ngx-slider [options]="imports.SOSSalarySliderConfig" [value]="0" [highValue]="400" formControlName="amount"></ngx-slider>
+      <ngx-slider [options]="imports.SOSSalarySliderConfig" [value]="0" [highValue]="400" formControlName="amount" (userChange)="detectChange()"></ngx-slider>
     </div>
 
 
@@ -92,7 +93,7 @@ export class SOSFilterForm implements OnInit {
     {}
   );
 
-  constructor(private store: Store){}
+  constructor(private store: Store, private cd: ChangeDetectorRef){}
 
   @SnapshotAll('Job')
   allJobs!: Job[];
@@ -104,4 +105,9 @@ export class SOSFilterForm implements OnInit {
     })
   }
 
+  detectChange(){
+    this.cd.detectChanges();
+  }
+
+  returnInputKeyboard = returnInputKeyboard
 }
