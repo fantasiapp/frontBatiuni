@@ -29,6 +29,7 @@ import { ApplicationsComponent } from "./components/applications/applications.co
 import { InviteFriendsComponent } from "./components/invite_friends/invite_friends.component";
 import { SuiviChantierDateContentComponent } from './components/suivi_chantier_date-content/suivi_chantier_date-content.component';
 import { MentionLegalComponent } from './components/mention-legal/mention-legal.component';
+import { SupervisionWrapperComponent } from './components/supervision-wrapper/supervision-wrapper.component';
 
 @NgModule({
   declarations: [
@@ -57,6 +58,7 @@ import { MentionLegalComponent } from './components/mention-legal/mention-legal.
     InviteFriendsComponent,
     SuiviChantierDateContentComponent,
     MentionLegalComponent,
+    SupervisionWrapperComponent,
   ],
   imports: [
     CommonModule,

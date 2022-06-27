@@ -13,7 +13,7 @@
 <label *ngIf="showtitle"  class="label-input" for="filename">Télécharger la certification {{filename}}</label>
 <div class="file-form flex grow">
   <span class="file-input position-relative">
-    <input class="form-search" (change)="onChange({origin: 'file', event: $event})" (keyup)="returnInputKeyboard($event, input)" type="file" #input/>
+    <input accept="image/*" class="form-search" (change)="onChange({origin: 'file', event: $event})" (keyup)="returnInputKeyboard($event, input)" multiple="true" type="file" #input/>
     <span class="placeholder full-width text-ellipsis position-absolute"> {{ value!.name }} </span>
   </span>
   <img src="assets/Attachement.svg" (click)="onFileInputClicked($event, input)">

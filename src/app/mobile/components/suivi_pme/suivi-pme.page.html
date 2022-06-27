@@ -5,7 +5,7 @@
     <h3>
       Le contrats
     </h3>
-    <div class="flex center-cross space-around" (click)="signContract()">
+    <div class="flex center-cross space-around" (click)=" isNotSignedByUser ? verifyKbis() : signContract()">
       <file-svg name="Contrat" color="red"></file-svg>
       <h4 *ngIf="isNotSignedByUser" class="contrat-title font-Poppins">
         Signer le contrat

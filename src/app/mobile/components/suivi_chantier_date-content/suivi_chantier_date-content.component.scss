@@ -1,6 +1,9 @@
 @use 'src/styles/variables' as *;
 
-
+.annonce {
+  background: #FFFFFF !important;
+  color: $dark;
+}
 
 .chantier-tache-container {
   display: flex;
@@ -145,3 +148,5 @@ form {
   justify-content: space-around;
   width:90%;
 }
+
+

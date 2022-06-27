@@ -108,6 +108,7 @@ export class Notifications {
         moment(moment(today[i].date)).startOf("minute").fromNow()
       );
     }
+    moment.locale('en')
     return Today;
   }
 
@@ -121,6 +122,7 @@ export class Notifications {
         moment(moment(month[j].date)).startOf("minute").fromNow()
       );
     }
+    moment.locale('en')
     return Month;
   }
 

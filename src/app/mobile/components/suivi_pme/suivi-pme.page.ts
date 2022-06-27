@@ -36,6 +36,7 @@ import { Destroy$ } from "src/app/shared/common/classes";
 import * as moment from "moment";
 import { ActiveViewService } from "src/app/shared/services/activeView.service";
 import { HomeComponent } from "../home_page/home.component";
+import { Mobile } from "src/app/shared/services/mobile-footer.service";
 
 // export type Task = PostDetail & {validationImage:string, invalidationImage:string}
 
@@ -69,6 +70,7 @@ export class SuiviPME extends Destroy${
     private cd: ChangeDetectorRef,
     private activeViewService: ActiveViewService,
     // private homeComponent: HomeComponent
+    private mobile: Mobile
   ) {super()}
 
   ngOnInit(){
@@ -278,6 +280,10 @@ export class SuiviPME extends Destroy${
 
   @Select(DataQueries.currentProfile)
   currentProfile$!: Observable<Profile>;
+
+  verifyKbis(){
+    this.popup.signContractKbis(this.mission!, this.updateMission.bind(this))
+  }
 
   signContract() {
     this.popup.openSignContractDialog(this.mission!, this.updateMission.bind(this));
