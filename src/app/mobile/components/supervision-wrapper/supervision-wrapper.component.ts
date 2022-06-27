@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { Store } from '@ngxs/store';
@@ -8,6 +8,7 @@ import { Mobile } from 'src/app/shared/services/mobile-footer.service';
 import { DatePost, Mission, PostDetail, PostDetailGraphic, Ref, Supervision } from 'src/models/new/data.interfaces';
 import { DataQueries } from 'src/models/new/data.state';
 import { CreateSupervision, UploadImageSupervision } from 'src/models/new/user/user.actions';
+import { EventEmitter } from 'stream';
 import { TaskGraphic } from '../suivi_chantier_date-content/suivi_chantier_date-content.component';
 
 @Component({
@@ -27,6 +28,8 @@ export class SupervisionWrapperComponent implements OnInit {
   @Input() supervisions: Supervision[] = []
   showFooter: boolean = true;
   swipeMenuImage: boolean = false;
+
+  // @Output() closeSwipe = new EventEmitter<Supervision[] | null>()
 
 
   constructor(public mobile: Mobile, private cd: ChangeDetectorRef, private store: Store, private info: InfoService) {
@@ -80,6 +83,7 @@ export class SupervisionWrapperComponent implements OnInit {
             supervisions = this.store.selectSnapshot(DataQueries.getMany('Supervision', this.dateOrigin.supervisions))!
           }
           this.supervisions = supervisions
+          console.log('response');
 
           this.cd.markForCheck()
 
@@ -90,7 +94,9 @@ export class SupervisionWrapperComponent implements OnInit {
     }
   }
   
+  // currentSupervisionId: Ref<Supervision> | null = null
   cameraSwipe(){
+    // this.currentSupervisionId = supervsionId;
     this.swipeMenuImage = true; 
     this.cd.markForCheck()
   }
@@ -102,8 +108,8 @@ export class SupervisionWrapperComponent implements OnInit {
       source: CameraSource.Camera,
     });
     // this.store.dispatch(new UploadImageSupervision(photo, this.currentSupervisionId)).pipe(take(1)).subscribe(() => {
-    //   // this.date.supervisions
-    //   // this.updatePageOnlyDate();
+      // this.date.supervisions
+      // this.updatePageOnlyDate();
     //   this.swipeMenuImage = false;
     // });
   }
