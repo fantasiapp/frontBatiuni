@@ -110,7 +110,7 @@ export class SuiviComments {
   openModalImage(image: SafeResourceUrl) {
     this.displayModal = true;
     this.modalImage = image;
-
+    this.cd.markForCheck();
   }
 
   closeModalImage() {

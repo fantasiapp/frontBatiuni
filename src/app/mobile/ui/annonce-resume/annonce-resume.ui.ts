@@ -94,7 +94,7 @@ export type ApplyForm = {
           </div>
   
           <div class="condition">
-            <span class="title  ">Condition de paiement</span>
+            <span class="title" *ngIf="post.paymentCondition">Condition de paiement</span>
             <p>{{ post.paymentCondition }}</p>
           </div>  
 
