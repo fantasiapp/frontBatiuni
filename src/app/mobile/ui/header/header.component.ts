@@ -1,9 +1,21 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from "@angular/core";
+import { Store } from "@ngxs/store";
+import { ChangeProfileType } from "src/models/new/user/user.actions";
 
 @Component({
   selector: 'page-header',
   template: `
   <header class="clear-margin flex column full-width small-space-children-margin">
+    <div class="switch-header__wrapper">
+      <div class="switch-header">
+        <div class="switch-header__PME-ST" (click)="changeProfileType(true)">
+          Profil PME
+        </div>
+        <div class="switch-header__PME-ST active" (click)="changeProfileType(false)">
+          Profil Sous-traitant
+        </div>
+      </div>
+    </div>
     <h1 *ngIf="!customHeader">{{name}}</h1>
     <div *ngIf="!customHeader; else headerBar" class="pick flex row">
       <searchbar class="grow" [callbackSearch]="callbackSearch"></searchbar>
@@ -56,5 +68,13 @@ export class HeaderComponent {
     for ( let i = 0; i < tabs; i++ )
       result[i] = i;
     return result;
+  }
+
+  constructor(private store: Store){
+    
+  }
+
+  changeProfileType(type: boolean) {
+    this.store.dispatch(new ChangeProfileType(type));
   }
 };

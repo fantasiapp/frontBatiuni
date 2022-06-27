@@ -1,24 +1,18 @@
 <div class="slideMenu__comment__wrapper" content>
     <div class="slideMenu__comment__wrapper__container">
-        <!-- <ng-container *ngIf="taskGraphic else mainComment" >
-            <div class="partenerComment-container" *ngFor="let supervision of taskGraphic.selectedTask.supervisions; let isLast = last">
-              <comment-suivi  [supervision]="supervision" #commentSuivi ></comment-suivi>
-            </div>
-        </ng-container> -->
 
-        <!-- <ng-template #mainComment> -->
-            <div class="partenerComment-container" *ngFor="let supervision of supervisions; let isLast = last">
-                <comment-suivi  [supervision]="supervision" #commentSuivi ></comment-suivi>
-              </div>
-        <!-- </ng-template> -->
+
+      <div class="partenerComment-container" *ngFor="let supervision of supervisions; let isLast = last">
+          <comment-suivi  [supervision]="supervision" #commentSuivi ></comment-suivi>
+        </div>
     </div>
 </div>
 <div class="slideMenu__comment__input__wrapper" [ngClass]="{'resetPadding': !showFooter}">
   <div class="divComment">
     <form [formGroup]="formMain" #formMainTest (ngSubmit)="onSubmit(selectedTask, formMain, 'inputComment')">
       <input formControlName="inputComment" class="inputComment" type="text" placeholder="Ajouter un commentaire" #comment>
-      <img (click)="cameraSwipe()" src="assets/camera-outline.svg"/>
     </form>
+    <img (click)="cameraSwipe()" src="assets/camera-outline.svg"/>
   </div>
 </div>
 

@@ -6,7 +6,7 @@ header {
   @extend %header;
   position: fixed;
   // height: $mission-header-height;
-  height: calc(#{$mission-header-height} + env(safe-area-inset-top));
+  height: calc(#{$mission-header-height} + #{$switch-header-size} + env(safe-area-inset-top));
   padding-top: calc(env(safe-area-inset-top) + 1rem);
   padding-bottom: 0;
 }
@@ -19,4 +19,37 @@ header {
   position: absolute;
   left: 0;
   bottom: 0;
+}
+
+.switch-header__wrapper {
+  height: $switch-header-size;
+  margin-bottom: -0.25rem;
+  
+  .switch-header {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    top: 0;
+    height: $switch-header-size;
+    background-color: white;
+    display: flex;
+  }
+}
+
+.switch-header__PME-ST {
+  width: 50%;
+  height: 100%;
+  background-color: #E5E5E5;
+  color: #8D8D8D;
+  padding: 10px 0;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  &.active {
+    background-color: $primary;
+    font-weight: 600;
+    color: white;
+    box-shadow: 0 3px 6px #0000009f;
+  }
 }

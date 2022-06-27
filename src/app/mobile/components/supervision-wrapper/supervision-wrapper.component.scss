@@ -35,11 +35,13 @@ $color-background-comment: #e5e8ed;
     position: relative;
     flex-direction: row;
     padding: .5rem 1rem;
-    margin-top: 1rem;
     background: white;
-    border-radius: 1.5rem;
+    border-radius: 1.25rem;
     border: 1px solid #F7F7F7;
-    
+    width: 100%;
+    > form {
+      flex-grow: 1;
+    }
     &:focus-within {
       border: 1px solid $primary;
     }
@@ -92,26 +94,6 @@ $color-background-comment: #e5e8ed;
     padding: 2rem;
 }
 
-.divComment {
-    margin-top: 1rem;
-    padding: unset;
-    border-color: #bdbdbd;
-    border-radius: 4px;
-    justify-content: space-between;
-    textarea {
-    padding: .5rem;
-    resize: none;
-    min-height: 50px;
-    max-height: 100px;
-    width: 90%;
-    }
-    img {
-    align-self: flex-end;
-    position: relative;
-    top: -.5rem;
-    right: .5rem
-    }
-}
 .partenerComment-addPhoto {
     display: flex;
     align-items: center;
