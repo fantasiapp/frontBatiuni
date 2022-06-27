@@ -526,14 +526,14 @@ input[type=number] {
   width: 100%;
   position: absolute;
   top: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(0%, -50%);
   animation-name: zoom;
   animation-duration: 0.3s;
 }
 
 @keyframes zoom {
-  from {transform:scale(0) translate(-50%, -50%)}
-  to {transform:scale(1) translate(-50%, -50%)}
+  from {transform:scale(0) translate(0%, -50%)}
+  to {transform:scale(1) translate(0%, -50%)}
 }
 
 .wrapper__searchbar__clickcatcher {
