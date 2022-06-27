@@ -82,3 +82,8 @@
   </div>
 </slidemenu>
 
+<slidemenu [(open)]="openRecommandationMenu" #askRecommandation>
+  <div class="modify-page hosted-page flex column center-cross space-children-margin" content>
+    <ask_recommandation [profileEmail]="profileEmail" class="flex column center-cross space-children-margin"></ask_recommandation>
+  </div>
+</slidemenu>
