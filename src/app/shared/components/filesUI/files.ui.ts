@@ -143,6 +143,7 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
       this.popup.newFile(this.filename, this);
     }
 
+    console.log('file', this.value, ext, name);
 
     return {
       ...this.value,
@@ -169,18 +170,25 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
   }
 
   async selectPhoto() {
+    // if(!Camera.checkPermissions()) Camera.requestPermissions()
     const photo = await Camera.getPhoto({
       resultType: CameraResultType.Base64,
       source: CameraSource.Photos,
       allowEditing: true,
     });
 
+    // const fullname = photo.webPath;
+    // lastDot = fullname.lastIndexOf("."),
+    // name = fullname.slice(0, lastDot),
+    // ext = fullname.slice(lastDot + 1);
+    // console.log('Photo', photo, photo.format, photo.path, fullname);
+    
     let acceptedFormat = ["jpeg", "png", "jpg", "bmp"];
     if (acceptedFormat.includes(photo.format)) {
       this.value = {
         expirationDate: "",
         nature: "",
-        name: photo.path || "Image téléchargée depuis les photos",
+        name:  "Image téléchargée depuis les photos",
         ext: photo.format,
         content: [photo.base64String as string],
       }

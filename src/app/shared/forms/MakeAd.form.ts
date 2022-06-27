@@ -516,6 +516,7 @@ export class MakeAdForm {
   }
 
   ngOnInit() {
+    this.info.alignWith('paging_switch')
     this.mobile.footerStateSubject.subscribe((b) => {
       this.showFooter = b;
       this.cd.detectChanges();
