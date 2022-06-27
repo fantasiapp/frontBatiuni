@@ -18,7 +18,6 @@ import { getFileType } from "../../common/functions";
 import { InfoService } from "../info/info.component";
 import { PopupService } from "../popup/popup.component";
 import { SwipeupService } from "../swipeup/swipeup.component";
-import { returnInputKeyboard } from '../../common/classes'
 
 export type BasicFile = {
   nature: string;
@@ -56,7 +55,6 @@ export function defaultFileUIOuput(
   ],
 })
 export class FileUI extends UIAsyncAccessor<FileUIOutput> {
-  returnInputKeyboard = returnInputKeyboard
   @Input()
   filename: string = "Kbis";
 
@@ -122,7 +120,7 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
 
   //override
 
-  async getInput(e: { origin: string; event: any, popup?: boolean }): Promise<FileUIOutput> {
+  async getInput(e: { origin: string; event: any }): Promise<FileUIOutput> {
     let input = e.event.target as HTMLInputElement;
     if (e.origin == "date") {
       if (!input.value) return this.value!;
@@ -137,12 +135,6 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
       lastDot = fullname.lastIndexOf("."),
       name = fullname.slice(0, lastDot),
       ext = fullname.slice(lastDot + 1);
-
-
-    if (this.value?.nature != 'post') {
-      this.popup.newFile(this.filename, this);
-    }
-
 
     return {
       ...this.value,
@@ -161,34 +153,28 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
     this.kill.emit();
   }
 
-  async openInput(input:HTMLInputElement, e: Event) {
-
-    input.click()
-    
+  openInput() {
+    this.inputRef.nativeElement.click();
+    if (this.value?.nature == "admin") {this.popup.newFile(this.filename, this);}
     this.modified = true;
   }
 
-  async selectPhoto() {
+  private async takePhoto() {
     const photo = await Camera.getPhoto({
+      allowEditing: false,
       resultType: CameraResultType.Base64,
       source: CameraSource.Photos,
-      allowEditing: true,
     });
 
-    let acceptedFormat = ["jpeg", "png", "jpg", "bmp"];
-    if (acceptedFormat.includes(photo.format)) {
-      this.value = {
-        expirationDate: "",
-        nature: "",
-        name: photo.path || "Image téléchargée depuis les photos",
-        ext: photo.format,
-        content: [photo.base64String as string],
-      }
-    } else {
-      this.info.show("error", "Format d'image non supporté", 3000);
-    }
+    console.log('take photo', photo.path);
+    this.value = {
+      expirationDate: "",
+      nature: "",
+      name: photo.path || "Image téléchargée depuis les photos",
+      ext: photo.format,
+      content: [photo.base64String as string],
+    };
   }
-
 
   deleteFile(){
     if (this.value?.nature == "admin") {this.kill.emit(this.value?.name);}
@@ -211,6 +197,7 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
       responseType: ResponseType.Base64,
     })
     
+    console.log('scanenrImages', scannedImages);
     if (scannedImages && scannedImages.length > 0) {
 
       // let base64 = Capacitor.convertFileSrc(scannedImages[0])
@@ -226,7 +213,7 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
     }
   }
 
-  onFileInputClicked(e: Event, input: HTMLInputElement) {
+  onFileInputClicked(e: Event) {
     if (e.isTrusted) e.preventDefault();
 
     this.swipeup.show({
@@ -274,8 +261,7 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
         {
           name: "Télécharger un fichier",
           click: () => {
-            this.selectPhoto()
-            
+            this.openInput();
           },
         },
         {

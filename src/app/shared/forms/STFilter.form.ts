@@ -35,34 +35,33 @@ import "hammerjs"
       <options [options]="allJobs" formControlName="jobs"></options>
     </div>
     
-      <div class="form-input">
-        <label>Date de démarrage</label>
-        <div class="form-input flex row space-between">
-          <input type="date" style="padding-left: 0.5rem;" class="form-element" formControlName="date" #inputDateMission/>
-          <img src="assets/calendar.png" (click)="inputDateMission.select()" class="img-calendar-since" style="pointer-events: none;"/>
-        </div>
+    <div class="form-input">
+      <label>Date de démarrage</label>
+      <div class="form-input flex row space-between">
+        <input type="date" style="padding-left: 0.5rem;" class="form-element" formControlName="date" #inputDateMission/>
+        <img src="assets/calendar.png" (click)="inputDateMission.select()" class="img-calendar-since" style="pointer-events: none;"/>
       </div>
+    </div>
 
-      <div class="form-input">
-        <label>Adresse de chantier</label>
-        <input
-          type="text"
-          class="form-element"
-          formControlName="address"
-          (keyup)="returnInputKeyboard($event, inputAddress)" #inputAddress
-        />
-      </div>
+    <div class="form-input">
+      <label>Adresse de chantier</label>
+      <input
+        type="text"
+        class="form-element"
+        formControlName="address"
+        (keyup)="returnInputKeyboard($event, inputAddress)" #inputAddress
+      />
+    </div>
 
     <div class="form-input">
       <label>Dans un rayon autour de</label>
       <ngx-slider [(value)]=valueDistance [options]="imports.DistanceSliderConfig" formControlName="radius" (userChange)="detectChanges()"></ngx-slider>
-
     </div>
 
     <div class="form-input">
-        <label>Taille de l'entreprise</label>
-        <ngx-slider [options]="imports.EmployeesSliderConfig" formControlName="employees" (userChange)="detectChanges()"></ngx-slider>
-      </div>
+      <label>Taille de l'entreprise</label>
+      <ngx-slider [options]="imports.EmployeesSliderConfig" formControlName="employees" (userChange)="detectChanges()"></ngx-slider>
+    </div>
 
     <div class="form-input form-spacer">
       <label class="form-title">Type</label>
