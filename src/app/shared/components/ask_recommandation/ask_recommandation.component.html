@@ -4,7 +4,7 @@
   <span>Veuillez saisir l’adresse e-mail de la personne dont vous souhaitez une recommandation</span>
 
   <form [formGroup]="emailForm" style="width:100%">
-    <input type="text" class="askRecommandationsInput" placeholder="Ex: jeanluc@fantasiapp.com" formControlName="email">
+    <input type="text" class="askRecommandationsInput" (keyup)="returnInputKeyboard($event, input)" placeholder="Ex: jeanluc@fantasiapp.com" formControlName="email" #input>
     <div style="height:20px"></div> 
     <button class="flex center button active" class="button askRecommandationsSubmit" (click)="askRecommandation()">Envoyer</button>
   </form>
