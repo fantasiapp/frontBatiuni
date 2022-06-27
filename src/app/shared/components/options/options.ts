@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostBinding, HostListener, Input, NgZone, Output, QueryList, SimpleChanges } from "@angular/core";
 import { NG_VALUE_ACCESSOR } from "@angular/forms";
 import { UIDefaultAccessor } from "src/app/shared/common/classes";
-import { filterMap, focusOutside, getTopmostElement, makeid } from "src/app/shared/common/functions";
+import { delay, filterMap, focusOutside, getTopmostElement, makeid } from "src/app/shared/common/functions";
 import { Option } from "src/models/option";
 import { UIRadioboxComponent } from "../box/radiobox.component";
 
@@ -47,6 +47,7 @@ export class OptionsModel extends UIDefaultAccessor<Option[]> {
   private static listening: boolean = false;
 
   ngOnInit() {
+    this.test()
     OptionsModel.instances.push(this);
     if ( !OptionsModel.listening )
       window.addEventListener('click', OptionsModel.listener);
@@ -99,7 +100,6 @@ export class OptionsModel extends UIDefaultAccessor<Option[]> {
 
   getInput(action: ['delete' | 'toggle', number]) {
     const isRadio = this._type[0] != 'checkbox';
-    console.log(action, isRadio)
     if ( action[0] == 'delete' ) {
       let idx = action[1],
         id = this.value![idx].id;
@@ -110,10 +110,11 @@ export class OptionsModel extends UIDefaultAccessor<Option[]> {
         option = this.options.find(option => option.id == id)!;
 
       if ( isRadio )
-        return [option];
+        if (this.value!.length > 0 && this.value![0] == option) {return this.value!.filter(option => option.id != id)} 
+        else return [option];
 
-      if ( this.value!.find(option => option.id == id) )
-        return this.value!.filter(option => option.id != id);
+      if ( this.value!.find(option => option.id == id) ){
+        return this.value!.filter(option => option.id != id);}
       else
         return [...this.value!, option];
     }
@@ -126,6 +127,13 @@ export class OptionsModel extends UIDefaultAccessor<Option[]> {
       window.removeEventListener('click', OptionsModel.listener)
       OptionsModel.listening = false;
     }
+  }
+
+  async test() {
+    // while(true){
+    //   console.log("la value", this.value)
+    //   await delay(5000)
+    // }
   }
 
   writeValue(value: Option[]) {

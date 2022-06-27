@@ -32,6 +32,10 @@ export const ratingStarWidth = 18;
   ],
 })
 export class UIStarsComponent extends UIDefaultAccessor<string | number> {
+
+  @Input()
+  isRatings: boolean = false
+
   @HostBinding("style.background-image")
   get emptyStarUrl() {
     return `url(assets/starEmpty.svg)`;
@@ -57,8 +61,11 @@ export class UIStarsComponent extends UIDefaultAccessor<string | number> {
   }
 
   get fullStarUrl() {
-    return `url(assets/starFull.svg)`;
+    if (this.isRatings) {
+      return `url(assets/starFull.svg)`}
+    else return `url(assets/greyFullStar.svg)`;
   }
+
 
   constructor(cd: ChangeDetectorRef, private ref: ElementRef) {
     super(cd);

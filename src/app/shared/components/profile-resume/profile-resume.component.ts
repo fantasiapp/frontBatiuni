@@ -1,9 +1,10 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, ViewChild } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, Output, ViewChild } from "@angular/core";
 import { Select, Store } from "@ngxs/store";
 import { Observable } from "rxjs";
 import { Profile, File, Company, User } from "src/models/new/data.interfaces";
 import { DataQueries, DataState } from "src/models/new/data.state";
 import { ChangeProfileType } from "src/models/new/user/user.actions";
+import { BooleanService } from "../../services/boolean.service";
 import { UIProfileImageComponent } from "../profile-image/profile-image.component";
 
 @Component({
@@ -17,8 +18,10 @@ export class ProfileResume {
   openRatings: boolean = false;
   @Input()
   showRecomandation: boolean = true;
+  hasRatings: boolean
 
-  constructor(private store: Store) {
+  constructor(private store: Store, private booleanService: BooleanService, private cd: ChangeDetectorRef) {
+    this.hasRatings = booleanService.hasRatings
   }
 
   @Input()
@@ -56,6 +59,13 @@ export class ProfileResume {
 
   changeProfileType(type: boolean) {
     this.store.dispatch(new ChangeProfileType(type));
+  }
+
+  ngOnInit() {
+    this.booleanService.gethasRatingsChangeEmitter().subscribe((bool) => {
+      this.hasRatings = bool
+      this.cd.markForCheck()
+    })
   }
 
   ngOnChanges() {

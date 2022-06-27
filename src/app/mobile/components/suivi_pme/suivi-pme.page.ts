@@ -36,6 +36,7 @@ import { Destroy$ } from "src/app/shared/common/classes";
 import * as moment from "moment";
 import { ActiveViewService } from "src/app/shared/services/activeView.service";
 import { HomeComponent } from "../home_page/home.component";
+import { Mobile } from "src/app/shared/services/mobile-footer.service";
 
 // export type Task = PostDetail & {validationImage:string, invalidationImage:string}
 
@@ -69,6 +70,7 @@ export class SuiviPME extends Destroy${
     private cd: ChangeDetectorRef,
     private activeViewService: ActiveViewService,
     // private homeComponent: HomeComponent
+    private mobile: Mobile
   ) {super()}
 
   ngOnInit(){
@@ -148,7 +150,6 @@ export class SuiviPME extends Destroy${
 
 
   onComputeDate(){
-    console.log('onComputeDate',this.mission, this.dates);
     if(!this.mission) return
     this.mission = this.store.selectSnapshot(DataQueries.getById('Mission', this.mission.id));
     if(!this.mission) return
@@ -263,7 +264,6 @@ export class SuiviPME extends Destroy${
     //   button.classList.add('submitActivated')
     
     // }, 1500)
-    console.log('this.hasgeneralStars', this.hasGeneralStars);
     if (!this.hasGeneralStars) return
     try {
       this.store.dispatch(new CloseMission(this.mission!.id, this.mission!.quality, this.mission!.qualityComment, this.mission!.security, this.mission!.securityComment, this.mission!.organisation, this.mission!.organisationComment)).pipe(take(1)).subscribe(() => {

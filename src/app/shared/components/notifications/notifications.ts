@@ -102,11 +102,13 @@ export class Notifications {
     let Today = [];
     let max = this.today.length
     let today = this.today;
+    moment.locale('fr')
     for (let i = 0; i < max; i++) {
       Today.push(
         moment(moment(today[i].date)).startOf("minute").fromNow()
       );
     }
+    moment.locale('en')
     return Today;
   }
 
@@ -114,11 +116,13 @@ export class Notifications {
     let Month = [];
     let max = this.month.length
     let month = this.month
+    moment.locale('fr')
     for (let j = 0; j < max; j++) {
       Month.push(
         moment(moment(month[j].date)).startOf("minute").fromNow()
       );
     }
+    moment.locale('en')
     return Month;
   }
 
@@ -136,8 +140,6 @@ export class Notifications {
 
 
   lateInit() {
-    console.log("----------------------------les notifs---------------------------")
-    console.log(this.notifications, this.store.selectSnapshot(DataState.view))
     this.notifications.forEach((notificationAny, index) => {
       let notification = notificationAny as Notification;
       let src: SafeResourceUrl | string = "assets/profile.png";

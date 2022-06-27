@@ -174,13 +174,12 @@ export class HomeComponent extends Destroy$ {
   ) {
     super();
     this.isLoading = this.booleanService.isLoading
-    this.searchbar = new SearchbarComponent(store);
+    this.searchbar = new SearchbarComponent(store, cd);
     this.activeView = activeViewService.activeView
   }
   
   ngOnInit() {
     this.booleanService.getLoadingChangeEmitter().subscribe((bool : boolean) => {
-      console.log("tout va bien")
       this.isLoading = bool
       this.cd.markForCheck()
     })
@@ -198,7 +197,6 @@ export class HomeComponent extends Destroy$ {
     this.activeViewService.getActiveViewChangeEmitter().subscribe((num: number) => {
       this.slideMissionClose()
       this.activeView = num
-      console.log("j'ai changé", this.activeView)
     })
     this.lateInit()
   }
@@ -210,10 +208,8 @@ export class HomeComponent extends Destroy$ {
       combineLatest([this.profile$, this.store.select(DataQueries.getAll('Post'))])
         .pipe(takeUntil(this.destroy$))
         .subscribe(([profile, posts]) => {
-          console.log(posts)
           const mapping = splitByOutput(posts, (post) => {
             //0 -> userOnlinePosts | 1 -> userDrafts
-            console.log(post)
             if (profile.company.posts.includes(post.id))
               return post.draft
                 ? this.symbols.userDraft
@@ -223,12 +219,10 @@ export class HomeComponent extends Destroy$ {
               ? this.symbols.discard
               : this.symbols.otherOnlinePost;
           });
-          console.log(mapping, this.symbols.otherOnlinePost)
           const otherOnlinePost = mapping.get(this.symbols.otherOnlinePost) || [];
           this.allUserDrafts = mapping.get(this.symbols.userDraft) || [];
           this.allUserOnlinePosts = mapping.get(this.symbols.userOnlinePost) || [];
           this.allOnlinePosts = [...otherOnlinePost, ...this.userOnlinePosts];
-          console.log("tout, allOnlinePosts",this.allOnlinePosts, this.allUserDrafts)
           this.allMissions = this.store.selectSnapshot(DataQueries.getMany("Mission", profile.company.missions));
           const now = (new Date).toISOString().slice(0, 10);
           this.allUserOnlinePosts = this.allUserOnlinePosts.filter((post) => post.dueDate > now)
@@ -269,7 +263,6 @@ export class HomeComponent extends Destroy$ {
   }
 
   updatePage() {
-    this.updatePossibleCandidates();
     this.cd.markForCheck()
   }
 
@@ -380,7 +373,6 @@ export class HomeComponent extends Destroy$ {
   selectMission(filter: any) {
     this.missions = [];
     this.allMissions.sort((a, b) => {return Number(a["isClosed"]) - Number(b["isClosed"]);});
-    console.log("this.allMissions", this.allMissions)
     if (filter == null) {
       this.missions = this.allMissions;
     } else {
@@ -601,7 +593,6 @@ export class HomeComponent extends Destroy$ {
   };
 
   callbackSearchST = (search: string): void => {
-    console.log('search', search, !search);
     this.searchBarEmptySubject.next(!search)
     this.refreshSubject.next();
     this.selectSearchST(search)
@@ -906,7 +897,9 @@ export class HomeComponent extends Destroy$ {
 
   updateCurrentPost(p: Post) {
     this.currentPost = p;
+    this.updatePossibleCandidates()
   }
+
   // Used in notification
   get currentCandidates(): number {
     let possibleCandidates: number = 0;

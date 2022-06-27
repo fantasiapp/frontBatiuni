@@ -35,5 +35,17 @@ export class BooleanService {
     return this.isConnectedNavChange;
   }
 
+  hasRatingsNavChange: EventEmitter<boolean> = new EventEmitter();
+
+  hasRatings: boolean = false
+
+  emithasRatingsChangeEvent(bool : boolean) {
+    this.hasRatings = bool
+    this.hasRatingsNavChange.emit(this.hasRatings);
+  }
+
+  gethasRatingsChangeEmitter() {
+    return this.hasRatingsNavChange;
+  }
 }
 

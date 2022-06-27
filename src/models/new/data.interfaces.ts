@@ -50,9 +50,12 @@ export interface Company {
   ntva: string;
   capital: string;
   revenue: number;
+  size: number;
   logo: any;
   starsST: string;
-  starsPME: string;
+  starsPME: string;  
+  starsRecoST: string;
+  starsRecoPME: string;
   latitude: number;
   longitude: number;
   companyPhone: string;
@@ -166,6 +169,7 @@ export interface Post {
   candidates: Ref<Candidate>[];
   dates: Ref<DatePost>[];
   boostTimestamp: number;
+  paymentCondition: string;
 };
 
 export interface Candidate {
@@ -201,6 +205,7 @@ export interface Recommandation {
   securityComment: string;
   organisationStars: number;
   organisationComment: string;
+  LastWorksiteDate: string;
 }
 
 export type Notification = {

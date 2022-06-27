@@ -55,7 +55,6 @@ export class AuthState {
   @Action(Login)
   login(ctx: StateContext<AuthModel>, action: Login) {
     let { username, password } = action
-    console.log("l'api token auth", { username, password } )
     let req = this.http.post("api-token-auth", { username, password });
 
     return req.pipe(

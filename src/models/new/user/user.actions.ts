@@ -155,7 +155,9 @@ export class ModifyFile<K extends DataTypes = any> {
 
   //tell JLW to unify formats
   constructor(src: FileUIOutput, fileId: number, category?: K) {
-    this.fileBase64 = src.content[0]; //only one file
+    if (src.content) this.fileBase64 = src.content[0] //only one file
+    else this.fileBase64 = ""
+    console.log("fileBase64", this.fileBase64)
     this.expirationDate = src.expirationDate;
     this.ext = src.ext;
     this.fileId =  fileId;
@@ -466,7 +468,7 @@ export class AskRecommandation {
 export class GiveRecommandation {
   static readonly type = 'give a recommandation';
   action = 'giveRecommandation';
-  constructor(public companyRecommanded: number, public firstNameRecommanding: string, public lastNameRecommanding: string, public companyNameRecommanding: string, public qualityStars:number, public qualityComment:string, public securityStars:number, public securityComment:string, public organisationStars:number, public organisationComment:string) {}
+  constructor(public companyRecommanded: number, public firstNameRecommanding: string, public lastNameRecommanding: string, public companyNameRecommanding: string, public qualityStars:number, public qualityComment:string, public securityStars:number, public securityComment:string, public organisationStars:number, public organisationComment:string, public lastWorksiteDate: string) {}
 }
 
 export class GiveNotificationToken {

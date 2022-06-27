@@ -241,6 +241,7 @@
   & > img {
     position: absolute;
     right: $input-image-offset-x;
+    // right: 0;
     bottom: $input-image-offset-y;
   }
 
@@ -330,3 +331,12 @@
   @include circle(1.1em, #fafafa);
   border: 1px solid black;
 }  
+
+.img-calendar {
+  pointer-events: none;
+}
+
+.img-calendar-since {
+  right: $input-image-offset-x;
+  position: relative;
+}

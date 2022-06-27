@@ -55,4 +55,11 @@
   a {
     color: $primary;
   }
+
+  .links-landing{
+    display: flex;
+    flex-direction: column;
+    row-gap: 2rem;
+    text-align: center;
+  }
 }

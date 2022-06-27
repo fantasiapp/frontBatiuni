@@ -16,7 +16,6 @@ import { NotifService } from "../services/notif.service";
   selector: 'connexion-form',
   template: `
   <!-- Form -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css" />
   <form class="full-height form-control section-host curved-border" [formGroup]="loginForm" (ngSubmit)="onSubmit($event)">
   <!-- Main title ex: Je me connecte, Créer un compte  -->
     <section class="form-section">
@@ -32,7 +31,8 @@ import { NotifService } from "../services/notif.service";
       <div class="form-input">
           <label >Mot de passe</label>
           <input type="password" class="form-element" formControlName="password" id="idPassword">
-          <div class="bi bi-eye-slash" (click)="togglePassword()" style="position: absolute; cursor: pointer; bottom: 0; right: 0" id="togglePassword"></div>
+          <div (click)="togglePassword()" style="position: absolute; cursor: pointer; bottom: 0; right: 0">
+            <img class="eye" src="assets/Oeil_Fermé.svg" id="togglePassword"></div>
           <!-- <div *ngIf="loginForm.get('password')!.touched && loginForm.get('password')!.errors?.minlength" class="error">Doit contenir au moins 8 caractères</div> -->
           <!-- <div *ngIf="loginForm.get('password')!.touched && loginForm.get('password')!.errors?.uppercase" class="error">Doit contenir au moins une lettre en majuscule</div> -->
           <!-- <div *ngIf="loginForm.get('password')!.touched && loginForm.get('password')!.errors?.lowercase" class="error">Doit contenir au moins une lettre en miniscule</div> -->
@@ -113,9 +113,9 @@ export class ConnexionForm extends Destroy$ {
     const togglePassword = document.querySelector('#togglePassword');
     const password = document.querySelector('#idPassword');
     let type = password?.getAttribute('type') === 'password' ? 'text' : 'password'
-    let toggleClass = password?.getAttribute('type') === 'password' ? 'bi bi-eye' : 'bi bi-eye-slash'
+    let toggleClass = password?.getAttribute('type') === 'password' ? 'assets/Oeil_ouvert.svg' : 'assets/Oeil_Fermé.svg'
     password?.setAttribute('type', type)
-    togglePassword?.setAttribute('class', toggleClass)
+    togglePassword?.setAttribute('src', toggleClass)
   }
 
   hide(){

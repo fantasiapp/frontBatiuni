@@ -9,10 +9,10 @@
 
     <profile-image [profile]="profile"></profile-image>
     <span class="company">{{ profile.company!.name }}</span>
-    <stars (click)='openRatings = true' class="stars" value="{{ view == 'ST' ? profile.company!.starsST : profile.company!.starsPME  }}" disabled></stars>
-    <!-- <button *ngIf="profileRecommandation" class="recommendation-button button active" (click)="openRecommandation()"><img src="assets/mail-outline.svg" alt="recommandation">
+    <stars [isRatings]="hasRatings" (click)='openRatings = true' class="stars" value="{{ view == 'ST' ? profile.company!.starsST ? profile.company.starsST : profile.company.starsRecoST : profile.company!.starsPME ? profile.company!.starsPME : profile.company!.starsRecoPME }}" disabled></stars>
+    <button *ngIf="profileRecommandation" class="recommendation-button button active" (click)="openRecommandation()"><img src="assets/mail-outline.svg" alt="recommandation">
       Demander une recommandation
-    </button> -->
+    </button>
     <section class="full-width section modify-profile">
       <div *ngFor="let ratingInfo of ratingInfos" class="company-rate">
         <span class="company-name">Note par {{ view == 'ST' ?  ratingInfo.contactName : ratingInfo.subContractorName }} de {{ view == 'ST' ? ratingInfo.companyContractor : ratingInfo.subContractorContact }}</span>
@@ -20,7 +20,7 @@
           <div class="flex center-cross">
             <span class="criterion-stars">{{ view == 'ST' ? 'Qualité du travail fourni' : 'Ambiance sur le chantier' }}
             </span>
-            <stars class="stars" [value]="ratingInfo.qualityVibe" disabled></stars>
+            <stars [isRatings]="true" class="stars" [value]="ratingInfo.qualityVibe" disabled></stars>
           </div>
 
           <span>{{ ratingInfo.qualityVibeComment }}</span>
@@ -29,7 +29,7 @@
           <div class="flex center-cross">
             <span class="criterion-stars">Respect de la securité et de la propreté du chantier
             </span>
-            <stars class="stars" [value]="ratingInfo.security" disabled></stars>
+            <stars [isRatings]="true" class="stars" [value]="ratingInfo.security" disabled></stars>
           </div>
 
           <span>{{ ratingInfo.securityComment }}</span>
@@ -39,7 +39,7 @@
           <div class="flex center-cross">
             <span class="criterion-stars">{{ view == 'ST' ? 'Organisation' : 'Organisation PME' }}
             </span>
-            <stars class="stars" [value]="ratingInfo.organisation" disabled></stars>
+            <stars [isRatings]="true" class="stars" [value]="ratingInfo.organisation" disabled></stars>
           </div>
 
           <span>{{ ratingInfo.organisationComment }}</span>
@@ -52,7 +52,7 @@
           <div class="flex center-cross">
             <span class="criterion-stars">{{ view == 'ST' ? 'Qualité du travail fourni' : 'Ambiance sur le chantier' }}
             </span>
-            <stars class="stars" [value]="recommandationInfo.qualityVibe" disabled></stars>
+            <stars [isRatings]="false" class="stars" [value]="recommandationInfo.qualityVibe" disabled></stars>
           </div>
 
           <span>{{ recommandationInfo.qualityVibeComment }}</span>
@@ -61,7 +61,7 @@
           <div class="flex center-cross">
             <span class="criterion-stars">Respect de la securité et de la propreté du chantier
             </span>
-            <stars class="stars" [value]="recommandationInfo.security" disabled></stars>
+            <stars [isRatings]="false" class="stars" [value]="recommandationInfo.security" disabled></stars>
           </div>
 
           <span>{{ recommandationInfo.securityComment }}</span>
@@ -71,7 +71,7 @@
           <div class="flex center-cross">
             <span class="criterion-stars">{{ view == 'ST' ? 'Organisation' : 'Organisation PME' }}
             </span>
-            <stars class="stars" [value]="recommandationInfo.organisation" disabled></stars>
+            <stars [isRatings]="false" class="stars" [value]="recommandationInfo.organisation" disabled></stars>
           </div>
 
           <span>{{ recommandationInfo.organisationComment }}</span>

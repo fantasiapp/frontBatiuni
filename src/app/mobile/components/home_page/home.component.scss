@@ -9,11 +9,7 @@
   height: calc(100vh)
 }
 
-.hosted-page {
-  &.footerHide {
-    height: calc(100vh - #{$sticky-header-height})
-  }
-}
+
 
 
 

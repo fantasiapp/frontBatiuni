@@ -8,6 +8,7 @@ import { UISwitchComponent } from "../components/switch/switch.component";
 import { FilterService } from "../services/filter.service";
 import { Store } from "@ngxs/store";
 import { FormArray, FormControl, FormGroup } from "@angular/forms";
+import { returnInputKeyboard } from '../common/classes'
 import "hammerjs"
 
 @Component({
@@ -22,7 +23,7 @@ import "hammerjs"
 
     <div class="form-input">
       <label>Adresse de chantier</label>
-      <input type="text" class="form-element" formControlName="address"/>
+      <input type="text" class="form-element" formControlName="address" (keyup)="returnInputKeyboard($event, inputAddress)" #inputAddress/>
     </div>
 
     <div class="form-input">
@@ -108,4 +109,5 @@ export class SOSFilterForm implements OnInit {
     this.cd.detectChanges();
   }
 
+  returnInputKeyboard = returnInputKeyboard
 }

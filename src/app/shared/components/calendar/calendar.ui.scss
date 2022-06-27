@@ -135,3 +135,10 @@ ol {
   pointer-events: none;
   @extend %bgcolor;
 }
+
+.today {
+  border-style: solid !important;
+  border-color: $primary !important;
+  border-width: 0.2rem !important;
+  border-radius: 50%;
+}

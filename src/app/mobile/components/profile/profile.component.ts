@@ -49,13 +49,15 @@ export class ProfileComponent extends Destroy$ {
   notificationsUnseen: number = 0
   notifications: Notification[] = []
   companyId:number = -1;
+  profileEmail: string = ''
 
   openFacture: boolean = false;
   openFaq: boolean = false;
   openMentionLegal: boolean = false;
   openBlockedContact: boolean = false;
   openCandidature: boolean = false;
-  openRecommendation: boolean = false;
+  openRecommandationMenu: boolean = false;
+
 
   @Input()
   showView!: 'ST' | 'PME';
@@ -115,6 +117,7 @@ export class ProfileComponent extends Destroy$ {
     
     this.notifService.emitNotifChangeEvent()
     this.companyId = profile.user?.company!
+    this.profileEmail = profile.user?.email || ''
     profile.company = this.store.selectSnapshot(DataQueries.getById('Company', this.companyId))!
     this.profileResume?.profileImage.updateProfile(profile);
 

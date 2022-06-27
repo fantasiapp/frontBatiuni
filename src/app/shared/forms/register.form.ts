@@ -55,8 +55,11 @@ import { InfoService } from "../components/info/info.component";
         class="full-width form-control curved-border"
         formGroupName="firstPage"
       >
-        <h3 class="form-title">Créer un compte !</h3>
-        <h4 class="form-subtitle">Informations contact</h4>
+      <div class="title-container">
+        <h3 class="form-title" style="font-size: 1.25rem; font-weight: 600">Créer un compte !</h3>
+        <span class="title-subtitle">Créer un compte avec 1 mois d'essai gratuit</span>
+      </div>
+        <h4 style="font-weight: 500;">Informations contact</h4>
         <div class="form-input">
           <label>Nom du contact</label>
           <input 
@@ -94,8 +97,12 @@ import { InfoService } from "../components/info/info.component";
             class="form-element"
             type="password"
             formControlName="password"
+            id="idPassword"
           />
-        </div>
+          <div (click)="togglePassword()" style="position: absolute; cursor: pointer; bottom: 0; right: 0; z=100">
+            <img class="eye" src="assets/Oeil_Fermé.svg" id="togglePassword">
+          </div>
+          </div>
         <div class="form-action">
           <button
             *ngIf="showSubmitButton"
@@ -246,6 +253,16 @@ import { InfoService } from "../components/info/info.component";
         align-self: center;
       }
 
+      .form-title {
+        font-size: 1.25rem;
+        font-weight: 600
+      }
+
+      .title-subtitle {
+        font-size: 0.95rem;
+        color: $primary
+      }
+
       .parrain {
         align-self: flex-end;
         max-width: 50vw;
@@ -392,9 +409,9 @@ export class RegisterForm extends Destroy$ {
 
   onClickInputScroll(input: HTMLElement){
     setTimeout(() => {
-      input.scrollIntoView({behavior: 'smooth', block: 'center', inline: 'nearest'})
+      input.scrollIntoView({behavior: 'smooth', block: 'start', inline: 'nearest'})
       setTimeout(() => {
-        input.scrollIntoView({behavior: 'smooth', block: 'center', inline: 'nearest'})
+        input.scrollIntoView({behavior: 'smooth', block: 'start', inline: 'nearest'})
       }, 500)
     }, 100)
   }
@@ -435,4 +452,13 @@ export class RegisterForm extends Destroy$ {
 
   @SnapshotAll("Role")
   roles!: Role[];
+
+  togglePassword() {
+    const togglePassword = document.querySelector('#togglePassword');
+    const password = document.querySelector('#idPassword');
+    let type = password?.getAttribute('type') === 'password' ? 'text' : 'password'
+    let toggleClass = password?.getAttribute('type') === 'password' ? 'assets/Oeil_ouvert.svg' : 'assets/Oeil_Fermé.svg'
+    password?.setAttribute('type', type)
+    togglePassword?.setAttribute('src', toggleClass)
+  }
 }

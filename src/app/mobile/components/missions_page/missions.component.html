@@ -7,8 +7,9 @@
   <span tab_0>Vue liste</span>
   <span tab_1>Calendrier</span>
 </page-header>
+<div class="wrapper__searchbar__clickcatcher page-content-with-tabs" (click)="true" *ngIf="!showFooter"></div>
 
-<div class="hosted-page space-children-margin page-content-with-tabs">
+<div class="hosted-page space-children-margin page-content-with-tabs" [ngClass]="{'footerHide': !showFooter}">
   <ng-container [ngSwitch]="activeView">
     <ng-container *ngSwitchCase="0">
       <offer 
@@ -27,12 +28,12 @@
 
 <slidemenu [(open)]="missionMenu.open" [header]="false" #slideOnlinePost>
   <header
-        class="clear-margin full-width sticky-header flex center-cross annonce"
-        customHeader id="swipeupHeader"
-      >
-        <img (click)="slideOnlinePostClose()" src="assets/arrowlblack.svg" />
-        <h1 class="grow center-text">Mission</h1>
-      </header>
+    class="clear-margin full-width sticky-header flex center-cross annonce"
+    customHeader id="swipeupHeader"
+  >
+    <img (click)="slideOnlinePostClose()" src="assets/arrowlblack.svg" />
+    <h1 class="grow center-text">Mission</h1>
+  </header>
   <suivi-chantier [missionMenu]="missionMenu" content></suivi-chantier>
 </slidemenu>
 

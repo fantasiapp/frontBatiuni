@@ -6,6 +6,7 @@ import { SnapshotAll } from "src/models/new/data.state";
 import { FilterService } from "../services/filter.service";
 import { UISwitchComponent } from "../components/switch/switch.component";
 import { Filter } from "../directives/filter.directive";
+import { returnInputKeyboard } from '../common/classes'
 
 @Component({
   selector: "application-filter-form",
@@ -14,21 +15,21 @@ import { Filter } from "../directives/filter.directive";
         <div class="form-input">
           <label>Date à laquelle vous avez postulé</label>
           <input type="date" class="form-element" formControlName="postulationDate"/>
-          <img src="assets/calendar.png"/>
+          <img src="assets/calendar.png" class='img-calendar'/>
         </div>
 
         <div class="form-input">
           <label>Date de mission</label>
-          <div class="flex row space-between">
-            <label>À partir de : </label>
-            <input type="date" class="form-element" formControlName="missionDate"/>
-            <img src="assets/calendar.png"/>
+          <div class="form-input flex row space-between">
+            <label style="flex-shrink: 0">À partir de : </label>
+            <input type="date" style="padding-left: 0.5rem;" class="form-element" formControlName="date" #inputDateMission/>
+            <img src="assets/calendar.png" (click)="inputDateMission.select()" class="img-calendar-since" style="pointer-events: none;"/>
           </div>
         </div>
 
         <div class="form-input">
           <label>Adresse de chantier</label>
-          <input type="text" class="form-element" formControlName="address"/>
+          <input type="text" class="form-element" formControlName="address" (keyup)="returnInputKeyboard($event, inputAddress)" #inputAddress/>
         </div>
 
         <div class="form-input form-spacer">
@@ -123,11 +124,14 @@ export class ApplicationForm extends Filter<Post>  {
     allJobs!: Job[];
   
     ngOnInit(): void {
-        super.ngOnInit();
-        this.callbackFilter(this.filterForm.value);
-    
-        this.filterForm.valueChanges.subscribe((value) => {
-          this.callbackFilter(value);
-        });
-      }
+      super.ngOnInit();
+      this.callbackFilter(this.filterForm.value);
+
+      this.filterForm.valueChanges.subscribe((value) => {
+        this.callbackFilter(value);
+      });
+    }
+
+    returnInputKeyboard = returnInputKeyboard
+
 }    
