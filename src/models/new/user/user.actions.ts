@@ -155,7 +155,11 @@ export class ModifyFile<K extends DataTypes = any> {
 
   //tell JLW to unify formats
   constructor(src: FileUIOutput, fileId: number, category?: K) {
-    this.fileBase64 = src.content[0]; //only one file
+    if (src.content) {
+      this.fileBase64 = src.content[0]; //only one file
+    } else {
+      this.fileBase64 = ""
+    }
     this.expirationDate = src.expirationDate;
     this.ext = src.ext;
     this.fileId =  fileId;
