@@ -513,7 +513,6 @@ input[type=number] {
 .modal {
   position: fixed; /* Stay in place */
   z-index: 11; /* Sit on top */
-  padding: 10%; /* Location of the box */
   left: 0;
   top: 0;
   width: 100%; /* Full width */
@@ -530,15 +529,17 @@ input[type=number] {
 .modal-content {
   margin: 0px auto;
   padding: 0 !important;
-  display: block;
   width: 100%;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
   animation-name: zoom;
   animation-duration: 0.3s;
 }
 
 @keyframes zoom {
-  from {transform:scale(0)}
-  to {transform:scale(1)}
+  from {transform:scale(0) translate(-50%, -50%)}
+  to {transform:scale(1) translate(-50%, -50%)}
 }
 
 .wrapper__searchbar__clickcatcher {
