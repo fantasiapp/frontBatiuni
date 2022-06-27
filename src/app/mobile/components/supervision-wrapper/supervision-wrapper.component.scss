@@ -1,5 +1,7 @@
 @use 'src/styles/variables' as *;
 
+$color-background-comment: #e5e8ed;
+
 :host{
     position: fixed;
     height: calc(100vh - $sticky-header-height - env(safe-area-inset-bottom));
@@ -51,27 +53,30 @@
     bottom: 0;
     left: 0;
   
-    height: 3rem;
+    height: 2.5rem;
     box-sizing: content-box;
   
-    padding-bottom: calc(20px + env(safe-area-inset-bottom)); 
-    padding-top: 20px;
-    width: calc(100% - 4rem);
-    background-color: #e5e8ed;
+    padding-bottom: calc(0.5rem + env(safe-area-inset-bottom)); 
+    padding-top: 0.5rem;
+    width: calc(100% - 2rem);
+    background-color: white;
     display: flex;
     align-items: center;
     justify-content: center;
   
-    padding-left: 2rem;
-    padding-right: 2rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    border-top: 1px solid $color-background-comment;
+    
   
     &.resetPadding {
-        padding-bottom: calc(20px + env(safe-area-inset-bottom)); 
-        bottom: 3rem;
+        padding-bottom: calc(0.5rem + env(safe-area-inset-bottom)); 
+        bottom: 2.5rem;
     }
     .divComment {
       margin-top: unset;
       width: 100%;
+      background-color: $color-background-comment;
     }
   }
 
