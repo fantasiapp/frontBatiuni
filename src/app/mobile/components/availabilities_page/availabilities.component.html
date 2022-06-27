@@ -1,7 +1,22 @@
 <ng-container *ngIf="(profile$ | async) as profile">
-  <header class="clear-margin full-width sticky-header flex center-cross">
-    <span class="grow text-light-emphasis">Mes disponibilités</span>
-    <span class="current-availability" [class]="currentAvailability"></span>
+  <header class="clear-margin full-width sticky-header flex center-cross column" [ngClass]="{'header-with-switch': profile.company && profile.company.role == 3}">
+    <ng-container *ngIf="(view$ | async) as view">
+      <div class="switch-header__wrapper" *ngIf="profile.company && profile.company.role == 3">
+        <div class="switch-header">
+          <div class="switch-header__PME-ST" [ngClass]="{'active': isPmeSwitch}" (click)="changeProfileType(true)">
+            Profil PME
+          </div>
+          <div class="switch-header__PME-ST" [ngClass]="{'active': !isPmeSwitch}" (click)="changeProfileType(false)">
+            Profil Sous-traitant
+          </div>
+        </div>
+      </div>
+    </ng-container>
+
+    <div class="header-title-wrapper flex center-cross full-width">
+      <span class="grow text-light-emphasis">Mes disponibilités</span>
+      <span class="current-availability" [class]="currentAvailability"></span>
+    </div>
   </header>
 
   <!-- <form [formGroup]="jobForm" class="formjob">
@@ -11,7 +26,7 @@
     </div>
   </form>
    -->
-  <div class="hosted-page flex column center-cross space-children-margin page-content">
+  <div class="hosted-page flex column center-cross space-children-margin page-content" [ngClass]="{'page-content-with-switch': profile.company && profile.company.role == 3}">
     <calendar [disableBeforeToday]="true" [value]="availabilities" (dayClick)="onDayClicked($event)" #calendar></calendar>
   </div>
 </ng-container>

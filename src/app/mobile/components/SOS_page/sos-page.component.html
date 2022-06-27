@@ -1,32 +1,35 @@
-<page-header name="SOS" [(activeView)]="activeView" (filterClicked)="openSOSFilterMenu = true; updateFilterMap()" [filterOpen]="filterOn" [callbackSearch]="callbackSearch">
-  <span tab_0>Vue liste</span>
-  <span tab_1>Carte</span>
-</page-header>
-<div class="wrapper__searchbar__clickcatcher page-content-with-tabs" [ngClass]="{'footerHide': !showFooter}" *ngIf="!showFooter"></div>
+<ng-container *ngIf="profile$ | async as profile">
 
-
-<ng-container [ngSwitch]="activeView">
-  <ng-container *ngSwitchCase="0">
-      <div class="hosted-page space-children-margin page-content-with-tabs">
+  <page-header [profile]="profile" name="SOS" [(activeView)]="activeView" (filterClicked)="openSOSFilterMenu = true; updateFilterMap()" [filterOpen]="filterOn" [callbackSearch]="callbackSearch">
+    <span tab_0>Vue liste</span>
+    <span tab_1>Carte</span>
+  </page-header>
+  <div class="wrapper__searchbar__clickcatcher page-content-with-tabs" [ngClass]="{'footerHide': !showFooter, 'page-content-with-tabs-with-switch': profile.company && profile.company.role == 3}" *ngIf="!showFooter"></div>
+  
+  
+  <ng-container [ngSwitch]="activeView">
+    <ng-container *ngSwitchCase="0">
+      <div class="hosted-page space-children-margin page-content-with-tabs" [ngClass]="{'footerHide': !showFooter, 'page-content-with-tabs-with-switch': profile.company && profile.company.role == 3}">
         <sos-card 
-          (click)="checkCompanyProfile(companyAvailable.company)" 
-          *ngFor="let companyAvailable of availableCompanies" 
-          [profile]="{company: companyAvailable.company}" 
-          [availability]="companyAvailable.availability">
-        </sos-card>
-      </div>
-    </ng-container>
-    <div class="map-container space-children-margin page-content-with-tabs" *ngSwitchCase="1">
-      <mapbox-batiuni 
-        [refreshEvent]="refreshSubject.asObservable()"
-        [availableCompanies]="availableCompanies"
-        (companyClick)="checkCompanyProfile($event)"
-        class="space-children-margin" 
-        >
-      </mapbox-batiuni>
+        (click)="checkCompanyProfile(companyAvailable.company)" 
+        *ngFor="let companyAvailable of availableCompanies" 
+        [profile]="{company: companyAvailable.company}" 
+        [availability]="companyAvailable.availability">
+      </sos-card>
     </div>
   </ng-container>
+  <div class="map-container space-children-margin page-content-with-tabs" *ngSwitchCase="1">
+    <mapbox-batiuni 
+    [refreshEvent]="refreshSubject.asObservable()"
+    [availableCompanies]="availableCompanies"
+    (companyClick)="checkCompanyProfile($event)"
+    class="space-children-margin" 
+    >
+    </mapbox-batiuni>
+  </div>
+</ng-container>
 
+</ng-container>
 
 <swipeup [(open)]="openSOSFilterMenu" type="view">
   <sos-filter-form [callbackFilter]="callbackFilter" view></sos-filter-form>

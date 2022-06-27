@@ -284,6 +284,12 @@ input, textarea {
   background: $secondaryBackground;
   color: white;
   @extend %header;
+
+  &.header-with-switch {
+    padding: 10px $page-padding;
+    height: calc(#{$sticky-header-height} + #{$switch-header-size} + env(safe-area-inset-top));
+    @include with-set-safe-area(padding, top, 10px);
+  }
 }
 .white-header {
   background-color: $bg-white;
@@ -539,4 +545,50 @@ input[type=number] {
   position: absolute;
   height: calc(100vh  - 70px - env(safe-area-inset-bottom));
   z-index: 10
+}
+
+// switch header 
+
+
+.switch-header__wrapper {
+  height: $switch-header-size;
+  margin-bottom: -0.15rem;
+  width: 100%;
+  .switch-header {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    top: 0;
+    height: $switch-header-size;
+    background-color: white;
+    display: flex;
+  }
+}
+
+.switch-header__PME-ST {
+  width: 50%;
+  height: 100%;
+  background-color: #E5E5E5;
+  color: #8D8D8D;
+  padding: 10px 0;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  &.active {
+    background-color: $primary;
+    font-weight: 600;
+    color: white;
+    box-shadow: 0 3px 6px #0000009f;
+  }
+}
+
+.sticky-header {
+  .switch-header__wrapper {
+    flex-basis: 100%;
+  }
+  
+  .header-title-wrapper{
+    height: 100%;
+  }
 }

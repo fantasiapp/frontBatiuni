@@ -6,9 +6,13 @@ header {
   @extend %header;
   position: fixed;
   // height: $mission-header-height;
-  height: calc(#{$mission-header-height} + #{$switch-header-size} + env(safe-area-inset-top));
+  height: calc(#{$mission-header-height} + env(safe-area-inset-top));
   padding-top: calc(env(safe-area-inset-top) + 1rem);
   padding-bottom: 0;
+
+  &.header-search-with-switch{
+    height: calc(#{$mission-header-height} + #{$switch-header-size} + env(safe-area-inset-top))
+  }
 }
 
 .pick > img {
@@ -23,7 +27,7 @@ header {
 
 .switch-header__wrapper {
   height: $switch-header-size;
-  margin-bottom: -0.25rem;
+  margin-bottom: -0.15rem;
   
   .switch-header {
     position: absolute;

@@ -1,6 +1,7 @@
 <ng-container *ngIf="view$ | async as view">
   <ng-container *ngIf="profile$ | async as profile">
     <page-header
+      [profile]="profile"
       [name]="view == 'PME' ? 'Mes Annonces' : 'Annonces qui peuvent vous intéresser'"
       [tabs]="view == 'PME' ? 3 : 2"
       [(activeView)]="activeView"
@@ -14,7 +15,7 @@
     </page-header>
     <div class="wrapper__searchbar__clickcatcher page-content-with-tabs" *ngIf="!showFooter"></div>
 
-      <div  class="hosted-page space-children-margin page-content-with-tabs" [ngClass]="{'footerHide': !showFooter}">
+    <div  class="hosted-page space-children-margin page-content-with-tabs" [ngClass]="{'footerHide': !showFooter, 'page-content-with-tabs-with-switch': profile.company && profile.company.role == 3}">
           <!-- Page pour PME -->
           <ng-container *ngIf="view == 'PME'; else stview">
             <ng-container *ngIf="(posts$ | async) as posts" [ngSwitch]="activeView">

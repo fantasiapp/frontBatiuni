@@ -1,17 +1,20 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from "@angular/core";
-import { Store } from "@ngxs/store";
+import { Select, Store } from "@ngxs/store";
+import { Observable } from "rxjs/internal/Observable";
+import { Company, Profile, User } from "src/models/new/data.interfaces";
+import { DataQueries, DataState } from "src/models/new/data.state";
 import { ChangeProfileType } from "src/models/new/user/user.actions";
 
 @Component({
   selector: 'page-header',
   template: `
-  <header class="clear-margin flex column full-width small-space-children-margin">
-    <div class="switch-header__wrapper">
+  <header class="clear-margin flex column full-width small-space-children-margin" [ngClass]="{'header-search-with-switch': profile.company && profile.company.role == 3}">
+    <div class="switch-header__wrapper" *ngIf="profile.company && profile.company.role == 3">
       <div class="switch-header">
-        <div class="switch-header__PME-ST" (click)="changeProfileType(true)">
+        <div class="switch-header__PME-ST" [ngClass]="{'active': isPmeSwitch}" (click)="changeProfileType(true)">
           Profil PME
         </div>
-        <div class="switch-header__PME-ST active" (click)="changeProfileType(false)">
+        <div class="switch-header__PME-ST" [ngClass]="{'active': !isPmeSwitch}" (click)="changeProfileType(false)">
           Profil Sous-traitant
         </div>
       </div>
@@ -36,6 +39,8 @@ import { ChangeProfileType } from "src/models/new/user/user.actions";
 })
 export class HeaderComponent {
   openFilterMenu: boolean = false;
+
+  @Input() profile!: Profile
   
   @Input()
   activeView: number = 0;
@@ -58,7 +63,12 @@ export class HeaderComponent {
   @Output()
   filterClicked = new EventEmitter<never>();
 
+  @Select(DataState.view)
+  view$!: Observable<'ST' | 'PME'>;
 
+  // @Select(DataState.users) 
+  // user$!: Observable<User>
+  // company!: Company
   @Input()
   name: string = '';
 
@@ -74,7 +84,20 @@ export class HeaderComponent {
     
   }
 
+  ngOnInit(){
+    console.log('profile', this.profile);
+    this.view$.subscribe((view)=>{
+      this.isPmeSwitch = view === 'PME'
+    })
+    // this.user$.subscribe((user) => {
+    //   console.log('company', user, user.company);
+    //   this.company = this.store.selectSnapshot(DataQueries.getById('Company', user.company))!
+    // })
+  }
+
+  isPmeSwitch: boolean = false
   changeProfileType(type: boolean) {
+    this.isPmeSwitch = type
     this.store.dispatch(new ChangeProfileType(type));
   }
 };
