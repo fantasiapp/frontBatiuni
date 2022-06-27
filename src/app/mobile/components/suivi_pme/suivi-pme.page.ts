@@ -281,6 +281,10 @@ export class SuiviPME extends Destroy${
   @Select(DataQueries.currentProfile)
   currentProfile$!: Observable<Profile>;
 
+  verifyKbis(){
+    this.popup.signContractKbis(this.mission!, this.updateMission.bind(this))
+  }
+
   signContract() {
     this.popup.openSignContractDialog(this.mission!, this.updateMission.bind(this));
   }

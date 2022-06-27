@@ -27,6 +27,8 @@
 
 .header-only {
   @extend %content-with-header;
+  z-index: 10;
+  position: relative;
 }
 
 .content-with-small-footer {
