@@ -35,7 +35,7 @@ import { DataQueries, SnapshotAll } from "src/models/new/data.state";
     </g>
   </svg>
 <img class="icon-logo" *ngIf="isLabel" src="assets/{{originalName}}.png" alt="label">
-<figcaption>*{{ date.slice(8,10)+date.slice(4,7)+'-'+date.slice(0,4) }}</figcaption>
+<figcaption *ngIf="date">*{{ date.slice(8,10)+date.slice(4,7)+'-'+date.slice(0,4) }}</figcaption>
   `,
   styles: [`
     :host { 
