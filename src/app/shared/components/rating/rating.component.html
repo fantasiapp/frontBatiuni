@@ -9,7 +9,7 @@
 
     <profile-image [profile]="profile"></profile-image>
     <span class="company">{{ profile.company!.name }}</span>
-    <stars [isRatings]="hasRatings" (click)='openRatings = true' class="stars" value="{{ view == 'ST' ? profile.company!.starsST : profile.company!.starsPME  }}" disabled></stars>
+    <stars [isRatings]="hasRatings" (click)='openRatings = true' class="stars" value="{{ view == 'ST' ? profile.company!.starsST ? profile.company.starsST : profile.company.starsRecoST : profile.company!.starsPME ? profile.company!.starsPME : profile.company!.starsRecoPME }}" disabled></stars>
     <button *ngIf="profileRecommandation" class="recommendation-button button active" (click)="openRecommandation()"><img src="assets/mail-outline.svg" alt="recommandation">
       Demander une recommandation
     </button>
@@ -82,3 +82,8 @@
   </div>
 </slidemenu>
 
+<slidemenu [(open)]="openRecommandationMenu" #askRecommandation>
+  <div class="modify-page hosted-page flex column center-cross space-children-margin" content>
+    <ask_recommandation [profileEmail]="profileEmail" class="flex column center-cross space-children-margin"></ask_recommandation>
+  </div>
+</slidemenu>

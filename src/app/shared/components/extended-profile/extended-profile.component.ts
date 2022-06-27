@@ -10,7 +10,7 @@ import {
 } from "@angular/core";
 import { Store } from "@ngxs/store";
 import * as UserActions from "src/models/new/user/user.actions";
-import { take } from "rxjs/operators";
+import { filter, take } from "rxjs/operators";
 import { PopupService } from "src/app/shared/components/popup/popup.component";
 import {
   DataQueries,
@@ -96,9 +96,14 @@ export class ExtendedProfileComponent extends Destroy$ {
 
   get attachedFiles(): any[] {
     return this.files.filter(
-      (file) => file.nature == "admin" || file.nature == "labels"
+      (file) => file.nature == "admin" 
     );
   }
+
+  get labelFiles(): any[] {
+    return this.files.filter((file) => file.nature == "labels")
+  }
+
 
   initSubscribeProfile() {
     (this.profile$ as Observable<Profile>)

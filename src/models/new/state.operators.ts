@@ -70,7 +70,6 @@ namespace mutable {
                 // if (fields[i] != "DatePost") {
                 
                 if(typeof item[i] === 'object' && !Array.isArray(item[i])){
-                  console.log('Tu ne devrais pas etre la');
                   item[i] = Object.keys(item[i]).map(id => +id);
                 }
                   // }

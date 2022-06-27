@@ -139,7 +139,6 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
       ext = fullname.slice(lastDot + 1);
 
 
-    console.log('nature', this.value?.nature, this.value);
     if (this.value?.nature != 'post') {
       this.popup.newFile(this.filename, this);
     }
@@ -165,26 +164,31 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
   async openInput(input:HTMLInputElement, e: Event) {
 
     input.click()
-
+    
     this.modified = true;
   }
 
-  private async takePhoto() {
+  async selectPhoto() {
     const photo = await Camera.getPhoto({
-      allowEditing: false,
       resultType: CameraResultType.Base64,
       source: CameraSource.Photos,
+      allowEditing: true,
     });
 
-    console.log('take photo', photo.path);
-    this.value = {
-      expirationDate: "",
-      nature: "",
-      name: photo.path || "Image téléchargée depuis les photos",
-      ext: photo.format,
-      content: [photo.base64String as string],
-    };
+    let acceptedFormat = ["jpeg", "png", "jpg", "bmp"];
+    if (acceptedFormat.includes(photo.format)) {
+      this.value = {
+        expirationDate: "",
+        nature: "",
+        name: photo.path || "Image téléchargée depuis les photos",
+        ext: photo.format,
+        content: [photo.base64String as string],
+      }
+    } else {
+      this.info.show("error", "Format d'image non supporté", 3000);
+    }
   }
+
 
   deleteFile(){
     if (this.value?.nature == "admin") {this.kill.emit(this.value?.name);}
@@ -207,7 +211,6 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
       responseType: ResponseType.Base64,
     })
     
-    console.log('scanenrImages', scannedImages);
     if (scannedImages && scannedImages.length > 0) {
 
       // let base64 = Capacitor.convertFileSrc(scannedImages[0])
@@ -271,7 +274,7 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
         {
           name: "Télécharger un fichier",
           click: () => {
-            this.openInput(input, e);
+            this.selectPhoto()
             
           },
         },

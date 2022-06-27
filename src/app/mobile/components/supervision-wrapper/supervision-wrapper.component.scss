@@ -1,0 +1,122 @@
+@use 'src/styles/variables' as *;
+
+:host{
+    position: fixed;
+    height: calc(100vh - $sticky-header-height - env(safe-area-inset-bottom));
+    width: 100%;
+}
+
+.slideMenu__comment__wrapper {
+    height: 100%;
+    overflow: scroll;
+    // &:last-child {
+    //   margin-left: 0;
+    //   margin-right: 
+    // }
+  }
+
+  .slideMenu__comment__wrapper__container {
+    display: flex;
+    flex-direction: column;
+    row-gap: 1rem;
+
+
+    min-height: 100%;
+    padding-top: 1rem;
+    padding-left: 2rem;
+    padding-right: 2rem;
+  
+  }
+
+  .divComment {
+    display: flex;
+    position: relative;
+    flex-direction: row;
+    padding: .5rem 1rem;
+    margin-top: 1rem;
+    background: white;
+    border-radius: 1.5rem;
+    border: 1px solid #F7F7F7;
+    
+    &:focus-within {
+      border: 1px solid $primary;
+    }
+    img {
+      height: 1.5rem;
+    }
+  }
+
+  .slideMenu__comment__input__wrapper{  
+    position: absolute;
+    bottom: 0;
+    left: 0;
+  
+    height: 3rem;
+    box-sizing: content-box;
+  
+    padding-bottom: calc(20px + env(safe-area-inset-bottom)); 
+    padding-top: 20px;
+    width: calc(100% - 4rem);
+    background-color: #e5e8ed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  
+    padding-left: 2rem;
+    padding-right: 2rem;
+  
+    &.resetPadding {
+        padding-bottom: calc(20px + env(safe-area-inset-bottom)); 
+        bottom: 3rem;
+    }
+    .divComment {
+      margin-top: unset;
+      width: 100%;
+    }
+  }
+
+.partenerComment-container {
+& > div {
+    display: flex;
+    flex-direction: column;
+    row-gap: 1rem;
+    padding: 2rem;
+}
+.partenerComment {
+    background: #e5e8ed;
+    padding: 2rem;
+}
+
+.divComment {
+    margin-top: 1rem;
+    padding: unset;
+    border-color: #bdbdbd;
+    border-radius: 4px;
+    justify-content: space-between;
+    textarea {
+    padding: .5rem;
+    resize: none;
+    min-height: 50px;
+    max-height: 100px;
+    width: 90%;
+    }
+    img {
+    align-self: flex-end;
+    position: relative;
+    top: -.5rem;
+    right: .5rem
+    }
+}
+.partenerComment-addPhoto {
+    display: flex;
+    align-items: center;
+    font-size: 0.875rem;
+    justify-content: flex-end;
+    margin-top: 1rem;
+    img {
+    margin-left: 1rem;
+    height: 1.5rem;
+    width: 1.5rem;
+    }
+}
+}

@@ -83,7 +83,6 @@ export class CalendarUI extends UIDefaultAccessor<DayState[]> {
   store: any;
   
   get today() {
-    console.log("today", moment(Date.now()).format('YYYY-MM-DD'))
     return moment(Date.now()).format('YYYY-MM-DD');
   }
   @Input()

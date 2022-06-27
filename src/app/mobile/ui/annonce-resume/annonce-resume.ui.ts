@@ -93,6 +93,11 @@ export type ApplyForm = {
             </ul>
           </div>
   
+          <div class="condition">
+            <span class="title  ">Condition de paiement</span>
+            <p>{{ post.paymentCondition }}</p>
+          </div>  
+
           <div class="documents">
             <span class="title  ">Documents importants</span>
             <ul>

@@ -34,6 +34,7 @@ import {
   ValidateMissionDate,
 } from "src/models/new/user/user.actions";
 import { getUserDataService } from "src/app/shared/services/getUserData.service";
+import { Mobile } from "src/app/shared/services/mobile-footer.service";
 
 
 export interface TaskGraphic {
@@ -48,6 +49,7 @@ export interface TaskGraphic {
   templateUrl: "./suivi_chantier_date-content.component.html",
   styleUrls: ["./suivi_chantier_date-content.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [Mobile]
 })
 export class SuiviChantierDateContentComponent extends Destroy$ {
   swipeMenu: boolean = false;
@@ -69,6 +71,8 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
 
   date:PostDateAvailableTask = {id:5, date:'12-12-2022', validated: false, deleted:false, supervisions: [], postDetails: [], allPostDetails: []}
 
+  showFooter: boolean = true;
+
   // @Input()
   // _accordionOpen: boolean = false;
   // get accordionOpen(){  return this._accordionOpen}
@@ -80,11 +84,13 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
 
   user!: User;
 
-  constructor(private cd: ChangeDetectorRef, private store: Store, private popup: PopupService, private getUserDataService: getUserDataService, private info: InfoService) {
+  constructor(public mobile: Mobile, private cd: ChangeDetectorRef, private store: Store, private popup: PopupService, private getUserDataService: getUserDataService, private info: InfoService) {
     super();
   }
 
   ngOnInit(){
+    
+
     this.user = this.store.selectSnapshot(DataQueries.currentUser)
     this.mission = this.store.selectSnapshot(DataQueries.getById('Mission', this.mission!.id))
     this.updatePageOnlyDate()
@@ -234,7 +240,7 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
 
   async takePhoto() {
     const photo = await Camera.getPhoto({
-      allowEditing: false,
+      allowEditing: true,
       resultType: CameraResultType.Base64,
       source: CameraSource.Camera,
     });
@@ -247,9 +253,13 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
 
   async selectPhoto() {
     const photo = await Camera.getPhoto({
-      allowEditing: false,
       resultType: CameraResultType.Base64,
       source: CameraSource.Photos,
+      presentationStyle: 'fullscreen',
+      webUseInput: true,
+      quality: 90,
+      allowEditing: true,
+      saveToGallery: true
     });
 
     let acceptedFormat = ["jpeg", "png", "jpg", "bmp"];
@@ -365,4 +375,31 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
       if(b) this.computeDates.next()
     });
   }
+
+  slideCommentOpen = false
+
+  slideCommentMenu: slideCommentMenu = {
+     taskGraphic: null,
+     slideCommentOpen: false,
+     formControlName: '',
+     selectedTask: null
+  }
+
+  slideComment(taskGraphic: TaskGraphic | null, e: Event, formControlName: string, selectedTask: PostDetailGraphic){
+    e.preventDefault()
+    this.slideCommentOpen = true
+    this.slideCommentMenu = {
+      taskGraphic: taskGraphic,
+      slideCommentOpen: true,
+      formControlName: formControlName,
+      selectedTask: selectedTask
+    }
+  }
+}
+
+export interface slideCommentMenu {
+  taskGraphic: TaskGraphic | null,
+  slideCommentOpen: boolean,
+  formControlName: string,
+  selectedTask: PostDetailGraphic | null
 }

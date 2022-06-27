@@ -108,6 +108,7 @@ export class Notifications {
         moment(moment(today[i].date)).startOf("minute").fromNow()
       );
     }
+    moment.locale('en')
     return Today;
   }
 
@@ -121,6 +122,7 @@ export class Notifications {
         moment(moment(month[j].date)).startOf("minute").fromNow()
       );
     }
+    moment.locale('en')
     return Month;
   }
 
@@ -138,8 +140,6 @@ export class Notifications {
 
 
   lateInit() {
-    console.log("----------------------------les notifs---------------------------")
-    console.log(this.notifications, this.store.selectSnapshot(DataState.view))
     this.notifications.forEach((notificationAny, index) => {
       let notification = notificationAny as Notification;
       let src: SafeResourceUrl | string = "assets/profile.png";

@@ -30,6 +30,7 @@ export class RatingComponent extends UIOpenMenu {
   
   openRatings: boolean = false;
   hasRatings: boolean = false;
+  profileEmail: string = ''
   
   // @Select(DataQueries.currentProfile)
   // profile$!: Observable<Profile>;
@@ -60,9 +61,12 @@ export class RatingComponent extends UIOpenMenu {
   // }
 
   ngOnChanges(){
-    
+    if (!this.profile) {
+      this.profile = this.store.selectSnapshot(DataQueries.currentProfile)
+    }
     // permet de limiter l'appel de 
     // if (this.company != this.profile.company ) {
+      this.profileEmail = this.profile.user?.email || ''
       this.company = this.profile.company
       this.setRatingInfos(this.company)
     // }
@@ -136,7 +140,6 @@ export class RatingComponent extends UIOpenMenu {
 
   getRecommandations(company: Company) {
     let recommandations = this.store.selectSnapshot(DataQueries.getAll('Recommandation'))
-    console.log("les reco ", recommandations)
     for (const recommandation of recommandations) {
       if(recommandation.companyRecommanded == company.id) {
         let ratingInfo: ratingInfo = {

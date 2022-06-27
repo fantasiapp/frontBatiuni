@@ -36,9 +36,8 @@ import "hammerjs"
     </div>
     
       <div class="form-input">
-        <label>Date de mission</label>
+        <label>Date de démarrage</label>
         <div class="form-input flex row space-between">
-          <label style="flex-shrink: 0">À partir de : </label>
           <input type="date" style="padding-left: 0.5rem;" class="form-element" formControlName="date" #inputDateMission/>
           <img src="assets/calendar.png" (click)="inputDateMission.select()" class="img-calendar-since" style="pointer-events: none;"/>
         </div>
@@ -55,10 +54,15 @@ import "hammerjs"
       </div>
 
     <div class="form-input">
-      <label>Dans un rayon autour deee</label>
+      <label>Dans un rayon autour de</label>
       <ngx-slider [(value)]=valueDistance [options]="imports.DistanceSliderConfig" formControlName="radius" (userChange)="detectChanges()"></ngx-slider>
 
     </div>
+
+    <div class="form-input">
+        <label>Taille de l'entreprise</label>
+        <ngx-slider [options]="imports.EmployeesSliderConfig" formControlName="employees" (userChange)="detectChanges()"></ngx-slider>
+      </div>
 
     <div class="form-input form-spacer">
       <label class="form-title">Type</label>
@@ -80,10 +84,6 @@ import "hammerjs"
       <ngx-slider [options]="imports.SalarySliderConfig" [highValue]="100000" formControlName="salary" (userChange)="detectChanges()"></ngx-slider>
     </div>
 
-      <div class="form-input">
-        <label>Taille de l'entreprise</label>
-        <ngx-slider [options]="imports.EmployeesSliderConfig" formControlName="employees" (userChange)="detectChanges()"></ngx-slider>
-      </div>
 
       <div class="form-input space-children-margin">
         <label class="form-title">Réorganiser la liste selon</label>
@@ -373,8 +373,7 @@ export class STFilterForm {
   }
 
   isFilterOn(filter: any){
-    console.log("filer", filter)
-    if (filter.address == "" && filter.date == "" && filter.jobs.length == 0 && filter.manPower == null && filter.candidate == false && filter.counterOffer == false &&  filter.dueDateSort == false && this.arrayEquals(filter.employees, [true, true, true, true, true]) && this.arrayEquals(filter.salary, [0, 100000]) && filter.favorite == false && filter.radius == 2000 && filter.startDateSort == false && filter.viewed == false){
+    if (filter.address == "" && filter.date == "" && filter.jobs.length == 0 && filter.manPower == null && filter.candidate == false && filter.counterOffer == false &&  filter.dueDateSort == false && this.arrayEquals(filter.employees, [0,100]) && this.arrayEquals(filter.salary, [0, 100000]) && filter.favorite == false && filter.radius == 2000 && filter.startDateSort == false && filter.viewed == false){
       this.filterOnST.emit(false)
     } else {
       this.filterOnST.emit(true);

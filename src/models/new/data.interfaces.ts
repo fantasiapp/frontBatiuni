@@ -169,6 +169,7 @@ export interface Post {
   candidates: Ref<Candidate>[];
   dates: Ref<DatePost>[];
   boostTimestamp: number;
+  paymentCondition: string;
 };
 
 export interface Candidate {

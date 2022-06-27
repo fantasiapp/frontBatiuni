@@ -45,15 +45,6 @@ import { Mobile } from "../services/mobile-footer.service";
         <h2 class="form-section-title" #0>Besoins de l'entreprise *</h2>
 
         <div class="form-input">
-          <label>Je recherche</label>
-          <input
-            min="0"
-            class="form-element"
-            formControlName="numberOfPeople"
-          />
-        </div>
-
-        <div class="form-input">
           <label>Métier</label>
           <options type="radio" [options]="allJobs" formControlName="job"></options>
         </div>
@@ -101,6 +92,15 @@ import { Mobile } from "../services/mobile-footer.service";
             formControlName="description"
             placeholder="Ajouter une description"
           ></textarea>
+        </div>
+
+        <div class="form-input">
+          <label>Effectif minimum du chantier</label>
+          <input
+            min="0"
+            class="form-element"
+            formControlName="numberOfPeople"
+          />
         </div>
 
         <div class="form-input">
@@ -195,6 +195,16 @@ import { Mobile } from "../services/mobile-footer.service";
               ></options> 
             </div> -->
           </div>
+        </div>
+
+        <div class="form-input">
+          <label>Condition de paiement</label>
+          <textarea
+            class="form-element"
+            id='payementCondition'
+            formControlName="payementCondition"
+            placeholder="30% a la commande …"
+          ></textarea>
         </div>
 
         <div class="form-input flex row">
@@ -528,29 +538,18 @@ export class MakeAdForm {
     ]),
     manPower: new FormControl(0),
     job: new FormControl([], [Validators.required]),
-    address: new FormControl("1 Rue Joliot Curie, 91190 Gif-sur-Yvette", [
-      Validators.required,
-    ]),
+    address: new FormControl("1 Rue Joliot Curie, 91190 Gif-sur-Yvette", [Validators.required,]),
     numberOfPeople: new FormControl("", [FieldType("number")]),
     counterOffer: new FormControl(false),
     hourlyStart: new FormControl("07:30:00"),
     hourlyEnd: new FormControl("17:30:00"),
-    currency: new FormControl(
-      this.currencies.filter((currency) => currency.name == "€")
-    ),
+    currency: new FormControl(this.currencies.filter((currency) => currency.name == "€")),
     description: new FormControl(""),
     amount: new FormControl(1, [FieldType("number")]),
-    documents: new FormArray(
-      this.commonDocuments.map(
-        (name) =>
-          new FormGroup({
-            name: new FormControl(name),
-            fileData: new FormControl(defaultFileUIOuput("post")),
-          })
-      )
-    ),
+    documents: new FormArray(this.commonDocuments.map((name) => new FormGroup({name: new FormControl(name),fileData: new FormControl(defaultFileUIOuput("post")),}))),
     detailedPost: new FormArray([]),
     calendar: new FormControl([]),
+    payementCondition: new FormControl("")
   });
   get invalid() {
     const calendar = this.makeAdForm.get("calendar")
@@ -567,12 +566,7 @@ export class MakeAdForm {
 
   addDocument() {
     const documents = this.makeAdForm.get("documents") as FormArray;
-    documents.push(
-      new FormGroup({
-        name: new FormControl(""),
-        fileData: new FormControl(defaultFileUIOuput("post")),
-      })
-    );
+    documents.push(new FormGroup({ name: new FormControl(""), fileData: new FormControl(defaultFileUIOuput("post")),}));
   }
 
   removeDocument(index: number) {
@@ -645,10 +639,7 @@ export class MakeAdForm {
     } else {
       this.info.show("info", "Envoi de l'annonce...", Infinity);
       const calendar: any[] = this.makeAdForm.get("calendar")!.value;
-      this.store
-        .dispatch(UploadPost.fromPostForm(this.makeAdForm.value, draft))
-        .pipe(take(1))
-        .subscribe(
+      this.store.dispatch(UploadPost.fromPostForm(this.makeAdForm.value, draft)).pipe(take(1)).subscribe(
           () => {
             this.info.show("success", "Annonce Envoyée", 2000);
             this.done.emit();

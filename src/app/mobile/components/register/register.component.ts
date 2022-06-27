@@ -33,7 +33,6 @@ export class RegisterComponent {
     this.mobile.init()
     this.mobile.footerState.subscribe(b => {
       this.showFooter = b
-      console.log('fsgdg');
       this.cd.detectChanges()
     })
   }
