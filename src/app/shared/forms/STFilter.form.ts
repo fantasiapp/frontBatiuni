@@ -35,9 +35,8 @@ import "hammerjs"
     </div>
     
       <div class="form-input">
-        <label>Date de mission</label>
+        <label>Date de démarrage</label>
         <div class="flex row space-between">
-            <label>À partir de : </label>
         <input
           type="date"
           class="form-element"
