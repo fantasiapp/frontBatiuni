@@ -1,5 +1,7 @@
 @use 'src/styles/variables' as *;
 
+$color-background-comment: #e5e8ed;
+
 :host{
     position: fixed;
     height: calc(100vh - $sticky-header-height - env(safe-area-inset-bottom));
@@ -33,11 +35,13 @@
     position: relative;
     flex-direction: row;
     padding: .5rem 1rem;
-    margin-top: 1rem;
     background: white;
-    border-radius: 1.5rem;
+    border-radius: 1.25rem;
     border: 1px solid #F7F7F7;
-    
+    width: 100%;
+    > form {
+      flex-grow: 1;
+    }
     &:focus-within {
       border: 1px solid $primary;
     }
@@ -51,27 +55,30 @@
     bottom: 0;
     left: 0;
   
-    height: 3rem;
+    height: 2.5rem;
     box-sizing: content-box;
   
-    padding-bottom: calc(20px + env(safe-area-inset-bottom)); 
-    padding-top: 20px;
-    width: calc(100% - 4rem);
-    background-color: #e5e8ed;
+    padding-bottom: calc(0.5rem + env(safe-area-inset-bottom)); 
+    padding-top: 0.5rem;
+    width: calc(100% - 2rem);
+    background-color: white;
     display: flex;
     align-items: center;
     justify-content: center;
   
-    padding-left: 2rem;
-    padding-right: 2rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    border-top: 1px solid $color-background-comment;
+    
   
     &.resetPadding {
-        padding-bottom: calc(20px + env(safe-area-inset-bottom)); 
-        bottom: 3rem;
+        padding-bottom: calc(0.5rem + env(safe-area-inset-bottom)); 
+        bottom: 2.5rem;
     }
     .divComment {
       margin-top: unset;
       width: 100%;
+      background-color: $color-background-comment;
     }
   }
 
@@ -87,26 +94,6 @@
     padding: 2rem;
 }
 
-.divComment {
-    margin-top: 1rem;
-    padding: unset;
-    border-color: #bdbdbd;
-    border-radius: 4px;
-    justify-content: space-between;
-    textarea {
-    padding: .5rem;
-    resize: none;
-    min-height: 50px;
-    max-height: 100px;
-    width: 90%;
-    }
-    img {
-    align-self: flex-end;
-    position: relative;
-    top: -.5rem;
-    right: .5rem
-    }
-}
 .partenerComment-addPhoto {
     display: flex;
     align-items: center;

@@ -1,7 +1,22 @@
-<header class="clear-margin full-width sticky-header flex center-cross annonce">
-  <h1 class="grow">Créer une annonce</h1>
-</header>
 
-<div class="hosted-page flex column center-cross space-children-margin" [ngClass]="{'footerHideMobile': !showFooter}">
-  <ad-form [ngClass]="{'footerHideMobile': !showFooter}" [page]="page"></ad-form>
-</div>
+<ng-container *ngIf="(profile$ | async) as profile">
+  <header class="clear-margin full-width sticky-header flex center-cross column annonce" [ngClass]="{'header-with-switch': profile.company && profile.company.role == 3}">
+    <ng-container *ngIf="(view$ | async) as view">
+      <div class="switch-header__wrapper" *ngIf="profile.company && profile.company.role == 3">
+        <div class="switch-header">
+          <div class="switch-header__PME-ST" [ngClass]="{'active': isPmeSwitch}" (click)="changeProfileType(true)">
+            Profil PME
+          </div>
+          <div class="switch-header__PME-ST" [ngClass]="{'active': !isPmeSwitch}" (click)="changeProfileType(false)">
+            Profil Sous-traitant
+          </div>
+        </div>
+      </div>
+    </ng-container>
+    <h1 class="header-title-wrapper grow full-width flex center-cross">Créer une annonce</h1>
+  </header>
+
+  <div class="hosted-page flex column center-cross space-children-margin" [ngClass]="{'footerHideMobile': !showFooter, 'page-content-with-switch': profile.company && profile.company.role == 3}">
+    <ad-form [ngClass]="{'footerHideMobile': !showFooter}" [page]="page"></ad-form>
+  </div>
+</ng-container>
