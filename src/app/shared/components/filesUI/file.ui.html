@@ -26,7 +26,7 @@
     </div>
   </ng-template>
   <div class="date grow flex column center-main">
-    <label class="label-input text-emphasis">{{value?.nature == 'admin' ? 'Date de document' : 'Date de fin de validité'}}</label>
+    <label class="label-input text-emphasis">{{value?.nature == 'admin' ? 'Date du document' : 'Date de fin de validité'}}</label>
     <input class="full-width" [value]="value!.expirationDate" (change)="onChange({origin: 'date', event: $event})" (keyup)="returnInputKeyboard($event, inputdate)" type="date" #inputdate/>
   </div>
 </div>

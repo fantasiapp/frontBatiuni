@@ -42,10 +42,10 @@
     <section class="full-width documents">
       <h3>Documents importants</h3>
       <div class="documents-grid">
-        <file-svg *ngFor="let file of attachedFiles" [name]="file.name" [color]="getFileColor(file.name)" (click)="openFile(file)"></file-svg>
+        <file-svg *ngFor="let file of attachedFiles" [name]="file.name" [date]="file.expirationDate" [color]="getFileColor(file.name)" (click)="openFile(file)"></file-svg>
       </div>
       <div class="documents-grid">
-        <file-svg *ngFor="let file of labelFiles" [name]="file.name" [color]="getFileColor(file.name)" (click)="openFile(file)"></file-svg>
+        <file-svg *ngFor="let file of labelFiles" [name]="file.name" [date]="file.expirationDate" [color]="getFileColor(file.name)" (click)="openFile(file)"></file-svg>
       </div>
     </section>
 
