@@ -51,7 +51,6 @@ export class FileDownloader {
         return this.sanitizer.bypassSecurityTrustResourceUrl(url)
       }),
     };
-    console.log('4');
 
     return context;
   }

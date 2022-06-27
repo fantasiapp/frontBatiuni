@@ -150,7 +150,6 @@ export class SuiviPME extends Destroy${
 
 
   onComputeDate(){
-    console.log('onComputeDate',this.mission, this.dates);
     if(!this.mission) return
     this.mission = this.store.selectSnapshot(DataQueries.getById('Mission', this.mission.id));
     if(!this.mission) return
@@ -265,7 +264,6 @@ export class SuiviPME extends Destroy${
     //   button.classList.add('submitActivated')
     
     // }, 1500)
-    console.log('this.hasgeneralStars', this.hasGeneralStars);
     if (!this.hasGeneralStars) return
     try {
       this.store.dispatch(new CloseMission(this.mission!.id, this.mission!.quality, this.mission!.qualityComment, this.mission!.security, this.mission!.securityComment, this.mission!.organisation, this.mission!.organisationComment)).pipe(take(1)).subscribe(() => {

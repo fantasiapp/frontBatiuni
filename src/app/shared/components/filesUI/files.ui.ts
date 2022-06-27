@@ -139,7 +139,6 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
       ext = fullname.slice(lastDot + 1);
 
 
-    console.log('nature', this.value?.nature, this.value);
     if (this.value?.nature != 'post') {
       this.popup.newFile(this.filename, this);
     }
@@ -212,7 +211,6 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
       responseType: ResponseType.Base64,
     })
     
-    console.log('scanenrImages', scannedImages);
     if (scannedImages && scannedImages.length > 0) {
 
       // let base64 = Capacitor.convertFileSrc(scannedImages[0])

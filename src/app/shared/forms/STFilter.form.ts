@@ -13,7 +13,7 @@ import {
 import { FormArray, FormControl, FormGroup } from "@angular/forms";
 import { Store } from "@ngxs/store";
 import { Control } from "mapbox-gl";
-import { DistanceSliderConfig, SalarySliderConfig } from "src/app/shared/common/sliderConfig";
+import { DistanceSliderConfig, SalarySliderConfig, EmployeesSliderConfig } from "src/app/shared/common/sliderConfig";
 import { Candidate, Job, Post } from "src/models/new/data.interfaces";
 import { DataQueries, SnapshotAll } from "src/models/new/data.state";
 import { OptionsModel } from "../components/options/options";
@@ -80,46 +80,9 @@ import "hammerjs"
       <ngx-slider [options]="imports.SalarySliderConfig" [highValue]="100000" formControlName="salary" (userChange)="detectChanges()"></ngx-slider>
     </div>
 
-      <div class="form-input space-children-margin">
-        <ng-container formArrayName="employees">
-        <label class="form-title">Taille de l'entreprise</label>
-          <div class="radio-item">
-            <checkbox class="grow"  [value]="true" formControlName="0"></checkbox>
-            <span >Moins de 10 salariés</span>
-          </div>
-          <div class="radio-item">
-            <checkbox
-              class="grow"
-              [value]="true"
-              [formControlName]="'1'"
-            ></checkbox>
-            <span>Entre 11 et 20 salariés</span>
-          </div>
-          <div class="radio-item">
-            <checkbox
-              class="grow"
-              [value]="true"
-              [formControlName]="'2'"
-            ></checkbox>
-            <span>Entre 20 et 50 salariés</span>
-          </div>
-          <div class="radio-item">
-            <checkbox
-              class="grow"
-              [value]="true"
-              [formControlName]="'3'"
-            ></checkbox>
-            <span>Entre 50 et 100 salariés</span>
-          </div>
-          <div class="radio-item">
-            <checkbox
-              class="grow"
-              [value]="true"
-              [formControlName]="'4'"
-            ></checkbox>
-            <span>Plus de 100 salariés</span>
-          </div>
-        </ng-container>
+      <div class="form-input">
+        <label>Taille de l'entreprise</label>
+        <ngx-slider [options]="imports.EmployeesSliderConfig" formControlName="employees" (userChange)="detectChanges()"></ngx-slider>
       </div>
 
       <div class="form-input space-children-margin">
@@ -185,7 +148,7 @@ import "hammerjs"
 export class STFilterForm {
   checkboxValues = [true]
 
-  imports = { DistanceSliderConfig, SalarySliderConfig };
+  imports = { DistanceSliderConfig, SalarySliderConfig, EmployeesSliderConfig };
 
   valueDistance: number=2000;
 
@@ -209,13 +172,7 @@ export class STFilterForm {
     jobs: new FormControl([]),
     salary: new FormControl([0, 100000]),
     manPower: new FormControl(null),
-    employees: new FormArray([
-      new FormControl(true),
-      new FormControl(true),
-      new FormControl(true),
-      new FormControl(true),
-      new FormControl(true),
-    ]),
+    employees: new FormControl([0, 100]),
     viewed: new FormControl(false),
     favorite: new FormControl(false),
     candidate: new FormControl(false),
@@ -302,11 +259,8 @@ export class STFilterForm {
       //Employees
       const jobsForCompany = this.store.selectSnapshot(DataQueries.getMany('JobForCompany', company.jobs));
       let count = jobsForCompany.reduce((acc, {number}) => acc + number, 0);
-      let isNotBetween1And10 = (!filter.employees[0] && (count >= 1 && count <= 10))
-      let isNotBetween11And20 = (!filter.employees[1] && (count >= 11 && count <= 20))
-      let isNotBetween21And50 = (!filter.employees[2] && (count >= 21 && count <= 50))
-      let isNotBetween51And100 = (!filter.employees[3] && (count >= 51 && count <= 100))
-      let isNotMoreThan100 = (!filter.employees[4] && count > 100)
+      let isNotInRangeEmployees = filter.employees[0] >= count || (filter.employees[1] != 100 && filter.employees[1] <= count);
+
 
       //Favorite
       let isNotFavorite = (filter.favorite && !user.favoritePosts.includes(post.id));
@@ -332,11 +286,7 @@ export class STFilterForm {
           isNotFavorite ||
           isNotCandidate ||
           isNotCounterOffer ||
-          isNotBetween1And10 ||
-          isNotBetween11And20 ||
-          isNotBetween21And50 ||
-          isNotBetween51And100 ||
-          isNotMoreThan100
+          isNotInRangeEmployees
           ) { continue }
 
       this.filteredPosts.push(post)
@@ -423,7 +373,6 @@ export class STFilterForm {
   }
 
   isFilterOn(filter: any){
-    console.log("filer", filter)
     if (filter.address == "" && filter.date == "" && filter.jobs.length == 0 && filter.manPower == null && filter.candidate == false && filter.counterOffer == false &&  filter.dueDateSort == false && this.arrayEquals(filter.employees, [true, true, true, true, true]) && this.arrayEquals(filter.salary, [0, 100000]) && filter.favorite == false && filter.radius == 2000 && filter.startDateSort == false && filter.viewed == false){
       this.filterOnST.emit(false)
     } else {

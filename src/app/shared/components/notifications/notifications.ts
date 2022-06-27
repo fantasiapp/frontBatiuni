@@ -140,8 +140,6 @@ export class Notifications {
 
 
   lateInit() {
-    console.log("----------------------------les notifs---------------------------")
-    console.log(this.notifications, this.store.selectSnapshot(DataState.view))
     this.notifications.forEach((notificationAny, index) => {
       let notification = notificationAny as Notification;
       let src: SafeResourceUrl | string = "assets/profile.png";
