@@ -8,7 +8,7 @@ import { Mobile } from 'src/app/shared/services/mobile-footer.service';
 import { DatePost, Mission, PostDetail, PostDetailGraphic, Ref, Supervision } from 'src/models/new/data.interfaces';
 import { DataQueries } from 'src/models/new/data.state';
 import { CreateSupervision, UploadImageSupervision } from 'src/models/new/user/user.actions';
-import { EventEmitter } from 'stream';
+// import { EventEmitter } from 'stream';
 import { TaskGraphic } from '../suivi_chantier_date-content/suivi_chantier_date-content.component';
 
 @Component({
