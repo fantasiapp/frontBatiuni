@@ -10,7 +10,8 @@
 <div class="slideMenu__comment__input__wrapper" [ngClass]="{'resetPadding': !showFooter}">
   <div class="divComment">
     <form [formGroup]="formMain" #formMainTest (ngSubmit)="onSubmit(selectedTask, formMain, 'inputComment')">
-      <input formControlName="inputComment" class="inputComment" type="text" placeholder="Ajouter un commentaire" #comment>
+      <!-- <input formControlName="inputComment" class="inputComment" type="text" placeholder="Ajouter un commentaire" #comment> -->
+      <textarea formControlName="inputComment" class="inputComment" type="text"  rows='1' placeholder='Ajouter un commentaire' (keyup)="autosize(comment)" #comment></textarea>
     </form>
     <img (click)="cameraSwipe()" src="assets/camera-outline.svg"/>
   </div>

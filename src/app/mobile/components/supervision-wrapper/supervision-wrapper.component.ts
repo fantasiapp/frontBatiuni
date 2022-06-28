@@ -80,10 +80,10 @@ export class SupervisionWrapperComponent implements OnInit {
           } else {
             this.dateOrigin = this.store.selectSnapshot(DataQueries.getById('DatePost', this.dateOrigin.id))!
             supervisions = this.store.selectSnapshot(DataQueries.getMany('Supervision', this.dateOrigin.supervisions))!
+            this.closeSwipe.next(supervisions)
           }
           this.supervisions = supervisions
           console.log('response');
-          this.closeSwipe.next(this.supervisions)
           this.cd.markForCheck()
 
         })
@@ -138,5 +138,12 @@ export class SupervisionWrapperComponent implements OnInit {
     // }
   }
 
-
+  autosize(input: HTMLTextAreaElement){
+    setTimeout(function(){
+      input.style.cssText = 'height:auto; padding:0';
+      // for box-sizing other than "content-box" use:
+      // el.style.cssText = '-moz-box-sizing:content-box';
+      input.style.cssText = 'height:' + input.scrollHeight + 'px';
+    },0);
+  }
 }
