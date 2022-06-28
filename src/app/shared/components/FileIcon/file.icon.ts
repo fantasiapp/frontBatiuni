@@ -40,8 +40,9 @@ import { DataQueries, SnapshotAll } from "src/models/new/data.state";
   `,
   styles: [`
     :host { 
-      /* display: inline-block;  */
-      position: relative
+      display: inline-block; 
+      position: relative;
+      /* display: block !important; */
     }
 
     .icon-logo{
