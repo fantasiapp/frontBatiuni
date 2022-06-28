@@ -20,6 +20,20 @@ interface ratingInfo {
   organisationComment: string;
 }
 
+interface recommandationInfo {
+  contactName: string;
+  subContractorName: string;
+  companyContractor: string;
+  subContractorContact: string;
+  qualityVibe: number;
+  qualityVibeComment: string;
+  security: number;
+  securityComment: string;
+  organisation: number;
+  organisationComment: string;
+  LastWorksiteDate: string;
+}
+
 @Component({
   selector: 'rating',
   templateUrl: './rating.component.html',
@@ -47,7 +61,7 @@ export class RatingComponent extends UIOpenMenu {
 
   missions: Mission[] | undefined;
   ratingInfos?: ratingInfo[];
-  recommandationInfos?: ratingInfo[];
+  recommandationInfos?: recommandationInfo[];
   company: Company | undefined;
   openRecommandationMenu: boolean = false;
 
@@ -142,7 +156,7 @@ export class RatingComponent extends UIOpenMenu {
     let recommandations = this.store.selectSnapshot(DataQueries.getAll('Recommandation'))
     for (const recommandation of recommandations) {
       if(recommandation.companyRecommanded == company.id) {
-        let ratingInfo: ratingInfo = {
+        let recommandationInfo: recommandationInfo = {
           contactName:recommandation.firstNameRecommanding + " " + recommandation.lastNameRecommanding,
           subContractorName: recommandation.firstNameRecommanding + " " + recommandation.lastNameRecommanding,
           companyContractor: recommandation.companyNameRecommanding,
@@ -153,8 +167,9 @@ export class RatingComponent extends UIOpenMenu {
           securityComment: recommandation.securityComment,
           organisation: recommandation.organisationStars,
           organisationComment: recommandation.organisationComment,
+          LastWorksiteDate: recommandation.LastWorksiteDate
         }
-        this.recommandationInfos!.push(ratingInfo)
+        this.recommandationInfos!.push(recommandationInfo)
       }
     }
   }
