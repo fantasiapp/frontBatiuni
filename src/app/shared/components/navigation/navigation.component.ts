@@ -1,7 +1,7 @@
-import { Component, EventEmitter, ChangeDetectionStrategy, Output, ChangeDetectorRef } from "@angular/core";
+import { Component, EventEmitter, ChangeDetectionStrategy, Output, ChangeDetectorRef, Injectable } from "@angular/core";
 import { NavigationEnd, Router } from "@angular/router";
 import { Select, Store } from "@ngxs/store";
-import { BehaviorSubject, Observable } from "rxjs";
+import { BehaviorSubject, Observable, Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { Destroy$ } from "src/app/shared/common/classes";
 import { DataQueries, DataState } from "src/models/new/data.state";
@@ -64,12 +64,12 @@ export class NavigationMenu extends Destroy$ {
   }
 
   changeRoute(index: number) {
-    if (index == this.currentIndex.getValue()) return;
-    let menu = this.menu.getValue();
-    this.changeRouteOnMenu(menu, index);
+    this.service.currentIndex = index
+    this.service.updateNav(index)
   }
+  
 
-  constructor(private router: Router, private store: Store, info: InfoService, private notifService: NotifService, private cd: ChangeDetectorRef, private popup: PopupService) {
+  constructor(private router: Router, private store: Store, info: InfoService, private notifService: NotifService, private cd: ChangeDetectorRef, private popup: PopupService, private service: NavService) {
     super();
     this.menu = new BehaviorSubject(this.store.selectSnapshot(DataState.view) == 'PME' ? PMEMenu : STMenu);
     this.router.events.pipe(takeUntil(this.destroy$)).subscribe((event) => {
@@ -91,6 +91,7 @@ export class NavigationMenu extends Destroy$ {
     });
   }
 
+
   private getIndexFromUrl(url: string) {
     let menu = this.menu.getValue();
     let segments = url.split('/');
@@ -111,6 +112,11 @@ export class NavigationMenu extends Destroy$ {
   navigationType$!: Observable<"ST" | "PME">;
 
   ngOnInit() {
+    this.service.index$.pipe(takeUntil(this.destroy$)).subscribe((index) => {
+      // if (index == this.currentIndex.getValue()) return;
+      let menu = this.menu.getValue();
+      this.changeRouteOnMenu(menu, index);
+    })
     this.changeRouteOnMenu(this.menu.getValue(), this.currentIndex.getValue());
 
 
@@ -136,4 +142,19 @@ export interface MenuItem {
   name: string // Nom de la page / tab
   src: string  // src de la photo non active
   route: string;
+}
+
+
+@Injectable({
+  providedIn: 'root'
+})
+export class NavService {
+
+  index$ = new Subject<number>()
+  currentIndex: number = 0;
+  
+  updateNav(i: number)
+  {
+    this.index$.next(i)
+  }
 }
