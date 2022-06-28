@@ -109,9 +109,7 @@ export class ModalImage extends Destroy$ {
           "scale3d(" + scale + ", " + scale + ", 1)";
       }
 
-      if (transform) {
-        el.style.webkitTransform = transform;
-      }
+      el.style.transform = "translate(0%, -50%)" + transform
     });
   }
 
