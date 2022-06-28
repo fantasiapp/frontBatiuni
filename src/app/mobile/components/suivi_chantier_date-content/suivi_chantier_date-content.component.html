@@ -68,7 +68,7 @@
 <slidemenu [(open)]="slideCommentMenu.slideCommentOpen" #slideMenuComment>
   <h1 class="center-text full-width" header>Commentaires</h1>
 
-  <app-supervision-wrapper *ngIf="slideCommentMenu.slideCommentOpen" [taskGraphic]="slideCommentMenu.taskGraphic" [selectedTask]="slideCommentMenu.selectedTask" [mission]="mission!" [dateOrigin]="dateOrigin!" [supervisions]="slideCommentMenu.supervisions" content></app-supervision-wrapper>
+  <app-supervision-wrapper *ngIf="slideCommentMenu.slideCommentOpen" [taskGraphic]="slideCommentMenu.taskGraphic" [selectedTask]="slideCommentMenu.selectedTask" [mission]="mission!" [dateOrigin]="dateOrigin!" [supervisions]="slideCommentMenu.supervisions" (closeSwipe)="refreshMainComment($event)" content></app-supervision-wrapper>
 </slidemenu>
 
 
