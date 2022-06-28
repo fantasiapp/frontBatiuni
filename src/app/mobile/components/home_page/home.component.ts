@@ -85,6 +85,8 @@ export class HomeComponent extends Destroy$ {
   @Select(DataState.view)
   view$!: Observable<"PME" | "ST">;
 
+  view: 'PME' | 'ST' = 'PME'
+
   time: number = 0;
 
   @QueryAll("Post")
@@ -205,6 +207,12 @@ export class HomeComponent extends Destroy$ {
       } else {
         this.info.alignWith('header_search')
       }
+    })
+
+    this.view$.pipe(takeUntil(this.destroy$)).subscribe((view) => {
+      this.view = view
+      this.activeView = 0
+      this.cd.markForCheck()
     })
     this.lateInit()
   }
@@ -445,25 +453,24 @@ export class HomeComponent extends Destroy$ {
   }
 
   changeView(headerActiveView: number) {
-    this.view$.subscribe((view)=>{
-      if(view=='PME'){
-        if (headerActiveView == 0){
-          this.filterPME.resetFilter()
-          this.searchbar.resetSearch()
-          this.filterOn = false;
-        }  
-        if (headerActiveView == 1) {
-          this.filterPME.resetFilter()
-          this.searchbar.resetSearch()
-          this.filterOn = false;
-        }    
-        if (headerActiveView == 2) {
-          this.filterPME.resetFilter()
-          this.searchbar.resetSearch()
-          this.filterOn = false;
-        }
+   
+    if(this.view == 'PME'){
+      if (headerActiveView == 0){
+        this.filterPME.resetFilter()
+        this.searchbar.resetSearch()
+        this.filterOn = false;
+      }  
+      if (headerActiveView == 1) {
+        this.filterPME.resetFilter()
+        this.searchbar.resetSearch()
+        this.filterOn = false;
+      }    
+      if (headerActiveView == 2) {
+        this.filterPME.resetFilter()
+        this.searchbar.resetSearch()
+        this.filterOn = false;
       }
-    })
+    }
   }
 
   callbackFilter = (filter: any): void => {
