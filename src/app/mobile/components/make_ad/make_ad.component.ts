@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from "@angular/core";
 import { Select, Store } from "@ngxs/store";
 import { Observable } from "rxjs/internal/Observable";
+import { InfoService } from "src/app/shared/components/info/info.component";
 import { Mobile } from "src/app/shared/services/mobile-footer.service";
 import { Profile } from "src/models/new/data.interfaces";
 import { DataQueries, DataState } from "src/models/new/data.state";
@@ -27,10 +28,18 @@ export class MakeAdComponent {
   @Input() withSubmit: boolean = false;
   showFooter: boolean = true;
 
-  constructor(public mobile: Mobile, private cd: ChangeDetectorRef, private store: Store){
+  constructor(public mobile: Mobile, private cd: ChangeDetectorRef, private store: Store, private info: InfoService){
   }
 
   ngOnInit(){
+    this.profile$.subscribe((profile) => {
+      if( profile.company && profile.company.role == 3) {
+        this.info.alignWith('paging_switch')
+      } else {
+        this.info.alignWith('header')
+      }
+    })
+
     this.mobile.footerStateSubject.subscribe(b => {
       this.showFooter = b;
       this.cd.detectChanges()

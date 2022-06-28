@@ -198,13 +198,20 @@ export class HomeComponent extends Destroy$ {
       this.slideMissionClose()
       this.activeView = num
     })
+    this.profile$.pipe(takeUntil(this.destroy$)).subscribe((profile) => {
+      if(profile.company && profile.company.role == 3){
+        this.info.alignWith('header_search_switch')
+        console.log('info switch');
+      } else {
+        this.info.alignWith('header_search')
+      }
+    })
     this.lateInit()
   }
 
   async lateInit() {
     this.activeViewService.setActiveView(0)
     if (!this.isLoading && this.isStillOnPage) {
-      this.info.alignWith("header_search");
       combineLatest([this.profile$, this.store.select(DataQueries.getAll('Post'))])
         .pipe(takeUntil(this.destroy$))
         .subscribe(([profile, posts]) => {

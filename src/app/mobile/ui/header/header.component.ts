@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from 
 import { Router } from "@angular/router";
 import { Select, Store } from "@ngxs/store";
 import { Observable } from "rxjs/internal/Observable";
+import { InfoService } from "src/app/shared/components/info/info.component";
 import { NavService } from "src/app/shared/components/navigation/navigation.component";
 import { Company, Profile, User } from "src/models/new/data.interfaces";
 import { DataQueries, DataState } from "src/models/new/data.state";
@@ -82,11 +83,17 @@ export class HeaderComponent {
     return result;
   }
 
-  constructor(private store: Store, private router: Router, private navService: NavService){
+  constructor(private store: Store, private router: Router, private navService: NavService, private info: InfoService){
     
   }
 
   ngOnInit(){
+    if(this.profile.company && this.profile.company.role == 3){
+      this.info.alignWith('header_search_switch')
+      console.log('info switch');
+    } else {
+      this.info.alignWith('header_search')
+    }
     console.log('profile', this.profile);
     this.view$.subscribe((view)=>{
       this.isPmeSwitch = view === 'PME'

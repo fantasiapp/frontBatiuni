@@ -83,7 +83,6 @@ export class SOSPageComponent extends Destroy$ {
       this.showFooter = b
       this.cd.detectChanges()
     })
-    this.info.alignWith('header_search');
     const now = new Date().toISOString().slice(0, 10);
     const user = this.store.selectSnapshot(DataQueries.currentUser)
     this.companies$.subscribe((companies) => {
