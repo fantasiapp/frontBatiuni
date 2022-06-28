@@ -127,6 +127,7 @@ export class UploadFile<K extends DataTypes = any> {
 
   //tell JLW to unify formats
   constructor(src: FileUIOutput, nature: string, name?: string, category?: K) {
+    // this.fileBase64 = src.content //only one file
     this.fileBase64 = src.content[0]; //only one file
     this.expirationDate = src.expirationDate;
     this.ext = src.ext;
@@ -156,6 +157,7 @@ export class ModifyFile<K extends DataTypes = any> {
   //tell JLW to unify formats
   constructor(src: FileUIOutput, fileId: number, category?: K) {
     if (src.content) this.fileBase64 = src.content[0] //only one file
+    // if (src.content) this.fileBase64 = src.content //only one file
     else this.fileBase64 = ""
     console.log("fileBase64", this.fileBase64)
     this.expirationDate = src.expirationDate;

@@ -185,6 +185,10 @@ import { InfoService } from "../components/info/info.component";
           <options [options]="jobs" formControlName="jobs"></options>
         </div>
 
+        <div class="form-input">
+          <checkbox>J'accepte les Conditions Générales & les mentions légales d'Utilisation </checkbox>
+        </div>
+
         <div class="form-input parrain">
           <label>Code parrain ?</label>
           <input
