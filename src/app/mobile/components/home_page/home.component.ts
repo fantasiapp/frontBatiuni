@@ -868,7 +868,7 @@ export class HomeComponent extends Destroy$ {
     }})
 
     this.view$.subscribe((view)=>{
-      if(view=='ST'){
+      if(view=='ST' && this.filterST){
         this.filterST.updateFilteredPosts(this.filterST.filterForm.value)
         this.filterST.updateEvent.emit(this.filterST.filteredPosts);
         this.filterService.emitFilterChangeEvent(this.filterST.filteredPosts)
@@ -945,7 +945,7 @@ export class HomeComponent extends Destroy$ {
   closeAdFilterMenu(value: any){
     this.openAdFilterMenu = value;
     this.view$.subscribe((view)=>{
-      if(view=='ST'){
+      if(view=='ST' && this.filterST){
         this.filterST.updateFilteredPosts(this.filterST.filterForm.value);
         this.displayOnlinePosts = this.filterST.filteredPosts;
         this.filterST.isFilterOn(this.filterST.filterForm.value);
