@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, Output } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { Store } from '@ngxs/store';
@@ -8,7 +8,6 @@ import { Mobile } from 'src/app/shared/services/mobile-footer.service';
 import { DatePost, Mission, PostDetail, PostDetailGraphic, Ref, Supervision } from 'src/models/new/data.interfaces';
 import { DataQueries } from 'src/models/new/data.state';
 import { CreateSupervision, UploadImageSupervision } from 'src/models/new/user/user.actions';
-// import { EventEmitter } from 'stream';
 import { TaskGraphic } from '../suivi_chantier_date-content/suivi_chantier_date-content.component';
 
 @Component({
@@ -29,7 +28,7 @@ export class SupervisionWrapperComponent implements OnInit {
   showFooter: boolean = true;
   swipeMenuImage: boolean = false;
 
-  // @Output() closeSwipe = new EventEmitter<Supervision[] | null>()
+  @Output() closeSwipe = new EventEmitter<Supervision[] | null>()
 
 
   constructor(public mobile: Mobile, private cd: ChangeDetectorRef, private store: Store, private info: InfoService) {
@@ -84,7 +83,7 @@ export class SupervisionWrapperComponent implements OnInit {
           }
           this.supervisions = supervisions
           console.log('response');
-
+          this.closeSwipe.next(this.supervisions)
           this.cd.markForCheck()
 
         })

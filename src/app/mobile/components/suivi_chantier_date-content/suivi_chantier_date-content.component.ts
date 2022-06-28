@@ -396,7 +396,13 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
       selectedTask: selectedTask
     }
   }
+  refreshMainComment(supervisions : Supervision[] | null){
+    console.log('object', supervisions);
+    if(!supervisions) return
+    this.date.supervisions = supervisions
+  }
 }
+
 
 export interface slideCommentMenu {
   taskGraphic: TaskGraphic | null,

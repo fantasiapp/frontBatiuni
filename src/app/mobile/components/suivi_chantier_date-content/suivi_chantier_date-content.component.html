@@ -23,20 +23,19 @@
             <img (click)="refuse(taskGraphic.selectedTask, refuseImg)" id="control_refuse_{{taskGraphic.selectedTask.id}}" [src]= "taskGraphic.invalidationImage" #refuseImg/>
           </div>
         </div>
-        <div class="comment-container" *ngIf="!taskGraphic.selectedTask.supervisions.length">
+        <!-- <div class="comment-container">
           <div *ngIf="!mission!.isClosed" class="divComment">
             <form (click)="slideComment(taskGraphic, $event, taskGraphic.selectedTask.supervisions, taskGraphic.selectedTask)" [formGroup]="taskGraphic.formGroup" (ngSubmit)="onSubmit(taskGraphic.selectedTask, taskGraphic.formGroup, 'comment')">
               <input style="pointer-events: none;" id="input_{{taskGraphic.selectedTask.id}}" class="inputComment" type="text" placeholder="Ajouter un commentaire" formControlName="comment"  #comment>
             </form>
           </div>
-        </div>
+        </div> -->
         <div class="comment-container" *ngFor="let supervision of taskGraphic.selectedTask.supervisions; let isLast = last">
-          <comment-suivi  [supervision]="supervision"></comment-suivi>
+          <comment-suivi  *ngIf="taskGraphic.selectedTask.supervisions.length"  [supervision]="supervision"></comment-suivi>
           <div *ngIf="!mission!.isClosed && isLast" class="divComment">
             <form [formGroup]="taskGraphic.formGroup" (ngSubmit)="onSubmit(taskGraphic.selectedTask, taskGraphic.formGroup, 'comment')" (click)="slideComment(taskGraphic, $event, taskGraphic.selectedTask.supervisions, taskGraphic.selectedTask)">
               <input style="pointer-events: none;" id="input_{{taskGraphic.selectedTask.id}}" class="inputComment" type="text" placeholder="Ajouter un commentaire" formControlName="comment" #comment>
             </form>
-            <img (click)="cameraSwipe(supervision.id)" src="assets/camera-outline.svg"/>
           </div>
         </div>
     </div>
@@ -47,11 +46,6 @@
           <h2>Communiquer avec votre partenaire de chantier</h2>
           <div *ngFor="let supervision of date.supervisions; let isLast = last">
             <comment-suivi  [supervision]="supervision" #commentSuivi></comment-suivi>
-            
-            <div class="partenerComment-addPhoto" *ngIf="!!date.supervisions[0] && isLast && !mission!.isClosed && (user.firstName + ' ' + user.lastName) === supervision.author" (click)="cameraSwipe(supervision.id)">
-              <span>Ajouter une photo : </span>
-              <img class="partenerComment-icon"   src="assets/camera-outline.svg" alt="camera"/>
-            </div>
           </div>
       </div>
       <div *ngIf="!mission!.isClosed" class="partenerComment">
@@ -68,7 +62,7 @@
 <slidemenu [(open)]="slideCommentMenu.slideCommentOpen" #slideMenuComment>
   <h1 class="center-text full-width" header>Commentaires</h1>
 
-  <app-supervision-wrapper *ngIf="slideCommentMenu.slideCommentOpen" [taskGraphic]="slideCommentMenu.taskGraphic" [selectedTask]="slideCommentMenu.selectedTask" [mission]="mission!" [dateOrigin]="dateOrigin!" [supervisions]="slideCommentMenu.supervisions" content></app-supervision-wrapper>
+  <app-supervision-wrapper *ngIf="slideCommentMenu.slideCommentOpen" [taskGraphic]="slideCommentMenu.taskGraphic" [selectedTask]="slideCommentMenu.selectedTask" [mission]="mission!" [dateOrigin]="dateOrigin!" [supervisions]="slideCommentMenu.supervisions" (closeSwipe)="refreshMainComment($event)" content></app-supervision-wrapper>
 </slidemenu>
 
 

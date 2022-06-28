@@ -561,8 +561,9 @@ input[type=number] {
     left: 0;
     width: 100%;
     top: 0;
-    height: $switch-header-size;
-    background-color: white;
+    padding-top: calc(env(safe-area-inset-top));
+    height: calc(env(safe-area-inset-top) + $switch-header-size);
+    background-color: #e6e6e6;
     display: flex;
   }
 }

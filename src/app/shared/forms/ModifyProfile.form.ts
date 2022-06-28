@@ -403,6 +403,14 @@ import { returnInputKeyboard } from '../common/classes'
         flex-flow: column nowrap;
         flex-shrink: 0;
       }
+
+      section {
+        position: relative;
+        z-index: 5;
+      }
+      .mid-sticky-footer {
+        z-index: 10;
+      }
       .metiers options {
         margin-bottom: 20px;
       }

@@ -9,21 +9,21 @@ import { returnInputKeyboard } from '../common/classes'
   <form class="form-control" style="height: 100%;" [formGroup]="form" >
     <div class="form-input">
       <label>Ancien mot de passe</label>
-      <input class="form-element" type="password" formControlName="oldPwd" id="idPassword"/>
+      <input class="form-element" type="password" formControlName="oldPwd" id="idPassword" (keyup)="returnInputKeyboard($event, input1)" (click)="onClickInputScroll(input1)" #input1/>
       <div (click)="togglePassword()" style="position: absolute; cursor: pointer; bottom: 0; right: 0; z=100">
         <img class="eye" src="assets/Oeil_Fermé.svg" id="togglePassword">
       </div>
     </div>
     <div class="form-input">
       <label>Nouveau mot de passe</label>
-      <input class="form-element" type="password" formControlName="newPwd" id="idPassword"/>
+      <input class="form-element" type="password" formControlName="newPwd" id="idPassword" (keyup)="returnInputKeyboard($event, input2)" (click)="onClickInputScroll(input2)" #input2/>
       <div (click)="togglePassword()" style="position: absolute; cursor: pointer; bottom: 0; right: 0; z=100">
         <img class="eye" src="assets/Oeil_Fermé.svg" id="togglePassword">
       </div>
     </div>
     <div class="form-input">
       <label>Confirmation nouveau mot de passe</label>
-      <input class="form-element" type="password" formControlName="newPwdConfirmation" id="idPassword"/>
+      <input class="form-element" type="password" formControlName="newPwdConfirmation" id="idPassword" (click)="onClickInputScroll(input3)" (keyup)="returnInputKeyboard($event, input3)" #input3/>
       <div (click)="togglePassword()" style="position: absolute; cursor: pointer; bottom: 0; right: 0; z=100">
         <img class="eye" src="assets/Oeil_Fermé.svg" id="togglePassword">
       </div>
@@ -87,5 +87,14 @@ export class ModifyPasswordForm {
     togglePassword.forEach((togglepwd) => {
       togglepwd.setAttribute('src', toggleClass)
     })
+  }
+
+  onClickInputScroll(input: HTMLElement){
+    setTimeout(() => {
+      input.scrollIntoView({behavior: 'smooth', block: 'center', inline: 'nearest'})
+      setTimeout(() => {
+        input.scrollIntoView({behavior: 'smooth', block: 'center', inline: 'nearest'})
+      }, 500)
+    }, 100)
   }
 };

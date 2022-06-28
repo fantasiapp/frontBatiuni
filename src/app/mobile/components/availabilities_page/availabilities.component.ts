@@ -6,6 +6,7 @@ import { takeUntil } from "rxjs/operators";
 import { AppComponent } from "src/app/app.component";
 import { Destroy$ } from "src/app/shared/common/classes";
 import { Availability, CalendarUI, DayState } from "src/app/shared/components/calendar/calendar.ui";
+import { NavService } from "src/app/shared/components/navigation/navigation.component";
 import { SwipeupService, SwipeupView } from "src/app/shared/components/swipeup/swipeup.component";
 import { getUserDataService } from "src/app/shared/services/getUserData.service";
 import { Job, Profile } from "src/models/new/data.interfaces";
@@ -63,7 +64,7 @@ export class AvailabilitiesComponent extends Destroy$ {
     },
   }]
 
-  constructor(private store: Store, private swipeupService: SwipeupService, private appComponent: AppComponent, private getUserDataService: getUserDataService) {
+  constructor(private store: Store, private swipeupService: SwipeupService, private appComponent: AppComponent, private getUserDataService: getUserDataService, private navService: NavService) {
     super();
   }
 
@@ -112,6 +113,12 @@ export class AvailabilitiesComponent extends Destroy$ {
   isPmeSwitch: boolean = false
   changeProfileType(type: boolean) {
     this.isPmeSwitch = type
-    this.store.dispatch(new ChangeProfileType(type));
+    this.store.dispatch(new ChangeProfileType(type)).subscribe(()=> {
+      try{ 
+        this.navService.updateNav(0)
+      } catch {
+
+      }
+    })
   }
 }
