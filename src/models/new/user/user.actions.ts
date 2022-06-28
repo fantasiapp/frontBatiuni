@@ -237,6 +237,7 @@ export class UploadPost {
     public amount: number,
     public DetailedPost: string[],
     public files: any,
+    public paymentCondition: string,
     public draft: boolean,
     public id?:number,
     public isBoosted?:boolean,
@@ -291,6 +292,7 @@ export class UploadPost {
       value.amount,
       value.detailedPost.map((detail: any) => detail.description),
       newFiles,
+      value.paymentCondition,
       draft,
       id
     );

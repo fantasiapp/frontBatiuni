@@ -201,8 +201,8 @@ import { Mobile } from "../services/mobile-footer.service";
           <label>Condition de paiement</label>
           <textarea
             class="form-element"
-            id='payementCondition'
-            formControlName="payementCondition"
+            id='paymentCondition'
+            formControlName="paymentCondition"
             placeholder="30% a la commande …"
           ></textarea>
         </div>
@@ -441,12 +441,9 @@ export class MakeAdForm {
     this.makeAdForm.get("counterOffer")?.setValue(p.counterOffer);
     this.makeAdForm.get("hourlyStart")?.setValue(p.hourlyStart);
     this.makeAdForm.get("hourlyEnd")?.setValue(p.hourlyEnd);
-    this.makeAdForm
-      .get("currency")
-      ?.setValue(
-        this.currencies.filter((currency) => currency.name == p.currency)
-      );
+    this.makeAdForm.get("currency")?.setValue(this.currencies.filter((currency) => currency.name == p.currency));
     this.makeAdForm.get("description")?.setValue(p.description);
+    this.makeAdForm.get("paymentCondition")?.setValue(p.paymentCondition);
     this.makeAdForm.get("amount")?.setValue(p.amount);
 
     //load details
@@ -550,7 +547,7 @@ export class MakeAdForm {
     documents: new FormArray(this.commonDocuments.map((name) => new FormGroup({name: new FormControl(name),fileData: new FormControl(defaultFileUIOuput("post")),}))),
     detailedPost: new FormArray([]),
     calendar: new FormControl([]),
-    payementCondition: new FormControl("")
+    paymentCondition: new FormControl("")
   });
   get invalid() {
     const calendar = this.makeAdForm.get("calendar")
@@ -602,14 +599,9 @@ export class MakeAdForm {
       let files = this.store.selectSnapshot(DataQueries.getMany('File', this.post.files))
       if (!draft) {
         this.info.show("info", "Mise en ligne de l'annonce...", Infinity);
-        const action = this.makeAdForm.touched
-          ? UploadPost.fromPostForm(this.makeAdForm.value, draft, this.post.id, files)
-          : new SwitchPostType(this.post.id);
-        this.store
-          .dispatch(action)
-          .pipe(take(1))
-          .subscribe(
-            () => {
+        const action = this.makeAdForm.touched ? UploadPost.fromPostForm(this.makeAdForm.value, draft, this.post.id, files) : new SwitchPostType(this.post.id);
+        console.log("action", action)
+        this.store.dispatch(action).pipe(take(1)).subscribe(() => {
               this.info.show("success", "Annonce mise en ligne", 2000);
               this.activeViewService.emitActiveViewChangeEvent(1)
               this.done.emit();
