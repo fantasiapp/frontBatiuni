@@ -10,18 +10,22 @@ export type Info = {
   alignWith?: InfoAlignType;
 };
 
-export type InfoAlignType = 'header' | 'paging' | 'header_search' | 'last';
+export type InfoAlignType = 'header' | 'paging' | 'header_search' | 'last' | 'paging_switch';
 
 const TRANSITION_TIME = 150;
-const HEADER_HEIGHT = 4*16; // $sticky-header-height
+const HEADER_HEIGHT = 4*16; // $sticky-header-height, header normal
+const HEADER_SWITCH_HEIGHT = 106; // $sticky-header-height, header normal
 const PAGING_HEIGHT = 75;
-const HEADER_SEARCH_HEIGHT = 150;
+// const HEADER_SEARCH_HEIGHT = 150;
+const HEADER_SEARCH_HEIGHT = 192;
 
 function getHeight(top: InfoAlignType) {
   if ( top == 'header' )
     return HEADER_HEIGHT;
   else if ( top == 'paging' ) 
     return PAGING_HEIGHT;
+  else if ( top == 'paging_switch')
+    return HEADER_SWITCH_HEIGHT
   return HEADER_SEARCH_HEIGHT;
 }
 
