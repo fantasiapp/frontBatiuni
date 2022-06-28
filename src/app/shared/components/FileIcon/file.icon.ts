@@ -53,6 +53,7 @@ import { DataQueries, SnapshotAll } from "src/models/new/data.state";
       color: #0D6191;
       font-size: 14px;
       text-align: center;
+    }
 
     svg {
       position: relative;
