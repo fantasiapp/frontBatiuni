@@ -35,6 +35,7 @@ import {
 } from "src/models/new/user/user.actions";
 import { getUserDataService } from "src/app/shared/services/getUserData.service";
 import { Mobile } from "src/app/shared/services/mobile-footer.service";
+import { UICheckboxComponent } from "src/app/shared/components/box/checkbox.component";
 
 
 export interface TaskGraphic {
@@ -93,6 +94,7 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
 
     this.user = this.store.selectSnapshot(DataQueries.currentUser)
     this.mission = this.store.selectSnapshot(DataQueries.getById('Mission', this.mission!.id))
+
     this.updatePageOnlyDate()
 
     this.popup.addPostDetail.pipe(takeUntil(this.destroy$)).subscribe(newPostDetail => {
@@ -276,11 +278,6 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
     }
   }
 
-  addTaskToPost() {
-    this.popup.openDateDialog(this.mission!.id, this.date, this.dateOrigin.id, this);
-    this.swipeMenu = false;
-  }
-
   updatePage(content: any) {
     if (content) {
 
@@ -386,7 +383,6 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
   }
 
   slideComment(taskGraphic: TaskGraphic | null, e: Event, supervisions: Supervision[], selectedTask: PostDetailGraphic | null){
-    console.log('slideComment', taskGraphic, e, supervisions, selectedTask);
     e.preventDefault()
     this.slideCommentOpen = true
     this.slideCommentMenu = {
@@ -397,9 +393,90 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
     }
   }
   refreshMainComment(supervisions : Supervision[] | null){
-    console.log('object', supervisions);
     if(!supervisions) return
     this.date.supervisions = supervisions
+  }
+
+  assignDate!: assignDateType;
+  newTaskForm = new FormGroup({
+    task: new FormControl("", [Validators.required]),
+  });
+  taskMenuUp: boolean = false
+  
+
+  addNewTask(e: Event, form: FormGroup){
+    let formControl = form.get('task')!
+    let value = formControl.value
+    if(!value || value.trim() == '') return
+
+    this.store.dispatch(new CreateDetailedPost(this.mission!.id, value, this.dateId)).pipe(take(1)).subscribe(() => {
+      formControl.reset()
+      this.mission = this.store.selectSnapshot(DataQueries.getById('Mission', this.mission!.id))!
+      const missionPostDetail = this.store.selectSnapshot(DataQueries.getMany("DetailedPost", this.mission!.details)) as Task[];
+      const newTask = missionPostDetail[missionPostDetail.length - 1];
+      const newTaskSupervision = this.store.selectSnapshot(DataQueries.getMany("Supervision", newTask.supervisions))
+      const detailDate: PostDetailGraphic = {
+        id: newTask.id,
+        date: this.date.date,
+        content: newTask.content,
+        validated: newTask.validated,
+        refused: newTask.refused,
+        supervisions: newTaskSupervision,
+        checked: true
+      }
+      this.updatePageOnlyDate()
+
+      this.updateTaskGraphic(detailDate)
+      this.cd.markForCheck()
+    })
+  }
+
+
+  taskSubmit(e:Event, form: HTMLFormElement, input: HTMLInputElement) {
+    if(!input.value || input.value.trim() == '') return
+    form.dispatchEvent(new Event("submit", {cancelable: true}))
+    e.preventDefault(); // Prevents the addition of a new line in the text field (not needed in a lot of cases)
+  }
+
+  taskManager(e:Event, b: boolean){
+    e.stopPropagation()
+    this.taskMenuUp = b
+
+    if(b) {
+      this.updatePageOnlyDate()
+
+    }
+  }
+
+  modifyDetailedPostDate(detailedPost: PostDetailGraphic, checkbox: UICheckboxComponent, e: Event) {
+    this.store.dispatch(new ModifyDetailedPost(detailedPost, detailedPost.checked, this.dateId)).pipe(take(1)).subscribe(result => {
+      checkbox.onChange(e)
+      detailedPost.checked = !detailedPost.checked
+      detailedPost.date = this.dateOrigin.date
+
+      console.log('detailedPost', detailedPost);
+      this.updateTaskGraphic(detailedPost)
+      
+    })
+  }
+
+  updateTaskGraphic(detailedPost: PostDetailGraphic){
+    if(detailedPost.checked && detailedPost.date == this.dateOrigin.date){
+      this.tasksGraphic.push({
+        selectedTask:detailedPost,
+        validationImage: this.computeTaskImage(detailedPost, "validated"),
+        invalidationImage: this.computeTaskImage(detailedPost, "refused"),
+        formGroup: new FormGroup({comment: new FormControl()})
+      })
+    } else {
+      this.tasksGraphic = this.tasksGraphic.filter(task => task.selectedTask.content != detailedPost.content)
+      this.date.postDetails = this.date.postDetails.filter(postdetail => postdetail.content != detailedPost.content)
+    }
+
+    this.tasksGraphic = this.tasksGraphic.filter(task => task.selectedTask.checked)
+
+    this.cd.markForCheck()
+
   }
 }
 
@@ -409,4 +486,11 @@ export interface slideCommentMenu {
   slideCommentOpen: boolean,
   supervisions: Supervision[],
   selectedTask: PostDetailGraphic | null
+}
+
+export interface assignDateType {
+  missionId: Ref<Mission>;
+  date: PostDateAvailableTask;
+  datePostId: Ref<DatePost>;
+  view: "ST" | "PME";
 }

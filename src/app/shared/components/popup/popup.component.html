@@ -22,30 +22,6 @@
   <button *ngIf="!signature.signedByProfile" class="button active" id="signer" (click)="actionSign(signature.missionId, signature.view)">Signer</button>
 </ng-template>
 
-<ng-template #setDate let-assignDate>
-  <div class="main-date" #tache>
-    <div class="header-container">
-      <h3 class="title-date">Le {{assignDate.date.date}}</h3>
-    </div>
-
-    <img class="hero-img" src="assets/popup-contrat.svg" alt="contrat">
-    
-    <label class="subtitle-date">Choisissez les tâches du jour :</label>
-    <ul id="list-date">
-      <li *ngFor="let detailedPost of assignDate.date.allPostDetails" 
-      (click)="modifyDetailedPostDate(detailedPost, checkbox, assignDate, $event)" 
-      [ngClass]="{'disabled': detailedPost.checked && (detailedPost.validated || detailedPost.refused)}">
-        <checkbox style="pointer-events: none; flex-shrink: 0;" [value]="detailedPost.checked" #checkbox></checkbox>
-        <span >{{ detailedPost.content }}</span>
-      </li>
-    </ul>
-    <form (ngSubmit)="addNewTask($event, assignDate, newTaskForm)" [formGroup]="newTaskForm" #formTask>
-      <input id="addTask" type="text" placeholder="Ajouter une nouvelle tâche" formControlName="task" #addTask>
-      <img id="check-task" src="assets/checkmark-done-outline.svg" alt="done" (click)="taskSubmit($event, formTask, addTask)">
-    </form>
-  </div>
-</ng-template>
-
 <ng-template #closeMission let-context>
   <label>Noter l'entreprise {{ context.name }}</label>
   <label>Confirmer-vous la clôture de cette mission ?</label>

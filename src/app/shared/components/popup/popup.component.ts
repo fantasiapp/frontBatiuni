@@ -57,7 +57,7 @@ import {
   CreateDetailedPost,
 } from "src/models/new/user/user.actions";
 import { SuiviPME } from "src/app/mobile/components/suivi_pme/suivi-pme.page";
-import { SuiviChantierDateContentComponent } from "src/app/mobile/components/suivi_chantier_date-content/suivi_chantier_date-content.component";
+import { assignDateType, SuiviChantierDateContentComponent } from "src/app/mobile/components/suivi_chantier_date-content/suivi_chantier_date-content.component";
 import { UICheckboxComponent } from "../box/checkbox.component";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { SingleCache } from "../../services/SingleCache";
@@ -71,12 +71,7 @@ const TRANSITION_DURATION = 200;
 
 //extend to support components
 
-export interface assignDateType {
-  missionId: Ref<Mission>;
-  date: PostDateAvailableTask;
-  datePostId: Ref<DatePost>;
-  view: "ST" | "PME";
-}
+
 
 // export interface assignDateType {
 //   postDateAvailableTask: PostDateAvailableTask;
@@ -249,46 +244,6 @@ export class UIPopup extends DimensionMenu {
   detailedPostCheck(postDateAvailableTask: PostDateAvailableTask, detailedPost: PostDetail){
     const postDetails = postDateAvailableTask.postDetails.filter(postDetail => postDetail.id == detailedPost.id)
     return !!postDetails.length ? postDetails[0].checked : false
-  }
-
-  addNewTask(e: Event,assignDate: assignDateType, newTaskForm: FormGroup) {
-
-    let formControl = newTaskForm.get('task')!
-    let value = formControl.value
-    if(!value || value.trim() == '') return
-    this.store.dispatch(new CreateDetailedPost(assignDate.missionId, value, assignDate.datePostId)).pipe(take(1)).subscribe(() => {
-      formControl.reset()
-            
-      const mission = this.store.selectSnapshot(DataQueries.getById("Mission", assignDate.missionId))
-      const missionPostDetail = this.store.selectSnapshot(DataQueries.getMany("DetailedPost", mission!.details)) as Task[];
-      const newTask = missionPostDetail[missionPostDetail.length - 1];
-      
-      // assignDate.date.allPostDetails = this.store.selectSnapshot(DataQueries.getMany("DetailedPost", mission!.details));
-      // this.popupService.addPostDetailList.next(newTask);
-      const newTaskSupervision = this.store.selectSnapshot(DataQueries.getMany("Supervision", newTask.supervisions))
-      const detailDate: PostDetailGraphic = {
-        id: newTask.id,
-        date: assignDate.date.date,
-        content: newTask.content,
-        validated: newTask.validated,
-        refused: newTask.refused,
-        supervisions: newTaskSupervision,
-        checked: true
-      }
-      assignDate.date.allPostDetails.push(detailDate)
-      assignDate.date.postDetails.push(detailDate)
-      this.popupService.addPostDetail.next(detailDate)
-      this.popupService.modifyPostDetail.next(detailDate)
-
-      this.cd.markForCheck();
-    });
-  }
-
-  taskSubmit(e:Event, form: HTMLFormElement, input: HTMLInputElement) {
-    if(!input.value || input.value.trim() == '') return
-    form.dispatchEvent(new Event("submit", {cancelable: true}))
-    e.preventDefault(); // Prevents the addition of a new line in the text field (not needed in a lot of cases)
-
   }
 
   clearInput(newTaskForm: FormGroup){
@@ -489,40 +444,7 @@ export class PopupService {
       });
   }
 
-  openDateDialog(
-    missionId: Ref<Mission>,
-    date: PostDateAvailableTask,
-    datePostId: Ref<DatePost>,
-    objectSuivi: SuiviChantierDateContentComponent
-  ) {
-    const view = this.store.selectSnapshot(DataState.view),
-      closed$ = new Subject<void>();
-    let first: boolean = true;
-
-    const context = {
-      $implicit: {
-        missionId: missionId,
-        date: date,
-        datePostId: datePostId,
-        view: view,
-      },
-    };
-
-    if (first) {
-      this.dimension$.next(this.defaultDimension);
-      this.popups$.next({
-        type: "predefined",
-        name: "setDate",
-        context,
-        close: (test: boolean) => {
-          closed$.next();
-          let content = document.getElementById("addTask") as HTMLInputElement;
-          objectSuivi.updatePage(content);
-        },
-      });
-      first = false;
-    }
-  }
+  
 
   openCloseMission(company: Company, object: SuiviPME) {
     let first: boolean = true;
