@@ -10,8 +10,8 @@ import { SwipeupService, SwipeupView } from "src/app/shared/components/swipeup/s
 import { getUserDataService } from "src/app/shared/services/getUserData.service";
 import { Job, Profile } from "src/models/new/data.interfaces";
 import { nameToAvailability } from "src/models/new/data.mapper";
-import { DataQueries, SnapshotAll } from "src/models/new/data.state";
-import { ModifyAvailability } from "src/models/new/user/user.actions";
+import { DataQueries, DataState, SnapshotAll } from "src/models/new/data.state";
+import { ChangeProfileType, ModifyAvailability } from "src/models/new/user/user.actions";
 
 @Component({
   selector: 'availabilities',
@@ -25,6 +25,9 @@ export class AvailabilitiesComponent extends Destroy$ {
 
   @Select(DataQueries.currentProfile)
   profile$!: Observable<Profile>;
+
+  @Select(DataState.view)
+  view$!: Observable<'PME' | 'ST'>;
 
   @SnapshotAll('Job')
   allJobs!: Job[];
@@ -104,5 +107,11 @@ export class AvailabilitiesComponent extends Destroy$ {
   ngOnDestroy() {
     this.getUserDataService.emitDataChangeEvent()
     super.ngOnDestroy();
+  }
+
+  isPmeSwitch: boolean = false
+  changeProfileType(type: boolean) {
+    this.isPmeSwitch = type
+    this.store.dispatch(new ChangeProfileType(type));
   }
 }

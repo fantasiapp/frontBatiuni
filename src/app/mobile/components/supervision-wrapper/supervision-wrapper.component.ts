@@ -1,11 +1,14 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { Store } from '@ngxs/store';
 import { take } from 'rxjs/operators';
+import { InfoService } from 'src/app/shared/components/info/info.component';
 import { Mobile } from 'src/app/shared/services/mobile-footer.service';
-import { DatePost, Mission, PostDetail, PostDetailGraphic, Supervision } from 'src/models/new/data.interfaces';
+import { DatePost, Mission, PostDetail, PostDetailGraphic, Ref, Supervision } from 'src/models/new/data.interfaces';
 import { DataQueries } from 'src/models/new/data.state';
-import { CreateSupervision } from 'src/models/new/user/user.actions';
+import { CreateSupervision, UploadImageSupervision } from 'src/models/new/user/user.actions';
+// import { EventEmitter } from 'stream';
 import { TaskGraphic } from '../suivi_chantier_date-content/suivi_chantier_date-content.component';
 
 @Component({
@@ -24,15 +27,16 @@ export class SupervisionWrapperComponent implements OnInit {
   @Input() selectedTask: PostDetailGraphic | null = null
   @Input() supervisions: Supervision[] = []
   showFooter: boolean = true;
+  swipeMenuImage: boolean = false;
+
+  // @Output() closeSwipe = new EventEmitter<Supervision[] | null>()
 
 
-  constructor(public mobile: Mobile, private cd: ChangeDetectorRef, private store: Store) {
-
-    console.log('object', this.taskGraphic, this.mission,this.dateOrigin, this.selectedTask);
+  constructor(public mobile: Mobile, private cd: ChangeDetectorRef, private store: Store, private info: InfoService) {
   }
   
   ngOnInit(): void {
-    console.log('object', this.taskGraphic, this.mission,this.dateOrigin, this.selectedTask);
+    console.log('object', this.taskGraphic, this.mission, this.dateOrigin, this.selectedTask, this.supervisions);
     this.mobile.init()
     this.mobile.footerStateSubject.subscribe(b => {
       console.log('fasdf', b);
@@ -56,7 +60,7 @@ export class SupervisionWrapperComponent implements OnInit {
     }
   }
   
-  mainComment(task:PostDetailGraphic | null, formGroup: FormGroup, formControlName: string) {
+  mainComment(task: PostDetailGraphic | null, formGroup: FormGroup, formControlName: string) {
     let formControl = formGroup.get(formControlName)!
     let comment = formControl.value
     if(!comment || comment.trim() == '') return
@@ -66,7 +70,7 @@ export class SupervisionWrapperComponent implements OnInit {
       if (!detailPostId) {
         datePostId = this.dateOrigin.id
       }
-      // try {
+      try {
         this.store.dispatch(new CreateSupervision(detailPostId, datePostId, comment)).pipe(take(1)).subscribe((response) => {
           formControl.reset()
           let supervisions: Supervision[];
@@ -78,18 +82,62 @@ export class SupervisionWrapperComponent implements OnInit {
             this.dateOrigin = this.store.selectSnapshot(DataQueries.getById('DatePost', this.dateOrigin.id))!
             supervisions = this.store.selectSnapshot(DataQueries.getMany('Supervision', this.dateOrigin.supervisions))!
           }
+          this.supervisions = supervisions
           console.log('response');
 
           this.cd.markForCheck()
 
-          // this.updatePageOnlyDate()
         })
-      // } catch {
-      //   this.getUserDataService.emitDataChangeEvent()
-      // }
+      } catch {
+        // this.getUserDataService.emitDataChangeEvent()
+      }
     }
   }
+  
+  // currentSupervisionId: Ref<Supervision> | null = null
+  cameraSwipe(){
+    // this.currentSupervisionId = supervsionId;
+    this.swipeMenuImage = true; 
+    this.cd.markForCheck()
+  }
 
+  async takePhoto() {
+    const photo = await Camera.getPhoto({
+      allowEditing: true,
+      resultType: CameraResultType.Base64,
+      source: CameraSource.Camera,
+    });
+    // this.store.dispatch(new UploadImageSupervision(photo, this.currentSupervisionId)).pipe(take(1)).subscribe(() => {
+      // this.date.supervisions
+      // this.updatePageOnlyDate();
+    //   this.swipeMenuImage = false;
+    // });
+  }
+
+  async selectPhoto() {
+    const photo = await Camera.getPhoto({
+      resultType: CameraResultType.Base64,
+      source: CameraSource.Photos,
+      presentationStyle: 'fullscreen',
+      webUseInput: true,
+      quality: 90,
+      allowEditing: true,
+      saveToGallery: true
+    });
+
+    let acceptedFormat = ["jpeg", "png", "jpg", "bmp"];
+    // if (acceptedFormat.includes(photo.format)) {
+    //   this.store.dispatch(new UploadImageSupervision(photo, this.currentSupervisionId)).pipe(take(1)).subscribe(() => {
+    //     // let supervisions = this.store.selectSnapshot(DataQueries.getMany('Supervision', this.mission!.supervisions))
+    //     // this.updatePageOnlyDate();
+    //     this.swipeMenuImage = false;
+    //   });
+    // } else {
+    //   // this.updatePageOnlyDate();
+    //   this.swipeMenuImage = false;
+    //   this.info.show("error", "Format d'image non supporté", 3000);
+    // }
+  }
 
 
 }

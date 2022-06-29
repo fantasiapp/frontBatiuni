@@ -437,7 +437,6 @@ export class DataState {
         if (response[upload.action] !== "OK") throw response["messages"];
         delete response[upload.action];
         delete response["timestamp"]
-        console.log("upload file response", response)
         const assignedId = +Object.keys(response)[0],
         fields = ctx.getState()["fields"],
         contentIndex = fields["File"].indexOf("content");

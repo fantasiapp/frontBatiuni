@@ -34,15 +34,34 @@ import { DataQueries, SnapshotAll } from "src/models/new/data.state";
       </g>
     </g>
   </svg>
+  <div *ngIf="!isLabel" class="svg-shadow-fallback-value"></div>
 <img class="icon-logo" *ngIf="isLabel" src="assets/{{originalName}}.png" alt="label">
   `,
   styles: [`
-    :host { display: inline-block; }
+    :host { 
+      display: inline-block; 
+      position: relative
+    }
 
     .icon-logo{
       width: 100%;
       height: 100%;
       object-fit: contain 
+    }
+
+    svg {
+      position: relative;
+      z-index: 1
+    }
+    .svg-shadow-fallback-value {
+      position: absolute;
+      top: 16px;
+      left: 10px;
+      height: 82.75px;
+      width: 59px;
+      border-radius: 4px;
+      box-shadow: 0 3px 6px #00000029;
+      z-index: 0
     }
   `],
   changeDetection: ChangeDetectionStrategy.OnPush

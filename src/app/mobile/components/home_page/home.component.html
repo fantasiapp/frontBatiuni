@@ -1,24 +1,21 @@
 <ng-container *ngIf="view$ | async as view">
   <ng-container *ngIf="profile$ | async as profile">
     <page-header
-      [name]="
-        view == 'PME' ? 'Mes Annonces' : 'Annonces qui peuvent vous intéresser'
-      "
+      [profile]="profile"
+      [name]="view == 'PME' ? 'Mes Annonces' : 'Annonces qui peuvent vous intéresser'"
       [tabs]="view == 'PME' ? 3 : 2"
       [(activeView)]="activeView"
       (activeViewChange)="changeView($event)"
       (filterClicked)="openAdFilterMenu = true"
       [filterOpen]="view == 'PME' ? filterOn : filterOnST"
-      [callbackSearch]="view == 'PME' ? callbackSearch : callbackSearchST"
-      
-    >
+      [callbackSearch]="view == 'PME' ? callbackSearch : callbackSearchST">
       <span tab_0>{{ view == "PME" ? "Brouillon" : "Vue liste" }}</span>
       <span tab_1>{{ view == "PME" ? "En ligne" : "Carte" }}</span>
       <span tab_2>Validées</span>
     </page-header>
     <div class="wrapper__searchbar__clickcatcher page-content-with-tabs" *ngIf="!showFooter"></div>
 
-      <div  class="hosted-page space-children-margin page-content-with-tabs" [ngClass]="{'footerHide': !showFooter}">
+    <div  class="hosted-page space-children-margin page-content-with-tabs" [ngClass]="{'footerHide': !showFooter, 'page-content-with-tabs-with-switch': profile.company && profile.company.role == 3}">
           <!-- Page pour PME -->
           <ng-container *ngIf="view == 'PME'; else stview">
             <ng-container *ngIf="(posts$ | async) as posts" [ngSwitch]="activeView">
@@ -49,7 +46,7 @@
                 <offer
                   *ngFor="let mission of missions"
                   [post]="mission"
-                  src="assets/validée.svg"
+                  src="assets/validate.svg"
                   (click)="openMission(mission)"
                   [view]="'PME'"
                 ></offer>
@@ -220,7 +217,7 @@
 </ng-template>
 
 <ng-template #acceptOffer let-profile>
-  <div class="offres-logo"><img src="assets/validée.svg" /></div>
+  <div class="offres-logo"><img src="assets/validate.svg" /></div>
   <p>
     Vous avez bien validé la candidature de
     <br />

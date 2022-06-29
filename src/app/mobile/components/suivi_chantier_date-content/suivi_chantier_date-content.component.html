@@ -25,7 +25,7 @@
         </div>
         <div class="comment-container" *ngIf="!taskGraphic.selectedTask.supervisions.length">
           <div *ngIf="!mission!.isClosed" class="divComment">
-            <form (click)="slideComment(taskGraphic, $event, 'comment', taskGraphic.selectedTask)" [formGroup]="taskGraphic.formGroup" (ngSubmit)="onSubmit(taskGraphic.selectedTask, taskGraphic.formGroup, 'comment')">
+            <form (click)="slideComment(taskGraphic, $event, taskGraphic.selectedTask.supervisions, taskGraphic.selectedTask)" [formGroup]="taskGraphic.formGroup" (ngSubmit)="onSubmit(taskGraphic.selectedTask, taskGraphic.formGroup, 'comment')">
               <input style="pointer-events: none;" id="input_{{taskGraphic.selectedTask.id}}" class="inputComment" type="text" placeholder="Ajouter un commentaire" formControlName="comment"  #comment>
             </form>
           </div>
@@ -33,7 +33,7 @@
         <div class="comment-container" *ngFor="let supervision of taskGraphic.selectedTask.supervisions; let isLast = last">
           <comment-suivi  [supervision]="supervision"></comment-suivi>
           <div *ngIf="!mission!.isClosed && isLast" class="divComment">
-            <form [formGroup]="taskGraphic.formGroup" (ngSubmit)="onSubmit(taskGraphic.selectedTask, taskGraphic.formGroup, 'comment')" (click)="slideComment(taskGraphic, $event, 'comment', taskGraphic.selectedTask)">
+            <form [formGroup]="taskGraphic.formGroup" (ngSubmit)="onSubmit(taskGraphic.selectedTask, taskGraphic.formGroup, 'comment')" (click)="slideComment(taskGraphic, $event, taskGraphic.selectedTask.supervisions, taskGraphic.selectedTask)">
               <input style="pointer-events: none;" id="input_{{taskGraphic.selectedTask.id}}" class="inputComment" type="text" placeholder="Ajouter un commentaire" formControlName="comment" #comment>
             </form>
             <img (click)="cameraSwipe(supervision.id)" src="assets/camera-outline.svg"/>
@@ -56,7 +56,7 @@
       </div>
       <div *ngIf="!mission!.isClosed" class="partenerComment">
         <div  class="divComment">
-          <form [formGroup]="formMain" (submit)="onSubmit( null, formMain, 'commentMain')" #formMainTest>
+          <form (click)="slideComment(null, $event, date.supervisions, null)" [formGroup]="formMain" (submit)="onSubmit( null, formMain, 'commentMain')" #formMainTest>
             <textarea id="input_general" class="inputComment mainInputComment" (keyup)="textareaSubmit($event, formMainTest)" type="text" placeholder="Ajouter un commentaire" formControlName="commentMain" #chantierMain></textarea>
             <input type="image" src="assets/send-outline.svg" (click)="textareaSubmit(13, formMainTest)" style="height: 1.5rem; width: 1.5rem">
           </form>
@@ -68,7 +68,7 @@
 <slidemenu [(open)]="slideCommentMenu.slideCommentOpen" #slideMenuComment>
   <h1 class="center-text full-width" header>Commentaires</h1>
 
-  <app-supervision-wrapper *ngIf="slideCommentMenu.slideCommentOpen" [taskGraphic]="slideCommentMenu.taskGraphic" [selectedTask]="slideCommentMenu.selectedTask" [mission]="mission!" [dateOrigin]="dateOrigin!" [supervisions]="[]" content></app-supervision-wrapper>
+  <app-supervision-wrapper *ngIf="slideCommentMenu.slideCommentOpen" [taskGraphic]="slideCommentMenu.taskGraphic" [selectedTask]="slideCommentMenu.selectedTask" [mission]="mission!" [dateOrigin]="dateOrigin!" [supervisions]="slideCommentMenu.supervisions" content></app-supervision-wrapper>
 </slidemenu>
 
 
