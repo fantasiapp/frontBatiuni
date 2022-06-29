@@ -98,12 +98,10 @@ export class SupervisionWrapperComponent implements OnInit {
   textareaSubmit(e: any, input: HTMLFormElement, comment: HTMLTextAreaElement){
     this.autosize(comment)
     this.sendButtonShow = !!comment.value.length
-    console.log('this.sendButtonShow', this.sendButtonShow);
- 
-    if(e.keyCode == 13){
-      input.dispatchEvent(new Event("submit", {cancelable: true}))
-      e.preventDefault(); // Prevents the addition of a new line in the text field (not needed in a lot of cases)
-    }
+    // if(e.keyCode == 13){
+    //   input.dispatchEvent(new Event("submit", {cancelable: true}))
+    //   e.preventDefault(); // Prevents the addition of a new line in the text field (not needed in a lot of cases)
+    // }
   }
   
   mainComment(task: PostDetailGraphic | null, formGroup: FormGroup, formControlName: string) {
