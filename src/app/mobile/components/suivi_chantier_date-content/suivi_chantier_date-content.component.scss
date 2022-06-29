@@ -207,6 +207,15 @@ form {
   }
 }
 
+.task-menu__arrow-task {
+  position: absolute;
+  right: 0.5rem;
+  transition: transform 300ms;
+  &.active {
+    transform: rotate(-90deg);
+  }
+}
+
 
 #task-manager {
 

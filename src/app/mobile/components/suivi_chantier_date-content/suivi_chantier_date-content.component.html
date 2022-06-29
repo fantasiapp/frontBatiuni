@@ -14,7 +14,7 @@
           <label>Choisir les tâches pour ce jour</label>
           <form (ngSubmit)="addNewTask($event, newTaskForm)" [formGroup]="newTaskForm"  *ngIf="!mission!.isClosed" #formTask>
             <input id="addTask" type="text" autocomplete="off" placeholder="Ajouter une nouvelle tâche" formControlName="task" (click)="taskManager($event, true)" #addTask>
-            <!-- <img id="check-task" src="assets/checkmark-done-outline.svg" alt="done" (click)="taskSubmit($event, formTask, addTask)"> -->
+            <img class="task-menu__arrow-task" src="assets/arrowdown.svg" [ngClass]="{'active': taskMenuUp}"/>
             <div class="task-menu__wrapper" *ngIf="taskMenuUp">
               <ul id="list-date">
                 <li *ngFor="let detailedPost of date.allPostDetails" 
