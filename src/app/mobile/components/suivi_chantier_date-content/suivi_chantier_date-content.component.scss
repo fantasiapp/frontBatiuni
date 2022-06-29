@@ -1,5 +1,6 @@
 @use 'src/styles/variables' as *;
 
+
 .annonce {
   background: #FFFFFF !important;
   color: $dark;
@@ -51,6 +52,8 @@
   display: flex;
   flex-direction: column;
   row-gap: 1rem;
+  padding-bottom: 2rem;
+  border-bottom: 5px #F8F8F8 solid;
 }
 
 .divComment {
@@ -88,11 +91,12 @@ form {
 }
 
 .partenerComment-container {
-  & > div {
+  div:first-child {
     display: flex;
     flex-direction: column;
     row-gap: 1rem;
     padding: 2rem;
+    padding-top: 0;
   }
   .partenerComment {
     background: #e5e8ed;
@@ -131,6 +135,35 @@ form {
       width: 1.5rem;
     }
   }
+}
+
+.comment-action-box-main{
+  justify-content: space-between;
+}
+
+.comment-action-box-task {
+  justify-content: center;
+
+  svg {
+    margin-left: 1rem;
+  }
+}
+
+.empty-main-comment {
+  background-color: #F8F8F8;
+} 
+
+.comment-action-box {
+  display: flex;
+  flex-direction: row;
+  background-color: white;
+  border: 1px #333333 solid;
+  border-radius: 1.125rem;
+  height: 2.25rem;
+  width: 100%;
+  align-items: center;
+  font-size: 14px;
+  padding: 0 1rem;
 }
 
 .newDate {
