@@ -3,7 +3,8 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { Store } from '@ngxs/store';
 import * as moment from 'moment';
-import { take } from 'rxjs/operators';
+import { take, takeUntil } from 'rxjs/operators';
+import { Destroy$ } from 'src/app/shared/common/classes';
 import { InfoService } from 'src/app/shared/components/info/info.component';
 import { Mobile } from 'src/app/shared/services/mobile-footer.service';
 import { DatePost, Mission, PostDetail, PostDetailGraphic, Ref, Supervision } from 'src/models/new/data.interfaces';
@@ -18,7 +19,7 @@ import { TaskGraphic } from '../suivi_chantier_date-content/suivi_chantier_date-
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [Mobile]
 })
-export class SupervisionWrapperComponent implements OnInit {
+export class SupervisionWrapperComponent extends Destroy$ {
 
   @Input() taskGraphic: TaskGraphic | null = null
   @Input() mission!: Mission
@@ -37,12 +38,12 @@ export class SupervisionWrapperComponent implements OnInit {
 
 
   constructor(public mobile: Mobile, private cd: ChangeDetectorRef, private store: Store, private info: InfoService) {
+    super()
   }
   
 
 
   ngOnInit(): void {
-    console.log('object', this.taskGraphic, this.mission, this.dateOrigin, this.selectedTask, this.supervisions);
     this.dateShow = this.dateOrigin.date
     this.dateShow = moment(this.dateShow).locale('fr').format('DD-MM-YYYY')
 
@@ -50,12 +51,15 @@ export class SupervisionWrapperComponent implements OnInit {
     
 
     this.mobile.init()
-    this.mobile.footerStateSubject.subscribe(b => {
-      console.log('fasdf', b);
+    this.mobile.footerStateSubject.pipe(takeUntil(this.destroy$)).subscribe(b => {
       this.showFooter = b
       this.cd.detectChanges()
     })
     this.platform = this.mobile.plateform
+  }
+
+  ngOnDestroy() {
+    super.ngOnDestroy();
   }
 
   formMain = new FormGroup({

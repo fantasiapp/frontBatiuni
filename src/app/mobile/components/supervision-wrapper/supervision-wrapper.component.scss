@@ -97,8 +97,7 @@ textarea{
     padding-right: 1rem;
     border-top: 1px solid $color-background-comment;
     
-  
-    &.ios-platform {
+    &.resetPadding.ios-platform {
       padding-bottom: calc(3.5rem + env(safe-area-inset-bottom));
     }
     .divComment {
@@ -119,19 +118,6 @@ textarea{
     background: #e5e8ed;
     padding: 2rem;
 }
-
-// .partenerComment-addPhoto {
-//     display: flex;
-//     align-items: center;
-//     font-size: 0.875rem;
-//     justify-content: flex-end;
-//     margin-top: 1rem;
-//     img {
-//     margin-left: 1rem;
-//     height: 1.5rem;
-//     width: 1.5rem;
-//     }
-// }
 }
 
 

@@ -1,21 +1,41 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { takeUntil } from 'rxjs/operators';
+import { Destroy$ } from 'src/app/shared/common/classes';
+import { Mobile } from 'src/app/shared/services/mobile-footer.service';
 
 @Component({
   selector: 'task-add',
   templateUrl: './task-add.component.html',
   styleUrls: ['./task-add.component.scss']
 })
-export class TaskAddComponent implements OnInit {
+export class TaskAddComponent extends Destroy$ {
 
   newTasks: string[] = []
   newTaskForm = new FormGroup({
     task: new FormControl("", [Validators.required]),
   });
 
-  constructor() { }
+
+  platform: string = ''
+  showFooter: boolean = true;
+
+
+  constructor(private mobile: Mobile, private cd: ChangeDetectorRef) {
+    super()
+  }
 
   ngOnInit(): void {
+    this.mobile.init()
+    this.mobile.footerStateSubject.pipe(takeUntil(this.destroy$)).subscribe(b => {
+      this.showFooter = b
+      this.cd.detectChanges()
+    })
+    this.platform = this.mobile.plateform
+  }
+
+  ngOnDestroy() {
+    super.ngOnDestroy()
   }
 
   @Output() validateEmiter = new EventEmitter()

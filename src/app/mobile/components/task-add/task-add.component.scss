@@ -1,4 +1,5 @@
 @use 'src/styles/variables' as *;
+@use 'src/styles/mixins' as *;
 
 
 :host {
@@ -38,12 +39,18 @@ $validate-height: 4rem;
     font-size: 1rem;
     height: $validate-height;
     position: absolute;
+    // padding-bottom: calc(0.5rem + env(safe-area-inset-bottom));
+    @include with-set-safe-area(padding, bottom, 10px);
     bottom: 0;
     left: 0;
     right: 0;
     display: flex;
     align-items: center;
     justify-content: center;
+
+    &.resetPadding.ios-platform {
+        padding-bottom: calc(3.5rem + env(safe-area-inset-bottom));
+    }
 }
 .validate {
     height: 3rem;
