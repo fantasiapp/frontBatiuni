@@ -185,8 +185,9 @@ import { InfoService } from "../components/info/info.component";
           <options [options]="jobs" formControlName="jobs"></options>
         </div>
 
-        <div class="form-input">
-          <checkbox>J'accepte les Conditions Générales & les mentions légales d'Utilisation </checkbox>
+        <div class="condition-general-container flex row">
+          <checkbox formControlName="conditionGeneral"></checkbox>
+          <span style="font-size: 12px;">J'accepte les <span style="color: hsl(203deg 96% 48%); text-decoration: underline">Conditions Générales & les mentions légales</span> d'Utilisation BatiUni</span>
         </div>
 
         <div class="form-input parrain">
@@ -288,6 +289,13 @@ import { InfoService } from "../components/info/info.component";
         transform-origin: center;
         transform: scale(0.7);
       }
+
+      .condition-general-container {
+        display: flex;
+         checkbox{ 
+           flex-shrink: 0
+         }
+      }
     `,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -374,7 +382,8 @@ export class RegisterForm extends Destroy$ {
           TransferError("companyName"),
         ]),
         companyName: new FormControl(""),
-        jobs: new FormControl([], [Validators.required])
+        jobs: new FormControl([], [Validators.required]),
+        conditionGeneral: new FormControl(false, [Validators.requiredTrue])
       }),
     },
     {}
