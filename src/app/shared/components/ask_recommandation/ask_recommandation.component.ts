@@ -5,7 +5,7 @@ import { take } from "rxjs/operators";
 import { AskRecommandation } from "src/models/new/user/user.actions";
 import { Destroy$, returnInputKeyboard } from "src/app/shared/common/classes";
 import { Email } from "src/validators/persist";
-import { DataQueries } from "src/models/new/data.state";
+import { DataQueries, DataState } from "src/models/new/data.state";
 import { email } from 'src/validators/regex';
 
 @Component({
@@ -36,7 +36,7 @@ export class AskRecommandationComponent extends Destroy$ {
 
   askRecommandation () {
     if (this.emailForm.valid) {
-      this.store.dispatch(new AskRecommandation(this.emailForm.get('email')!.value)).pipe(take(1)).subscribe(
+      this.store.dispatch(new AskRecommandation(this.emailForm.get('email')!.value, this.store.selectSnapshot(DataState.view))).pipe(take(1)).subscribe(
         async (success) => {
           this.cd.markForCheck()
         }
