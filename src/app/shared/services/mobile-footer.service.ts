@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, EventEmitter, Injectable } from "@angular/core";
 import { Capacitor } from "@capacitor/core";
-import { Keyboard } from "@capacitor/keyboard";
+import { Keyboard, KeyboardResize } from "@capacitor/keyboard";
 import { BehaviorSubject } from "rxjs";
 
 @Injectable()
@@ -28,6 +28,10 @@ export class Mobile {
     }
     // if(!this.isInited) this.test()
     this.isInited = true
+  }
+
+  get plateform() {
+    return Capacitor.getPlatform()
   }
   test(){
     setInterval(()=>{

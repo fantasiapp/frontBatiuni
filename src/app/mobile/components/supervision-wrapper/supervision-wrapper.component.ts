@@ -31,6 +31,7 @@ export class SupervisionWrapperComponent implements OnInit {
   sendButtonShow: boolean = false;
   dateShow: string = ''
   taskShow: string = ''
+  platform: string = ''
 
   @Output() closeSwipe = new EventEmitter<Supervision[] | null>()
 
@@ -54,6 +55,7 @@ export class SupervisionWrapperComponent implements OnInit {
       this.showFooter = b
       this.cd.detectChanges()
     })
+    this.platform = this.mobile.plateform
   }
 
   formMain = new FormGroup({

@@ -7,7 +7,7 @@
         </div>
     </div>
 </div>
-<div class="slideMenu__comment__input__wrapper" [ngClass]="{'resetPadding': !showFooter}">
+<div class="slideMenu__comment__input__wrapper" [ngClass]="{'resetPadding': !showFooter, 'ios-platform': platform == 'ios'}">
   <div class="divComment">
     <form [formGroup]="formMain" #formMainTest (ngSubmit)="onSubmit(selectedTask, formMain, 'inputComment', comment)">
       <!-- <input formControlName="inputComment" class="inputComment" type="text" placeholder="Ajouter un commentaire" #comment> -->

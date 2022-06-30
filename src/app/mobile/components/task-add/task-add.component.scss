@@ -1,0 +1,60 @@
+@use 'src/styles/variables' as *;
+
+
+:host {
+    height: 100%;
+    font-size: 14px;
+}
+
+h2, h4 {
+    margin-top: 2rem;
+}
+h2 {
+    text-align: center;
+}
+
+.new-task-container {
+    list-style: none;
+    li {
+        margin-top: 2rem;   
+        border-bottom: 1px hsl(0deg 0% 74%) solid; 
+    }
+}
+
+form {
+    margin-top: 2rem;
+}
+
+$validate-height: 4rem;
+
+.content-wrapper {
+    height: calc(100% - $validate-height - env(safe-area-inset-bottom));
+    overflow: scroll;
+    padding: 0 2rem;
+}
+
+
+.button-validate-wrapper {
+    font-size: 1rem;
+    height: $validate-height;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.validate {
+    height: 3rem;
+    width: 90%;
+}
+
+form {
+    padding-bottom: 0.5rem;
+    border-bottom: 1px hsl(0deg 0% 74%) solid;
+}
+
+.add-task-img {
+    color: $primary;
+}

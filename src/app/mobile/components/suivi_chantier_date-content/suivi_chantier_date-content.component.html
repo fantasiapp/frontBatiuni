@@ -11,22 +11,28 @@
     
     <div id="task-manager" *ngIf="view=='PME'">
         <div class="chantier-tache">
-          <label>Choisir les tâches pour ce jour</label>
-          <form (ngSubmit)="addNewTask($event, newTaskForm)" [formGroup]="newTaskForm"  *ngIf="!mission!.isClosed" #formTask>
-            <input id="addTask" type="text" autocomplete="off" placeholder="Ajouter une nouvelle tâche" formControlName="task" (click)="taskManager($event, true)" #addTask>
+          <label (click)="taskManager($event, true)">Choisir les tâches pour ce jour 
+            <svg id="noun_add_928257" xmlns="http://www.w3.org/2000/svg" width="22.721" height="22.721" viewBox="0 0 22.721 22.721"  class="add-task-img">
+              <g id="Group_280" data-name="Group 280" transform="translate(0)">
+                <path fill="currentColor" id="Path_299" data-name="Path 299" d="M11.361,0A11.361,11.361,0,1,0,22.721,11.361,11.361,11.361,0,0,0,11.361,0Zm0,4.279c.153,0,.5.123.5.277v6.306h6.306c.153,0,.277.345.277.5s-.123.5-.277.5H11.859v6.306c0,.153-.345.277-.5.277s-.5-.123-.5-.277V11.859H4.556c-.153,0-.277-.345-.277-.5s.123-.5.277-.5h6.306V4.556C10.86,4.4,11.207,4.279,11.361,4.279Z" transform="translate(0)"/>
+              </g>
+            </svg>
+          </label>
+          <form *ngIf="!mission!.isClosed && taskMenuUp" #formTask>
+            <input id="addTask" type="text" autocomplete="off" placeholder="Ajouter une nouvelle tâche" #addTask>
             <img class="task-menu__arrow-task" src="assets/arrowdown.svg" [ngClass]="{'active': taskMenuUp}"/>
-            <div class="task-menu__wrapper" *ngIf="taskMenuUp">
+            <div class="task-menu__wrapper">
               <ul id="list-date">
                 <li *ngFor="let detailedPost of date.allPostDetails" 
-                (click)="modifyDetailedPostDate(detailedPost, checkbox, $event)" 
-                [ngClass]="{'disabled': detailedPost.checked && (detailedPost.validated || detailedPost.refused)}">
+                (click)="addDetailedPostPending(detailedPost, checkbox, $event)" 
+                [ngClass]="{'disabled': detailedPost.checked}">
                   <span >{{ detailedPost.content }}</span>
-                  <checkbox style="pointer-events: none; flex-shrink: 0;" [value]="detailedPost.checked" #checkbox></checkbox>
+                  <checkbox style="pointer-events: none; flex-shrink: 0;" [value]="detailedPost.checked || checkbox.value" #checkbox></checkbox>
                 </li>
               </ul>
               <div class="task-menu__action_container">
-                <button (click)="taskSubmit($event, formTask, addTask)" class="button passive">Ajouter une tache</button>
-                <button class="button active" (click)="taskManager($event, false)">Valider</button>
+                <button class="button passive" (click)="slideNewTaskManager = true">Ajouter une tache</button>
+                <button class="button active" (click)="computeValidateTask()">Valider</button>
               </div>
             </div>
           </form>
@@ -55,7 +61,7 @@
     </div>
     
 
-    <div class="partenerComment-container" [ngClass]="{'empty-main-comment': !tasksGraphic.length}">
+    <div class="partenerComment-container" [ngClass]="{'empty-main-comment': !date.supervisions.length, 'empty-task': !tasksGraphic.length}">
       <div>
           <h2>Communiquer avec votre partenaire de chantier</h2>
           <div *ngFor="let supervision of date.supervisions; let isLast = last">
@@ -76,6 +82,11 @@
   <h1 class="center-text full-width" header>Commentaires</h1>
 
   <app-supervision-wrapper *ngIf="slideCommentMenu.slideCommentOpen" [taskGraphic]="slideCommentMenu.taskGraphic" [selectedTask]="slideCommentMenu.selectedTask" [mission]="mission!" [dateOrigin]="dateOrigin!" [supervisions]="slideCommentMenu.supervisions" (closeSwipe)="refreshMainComment($event)" content></app-supervision-wrapper>
+</slidemenu>
+<slidemenu [(open)]="slideNewTaskManager" #slideNewTask>
+  <h1 class="center-text full-width" header>Ajouter des tâches</h1>
+
+  <task-add (validateEmiter)="computeNewTasks($event)" *ngIf="slideNewTaskManager" content></task-add>  
 </slidemenu>
 
 <swipeup [(open)]="swipeMenuImage" #modifyPicture>

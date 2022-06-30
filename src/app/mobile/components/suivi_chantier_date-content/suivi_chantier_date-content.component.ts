@@ -36,6 +36,7 @@ import {
 import { getUserDataService } from "src/app/shared/services/getUserData.service";
 import { Mobile } from "src/app/shared/services/mobile-footer.service";
 import { UICheckboxComponent } from "src/app/shared/components/box/checkbox.component";
+import { delay } from "src/app/shared/common/functions";
 
 
 export interface TaskGraphic {
@@ -396,41 +397,10 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
     if(!supervisions) return
     this.date.supervisions = supervisions
   }
-
-  assignDate!: assignDateType;
-  newTaskForm = new FormGroup({
-    task: new FormControl("", [Validators.required]),
-  });
+  
   taskMenuUp: boolean = false
   
-
-  addNewTask(e: Event, form: FormGroup){
-    let formControl = form.get('task')!
-    let value = formControl.value
-    if(!value || value.trim() == '') return
-
-    this.store.dispatch(new CreateDetailedPost(this.mission!.id, value, this.dateId)).pipe(take(1)).subscribe(() => {
-      formControl.reset()
-      this.mission = this.store.selectSnapshot(DataQueries.getById('Mission', this.mission!.id))!
-      const missionPostDetail = this.store.selectSnapshot(DataQueries.getMany("DetailedPost", this.mission!.details)) as Task[];
-      const newTask = missionPostDetail[missionPostDetail.length - 1];
-      const newTaskSupervision = this.store.selectSnapshot(DataQueries.getMany("Supervision", newTask.supervisions))
-      const detailDate: PostDetailGraphic = {
-        id: newTask.id,
-        date: this.date.date,
-        content: newTask.content,
-        validated: newTask.validated,
-        refused: newTask.refused,
-        supervisions: newTaskSupervision,
-        checked: true
-      }
-      this.updatePageOnlyDate()
-
-      this.updateTaskGraphic(detailDate)
-      this.cd.markForCheck()
-    })
-  }
-
+  slideNewTaskManager: boolean = false;
 
   taskSubmit(e:Event, form: HTMLFormElement, input: HTMLInputElement) {
     if(!input.value || input.value.trim() == '') return
@@ -448,13 +418,56 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
     }
   }
 
-  modifyDetailedPostDate(detailedPost: PostDetailGraphic, checkbox: UICheckboxComponent, e: Event) {
-    this.store.dispatch(new ModifyDetailedPost(detailedPost, detailedPost.checked, this.dateId)).pipe(take(1)).subscribe(result => {
-      checkbox.onChange(e)
-      detailedPost.checked = !detailedPost.checked
+  computeValidateTask(){
+    for (const detailPost of this.pendingDetailedPost) {
+      this.modifyDetailedPostDate(detailPost)
+    }
+    this.pendingDetailedPost = []
+  }
+
+  pendingDetailedPost: PostDetailGraphic[] = []
+  addDetailedPostPending(detailedPost : PostDetailGraphic, checkbox: UICheckboxComponent, e:Event){
+    if (checkbox.value){
+      this.pendingDetailedPost = this.pendingDetailedPost.filter(detailpost => detailpost != detailedPost )
+    } else {
+      this.pendingDetailedPost.push(detailedPost)
+    }
+    checkbox.value = !checkbox.value
+    
+    console.log('pendingDetailedPost', this.pendingDetailedPost)
+  }
+
+  computeNewTasks(newTasks: string[]){
+    for (const newTask of newTasks) {
+      this.store.dispatch(new CreateDetailedPost(this.mission!.id, newTask, this.dateId)).pipe(take(1)).subscribe(() => {
+        this.mission = this.store.selectSnapshot(DataQueries.getById('Mission', this.mission!.id))!
+        const missionPostDetail = this.store.selectSnapshot(DataQueries.getMany("DetailedPost", this.mission!.details)) as Task[];
+        const newTask = missionPostDetail[missionPostDetail.length - 1];
+        const newTaskSupervision = this.store.selectSnapshot(DataQueries.getMany("Supervision", newTask.supervisions))
+        const detailDate: PostDetailGraphic = {
+          id: newTask.id,
+          date: this.date.date,
+          content: newTask.content,
+          validated: newTask.validated,
+          refused: newTask.refused,
+          supervisions: newTaskSupervision,
+          checked: true
+        }
+        
+        this.updateTaskGraphic(detailDate)
+        this.updatePageOnlyDate()
+        this.cd.markForCheck()
+      })
+    }
+
+    this.slideNewTaskManager = false
+  }
+
+  modifyDetailedPostDate(detailedPost: PostDetailGraphic) {
+    this.store.dispatch(new ModifyDetailedPost(detailedPost, false, this.dateId)).pipe(take(1)).subscribe(result => {
+      detailedPost.checked = true
       detailedPost.date = this.dateOrigin.date
 
-      console.log('detailedPost', detailedPost);
       this.updateTaskGraphic(detailedPost)
       
     })
