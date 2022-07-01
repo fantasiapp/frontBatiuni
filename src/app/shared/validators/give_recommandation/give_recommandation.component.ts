@@ -20,6 +20,7 @@ export class GiveARecommandation extends Destroy$ {
   @Input()
   companyId: number = -1;
   companyNameRecommended: string;
+  view: 'PME' | 'ST'
 
   hasSentRecommandation: boolean = false;
   recommandation: Recommandation = {
@@ -34,7 +35,8 @@ export class GiveARecommandation extends Destroy$ {
     securityComment : "",
     organisationStars : 0,
     organisationComment : "",
-    LastWorksiteDate: ""
+    LastWorksiteDate: "",
+    view: 'PME'
   };
 
   userNameForm: FormGroup = new FormGroup({
@@ -51,6 +53,7 @@ export class GiveARecommandation extends Destroy$ {
     this.companyId = this.route.snapshot.params.companyId;
     this.recommandation.companyRecommanded = this.companyId
     this.companyNameRecommended = this.route.snapshot.params.companyName
+    this.view = route.snapshot.params.view
   }
 
   starAction(index: number, nature: string) {
@@ -148,7 +151,8 @@ export class GiveARecommandation extends Destroy$ {
             this.recommandation!.securityComment,
             this.recommandation!.organisationStars,
             this.recommandation!.organisationComment,
-            this.recommandation!.LastWorksiteDate
+            this.recommandation!.LastWorksiteDate,
+            this.view!
           )
         )
         .pipe(take(1))

@@ -99,7 +99,7 @@ const routes: Routes = [{
     path: 'accordion',
     component: UIAccordion
   },{
-    path: 'give_recommandation/:token/:firstName/:lastName/:companyName/:companyId',
+    path: 'give_recommandation/:token/:firstName/:lastName/:companyName/:companyId/:view',
     component: GiveARecommandation
   },{
     path: 'home',
