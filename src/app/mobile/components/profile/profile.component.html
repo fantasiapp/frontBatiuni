@@ -75,6 +75,7 @@
       <swipeup [(open)]="openModifyPicture" #modifyPicture>
         <li (click)="takePhoto()">Accéder à l'appareil photo</li>
         <li (click)="selectPhoto()">Télécharger une image</li>
+        <li >Supprimer la photo actuelle</li>
       </swipeup>
       <profile-resume [profile]="profile" [canChangePicture]="!modifyPassword" [showView]="view" class="flex column center-cross space-children-margin" (changePicture)="swipeModifyPicture()"></profile-resume>
       <modify-password-form *ngIf="modifyPassword" class="grow" (submit)="changePassword($event)"></modify-password-form>
