@@ -73,6 +73,7 @@ import { AskRecommandationComponent } from "./components/ask_recommandation/ask_
 import { GiveARecommandation } from "./validators/give_recommandation/give_recommandation.component";
 import { FaqComponent } from "./components/faq/faq.component";
 import { Payment } from "./components/payment/payment.component";
+import { MentionLegalComponent } from "../mobile/components/mention-legal/mention-legal.component";
 
 @NgModule({
   declarations: [
@@ -146,7 +147,8 @@ import { Payment } from "./components/payment/payment.component";
     AskRecommandationComponent,
     GiveARecommandation,
     FaqComponent,
-    Payment
+    Payment,
+    MentionLegalComponent
   ],
   imports: [
     CommonModule,
@@ -224,7 +226,8 @@ import { Payment } from "./components/payment/payment.component";
     GiveARecommandation,
     AskRecommandationComponent,
     FaqComponent,
-    Payment
+    Payment,
+    MentionLegalComponent
   ],
   providers: [ImageGenerator, FileDownloader, FilterService, Mobile]
 })

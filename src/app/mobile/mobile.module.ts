@@ -28,7 +28,6 @@ import { MailSender } from "./components/only_mail/only.mail";
 import { ApplicationsComponent } from "./components/applications/applications.component";
 import { InviteFriendsComponent } from "./components/invite_friends/invite_friends.component";
 import { SuiviChantierDateContentComponent } from './components/suivi_chantier_date-content/suivi_chantier_date-content.component';
-import { MentionLegalComponent } from './components/mention-legal/mention-legal.component';
 import { SupervisionWrapperComponent } from './components/supervision-wrapper/supervision-wrapper.component';
 import { TaskAddComponent } from './components/task-add/task-add.component';
 
@@ -58,7 +57,6 @@ import { TaskAddComponent } from './components/task-add/task-add.component';
     ApplicationsComponent,
     InviteFriendsComponent,
     SuiviChantierDateContentComponent,
-    MentionLegalComponent,
     SupervisionWrapperComponent,
     TaskAddComponent,
   ],
