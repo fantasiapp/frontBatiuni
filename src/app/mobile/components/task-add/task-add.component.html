@@ -1,0 +1,23 @@
+<div class="content-wrapper">
+    <h2>Vous pouvez ajouter une ou plusieurs tâches à la liste des tâches par jour</h2>
+    
+    <h4>Ajouter des taches non renseignées</h4>
+    <div class="task-wrapper">
+        <ul class="new-task-container">
+            <li *ngFor="let newTask of newTasks">{{newTask}}</li>
+        </ul>
+        <form (ngSubmit)="addNewTask($event, newTaskForm)" [formGroup]="newTaskForm" class="flex row center-cross space-between" #formTask>
+            <input id="addTask" type="text" autocomplete="off" placeholder="Ajouter une nouvelle tâche" formControlName="task" #addTask>
+            <svg (click)="submit($event, formTask)" id="noun_add_928257" xmlns="http://www.w3.org/2000/svg" width="22.721" height="22.721" viewBox="0 0 22.721 22.721"  class="add-task-img">
+                <g id="Group_280" data-name="Group 280" transform="translate(0)">
+                  <path fill="currentColor" id="Path_299" data-name="Path 299" d="M11.361,0A11.361,11.361,0,1,0,22.721,11.361,11.361,11.361,0,0,0,11.361,0Zm0,4.279c.153,0,.5.123.5.277v6.306h6.306c.153,0,.277.345.277.5s-.123.5-.277.5H11.859v6.306c0,.153-.345.277-.5.277s-.5-.123-.5-.277V11.859H4.556c-.153,0-.277-.345-.277-.5s.123-.5.277-.5h6.306V4.556C10.86,4.4,11.207,4.279,11.361,4.279Z" transform="translate(0)"/>
+                </g>
+              </svg>
+        </form>
+    </div>
+</div>
+
+
+<div class="button-validate-wrapper" [ngClass]="{'resetPadding': !showFooter, 'ios-platform': platform == 'ios'}">
+    <button class="button active validate" (click)="validate()">Valider</button>
+</div>

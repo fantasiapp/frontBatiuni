@@ -1,4 +1,5 @@
 import { CapacitorConfig } from '@capacitor/cli';
+import { KeyboardResize } from '@capacitor/keyboard';
 
 const config: CapacitorConfig = {
   appId: 'com.batiuni.app',
@@ -7,6 +8,10 @@ const config: CapacitorConfig = {
   bundledWebRuntime: false,
   backgroundColor: '#ffffffff',
   plugins: {
+    Keyboard: {
+      "resizeOnFullScreen": true,
+      resize: KeyboardResize.Native
+    },
     SplashScreen: {
       launchShowDuration: 0,
       launchAutoHide: true,

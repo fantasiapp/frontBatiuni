@@ -5,6 +5,7 @@
       <input (focusout)="getCompanyInfoByText('lastName', lastNameControl)"class="form-element" placeholder="Entrer votre nom" formControlName="lastName" #lastNameControl/>
       <input (focusout)="getCompanyInfoByText('firstName', firstNameControl)"placeholder="Entrer votre prénom" class="form-element" formControlName="firstName" #firstNameControl/>
       <input (focusout)="getCompanyInfoByText('companyName', companyControl)"placeholder="Entrer le nom de votre entreprise" class="form-element" style='margin-bottom: 1rem;' formControlName="firstName" #companyControl/>
+      <div> Date du dernier chantier</div>
       <input type="date" (focusout)="getCompanyInfoByText('companyName', companyControl)"placeholder="Entrer la date de votre dernier chantier" class="form-element" style='margin-bottom: 1rem;' formControlName="firstName" #companyControl/>
 
       <!-- <div class="star-container" *ngIf="hasGeneralStars">
@@ -12,7 +13,7 @@
       </div> -->
   
       <div class="form-input">
-        <p>Qualité du travail fourni</p>
+        <p>{{ view == 'ST' ? 'Qualité du travail fourni' : 'Ambiance sur le chantier' }}</p>
         <div class="star-container">
           <img *ngFor="let flag of getArrayStar('quality'); let index=index;" (click)="starAction(index, 'quality')" [src]="flag ? 'assets/starFull.svg' : 'assets/starEmpty.svg'">
         </div>
@@ -28,7 +29,7 @@
       </div>
   
       <div class="form-input">
-        <p>Organisation</p>
+        <p>{{ view == 'ST' ? 'Organisation' : 'Organisation PME' }}</p>
         <div class="star-container">
           <img *ngFor="let flag of getArrayStar('organisation'); let index=index;" (click)="starAction(index, 'organisation')" [src]="flag ? 'assets/starFull.svg' : 'assets/starEmpty.svg'">
         </div>

@@ -1,6 +1,9 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from "@angular/core";
+import { Router } from "@angular/router";
 import { Select, Store } from "@ngxs/store";
 import { Observable } from "rxjs/internal/Observable";
+import { InfoService } from "src/app/shared/components/info/info.component";
+import { NavService } from "src/app/shared/components/navigation/navigation.component";
 import { Company, Profile, User } from "src/models/new/data.interfaces";
 import { DataQueries, DataState } from "src/models/new/data.state";
 import { ChangeProfileType } from "src/models/new/user/user.actions";
@@ -80,11 +83,17 @@ export class HeaderComponent {
     return result;
   }
 
-  constructor(private store: Store){
+  constructor(private store: Store, private router: Router, private navService: NavService, private info: InfoService){
     
   }
 
   ngOnInit(){
+    if(this.profile.company && this.profile.company.role == 3){
+      this.info.alignWith('header_search_switch')
+      console.log('info switch');
+    } else {
+      this.info.alignWith('header_search')
+    }
     console.log('profile', this.profile);
     this.view$.subscribe((view)=>{
       this.isPmeSwitch = view === 'PME'
@@ -98,6 +107,12 @@ export class HeaderComponent {
   isPmeSwitch: boolean = false
   changeProfileType(type: boolean) {
     this.isPmeSwitch = type
-    this.store.dispatch(new ChangeProfileType(type));
+    this.store.dispatch(new ChangeProfileType(type)).subscribe(()=> {
+      try{ 
+        this.navService.updateNav(0)
+      } catch {
+
+      }
+    })
   }
 };

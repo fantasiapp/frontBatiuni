@@ -10,14 +10,14 @@ export type Info = {
   alignWith?: InfoAlignType;
 };
 
-export type InfoAlignType = 'header' | 'paging' | 'header_search' | 'last' | 'paging_switch';
+export type InfoAlignType = 'header' | 'paging' | 'header_search' | 'header_search_switch' | 'last' | 'paging_switch';
 
 const TRANSITION_TIME = 150;
 const HEADER_HEIGHT = 4*16; // $sticky-header-height, header normal
-const HEADER_SWITCH_HEIGHT = 106; // $sticky-header-height, header normal
+const HEADER_SWITCH_HEIGHT = 106; // header norma + switch
 const PAGING_HEIGHT = 75;
-// const HEADER_SEARCH_HEIGHT = 150;
-const HEADER_SEARCH_HEIGHT = 192;
+const HEADER_SEARCH_HEIGHT = 150;
+const HEADER_SEARCH_HEIGHT_SWITCH = 192;
 
 function getHeight(top: InfoAlignType) {
   if ( top == 'header' )
@@ -26,6 +26,9 @@ function getHeight(top: InfoAlignType) {
     return PAGING_HEIGHT;
   else if ( top == 'paging_switch')
     return HEADER_SWITCH_HEIGHT
+  else if ( top == 'header_search_switch'){
+    return HEADER_SEARCH_HEIGHT_SWITCH
+  }
   return HEADER_SEARCH_HEIGHT;
 }
 

@@ -32,6 +32,8 @@ import { ApplicationsComponent } from 'src/app/mobile/components/applications/ap
 import { GiveARecommandation } from 'src/app/shared/validators/give_recommandation/give_recommandation.component';
 import { FaqComponent } from '../../shared/components/faq/faq.component';
 import { MentionLegalComponent } from '../components/mention-legal/mention-legal.component';
+import { Payment } from 'src/app/shared/components/payment/payment.component';
+import { PaymentCheckout } from 'src/app/shared/components/payment-checkout/payment-checkout.component';
 
 const routes: Routes = [{
     path: 'landing',
@@ -97,7 +99,7 @@ const routes: Routes = [{
     path: 'accordion',
     component: UIAccordion
   },{
-    path: 'give_recommandation/:token/:firstName/:lastName/:companyName/:companyId',
+    path: 'give_recommandation/:token/:firstName/:lastName/:companyName/:companyId/:view',
     component: GiveARecommandation
   },{
     path: 'home',
@@ -114,6 +116,12 @@ const routes: Routes = [{
       {path: '', pathMatch: 'full', component: HomeComponent, data: { animation: 'home' } },
       {path: '**', component: HomeComponent}
     ]
+  }, {
+    path: 'payment',
+    component: Payment
+  }, {
+    path: 'payment_checkout',
+    component: PaymentCheckout
   }, {
     path: '**',
     redirectTo: 'landing',

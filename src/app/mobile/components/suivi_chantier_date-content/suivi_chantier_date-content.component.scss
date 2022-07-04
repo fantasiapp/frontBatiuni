@@ -1,5 +1,6 @@
 @use 'src/styles/variables' as *;
 
+
 .annonce {
   background: #FFFFFF !important;
   color: $dark;
@@ -51,6 +52,8 @@
   display: flex;
   flex-direction: column;
   row-gap: 1rem;
+  padding-bottom: 2rem;
+  border-bottom: 5px #F8F8F8 solid;
 }
 
 .divComment {
@@ -72,6 +75,8 @@
 }
 
 form {
+  position: relative;
+  z-index: 1;
   width: 100%;
   .inputComment {
     width: 100%;
@@ -88,11 +93,12 @@ form {
 }
 
 .partenerComment-container {
-  & > div {
+  div:first-child {
     display: flex;
     flex-direction: column;
     row-gap: 1rem;
     padding: 2rem;
+    padding-top: 0;
   }
   .partenerComment {
     background: #e5e8ed;
@@ -133,6 +139,52 @@ form {
   }
 }
 
+.comment-action-box-main{
+  justify-content: space-between;
+}
+
+.comment-action-box-task {
+  justify-content: center;
+
+  svg {
+    margin-left: 1rem;
+  }
+}
+
+.partenerComment-container{
+  &.empty-main-comment {
+  margin-top: -2rem;
+  background-color: #F8F8F8;
+    > div {
+      padding-top: 2rem;
+    }
+  }
+} 
+
+.partenerComment-container.empty-main-comment.empty-task {
+  margin-top: 0;
+}
+
+.empty-task {
+  margin-top: 0;
+  > div {
+    padding-top: 0;
+  }
+}
+
+.comment-action-box {
+  display: flex;
+  flex-direction: row;
+  background-color: white;
+  border: 1px #333333 solid;
+  border-radius: 1.125rem;
+  height: 2.25rem;
+  width: 100%;
+  align-items: center;
+  font-size: 14px;
+  padding: 0 1rem;
+}
+
 .newDate {
   display: flex;
   flex-direction:row;
@@ -149,4 +201,88 @@ form {
   width:90%;
 }
 
+.task-menu__wrapper {
+  width: 100%;
+  min-height: 3rem;
+  background-color: white;
+  border: 1px solid hsl(0deg 0% 83%);
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  box-shadow: 0 3px 6px #c2c2c2;
 
+  ul {
+    padding: 1rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    row-gap: 0.75rem;
+    li {
+      display: flex;
+      justify-content: space-between;
+    }
+  }
+}
+
+.add-task-img {
+  color: $primary;
+}
+
+
+.task-menu__arrow-task {
+  position: absolute;
+  right: 0.5rem;
+  transition: transform 300ms;
+  pointer-events: none;
+  &.active {
+    transform: rotate(-90deg);
+  }
+}
+
+
+#task-manager {
+
+  .chantier-tache {
+    flex-direction: column;
+    label {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
+}
+
+.disabled {
+  pointer-events: none;
+  checkbox::after{
+    content: "";
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: white;
+    opacity: 0.7;
+  }
+}
+
+#addTask {
+  pointer-events: none;
+  width: 100%;
+  border-bottom: 1px $dark solid;
+}
+$supervision-background: hsl(0deg 6% 94%);
+.task-menu__action_container {
+  width: 100%;
+  height: 4rem;
+  background-color: $supervision-background;
+  border-top: 1px solid hsl(0deg 0% 89%);
+  font-size: 14px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  button {
+    width: 45%;
+    height: 2.5rem;
+    padding: unset;
+  }
+}

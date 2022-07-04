@@ -85,6 +85,8 @@ export class HomeComponent extends Destroy$ {
   @Select(DataState.view)
   view$!: Observable<"PME" | "ST">;
 
+  view: 'PME' | 'ST' = 'PME'
+
   time: number = 0;
 
   @QueryAll("Post")
@@ -198,13 +200,26 @@ export class HomeComponent extends Destroy$ {
       this.slideMissionClose()
       this.activeView = num
     })
+    this.profile$.pipe(takeUntil(this.destroy$)).subscribe((profile) => {
+      if(profile.company && profile.company.role == 3){
+        this.info.alignWith('header_search_switch')
+        console.log('info switch');
+      } else {
+        this.info.alignWith('header_search')
+      }
+    })
+
+    this.view$.pipe(takeUntil(this.destroy$)).subscribe((view) => {
+      this.view = view
+      this.activeView = 0
+      this.cd.markForCheck()
+    })
     this.lateInit()
   }
 
   async lateInit() {
     this.activeViewService.setActiveView(0)
     if (!this.isLoading && this.isStillOnPage) {
-      this.info.alignWith("header_search");
       combineLatest([this.profile$, this.store.select(DataQueries.getAll('Post'))])
         .pipe(takeUntil(this.destroy$))
         .subscribe(([profile, posts]) => {
@@ -372,6 +387,21 @@ export class HomeComponent extends Destroy$ {
 
   selectMission(filter: any) {
     this.missions = [];
+
+    // Trie missions selon leurs notifications
+    let allNotifications = this.store.selectSnapshot(DataQueries.getAll("Notification"));
+    let missionsNotifications = allNotifications.map(notification => notification.missions);
+    let missionArray = [];
+    for (let mission of this.allMissions){
+      let missionNotifications = missionsNotifications.map(missionId => missionId === mission.id)
+      const countTrue = missionNotifications.filter(value => value === true).length;
+      missionArray.push([mission, countTrue]);
+    }
+    missionArray.sort((a: any, b: any) => b[1] - a[1]);
+    let keys = missionArray.map((key: any) => {return key[0]});
+    this.allMissions.sort((a: any, b: any) => keys.indexOf(a) - keys.indexOf(b));
+    
+
     this.allMissions.sort((a, b) => {return Number(a["isClosed"]) - Number(b["isClosed"]);});
     if (filter == null) {
       this.missions = this.allMissions;
@@ -385,7 +415,6 @@ export class HomeComponent extends Destroy$ {
         this.allMissions.sort((a: any, b: any) => keys.indexOf(a) - keys.indexOf(b));
       } 
 
-      // Trie missions selon leurs notifications
       if (filter.sortMissionNotifications === true) {
         let allNotifications = this.store.selectSnapshot(DataQueries.getAll("Notification"));
         let missionsNotifications = allNotifications.map(notification => notification.missions);
@@ -398,7 +427,7 @@ export class HomeComponent extends Destroy$ {
         missionArray.sort((a: any, b: any) => b[1] - a[1]);
         let keys = missionArray.map((key: any) => {return key[0]});
         this.allMissions.sort((a: any, b: any) => keys.indexOf(a) - keys.indexOf(b));
-      }
+      }  
 
       for (let mission of this.allMissions) {
 
@@ -438,25 +467,24 @@ export class HomeComponent extends Destroy$ {
   }
 
   changeView(headerActiveView: number) {
-    this.view$.subscribe((view)=>{
-      if(view=='PME'){
-        if (headerActiveView == 0){
-          this.filterPME.resetFilter()
-          this.searchbar.resetSearch()
-          this.filterOn = false;
-        }  
-        if (headerActiveView == 1) {
-          this.filterPME.resetFilter()
-          this.searchbar.resetSearch()
-          this.filterOn = false;
-        }    
-        if (headerActiveView == 2) {
-          this.filterPME.resetFilter()
-          this.searchbar.resetSearch()
-          this.filterOn = false;
-        }
+   
+    if(this.view == 'PME'){
+      if (headerActiveView == 0){
+        this.filterPME.resetFilter()
+        this.searchbar.resetSearch()
+        this.filterOn = false;
+      }  
+      if (headerActiveView == 1) {
+        this.filterPME.resetFilter()
+        this.searchbar.resetSearch()
+        this.filterOn = false;
+      }    
+      if (headerActiveView == 2) {
+        this.filterPME.resetFilter()
+        this.searchbar.resetSearch()
+        this.filterOn = false;
       }
-    })
+    }
   }
 
   callbackFilter = (filter: any): void => {
@@ -868,7 +896,7 @@ export class HomeComponent extends Destroy$ {
     }})
 
     this.view$.subscribe((view)=>{
-      if(view=='ST'){
+      if(view=='ST' && this.filterST){
         this.filterST.updateFilteredPosts(this.filterST.filterForm.value)
         this.filterST.updateEvent.emit(this.filterST.filteredPosts);
         this.filterService.emitFilterChangeEvent(this.filterST.filteredPosts)
@@ -945,7 +973,7 @@ export class HomeComponent extends Destroy$ {
   closeAdFilterMenu(value: any){
     this.openAdFilterMenu = value;
     this.view$.subscribe((view)=>{
-      if(view=='ST'){
+      if(view=='ST' && this.filterST){
         this.filterST.updateFilteredPosts(this.filterST.filterForm.value);
         this.displayOnlinePosts = this.filterST.filteredPosts;
         this.filterST.isFilterOn(this.filterST.filterForm.value);

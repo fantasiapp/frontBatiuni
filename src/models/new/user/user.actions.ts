@@ -127,6 +127,7 @@ export class UploadFile<K extends DataTypes = any> {
 
   //tell JLW to unify formats
   constructor(src: FileUIOutput, nature: string, name?: string, category?: K) {
+    // this.fileBase64 = src.content //only one file
     this.fileBase64 = src.content[0]; //only one file
     this.expirationDate = src.expirationDate;
     this.ext = src.ext;
@@ -156,6 +157,7 @@ export class ModifyFile<K extends DataTypes = any> {
   //tell JLW to unify formats
   constructor(src: FileUIOutput, fileId: number, category?: K) {
     if (src.content) this.fileBase64 = src.content[0] //only one file
+    // if (src.content) this.fileBase64 = src.content //only one file
     else this.fileBase64 = ""
     console.log("fileBase64", this.fileBase64)
     this.expirationDate = src.expirationDate;
@@ -237,6 +239,7 @@ export class UploadPost {
     public amount: number,
     public DetailedPost: string[],
     public files: any,
+    public paymentCondition: string,
     public draft: boolean,
     public id?:number,
     public isBoosted?:boolean,
@@ -291,6 +294,7 @@ export class UploadPost {
       value.amount,
       value.detailedPost.map((detail: any) => detail.description),
       newFiles,
+      value.paymentCondition,
       draft,
       id
     );
@@ -462,13 +466,13 @@ export class BoostPost {
 export class AskRecommandation {
   static readonly type = 'ask for a recommandation';
   action = 'askRecommandation';
-  constructor(public email: string) {}
+  constructor(public email: string, public view: 'PME' | 'ST') {}
 }
 
 export class GiveRecommandation {
   static readonly type = 'give a recommandation';
   action = 'giveRecommandation';
-  constructor(public companyRecommanded: number, public firstNameRecommanding: string, public lastNameRecommanding: string, public companyNameRecommanding: string, public qualityStars:number, public qualityComment:string, public securityStars:number, public securityComment:string, public organisationStars:number, public organisationComment:string, public lastWorksiteDate: string) {}
+  constructor(public companyRecommanded: number, public firstNameRecommanding: string, public lastNameRecommanding: string, public companyNameRecommanding: string, public qualityStars:number, public qualityComment:string, public securityStars:number, public securityComment:string, public organisationStars:number, public organisationComment:string, public lastWorksiteDate: string, public view: 'PME' | 'ST') {}
 }
 
 export class GiveNotificationToken {

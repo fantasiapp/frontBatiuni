@@ -25,7 +25,7 @@ export class OptionsModel extends UIDefaultAccessor<Option[]> {
     if ( this.showDropDown ) {
       setTimeout(() => {
         const searchInput = this.ref.nativeElement.querySelector('input[type=text]');
-        searchInput?.scrollIntoView({behavior: "smooth", block: "center", inline: "nearest"});
+        searchInput?.scrollIntoView({behavior: "smooth", block: "start", inline: "nearest"});
       });
     }
   }
@@ -144,5 +144,10 @@ export class OptionsModel extends UIDefaultAccessor<Option[]> {
       return ids.includes(option.id) ? option : null;
     });
     this.cd.markForCheck();
+  }
+
+  valideButton(e: Event){
+    e.preventDefault()
+    this.onToggle(e)
   }
 };

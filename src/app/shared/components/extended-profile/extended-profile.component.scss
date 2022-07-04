@@ -42,11 +42,18 @@ ul {
 .documents-grid {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
+  margin-bottom: 1rem;
 
   file-svg {
     width: fit-content;
     margin: 0 auto;
+    margin-right: 1rem;
   }
+}
+.date {
+  margin-top: 0.5rem;
+  color: #0D6191;
+  font-weight: normal;
 }
 
 .contact {

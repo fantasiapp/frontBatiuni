@@ -36,17 +36,24 @@ import { DataQueries, SnapshotAll } from "src/models/new/data.state";
   </svg>
   <div *ngIf="!isLabel" class="svg-shadow-fallback-value"></div>
 <img class="icon-logo" *ngIf="isLabel" src="assets/{{originalName}}.png" alt="label">
+<figcaption *ngIf="date">*{{ date.slice(8,10)+date.slice(4,7)+'-'+date.slice(0,4) }}</figcaption>
   `,
   styles: [`
     :host { 
       display: inline-block; 
-      position: relative
+      position: relative;
+      /* display: block !important; */
     }
 
     .icon-logo{
       width: 100%;
-      height: 100%;
       object-fit: contain 
+    }
+
+    figcaption{
+      color: #0D6191;
+      font-size: 14px;
+      text-align: center;
     }
 
     svg {
@@ -84,6 +91,9 @@ export class FileIcon {
       this.name = name.slice(0, 7) + '-';
     else this.name = name;
   };
+
+  @Input() 
+  date!: string 
 
   //#ffb347 for orange
   @Input() color: string = '#32a290';

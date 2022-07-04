@@ -72,6 +72,8 @@ import { ModalImage } from "./components/modal-image/modal-image.component";
 import { AskRecommandationComponent } from "./components/ask_recommandation/ask_recommandation.component";
 import { GiveARecommandation } from "./validators/give_recommandation/give_recommandation.component";
 import { FaqComponent } from "./components/faq/faq.component";
+import { Payment } from "./components/payment/payment.component";
+import { MentionLegalComponent } from "../mobile/components/mention-legal/mention-legal.component";
 
 @NgModule({
   declarations: [
@@ -144,7 +146,9 @@ import { FaqComponent } from "./components/faq/faq.component";
     ModalImage,
     AskRecommandationComponent,
     GiveARecommandation,
-    FaqComponent
+    FaqComponent,
+    Payment,
+    MentionLegalComponent
   ],
   imports: [
     CommonModule,
@@ -221,7 +225,9 @@ import { FaqComponent } from "./components/faq/faq.component";
     SlideProfileComponent,
     GiveARecommandation,
     AskRecommandationComponent,
-    FaqComponent
+    FaqComponent,
+    Payment,
+    MentionLegalComponent
   ],
   providers: [ImageGenerator, FileDownloader, FilterService, Mobile]
 })

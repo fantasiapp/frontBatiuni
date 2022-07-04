@@ -30,9 +30,8 @@ import { returnInputKeyboard } from '../common/classes'
       </div>
 
       <div class="form-input">
-        <label>Date de mission</label>
+        <label>Date de démarrage</label>
         <div class="form-input flex row space-between">
-          <label style="flex-shrink: 0">À partir de : </label>
           <input type="date" style="padding-left: 0.5rem;" class="form-element" formControlName="missionDate" #inputDateMission/>
           <img src="assets/calendar.png" (click)="inputDateMission.select()" class="img-calendar-since" style="pointer-events: none;"/>
         </div>

@@ -206,6 +206,7 @@ export interface Recommandation {
   organisationStars: number;
   organisationComment: string;
   LastWorksiteDate: string;
+  view: 'PME' | 'ST'
 }
 
 export type Notification = {

@@ -1,18 +1,27 @@
 <div class="slideMenu__comment__wrapper" content>
     <div class="slideMenu__comment__wrapper__container">
-
+      <h2>Le {{ dateShow }} <span *ngIf="taskGraphic">:</span><span *ngIf="taskGraphic"> {{ taskShow }}</span></h2>
 
       <div class="partenerComment-container" *ngFor="let supervision of supervisions; let isLast = last">
           <comment-suivi  [supervision]="supervision" #commentSuivi ></comment-suivi>
         </div>
     </div>
 </div>
-<div class="slideMenu__comment__input__wrapper" [ngClass]="{'resetPadding': !showFooter}">
+<div class="slideMenu__comment__input__wrapper" [ngClass]="{'resetPadding': !showFooter, 'ios-platform': platform == 'ios'}">
   <div class="divComment">
-    <form [formGroup]="formMain" #formMainTest (ngSubmit)="onSubmit(selectedTask, formMain, 'inputComment')">
-      <input formControlName="inputComment" class="inputComment" type="text" placeholder="Ajouter un commentaire" #comment>
+    <form [formGroup]="formMain" #formMainTest (ngSubmit)="onSubmit(selectedTask, formMain, 'inputComment', comment)">
+      <!-- <input formControlName="inputComment" class="inputComment" type="text" placeholder="Ajouter un commentaire" #comment> -->
+      <textarea formControlName="inputComment" class="inputComment" type="text"  rows='1' placeholder='Ajouter un commentaire' (keyup)="autosize(comment)" (keyup)="textareaSubmit($event, formMainTest, comment)" #comment></textarea>
     </form>
-    <img (click)="cameraSwipe()" src="assets/camera-outline.svg"/>
+    <div class="action-button-wrapper">
+      <img (click)="cameraSwipe()" src="assets/camera-outline.svg" *ngIf="!sendButtonShow;else showButton"/>
+      <ng-template #showButton>
+        <svg (click)="onSubmit(selectedTask,formMain, 'inputComment', comment)" xmlns="http://www.w3.org/2000/svg" class="ionicon" viewBox="0 0 512 512">
+          <title>Send</title>
+          <path fill="currentColor" d="M476.59 227.05l-.16-.07L49.35 49.84A23.56 23.56 0 0027.14 52 24.65 24.65 0 0016 72.59v113.29a24 24 0 0019.52 23.57l232.93 43.07a4 4 0 010 7.86L35.53 303.45A24 24 0 0016 327v113.31A23.57 23.57 0 0026.59 460a23.94 23.94 0 0013.22 4 24.55 24.55 0 009.52-1.93L476.4 285.94l.19-.09a32 32 0 000-58.8z"/>
+        </svg>
+      </ng-template>
+    </div>
   </div>
 </div>
 
