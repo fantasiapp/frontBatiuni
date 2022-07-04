@@ -11,21 +11,21 @@ import { returnInputKeyboard } from '../common/classes'
       <label>Ancien mot de passe</label>
       <input class="form-element" type="password" formControlName="oldPwd" id="idPassword" (keyup)="returnInputKeyboard($event, input1)" (click)="onClickInputScroll(input1)" #input1/>
       <div (click)="togglePassword()" style="position: absolute; cursor: pointer; bottom: 0; right: 0; z=100">
-        <img class="eye" src="assets/Oeil_Fermé.svg" id="togglePassword">
+        <img class="eye" src="assets/Oeil_ferme.svg" id="togglePassword">
       </div>
     </div>
     <div class="form-input">
       <label>Nouveau mot de passe</label>
       <input class="form-element" type="password" formControlName="newPwd" id="idPassword" (keyup)="returnInputKeyboard($event, input2)" (click)="onClickInputScroll(input2)" #input2/>
       <div (click)="togglePassword()" style="position: absolute; cursor: pointer; bottom: 0; right: 0; z=100">
-        <img class="eye" src="assets/Oeil_Fermé.svg" id="togglePassword">
+        <img class="eye" src="assets/Oeil_ferme.svg" id="togglePassword">
       </div>
     </div>
     <div class="form-input">
       <label>Confirmation nouveau mot de passe</label>
       <input class="form-element" type="password" formControlName="newPwdConfirmation" id="idPassword" (click)="onClickInputScroll(input3)" (keyup)="returnInputKeyboard($event, input3)" #input3/>
       <div (click)="togglePassword()" style="position: absolute; cursor: pointer; bottom: 0; right: 0; z=100">
-        <img class="eye" src="assets/Oeil_Fermé.svg" id="togglePassword">
+        <img class="eye" src="assets/Oeil_ferme.svg" id="togglePassword">
       </div>
     </div>
   </form>
@@ -80,7 +80,7 @@ export class ModifyPasswordForm {
     const togglePassword = document.querySelectorAll('#togglePassword');
     const password = document.querySelectorAll('#idPassword');
     let type = password.item(0).getAttribute('type') === 'password' ? 'text' : 'password'
-    let toggleClass = password.item(0).getAttribute('type') === 'password' ? 'assets/Oeil_ouvert.svg' : 'assets/Oeil_Fermé.svg'
+    let toggleClass = password.item(0).getAttribute('type') === 'password' ? 'assets/Oeil_ouvert.svg' : 'assets/Oeil_ferme.svg'
     password.forEach((pwd) => {
       pwd.setAttribute('type', type)
     })

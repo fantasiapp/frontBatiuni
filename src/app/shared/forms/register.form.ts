@@ -100,7 +100,7 @@ import { InfoService } from "../components/info/info.component";
             id="idPassword"
           />
           <div (click)="togglePassword()" style="position: absolute; cursor: pointer; bottom: 0; right: 0; z=100">
-            <img class="eye" src="assets/Oeil_Fermé.svg" id="togglePassword">
+            <img class="eye" src="assets/Oeil_ferme.svg" id="togglePassword">
           </div>
           </div>
         <div class="form-action">
@@ -478,7 +478,7 @@ export class RegisterForm extends Destroy$ {
     const togglePassword = document.querySelector('#togglePassword');
     const password = document.querySelector('#idPassword');
     let type = password?.getAttribute('type') === 'password' ? 'text' : 'password'
-    let toggleClass = password?.getAttribute('type') === 'password' ? 'assets/Oeil_ouvert.svg' : 'assets/Oeil_Fermé.svg'
+    let toggleClass = password?.getAttribute('type') === 'password' ? 'assets/Oeil_ouvert.svg' : 'assets/Oeil_ferme.svg'
     password?.setAttribute('type', type)
     togglePassword?.setAttribute('src', toggleClass)
   }

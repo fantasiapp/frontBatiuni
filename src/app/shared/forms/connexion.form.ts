@@ -32,7 +32,7 @@ import { NotifService } from "../services/notif.service";
           <label >Mot de passe</label>
           <input type="password" class="form-element" formControlName="password" id="idPassword">
           <div (click)="togglePassword()" style="position: absolute; cursor: pointer; bottom: 0; right: 0">
-            <img class="eye" src="assets/Oeil_Fermé.svg" id="togglePassword"></div>
+            <img class="eye" src="assets/Oeil_ferme.svg" id="togglePassword"></div>
           <!-- <div *ngIf="loginForm.get('password')!.touched && loginForm.get('password')!.errors?.minlength" class="error">Doit contenir au moins 8 caractères</div> -->
           <!-- <div *ngIf="loginForm.get('password')!.touched && loginForm.get('password')!.errors?.uppercase" class="error">Doit contenir au moins une lettre en majuscule</div> -->
           <!-- <div *ngIf="loginForm.get('password')!.touched && loginForm.get('password')!.errors?.lowercase" class="error">Doit contenir au moins une lettre en miniscule</div> -->
@@ -113,7 +113,7 @@ export class ConnexionForm extends Destroy$ {
     const togglePassword = document.querySelector('#togglePassword');
     const password = document.querySelector('#idPassword');
     let type = password?.getAttribute('type') === 'password' ? 'text' : 'password'
-    let toggleClass = password?.getAttribute('type') === 'password' ? 'assets/Oeil_ouvert.svg' : 'assets/Oeil_Fermé.svg'
+    let toggleClass = password?.getAttribute('type') === 'password' ? 'assets/Oeil_ouvert.svg' : 'assets/Oeil_ferme.svg'
     password?.setAttribute('type', type)
     togglePassword?.setAttribute('src', toggleClass)
   }

@@ -353,7 +353,7 @@ export class HorizontaleCalendar implements OnInit {
           
           
           
-          if(!status) status = curCard.change.validate || curCard.change.deleted
+          if(!status) status = curCard.change.validate || curCard.change.schedule || curCard.change.schedule || curCard.change.deleted
           day.status = status ? 'occupe' : ''
 
           // if(!status){
@@ -364,7 +364,7 @@ export class HorizontaleCalendar implements OnInit {
     }
   }
 
-  onCardUpdate(state: any, card: calendarItem) {
+  oonCardUpdate(state: any, card: calendarItem) {
     const cardChange = state
 
 
