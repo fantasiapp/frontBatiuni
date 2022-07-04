@@ -187,7 +187,7 @@ import { InfoService } from "../components/info/info.component";
 
         <div class="condition-general-container flex row">
           <checkbox formControlName="conditionGeneral"></checkbox>
-          <span style="font-size: 12px;">J'accepte les <span style="color: hsl(203deg 96% 48%); text-decoration: underline">Conditions Générales & les mentions légales</span> d'Utilisation BatiUni</span>
+          <span style="font-size: 12px;">J'accepte les <span style="color: hsl(203deg 96% 48%); text-decoration: underline" (click)="openMentionLegal = true">Conditions Générales & les mentions légales</span> d'Utilisation BatiUni</span>
         </div>
 
         <div class="form-input parrain">
@@ -226,7 +226,14 @@ import { InfoService } from "../components/info/info.component";
         </div>
       </form>
       </form>
+
     </ng-template>
+    <slidemenu [(open)]="openMentionLegal" #mentionLegal>
+      <h1 class="center-text full-width" header>Mentions légales</h1>
+      <div class="modify-page hosted-page flex column center-cross space-children-margin" content>
+        <app-mention-legal *ngIf="openMentionLegal"></app-mention-legal>
+      </div>
+    </slidemenu>
   `,
   styles: [
     `
@@ -318,6 +325,7 @@ export class RegisterForm extends Destroy$ {
     super();
   }
 
+  openMentionLegal: boolean = false;
 
   @ViewChild(UISuggestionBox)
   suggestionBox?: UISuggestionBox;
