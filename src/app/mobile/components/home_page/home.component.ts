@@ -387,6 +387,21 @@ export class HomeComponent extends Destroy$ {
 
   selectMission(filter: any) {
     this.missions = [];
+
+    // Trie missions selon leurs notifications
+    let allNotifications = this.store.selectSnapshot(DataQueries.getAll("Notification"));
+    let missionsNotifications = allNotifications.map(notification => notification.missions);
+    let missionArray = [];
+    for (let mission of this.allMissions){
+      let missionNotifications = missionsNotifications.map(missionId => missionId === mission.id)
+      const countTrue = missionNotifications.filter(value => value === true).length;
+      missionArray.push([mission, countTrue]);
+    }
+    missionArray.sort((a: any, b: any) => b[1] - a[1]);
+    let keys = missionArray.map((key: any) => {return key[0]});
+    this.allMissions.sort((a: any, b: any) => keys.indexOf(a) - keys.indexOf(b));
+    
+
     this.allMissions.sort((a, b) => {return Number(a["isClosed"]) - Number(b["isClosed"]);});
     if (filter == null) {
       this.missions = this.allMissions;
@@ -400,7 +415,6 @@ export class HomeComponent extends Destroy$ {
         this.allMissions.sort((a: any, b: any) => keys.indexOf(a) - keys.indexOf(b));
       } 
 
-      // Trie missions selon leurs notifications
       if (filter.sortMissionNotifications === true) {
         let allNotifications = this.store.selectSnapshot(DataQueries.getAll("Notification"));
         let missionsNotifications = allNotifications.map(notification => notification.missions);
@@ -413,7 +427,7 @@ export class HomeComponent extends Destroy$ {
         missionArray.sort((a: any, b: any) => b[1] - a[1]);
         let keys = missionArray.map((key: any) => {return key[0]});
         this.allMissions.sort((a: any, b: any) => keys.indexOf(a) - keys.indexOf(b));
-      }
+      }  
 
       for (let mission of this.allMissions) {
 

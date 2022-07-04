@@ -215,6 +215,19 @@ export class MissionsComponent extends Destroy$ {
   selectMissions(filter: any) {
     this.myMissions = [];
     this.allMyMissions.sort((a, b) => {return Number(a["isClosed"]) - Number(b["isClosed"]);});
+    let allNotifications = this.store.selectSnapshot(DataQueries.getAll("Notification"));
+    let missionsNotifications = allNotifications.map(notification => notification.missions);
+    let missionArray = [];
+    for (let mission of this.allMyMissions){
+      let missionNotifications = missionsNotifications.map(missionId => missionId === mission.id)
+      const countTrue = missionNotifications.filter(value => value === true).length;
+      missionArray.push([mission, countTrue]);
+    }
+    missionArray.sort((a: any, b: any) => b[1] - a[1]);
+    let keys = missionArray.map((key: any) => {return key[0]});
+    this.allMyMissions.sort((a: any, b: any) => keys.indexOf(a) - keys.indexOf(b));
+    
+    console.log("NOTIF", allNotifications)
     if (filter == null) {
       this.myMissions = this.allMyMissions;
     } else {
@@ -231,6 +244,22 @@ export class MissionsComponent extends Destroy$ {
 
       // Trie les missions par date plus proche
       if (filter.sortMissionDate === true) {this.allMyMissions.sort((a: any, b: any) => Date.parse(a['startDate']) - Date.parse(b['startDate']))}
+
+      // Trie Notifications non lus
+      if (filter.sortMissionNotifications) {
+        let allNotifications = this.store.selectSnapshot(DataQueries.getAll("Notification"));
+        let missionsNotifications = allNotifications.map(notification => notification.missions);
+        let missionArray = [];
+        for (let mission of this.allMyMissions){
+          let missionNotifications = missionsNotifications.map(missionId => missionId === mission.id)
+          const countTrue = missionNotifications.filter(value => value === true).length;
+          missionArray.push([mission, countTrue]);
+        }
+        missionArray.sort((a: any, b: any) => b[1] - a[1]);
+        let keys = missionArray.map((key: any) => {return key[0]});
+        this.allMyMissions.sort((a: any, b: any) => keys.indexOf(a) - keys.indexOf(b));
+      }
+    
 
       for (let mission of this.allMyMissions) {
       
