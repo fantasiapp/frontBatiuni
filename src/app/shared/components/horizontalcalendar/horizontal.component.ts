@@ -350,12 +350,13 @@ export class HorizontaleCalendar implements OnInit {
             notification = curCard.change.deleted || curCard.change.schedule || !curCard.change.validate
           }
           day.notification = notification
-
-
           
-          if(!status) status = curCard.change.validate
+          
+          
+          if(!status) status = curCard.change.validate || curCard.change.deleted
           day.status = status ? 'occupe' : ''
-
+          
+          console.log(day.day[2], day.selected, day.status);
           // if(!status){
             //   day.notification = false
             // }
