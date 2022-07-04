@@ -13,7 +13,7 @@
       </div> -->
   
       <div class="form-input">
-        <p>Qualité du travail fourni</p>
+        <p>{{ view == 'ST' ? 'Qualité du travail fourni' : 'Ambiance sur le chantier' }}</p>
         <div class="star-container">
           <img *ngFor="let flag of getArrayStar('quality'); let index=index;" (click)="starAction(index, 'quality')" [src]="flag ? 'assets/starFull.svg' : 'assets/starEmpty.svg'">
         </div>
@@ -29,7 +29,7 @@
       </div>
   
       <div class="form-input">
-        <p>Organisation</p>
+        <p>{{ view == 'ST' ? 'Organisation' : 'Organisation PME' }}</p>
         <div class="star-container">
           <img *ngFor="let flag of getArrayStar('organisation'); let index=index;" (click)="starAction(index, 'organisation')" [src]="flag ? 'assets/starFull.svg' : 'assets/starEmpty.svg'">
         </div>

@@ -1,72 +1,14 @@
 import { Injectable, NgZone } from "@angular/core";
-import {
-  Action,
-  createSelector,
-  Selector,
-  State,
-  StateContext,
-  Store,
-} from "@ngxs/store";
+import { Action,createSelector,Selector,State,StateContext,Store, } from "@ngxs/store";
 import { Observable, of, Subject } from "rxjs";
 import { concatMap, map, tap } from "rxjs/operators";
 import { HttpService } from "src/app/services/http.service";
-import {
-  GetGeneralData,
-  HandleApplication,
-  BlockCompany,
-  SignContract,
-  MarkViewed,
-  ModifyAvailability,
-  SetFavorite,
-  TakePicture,
-  InviteFriend,
-  ValidateMissionDate,
-  BoostPost,
-  AskRecommandation,
-  GiveRecommandation,
-  GiveNotificationToken,
-  ModifyFile,
-  UnapplyPost,
-  DeleteLabel,
-  PostNotificationViewed,
-} from "./user/user.actions";
-import {
-  ApplyPost,
-  CandidateViewed,
-  ChangePassword,
-  ChangeProfilePicture,
-  ChangeProfileType,
-  DeleteFile,
-  DeletePost,
-  DownloadFile,
-  DuplicatePost,
-  GetUserData,
-  ModifyUserProfile,
-  CreateDetailedPost,
-  ModifyDetailedPost,
-  CreateSupervision,
-  SwitchPostType,
-  ModifyMissionDate,
-  CloseMission,
-  CloseMissionST,
-  UploadFile,
-  UploadPost,
-  UploadImageSupervision,
-  NotificationViewed,
-} from "./user/user.actions";
+import { GetGeneralData,HandleApplication,BlockCompany,SignContract,MarkViewed,ModifyAvailability,SetFavorite,TakePicture,InviteFriend,ValidateMissionDate,BoostPost,AskRecommandation,GiveRecommandation,GiveNotificationToken,ModifyFile,UnapplyPost,DeleteLabel,PostNotificationViewed } from "./user/user.actions";
+import { ApplyPost,CandidateViewed,ChangePassword,ChangeProfilePicture,ChangeProfileType,DeleteFile,DeletePost,DownloadFile,DuplicatePost,GetUserData,ModifyUserProfile,CreateDetailedPost,ModifyDetailedPost,CreateSupervision,SwitchPostType,ModifyMissionDate,CloseMission,CloseMissionST,UploadFile,UploadPost,UploadImageSupervision,NotificationViewed } from "./user/user.actions";
 import { Company, Interface, User } from "./data.interfaces";
 import { DataReader, NameMapping, TranslatedName } from "./data.mapper";
 import { Record, DataTypes } from "./data.interfaces";
-import {
-  addValues,
-  compose,
-  deleteIds,
-  addSimpleChildren,
-  transformField,
-  addComplexChildren,
-  replaceChildren,
-  update,
-} from "./state.operators";
+import { addValues,compose,deleteIds,addSimpleChildren,transformField,addComplexChildren,replaceChildren,update } from "./state.operators";
 import { Logout } from "../auth/auth.actions";
 import { InfoService } from "src/app/shared/components/info/info.component";
 import { GetCompanies } from "./search/search.actions";
@@ -110,18 +52,7 @@ export class Clear {
 export class DataState {
   flagUpdate = true;
   isFirstTime = true
-  constructor(
-    private store: Store,
-    private reader: DataReader,
-    private http: HttpService,
-    private info: InfoService,
-    private slide: SlidemenuService,
-    private swipeup: SwipeupService,
-    private zone: NgZone,
-    private booleanService: BooleanService,
-    private getUserDataService: getUserDataService,
-    private notifService: NotifService
-  ) {}
+  constructor(private store: Store,private reader: DataReader,private http: HttpService,private info: InfoService,private slide: SlidemenuService,private swipeup: SwipeupService,private zone: NgZone,private booleanService: BooleanService,private getUserDataService: getUserDataService,private notifService: NotifService) {}
 
   private pending$: Record<Subject<any>> = {};
 
@@ -355,7 +286,7 @@ export class DataState {
             console.log("modify file", adminFiles[name])
             ctx.dispatch(new ModifyFile(adminFiles[name], adminFiles[name].id, "Company"))
           } else if (adminFiles[name].ext != "???" ) {
-            console.log("upload file", adminFiles[name])
+            console.log("upload file dand modify user", adminFiles[name])
             ctx.dispatch(new UploadFile(adminFiles[name], "admin", name, "Company"))
           }
         });
