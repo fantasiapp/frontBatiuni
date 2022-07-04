@@ -364,7 +364,7 @@ export class HorizontaleCalendar implements OnInit {
     }
   }
 
-  oonCardUpdate(state: any, card: calendarItem) {
+  onCardUpdate(state: any, card: calendarItem) {
     const cardChange = state
 
 
