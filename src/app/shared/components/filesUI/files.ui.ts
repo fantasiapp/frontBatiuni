@@ -166,6 +166,7 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
       allowEditing: false,
       resultType: CameraResultType.Base64,
       source: CameraSource.Photos,
+      quality: 60
     });
 
     console.log('take photo', photo.path);
