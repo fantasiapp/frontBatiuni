@@ -89,6 +89,7 @@
     <swipeup [open]="openAdFilterMenu" (openChange)="closeAdFilterMenu($event)" type="view">
       <ng-container *ngIf="view == 'PME'; else stfilter" view>
         <pme-filter-form
+          (closeFilter)="openAdFilterMenu = false"
           [activeView]="activeView"
           [callbackFilter]="callbackFilter"
         ></pme-filter-form>
