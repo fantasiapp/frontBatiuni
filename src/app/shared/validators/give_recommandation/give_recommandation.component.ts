@@ -41,7 +41,8 @@ export class GiveARecommandation extends Destroy$ {
 
   userNameForm: FormGroup = new FormGroup({
     lastName: new FormControl('', [Validators.required]),
-    firstName: new FormControl('', [Validators.required])
+    firstName: new FormControl('', [Validators.required]),
+    lastWorkSiteDate: new FormControl('', [Validators.required])
   })
   
   ngOnInit() {
