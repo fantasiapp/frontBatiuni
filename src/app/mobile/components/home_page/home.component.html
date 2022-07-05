@@ -99,6 +99,7 @@
           [time]="time"
           [posts]="allOnlinePosts"
           (filterOnST)="updateFilterOnST($event)"
+          (closeFilter)="openAdFilterMenu = false"
           ></st-filter-form>
       </ng-template>
     </swipeup>
