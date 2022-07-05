@@ -41,6 +41,7 @@ import { BooleanService } from "./shared/services/boolean.service";
     ]),
   ],
 })
+
 export class AppComponent extends Destroy$ {
 
   title = 'af-notification'

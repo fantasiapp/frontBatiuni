@@ -422,6 +422,8 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
     for (const detailPost of this.pendingDetailedPost) {
       this.modifyDetailedPostDate(detailPost)
     }
+
+    this.taskMenuUp = false;
     this.pendingDetailedPost = []
   }
 

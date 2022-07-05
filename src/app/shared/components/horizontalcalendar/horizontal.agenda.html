@@ -28,6 +28,7 @@
         'sous-condition': curDisponibility?.nature == 'Disponible Sous Conditions', 
         'non-disponible': curDisponibility?.nature == 'Non Disponible'}"></div></div>
 </div>
+
 <div class="agenda flex position-relative " >
     <ol class="full-width"> 
         <li class="flex center-cross " 
@@ -52,10 +53,8 @@
                     <span>- {{ task.content }}</span>
 
                 </div>
-            </div>
-            
+            </div>  
             <notification-agenda (click)="$event.stopPropagation()" *ngIf="card.change.deleted || card.change.schedule || !card.change.validate" [card]="card" [date]="card.date" (cardUpdate)="onCardUpdate($event, card)"></notification-agenda>
         </div>
-    </div>
-   
+    </div> 
 </div>
