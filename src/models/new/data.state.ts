@@ -160,6 +160,7 @@ export class DataState {
   @Action(GetUserData)
   getUserData(ctx: StateContext<DataModel>, action: GetUserData) {
     const req = this.http.get("data", { action: action.action });
+    console.log(this.store.selectSnapshot(DataQueries.getAll("Recommandation")))
     if (this.isFirstTime) {
     }
     if (this.flagUpdate){
