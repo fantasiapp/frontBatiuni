@@ -31,7 +31,7 @@ interface recommandationInfo {
   securityComment: string;
   organisation: number;
   organisationComment: string;
-  LastWorksiteDate: string;
+  lastWorksiteDate: string;
 }
 
 @Component({
@@ -155,7 +155,7 @@ export class RatingComponent extends UIOpenMenu {
   getRecommandations(company: Company) {
     let recommandations = this.store.selectSnapshot(DataQueries.getAll('Recommandation'))
     for (const recommandation of recommandations) {
-      if(recommandation.companyRecommanded == company.id) {
+      if(recommandation.companyRecommanded == company.id && recommandation.view == this.viewId) {
         let recommandationInfo: recommandationInfo = {
           contactName:recommandation.firstNameRecommanding + " " + recommandation.lastNameRecommanding,
           subContractorName: recommandation.firstNameRecommanding + " " + recommandation.lastNameRecommanding,
@@ -167,10 +167,22 @@ export class RatingComponent extends UIOpenMenu {
           securityComment: recommandation.securityComment,
           organisation: recommandation.organisationStars,
           organisationComment: recommandation.organisationComment,
-          LastWorksiteDate: recommandation.LastWorksiteDate
+          lastWorksiteDate: recommandation.lastWorksiteDate
         }
         this.recommandationInfos!.push(recommandationInfo)
       }
     }
+  }
+
+  toFrenchDate(date: string) {
+    let listDate = date.split("-")
+    return listDate[2]+"/"+listDate[1]+"/"+listDate[0]
+  }
+
+  get viewId() {
+    let currentView = this.store.selectSnapshot(DataState.view)
+    if (currentView == "ST") 
+      return 2
+    else return 1  
   }
 }

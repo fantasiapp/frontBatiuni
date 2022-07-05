@@ -48,7 +48,7 @@
       </div>
       <div *ngFor="let recommandationInfo of recommandationInfos" class="company-rate">
         <span class="company-name">Recommandé par {{ view == 'ST' ?  recommandationInfo.contactName : recommandationInfo.subContractorName }} de {{ view == 'ST' ? recommandationInfo.companyContractor : recommandationInfo.subContractorContact }}</span><br>
-        <span class="company-name">Date du dernier chantier : {{ recommandationInfo.LastWorksiteDate }}</span>
+        <span class="company-name">Date du dernier chantier : {{ toFrenchDate(recommandationInfo.lastWorksiteDate) }}</span>
         <div class="criterion">
           <div class="flex center-cross">
             <span class="criterion-stars">{{ view == 'ST' ? 'Qualité du travail fourni' : 'Ambiance sur le chantier' }}
