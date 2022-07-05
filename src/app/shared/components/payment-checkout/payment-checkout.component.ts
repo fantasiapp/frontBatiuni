@@ -21,10 +21,12 @@ export class PaymentCheckout {
   }
 
   handleSubmit(e: any){
-    const req =this.http.post("create-payment-checkout", {"action": "paymentCheckout"})
+    const req =this.http.post("payment", {"action": "paymentCheckout"})
 
-    req.subscribe((response) => {
+    req.subscribe((response: any) => {
+      console.log("response")
       console.log(response);
+      window.location.href = response.checkoutUrl
     })
   }
 };
