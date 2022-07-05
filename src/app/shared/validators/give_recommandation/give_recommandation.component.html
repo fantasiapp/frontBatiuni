@@ -6,7 +6,7 @@
       <input (focusout)="getCompanyInfoByText('firstName', firstNameControl)"placeholder="Entrer votre prénom" class="form-element" formControlName="firstName" #firstNameControl/>
       <input (focusout)="getCompanyInfoByText('companyName', companyControl)"placeholder="Entrer le nom de votre entreprise" class="form-element" style='margin-bottom: 1rem;' formControlName="firstName" #companyControl/>
       <div> Date du dernier chantier</div>
-      <input type="date" (focusout)="getCompanyInfoByText('lastWorksiteDate', companyControl)"placeholder="Entrer la date de votre dernier chantier" class="form-element" style='margin-bottom: 1rem;' formControlName="lastWorksiteDate" #companyControl/>
+      <input type="date" (focusout)="getCompanyInfoByText('lastWorksiteDate', companyControl)"placeholder="Entrer la date de votre dernier chantier" class="form-element" style='margin-bottom: 1rem;' formControlName="firstName" #companyControl/>
 
       <!-- <div class="star-container" *ngIf="hasGeneralStars">
         <img  *ngFor="let flag of getArrayStar('general'); let index=index;" [src]="flag ? 'assets/starFull.svg' : 'assets/starEmpty.svg'">
