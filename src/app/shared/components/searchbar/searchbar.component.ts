@@ -34,6 +34,7 @@ export class SearchbarComponent  implements OnInit{
   ngOnInit(){
     this.callbackSearch(this.searchForm.value.search);
     this.searchForm.valueChanges.subscribe(value => {
+       console.log('value', value, value.search);
       this.callbackSearch(value.search);
     });
   }

@@ -22,8 +22,7 @@ export type MarkerType = Exclude<Availability, 'nothing'>;
 })
 export class UIMapComponent {
 
-  @Input()
-  searchBarEmptyEvent!: Observable<boolean>
+  @Input() searchBarEmptyEvent!: Observable<boolean>
 
   searchBarEmptyEventSubscription!: Subscription
 
@@ -179,7 +178,7 @@ export class UIMapComponent {
   refresh() {
     this.reset();
     if ( this.mode == 'post' ){
-      // this.showPosts();
+      this.showPosts();
     }
     else{
       this.showCompanies(); 

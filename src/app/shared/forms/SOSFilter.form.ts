@@ -109,13 +109,17 @@ export class SOSFilterForm implements OnInit {
     })
   }
 
+  @Output() refreshMap = new EventEmitter()
   detectChange(){
+    this.callbackFilter(this.filterForm.value)
+    this.refreshMap.next()
     this.cd.detectChanges();
   }
 
   @Output() closeFilter = new EventEmitter()
   onCloseFilter(){
-    this.closeFilter.next()
+    this.closeFilter.next(this.filterForm.value)
+    this.detectChange()
   }
   onResetFilter(){
    this.filterForm.get('address')?.patchValue('') 
@@ -125,6 +129,7 @@ export class SOSFilterForm implements OnInit {
    this.filterForm.get('sortNotation')?.patchValue(false) 
    this.filterForm.get('sortFullProfils')?.patchValue(false) 
    this.filterForm.get('sortDisponibleProfils')?.patchValue(false) 
+   this.detectChange()
   }
   returnInputKeyboard = returnInputKeyboard
 }
