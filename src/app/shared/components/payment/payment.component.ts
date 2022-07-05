@@ -1,6 +1,6 @@
 import { DOCUMENT } from "@angular/common";
 import { Component, ChangeDetectionStrategy, Input, Inject } from "@angular/core";
-import { loadStripe } from "@stripe/stripe-js";
+// import { loadStripe } from "@stripe/stripe-js";
 import { HttpService } from "src/app/services/http.service";
 
 
@@ -30,7 +30,7 @@ export class Payment {
   }
 
   async enableStripe() {
-    this.stripe = await loadStripe("pk_test_51LDlcoAdZaSfQS2YnaAxXmcMVSuiUoWC1PSBzclR9QJRgYFxviIAevlu18bWrZ5jnI0A2snkqEqHt1YOlZnSnuWa00FhcebxRK");
+    // this.stripe = await loadStripe("pk_test_51LDlcoAdZaSfQS2YnaAxXmcMVSuiUoWC1PSBzclR9QJRgYFxviIAevlu18bWrZ5jnI0A2snkqEqHt1YOlZnSnuWa00FhcebxRK");
     console.log("stripe loaded", this.stripe);
     this.initialize();
   }
