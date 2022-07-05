@@ -47,7 +47,7 @@ const routes: Routes = [{
   path: 'success',
   component: RegistrationSuccess
 },{
-  path: 'give_recommandation/:token/:firstName/:lastName/:companyName/:companyId',
+  path: 'give_recommandation/:token/:firstName/:lastName/:companyName/:companyId/:view',
   component: GiveARecommandation
 },{
   path: 'home',
