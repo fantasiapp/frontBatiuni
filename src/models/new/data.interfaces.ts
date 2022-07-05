@@ -71,6 +71,7 @@ export interface Company {
   amount: number;
   saturdayDisponibility: boolean
   allQualifications : boolean
+  stripeCustomerId: string;
   Notification: Ref<Notification>[]
 };
 

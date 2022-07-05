@@ -37,7 +37,7 @@ export class Payment {
 
   // Fetches a payment intent and captures the client secret
   initialize() {
-    const req = this.http.post("create-payment-intent", {'action':'payment'});
+    const req = this.http.post("payment", {'action':'createPaymentIntent'});
     console.log("requete")
     req.subscribe((response: any) => {
       console.log("response", response)
