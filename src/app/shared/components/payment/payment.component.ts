@@ -1,5 +1,5 @@
 import { DOCUMENT } from "@angular/common";
-import { Component, ChangeDetectionStrategy, Input, Inject } from "@angular/core";
+import { Component, ChangeDetectionStrategy, Input, Inject, ChangeDetectorRef } from "@angular/core";
 import { Router } from "@angular/router";
 import { Navigate } from "@ngxs/router-plugin";
 import { loadStripe } from "@stripe/stripe-js";
@@ -25,10 +25,27 @@ export class Payment {
 
   state: any;
 
+  _product: string = "";
+  get product(){
+    return this._product;
+  }
+  set product(_product){
+    this._product = _product
+  }
+
+  _price: number = 0;
+  get price(){
+    return this._price;
+  }
+  set price(_price){
+    this._price = _price
+  }
+
   constructor(
     private http: HttpService,
     @Inject(DOCUMENT) private document: Document,
-    private router: Router
+    private router: Router,
+    private cd: ChangeDetectorRef,
   ) {
     const navigation = this.router.getCurrentNavigation();
     if (navigation) {
@@ -73,7 +90,18 @@ export class Payment {
     console.log("requete")
     req.subscribe((response: any) => {
       console.log("response", response)
-      if (response['createPaymentIntent'] !== "OK") this.router.navigate(['home'])
+      if (response['createPaymentIntent'] !== "OK") { 
+        console.log("error, navigate home")
+        this.router.navigate(['home'])
+      } 
+      this.product = response['productName'];
+      this.price = response['price']/100;
+
+
+      console.log("productName", this.product)
+      console.log("price", this.price)
+
+      this.cd.markForCheck();
       let clientSecret = response.clientSecret
 
       console.log("client secret", clientSecret);
