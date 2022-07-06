@@ -38,6 +38,7 @@ export class AskRecommandationComponent extends Destroy$ {
     if (this.emailForm.valid) {
       this.store.dispatch(new AskRecommandation(this.emailForm.get('email')!.value, this.store.selectSnapshot(DataState.view))).pipe(take(1)).subscribe(
         async (success) => {
+          document.querySelector("form")?.reset();
           this.cd.markForCheck()
         }
       )
