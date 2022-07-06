@@ -245,7 +245,7 @@ import { Mobile } from "../services/mobile-footer.service";
     </form>
 
     <footer
-      [ngClass]="{'footerHide': !showFooter}"
+      *ngIf="!showFooter"
       class="flex row space-between sticky-footer full-width submit-container"
       style="background-color: white;"
     >
