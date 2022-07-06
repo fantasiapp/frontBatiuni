@@ -66,8 +66,6 @@ export class OfferComponent {
         candidates = this.store.selectSnapshot(
           DataQueries.getMany("Candidate", candidatesIds)
         );
-
-      
       candidates.forEach((candidate) => {
         if(candidate.isRefused) candidate.isViewed = true
         if (!candidate.isViewed) possibleCandidates++;
