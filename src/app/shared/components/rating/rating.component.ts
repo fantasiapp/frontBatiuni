@@ -175,8 +175,13 @@ export class RatingComponent extends UIOpenMenu {
   }
 
   toFrenchDate(date: string) {
-    let listDate = date.split("-")
-    return listDate[2]+"/"+listDate[1]+"/"+listDate[0]
+    if (date){
+      let listDate = date.split("-")
+      return listDate[2]+"/"+listDate[1]+"/"+listDate[0]
+    }
+    else {
+      return date
+    }
   }
 
   get viewId() {
