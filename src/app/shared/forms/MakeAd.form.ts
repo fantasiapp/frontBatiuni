@@ -180,6 +180,7 @@ import { Mobile } from "../services/mobile-footer.service";
           <label>Montant</label>
           <div class="flex row remuneration">
             <input
+              type='number'
               min="0"
               style="max-height: 51px"
               class="grow form-element"
@@ -244,7 +245,7 @@ import { Mobile } from "../services/mobile-footer.service";
     </form>
 
     <footer
-      [ngClass]="{'footerHide': !showFooter}"
+      *ngIf="showFooter"
       class="flex row space-between sticky-footer full-width submit-container"
       style="background-color: white;"
     >
@@ -287,6 +288,7 @@ import { Mobile } from "../services/mobile-footer.service";
       border: 2px solid #aaa;
       outline: none;
       border-radius: 3px;
+      resize: vertical
     }
 
     input{
