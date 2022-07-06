@@ -142,17 +142,18 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
   }
 
   computeFieldOfDate(date:DatePost) {
+    this.dateOrigin = this.store.selectSnapshot(DataQueries.getById('DatePost', date.id))!
     let supervisions:Supervision[] = []
     let postDetails:PostDetail[] = []
     let avaliableDetails:PostDetail[] = []
-    if (typeof(date.supervisions) === "object" && !Array.isArray(date.supervisions))
-      supervisions = Object.values(date.supervisions) as Supervision[]
+    if (typeof(date.supervisions) === "object" && !Array.isArray(this.dateOrigin.supervisions))
+      supervisions = Object.values(this.dateOrigin.supervisions) as Supervision[]
     else
-      supervisions = this.store.selectSnapshot(DataQueries.getMany("Supervision", date.supervisions))
+      supervisions = this.store.selectSnapshot(DataQueries.getMany("Supervision", this.dateOrigin.supervisions))
 
     let postDetailsId = []
-    if (!Array.isArray(date.details)) postDetailsId = Object.keys(date.details).map(detail => +detail)
-    else postDetailsId = date.details
+    if (!Array.isArray(this.dateOrigin.details)) postDetailsId = Object.keys(this.dateOrigin.details).map(detail => +detail)
+    else postDetailsId = this.dateOrigin.details
     
     postDetails = this.store.selectSnapshot(DataQueries.getMany("DetailedPost", postDetailsId))
 
