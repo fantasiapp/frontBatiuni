@@ -6,6 +6,6 @@
   <form [formGroup]="emailForm" style="width:100%" id="form">
     <input type="text" class="askRecommandationsInput" (keyup)="returnInputKeyboard($event, input)" placeholder="Ex: jeanluc@fantasiapp.com" formControlName="email" #input>
     <div style="height:20px"></div> 
-    <button class="flex center button active" class="button askRecommandationsSubmit" (click)="askRecommandation()">Envoyer</button>
+    <button class="flex center button active askRecommandationsSubmit" (click)="askRecommandation()" [disabled]="disableBoutton">Envoyer</button>
   </form>
 </div>
