@@ -52,7 +52,7 @@ import { DataQueries, SnapshotAll } from "src/models/new/data.state";
 
     figcaption{
       color: #0D6191;
-      font-size: 14px;
+      font-size: 12px;
       text-align: center;
     }
 
