@@ -9,7 +9,7 @@
       </div>
     </div>
     
-    <div id="task-manager" *ngIf="view=='PME'; taskViewerST">
+    <div id="task-manager" *ngIf="view=='PME'; else taskViewerST">
         <div class="chantier-tache">
           <label (click)="taskManager($event, true)">Choisir les tâches pour ce jour 
             <svg id="noun_add_928257" xmlns="http://www.w3.org/2000/svg" width="22.721" height="22.721" viewBox="0 0 22.721 22.721"  class="add-task-img">
@@ -39,9 +39,11 @@
           <div class="full-page" style="left: 0; position: absolute" (click)="taskManager($event, false)" *ngIf="taskMenuUp"></div>
           </div>
     </div>
-    <div id="task-manager" *ngIf="tasksGraphic.length">
-        Les taches du jours : <span *ngFor="let task of tasksGraphic; let isLast = last">{{ task.selectedTask.content }}<ng-container>{{ isLast ? '.' : ', '}}</ng-container></span>
-    </div>
+    <ng-template #taskViewerST >
+      <div id="task-manager" *ngIf="tasksGraphic.length">
+          Les taches du jours : <span *ngFor="let task of tasksGraphic; let isLast = last">{{ task.selectedTask.content }}<ng-container>{{ isLast ? '.' : ', '}}</ng-container></span>
+      </div>
+    </ng-template>
     <div class="taskByDate" *ngFor="let taskGraphic of tasksGraphic; let index = index">
         <div class="details chantier-tache">
           <span class="detail-name">{{ taskGraphic.selectedTask.content }}</span>
