@@ -366,7 +366,13 @@ export class DataState {
     return req.pipe(
       tap((response: any) => {
         console.log("upload file response", response)
-        if (response[upload.action] !== "OK") throw response["messages"];
+        if (response[upload.action] !== "OK") {
+          this.info.show("error", response["messages"], 3000)
+          throw response["messages"];
+        }
+        else {
+          this.info.show("success", "Votre fichier a bien été téléchargé", 3000)
+        }
         delete response[upload.action];
         delete response["timestamp"]
         const assignedId = +Object.keys(response)[0],
