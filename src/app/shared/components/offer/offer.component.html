@@ -7,7 +7,7 @@
                   'boosted': post.boostTimestamp >= time }">
     <div class="offres-infos" >
       <ng-container *ngIf="view == 'PME';else stTemplate" #stTemplate>
-        <span class="start-date">Chantier du {{toLocateDate(post.startDate)}} au {{toLocateDate(post.endDate)}}</span>
+        <span class="start-date">Du {{toLocateDate(post.startDate)}} au {{toLocateDate(post.endDate)}}</span>
         <span class="metier text-dark">{{metier?.name}}</span>
         <span class="address">{{post?.address}}</span>
         <span class="date text-dark">Réponse avant le {{toLocateDate(post.dueDate)}}</span>
