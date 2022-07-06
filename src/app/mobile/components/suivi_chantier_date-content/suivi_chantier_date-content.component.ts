@@ -387,6 +387,7 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
   slideComment(taskGraphic: TaskGraphic | null, e: Event, supervisions: Supervision[], selectedTask: PostDetailGraphic | null){
     e.preventDefault()
     this.slideCommentOpen = true
+    console.log('this.slideCommentOpen', this.slideCommentOpen);
     this.slideCommentMenu = {
       taskGraphic: taskGraphic,
       slideCommentOpen: true,
