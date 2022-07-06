@@ -1,7 +1,9 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  EventEmitter,
   Input,
+  Output,
   QueryList,
   ViewChildren,
 } from "@angular/core";
@@ -94,6 +96,11 @@ import { returnInputKeyboard } from '../common/classes'
           <switch class="default" formControlName="unread" #unRead></switch>
         </div>
       </div>
+
+        <div class="action-button-filter flex row space space-between full-width">
+          <button class="button passive" (click)="onResetFilter()">Reinitialiser</button>
+          <button class="button active" (click)="onCloseFilter()">Valider</button>
+        </div>
     </form>
   `,
   styles: [
@@ -165,8 +172,23 @@ export class MissionFilterForm extends Filter<Mission> {
     });
   }
 
-  resetFilter(){
+  @Output() resetFilter = new EventEmitter()
+  onResetFilter(){
     this.filterForm.reset();
+    this.filterForm.get('missionDate')?.patchValue('')
+    this.filterForm.get('validationDate')?.patchValue('')
+    this.filterForm.get('address')?.patchValue('')
+    this.filterForm.get('jobs')?.patchValue([])
+    this.filterForm.get('manPower')?.patchValue(null)
+    this.filterForm.get('unread')?.patchValue(false)
+    this.filterForm.get('sortMissionDate')?.patchValue(false)
+    this.filterForm.get('isClosed')?.patchValue(false)
+    // this.callbackFilter(this.filterForm)
+  }
+
+  @Output() closeFilter = new EventEmitter()
+  onCloseFilter() {
+    this.closeFilter.next()   
   }
 
   returnInputKeyboard = returnInputKeyboard

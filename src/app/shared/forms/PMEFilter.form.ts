@@ -62,6 +62,10 @@ import { SnapshotAll } from "src/models/new/data.state";
             </div>
           </ng-container>
         </div>
+        <div class="action-button-filter flex row space space-between full-width">
+          <button class="button passive" (click)="onResetFilter()">Reinitialiser</button>
+          <button class="button active" (click)="onCloseFilter()">Valider</button>
+        </div>
       </form>
       <!-- <online-filter-form [target]="activeView == 1 ? 'réponses' : 'notifications'" *ngSwitchDefault></online-filter-form> -->
     </ng-container>
@@ -120,7 +124,11 @@ export class PMEFilterForm implements OnInit {
     })
   }
 
-  resetFilter(){
+  @Output() closeFilter = new EventEmitter()
+  onCloseFilter(){
+    this.closeFilter.next()
+  }
+  onResetFilter(){
     this.filterForm.reset();
   }
 }

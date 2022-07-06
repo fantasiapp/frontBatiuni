@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, QueryList, ViewChildren } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, QueryList, ViewChildren } from "@angular/core";
 import { DistanceSliderConfig, SOSSalarySliderConfig } from "src/app/shared/common/sliderConfig";
 import { Company, Job, Post, Profile } from "src/models/new/data.interfaces";
 import { NgxSliderModule } from '@angular-slider/ngx-slider';
@@ -52,6 +52,10 @@ import "hammerjs"
         <span class="criteria">Les profils affichés comme disponibles</span> 
         <switch class="default" formControlName="sortDisponibleProfils"></switch>
       </div>
+        <div class="action-button-filter flex row space space-between full-width">
+          <button class="button passive" (click)="onResetFilter()">Reinitialiser</button>
+          <button class="button active" (click)="onCloseFilter()">Valider</button>
+        </div>
     </div>
   </form>
 </ng-container>
@@ -105,9 +109,27 @@ export class SOSFilterForm implements OnInit {
     })
   }
 
+  @Output() refreshMap = new EventEmitter()
   detectChange(){
+    this.callbackFilter(this.filterForm.value)
+    this.refreshMap.next()
     this.cd.detectChanges();
   }
 
+  @Output() closeFilter = new EventEmitter()
+  onCloseFilter(){
+    this.closeFilter.next(this.filterForm.value)
+    this.detectChange()
+  }
+  onResetFilter(){
+   this.filterForm.get('address')?.patchValue('') 
+   this.filterForm.get('jobs')?.patchValue([]) 
+   this.filterForm.get('radius')?.patchValue(2000) 
+   this.filterForm.get('amount')?.patchValue('') 
+   this.filterForm.get('sortNotation')?.patchValue(false) 
+   this.filterForm.get('sortFullProfils')?.patchValue(false) 
+   this.filterForm.get('sortDisponibleProfils')?.patchValue(false) 
+   this.detectChange()
+  }
   returnInputKeyboard = returnInputKeyboard
 }

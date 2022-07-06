@@ -78,7 +78,8 @@ textarea{
     }
   }
 
-  .slideMenu__comment__input__wrapper{  
+  .slideMenu__comment__input__wrapper{
+    display: block;
     position: fixed;
     bottom: 0;
     left: 0;

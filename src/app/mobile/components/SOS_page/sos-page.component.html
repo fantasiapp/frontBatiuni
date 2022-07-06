@@ -20,6 +20,7 @@
   </ng-container>
   <div class="map-container space-children-margin page-content-with-tabs" *ngSwitchCase="1">
     <mapbox-batiuni 
+    [searchBarEmptyEvent]="searchbarSubject.asObservable()"
     [refreshEvent]="refreshSubject.asObservable()"
     [availableCompanies]="availableCompanies"
     (companyClick)="checkCompanyProfile($event)"
@@ -32,5 +33,5 @@
 </ng-container>
 
 <swipeup [(open)]="openSOSFilterMenu" type="view">
-  <sos-filter-form [callbackFilter]="callbackFilter" view></sos-filter-form>
+  <sos-filter-form (closeFilter)="openSOSFilterMenu = false;" (refreshMap)="updateFilterMap()"  [callbackFilter]="callbackFilter" view></sos-filter-form>
 </swipeup>

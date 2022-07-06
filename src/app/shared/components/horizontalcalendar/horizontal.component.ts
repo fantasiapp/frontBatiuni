@@ -350,10 +350,10 @@ export class HorizontaleCalendar implements OnInit {
             notification = curCard.change.deleted || curCard.change.schedule || !curCard.change.validate
           }
           day.notification = notification
-
-
           
-          if(!status) status = curCard.change.validate
+          
+          
+          if(!status) status = curCard.change.validate || curCard.change.schedule || curCard.change.schedule || curCard.change.deleted
           day.status = status ? 'occupe' : ''
 
           // if(!status){
