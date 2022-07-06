@@ -1,5 +1,7 @@
 import { DOCUMENT } from "@angular/common";
 import { Component, ChangeDetectionStrategy, Input, Inject } from "@angular/core";
+import { Router } from "@angular/router";
+import { Navigate } from "@ngxs/router-plugin";
 import { loadStripe } from "@stripe/stripe-js";
 import { HttpService } from "src/app/services/http.service";
 import { environment } from "src/environments/environment";
@@ -21,13 +23,26 @@ export class Payment {
 
   elements: any;
 
+  state: any;
+
   constructor(
     private http: HttpService,
-    @Inject(DOCUMENT) private document: Document
-  ) {}
+    @Inject(DOCUMENT) private document: Document,
+    private router: Router
+  ) {
+    const navigation = this.router.getCurrentNavigation();
+    if (navigation) {
+      this.state = navigation.extras.state;
+    }
+  }
 
   ngOnInit() {
-    this.enableStripe();
+    console.log('state', this.state)
+    if (!this.state) {
+      this.router.navigate(['home']);
+    } else {
+      this.enableStripe();
+    }
   }
 
   async enableStripe() {
@@ -46,6 +61,7 @@ export class Payment {
         stripePublicKey = "pk_test_51LI7b7GPflszP2pB9SHmOB0ma7N1zgoX5W0uBCIF2j22I8lqE5WgqBFLJA34D75UHlJGHzZhfMfSiUm2R9wO0Aos000EW2okEq";
         break;
     }
+    console.log("stripe public key", stripePublicKey)
     this.stripe = await loadStripe(stripePublicKey);
     console.log("stripe loaded", this.stripe);
     this.initialize();
@@ -53,17 +69,17 @@ export class Payment {
 
   // Fetches a payment intent and captures the client secret
   initialize() {
-    const req = this.http.post("payment", {'action':'createPaymentIntent'});
+    const req = this.http.post("payment", {'action':'createPaymentIntent', 'product': this.state.product});
     console.log("requete")
     req.subscribe((response: any) => {
       console.log("response", response)
-      
+      if (response['createPaymentIntent'] !== "OK") this.router.navigate(['home'])
       let clientSecret = response.clientSecret
 
       console.log("client secret", clientSecret);
   
       const appearance = {
-        theme: 'stripe',
+        theme: 'flat',
       };
       this.elements = this.stripe.elements({ appearance, clientSecret });
   

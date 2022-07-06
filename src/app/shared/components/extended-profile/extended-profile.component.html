@@ -13,6 +13,8 @@
     <section class="job-description full-width flex column space-children-margin">
       <h4 class="text-light-emphasis">Nom de l'entreprise : <span class="value">{{profile.company.name}}</span></h4>
 
+      <h4 class="text-light-emphasis">Fonction dans l'entreprise : <span class="value">{{profile.user?.function}}</span></h4>
+
       <h4 class="text-light-emphasis">Téléphone fixe : <span class="value">{{profile.company.companyPhone | space: 2:1 }}</span></h4>
       
       <h4 class="text-light-emphasis" *ngIf="profile.company.webSite">Site internet : <span class="value link"><a [href]="computeWebSite(profile.company.webSite)">{{profile.company.webSite}}</a></span></h4>
