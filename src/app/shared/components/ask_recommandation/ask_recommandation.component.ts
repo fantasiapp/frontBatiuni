@@ -32,13 +32,16 @@ export class AskRecommandationComponent extends Destroy$ {
   profileEmail: string = ''
   
   disabled:boolean = true
+  disableBoutton = false;
   token:string = ''
 
   askRecommandation () {
     if (this.emailForm.valid) {
+      this.disableBoutton = true;
       this.store.dispatch(new AskRecommandation(this.emailForm.get('email')!.value, this.store.selectSnapshot(DataState.view))).pipe(take(1)).subscribe(
         async (success) => {
           document.querySelector("form")?.reset();
+          this.disableBoutton = false;
           this.cd.markForCheck()
         }
       )
