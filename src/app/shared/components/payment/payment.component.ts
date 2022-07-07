@@ -136,7 +136,7 @@ export class Payment {
     const path = this.location.prepareExternalUrl(urlTree.toString());
     let returnUrl = window.location.origin + path;
     console.log("return url", returnUrl)
-    
+
     const { error } = await this.stripe.confirmPayment({
       elements: this.elements,
       confirmParams: {
@@ -145,13 +145,30 @@ export class Payment {
       }
     })
 
+    console.log("error", error);
+
     if (error.type === "card_error" || error.type === "validation_error") {
-      console.log("erreur", error.messages)
+      this.showMessage(error.message)
     } else {
-      console.log("unexpected error")
+      this.showMessage("unexpected error")
     }
+
+    this.setLoading(false)
   }
 
+  showMessage(messageText: string) {
+    console.log("show message", messageText)
+    const messageContainer = document.querySelector("#payment-message")!;
+  
+    messageContainer.classList.remove("hidden");
+    messageContainer.textContent = messageText;
+  
+    console.log(messageContainer);
+    setTimeout(function () {
+      messageContainer.classList.add("hidden");
+      messageContainer.textContent = "";
+    }, 4000);
+  }
   // Show a spinner on payment submission
   setLoading(isLoading: boolean){
     if (isLoading) {
