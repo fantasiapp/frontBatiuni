@@ -22,6 +22,7 @@ import { InfoService } from "../components/info/info.component";
 import { Store } from "@ngxs/store";
 import {
   DataQueries,
+  DataState,
   SnapshotAll,
   SnapshotArray,
 } from "src/models/new/data.state";
@@ -41,6 +42,7 @@ import { delay, getDirtyValues } from "../common/functions";
 import { Email } from "src/validators/persist";
 import { returnInputKeyboard } from '../common/classes'
 import { JsonpClientBackend } from "@angular/common/http";
+import { ActiveViewService } from "../services/activeView.service";
 
 @Component({
   selector: "modify-profile-form",
@@ -245,7 +247,7 @@ import { JsonpClientBackend } from "@angular/common/http";
             </div>
 
             <div class="form-input">
-              <label>Chiffres d'affaires</label>
+              <label>Chiffres d'affaires <span class='star'>*</span></label>
               <input
                 #input10
                 (click)="onClickInputScroll(input10)"
@@ -265,6 +267,18 @@ import { JsonpClientBackend } from "@angular/common/http";
                 class="form-element"
                 maxlength="11"
                 formControlName="UserProfile.Company.capital"
+              />
+            </div>
+
+            <div class="form-input" *ngIf="view == 'ST'">
+              <label>Taux horaire moyen</label>
+              <input
+                #input12
+                (click)="onClickInputScroll(input12)"
+                (keyup)="returnInputKeyboard($event, input12)"
+                class="form-element"
+                maxlength="11"
+                formControlName="UserProfile.Company.amount"
               />
             </div>
 
@@ -533,6 +547,7 @@ export class ModifyProfileForm {
   companyJobs!: JobForCompany[];
   selectedJobs!: Label[];
   initialSelectedJobs!: Label[];
+  view = this.store.selectSnapshot(DataState.view)
 
   companyFiles!: File[];
 
