@@ -1,0 +1,7 @@
+{
+    "vim.easymotion": true,
+    "vim.easymotionMarkerBackgroundColor": "#ffffff",
+    "vim.easymotionDimColor": "#ffffff",
+    "vim.easymotionIncSearchForegroundColor": "#ffffff",
+    "vim.easymotionMarkerForegroundColorOneChar": "#ffffff"
+}
