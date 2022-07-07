@@ -70,7 +70,7 @@ export class MailForm {
     req.pipe(take(1)).subscribe(
       (data: any) => {
         if (data?.messages == "work in progress") {
-          this.info.show("success", "Vérifier votre mail", 3000, "paging");
+          this.info.show("success", "Vérifier vos emails pour récupérer votre mot de passe", 3000, "paging");
         } else {
           setErrors(this.mailSender, { email: "L'adresse n'est pas reconnue" });
           this.cd.markForCheck();
