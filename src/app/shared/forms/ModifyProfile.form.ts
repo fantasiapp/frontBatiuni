@@ -503,7 +503,7 @@ export class ModifyProfileForm {
   @Input() animate: boolean = true;
 
   //get all labels and jobs
-  @SnapshotAll("Label")
+  // @SnapshotAll("Label")
   allLabels!: Label[];
 
   @SnapshotAll("Job")
@@ -578,6 +578,7 @@ export class ModifyProfileForm {
   }
 
   async ngOnInit() {
+    // console.log('alllabel', this.allLabels); 
     let permissions = await Camera.checkPermissions();
     if (permissions.camera != "granted" || permissions.photos != "granted"){
       try {
@@ -587,16 +588,19 @@ export class ModifyProfileForm {
       } catch (e) {}
     }
   }
-
+  
   ngOnChanges(changes: SimpleChanges) {
     if (changes["profile"]) this.reload();
   }
-
+  
   space(value: any, each: number = 2, by: number = 1) {
     return SpacingPipe.prototype.transform(value, each, by);
   }
-
+  
   reload() {
+    this.allLabels = this.store.selectSnapshot(DataQueries.getAll('Label'))
+    console.log('LabelNew', this.store.selectSnapshot(DataQueries.getAll('LabelNew')))
+    console.log('allLabels', this.allLabels, this.store.selectSnapshot(DataQueries.getById('Label', 1)));
     const { user, company } = this.profile as { user: User; company: Company };
     this.companyFiles = this.store.selectSnapshot(DataQueries.getMany("File", this.profile.company.files));
     this.companyLabels = this.store.selectSnapshot(DataQueries.getMany("LabelForCompany", this.profile.company.labels));
@@ -615,24 +619,26 @@ export class ModifyProfileForm {
         this.selectedJobs.push({
           id: job.id,
           name: job.name,
-          filename: ''} as Label
+          fileName: ''} as Label
           );
       }
     });
     this.initialSelectedJobs = this.selectedJobs;
 
     this.selectedLabels = [];
-    this.allLabels.forEach((label) => {
-      const used = this.companyLabels.find(
-        (labelForCompany) => {
-          return labelForCompany.label == label.id
+    if(this.allLabels){
+      this.allLabels.forEach((label) => {
+        const used = this.companyLabels.find(
+          (labelForCompany) => {
+            return labelForCompany.label == label.id
+          }
+        );
+        if (used) {
+          labelMapping.set(used.id, label);
+          this.selectedLabels.push(label);
         }
-      );
-      if (used) {
-        labelMapping.set(used.id, label);
-        this.selectedLabels.push(label);
-      }
-    });
+      });
+    }
 
     const filesInput = this.form.controls["UserProfile.Company.admin"];
     this.companyFiles.forEach((file) => {
@@ -685,12 +691,15 @@ export class ModifyProfileForm {
 
     const labelControl = this.form.controls["UserProfile.Company.LabelForCompany"] as FormArray;
     labelControl.clear();
+
     for (let labelForCompany of this.companyLabels) {
       const labelObject = labelMapping.get(labelForCompany.id)!;
+      console.log('labelObject', labelObject);
       labelControl.push(
         new FormGroup({
           label: new FormControl(labelObject),
           //get date from server
+
           fileData: new FormControl(
             defaultFileUIOuput(
               labelObject.name,
@@ -711,7 +720,7 @@ export class ModifyProfileForm {
     oldJobsId = new Set(oldJobs.map(({ id }) => id)),
     overlap = newJobs.filter((job) => oldJobsId.has(job.id)),
     difference = newJobs.filter((job) => !oldJobsId.has(job.id));
-
+  
     let jobControl = this.form.controls["UserProfile.Company.JobForCompany"] as FormArray;
     jobControl.clear();
 
@@ -739,7 +748,7 @@ export class ModifyProfileForm {
       return ({
       id: job.id,
       name: job.name,
-      filename: ''
+      fileName: ''
     } as Label)
   });
     jobControl.markAsDirty();
@@ -789,7 +798,7 @@ export class ModifyProfileForm {
       return ({
       id: job.id,
       name: job.name,
-      filename: ''
+      fileName: ''
     } as Label)
   });
     labelControl.markAsDirty();

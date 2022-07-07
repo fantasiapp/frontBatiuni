@@ -5,7 +5,7 @@ export type Record<T = any> = {
 export type DataTypes = 'Job' | 'Label' | 'Role' | 'UserProfile' | 'Company' | 'BlockedCandidate' |
   'Post' | 'DetailedPost' | 'Supervision' | 'Disponibility' | 'File' |
   'JobForCompany' | 'LabelForCompany' | 'Candidate' | 'Mission' |
-  'Establishments'| 'DatePost' | 'Notification' | 'Recommandation'; //..
+  'Establishments'| 'DatePost' | 'Notification' | 'Recommandation' | 'LabelNew'; //..
 
 //just to indicate
 export type Ref<T> = number;
@@ -20,12 +20,17 @@ export type Role = {
   name: string;
 };
 
-export type Label = {
+export interface Label {
   id: Ref<Label>;
   name: string;
-  filename: string;
+  fileName: string;
 };
 
+export interface LabelNew {
+  id: Ref<LabelNew>;
+  name: string;
+  fileName: string
+}
 export interface User {
   id: Ref<User>;
   email: string;
@@ -305,6 +310,7 @@ export type Interface<K extends DataTypes> =
   K extends 'Notification' ? Notification :
   K extends 'BlockedCandidate' ? BlockedCandidate :
   K extends 'Recommandation' ? Recommandation :
+  K extends 'LabelNew' ? LabelNew : 
   K;
 
 export type Profile = {
