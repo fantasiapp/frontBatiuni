@@ -12,6 +12,10 @@
     <form [formGroup]="formMain" #formMainTest (ngSubmit)="onSubmit(selectedTask, formMain, 'inputComment', comment)">
       <!-- <input formControlName="inputComment" class="inputComment" type="text" placeholder="Ajouter un commentaire" #comment> -->
       <textarea formControlName="inputComment" class="inputComment" type="text"  rows='1' placeholder='Ajouter un commentaire' (keyup)="autosize(comment)" (keyup)="textareaSubmit($event, formMainTest, comment)" #comment></textarea>
+      <swipeup [(open)]="swipeMenuImage" #modifyPicture>
+        <li (click)="takePhoto(comment)">Accéder à l'appareil photo</li>
+        <li (click)="selectPhoto(comment, selectedTask, formMain, 'inputComment')">Télécharger une image</li>
+      </swipeup>
     </form>
     <div class="action-button-wrapper">
       <img (click)="cameraSwipe()" src="assets/camera-outline.svg" *ngIf="!sendButtonShow;else showButton"/>
@@ -24,8 +28,3 @@
     </div>
   </div>
 </div>
-
-<swipeup [(open)]="swipeMenuImage" #modifyPicture>
-  <li (click)="takePhoto()">Accéder à l'appareil photo</li>
-  <li (click)="selectPhoto()">Télécharger une image</li>
-</swipeup>

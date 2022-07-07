@@ -1,6 +1,7 @@
+import { i18nMetaToJSDoc } from '@angular/compiler/src/render3/view/i18n/meta';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
+import { Camera, CameraResultType, CameraSource, Photo } from '@capacitor/camera';
 import { Store } from '@ngxs/store';
 import * as moment from 'moment';
 import { take, takeUntil } from 'rxjs/operators';
@@ -66,10 +67,11 @@ export class SupervisionWrapperComponent extends Destroy$ {
     inputComment: new FormControl("", [Validators.required]),
   });
 
-  onSubmit( task: PostDetailGraphic| null, formGroup: FormGroup, formControlName: string, input: HTMLTextAreaElement){
+  async onSubmit( task: PostDetailGraphic| null, formGroup: FormGroup, formControlName: string, input: HTMLTextAreaElement, uploadImageAfter= false, photo: Photo | null = null){
+    console.log('in submit');
     let formControl = formGroup.get(formControlName)!
     let comment = formControl.value
-    if(!comment || comment.trim() == '') return
+    if(!comment || comment.trim() == '') comment = ''
     if (!this.mission!.isClosed) {
       let detailPostId: number | null = task ? task.id : null
       let datePostId: number | null = null;
@@ -77,7 +79,7 @@ export class SupervisionWrapperComponent extends Destroy$ {
         datePostId = this.dateOrigin.id
       }
       try {
-        this.store.dispatch(new CreateSupervision(detailPostId, datePostId, comment)).pipe(take(1)).subscribe((response) => {
+        await this.store.dispatch(new CreateSupervision(detailPostId, datePostId, comment)).pipe(take(1)).subscribe((response) => {
           formControl.reset()
           let supervisions: Supervision[];
           if(this.selectedTask){
@@ -94,9 +96,18 @@ export class SupervisionWrapperComponent extends Destroy$ {
           this.supervisions = supervisions
           this.cd.markForCheck()
 
+          if(uploadImageAfter && photo){
+            this.store.dispatch(new UploadImageSupervision(photo, this.supervisions[this.supervisions.length - 1].id)).pipe(take(1)).subscribe(() => {
+              
+              // this.updatePageOnlyDate();
+              this.swipeMenuImage = false;
+              console.log('NEW SUPERVISION ', this.supervisions);
+              this.supervisions[this.supervisions.length - 1] = this.store.selectSnapshot(DataQueries.getById('Supervision', this.supervisions[this.supervisions.length - 1].id))! 
+            });
+          }
         })
-      } catch {
         // this.getUserDataService.emitDataChangeEvent()
+      } catch {
       }
     }
     this.cd.markForCheck()
@@ -121,20 +132,24 @@ export class SupervisionWrapperComponent extends Destroy$ {
     this.cd.markForCheck()
   }
 
-  async takePhoto() {
+  async takePhoto(input: HTMLTextAreaElement) {
     const photo = await Camera.getPhoto({
       allowEditing: true,
       resultType: CameraResultType.Base64,
       source: CameraSource.Camera,
     });
-    // this.store.dispatch(new UploadImageSupervision(photo, this.currentSupervisionId)).pipe(take(1)).subscribe(() => {
-      // this.date.supervisions
-      // this.updatePageOnlyDate();
-    //   this.swipeMenuImage = false;
-    // });
-  }
 
-  async selectPhoto() {
+    input.dispatchEvent(new Event("submit", {cancelable: true}))
+    const lastSupervision = this.supervisions[this.supervisions.length]
+    this.store.dispatch(new UploadImageSupervision(photo, lastSupervision.id)).pipe(take(1)).subscribe(() => {
+      
+      // this.updatePageOnlyDate();
+      this.swipeMenuImage = false;
+    });
+  }
+  
+  async selectPhoto(input: HTMLTextAreaElement, task: PostDetailGraphic| null, formGroup: FormGroup, formControlName: string) {
+    console.log('selectPhoto in');
     const photo = await Camera.getPhoto({
       resultType: CameraResultType.Base64,
       source: CameraSource.Photos,
@@ -144,8 +159,10 @@ export class SupervisionWrapperComponent extends Destroy$ {
       allowEditing: true,
       saveToGallery: true
     });
-
-    let acceptedFormat = ["jpeg", "png", "jpg", "bmp"];
+    console.log('photo exist');
+    console.log('supervision old ', this.supervisions);
+    this.onSubmit(task,formGroup,formControlName,input, true,photo)
+    // let acceptedFormat = ["jpeg", "png", "jpg", "bmp"];
     // if (acceptedFormat.includes(photo.format)) {
     //   this.store.dispatch(new UploadImageSupervision(photo, this.currentSupervisionId)).pipe(take(1)).subscribe(() => {
     //     // let supervisions = this.store.selectSnapshot(DataQueries.getMany('Supervision', this.mission!.supervisions))
