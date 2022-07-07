@@ -57,6 +57,7 @@ import { JsonpClientBackend } from "@angular/common/http";
         <form class="form-control section-host" [formGroup]="form">
           <div class="form-section">
             <h3 class="form-title">Infos personelles:</h3>
+            <h4 class="champs">Champs obligatoire pour optimiser votre profil <span class='star'>*</span></h4>
             <div class="form-input">
               <label>Nom du contact</label>
               <input
@@ -80,7 +81,7 @@ import { JsonpClientBackend } from "@angular/common/http";
               />
             </div>
             <div class="form-input">
-              <label>Fonction dans l'entreprise *</label>
+              <label>Fonction dans l'entreprise <span class='star'>*</span></label>
               <input
                 #input6
                 (click)="onClickInputScroll(input6)"
@@ -102,7 +103,7 @@ import { JsonpClientBackend } from "@angular/common/http";
               />
             </div>
             <div class="form-input">
-              <label>Téléphone de l'entreprise *</label>
+              <label>Téléphone de l'entreprise <span class='star'>*</span></label>
               <input
                 #input4
                 (click)="onClickInputScroll(input4)"
@@ -133,6 +134,7 @@ import { JsonpClientBackend } from "@angular/common/http";
         <form class="full-width form-control section-host" [formGroup]="form">
           <div class="form-section">
             <h3 class="form-title">Infos entreprise:</h3>
+            <h4 class="champs">Champs obligatoire pour optimiser votre profil <span class='star'>*</span></h4>
             <div class="form-input">
               <label>Nom de l'entreprise</label>
               <input
@@ -159,7 +161,7 @@ import { JsonpClientBackend } from "@angular/common/http";
             <!-- all elements are selected -->
             <div class="form-input metiers">
               <ng-container *ngIf="!addingField; else addfield_tpl">
-                <label>Activités</label>
+                <label>Activités <span class='star'>*</span></label>
                 <ng-container formArrayName="UserProfile.Company.JobForCompany">
                   <span
                     class="number form-element"
@@ -232,7 +234,7 @@ import { JsonpClientBackend } from "@angular/common/http";
             </div>
 
             <div class="form-input">
-              <label>Effectif de la boite</label>
+              <label>Effectif de la boite <span class='star'>*</span></label>
               <input
                 #input10
                 (click)="onClickInputScroll(input10)"
@@ -332,8 +334,9 @@ import { JsonpClientBackend } from "@angular/common/http";
         <form class="full-width form-control section-host" [formGroup]="form">
           <div class="form-section">
             <h3 class="form-title">Certifications & labels:</h3>
+            <h4 class="champs">Champs obligatoire pour optimiser votre profil <span class='starGreen'>*</span></h4>
             <div class="form-input">
-              <label>Vos labels</label>
+              <label>Vos labels <span class='starGreen'>*</span></label>
               <options
                 [options]="allLabels"
                 [value]="selectedLabels"
@@ -403,6 +406,19 @@ import { JsonpClientBackend } from "@angular/common/http";
         display: flex;
         flex-flow: column nowrap;
         flex-shrink: 0;
+      }
+
+      .champs {
+        font-size: small;
+        color: #A2A2A2;
+      }
+
+      .star {
+        color: #FFCA57;  
+      }
+
+      .starGreen {
+        color: #B9EDAF;
       }
 
       section {
