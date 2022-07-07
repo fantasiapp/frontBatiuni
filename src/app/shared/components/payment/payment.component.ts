@@ -7,6 +7,7 @@ import { loadStripe } from "@stripe/stripe-js";
 import { HttpService } from "src/app/services/http.service";
 import { environment } from "src/environments/environment";
 import { DataQueries } from "src/models/new/data.state";
+import { PopupService } from "../popup/popup.component";
 
 
 @Component({
@@ -49,6 +50,7 @@ export class Payment {
     private router: Router,
     private cd: ChangeDetectorRef,
     private store: Store,
+    private popup: PopupService
   ) {
     const navigation = this.router.getCurrentNavigation();
     if (navigation) {
