@@ -1,4 +1,4 @@
-import { DOCUMENT } from "@angular/common";
+import { DOCUMENT, Location } from "@angular/common";
 import { Component, ChangeDetectionStrategy, Input, Inject, ChangeDetectorRef } from "@angular/core";
 import { Router } from "@angular/router";
 import { Navigate } from "@ngxs/router-plugin";
@@ -50,7 +50,8 @@ export class Payment {
     private router: Router,
     private cd: ChangeDetectorRef,
     private store: Store,
-    private popup: PopupService
+    private popup: PopupService,
+    private location: Location,
   ) {
     const navigation = this.router.getCurrentNavigation();
     if (navigation) {
@@ -131,21 +132,45 @@ export class Payment {
     this.setLoading(true);
 
     const user = this.store.selectSnapshot(DataQueries.currentUser)
+
+    //get redirect URL
+    const urlTree = this.router.createUrlTree(['home']);
+    const path = this.location.prepareExternalUrl(urlTree.toString());
+    let returnUrl = window.location.origin + path;
+    console.log("return url", returnUrl)
+
     const { error } = await this.stripe.confirmPayment({
       elements: this.elements,
       confirmParams: {
-        return_url: "http://localhost:4200/home",
+        return_url: returnUrl,
         receipt_email: user.email,
       }
     })
 
+    console.log("error", error);
+
     if (error.type === "card_error" || error.type === "validation_error") {
-      console.log("erreur", error.messages)
+      this.showMessage(error.message)
     } else {
-      console.log("unexpected error")
+      this.showMessage("unexpected error")
     }
+
+    this.setLoading(false)
   }
 
+  showMessage(messageText: string) {
+    console.log("show message", messageText)
+    const messageContainer = document.querySelector("#payment-message")!;
+  
+    messageContainer.classList.remove("hidden");
+    messageContainer.textContent = messageText;
+  
+    console.log(messageContainer);
+    setTimeout(function () {
+      messageContainer.classList.add("hidden");
+      messageContainer.textContent = "";
+    }, 4000);
+  }
   // Show a spinner on payment submission
   setLoading(isLoading: boolean){
     if (isLoading) {
