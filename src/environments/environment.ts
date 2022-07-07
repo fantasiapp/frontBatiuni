@@ -1,6 +1,6 @@
 export const environment = {
   production: false,
-  backUrl: "https://batiuni.fantasiapp.tech:5004",
+  backUrl: "https://batiuni.fantasiapp.tech:5002",
   // backUrl: 'http://localhost:8000',
   version: "current",
   firebase: {
@@ -30,16 +30,16 @@ switch (environment.backUrl[environment.backUrl.length - 1]) {
     break;
   case "2":
     temp = {
-      boost3: "",
-      boost7: "",
-      boost0: "",
+      boost3: "prod_M0V2RzWQAHxQtX",
+      boost7: "prod_M0V3Ao15zvtPjL",
+      boost0: "prod_M0V3LGtyd1G8QX",
     };
     break;
   case "3":
     temp = {
-      boost3: "",
-      boost7: "",
-      boost0: "",
+      boost3: "prod_M0V7ybe5P6pl7Q",
+      boost7: "prod_M0V7dhGlCfSemw",
+      boost0: "prod_M0V8V6gkS4484n",
     };
     break;
   case "4":

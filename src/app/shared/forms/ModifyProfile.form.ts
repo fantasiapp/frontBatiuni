@@ -22,6 +22,7 @@ import { InfoService } from "../components/info/info.component";
 import { Store } from "@ngxs/store";
 import {
   DataQueries,
+  DataState,
   SnapshotAll,
   SnapshotArray,
 } from "src/models/new/data.state";
@@ -41,6 +42,7 @@ import { delay, getDirtyValues } from "../common/functions";
 import { Email } from "src/validators/persist";
 import { returnInputKeyboard } from '../common/classes'
 import { JsonpClientBackend } from "@angular/common/http";
+import { ActiveViewService } from "../services/activeView.service";
 
 @Component({
   selector: "modify-profile-form",
@@ -57,6 +59,7 @@ import { JsonpClientBackend } from "@angular/common/http";
         <form class="form-control section-host" [formGroup]="form">
           <div class="form-section">
             <h3 class="form-title">Infos personelles:</h3>
+            <h4 class="champs">Champs obligatoire pour optimiser votre profil <span class='star'>*</span></h4>
             <div class="form-input">
               <label>Nom du contact</label>
               <input
@@ -80,7 +83,7 @@ import { JsonpClientBackend } from "@angular/common/http";
               />
             </div>
             <div class="form-input">
-              <label>Fonction dans l'entreprise *</label>
+              <label>Fonction dans l'entreprise <span class='star'>*</span></label>
               <input
                 #input6
                 (click)="onClickInputScroll(input6)"
@@ -102,7 +105,7 @@ import { JsonpClientBackend } from "@angular/common/http";
               />
             </div>
             <div class="form-input">
-              <label>Téléphone de l'entreprise *</label>
+              <label>Téléphone de l'entreprise <span class='star'>*</span></label>
               <input
                 #input4
                 (click)="onClickInputScroll(input4)"
@@ -133,6 +136,7 @@ import { JsonpClientBackend } from "@angular/common/http";
         <form class="full-width form-control section-host" [formGroup]="form">
           <div class="form-section">
             <h3 class="form-title">Infos entreprise:</h3>
+            <h4 class="champs">Champs obligatoire pour optimiser votre profil <span class='star'>*</span></h4>
             <div class="form-input">
               <label>Nom de l'entreprise</label>
               <input
@@ -159,7 +163,7 @@ import { JsonpClientBackend } from "@angular/common/http";
             <!-- all elements are selected -->
             <div class="form-input metiers">
               <ng-container *ngIf="!addingField; else addfield_tpl">
-                <label>Activités</label>
+                <label>Activités <span class='star'>*</span></label>
                 <ng-container formArrayName="UserProfile.Company.JobForCompany">
                   <span
                     class="number form-element"
@@ -232,7 +236,7 @@ import { JsonpClientBackend } from "@angular/common/http";
             </div>
 
             <div class="form-input">
-              <label>Effectif de la boite</label>
+              <label>Effectif de la boite <span class='star'>*</span></label>
               <input
                 #input10
                 (click)="onClickInputScroll(input10)"
@@ -243,7 +247,7 @@ import { JsonpClientBackend } from "@angular/common/http";
             </div>
 
             <div class="form-input">
-              <label>Chiffres d'affaires</label>
+              <label>Chiffres d'affaires <span class='star'>*</span></label>
               <input
                 #input10
                 (click)="onClickInputScroll(input10)"
@@ -263,6 +267,18 @@ import { JsonpClientBackend } from "@angular/common/http";
                 class="form-element"
                 maxlength="11"
                 formControlName="UserProfile.Company.capital"
+              />
+            </div>
+
+            <div class="form-input" *ngIf="view == 'ST'">
+              <label>Taux horaire moyen</label>
+              <input
+                #input12
+                (click)="onClickInputScroll(input12)"
+                (keyup)="returnInputKeyboard($event, input12)"
+                class="form-element"
+                maxlength="11"
+                formControlName="UserProfile.Company.amount"
               />
             </div>
 
@@ -332,8 +348,9 @@ import { JsonpClientBackend } from "@angular/common/http";
         <form class="full-width form-control section-host" [formGroup]="form">
           <div class="form-section">
             <h3 class="form-title">Certifications & labels:</h3>
+            <h4 class="champs">Champs obligatoire pour optimiser votre profil <span class='starGreen'>*</span></h4>
             <div class="form-input">
-              <label>Vos labels</label>
+              <label>Vos labels <span class='starGreen'>*</span></label>
               <options
                 [options]="allLabels"
                 [value]="selectedLabels"
@@ -403,6 +420,19 @@ import { JsonpClientBackend } from "@angular/common/http";
         display: flex;
         flex-flow: column nowrap;
         flex-shrink: 0;
+      }
+
+      .champs {
+        font-size: small;
+        color: #A2A2A2;
+      }
+
+      .star {
+        color: #FFCA57;  
+      }
+
+      .starGreen {
+        color: #B9EDAF;
       }
 
       section {
@@ -517,6 +547,7 @@ export class ModifyProfileForm {
   companyJobs!: JobForCompany[];
   selectedJobs!: Label[];
   initialSelectedJobs!: Label[];
+  view = this.store.selectSnapshot(DataState.view)
 
   companyFiles!: File[];
 
@@ -599,8 +630,6 @@ export class ModifyProfileForm {
   
   reload() {
     this.allLabels = this.store.selectSnapshot(DataQueries.getAll('Label'))
-    console.log('LabelNew', this.store.selectSnapshot(DataQueries.getAll('LabelNew')))
-    console.log('allLabels', this.allLabels, this.store.selectSnapshot(DataQueries.getById('Label', 1)));
     const { user, company } = this.profile as { user: User; company: Company };
     this.companyFiles = this.store.selectSnapshot(DataQueries.getMany("File", this.profile.company.files));
     this.companyLabels = this.store.selectSnapshot(DataQueries.getMany("LabelForCompany", this.profile.company.labels));

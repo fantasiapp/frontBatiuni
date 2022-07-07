@@ -51,11 +51,12 @@ export class NavigationMenu extends Destroy$ {
       Kbis = files.filter(file => file.name == 'Kbis') 
     }
     if (route == 'make' && Kbis.length == 0){
-      this.popup.missKbis('PME')
+      this.popup.missKbis('Créer une annonce')
       route = menu[3].route
     } 
-    else if (view == 'ST' && route == '' && Kbis.length == 0){
-      this.popup.missKbis('PME')
+    else if (view == 'ST' && (route == '' || route == 'availabilities') && Kbis.length == 0){
+      if (route == '') {this.popup.missKbis('Annonces qui peuvent vous intéresser')}
+      if (route == 'availabilities') {this.popup.missKbis('Mes disponibilités')}
       route = menu[3].route
     }
     this.routeChange.emit(route);

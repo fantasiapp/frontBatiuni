@@ -1,10 +1,13 @@
 import { DOCUMENT } from "@angular/common";
-import { Component, ChangeDetectionStrategy, Input, Inject } from "@angular/core";
+import { Component, ChangeDetectionStrategy, Input, Inject, ChangeDetectorRef } from "@angular/core";
 import { Router } from "@angular/router";
 import { Navigate } from "@ngxs/router-plugin";
+import { Store } from "@ngxs/store";
 import { loadStripe } from "@stripe/stripe-js";
 import { HttpService } from "src/app/services/http.service";
 import { environment } from "src/environments/environment";
+import { DataQueries } from "src/models/new/data.state";
+import { PopupService } from "../popup/popup.component";
 
 
 @Component({
@@ -25,10 +28,29 @@ export class Payment {
 
   state: any;
 
+  _product: string = "";
+  get product(){
+    return this._product;
+  }
+  set product(_product){
+    this._product = _product
+  }
+
+  _price: number = 0;
+  get price(){
+    return this._price;
+  }
+  set price(_price){
+    this._price = _price
+  }
+
   constructor(
     private http: HttpService,
     @Inject(DOCUMENT) private document: Document,
-    private router: Router
+    private router: Router,
+    private cd: ChangeDetectorRef,
+    private store: Store,
+    private popup: PopupService
   ) {
     const navigation = this.router.getCurrentNavigation();
     if (navigation) {
@@ -69,11 +91,27 @@ export class Payment {
 
   // Fetches a payment intent and captures the client secret
   initialize() {
-    const req = this.http.post("payment", {'action':'createPaymentIntent', 'product': this.state.product});
+    const req = this.http.post("payment", {
+                      'action':'createPaymentIntent', 
+                      'product': this.state.product,
+                      'post': this.state.post,
+                      'duration': this.state.duration
+                    });
     console.log("requete")
     req.subscribe((response: any) => {
       console.log("response", response)
-      if (response['createPaymentIntent'] !== "OK") this.router.navigate(['home'])
+      if (response['createPaymentIntent'] !== "OK") { 
+        console.log("error, navigate home")
+        this.router.navigate(['home'])
+      } 
+      this.product = response['productName'];
+      this.price = response['price']/100;
+
+
+      console.log("productName", this.product)
+      console.log("price", this.price)
+
+      this.cd.markForCheck();
       let clientSecret = response.clientSecret
 
       console.log("client secret", clientSecret);
@@ -92,10 +130,12 @@ export class Payment {
     e.preventDefault();
     this.setLoading(true);
 
+    const user = this.store.selectSnapshot(DataQueries.currentUser)
     const { error } = await this.stripe.confirmPayment({
       elements: this.elements,
       confirmParams: {
-        return_url: "http://localhost:4200/home"
+        return_url: "http://localhost:4200/home",
+        receipt_email: user.email,
       }
     })
 
