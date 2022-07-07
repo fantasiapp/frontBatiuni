@@ -1,9 +1,10 @@
-<div class="comment-provider" [ngClass]="{'comment-reverse': reverseComment}">
+<div class="comment-provider font-Poppins" [ngClass]="{'comment-reverse': reverseComment}">
   <profile-image class="user-image" [profile]="supervision.companyId"></profile-image>
 
   <div class="comment-box">
     <div class="user-info">
       <span class="user-name">{{supervision.author}}</span>
+      <span class="user-timestamp">Le {{ timestamp.date }} à {{ timestamp.hour}}</span>
       <!-- <span class="post-date">Le {{supervision.date}}</span> -->
     </div>
     <div class="suivi-comment">

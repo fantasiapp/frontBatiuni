@@ -43,7 +43,8 @@ export class UIComment {
     // Supervisions: [],
     comment: "Lorem ipsum dolor sit amet",
     date: '11-11-2022',
-    files: []
+    files: [],
+    timestamp: 0
   };
 
   @QueryProfile()

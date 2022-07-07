@@ -27,15 +27,20 @@
 .user-info{
   display: flex;
   align-items: center;
+  flex-direction: column;
   span {
     display: inline-block;
-  }
-  .user-name{
-    font-weight: 500;
     margin-right: auto;
   }
-  .post-date{
-    font-weight: 200;
+  .user-name{
+    color: $primary;
+    font-weight: 500;
+  }
+  .user-timestamp{
+    font-size: 14px;
+    font-weight: 400;
+    margin-top: -0.2rem;
+    margin-bottom: 0.5rem;
   }
 
   img {
