@@ -9,12 +9,12 @@ import { SnapshotAll } from "src/models/new/data.state";
   template: `
     <ng-container [ngSwitch]="activeView">
       <form class="form-control full-width" [formGroup]="filterForm">
+
         <div class="form-input">
-          <label>Date de mission</label>
-          <div class="flex row space-between">
-            <label>À partir de : </label>
-            <input type="date" class="form-element" formControlName="date"/>
-            <img src="assets/calendar.png"/>
+          <label>Date de démarrage</label>
+          <div class="form-input flex row space-between">
+            <input type="date" style="padding-left: 0.5rem;" class="form-element" formControlName="date" #inputDateMission/>
+            <img src="assets/calendar.png" (click)="inputDateMission.select()" class="img-calendar-since" style="pointer-events: none;"/>
           </div>
         </div>
 
@@ -76,10 +76,6 @@ import { SnapshotAll } from "src/models/new/data.state";
     :host {
       display: block;
       width: 100%;
-    }
-
-    form {
-      
     }
 
     .form-title {

@@ -214,6 +214,7 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
         content: [scannedImages[0] as string],
       };
     }
+    if (this.value?.nature == "admin") {this.popup.newFile(this.filename, this);}
   }
 
   onFileInputClicked(e: Event) {

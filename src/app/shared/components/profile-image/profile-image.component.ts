@@ -93,7 +93,7 @@ export class UIProfileImageComponent extends Destroy$ {
       }
       return null
     })
-    const levelStart = company.amount && company.address && company.companyPhone && company.siret && company.jobs
+    const levelStart = company.revenue && company.address && company.companyPhone && company.siret && company.jobs
     let step = "start"
     if (levelStart) {
       step = "beginner"

@@ -749,14 +749,14 @@ export class PopupService {
     }
   }
 
-  missKbis(actualView: string) {
+  missKbis(phrase: string) {
 
     let first: boolean = true;
     const closed$ = new Subject<void>();
 
     const context = {
       $implicit: {
-        actualView: actualView,
+        phrase: phrase,
         isActive: false,
       },
     };
