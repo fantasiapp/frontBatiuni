@@ -70,7 +70,8 @@ export const EmployeesSliderConfig: Options = {
   floor: 0,
   ceil: 100,
   translate(value: number): string{
-    if (value == 0 || value == 1) return value + " employé"
+    if (value == 0) return value + ""
+    if (value == 1) return value + "employé"
     return (value == 100 ? value + "+" : value)+" employés"
   }
 }
