@@ -290,11 +290,7 @@ export class HomeComponent extends Destroy$ {
 
   selectDraft(filter: any) {
     this.userDrafts = [];
-    this.allUserDrafts.sort((post1, post2) => {
-      let b1 = post1.boostTimestamp > this.time ? 1 : 0;
-      let b2 = post2.boostTimestamp > this.time ? 1 : 0;
-      return b2 - b1
-    })
+    this.allUserDrafts.sort((a: any, b: any) =>(b['id']) - (a['id']))
     if (filter == null) {
       this.userDrafts = this.allUserDrafts;
     } else {
@@ -308,7 +304,7 @@ export class HomeComponent extends Destroy$ {
       } 
 
       // Trie brouillons les plus anciens
-      if (filter.sortDraftDate === true) {this.allUserDrafts.sort((a: any, b: any) => Date.parse(a['creationDate']) - Date.parse(b['creationDate']))} 
+      if (filter.sortDraftDate === true) {this.allUserDrafts.sort((a: any, b: any) =>(a['id']) - (b['id']))} 
 
       // Trie les brouillons les plus complets (selon leurs details + nb de documents)
       let detailPost: any = []; 
@@ -322,7 +318,7 @@ export class HomeComponent extends Destroy$ {
       }
 
       for (let post of this.allUserDrafts) {
-
+        console.log(post, post.creationDate)
         let isDifferentDate = (filter.date && post.startDate < filter.date)
         let isDifferentManPower = (filter.manPower && post.manPower != (filter.manPower === "true"))
         let isNotIncludedJob = (filter.jobs && filter.jobs.length && filter.jobs.every((job: any) => {return job.id != post.job}))
