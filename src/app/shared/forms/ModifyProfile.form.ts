@@ -40,6 +40,7 @@ import { DeleteFile, DeleteLabel, ModifyUserProfile } from "src/models/new/user/
 import { delay, getDirtyValues } from "../common/functions";
 import { Email } from "src/validators/persist";
 import { returnInputKeyboard } from '../common/classes'
+import { JsonpClientBackend } from "@angular/common/http";
 
 @Component({
   selector: "modify-profile-form",
@@ -611,7 +612,11 @@ export class ModifyProfileForm {
       );
       if (used) {
         jobMapping.set(used.id, job);
-        this.selectedJobs.push(job);
+        this.selectedJobs.push({
+          id: job.id,
+          name: job.name,
+          filename: ''} as Label
+          );
       }
     });
     this.initialSelectedJobs = this.selectedJobs;
@@ -730,7 +735,13 @@ export class ModifyProfileForm {
       );
     }
 
-    this.selectedJobs = jobOptions;
+    this.selectedJobs = jobOptions.map(job => {
+      return ({
+      id: job.id,
+      name: job.name,
+      filename: ''
+    } as Label)
+  });
     jobControl.markAsDirty();
   }
 
@@ -774,7 +785,13 @@ export class ModifyProfileForm {
       }
     }
 
-    this.selectedLabels = labelOptions;
+    this.selectedJobs = labelOptions.map(job => {
+      return ({
+      id: job.id,
+      name: job.name,
+      filename: ''
+    } as Label)
+  });
     labelControl.markAsDirty();
   }
 

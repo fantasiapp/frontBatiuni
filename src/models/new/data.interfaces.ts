@@ -23,6 +23,7 @@ export type Role = {
 export type Label = {
   id: Ref<Label>;
   name: string;
+  filename: string;
 };
 
 export interface User {
