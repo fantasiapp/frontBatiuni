@@ -5,7 +5,7 @@
 
     <ng-template #image>
       <ng-container *ngFor="let safeUrl of fileContext.safeUrl" >
-        <img class="embedded-image" [src]="safeUrl" (click)="openModalImage(safeUrl)"/>
+        <img class="embedded-image" [src]="safeUrl" (dblclick)="openModalImage(safeUrl)"/>
       </ng-container>
     </ng-template>
 
