@@ -2,6 +2,9 @@
     <script src="https://js.stripe.com/v3/"></script>
 </head>
 <div *ngIf="this.state">
+    <div *ngIf="this.product">
+        <span>{{product}} {{price}} €</span>
+    </div>
     <form id="payment-form">
         <div id="payment-element">
             <!--Stripe.js injects the Payment Element-->

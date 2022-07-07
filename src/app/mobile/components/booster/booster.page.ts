@@ -36,16 +36,16 @@ export class BoosterPage {
   }
 
   openPayment() {
-    let navigationExtras: NavigationExtras = {};
+    let navigationExtras: NavigationExtras = {state: {post: this.post.id, duration: parseInt(this.selected)}};
     switch (this.selected){
       case "3":
-        navigationExtras = {state: {product: productList.boost3}}
+        navigationExtras.state!.product = productList.boost3;
         break;
       case "7":
-        navigationExtras = {state: {product: productList.boost7}}
+        navigationExtras.state!.product = productList.boost7;
         break;
       case "0":
-        navigationExtras = {state: {product: productList.boost0}}
+        navigationExtras.state!.product = productList.boost0;
         break;
     }
     this.slideService.hide();
