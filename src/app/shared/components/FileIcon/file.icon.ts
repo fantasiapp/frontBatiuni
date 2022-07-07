@@ -40,7 +40,10 @@ import { DataQueries, SnapshotAll } from "src/models/new/data.state";
   `,
   styles: [`
     :host { 
-      display: inline-block; 
+      /* display: inline-block;  */
+      display:flex;
+      flex-direction: column;
+      justify-content: center;
       position: relative;
       /* display: block !important; */
     }

@@ -599,8 +599,6 @@ export class ModifyProfileForm {
   
   reload() {
     this.allLabels = this.store.selectSnapshot(DataQueries.getAll('Label'))
-    console.log('LabelNew', this.store.selectSnapshot(DataQueries.getAll('LabelNew')))
-    console.log('allLabels', this.allLabels, this.store.selectSnapshot(DataQueries.getById('Label', 1)));
     const { user, company } = this.profile as { user: User; company: Company };
     this.companyFiles = this.store.selectSnapshot(DataQueries.getMany("File", this.profile.company.files));
     this.companyLabels = this.store.selectSnapshot(DataQueries.getMany("LabelForCompany", this.profile.company.labels));

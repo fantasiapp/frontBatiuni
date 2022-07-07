@@ -146,11 +146,12 @@ export class DataState {
   @Action(GetGeneralData)
   getGeneralData(ctx: StateContext<DataModel>) {
     if(this.isFirstTime){
-      console.log("getGeneralData")
       const req = this.http.get("initialize", {action: "getGeneralData",})
 
       return req.pipe(tap((response: any) => {
+        console.log('getGeneralData', response);
         const operations = this.reader.readStaticData(response);
+        // ctx.setState(compose(...operations));
         ctx.setState(compose(...operations));
       }))
     }

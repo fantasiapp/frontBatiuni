@@ -33,6 +33,7 @@ const ReverseMapping = {
   role: "Role",
   job: "Job",
   label: "Label",
+  labelNew: 'LabelNew',
   user: "UserProfile",
   company: "Company",
   files: "File",
@@ -115,10 +116,14 @@ export class DataReader {
   }
 
   readStaticData(data: any) {
+    
     const suffix = "Values",
-      keys = Object.keys(data),
+      keys = Object.keys(data).filter(key => key.endsWith('Values')),
       names = keys.map((key) => key.slice(0, -suffix.length)) as DataTypes[],
-      operations = names.map((name, i) => addValues(name, data[keys[i]]));
+      operations = names.map((name, i) => {
+        const records = data.hasOwnProperty(name + 'Fields') ? data[name+'Fields']: ['name']
+        return addRecord(name, records,data[keys[i]])
+      });
 
     return operations;
   }
