@@ -2,9 +2,11 @@ import { DOCUMENT } from "@angular/common";
 import { Component, ChangeDetectionStrategy, Input, Inject, ChangeDetectorRef } from "@angular/core";
 import { Router } from "@angular/router";
 import { Navigate } from "@ngxs/router-plugin";
+import { Store } from "@ngxs/store";
 import { loadStripe } from "@stripe/stripe-js";
 import { HttpService } from "src/app/services/http.service";
 import { environment } from "src/environments/environment";
+import { DataQueries } from "src/models/new/data.state";
 
 
 @Component({
@@ -46,6 +48,7 @@ export class Payment {
     @Inject(DOCUMENT) private document: Document,
     private router: Router,
     private cd: ChangeDetectorRef,
+    private store: Store,
   ) {
     const navigation = this.router.getCurrentNavigation();
     if (navigation) {
@@ -86,7 +89,12 @@ export class Payment {
 
   // Fetches a payment intent and captures the client secret
   initialize() {
-    const req = this.http.post("payment", {'action':'createPaymentIntent', 'product': this.state.product});
+    const req = this.http.post("payment", {
+                      'action':'createPaymentIntent', 
+                      'product': this.state.product,
+                      'post': this.state.post,
+                      'duration': this.state.duration
+                    });
     console.log("requete")
     req.subscribe((response: any) => {
       console.log("response", response)
@@ -120,10 +128,12 @@ export class Payment {
     e.preventDefault();
     this.setLoading(true);
 
+    const user = this.store.selectSnapshot(DataQueries.currentUser)
     const { error } = await this.stripe.confirmPayment({
       elements: this.elements,
       confirmParams: {
-        return_url: "http://localhost:4200/home"
+        return_url: "http://localhost:4200/home",
+        receipt_email: user.email,
       }
     })
 
