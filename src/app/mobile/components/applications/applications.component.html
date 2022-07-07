@@ -21,7 +21,7 @@
 </offer>
 
 <swipeup [(open)]="openAdFilterMenu" type="view">
-    <application-filter-form [callbackFilter]="callbackFilter" view></application-filter-form>
+    <application-filter-form (closeFilter)="openAdFilterMenu = false" [callbackFilter]="callbackFilter" view></application-filter-form>
 </swipeup>
 
 <slidemenu [(open)]="postMenu.open" [header]="false" #slideOnlinePost> 

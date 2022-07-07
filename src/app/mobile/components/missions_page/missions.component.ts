@@ -165,7 +165,7 @@ export class MissionsComponent extends Destroy$ {
     if (headerActiveView == 0){
       this.searchbar.resetSearch()
       this.viewList = true;
-      this.filterMission.resetFilter();
+      this.filterMission.onResetFilter();
       this.filterOn = false;
     }  
     if (headerActiveView == 1) {
@@ -174,7 +174,7 @@ export class MissionsComponent extends Destroy$ {
       this.filterOn = false;
     }    
   }
-
+  
   isFilterOn(filter: any){
     if (filter.address == "" && filter.isClosed == false && filter.jobs.length == 0 && filter.manPower == null && filter.missionDate == "" && filter.sortMissionDate == false && filter.unread == false && filter.validationDate == ""){
       this.filterOn = false;
@@ -182,6 +182,8 @@ export class MissionsComponent extends Destroy$ {
       this.filterOn = true;
       // this.info.show("info","Vos filtres ont été appliqués", 1000);
     }
+    console.log('this.filterOn', this.filterOn);
+    this.cd.markForCheck()
   }
 
   callbackFilter = (filter: any): void => {
@@ -316,7 +318,7 @@ export class MissionsComponent extends Destroy$ {
 
     // reset searchbar
     this.searchbar.resetSearch()
-    this.filterMission.resetFilter()
+    this.filterMission.onResetFilter()
     this.filterOn= false;
 
   }

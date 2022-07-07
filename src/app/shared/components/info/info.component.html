@@ -1,4 +1,5 @@
 <div class="cover-parent" [class]="type">
-  <img *ngIf="type" [src]="'assets/icons/' + type + '.png'"/>
-  {{content}}
+  <span class="cover-child1"> &nbsp; <img *ngIf="type" [src]="'assets/icons/' + type + '.png'"/> {{content}} </span>
+
+  <!-- <span class="cover-child2"> &nbsp; <img *ngIf="type" [src]="'assets/icons/' + type + '.png'"/> {{content}} </span>  -->
 </div>

@@ -461,7 +461,7 @@ export class HomeComponent extends Destroy$ {
       this.filterOn = false;
     } else {
       this.filterOn = true;
-      this.info.show("info","Vos filtres ont été appliqués", 3000);
+      // this.info.show("info","Vos filtres ont été appliqués", 3000);
     }
     this.cd.markForCheck;
   }
@@ -470,17 +470,17 @@ export class HomeComponent extends Destroy$ {
    
     if(this.view == 'PME'){
       if (headerActiveView == 0){
-        this.filterPME.resetFilter()
+        this.filterPME.onResetFilter()
         this.searchbar.resetSearch()
         this.filterOn = false;
       }  
       if (headerActiveView == 1) {
-        this.filterPME.resetFilter()
+        this.filterPME.onResetFilter()
         this.searchbar.resetSearch()
         this.filterOn = false;
       }    
       if (headerActiveView == 2) {
-        this.filterPME.resetFilter()
+        this.filterPME.onResetFilter()
         this.searchbar.resetSearch()
         this.filterOn = false;
       }
@@ -891,7 +891,7 @@ export class HomeComponent extends Destroy$ {
     // reset filter PME
     this.view$.subscribe((view)=>{
       if(view=='PME'){
-        this.filterPME.resetFilter()
+        this.filterPME.onResetFilter()
         this.filterOn = false;
     }})
 
@@ -915,7 +915,7 @@ export class HomeComponent extends Destroy$ {
 
     // reset searchbar
     this.searchbar.resetSearch()
-    this.filterPME.resetFilter()
+    this.filterPME.onResetFilter()
     this.filterOn = false;
   
   }

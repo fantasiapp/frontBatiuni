@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, OnInit, QueryList, ViewChildren } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output, QueryList, ViewChildren } from "@angular/core";
 import { FormControl, FormGroup} from "@angular/forms";
 import { Store } from "@ngxs/store";
 import { Job, Post } from "src/models/new/data.interfaces";
@@ -60,6 +60,10 @@ import { returnInputKeyboard } from '../common/classes'
               <span class="criteria" (click)="sortMissionDate.onChangeCall()">Date de mission de la plus proche à la plus lointaine</span> 
               <switch class="default" formControlName="sortMissionDate" #sortMissionDate></switch>
             </div>
+        </div>
+        <div class="action-button-filter flex row space space-between full-width">
+          <button class="button passive" (click)="onResetFilter()">Reinitialiser</button>
+          <button class="button active" (click)="onCloseFilter()">Valider</button>
         </div>
     </form>
   `,
@@ -131,6 +135,20 @@ export class ApplicationForm extends Filter<Post>  {
       });
     }
 
+    onResetFilter() {
+      this.filterForm.get('postulationDate')?.patchValue('')
+      this.filterForm.get('missionDate')?.patchValue('')
+      this.filterForm.get('address')?.patchValue('')
+      this.filterForm.get('jobs')?.patchValue([])
+      this.filterForm.get('manPower')?.patchValue(undefined)
+      this.filterForm.get('sortPostDate')?.patchValue(false)
+      this.filterForm.get('sortMissionDate')?.patchValue(false)
+    }
+
+    @Output() closeFilter = new EventEmitter()
+    onCloseFilter(){
+      this.closeFilter.next()
+    } 
     returnInputKeyboard = returnInputKeyboard
 
 }    

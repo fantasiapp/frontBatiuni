@@ -55,7 +55,7 @@ import "hammerjs"
 
     <div class="form-input">
       <label>Dans un rayon autour de</label>
-      <ngx-slider [(value)]=valueDistance [options]="imports.DistanceSliderConfig" formControlName="radius" (userChange)="detectChanges()"></ngx-slider>
+      <ngx-slider [(value)]='valueDistance' [options]="imports.DistanceSliderConfig" formControlName="radius" (userChange)="detectChanges()"></ngx-slider>
     </div>
 
     <div class="form-input">
@@ -124,6 +124,10 @@ import "hammerjs"
             formControlName="startDateSort"
             #switch2
           ></switch>
+        </div>
+        <div class="action-button-filter  flex row space space-between full-width">
+          <button class="button passive" (click)="resetFilter()">Reinitialiser</button>
+          <button class="button active" (click)="onCloseFilter()">Valider</button>
         </div>
       </div>
     </form>
@@ -376,15 +380,31 @@ export class STFilterForm {
       this.filterOnST.emit(false)
     } else {
       this.filterOnST.emit(true);
-      this.info.show("info","Vos filtres ont été appliqués", 3000);
+      // this.info.show("info","Vos filtres ont été appliqués", 3000);
     }
     this.cd.markForCheck;
   }
 
-  // resetFilter(){
-  //   this.filterForm.reset();
-  //   this.filterForm.get('radius')?.setValue(2000)
-  // }
+  resetFilter(){
+    this.filterForm.get('date')?.reset()
+    this.filterForm.get('address')?.reset()
+    this.filterForm.get('radius')?.patchValue(2000)
+    this.filterForm.get('jobs')?.patchValue([])
+    this.filterForm.get('salary')?.patchValue([0,100000])
+    this.filterForm.get('manPower')?.patchValue(null)
+    this.filterForm.get('employees')?.patchValue([0,100])
+    this.filterForm.get('viewed')?.patchValue(false)
+    this.filterForm.get('favorite')?.patchValue(false)
+    this.filterForm.get('candidate')?.patchValue(false)
+    this.filterForm.get('counterOffer')?.patchValue(false)
+    this.filterForm.get('dueDateSort')?.patchValue(false)
+    this.filterForm.get('startDateSort')?.patchValue(false)
+  }
+
+  @Output() closeFilter = new EventEmitter()
+  onCloseFilter() {
+    this.closeFilter.next()
+  }
 
   detectChanges() {
     this.cd.detectChanges();

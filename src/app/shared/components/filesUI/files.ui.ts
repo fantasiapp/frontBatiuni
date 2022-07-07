@@ -166,6 +166,7 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
       allowEditing: false,
       resultType: CameraResultType.Base64,
       source: CameraSource.Photos,
+      quality: 60
     });
 
     console.log('take photo', photo.path);
@@ -213,6 +214,7 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
         content: [scannedImages[0] as string],
       };
     }
+    if (this.value?.nature == "admin") {this.popup.newFile(this.filename, this);}
   }
 
   onFileInputClicked(e: Event) {

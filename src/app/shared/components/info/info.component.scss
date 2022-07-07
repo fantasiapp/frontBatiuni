@@ -5,33 +5,78 @@
 
 :host {
   display: block;
-  // overflow: hidden;
   position: fixed;
   @include with-set-safe-area(top, top, $sticky-header-height);
   z-index: 100000;
-  width: 100vw;
+  bottom: 0;
+  width: 100%;
   height: $info-height;
   //animation
   background-color: transparent;
   will-change: background-color;
   transition: background-color 150ms linear 0s;
 
+  //events
+  pointer-events: none;
+
+  // > div {
+  //   display: flex;
+  //   justify-content: center;
+  //   align-items: center
+  // }
+}
+
+.cover-parent {
+  overflow: hidden; 
+  margin:0 auto;
+  white-space: nowrap;   
+   
   //font
   font-family: "Roboto";
   font-weight: 200;
   line-height: $info-height;
   text-align: center;
   color: white;
-
-  //events
-  pointer-events: none;
-
-  > div {
-    display: flex;
-    justify-content: center;
-    align-items: center
-  }
 }
+
+// .cover-child1 {
+//   display: inline-block;                /* modèle de boîte en ligne */
+//   padding-right: 1em;                   /* un peu d'espace pour la transition */
+//   -webkit-animation: defilement-rtl 20s linear infinite;
+//   animation: defilement-rtl 20s infinite linear;
+// }
+
+// .cover-child2 {
+//   display: inline-block;                /* modèle de boîte en ligne */
+//   padding-right: 1em;                   /* un peu d'espace pour la transition */
+//   -webkit-animation: defilement-rtl2 20s linear infinite;
+//   animation: defilement-rtl2 20s infinite linear;
+//   animation-delay: 10s;
+// }
+
+// @keyframes defilement-rtl {
+//   0% {transform: translateX(100%);
+//     -webkit-transform: translateX(100%);}
+//   100% {transform: translateX(-100%);
+//       -webkit-transform: translateX(-100%);}
+// }
+
+// @keyframes defilement-rtl2 {
+//   0% {transform: translateX(0%);
+//       -webkit-transform: translateX(0%);}
+//     100% {transform: translateX(-200%);
+//         -webkit-transform: translateX(-200%);}
+// }
+
+// @-webkit-keyframes defilement-rtl {
+//   0% {-webkit-transform: translateX(100%);}
+//     100% {-webkit-transform: translateX(-100%);}
+// }
+
+// @-webkit-keyframes defilement-rtl2 {
+//   0% {-webkit-transform: translateX(0%);}
+//     100% {-webkit-transform: translateX(-200%);}
+// }
 
 
 $icon-size: 16px;
@@ -40,7 +85,7 @@ img {
   // left: 40px;
   width: $icon-size;
   height: $icon-size;
-  // top: math.div($info-height - $icon-size, 2);
+  // padding-top: math.div($info-height - $icon-size, 2);
   margin-right: 0.5rem;
   filter: invert(1);
 }

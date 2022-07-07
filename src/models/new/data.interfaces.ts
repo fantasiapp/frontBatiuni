@@ -23,6 +23,7 @@ export type Role = {
 export type Label = {
   id: Ref<Label>;
   name: string;
+  filename: string;
 };
 
 export interface User {
@@ -71,6 +72,7 @@ export interface Company {
   amount: number;
   saturdayDisponibility: boolean
   allQualifications : boolean
+  stripeCustomerId: string;
   Notification: Ref<Notification>[]
 };
 
@@ -205,8 +207,8 @@ export interface Recommandation {
   securityComment: string;
   organisationStars: number;
   organisationComment: string;
-  LastWorksiteDate: string;
-  view: 'PME' | 'ST'
+  lastWorksiteDate: string;
+  view: number
 }
 
 export type Notification = {

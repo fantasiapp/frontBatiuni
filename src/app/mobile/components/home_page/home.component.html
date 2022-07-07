@@ -89,6 +89,7 @@
     <swipeup [open]="openAdFilterMenu" (openChange)="closeAdFilterMenu($event)" type="view">
       <ng-container *ngIf="view == 'PME'; else stfilter" view>
         <pme-filter-form
+          (closeFilter)="openAdFilterMenu = false"
           [activeView]="activeView"
           [callbackFilter]="callbackFilter"
         ></pme-filter-form>
@@ -99,6 +100,7 @@
           [time]="time"
           [posts]="allOnlinePosts"
           (filterOnST)="updateFilterOnST($event)"
+          (closeFilter)="openAdFilterMenu = false"
           ></st-filter-form>
       </ng-template>
     </swipeup>
@@ -262,8 +264,9 @@
     [showSwitch]="false"
     [showRecomandation]="false"
     [showView]="'ST'"
+    style="position: relative; z-index: 1;"
   ></extended-profile>
-  <footer class="sticky-footer flex center-cross application background-white">
+  <footer class="sticky-footer flex center-cross application background-white" style="z-index: 2;">
     <button
       class="button active full-width"
       (click)="handleApplication(post, application)"

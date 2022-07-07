@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, In
 import { Select, Store } from "@ngxs/store";
 import { Observable, Subscriber } from "rxjs";
 import * as UserActions from "src/models/new/user/user.actions";
-import { Camera, CameraResultType, CameraSource } from "@capacitor/camera";
+import { Camera, CameraResultType, CameraSource, Photo } from "@capacitor/camera";
 import { UISlideMenuComponent } from "../../../shared/components/slidemenu/slidemenu.component";
 import { Logout } from "src/models/auth/auth.actions";
 import { InfoService } from "src/app/shared/components/info/info.component";
@@ -226,13 +226,24 @@ export class ProfileComponent extends Destroy$ {
       resultType: CameraResultType.Base64,
       source: CameraSource.Photos,
     });
-
+    console.log("photo", photo)
     this.store.dispatch(new UserActions.ChangeProfilePicture(photo, 'image')).subscribe(() => {
       this.updateProfile();
       this.cd.markForCheck();
     });
     this.openModifyPicture = false;
     this.info.show("info", "Votre photo de profil a bien été enregistrée", 3000)
+  }
+
+  async deletePhoto() {
+    const photo: Photo = {format:'jpeg', saved: false}
+
+    this.store.dispatch(new UserActions.ChangeProfilePicture(photo, 'image')).subscribe(() => {
+      this.updateProfile();
+      this.cd.markForCheck();
+    });
+    this.openModifyPicture = false;
+    this.info.show("info", "Votre photo de profil a bien été supprimée", 3000)
   }
 
   openApplicationsMenu(){

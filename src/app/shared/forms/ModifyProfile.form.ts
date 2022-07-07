@@ -40,6 +40,7 @@ import { DeleteFile, DeleteLabel, ModifyUserProfile } from "src/models/new/user/
 import { delay, getDirtyValues } from "../common/functions";
 import { Email } from "src/validators/persist";
 import { returnInputKeyboard } from '../common/classes'
+import { JsonpClientBackend } from "@angular/common/http";
 
 @Component({
   selector: "modify-profile-form",
@@ -56,6 +57,7 @@ import { returnInputKeyboard } from '../common/classes'
         <form class="form-control section-host" [formGroup]="form">
           <div class="form-section">
             <h3 class="form-title">Infos personelles:</h3>
+            <h4 class="champs">Champs obligatoire pour optimiser votre profil <span class='star'>*</span></h4>
             <div class="form-input">
               <label>Nom du contact</label>
               <input
@@ -79,7 +81,7 @@ import { returnInputKeyboard } from '../common/classes'
               />
             </div>
             <div class="form-input">
-              <label>Fonction dans l'entreprise *</label>
+              <label>Fonction dans l'entreprise <span class='star'>*</span></label>
               <input
                 #input6
                 (click)="onClickInputScroll(input6)"
@@ -101,7 +103,7 @@ import { returnInputKeyboard } from '../common/classes'
               />
             </div>
             <div class="form-input">
-              <label>Téléphone de l'entreprise *</label>
+              <label>Téléphone de l'entreprise <span class='star'>*</span></label>
               <input
                 #input4
                 (click)="onClickInputScroll(input4)"
@@ -132,6 +134,7 @@ import { returnInputKeyboard } from '../common/classes'
         <form class="full-width form-control section-host" [formGroup]="form">
           <div class="form-section">
             <h3 class="form-title">Infos entreprise:</h3>
+            <h4 class="champs">Champs obligatoire pour optimiser votre profil <span class='star'>*</span></h4>
             <div class="form-input">
               <label>Nom de l'entreprise</label>
               <input
@@ -158,7 +161,7 @@ import { returnInputKeyboard } from '../common/classes'
             <!-- all elements are selected -->
             <div class="form-input metiers">
               <ng-container *ngIf="!addingField; else addfield_tpl">
-                <label>Activités</label>
+                <label>Activités <span class='star'>*</span></label>
                 <ng-container formArrayName="UserProfile.Company.JobForCompany">
                   <span
                     class="number form-element"
@@ -231,7 +234,7 @@ import { returnInputKeyboard } from '../common/classes'
             </div>
 
             <div class="form-input">
-              <label>Effectif de la boite</label>
+              <label>Effectif de la boite <span class='star'>*</span></label>
               <input
                 #input12
                 (click)="onClickInputScroll(input12)"
@@ -332,8 +335,9 @@ import { returnInputKeyboard } from '../common/classes'
         <form class="full-width form-control section-host" [formGroup]="form">
           <div class="form-section">
             <h3 class="form-title">Certifications & labels:</h3>
+            <h4 class="champs">Champs obligatoire pour optimiser votre profil <span class='starGreen'>*</span></h4>
             <div class="form-input">
-              <label>Vos labels</label>
+              <label>Vos labels <span class='starGreen'>*</span></label>
               <options
                 [options]="allLabels"
                 [value]="selectedLabels"
@@ -403,6 +407,19 @@ import { returnInputKeyboard } from '../common/classes'
         display: flex;
         flex-flow: column nowrap;
         flex-shrink: 0;
+      }
+
+      .champs {
+        font-size: small;
+        color: #A2A2A2;
+      }
+
+      .star {
+        color: #FFCA57;  
+      }
+
+      .starGreen {
+        color: #B9EDAF;
       }
 
       section {
@@ -612,7 +629,11 @@ export class ModifyProfileForm {
       );
       if (used) {
         jobMapping.set(used.id, job);
-        this.selectedJobs.push(job);
+        this.selectedJobs.push({
+          id: job.id,
+          name: job.name,
+          filename: ''} as Label
+          );
       }
     });
     this.initialSelectedJobs = this.selectedJobs;
@@ -731,7 +752,13 @@ export class ModifyProfileForm {
       );
     }
 
-    this.selectedJobs = jobOptions;
+    this.selectedJobs = jobOptions.map(job => {
+      return ({
+      id: job.id,
+      name: job.name,
+      filename: ''
+    } as Label)
+  });
     jobControl.markAsDirty();
   }
 
@@ -775,7 +802,13 @@ export class ModifyProfileForm {
       }
     }
 
-    this.selectedLabels = labelOptions;
+    this.selectedJobs = labelOptions.map(job => {
+      return ({
+      id: job.id,
+      name: job.name,
+      filename: ''
+    } as Label)
+  });
     labelControl.markAsDirty();
   }
 

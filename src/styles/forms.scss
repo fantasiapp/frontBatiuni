@@ -343,3 +343,10 @@
   right: $input-image-offset-x;
   position: relative;
 }
+
+.action-button-filter {
+  >button.button {
+    padding: 0.5rem 0 ;
+    width: 45%;
+  }
+} 

@@ -57,8 +57,10 @@ export class SOSPageComponent extends Destroy$ {
   @Select(DataQueries.currentProfile)
   profile$!: Observable<Profile>;
 
+  searchbarSubject: Subject<boolean> = new Subject<boolean>()
   refreshSubject: Subject<void> = new Subject<void>();
   updateFilterMap(){
+    console.log('refresh');
     this.refreshSubject.next();
   }
 
@@ -139,6 +141,7 @@ export class SOSPageComponent extends Destroy$ {
 
 
   callbackSearch = (search: any): void => {
+    this.searchbarSubject.next(search.length != 0)
     this.selectSearchDraft(search)
   };
 
@@ -168,7 +171,7 @@ export class SOSPageComponent extends Destroy$ {
       this.filterOn = false;
     } else {
       this.filterOn = true;
-      this.info.show("info","Vos filtres ont été appliqués", 3000);
+      // this.info.show("info","Vos filtres ont été appliqués", 3000);
     }
   }
 
@@ -253,7 +256,9 @@ export class SOSPageComponent extends Destroy$ {
     }
     this.companies = this.availableCompanies.map(companyAvailable => companyAvailable.company);
     this.availabilities = this.availableCompanies.map(companyAvailable => companyAvailable.availability);
+    
     this.cd.markForCheck();
+    this.cd.detectChanges()
   }
 
   checkCompanyProfile(company: Company) {

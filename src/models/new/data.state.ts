@@ -159,6 +159,7 @@ export class DataState {
 
   @Action(GetUserData)
   getUserData(ctx: StateContext<DataModel>, action: GetUserData) {
+    console.log("les reco", this.store.selectSnapshot(DataQueries.getAll("Recommandation")))
     const req = this.http.get("data", { action: action.action });
     console.log(this.store.selectSnapshot(DataQueries.getAll("Recommandation")))
     if (this.isFirstTime) {
@@ -366,7 +367,13 @@ export class DataState {
     return req.pipe(
       tap((response: any) => {
         console.log("upload file response", response)
-        if (response[upload.action] !== "OK") throw response["messages"];
+        if (response[upload.action] !== "OK") {
+          this.info.show("error", "Votre fichier n'a pas pu être téléchargé. " + response["messages"], 3000)
+          throw response["messages"];
+        }
+        else {
+          this.info.show("success", "Votre fichier a bien été téléchargé", 3000)
+        }
         delete response[upload.action];
         delete response["timestamp"]
         const assignedId = +Object.keys(response)[0],
@@ -398,7 +405,13 @@ export class DataState {
     return this.http.post("data", modify).pipe(
       tap((response: any) => {
         console.log("modify file response", response)
-        if (response[modify.action] != "OK") throw response["messages"];
+        if (response[modify.action] !== "OK") {
+          this.info.show("error", "Votre fichier n'a pas pu être téléchargé. " + response["messages"], 3000)
+          throw response["messages"];
+        }
+        else {
+          this.info.show("success", "Votre fichier a bien été téléchargé", 3000)
+        }
         delete response[modify.action];
         delete response["timestamp"];
         const fileId = +Object.keys(response)[0]

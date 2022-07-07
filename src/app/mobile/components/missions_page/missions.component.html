@@ -41,7 +41,7 @@
 </slidemenu>
 
 <swipeup [(open)]="openFilterMenu" type="view">
-  <mission-filter-form [callbackFilter]="callbackFilter" view></mission-filter-form>
+  <mission-filter-form (closeFilter)="openFilterMenu = false" (resetFilter)="filterOn = false" [callbackFilter]="callbackFilter" view></mission-filter-form>
 </swipeup>
 
 <swipeup [(open)]="openCloseMission" [doClose]="doClose">

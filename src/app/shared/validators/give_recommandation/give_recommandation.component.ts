@@ -35,8 +35,8 @@ export class GiveARecommandation extends Destroy$ {
     securityComment : "",
     organisationStars : 0,
     organisationComment : "",
-    LastWorksiteDate: "",
-    view: 'PME'
+    lastWorksiteDate: "",
+    view: 1
   };
 
   userNameForm: FormGroup = new FormGroup({
@@ -68,7 +68,7 @@ export class GiveARecommandation extends Destroy$ {
   }
 
   get classSubmit() {
-    if (this.hasGeneralStars && this.recommandation.companyNameRecommanding && this.recommandation.firstNameRecommanding && this.recommandation.lastNameRecommanding && this.recommandation.LastWorksiteDate) {
+    if (this.hasGeneralStars && this.recommandation.companyNameRecommanding && this.recommandation.firstNameRecommanding && this.recommandation.lastNameRecommanding && this.recommandation.lastWorksiteDate) {
       return "submitActivated";
     } else {
       return "submitDisable";
@@ -102,7 +102,7 @@ export class GiveARecommandation extends Destroy$ {
     } else if (nature == "companyName") {
       this.recommandation!.companyNameRecommanding = input.value;
     } else if (nature == "lastWorksiteDate") {
-      this.recommandation!.LastWorksiteDate = input.value;
+      this.recommandation!.lastWorksiteDate = input.value;
     }
   }
 
@@ -151,7 +151,7 @@ export class GiveARecommandation extends Destroy$ {
             this.recommandation!.securityComment,
             this.recommandation!.organisationStars,
             this.recommandation!.organisationComment,
-            this.recommandation!.LastWorksiteDate,
+            this.recommandation!.lastWorksiteDate,
             this.view!
           )
         )
