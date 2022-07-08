@@ -132,20 +132,17 @@ export class SupervisionWrapperComponent extends Destroy$ {
     this.cd.markForCheck()
   }
 
-  async takePhoto(input: HTMLTextAreaElement) {
+  async takePhoto(input: HTMLTextAreaElement, task: PostDetailGraphic| null, formGroup: FormGroup, formControlName: string) {
     const photo = await Camera.getPhoto({
       allowEditing: true,
       resultType: CameraResultType.Base64,
       source: CameraSource.Camera,
     });
 
-    input.dispatchEvent(new Event("submit", {cancelable: true}))
-    const lastSupervision = this.supervisions[this.supervisions.length]
-    this.store.dispatch(new UploadImageSupervision(photo, lastSupervision.id)).pipe(take(1)).subscribe(() => {
       
+    this.onSubmit(task,formGroup,formControlName,input, true,photo)
       // this.updatePageOnlyDate();
-      this.swipeMenuImage = false;
-    });
+    this.swipeMenuImage = false;
   }
   
   async selectPhoto(input: HTMLTextAreaElement, task: PostDetailGraphic| null, formGroup: FormGroup, formControlName: string) {
