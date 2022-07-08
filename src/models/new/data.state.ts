@@ -477,6 +477,14 @@ export class DataState {
     return req.pipe(
       tap((response: any) => {
         console.log("DeleteLabel response", response);
+        if (response[deletion.action] !== "OK") throw response["messages"];
+
+        delete response[deletion.action];
+        this.getUserDataService.emitDataChangeEvent(response.timestamp)
+        delete response["timestamp"];
+        ctx.setState(deleteIds("LabelForCompany", [deletion.labelId]));
+
+        if(response.hasOwnProperty('Company')) {ctx.setState(update('Company', response['Company']))}
       })
     )
   }

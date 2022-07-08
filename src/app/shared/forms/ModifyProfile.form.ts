@@ -835,10 +835,12 @@ export class ModifyProfileForm {
 
   removeDocument(filename: string) {
     const documents = this.form.controls[ "UserProfile.Company.admin"]
-    documents.get(filename)?.setValue({content: [""], expirationDate: '', ext: '???', name: 'Veuillez télécharger un document', nature: 'admin'})
+    console.log("document", documents.get(filename), filename)
     let file = this.companyFiles.filter(file => file.name == filename)[0]
+    console.log("file", file)
     if (file?.id){ this.store.dispatch(new DeleteFile(file?.id))}
-    this.form.controls["UserProfile.Company.JobForCompany"].markAsDirty()
+    documents.get(filename)?.setValue({content: [""], expirationDate: '', ext: '???', name: 'Veuillez télécharger un document', nature: 'admin'})
+    this.form.controls["UserProfile.Company.admin"].markAsDirty()
   } 
 
   removeLabel(filename: string) {
@@ -847,13 +849,12 @@ export class ModifyProfileForm {
     const documents = this.form.controls[ "UserProfile.Company.LabelForCompany"] as FormArray;
     for (let i=0; i< documents.value.length; i++){
       if(documents.value[i].label.name == filename) {
-        // documents.value[i].fileData = {content: [""], expirationDate: '', ext: '???', name: 'Veuillez télécharger un document', nature: 'admin'}
+        console.log("document", documents.value[i])
+        documents.value[i].fileData = {content: [""], expirationDate: '', ext: '???', name: 'Veuillez télécharger un document', nature: filename}
         documents.removeAt(i)
       }
     }
-    let allFiles = this.store.selectSnapshot(DataQueries.getAll('File'))
-    let label = allFiles.filter(file => file.name == filename)[0]
-    if (label?.id) {this.store.dispatch(new DeleteLabel(label.id))}
+    if (labelForCompanyId) {this.store.dispatch(new DeleteLabel(labelForCompanyId))}
 
     this.selectedLabels = this.selectedLabels.filter(label => label.name != filename)
 
