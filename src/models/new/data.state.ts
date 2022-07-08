@@ -895,12 +895,9 @@ export class DataState {
 
   @Action(CreateSupervision)
   createSupervision(ctx: StateContext<DataModel>, application: CreateSupervision) {
-    console.log("createSupervision", application)
     const profile = this.store.selectSnapshot(DataQueries.currentProfile)!;
-    console.log('createSupervision', application);
     return this.http.post("data", application).pipe(
       tap((response: any) => {
-        console.log('createSupervision', response);
         if (response[application.action] !== "OK") {
           this.inZone(() => this.info.show("error", response.messages, 3000));
           throw response.messages;
