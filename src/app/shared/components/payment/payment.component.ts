@@ -7,6 +7,8 @@ import { loadStripe } from "@stripe/stripe-js";
 import { HttpService } from "src/app/services/http.service";
 import { environment } from "src/environments/environment";
 import { DataQueries } from "src/models/new/data.state";
+import { InfoService } from "../info/info.component";
+import { PopupService } from "../popup/popup.component";
 
 
 @Component({
@@ -50,6 +52,7 @@ export class Payment {
     private cd: ChangeDetectorRef,
     private store: Store,
     private location: Location,
+    private info: InfoService,
   ) {
     const navigation = this.router.getCurrentNavigation();
     if (navigation) {
@@ -98,10 +101,12 @@ export class Payment {
                     });
     console.log("requete")
     req.subscribe((response: any) => {
-      console.log("response", response)
+      console.log("response", response.toString())
       if (response['createPaymentIntent'] !== "OK") { 
         console.log("error, navigate home")
+        this.info.show("error", "Un problème est survenu")
         this.router.navigate(['home'])
+        return;
       } 
       this.product = response['productName'];
       this.price = response['price']/100;

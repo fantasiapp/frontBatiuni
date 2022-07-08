@@ -3,7 +3,10 @@
 </head>
 <div *ngIf="this.state">
     <div *ngIf="this.product">
-        <span>{{product}} {{price}} €</span>
+        <span>Produit : {{product}} </span>
+    </div>
+    <div *ngIf="this.price">
+        <span>Prix : {{price}} €</span>
     </div>
     <form id="payment-form">
         <div id="payment-element">
