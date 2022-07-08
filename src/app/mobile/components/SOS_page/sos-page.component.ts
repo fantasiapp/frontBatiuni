@@ -202,7 +202,7 @@ export class SOSPageComponent extends Destroy$ {
           const filesName = files.map(file => {if (file) { return file.name} return null })
           const checkFile = ["URSSAF", "Kbis", "Trav. Dis", "Impôts", "Congés Payés"].map(name => filesName.includes(name))
           const filesNature = files.map(file => { if (file) { return file.nature } return null })
-          const levelStart = company.amount && company.address && company.companyPhone && company.siret && company.jobs
+          const levelStart = company.revenue && company.address && company.companyPhone && company.siret && company.jobs
           let step = 0
           if (levelStart) { step = 1 }
           if (filesNature.includes("labels")) { step = 2 }
@@ -231,6 +231,7 @@ export class SOSPageComponent extends Destroy$ {
         }
         let isNotIncludedJob = (filter.jobs && filter.jobs.length && !includedJob)
 
+        console.log(company.amount)
         let isNotRightAmount = (filter.amount && company.amount && (company.amount < filter.amount[0] || company.amount > filter.amount[1]))
         
         const user = this.store.selectSnapshot(DataQueries.currentUser);

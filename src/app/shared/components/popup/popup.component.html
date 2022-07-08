@@ -112,8 +112,7 @@
 </ng-template>
 
 <ng-template #missKbis let-context>
-  <label class="postuleLabel" *ngIf="context.actualView == 'PME'">Veuillez ajouter le document <span class='boostStrong'>Kbis</span>  pour accéder à <span class='boostStrong'> Créer une annonce </span></label> 
-  <label class="postuleLabel" *ngIf="context.actualView == 'ST'">Veuillez ajouter le document <span class='boostStrong'>Kbis</span>  pour accéder à <span class='boostStrong'> Annonces qui peuvent vous intéresser</span></label>   
+  <label class="postuleLabel">Veuillez ajouter le document <span class='boostStrong'>Kbis</span>  pour accéder à <span class='boostStrong'> {{context.phrase}} </span></label> 
   <div style="height:5%;"></div>
   <div class="controls cloture">
     <button class="button active" (click)="close()">OK</button>
@@ -122,6 +121,14 @@
 
 <ng-template #signContractKbis let-context>
   <label class="postuleLabel">Veuillez vérifier que votre <span class='boostStrong'> Kbis </span>  est bien à jour.</label>  
+  <div style="height:5%;"></div>
+  <div class="controls cloture">
+    <button class="button active" (click)="close()">OK</button>
+  </div>
+</ng-template>
+
+<ng-template #successPayment let-context>
+  <label class="postuleLabel">Votre payement a bien été pris en compte. Votre annonce est mainteneant <span class='boostStrong'> boosté </span></label> 
   <div style="height:5%;"></div>
   <div class="controls cloture">
     <button class="button active" (click)="close()">OK</button>

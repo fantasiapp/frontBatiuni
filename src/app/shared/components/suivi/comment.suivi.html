@@ -1,23 +1,24 @@
-<div class="comment-provider" [ngClass]="{'comment-reverse': reverseComment}">
+<div class="comment-provider font-Poppins" [ngClass]="{'comment-reverse': reverseComment}">
   <profile-image class="user-image" [profile]="supervision.companyId"></profile-image>
 
   <div class="comment-box">
     <div class="user-info">
       <span class="user-name">{{supervision.author}}</span>
+      <span class="user-timestamp">Le {{ timestamp.date }} à {{ timestamp.hour}}</span>
       <!-- <span class="post-date">Le {{supervision.date}}</span> -->
     </div>
     <div class="suivi-comment">
       {{supervision.comment}}
+      <div class="comment-image position-relative" *ngIf="images.length">
+        <!-- <img class="background" [src]="images[nbImageSelected] || 'assets/unavailable.jpg'"/> -->
+        <img class="main" [src]="images[nbImageSelected] || 'assets/unavailable.jpg'" (dblclick)="openModalImage(images[nbImageSelected])"/>
+        <img *ngIf="imageHasNext" (click)="otherImage(1)" class="position-absolute right" src="assets/arrowright.svg"/>
+        <img *ngIf="imageHasPrevious" (click)="otherImage(-1)" class="position-absolute left" src="assets/arrowleft.svg"/>
+      </div>
     </div>
   </div>
 </div>
 
-<div class="comment-image position-relative" *ngIf="images.length">
-  <img class="background" [src]="images[nbImageSelected] || 'assets/unavailable.jpg'"/>
-  <img class="main" [src]="images[nbImageSelected] || 'assets/unavailable.jpg'" (click)="openModalImage(images[nbImageSelected])"/>
-  <img *ngIf="imageHasNext" (click)="otherImage(1)" class="position-absolute right" src="assets/arrowright.svg"/>
-  <img *ngIf="imageHasPrevious" (click)="otherImage(-1)" class="position-absolute left" src="assets/arrowleft.svg"/>
-</div>
 
 
 <div class="parent-comment" *ngIf="parentComment">
@@ -29,3 +30,4 @@
     <modal-image [src]="modalImage"></modal-image>
   </div>
 </ng-container>
+

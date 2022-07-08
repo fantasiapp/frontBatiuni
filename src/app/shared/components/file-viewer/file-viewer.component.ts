@@ -37,6 +37,7 @@ export class FileViewer {
   }
 
   openModalImage(image: SafeResourceUrl) {
+    console.log("coucou")
     this.displayModal = true;
     this.modalImage = image;
     this.cd.markForCheck();

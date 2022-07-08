@@ -1,3 +1,4 @@
+import { i18nMetaToJSDoc } from "@angular/compiler/src/render3/view/i18n/meta";
 import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
 import { Store } from "@ngxs/store";
 import { shadeColor } from "src/app/shared/common/functions";
@@ -40,7 +41,10 @@ import { DataQueries, SnapshotAll } from "src/models/new/data.state";
   `,
   styles: [`
     :host { 
-      display: inline-block; 
+      /* display: inline-block;  */
+      display:flex;
+      flex-direction: column;
+      justify-content: center;
       position: relative;
       /* display: block !important; */
     }
@@ -75,7 +79,7 @@ import { DataQueries, SnapshotAll } from "src/models/new/data.state";
 })
 export class FileIcon {
   public name: string = 'Fichier';
-  public allLabelsName: string[] = []
+  public label: Label[] = []
   public isLabel: boolean = false
   public originalName: string = '';
   public allLabels: Label[];
@@ -103,12 +107,12 @@ export class FileIcon {
   }
 
   ngOnInit() {
-    this.allLabels.forEach((label) => {
-      this.allLabelsName.push(label.name)
-    })
-    if (this.allLabelsName.includes(this.originalName)) {
+    this.label = this.allLabels.filter(label => label.name == this.originalName)
+    console.log('label', this.label);
+    if(this.label.length == 1) {
       this.isLabel = true
-    }
+      this.originalName = this.label[0].fileName
+    } 
 
   }
 }

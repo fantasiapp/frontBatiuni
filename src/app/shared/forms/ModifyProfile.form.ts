@@ -22,6 +22,7 @@ import { InfoService } from "../components/info/info.component";
 import { Store } from "@ngxs/store";
 import {
   DataQueries,
+  DataState,
   SnapshotAll,
   SnapshotArray,
 } from "src/models/new/data.state";
@@ -41,6 +42,7 @@ import { delay, getDirtyValues } from "../common/functions";
 import { Email } from "src/validators/persist";
 import { returnInputKeyboard } from '../common/classes'
 import { JsonpClientBackend } from "@angular/common/http";
+import { ActiveViewService } from "../services/activeView.service";
 
 @Component({
   selector: "modify-profile-form",
@@ -246,7 +248,7 @@ import { JsonpClientBackend } from "@angular/common/http";
             </div>
 
             <div class="form-input">
-              <label>Chiffres d'affaires</label>
+              <label>Chiffres d'affaires <span class='star'>*</span></label>
               <input
                 #input10
                 (click)="onClickInputScroll(input10)"
@@ -266,6 +268,18 @@ import { JsonpClientBackend } from "@angular/common/http";
                 class="form-element"
                 maxlength="11"
                 formControlName="UserProfile.Company.capital"
+              />
+            </div>
+
+            <div class="form-input" *ngIf="view == 'ST'">
+              <label>Taux horaire moyen</label>
+              <input
+                #input12
+                (click)="onClickInputScroll(input12)"
+                (keyup)="returnInputKeyboard($event, input12)"
+                class="form-element"
+                maxlength="11"
+                formControlName="UserProfile.Company.amount"
               />
             </div>
 
@@ -520,7 +534,7 @@ export class ModifyProfileForm {
   @Input() animate: boolean = true;
 
   //get all labels and jobs
-  @SnapshotAll("Label")
+  // @SnapshotAll("Label")
   allLabels!: Label[];
 
   @SnapshotAll("Job")
@@ -534,6 +548,7 @@ export class ModifyProfileForm {
   companyJobs!: JobForCompany[];
   selectedJobs!: Label[];
   initialSelectedJobs!: Label[];
+  view = this.store.selectSnapshot(DataState.view)
 
   companyFiles!: File[];
 
@@ -595,6 +610,7 @@ export class ModifyProfileForm {
   }
 
   async ngOnInit() {
+    // console.log('alllabel', this.allLabels); 
     let permissions = await Camera.checkPermissions();
     if (permissions.camera != "granted" || permissions.photos != "granted"){
       try {
@@ -604,16 +620,17 @@ export class ModifyProfileForm {
       } catch (e) {}
     }
   }
-
+  
   ngOnChanges(changes: SimpleChanges) {
     if (changes["profile"]) this.reload();
   }
-
+  
   space(value: any, each: number = 2, by: number = 1) {
     return SpacingPipe.prototype.transform(value, each, by);
   }
-
+  
   reload() {
+    this.allLabels = this.store.selectSnapshot(DataQueries.getAll('Label'))
     const { user, company } = this.profile as { user: User; company: Company };
     this.companyFiles = this.store.selectSnapshot(DataQueries.getMany("File", this.profile.company.files));
     this.companyLabels = this.store.selectSnapshot(DataQueries.getMany("LabelForCompany", this.profile.company.labels));
@@ -632,24 +649,26 @@ export class ModifyProfileForm {
         this.selectedJobs.push({
           id: job.id,
           name: job.name,
-          filename: ''} as Label
+          fileName: ''} as Label
           );
       }
     });
     this.initialSelectedJobs = this.selectedJobs;
 
     this.selectedLabels = [];
-    this.allLabels.forEach((label) => {
-      const used = this.companyLabels.find(
-        (labelForCompany) => {
-          return labelForCompany.label == label.id
+    if(this.allLabels){
+      this.allLabels.forEach((label) => {
+        const used = this.companyLabels.find(
+          (labelForCompany) => {
+            return labelForCompany.label == label.id
+          }
+        );
+        if (used) {
+          labelMapping.set(used.id, label);
+          this.selectedLabels.push(label);
         }
-      );
-      if (used) {
-        labelMapping.set(used.id, label);
-        this.selectedLabels.push(label);
-      }
-    });
+      });
+    }
 
     const filesInput = this.form.controls["UserProfile.Company.admin"];
     this.companyFiles.forEach((file) => {
@@ -702,12 +721,15 @@ export class ModifyProfileForm {
 
     const labelControl = this.form.controls["UserProfile.Company.LabelForCompany"] as FormArray;
     labelControl.clear();
+
     for (let labelForCompany of this.companyLabels) {
       const labelObject = labelMapping.get(labelForCompany.id)!;
+      console.log('labelObject', labelObject);
       labelControl.push(
         new FormGroup({
           label: new FormControl(labelObject),
           //get date from server
+
           fileData: new FormControl(
             defaultFileUIOuput(
               labelObject.name,
@@ -728,7 +750,7 @@ export class ModifyProfileForm {
     oldJobsId = new Set(oldJobs.map(({ id }) => id)),
     overlap = newJobs.filter((job) => oldJobsId.has(job.id)),
     difference = newJobs.filter((job) => !oldJobsId.has(job.id));
-
+  
     let jobControl = this.form.controls["UserProfile.Company.JobForCompany"] as FormArray;
     jobControl.clear();
 
@@ -756,7 +778,7 @@ export class ModifyProfileForm {
       return ({
       id: job.id,
       name: job.name,
-      filename: ''
+      fileName: ''
     } as Label)
   });
     jobControl.markAsDirty();
@@ -806,7 +828,7 @@ export class ModifyProfileForm {
       return ({
       id: job.id,
       name: job.name,
-      filename: ''
+      fileName: ''
     } as Label)
   });
     labelControl.markAsDirty();

@@ -146,6 +146,9 @@ export class UIPopup extends DimensionMenu {
   @ViewChild("signContractKbis", { read: TemplateRef, static: true })
   signContractKbis!: TemplateRef<any>;
 
+  @ViewChild("successPayment", { read: TemplateRef, static: true })
+  successPayment!: TemplateRef<any>;
+
   @Input()
   content?: Exclude<PopupView, ContextUpdate>;
 
@@ -305,7 +308,7 @@ export class UIPopup extends DimensionMenu {
 
 export type PredefinedPopups<T = any> = {
   readonly type: "predefined";
-  name: "deletePost" | "sign" | "setDate" | "closeMission" | "validateCandidate" | "refuseCandidate" | "blockCandidate" | "boostPost" | "onApply" | "onApplyConfirm" | "newFile" | "deleteFile" | "deleteCandidate" | "missKbis" | "signContractKbis"; // | 'closeMission'
+  name: "deletePost" | "sign" | "setDate" | "closeMission" | "validateCandidate" | "refuseCandidate" | "blockCandidate" | "boostPost" | "onApply" | "onApplyConfirm" | "newFile" | "deleteFile" | "deleteCandidate" | "missKbis" | "signContractKbis" | "successPayment"; // | 'closeMission'
   context?: TemplateContext;
 };
 
@@ -749,14 +752,14 @@ export class PopupService {
     }
   }
 
-  missKbis(actualView: string) {
+  missKbis(phrase: string) {
 
     let first: boolean = true;
     const closed$ = new Subject<void>();
 
     const context = {
       $implicit: {
-        actualView: actualView,
+        phrase: phrase,
         isActive: false,
       },
     };
@@ -794,6 +797,32 @@ export class PopupService {
         context,
         close: () => {
           this.openSignContractDialog(mission, onClosePopup)
+          closed$.next();
+        },
+      });
+
+      first = false;
+    }
+  }
+
+  successPayment() {
+
+    let first: boolean = true;
+    const closed$ = new Subject<void>();
+
+    const context = {
+      $implicit: {
+        isActive: false,
+      },
+    };
+
+    if (first) {
+      this.dimension$.next(this.defaultDimension);
+      this.popups$.next({
+        type: "predefined",
+        name: "successPayment",
+        context,
+        close: () => {
           closed$.next();
         },
       });
