@@ -58,6 +58,8 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
   @Input()
   filename: string = "Kbis";
 
+  @Input() name : string = 'Kbis'
+  @Input() nature: string = ''
   @Output()
   filenameChange = new EventEmitter<string>();
 
@@ -104,9 +106,10 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
       content: [""],
       expirationDate: "",
       ext: "???",
-      name: "Veuillez télécharger un document",
-      nature: this.filename,
+      name: this.nature == 'labels' ? this.filename : "Veuillez télécharger un document",
+      nature: this.nature,
     };
+    console.log('value', this.value);
   }
 
   private getBase64(files: FileList, index: number = 0) {
@@ -186,8 +189,8 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
       content: [""],
       expirationDate: "",
       ext: "???",
-      name: "Veuillez télécharger un document",
-      nature: this.filename,
+      name: this.nature == 'labels'? this.filename : "Veuillez télécharger un document",
+      nature: this.nature,
     };
     this.cd.markForCheck()
     
