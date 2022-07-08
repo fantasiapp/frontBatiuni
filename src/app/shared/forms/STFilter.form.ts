@@ -386,8 +386,8 @@ export class STFilterForm {
   }
 
   resetFilter(){
-    this.filterForm.get('date')?.reset()
-    this.filterForm.get('address')?.reset()
+    this.filterForm.get('date')?.patchValue("")
+    this.filterForm.get('address')?.patchValue("")
     this.filterForm.get('radius')?.patchValue(2000)
     this.filterForm.get('jobs')?.patchValue([])
     this.filterForm.get('salary')?.patchValue([0,100000])
@@ -399,6 +399,7 @@ export class STFilterForm {
     this.filterForm.get('counterOffer')?.patchValue(false)
     this.filterForm.get('dueDateSort')?.patchValue(false)
     this.filterForm.get('startDateSort')?.patchValue(false)
+    this.isFilterOn(this.filterForm.value)
   }
 
   @Output() closeFilter = new EventEmitter()

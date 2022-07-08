@@ -538,7 +538,7 @@ export class MakeAdForm {
     manPower: new FormControl(0),
     job: new FormControl([], [Validators.required]),
     address: new FormControl("1 Rue Joliot Curie, 91190 Gif-sur-Yvette", [Validators.required,]),
-    numberOfPeople: new FormControl("", [FieldType("number")]),
+    numberOfPeople: new FormControl("", [FieldType("number"), Validators.required]),
     counterOffer: new FormControl(false),
     hourlyStart: new FormControl("07:30:00"),
     hourlyEnd: new FormControl("17:30:00"),

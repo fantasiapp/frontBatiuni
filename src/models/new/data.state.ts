@@ -162,6 +162,7 @@ export class DataState {
   getUserData(ctx: StateContext<DataModel>, action: GetUserData) {
     console.log("les reco", this.store.selectSnapshot(DataQueries.getAll("Recommandation")))
     const req = this.http.get("data", { action: action.action });
+    console.log(this.store.selectSnapshot(DataQueries.getAll("Recommandation")))
     if (this.isFirstTime) {
     }
     if (this.flagUpdate){
@@ -477,6 +478,14 @@ export class DataState {
     return req.pipe(
       tap((response: any) => {
         console.log("DeleteLabel response", response);
+        if (response[deletion.action] !== "OK") throw response["messages"];
+
+        delete response[deletion.action];
+        this.getUserDataService.emitDataChangeEvent(response.timestamp)
+        delete response["timestamp"];
+        ctx.setState(deleteIds("LabelForCompany", [deletion.labelId]));
+
+        if(response.hasOwnProperty('Company')) {ctx.setState(update('Company', response['Company']))}
       })
     )
   }
