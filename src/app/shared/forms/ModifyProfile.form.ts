@@ -136,7 +136,7 @@ import { ActiveViewService } from "../services/activeView.service";
         <form class="full-width form-control section-host" [formGroup]="form">
           <div class="form-section">
             <h3 class="form-title">Infos entreprise:</h3>
-            <h4 class="champs">Champs obligatoire pour optimiser votre profil <span class='star'>*</span></h4>
+            <h4 class="champs">Champs obligatoire pour optimiser votre profil <span class='star'>*</span> <span class='starGreen'>*</span></h4>
             <div class="form-input">
               <label>Nom de l'entreprise</label>
               <input
