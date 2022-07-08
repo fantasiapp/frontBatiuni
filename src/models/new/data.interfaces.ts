@@ -109,6 +109,7 @@ export interface Supervision {
   companyId: number;
   date: string;
   comment: string;
+  timestamp: number;
   files: Ref<File>[];
 }
 

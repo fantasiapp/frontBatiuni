@@ -20,6 +20,7 @@ import { FileDownloader } from "../../services/file-downloader.service";
 import { DataQueries } from "src/models/new/data.state";
 import { ImageGenerator } from "../../services/image-generator.service";
 import { SingleCache } from "../../services/SingleCache";
+import * as moment from "moment";
 
 @Component({
   selector: "comment-suivi",
@@ -34,6 +35,10 @@ export class SuiviComments {
   parentComment: SuiviComments | null = null;
 
   reverseComment: boolean = false;
+  timestamp = {
+    date: '',
+    hour: ''
+  }
   constructor(
     private cd: ChangeDetectorRef,
     private imageGenerator: ImageGenerator,
@@ -47,6 +52,12 @@ export class SuiviComments {
     const myName = myUser.firstName + " " + myUser.lastName;
 
     myName == this.supervision.author && (this.reverseComment = true);
+    console.log(this.supervision.timestamp, 'timestamp');
+    moment.locale('fr')
+    const timestampMoment = moment(this.supervision.timestamp * 1000)
+    this.timestamp.date = timestampMoment.format('DD/MM/YYYY')
+    this.timestamp.hour = timestampMoment.format('HH:mm')
+    
   }
 
   images: SafeResourceUrl[] = [];
@@ -75,6 +86,7 @@ export class SuiviComments {
     comment:
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
     files: [],
+    timestamp: 0
   };
   get supervision() {
     return this._supervision;

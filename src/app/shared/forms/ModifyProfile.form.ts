@@ -238,8 +238,9 @@ import { ActiveViewService } from "../services/activeView.service";
             <div class="form-input">
               <label>Effectif de la boite <span class='star'>*</span></label>
               <input
-                #input10
-                (click)="onClickInputScroll(input10)"
+                #input12
+                (click)="onClickInputScroll(input12)"
+                (keyup)="returnInputKeyboard($event, input12)"
                 class="form-element"
                 maxlength="11"
                 formControlName="UserProfile.Company.size"
