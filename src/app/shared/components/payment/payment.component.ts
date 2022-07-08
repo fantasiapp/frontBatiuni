@@ -122,6 +122,12 @@ export class Payment {
       };
       this.elements = this.stripe.elements({ appearance, clientSecret });
   
+      //get redirect URL
+      const urlTree = this.router.createUrlTree(['home']);
+      const path = this.location.prepareExternalUrl(urlTree.toString());
+      let returnUrl = window.location.origin + path;
+      console.log("return url", returnUrl)
+      
       const paymentElement = this.elements.create("payment");
       paymentElement.mount("#payment-element");
     })
