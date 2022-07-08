@@ -137,13 +137,18 @@ export class HorizontaleCalendar implements OnInit {
     for (const detailDay of workDays) {
       detailDay.datePost = this.store.selectSnapshot(DataQueries.getById('DatePost', detailDay.datePost.id))!
     }
-    // console.log('workDays', workDays);
+    console.log('workDays', workDays);
     this.detailedDays = workDays;
-    return workDays.map((workDay) => 
+    let valuesCalendar : DayState[] = workDays.map((workDay) => 
       ({
       date: workDay.date,
       availability: this.newgetNotification(workDay.datePost, workDay.mission) ? 'notification' : "selected",
     }));
+    valuesCalendar.sort((a,b) => {
+      return moment(a.date).unix() - moment(b.date).unix()
+    })
+    
+    return valuesCalendar
   }
 
   newgetNotification(date: DatePost, mission: Mission){
@@ -345,6 +350,7 @@ export class HorizontaleCalendar implements OnInit {
       for (const curCard of this.currentCardCalendars) {
         if(day.day[2] == curCard.date){
           day.selected = true
+          this.showgrey(day)
           if(!notification) {
             notification = curCard.change.deleted || curCard.change.schedule || !curCard.change.validate
           }
@@ -355,7 +361,6 @@ export class HorizontaleCalendar implements OnInit {
           if(!status) status = !curCard.change.validate||curCard.change.validate || curCard.change.schedule || curCard.change.deleted
           day.status = status ? 'occupe' : ''
           
-          this.showgrey(day)
           // if(!status){
             //   day.notification = false
             // }
