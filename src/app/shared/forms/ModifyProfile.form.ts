@@ -366,12 +366,15 @@ import { ActiveViewService } from "../services/activeView.service";
                 <ng-container [formGroupName]="i">
                   <fileinput
                     [showtitle]="false"
-                    [filename]="control.get('label')!.value.name"
+                    [nature]="'labels'"
+                    [filename]="control.get('label')!.value.fileName"
+                    [name]="control.get('label')!.value.name"
                     formControlName="fileData"
                     (kill)="removeLabel($event)"
                   >
                     <file-svg
-                      [name]="control.get('label')!.value.name"
+                      [name]="control.get('label')!.value.fileName"
+                      [isLabel]="true"
                       image
                     ></file-svg>
                   </fileinput>

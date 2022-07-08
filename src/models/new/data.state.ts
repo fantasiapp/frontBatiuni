@@ -273,11 +273,12 @@ export class DataState {
       }),
       concatMap(() => {
         this.getUserDataService.emitDataChangeEvent()
+        console.log('UPLOAD FILE', labelFiles);
         labelFiles.forEach((file) =>
         // {
         // // if (companyLabels.some(label => label.name != file.nature)) {
         // //   console.log("file", file, "labelFile", labelFiles)
-          ctx.dispatch(new UploadFile(file, "labels", file.nature, "Company"))
+          ctx.dispatch(new UploadFile(file, "labels", file.name, "Company"))
         // } else {
 
         //   ctx.dispatch(new ModifyFile(file, "labels", response.LabelForCompany.id, file.name, "Company"))
