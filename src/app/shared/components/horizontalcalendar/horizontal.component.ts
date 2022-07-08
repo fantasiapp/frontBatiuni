@@ -345,7 +345,6 @@ export class HorizontaleCalendar implements OnInit {
       for (const curCard of this.currentCardCalendars) {
         if(day.day[2] == curCard.date){
           day.selected = true
-          this.showgrey(day)
           if(!notification) {
             notification = curCard.change.deleted || curCard.change.schedule || !curCard.change.validate
           }
@@ -353,9 +352,10 @@ export class HorizontaleCalendar implements OnInit {
           
           
           
-          if(!status) status = curCard.change.validate || curCard.change.schedule || curCard.change.schedule || curCard.change.deleted
+          if(!status) status = !curCard.change.validate||curCard.change.validate || curCard.change.schedule || curCard.change.deleted
           day.status = status ? 'occupe' : ''
-
+          
+          this.showgrey(day)
           // if(!status){
             //   day.notification = false
             // }
