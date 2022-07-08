@@ -108,7 +108,6 @@ export class FileIcon {
 
   ngOnInit() {
     this.label = this.allLabels.filter(label => label.name == this.originalName)
-    console.log('label', this.label);
     if(this.label.length == 1) {
       this.isLabel = true
       this.originalName = this.label[0].fileName
