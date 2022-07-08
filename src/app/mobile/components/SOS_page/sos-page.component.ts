@@ -60,7 +60,6 @@ export class SOSPageComponent extends Destroy$ {
   searchbarSubject: Subject<boolean> = new Subject<boolean>()
   refreshSubject: Subject<void> = new Subject<void>();
   updateFilterMap(){
-    console.log('refresh');
     this.refreshSubject.next();
   }
 
@@ -231,7 +230,6 @@ export class SOSPageComponent extends Destroy$ {
         }
         let isNotIncludedJob = (filter.jobs && filter.jobs.length && !includedJob)
 
-        console.log(company.amount)
         let isNotRightAmount = (filter.amount && company.amount && (company.amount < filter.amount[0] || company.amount > filter.amount[1]))
         
         const user = this.store.selectSnapshot(DataQueries.currentUser);

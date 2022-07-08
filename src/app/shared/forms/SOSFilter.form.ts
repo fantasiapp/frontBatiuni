@@ -34,7 +34,7 @@ import "hammerjs"
 
     <div class="form-input">
       <label>Estimation de salaire</label>
-      <ngx-slider [options]="imports.SOSSalarySliderConfig" [value]="0" [highValue]="400" formControlName="amount" (userChange)="detectChange()"></ngx-slider>
+      <ngx-slider [options]="imports.SOSSalarySliderConfig" [(highValue)]=valueSalary formControlName="amount" (userChange)="detectChange()"></ngx-slider>
     </div>
 
 
@@ -78,6 +78,8 @@ export class SOSFilterForm implements OnInit {
   imports = { DistanceSliderConfig, SOSSalarySliderConfig };
 
   valueDistance: number = 2000;
+
+  valueSalary: number = 400;
 
   @Input()
   activeView: number = 0;
@@ -125,7 +127,7 @@ export class SOSFilterForm implements OnInit {
    this.filterForm.get('address')?.patchValue('') 
    this.filterForm.get('jobs')?.patchValue([]) 
    this.filterForm.get('radius')?.patchValue(2000) 
-   this.filterForm.get('amount')?.patchValue('') 
+   this.filterForm.get('amount')?.patchValue([0,400]) 
    this.filterForm.get('sortNotation')?.patchValue(false) 
    this.filterForm.get('sortFullProfils')?.patchValue(false) 
    this.filterForm.get('sortDisponibleProfils')?.patchValue(false) 
