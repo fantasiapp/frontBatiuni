@@ -1,7 +1,7 @@
 <label>
   <ng-container *ngIf="editName; else simpleName">
     <span class="position-relative">
-      <input *ngIf="editName; else simpleName" type="text" placeholder="Nom du document..." class="full-width form-element editName" (input)="onFilenameChange($event)" [formControl]="editName"/>   
+      <input *ngIf="editName; else simpleName" type="text" placeholder="Nom du document..." class="full-width form-element editName" (input)="onFilenameChange($event)" [formControl]="editName"/>
       <!-- <img  *ngIf="closeButton" (click)="close()" src="assets/X.svg" class="position-absolute close-button"/> -->
     </span>
   </ng-container>
@@ -10,7 +10,7 @@
   </ng-template>
 </label>
 
-<label *ngIf="showtitle"  class="label-input" for="filename">Télécharger la certification {{filename}}</label>
+<label *ngIf="showtitle"  class="label-input" for="filename">Télécharger la certification {{filename}} </label>
 <div class="file-form flex grow">
   <span class="file-input position-relative">
     <input class="form-search" (change)="onChange({origin: 'file', event: $event})" type="file" #input/>

@@ -140,8 +140,8 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
       lastDot = fullname.lastIndexOf("."),
       name = fullname.slice(0, lastDot),
       ext = fullname.slice(lastDot + 1);
-      
-    if (this.value?.nature == "admin") {this.popup.newFile(this.filename, this);}
+
+    if (this.value?.nature == "admin" || this.value?.nature.includes('Quali')) {this.popup.newFile(this.filename, this);}
     return {
       ...this.value,
       content: [base64.slice(getFileType(ext).length + 13)],

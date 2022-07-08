@@ -136,7 +136,7 @@ import { ActiveViewService } from "../services/activeView.service";
         <form class="full-width form-control section-host" [formGroup]="form">
           <div class="form-section">
             <h3 class="form-title">Infos entreprise:</h3>
-            <h4 class="champs">Champs obligatoire pour optimiser votre profil <span class='star'>*</span></h4>
+            <h4 class="champs">Champs obligatoire pour optimiser votre profil <span class='star'>*</span> <span class='starGreen'>*</span></h4>
             <div class="form-input">
               <label>Nom de l'entreprise</label>
               <input
@@ -238,8 +238,9 @@ import { ActiveViewService } from "../services/activeView.service";
             <div class="form-input">
               <label>Effectif de la boite <span class='star'>*</span></label>
               <input
-                #input10
-                (click)="onClickInputScroll(input10)"
+                #input12
+                (click)="onClickInputScroll(input12)"
+                (keyup)="returnInputKeyboard($event, input12)"
                 class="form-element"
                 maxlength="11"
                 formControlName="UserProfile.Company.size"
@@ -838,25 +839,24 @@ export class ModifyProfileForm {
 
   removeDocument(filename: string) {
     const documents = this.form.controls[ "UserProfile.Company.admin"]
-    documents.get(filename)?.setValue({content: [""], expirationDate: '', ext: '???', name: 'Veuillez télécharger un document', nature: 'admin'})
     let file = this.companyFiles.filter(file => file.name == filename)[0]
     if (file?.id){ this.store.dispatch(new DeleteFile(file?.id))}
-    this.form.controls["UserProfile.Company.JobForCompany"].markAsDirty()
+    documents.get(filename)?.setValue({content: [""], expirationDate: '', ext: '???', name: 'Veuillez télécharger un document', nature: 'admin'})
+    this.form.controls["UserProfile.Company.admin"].markAsDirty()
   } 
 
   removeLabel(filename: string) {
+    console.log("company file", this.companyFiles)
     let labelId = this.store.selectSnapshot(DataQueries.getAll("Label")).filter((label) => label.name == filename)[0].id;
     let labelForCompanyId = this.companyLabels.filter((labelForCompany) => labelForCompany.label == labelId)[0].id
     const documents = this.form.controls[ "UserProfile.Company.LabelForCompany"] as FormArray;
     for (let i=0; i< documents.value.length; i++){
       if(documents.value[i].label.name == filename) {
-        // documents.value[i].fileData = {content: [""], expirationDate: '', ext: '???', name: 'Veuillez télécharger un document', nature: 'admin'}
+        documents.value[i].fileData = {content: [""], expirationDate: '', ext: '???', name: 'Veuillez télécharger un document', nature: filename}
         documents.removeAt(i)
       }
     }
-    let allFiles = this.store.selectSnapshot(DataQueries.getAll('File'))
-    let label = allFiles.filter(file => file.name == filename)[0]
-    if (label?.id) {this.store.dispatch(new DeleteLabel(label.id))}
+    if (labelForCompanyId) {this.store.dispatch(new DeleteLabel(labelForCompanyId))}
 
     this.selectedLabels = this.selectedLabels.filter(label => label.name != filename)
 
