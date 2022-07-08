@@ -87,6 +87,7 @@ export class ConnexionForm extends Destroy$ {
   }
 
   async onSubmit(e: any) {
+    this.mobileFooterService.hide()
     this.isLoadingService.emitLoadingChangeEvent(true)
     let { email, password } = this.loginForm.value;
     this.store.dispatch(new Login(email, password))
