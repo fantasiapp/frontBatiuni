@@ -1,12 +1,6 @@
 export const environment = {
   production: false,
-<<<<<<< HEAD
   backUrl: "https://batiuni.fantasiapp.tech:5004",
-||||||| 3189812b
-  backUrl: "https://batiuni.fantasiapp.tech:5002",
-=======
-  backUrl: "https://batiuni.fantasiapp.tech:5001",
->>>>>>> 4748f63dbeaac7819e2893bca5cd8b2caeca1fb5
   // backUrl: 'http://localhost:8000',
   version: "current",
   firebase: {
