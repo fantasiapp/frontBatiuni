@@ -283,6 +283,9 @@ import { ActiveViewService } from "../services/activeView.service";
               />
             </div>
 
+            <h3 class="form-title">Documents importants</h3>
+            <h4 class="champs">Champs obligatoire pour optimiser votre profil <span class='starGreen'>*</span></h4>
+
             <ng-container formGroupName="UserProfile.Company.admin">
               
               <fileinput
