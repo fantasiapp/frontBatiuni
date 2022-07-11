@@ -62,7 +62,7 @@
   </slidemenu>
 
   <slidemenu *ngIf="this.view == 'ST'" [header]="false" [(open)]="openCandidature" #candidature>
-    <!-- <h1 class="center-text full-width" header>Candidatures en cours</h1> -->
+    <h1 class="center-text full-width" header>Candidatures en cours</h1>
     <div class="modify-page hosted-page flex column center-cross space-children-margin" content>
       <applications (closeEvent)="candidature.close()" *ngIf="openCandidature"></applications>
     </div>
