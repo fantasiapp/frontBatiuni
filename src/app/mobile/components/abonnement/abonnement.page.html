@@ -1,41 +1,18 @@
-<page-header name="Annonces qui peuvent vous intéresser " class=""
-[customHeader]='true'
-[(activeView)]="activeView"
->
-  <div *ngIf="engagmentClicked" class="clear-margin full-width sticky-header flex center-cross abonnement" headerBar>
-      <img [routerLink]="['','home','profile']" src="assets/arrowlblack.svg" class="position-absolute"/>
-      <h1 class="grow center-text">Gérer mes abonnement</h1>
+<span style="margin: 2rem 2rem; display: block;">Sélectionnez un service</span>
+
+    <div class="caroussel ">
+      <div class="margleft"> 
+        <abonnement-card (openEngagment)="onOpenEngagement($event)" [subscriptionType]="0" [abonnement]="abonnement[0]"></abonnement-card>
+      </div>
+      <div class="thiscenterclass"> 
+        <abonnement-card (openEngagment)="onOpenEngagement($event)" class="thischild" [subscriptionType]="1" [abonnement]="abonnement[1]"></abonnement-card>
+        
+      </div>
+      <div>
+        <abonnement-card (openEngagment)="onOpenEngagement($event)" [subscriptionType]="2" [abonnement]="abonnement[2]"></abonnement-card>
+      </div>
   </div>
-  <span tab_0>PME</span>
-  <span tab_1>Sous-traitance</span>
-</page-header>
-
-  <div *ngIf="engagmentClicked" class=" space-children-margin page-content-with-tabs flex center ">
-    <ng-container [ngSwitch]="activeView">
-      <ng-container *ngSwitchCase="0">
-          <div class="caroussel ">
-              <div class="margleft"> 
-                <abonnement-card  [duration]="55"></abonnement-card>
-              </div>
-              <div class="thiscenterclass"> 
-                <abonnement-card class="thischild"></abonnement-card>
-
-              </div>
-              <div>
-
-                  <abonnement-card></abonnement-card>
-              </div>
-        </div>
-      </ng-container>
-      <ng-container *ngSwitchCase="1" >
-<div class="hosted-page  flex center clear-margin full-width">
-          <abonnement-card class="" ></abonnement-card>
-        </div>
-      </ng-container>
-    </ng-container>
-
-  </div>
-<div class="caroussel-button" *ngIf="engagmentClicked" >
+<div class="caroussel-button" >
   <button class="flex center"
   (click)="scrollRight()"
   ><img src="assets/arrowleft.svg" alt=""></button>
@@ -43,3 +20,10 @@
   (click)="scrollLeft()"
   ><img src="assets/arrowright.svg" alt=""></button>
 </div>
+
+<slidemenu [(open)]="openEngagment" #engagment>
+    <h1 class="center-text full-width" header>Test</h1>  
+    <div class="modify-page hosted-page flex column center-cross space-children-margin" content>
+        <engagement [abonnementId]="currentAbonnementId" [abonnement]="abonnement[currentAbonnementId]"></engagement>
+    </div>
+</slidemenu>

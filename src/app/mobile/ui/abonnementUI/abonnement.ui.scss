@@ -1,17 +1,29 @@
 @use "sass:math";
 @use "../../../../styles/variables" as *;
 
+:host {
+    display: block;
+    height: 30rem;
+}
 .card {
+    height: 100%;
     width: 100%;
     border : 1px solid #E5E5E5;
     background : $bg-white;
     border-bottom: 6px solid $primary;
-    padding : 0 2rem;
 }
 $margin-top : 16px;
+$margin-both: 12px;
+.both.space-children-margin > *:not(:last-child) {
+    margin-bottom: 0.5rem;
+}
 .card-stars {
     margin-top: $margin-top;
     margin-bottom: $margin-top*2;
+
+    .both & {
+        margin-bottom: $margin-top;
+    }
     img{
         width: 30px;
     }
@@ -41,6 +53,10 @@ $margin-top : 16px;
 .bottom-line{
     margin-top: $margin-top;
     margin-bottom: $margin-top;
+    .both & {
+        margin-top: $margin-both;
+        margin-bottom: $margin-both;
+    }
     border-top : 1px solid #E5E5E5;
 }
 .earn {
@@ -48,6 +64,9 @@ $margin-top : 16px;
         list-style: url('/assets/confirmationblue.svg');
         background-size: 40px;
         margin: $margin-top 0;
+        .both & {
+            margin: $margin-both 0;
+        }
         padding-left: math.div($margin-top, 2);
     }
 }
@@ -62,5 +81,8 @@ $margin-top : 16px;
     font-size: 12px;
     color : $light;
     margin: $margin-top*2 0 math.div($margin-top, 2) 0;
+    .both & {
+        margin: $margin-both 0 math.div($margin-both,2) 0;
+    }
 }
 

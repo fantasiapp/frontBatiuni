@@ -57,6 +57,7 @@ export class ProfileComponent extends Destroy$ {
   openBlockedContact: boolean = false;
   openCandidature: boolean = false;
   openRecommandationMenu: boolean = false;
+  openSubscription: boolean = false;
 
 
   @Input()
