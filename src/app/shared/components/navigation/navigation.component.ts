@@ -50,8 +50,9 @@ export class NavigationMenu extends Destroy$ {
       let files = this.store.selectSnapshot(DataQueries.getMany('File', userFiles))
       Kbis = files.filter(file => file.name == 'Kbis') 
     }
-    if (route == 'make' && Kbis.length == 0){
-      this.popup.missKbis('Créer une annonce')
+    if ((route == 'make' || route == 'sos') && Kbis.length == 0){
+      if (route == 'make') {this.popup.missKbis('Créer une annonce')}
+      if (route == 'sos') {this.popup.missKbis('SOS')}
       route = menu[3].route
     } 
     else if (view == 'ST' && (route == '' || route == 'availabilities') && Kbis.length == 0){
