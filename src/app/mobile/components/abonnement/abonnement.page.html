@@ -22,8 +22,14 @@
 </div>
 
 <slidemenu [(open)]="openEngagment" #engagment>
-    <h1 class="center-text full-width" header>Test</h1>  
-    <div class="modify-page hosted-page flex column center-cross space-children-margin" content>
-        <engagement [abonnementId]="currentAbonnementId" [abonnement]="abonnement[currentAbonnementId]"></engagement>
+    <h1 class="center-text full-width" header>Gérer mes abonnements</h1>  
+    <div *ngIf="openEngagment" class="modify-page hosted-page flex column center-cross space-children-margin" content>
+      <h4>Sélectionnez un plan : </h4>
+      <div class="plan-container">
+        <!-- <options [type]="'radio'"></options> -->
+      </div>
     </div>
+    <!-- <div class="modify-page hosted-page flex column center-cross space-children-margin" content>
+        <engagement [abonnementId]="currentAbonnementId" [abonnement]="abonnement[currentAbonnementId]"></engagement>
+    </div> -->
 </slidemenu>
