@@ -335,7 +335,7 @@ export class DataState {
         let key = Object.keys(response)
         let id = response.supervisionId
         delete response.supervisionId;
-        response[parseInt(key[0])].push(picture.imageBase64)
+        response[parseInt(key[0])].push(picture.fileBase64)
         this.getUserDataService.emitDataChangeEvent(response.timestamp)
         delete response["timestamp"];
         ctx.setState(compose(addComplexChildren("Supervision", id, "File", response)))
