@@ -79,7 +79,7 @@ export class SupervisionWrapperComponent extends Destroy$ {
         datePostId = this.dateOrigin.id
       }
       try {
-        await this.store.dispatch(new CreateSupervision(detailPostId, datePostId, comment)).pipe(take(1)).subscribe((response) => {
+        this.store.dispatch(new CreateSupervision(detailPostId, datePostId, comment)).pipe(take(1)).subscribe((response) => {
           formControl.reset()
           let supervisions: Supervision[];
           if(this.selectedTask){
@@ -98,7 +98,6 @@ export class SupervisionWrapperComponent extends Destroy$ {
 
           if(uploadImageAfter && photo){
             this.store.dispatch(new UploadImageSupervision(photo, this.supervisions[this.supervisions.length - 1].id)).pipe(take(1)).subscribe(() => {
-              
               // this.updatePageOnlyDate();
               this.swipeMenuImage = false;
               console.log('NEW SUPERVISION ', this.supervisions);
