@@ -96,7 +96,7 @@ export class InfoHandler extends Destroy$ {
   }
 
   private show(info: Info) {
-    // this.textOverflow()
+    this.textOverflow()
     if ( !info.content ) return;
     this.resetTimer();
     this.content = info.content;
