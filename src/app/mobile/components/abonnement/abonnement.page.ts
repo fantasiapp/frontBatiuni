@@ -44,7 +44,7 @@ export class AbonnementPage {
         let scroll = document.getElementsByClassName('caroussel')
         scroll[0].scrollTo({
             top:0,
-            left:302
+            left:310
         })
     }
     scrollLeft() {
