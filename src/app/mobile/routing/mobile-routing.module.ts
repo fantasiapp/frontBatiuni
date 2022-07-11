@@ -33,7 +33,6 @@ import { GiveARecommandation } from 'src/app/shared/validators/give_recommandati
 import { FaqComponent } from '../../shared/components/faq/faq.component';
 import { MentionLegalComponent } from '../components/mention-legal/mention-legal.component';
 import { Payment } from 'src/app/shared/components/payment/payment.component';
-import { PaymentCheckout } from 'src/app/shared/components/payment-checkout/payment-checkout.component';
 
 const routes: Routes = [{
     path: 'landing',
@@ -119,9 +118,6 @@ const routes: Routes = [{
   }, {
     path: 'payment',
     component: Payment
-  }, {
-    path: 'payment_checkout',
-    component: PaymentCheckout
   }, {
     path: '**',
     redirectTo: 'landing',
