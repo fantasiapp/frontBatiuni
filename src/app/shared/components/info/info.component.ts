@@ -96,6 +96,7 @@ export class InfoHandler extends Destroy$ {
   }
 
   private show(info: Info) {
+    // this.textOverflow()
     if ( !info.content ) return;
     this.resetTimer();
     this.content = info.content;
@@ -119,6 +120,15 @@ export class InfoHandler extends Destroy$ {
     this.content = '';
     this.resetTimer();
     this.cd.markForCheck();
+  }
+
+  textOverflow() {
+    let content = document.getElementById('content')
+    console.log("e", content, content?.scrollWidth, content?.offsetWidth)
+    if (content){
+      return (content?.scrollWidth > content?.offsetWidth)
+    }
+    return false
   }
 };
 
