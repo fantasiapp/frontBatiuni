@@ -5,7 +5,7 @@
         <abonnement-card (openEngagment)="onOpenEngagement($event)" [subscriptionType]="0" [abonnement]="abonnement[0]"></abonnement-card>
       </div>
       <div class="thiscenterclass"> 
-        <abonnement-card (openEngagment)="onOpenEngagement($event)" class="thischild" [subscriptionType]="1" [abonnement]="abonnement[1]"></abonnement-card>
+        <abonnement-card (openEngagment)="onOpenEngagement($event)" [ngClass]="{'thischild':abonnementOnView == 1}" [subscriptionType]="1" [abonnement]="abonnement[1]"></abonnement-card>
         
       </div>
       <div>

@@ -42,15 +42,16 @@ export class AbonnementPage {
     }
     ngAfterViewInit(){
         this.abonnementOnView = 1
+        this.cd.detectChanges()
         let scroll = document.getElementsByClassName('caroussel')
         scroll[0].scrollTo({
             top:0,
             left:310
         })
-        this.cd.markForCheck()
     }
     scrollLeft() {
         this.abonnementOnView = this.abonnementOnView > 0 ? this.abonnementOnView - 1 : 0
+        this.cd.detectChanges()
         let scroll = document.getElementsByClassName('caroussel')
         scroll[0].scrollTo({
             top:0,
@@ -60,6 +61,7 @@ export class AbonnementPage {
     }
     scrollRight() {
         this.abonnementOnView = this.abonnementOnView < 2 ? this.abonnementOnView + 1 : 2
+        this.cd.detectChanges()
         let scroll = document.getElementsByClassName('caroussel')
         scroll[0].scrollTo({
             top:0,
