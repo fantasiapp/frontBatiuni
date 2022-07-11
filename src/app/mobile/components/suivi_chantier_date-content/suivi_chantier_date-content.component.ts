@@ -163,8 +163,7 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
         supervisions = Object.values(postDetail.supervisions) as unknown as Supervision[]
       } else {
         supervisions = this.store.selectSnapshot(DataQueries.getMany("Supervision", postDetail.supervisions as unknown as number[]))
-      }
-      return {
+      } return {
         "id": postDetail.id,
         "date": postDetail.date,
         "content": postDetail.content,

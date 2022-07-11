@@ -32,10 +32,10 @@ export class ChangeProfilePicture {
 export class UploadImageSupervision {
   static readonly type = '[User] Upload Supervision Picture';
   ext: string = '';
-  imageBase64: string = '';
+  fileBase64: string = '';
   constructor(src: any, public supervisionId: number | null) {
     this.ext = src.format;
-    this.imageBase64 = src.base64String;
+    this.fileBase64 = src.base64String;
   }
   action = 'uploadImageSupervision';
 };
