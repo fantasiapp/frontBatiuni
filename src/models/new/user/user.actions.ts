@@ -8,6 +8,7 @@ import { availabilityToName } from "../data.mapper";
 import { ApplyForm } from "src/app/mobile/ui/annonce-resume/annonce-resume.ui";
 import { DataQueries } from "../data.state";
 import { Store } from "@ngxs/store";
+import { AbstractEmitterVisitor } from "@angular/compiler/src/output/abstract_emitter";
 
 export class ChangeProfileType {
   static readonly type = '[User] Change Profile Type';
@@ -31,10 +32,10 @@ export class ChangeProfilePicture {
 export class UploadImageSupervision {
   static readonly type = '[User] Upload Supervision Picture';
   ext: string = '';
-  imageBase64: string = '';
+  fileBase64: string = '';
   constructor(src: any, public supervisionId: number | null) {
     this.ext = src.format;
-    this.imageBase64 = src.base64String;
+    this.fileBase64 = src.base64String;
   }
   action = 'uploadImageSupervision';
 };
@@ -64,8 +65,15 @@ export class ModifyUserProfile {
     let changes: any; 
     if (labels) {
       changes = []
-      this.labelFiles = labels
-
+      // this.labelFiles = labels.map(label=> {
+      //   return {
+      //     content: label.fileData.content,
+      //     expirationDate: label.fileData.expirationDate,
+      //     ext: label.fileData.ext,
+      //     name: label.label.fileName,
+      //     nature: label.fileData.nature
+      //   }
+      // })
       changes.push({"UserProfile.Company.LabelForCompany": this.labelFiles})
       console.log(changes);
     } else {
@@ -86,7 +94,17 @@ export class ModifyUserProfile {
         changes['UserProfile.Company.LabelForCompany'] = Object.values<any>(labelsForm).map(
           ({label, fileData}) => ([label.id, fileData.expirationDate!])
         );
-        this.labelFiles = Object.values<any>(labelsForm).map(({fileData}: {fileData: FileUIOutput}) => fileData);
+        // this.labelFiles = Object.values<any>(labelsForm).map(({fileData}: {fileData: FileUIOutput}) => fileData);
+        console.log('LABELSFILES', labelsForm);
+        this.labelFiles = labelsForm.map((label: { fileData: { content: any; expirationDate: any; ext: any; nature: any; }; label: { fileName: any; }; })=> {
+          return {
+            content: label.fileData.content,
+            expirationDate: label.fileData.expirationDate,
+            ext: label.fileData.ext,
+            name: label.label.fileName,
+            nature: label.fileData.nature
+          }
+        })
       }
 
       if ( adminFiles ) {
@@ -127,6 +145,7 @@ export class UploadFile<K extends DataTypes = any> {
 
   //tell JLW to unify formats
   constructor(src: FileUIOutput, nature: string, name?: string, category?: K) {
+    console.log('uploadFile', src, nature, name, category );
     // this.fileBase64 = src.content //only one file
     this.fileBase64 = src.content[0]; //only one file
     this.expirationDate = src.expirationDate;

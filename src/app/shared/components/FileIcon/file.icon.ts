@@ -80,7 +80,7 @@ import { DataQueries, SnapshotAll } from "src/models/new/data.state";
 export class FileIcon {
   public name: string = 'Fichier';
   public label: Label[] = []
-  public isLabel: boolean = false
+  // public isLabel: boolean = false
   public originalName: string = '';
   public allLabels: Label[];
 
@@ -99,6 +99,8 @@ export class FileIcon {
   @Input() 
   date!: string 
 
+  @Input() isLabel: boolean = false
+
   //#ffb347 for orange
   @Input() color: string = '#32a290';
 
@@ -107,8 +109,7 @@ export class FileIcon {
   }
 
   ngOnInit() {
-    this.label = this.allLabels.filter(label => label.name == this.originalName)
-    console.log('label', this.label);
+    this.label = this.allLabels.filter(label => label.fileName == this.originalName)
     if(this.label.length == 1) {
       this.isLabel = true
       this.originalName = this.label[0].fileName
