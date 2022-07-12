@@ -55,27 +55,27 @@
 }
 
 @keyframes defilement-rtl {
-  0% {transform: translateX(100%);
-    -webkit-transform: translateX(100%);}
+  0% {transform: translateX(0%);
+    -webkit-transform: translateX(0%);}
   100% {transform: translateX(-100%);
       -webkit-transform: translateX(-100%);}
 }
 
 @keyframes defilement-rtl2 {
-  0% {transform: translateX(0%);
-      -webkit-transform: translateX(0%);}
-    100% {transform: translateX(-200%);
-        -webkit-transform: translateX(-200%);}
+  0% {transform: translateX(-50%);
+      -webkit-transform: translateX(-50%);}
+    100% {transform: translateX(-150%);
+        -webkit-transform: translateX(-150%);}
 }
 
 @-webkit-keyframes defilement-rtl {
-  0% {-webkit-transform: translateX(100%);}
+  0% {-webkit-transform: translateX(0%);}
     100% {-webkit-transform: translateX(-100%);}
 }
 
 @-webkit-keyframes defilement-rtl2 {
-  0% {-webkit-transform: translateX(0%);}
-    100% {-webkit-transform: translateX(-200%);}
+  0% {-webkit-transform: translateX(-50%);}
+    100% {-webkit-transform: translateX(-150%);}
 }
 
 
