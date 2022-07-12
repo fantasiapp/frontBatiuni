@@ -1,5 +1,29 @@
 import { Component, ChangeDetectionStrategy } from "@angular/core";
 
+export interface abonnementType{
+    title:string,
+    monthlyPrice: number,
+    advantages: string[], 
+}
+
+export const abonnementArray: abonnementType[]= [
+    {
+        title: 'Accès deux profil',
+        monthlyPrice: 50,
+        advantages: ['Trouver les meilleurs chantiers', 'Porte-documents électroniques', 'Organisation plus efficace', 'Suivi de chantier', 'Annonces illimitées', 'Accès salariés']
+    },
+    {
+        title: 'Accès PME',
+        monthlyPrice: 40,
+        advantages: ['Suivi de chantier', 'Annonces ilimitées', 'Accès salariés']
+    },
+    {
+        title: 'Accès ST',
+        monthlyPrice: 12,
+        advantages: ['Trouver les meilleurs chantiers', 'Porte-documents életroniques', 'Organisation plus efficace']
+    }
+]
+
 @Component({
     selector: "abonnement",
     templateUrl: "abonnement.page.html",
@@ -7,8 +31,15 @@ import { Component, ChangeDetectionStrategy } from "@angular/core";
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AbonnementPage {
+
     activeView: number = 0;
-    engagmentClicked: boolean = true;
+    openEngagment: boolean = false
+    currentAbonnementId: number = -1
+    abonnement: abonnementType[]
+
+    constructor(){
+        this.abonnement = abonnementArray
+    }
     ngAfterViewInit(){
         let scroll = document.getElementsByClassName('caroussel')
         scroll[0].scrollTo({
@@ -33,4 +64,8 @@ export class AbonnementPage {
         })
     }
 
+    onOpenEngagement(i:number) {
+        this.openEngagment = true
+        this.currentAbonnementId = i
+    }
 }
