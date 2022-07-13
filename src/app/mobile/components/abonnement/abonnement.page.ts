@@ -68,4 +68,10 @@ export class AbonnementPage {
         this.openEngagment = true
         this.currentAbonnementId = i
     }
+
+    selectedEngagmentLength = -1
+
+    selectEngagement(n: number) {
+        this.selectedEngagmentLength = n
+    }
 }

@@ -71,10 +71,14 @@ page-header::ng-deep .tabs {
     display: none;
 }
 
+h4 {
+    font-weight: 500;
+}
 .plans-container{
     display: flex;
     flex-direction: column;
     row-gap: 2rem;
+    font-weight: 300;
 }
 
 .plans__plan {
@@ -83,11 +87,28 @@ page-header::ng-deep .tabs {
 
 .radio {
     flex-shrink: 0;
-    width: 2rem;
-    height: 2rem;
+    width: 1.5rem;
+    height: 1.5rem;
     display: block;
-    border: 1px black solid;
+    border: 1px #707070 solid;
     border-radius: 50%;
+    background-color: unset;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    &-active {
+        border-color: $primary;
+
+        &::after {
+            content: '';
+            display: block;
+            background-color: $primary; 
+            height: 1rem;
+            width: 1rem;
+            border-radius: 50%;
+        }
+    }
 }
 
 footer {

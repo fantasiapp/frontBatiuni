@@ -26,16 +26,16 @@
     <div *ngIf="openEngagment" class="modify-page hosted-page flex column center-cross space-children-margin" content>
       <h4>Sélectionnez un plan : </h4>
       <div class="plans-container">
-        <div class="plans__plan flex row">
-          <button class="radio"></button>
+        <div class="plans__plan flex row" (click)="selectEngagement(0)">
+          <button class="radio" [ngClass]="{'radio-active': selectedEngagmentLength == 0}"></button>
           <div class="plan__text">Engagement 3 mois pour {{abonnement[currentAbonnementId].monthlyPrice}}€ / mois ({{abonnement[currentAbonnementId].monthlyPrice / 2}}€ au premier engagement)</div>
         </div>
-        <div class="plans__plan flex row">
-          <button class="radio"></button>
+        <div class="plans__plan flex row"(click)="selectEngagement(1)">
+          <button class="radio "[ngClass]="{'radio-active': selectedEngagmentLength == 1}"></button>
           <div class="plan__text">Engagement 6 mois pour {{abonnement[currentAbonnementId].monthlyPrice * .9}}€ / mois ({{abonnement[currentAbonnementId].monthlyPrice *.9/ 2}}€ au premier engagement)</div>
         </div>
-        <div class="plans__plan flex row">
-          <button class="radio"></button>
+        <div class="plans__plan flex row"(click)="selectEngagement(2)">
+          <button class="radio"[ngClass]="{'radio-active': selectedEngagmentLength == 2}"></button>
           <div class="plan__text">Engagement 12 mois pour {{abonnement[currentAbonnementId].monthlyPrice * .8}}€ / mois ({{abonnement[currentAbonnementId].monthlyPrice *.8/ 2}}€ au premier engagement)</div>
         </div>
       </div>
