@@ -71,6 +71,15 @@ page-header::ng-deep .tabs {
     display: none;
 }
 
+.plans-container{
+    display: flex;
+    flex-direction: column;
+    row-gap: 2rem;
+}
+
+.plans__plan {
+    column-gap: 1rem;
+}
 
 .radio {
     flex-shrink: 0;
@@ -79,4 +88,20 @@ page-header::ng-deep .tabs {
     display: block;
     border: 1px black solid;
     border-radius: 50%;
+}
+
+footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    margin-bottom: env(safe-area-inset-bottom);
+    height: 4rem;
+    display: flex;
+    justify-content: center;
+    border-top: 1px solid rgb(207, 207, 207);
+    button {
+        align-self: center;
+        width: 90%;
+        height: 3rem;
+    }
 }

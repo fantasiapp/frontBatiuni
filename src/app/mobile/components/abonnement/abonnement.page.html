@@ -28,10 +28,22 @@
       <div class="plans-container">
         <div class="plans__plan flex row">
           <button class="radio"></button>
-          <div class="plan__text">Engagement 3mois Lorem ipsum dolor sit amet consectetur adipisicing.</div>
+          <div class="plan__text">Engagement 3 mois pour {{abonnement[currentAbonnementId].monthlyPrice}}€ / mois ({{abonnement[currentAbonnementId].monthlyPrice / 2}}€ au premier engagement)</div>
+        </div>
+        <div class="plans__plan flex row">
+          <button class="radio"></button>
+          <div class="plan__text">Engagement 6 mois pour {{abonnement[currentAbonnementId].monthlyPrice * .9}}€ / mois ({{abonnement[currentAbonnementId].monthlyPrice *.9/ 2}}€ au premier engagement)</div>
+        </div>
+        <div class="plans__plan flex row">
+          <button class="radio"></button>
+          <div class="plan__text">Engagement 12 mois pour {{abonnement[currentAbonnementId].monthlyPrice * .8}}€ / mois ({{abonnement[currentAbonnementId].monthlyPrice *.8/ 2}}€ au premier engagement)</div>
         </div>
       </div>
+      <footer>
+        <button class="button active">J'en profite</button>
+      </footer>
     </div>
+
     <!-- <div class="modify-page hosted-page flex column center-cross space-children-margin" content>
         <engagement [abonnementId]="currentAbonnementId" [abonnement]="abonnement[currentAbonnementId]"></engagement>
     </div> -->
