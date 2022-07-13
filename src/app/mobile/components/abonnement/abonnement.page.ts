@@ -34,6 +34,7 @@ export class AbonnementPage {
 
     abonnementOnView: number = 0;
     openEngagment: boolean = false
+    openEngagmentPage: boolean = false
     currentAbonnementId: number = -1
     abonnement: abonnementType[]
 

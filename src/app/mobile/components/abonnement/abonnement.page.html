@@ -40,11 +40,14 @@
         </div>
       </div>
       <footer>
-        <button class="button active">J'en profite</button>
+        <button class="button active" (click)="(selectedEngagmentLength != -1) && openEngagmentPage = true">J'en profite</button>
       </footer>
     </div>
+  </slidemenu>
+  <slidemenu [(open)]="openEngagmentPage">
+    <h1 class="center-text full-width" header>Gérer mes abonnements</h1>  
+    <div class="modify-page hosted-page flex column center-cross space-children-margin" content>
+      <!-- <engagement [abonnement]="abonnement[currentAbonnementId]" [engagmentLength]="selectedEngagmentLength"></engagement> -->
+    </div>
+  </slidemenu>
 
-    <!-- <div class="modify-page hosted-page flex column center-cross space-children-margin" content>
-        <engagement [abonnementId]="currentAbonnementId" [abonnement]="abonnement[currentAbonnementId]"></engagement>
-    </div> -->
-</slidemenu>
