@@ -105,7 +105,7 @@ import { ActiveViewService } from "../services/activeView.service";
               />
             </div>
             <div class="form-input">
-              <label>Téléphone de l'entreprise <span class='star'>*</span></label>
+              <label>Téléphone de l'entreprise </label>
               <input
                 #input4
                 (click)="onClickInputScroll(input4)"
@@ -116,7 +116,7 @@ import { ActiveViewService } from "../services/activeView.service";
               />
             </div>
             <div class="form-input">
-              <label>Téléphone portable</label>
+              <label>Téléphone portable <span class='star'>*</span></label>
               <input
                 #input5
                 (click)="onClickInputScroll(input5)"
