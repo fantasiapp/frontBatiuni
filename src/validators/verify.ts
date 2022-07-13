@@ -27,10 +27,10 @@ export const ComplexPassword = () => {
   return (control: AbstractControl) => {
     let content = control?.value,
       errors: ValidationErrors = {};
-            
-    if ( content.length < 8 ) errors['MIN_LENGTH'] = [];
-    if ( !content.match(lowerCase) ) errors['CASE'] = ['miniscule'];
-    else if ( !content.match(upperCase) ) errors['CASE'] = ['majuscule'];
+          
+    if ( content && content.length < 8 ) errors['MIN_LENGTH'] = [];
+    if ( content && !content.match(lowerCase) ) errors['CASE'] = ['miniscule'];
+    else if ( content && !content.match(upperCase) ) errors['CASE'] = ['majuscule'];
     return Object.keys(errors).length ? errors : null;
   }
 };

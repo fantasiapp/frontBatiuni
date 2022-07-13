@@ -1,12 +1,13 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Output } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Output } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
+import { take } from "rxjs/operators";
 import { ComplexPassword, MatchField } from "src/validators/verify";
 import { returnInputKeyboard } from '../common/classes'
 
 @Component({
   selector: 'modify-password-form',
   template: `
-  <form class="form-control" style="height: 100%;" [formGroup]="form" >
+  <form class="form-control" style="height: 100%;" [formGroup]="form" id="form" >
     <div class="form-input">
       <label>Ancien mot de passe</label>
       <input class="form-element" type="password" formControlName="oldPwd" id="idPassword" (keyup)="returnInputKeyboard($event, input1)" (click)="onClickInputScroll(input1)" #input1/>
@@ -31,10 +32,7 @@ import { returnInputKeyboard } from '../common/classes'
   </form>
 
   <div class="sticky-footer">
-    <button class="button gradient full-width" (click)="onSubmit()"
-      [disabled]="form.invalid || null">
-      Enregistrer
-    </button>
+    <button class="button gradient full-width" (click)="onSubmit()" [disabled]="form.invalid || null || disableBoutton">Enregistrer </button>
   </div>
   `,
   styles: [`
@@ -57,9 +55,11 @@ import { returnInputKeyboard } from '../common/classes'
 export class ModifyPasswordForm {
 
   returnInputKeyboard = returnInputKeyboard
-  constructor() {}
+  constructor(private cd: ChangeDetectorRef) {}
 
   @Output() submit = new EventEmitter<FormGroup>();
+
+  disableBoutton = false;
 
   // Modify password 
   form = new FormGroup({
@@ -74,7 +74,15 @@ export class ModifyPasswordForm {
     ])
   }, {})
 
-  onSubmit() { this.submit.emit(this.form); }
+  onSubmit() { 
+    this.submit.emit(this.form);
+    this.disableBoutton = true;
+    this.form.reset()
+    document.querySelector("form")?.reset();
+    if (this.form.get('oldPwd')?.value == null){this.disableBoutton=false;}
+    this.cd.markForCheck()
+      
+  }
 
   togglePassword() {
     const togglePassword = document.querySelectorAll('#togglePassword');
