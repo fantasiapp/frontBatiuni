@@ -1,10 +1,6 @@
 export const environment = {
   production: false,
-<<<<<<< Updated upstream
-  backUrl: "https://batiuni.fantasiapp.tech:5003",
-=======
   backUrl: "https://batiuni.fantasiapp.tech:5004",
->>>>>>> Stashed changes
   // backUrl: 'http://localhost:8000',
   version: "current",
   firebase: {
