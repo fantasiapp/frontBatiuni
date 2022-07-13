@@ -271,17 +271,6 @@ import { ActiveViewService } from "../services/activeView.service";
               />
             </div>
 
-            <div class="form-input" *ngIf="view == 'ST'">
-              <label>Taux horaire moyen</label>
-              <input
-                #input12
-                (click)="onClickInputScroll(input12)"
-                (keyup)="returnInputKeyboard($event, input12)"
-                class="form-element"
-                maxlength="11"
-                formControlName="UserProfile.Company.amount"
-              />
-            </div>
 
             <h3 class="form-title">Documents importants</h3>
             <h4 class="champs">Champs obligatoire pour optimiser votre profil <span class='starGreen'>*</span></h4>
