@@ -147,7 +147,6 @@ export class DataState {
   //------------------------------------------------------------------------
   @Action(GetGeneralData)
   getGeneralData(ctx: StateContext<DataModel>) {
-    console.log('getGeneralData local', this.localService.getData("getGeneralData"));
     if(this.isFirstTime && this.connectionStatusService.isOnline){
       let localGetGeneralData: string | null = this.localService.getData("getGeneralData")
       if (localGetGeneralData){
@@ -171,7 +170,6 @@ export class DataState {
 
   @Action(GetUserData)
   getUserData(ctx: StateContext<DataModel>, action: GetUserData) {
-    console.log("le local ", this.localService.getData("getUserData"))
     const req = this.http.get("data", { action: action.action });
     let localGetUserData: string | null = this.localService.getData("getUserData")
     if (this.isFirstTime && localGetUserData) {
