@@ -189,10 +189,11 @@
       >
         <img (click)="slideMissionClose()" src="assets/arrowlblack.svg" />
         <h1 class="grow center-text">Annonce validée</h1>
-        <img
+        <button (click)="swipeupMenu(); view == 'PME' && suiviChantier.submitAdFormDate(true)"  class="optionButton">Options</button> 
+        <!-- <img
           (click)="swipeupMenu(); view == 'PME' && suiviChantier.submitAdFormDate(true)"
           [src]="view == 'PME' ? 'assets/Option.svg' : 'assets/phone.png'"
-        />
+        /> -->
       </header>
 
       <suivi-chantier

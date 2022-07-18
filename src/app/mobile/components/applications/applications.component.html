@@ -29,7 +29,8 @@
     customHeader id="swipeupHeader">
         <img (click)="slideOnlinePostClose()" src="assets/arrowlblack.svg" />
         <h1 class="grow center-text">Candidature en cours</h1>
-        <img *ngIf="!isRefused(postMenu.post)" (click)="postMenu.swipeup = true" src="assets/Option.svg"/>    
+        <!-- <img *ngIf="!isRefused(postMenu.post)" (click)="postMenu.swipeup = true" src="assets/Option.svg"/>     -->
+        <button *ngIf="!isRefused(postMenu.post)" (click)="postMenu.swipeup = true"  class="optionButton">Options</button> 
     </header>
 
     <ng-container content>
