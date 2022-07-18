@@ -280,6 +280,7 @@ import { ActiveViewService } from "../services/activeView.service";
               <fileinput
                 [showtitle]="false"
                 filename="Kbis"
+                name="Kbis"
                 formControlName="Kbis"
                 (kill)="removeDocument($event)"
               >
@@ -289,6 +290,7 @@ import { ActiveViewService } from "../services/activeView.service";
               <fileinput
                 [showtitle]="false"
                 filename="Attestation travail dissimulé"
+                name="Attestation travail dissimulé"
                 formControlName="Trav Dis"
                 (kill)="removeDocument($event)"
               >
@@ -298,6 +300,7 @@ import { ActiveViewService } from "../services/activeView.service";
               <fileinput
                 [showtitle]="false"
                 filename="Attestation RC + DC"
+                name="Attestation RC + DC"
                 formControlName="RC + DC"
                 (kill)="removeDocument($event)"
               >
@@ -307,6 +310,7 @@ import { ActiveViewService } from "../services/activeView.service";
               <fileinput
                 [showtitle]="false"
                 filename="URSSAF"
+                name="URSSAF"
                 formControlName="URSSAF"
                 (kill)="removeDocument($event)"
               >
@@ -316,6 +320,7 @@ import { ActiveViewService } from "../services/activeView.service";
               <fileinput
                 [showtitle]="false"
                 filename="Impôts"
+                name="Impôts"
                 formControlName="Impôts"
                 (kill)="removeDocument($event)"
               >
@@ -325,6 +330,7 @@ import { ActiveViewService } from "../services/activeView.service";
               <fileinput
                 [showtitle]="false"
                 filename="Congés payés"
+                name="Congés payés"
                 formControlName="Congés Payés"
                 (kill)="removeDocument($event)"
               >
