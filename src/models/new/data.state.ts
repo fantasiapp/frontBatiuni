@@ -21,6 +21,7 @@ import { getUserDataService } from "src/app/shared/services/getUserData.service"
 import { AppComponent } from "src/app/app.component";
 import { SingleCache } from "src/app/shared/services/SingleCache";
 import { NotifService } from "src/app/shared/services/notif.service";
+import { LocalService } from "src/app/shared/services/local.service";
 
 export interface DataModel {
   fields: Record<string[]>;
@@ -52,7 +53,7 @@ export class Clear {
 export class DataState {
   flagUpdate = true;
   isFirstTime = true
-  constructor(private store: Store,private reader: DataReader,private http: HttpService,private info: InfoService,private slide: SlidemenuService,private swipeup: SwipeupService,private zone: NgZone,private booleanService: BooleanService,private getUserDataService: getUserDataService,private notifService: NotifService) {}
+  constructor(private store: Store,private reader: DataReader,private http: HttpService,private info: InfoService,private slide: SlidemenuService,private swipeup: SwipeupService,private zone: NgZone,private booleanService: BooleanService,private getUserDataService: getUserDataService,private notifService: NotifService, private localService: LocalService) {}
 
   private pending$: Record<Subject<any>> = {};
 
@@ -146,15 +147,23 @@ export class DataState {
   @Action(GetGeneralData)
   getGeneralData(ctx: StateContext<DataModel>) {
     if(this.isFirstTime){
-      const req = this.http.get("initialize", {action: "getGeneralData",})
+      let localGetGeneralData: string | null = this.localService.getData("getGeneralData")
+      if (localGetGeneralData){
+          console.log('getGeneralData local', localGetGeneralData);
+          const operations = this.reader.readStaticData(localGetGeneralData);
+          ctx.setState(compose(...operations));
+          return
+      }
+      else{
+        const req = this.http.get("initialize", {action: "getGeneralData",})
 
-      return req.pipe(tap((response: any) => {
-        console.log('getGeneralData', response);
-        const operations = this.reader.readStaticData(response);
-        // ctx.setState(compose(...operations));
-        ctx.setState(compose(...operations));
-      }))
-    }
+        return req.pipe(tap((response: any) => {
+          console.log('getGeneralData', response);
+          this.localService.saveData('getGeneralData local', response)
+          const operations = this.reader.readStaticData(response);
+          ctx.setState(compose(...operations));
+        }))
+    }}
     else return
   }
 
