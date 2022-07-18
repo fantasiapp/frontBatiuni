@@ -9,7 +9,9 @@ import { fromEvent, Observable, Subscription } from 'rxjs';
 
 export class ConnectionStatusService {
     
-  constructor(private store: Store) {}
+  constructor(private store: Store) {
+    this.init()
+  }
 
   onlineEvent: Observable<Event> | null = null
   offlineEvent: Observable<Event> | null = null

@@ -1,5 +1,5 @@
 import { Injectable, NgZone } from "@angular/core";
-import { Action,createSelector,Selector,State,StateContext,Store, } from "@ngxs/store";
+import { Action,createSelector,Selector,State,StateContext,Store } from "@ngxs/store";
 import { Observable, of, Subject } from "rxjs";
 import { concatMap, map, tap } from "rxjs/operators";
 import { HttpService } from "src/app/services/http.service";
@@ -22,6 +22,7 @@ import { AppComponent } from "src/app/app.component";
 import { SingleCache } from "src/app/shared/services/SingleCache";
 import { NotifService } from "src/app/shared/services/notif.service";
 import { LocalService } from "src/app/shared/services/local.service";
+import { ConnectionStatusService } from "src/app/shared/services/connectionStatus.service";
 
 export interface DataModel {
   fields: Record<string[]>;
@@ -53,7 +54,7 @@ export class Clear {
 export class DataState {
   flagUpdate = true;
   isFirstTime = true
-  constructor(private store: Store,private reader: DataReader,private http: HttpService,private info: InfoService,private slide: SlidemenuService,private swipeup: SwipeupService,private zone: NgZone,private booleanService: BooleanService,private getUserDataService: getUserDataService,private notifService: NotifService, private localService: LocalService) {}
+  constructor(private store: Store,private reader: DataReader,private http: HttpService,private info: InfoService,private slide: SlidemenuService,private swipeup: SwipeupService,private zone: NgZone,private booleanService: BooleanService,private getUserDataService: getUserDataService,private notifService: NotifService, private localService: LocalService, private connectionStatusService: ConnectionStatusService) {}
 
   private pending$: Record<Subject<any>> = {};
 
@@ -146,11 +147,12 @@ export class DataState {
   //------------------------------------------------------------------------
   @Action(GetGeneralData)
   getGeneralData(ctx: StateContext<DataModel>) {
-    if(this.isFirstTime){
+    console.log('getGeneralData local', this.localService.getData("getGeneralData"));
+    if(this.isFirstTime && this.connectionStatusService.isOnline){
       let localGetGeneralData: string | null = this.localService.getData("getGeneralData")
       if (localGetGeneralData){
           console.log('getGeneralData local', localGetGeneralData);
-          const operations = this.reader.readStaticData(localGetGeneralData);
+          const operations = this.reader.readStaticData(JSON.parse(localGetGeneralData));
           ctx.setState(compose(...operations));
           return
       }
@@ -159,7 +161,7 @@ export class DataState {
 
         return req.pipe(tap((response: any) => {
           console.log('getGeneralData', response);
-          this.localService.saveData('getGeneralData local', response)
+          this.localService.saveData('getGeneralData', JSON.stringify(response))
           const operations = this.reader.readStaticData(response);
           ctx.setState(compose(...operations));
         }))
@@ -169,25 +171,25 @@ export class DataState {
 
   @Action(GetUserData)
   getUserData(ctx: StateContext<DataModel>, action: GetUserData) {
-    console.log("les reco", this.store.selectSnapshot(DataQueries.getAll("Recommandation")))
+    console.log("le local ", this.localService.getData("getUserData"))
     const req = this.http.get("data", { action: action.action });
-    console.log(this.store.selectSnapshot(DataQueries.getAll("Recommandation")))
     if (this.isFirstTime) {
     }
-    if (this.flagUpdate){
+    if (this.flagUpdate && this.connectionStatusService.isOnline){
       this.flagUpdate = false
       return req.pipe(tap((response: any) => {
         console.log("getUserData response", response);
-          this.getUserDataService.setNewResponse(response)
-          if (this.isFirstTime) {
-            this.booleanService.emitLoadingChangeEvent(true)
-            this.booleanService.emitConnectedChangeEvent(true)
-            this.getUserDataService.getDataChangeEmitter().subscribe((value) => {
-              this.updateLocalData(ctx, value)
-            })
-            this.updateLocalData(ctx, response)
-          }
-          this.flagUpdate = true
+        this.localService.saveData("getUserData", JSON.stringify(response))
+        this.getUserDataService.setNewResponse(response)
+        if (this.isFirstTime) {
+          this.booleanService.emitLoadingChangeEvent(true)
+          this.booleanService.emitConnectedChangeEvent(true)
+          this.getUserDataService.getDataChangeEmitter().subscribe((value) => {
+            this.updateLocalData(ctx, value)
+          })
+          this.updateLocalData(ctx, response)
+        }
+        this.flagUpdate = true
     }, (error: any) => {
       this.flagUpdate = true
     })
@@ -228,6 +230,7 @@ export class DataState {
     this.getUserDataService.resetTimestamp()
     ctx.setState({ fields: {}, session: { view: "ST", currentUser: -1 , time: 0} });
     ctx.dispatch(new GetGeneralData()); // a sign to decouple this from DataModel
+    this.localService.clearData()
   }
 
   @Action(ModifyUserProfile)

@@ -51,9 +51,8 @@ export class AppComponent extends Destroy$ {
   isWhileOn: boolean = false;
   app: any
 
-  constructor(private store: Store, private mobile: Mobile, private notifService: NotifService, private booleanService: BooleanService, private connectionService: ConnectionStatusService) {
+  constructor(private store: Store, private mobile: Mobile, private notifService: NotifService, private booleanService: BooleanService) {
     super();
-    connectionService.init()
     this.mobile.init()
     this.isConnected = booleanService.isConnected
     this.booleanService.getConnectedChangeEmitter().subscribe((value) => {
