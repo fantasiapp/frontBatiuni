@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy } from "@angular/core";
+import { Component, ChangeDetectionStrategy, ChangeDetectorRef } from "@angular/core";
 
 export interface abonnementType{
     title:string,
@@ -32,19 +32,20 @@ export const abonnementArray: abonnementType[]= [
 })
 export class AbonnementPage {
 
-    activeView: number = 0;
+    abonnementOnView: number = 0;
     openEngagment: boolean = false
+    openEngagmentPage: boolean = false
     currentAbonnementId: number = -1
     abonnement: abonnementType[]
 
-    constructor(){
+    constructor(private cd: ChangeDetectorRef){
         this.abonnement = abonnementArray
     }
     ngAfterViewInit(){
         let scroll = document.getElementsByClassName('caroussel')
         scroll[0].scrollTo({
             top:0,
-            left:302
+            left:310
         })
     }
     scrollLeft() {
@@ -67,5 +68,11 @@ export class AbonnementPage {
     onOpenEngagement(i:number) {
         this.openEngagment = true
         this.currentAbonnementId = i
+    }
+
+    selectedEngagmentLength = -1
+
+    selectEngagement(n: number) {
+        this.selectedEngagmentLength = n
     }
 }

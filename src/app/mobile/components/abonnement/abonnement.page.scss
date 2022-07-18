@@ -43,6 +43,7 @@ page-header::ng-deep .tabs {
     }
 }
 
+
 .thiscenterclass {
     position: relative;
     .thischild {
@@ -68,4 +69,60 @@ page-header::ng-deep .tabs {
 }
 ::-webkit-scrollbar {
     display: none;
-  }
+}
+
+h4 {
+    font-weight: 500;
+}
+.plans-container{
+    display: flex;
+    flex-direction: column;
+    row-gap: 2rem;
+    font-weight: 300;
+}
+
+.plans__plan {
+    column-gap: 1rem;
+}
+
+.radio {
+    flex-shrink: 0;
+    width: 1.5rem;
+    height: 1.5rem;
+    display: block;
+    border: 1px #707070 solid;
+    border-radius: 50%;
+    background-color: unset;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    &-active {
+        border-color: $primary;
+
+        &::after {
+            content: '';
+            display: block;
+            background-color: $primary; 
+            height: 1rem;
+            width: 1rem;
+            border-radius: 50%;
+        }
+    }
+}
+
+footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    margin-bottom: env(safe-area-inset-bottom);
+    height: 4rem;
+    display: flex;
+    justify-content: center;
+    border-top: 1px solid rgb(207, 207, 207);
+    button {
+        align-self: center;
+        width: 90%;
+        height: 3rem;
+    }
+}
