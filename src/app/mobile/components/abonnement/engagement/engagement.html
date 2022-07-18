@@ -1,19 +1,19 @@
-<div class="hosted-page full-width page-content-without-nav space-children-margin">
+<div class="space-children-margin">
     <div class="space-children-margin facture">
         <span class="title">Votre commande</span>
         <hr>
         <div class="engagment-type">
-            <span class="left-price blue-text-price">Service PME engagement 12 mois</span>
-            <span class="right-price blue-text-price blue line-through">40 €/ mois</span>
+            <span class="left-price blue-text-price">Service PME engagement {{engagment.length}} mois</span>
+            <span class="right-price blue-text-price blue" [ngClass]="{'line-through': engagment.length != 3}">{{engagment.monthlyPrice}} €/ mois</span>
         </div>
-        <div class=""><span class="right-price bold-price blue blue-text-price">20 €/ mois</span></div>
+        <div class=""><span class="right-price bold-price blue blue-text-price" *ngIf="engagment.length != 3">{{engagment.reducedMonthlyPrice}} €/ mois</span></div>
         <hr>
         <div class="flex total">
             <div class="white">
             </div>
             <div class="flex sous-total">
                 <span class="blue-text-price">sous-total</span>
-                <span class="blue-text-price blue">40€ / mois</span>
+                <span class="blue-text-price blue">{{engagment.reducedMonthlyPrice}}€ / mois</span>
             </div>
         </div>
         <div class="flex total">
@@ -21,7 +21,7 @@
             </div>
             <div class="flex sous-total">
                 <span class="blue-text-price">TVA ( 20% )</span>
-                <span class="blue-text-price blue" >8€ / mois</span>
+                <span class="blue-text-price blue" >{{engagment.reducedMonthlyPrice * .2 | number: '1.2-2'}}€ / mois</span>
             </div>
         </div>
         <div class="flex total">
@@ -29,7 +29,7 @@
             </div>
             <div class="flex sous-total">
                 <span class="blue-text-price bold-price">TOTAL</span>
-                <span class="bold-price blue-text-price blue">48€ / mois</span>
+                <span class="bold-price blue-text-price blue">{{engagment.reducedMonthlyPrice * 1.2 | number: '1.2-2'}}€ / mois</span>
             </div>
         </div>
         <hr class="dashed">
@@ -37,10 +37,10 @@
         <span class="float-right blue-text-price ">Code promo ?</span>
 
     </div>
-    <div class="space-children-margin">
+    <!-- <div class="space-children-margin">
         <div class="add-employees flex"><div class="offres-logo flex center">+</div> Ajouter un  compte employé  &#9432;</div>
         <div class="add-docusign flex"><div class="offres-logo flex center">+</div> Ajouter Docusign ou la création de documents  ⓘ </div>
-    </div>
+    </div> -->
 </div>
 <footer class="clear-margin full-width sticky-footer flex center-text center-cross">
     <button class="footer-button"> Passer la commande</button>

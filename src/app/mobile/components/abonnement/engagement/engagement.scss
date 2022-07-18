@@ -3,8 +3,8 @@
 
 
 :host {
-    @extend %page ;
-    @extend %no-navigation ;
+    // @extend %page ;
+    // @extend %no-navigation ;
 }
 .engagement {
     background: white !important;
@@ -15,7 +15,8 @@
     font-weight: 500;
 }
 .facture {
-    display: grid;
+    display: flex;
+    flex-direction: column;
 }
 .hosted-page {
     padding: 20px !important;
@@ -34,7 +35,7 @@
     width: 50%;
 }
 .sous-total {
-    width: 50%;
+    width: 60%;
     justify-content: space-between;
 }
 .total{
@@ -74,4 +75,8 @@ hr {
     color: $dark;
     margin: 2rem 0rem;
     white-space: normal;
+}
+
+footer {
+    border-top: 1px solid rgb(207, 207, 207);
 }

@@ -111,18 +111,12 @@ h4 {
     }
 }
 
-footer {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    margin-bottom: env(safe-area-inset-bottom);
-    height: 4rem;
-    display: flex;
-    justify-content: center;
+.highlight {
+    color: $primary;
+    font-weight: 500;
+}
+
+.sticky-footer {
+    @extend %sticky-footer;
     border-top: 1px solid rgb(207, 207, 207);
-    button {
-        align-self: center;
-        width: 90%;
-        height: 3rem;
-    }
 }
