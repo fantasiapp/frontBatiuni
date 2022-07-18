@@ -4,10 +4,15 @@
 :host {
     @extend %page;
     background: white !important;
+
 }
 .abonnement {
     background: #ffffff !important;
     color: $mainColor;
+}
+
+abonnement-card {
+    width: 100%;
 }
 
 page-header::ng-deep header {

@@ -19,7 +19,7 @@
     <li (click)="openBlockedContact = true; openMenu = false" *ngIf="this.view == 'PME'"> Contacts bloqués</li>
 
     <li class="spacer"></li>
-    <li [routerLink]="['','abonnement']">Gérer mes abonnements</li>
+    <li (click)="openSubscription = true; openMenu = false">Gérer mes abonnements</li>
     <li (click)="openFacture = true; openMenu = false">Mes factures</li>
     <li class="spacer"></li>
     <li (click)="openRecommandationMenu = true; openMenu = false"  >Demander une recommandation</li>
@@ -37,6 +37,13 @@
     <h1 class="center-text full-width" header>Mes factures</h1>
     <div class="modify-page hosted-page flex column center-cross space-children-margin" content>
       <facture-page *ngIf="openFacture"></facture-page>
+    </div>
+  </slidemenu>
+
+  <slidemenu [(open)]="openSubscription" #subscription>
+    <h1 class="center-text full-width" header>Gérer mes abonnements</h1>
+    <div class="modify-page flex column center-cross space-children-margin" content>
+      <abonnement *ngIf="openSubscription"></abonnement>
     </div>
   </slidemenu>
 

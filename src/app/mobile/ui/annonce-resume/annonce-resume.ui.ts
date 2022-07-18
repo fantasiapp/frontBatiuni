@@ -317,7 +317,7 @@ export class UIAnnonceResume extends Destroy$ {
   }
 
   toLocateDate(date?: string) {
-    return date ? new Date(date).toLocaleDateString("fr") : "(Non renseigné)";
+    return date ? new Date(date).toLocaleDateString("fr") : "...";
   }
 
   @Output()

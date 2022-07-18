@@ -1,8 +1,8 @@
-<div class="card space-children-margin">
+<div class="card space-children-margin" [ngClass]="{'both': subscriptionType == 0}">
     <div class="card-stars flex center">
-        <img [src]="cardstars" />
-        <img [src]="cardstars" />
-        <img [src]="cardstars" />
+        <img [src]="cardstars"/>
+        <img [src]="cardstars"/>
+        <img [src]="cardstars"/>
     </div>
     <div class="card-offer flex center">
         Engagez-vous 
@@ -12,7 +12,7 @@
         pour
     </div>
     <div class="arnaque flex center">
-        <span>12 € / mois</span>
+        <span>{{abonnement.monthlyPrice}}€ / mois</span>
     </div>
     <div class="new-price flex center">
         <span class="price">{{newprice}}€</span>au premier engagement
@@ -20,13 +20,12 @@
     <hr class="bottom-line">
     <div class="earn flex center">
         <ul class="space-children-margin">
-            <li>Trouver les meilleurs chantiers</li>
-            <li>Porte-documents électroniques</li>
-            <li>Porte-documents électroniques</li>
+            <li *ngFor="let advantage of abonnement.advantages">{{advantage}}</li>
         </ul>
     </div>
     <div class="profite flex center">
-        <button [routerLink]="['','engagement']">J'en profite</button>
+        <button class="button active ['','engagement']" (click)="onEngagment()">J'en profite</button>
     </div>
     <span class="cancel flex center">Annuler gratuitement à la fin de cet engagement</span>
 </div>
+

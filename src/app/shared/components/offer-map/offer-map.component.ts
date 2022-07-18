@@ -133,7 +133,7 @@ export class OfferMapComponent {
   }
 
   toLocateDate(date?: string) {
-    return date ? new Date(date).toLocaleDateString("fr") : "(Non renseigné)";
+    return date ? new Date(date).toLocaleDateString("fr") : "...";
   }
 
   ngOnInit() {

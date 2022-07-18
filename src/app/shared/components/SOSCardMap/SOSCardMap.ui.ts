@@ -18,7 +18,6 @@ import { SlidemenuService } from "../slidemenu/slidemenu.component";
         <span class="job">
           <ng-container *ngFor="let job of jobs">{{job.name}}, </ng-container>
         </span>
-        <span class="amount">Taux horaire moyen : {{profile.company.amount}} € HT</span>
         <!-- <span class="disponibility">{{availability}}</span> -->
     </div>
     <div class="presentation">

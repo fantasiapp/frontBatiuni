@@ -102,6 +102,7 @@ export class SupervisionWrapperComponent extends Destroy$ {
               this.swipeMenuImage = false;
               console.log('NEW SUPERVISION ', this.supervisions);
               this.supervisions[this.supervisions.length - 1] = this.store.selectSnapshot(DataQueries.getById('Supervision', this.supervisions[this.supervisions.length - 1].id))! 
+              this.cd.detectChanges()
             });
           }
         })

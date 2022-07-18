@@ -1,4 +1,5 @@
-import { Component, ChangeDetectionStrategy } from "@angular/core";
+import { Component, ChangeDetectionStrategy, Input } from "@angular/core";
+import { abonnementType } from "../abonnement.page";
 
 @Component({
     selector: "engagement",
@@ -8,4 +9,15 @@ import { Component, ChangeDetectionStrategy } from "@angular/core";
 })
 export class EngagementPage {
 
+    @Input() abonnementId!: number
+    @Input() abonnement!: abonnementType
+
+
+    constructor() {
+
+    }
+
+    ngOnInit(){
+
+    }
 }
