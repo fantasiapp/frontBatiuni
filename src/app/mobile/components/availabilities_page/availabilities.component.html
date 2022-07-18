@@ -27,6 +27,7 @@
   </form>
    -->
   <div class="hosted-page flex column center-cross space-children-margin page-content" [ngClass]="{'page-content-with-switch': profile.company && profile.company.role == 3}">
+    <span class="textDispo">Pour enregistrer vos disponibilités cliquez sur la date, les entreprises contractant pourront vous contacter pour aider sur un chantier</span>
     <calendar [disableBeforeToday]="true" [value]="availabilities" (dayClick)="onDayClicked($event)" #calendar></calendar>
   </div>
 </ng-container>

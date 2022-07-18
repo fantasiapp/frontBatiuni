@@ -21,6 +21,20 @@
 
 }
 
+h1{
+  color: #44444F;
+  font-size: 18px;
+  font-family: Poppins;
+  font-weight: normal;
+}
+
+span {
+  color: #44444F;
+  font-size: 18px;
+  font-family: Poppins;
+  font-weight: lighter;
+}
+
 .inviteFriendsInput {
   width:100%;
   height:40px;
@@ -33,4 +47,15 @@
   width:90%;
   background-color: $primary;
 
+}
+
+::placeholder, input{
+  padding-left: 0.5rem;
+}
+
+p{
+  padding-bottom: 0.5rem;
+  font-size: 14px;
+  font-family: Poppins;
+  font-weight: lighter;
 }
