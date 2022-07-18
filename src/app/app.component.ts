@@ -22,7 +22,6 @@ import { NotifService } from "./shared/services/notif.service";
 import { getMessaging, getToken, onMessage} from "firebase/messaging"
 import { initializeApp } from "firebase/app";
 import { BooleanService } from "./shared/services/boolean.service";
-import { ConnectionStatusService } from "./shared/services/connectionStatus.service";
 
 @Component({
   selector: "app-root",
@@ -107,7 +106,7 @@ export class AppComponent extends Destroy$ {
     let token = this.store.selectSnapshot(AuthState.token);
 
     if (!token) return throwError("no token");
-
+    console.log("ça c'ets celui de la boucle ")
     return this.store.dispatch(new GetUserData(token!)).pipe(
       catchError(() => {
         this.store.dispatch(new Logout());

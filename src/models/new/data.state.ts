@@ -173,13 +173,20 @@ export class DataState {
   getUserData(ctx: StateContext<DataModel>, action: GetUserData) {
     console.log("le local ", this.localService.getData("getUserData"))
     const req = this.http.get("data", { action: action.action });
-    if (this.isFirstTime) {
+    let localGetUserData: string | null = this.localService.getData("getUserData")
+    if (this.isFirstTime && localGetUserData) {
+      this.booleanService.emitLoadingChangeEvent(true)
+      this.booleanService.emitConnectedChangeEvent(true)
+      this.getUserDataService.getDataChangeEmitter().subscribe((value) => {
+        this.updateLocalData(ctx, value)
+      })
+      this.updateLocalData(ctx, JSON.parse(localGetUserData))
+      return
     }
-    if (this.flagUpdate && this.connectionStatusService.isOnline){
+    else if (this.flagUpdate && this.connectionStatusService.isOnline){
       this.flagUpdate = false
       return req.pipe(tap((response: any) => {
         console.log("getUserData response", response);
-        this.localService.saveData("getUserData", JSON.stringify(response))
         this.getUserDataService.setNewResponse(response)
         if (this.isFirstTime) {
           this.booleanService.emitLoadingChangeEvent(true)
@@ -206,6 +213,7 @@ export class DataState {
       console.log("update local data response", response)
       const loadOperations = this.reader.readInitialData(response),
       sessionOperation = this.reader.readCurrentSession(response);
+      this.localService.saveData("getUserData", JSON.stringify(response))
       if (!this.isFirstTime) {
         let oldView = this.store.selectSnapshot(DataState.view)
           ctx.setState(compose(...loadOperations, sessionOperation));
