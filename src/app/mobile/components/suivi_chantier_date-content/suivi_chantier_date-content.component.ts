@@ -6,8 +6,8 @@ import {
   Input,
   Output,
 } from "@angular/core";
-import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { Camera, CameraResultType, CameraSource } from "@capacitor/camera";
+import { FormControl, FormGroup, FormGroupName, Validators } from "@angular/forms";
+import { Camera, CameraResultType, CameraSource, Photo } from "@capacitor/camera";
 import { Store } from "@ngxs/store";
 import { take } from "rxjs/internal/operators/take";
 import { takeUntil } from "rxjs/operators";
@@ -240,6 +240,10 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
   }
 
   
+  swipePhoto?: {
+    task: PostDetailGraphic | null,
+    taskGraphic: TaskGraphic
+  }
 
   async takePhoto() {
     const photo = await Camera.getPhoto({
@@ -247,11 +251,12 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
       resultType: CameraResultType.Base64,
       source: CameraSource.Camera,
     });
-    this.store.dispatch(new UploadImageSupervision(photo, this.currentSupervisionId)).pipe(take(1)).subscribe(() => {
-      // this.date.supervisions
-      this.updatePageOnlyDate();
-      this.swipeMenuImage = false;
-    });
+
+      
+    console.log('TAKE PHOTO');
+    this.mainComment(this.swipePhoto!.task, this.swipePhoto!.taskGraphic,photo)
+      // this.updatePageOnlyDate();
+    this.swipeMenuImage = false;
   }
 
   async selectPhoto() {
@@ -265,18 +270,8 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
       saveToGallery: true
     });
 
-    let acceptedFormat = ["jpeg", "png", "jpg", "bmp"];
-    if (acceptedFormat.includes(photo.format)) {
-      this.store.dispatch(new UploadImageSupervision(photo, this.currentSupervisionId)).pipe(take(1)).subscribe(() => {
-        // let supervisions = this.store.selectSnapshot(DataQueries.getMany('Supervision', this.mission!.supervisions))
-        this.updatePageOnlyDate();
-        this.swipeMenuImage = false;
-      });
-    } else {
-      this.updatePageOnlyDate();
-      this.swipeMenuImage = false;
-      this.info.show("error", "Format d'image non supporté", 3000);
-    }
+    console.log('TAKE PHOTO');
+    this.mainComment(this.swipePhoto!.task, this.swipePhoto!.taskGraphic,photo)
   }
 
   updatePage(content: any) {
@@ -323,10 +318,10 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
   });
 
 
-  onSubmit( task: PostDetailGraphic| null, formGroup: FormGroup, formControlName: string){
-    this.mainComment(task, formGroup, formControlName);
-    this.cd.markForCheck()
-  }
+  // onSubmit( task: PostDetailGraphic| null, formGroup: FormGroup, formControlName: string){
+  //   this.mainComment(task, formGroup, formControlName);
+  //   this.cd.markForCheck()
+  // }
   textareaSubmit(e: any, input: HTMLFormElement){
     if(e.keyCode == 13){
       input.dispatchEvent(new Event("submit", {cancelable: true}))
@@ -334,10 +329,7 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
     }
   }
   
-  mainComment(task:PostDetailGraphic | null, formGroup: FormGroup, formControlName: string) {
-    let formControl = formGroup.get(formControlName)!
-    let comment = formControl.value
-    if(!comment || comment.trim() == '') return
+  mainComment(task:PostDetailGraphic | null, taskGraphic: TaskGraphic, photo: Photo) {
     if (!this.mission!.isClosed) {
       let detailPostId: number | null = task ? task.id : null
       let datePostId: number | null = null;
@@ -345,14 +337,32 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
         datePostId = this.dateOrigin.id
       }
       try {
-        this.store.dispatch(new CreateSupervision(detailPostId, datePostId, comment)).pipe(take(1)).subscribe((response) => {
-          formControl.reset()
-          this.updatePageOnlyDate()
+        console.log('create Supervision variable', detailPostId, datePostId);
+        this.store.dispatch(new CreateSupervision(detailPostId, datePostId, "")).pipe(take(1)).subscribe((response) => {
+          // this.updatePageOnlyDate()
+          let supervisions: Supervision[];
+          if(detailPostId){
+            let postDetail = this.store.selectSnapshot(DataQueries.getById('DetailedPost', detailPostId))!
+            supervisions = this.store.selectSnapshot(DataQueries.getMany('Supervision', postDetail.supervisions))
+            taskGraphic!.selectedTask.supervisions = supervisions
+          } else {
+            this.dateOrigin = this.store.selectSnapshot(DataQueries.getById('DatePost', this.dateOrigin.id))!
+            supervisions = this.store.selectSnapshot(DataQueries.getMany('Supervision', this.dateOrigin.supervisions))!
+          }
+          console.log(supervisions, photo);
+
+          this.store.dispatch(new UploadImageSupervision(photo, supervisions[supervisions.length - 1].id)).pipe(take(1)).subscribe(() => {
+            this.swipeMenuImage = false;
+            console.log('NEW SUPERVISION ', supervisions);
+            supervisions[supervisions.length - 1] = this.store.selectSnapshot(DataQueries.getById('Supervision', supervisions[supervisions.length - 1].id))! 
+            this.cd.detectChanges()
+          });
         })
       } catch {
         this.getUserDataService.emitDataChangeEvent()
       }
     }
+    this.updatePageOnlyDate()
   }
 
   currentSupervisionId: Ref<Supervision> | null = null
