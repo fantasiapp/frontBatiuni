@@ -32,11 +32,11 @@
         </div>
         <div class="plans__plan flex row"(click)="selectEngagement(6)">
           <button class="radio "[ngClass]="{'radio-active': selectedEngagmentLength == 6 }"></button>
-          <div class="plan__text">Engagement 6 mois pour <span class="highlight">{{+abonnement[currentAbonnementId].monthlyPrice * .9}}€</span> / mois ({{+abonnement[currentAbonnementId].monthlyPrice *.9/ 2}}€ au premier engagement)</div>
+          <div class="plan__text">Engagement 6 mois pour <span class="highlight">{{+abonnement[currentAbonnementId].monthlyPrice * .9 | number: '1.2-2'}}€</span> / mois ({{+abonnement[currentAbonnementId].monthlyPrice *.9/ 2 | number: '1.2-2'}}€ au premier engagement)</div>
         </div>
         <div class="plans__plan flex row"(click)="selectEngagement(12)">
           <button class="radio"[ngClass]="{'radio-active': selectedEngagmentLength == 12}"></button>
-          <div class="plan__text">Engagement 12 mois pour <span class="highlight">{{+abonnement[currentAbonnementId].monthlyPrice * .8}}€</span> / mois ({{+abonnement[currentAbonnementId].monthlyPrice *.8/ 2}}€ au premier engagement)</div>
+          <div class="plan__text">Engagement 12 mois pour <span class="highlight">{{+abonnement[currentAbonnementId].monthlyPrice * .8 | number: '1.2-2'}}€</span> / mois ({{+abonnement[currentAbonnementId].monthlyPrice *.8/ 2 | number: '1.2-2'}}€ au premier engagement)</div>
         </div>
       </div>
       <footer class="sticky-footer">
