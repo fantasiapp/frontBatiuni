@@ -146,38 +146,22 @@ import { InfoService } from "../components/info/info.component";
         </div>
 
         <div class="form-input">
-          <label>Nom de l'entreprise</label>
+          <label>N SIRET</label>
           <input
           #input6 (click)="onClickInputScroll(input6)"
             class="form-element"
             type="text"
-            class="form-element"
-            formControlName="company"
-            style="display: none"
+            formControlName="siret"
           />
-          <span class="position-relative">
-            <input
-
-              type="text"
-              class="form-element"
-              autocomplete="off"
-              formControlName="companyName"
-              [novalidate]="true"
-              (input)="onCompanySearch($event)"
-              #search
-            />
-            <img
-              *ngIf="suggestionBox && suggestionBox.picked"
-              src="assets/X.svg"
-              class="cancel-company"
-              (click)="cancelCompany() && search.focus()"
-            />
-          </span>
-          <suggestion-box
-            [query]="searchQuery | async"
-            [action]="actions.GetCompanies"
-            (choice)="onChoice($event)"
-          ></suggestion-box>
+        </div>
+        <div class="form-input">
+          <label>Nom de l'entreprise</label>
+          <input
+          #input7 (click)="onClickInputScroll(input7)"
+            class="form-element"
+            type="text"
+            formControlName="company"
+          />
         </div>
 
         <div class="form-input">
@@ -380,14 +364,15 @@ export class RegisterForm extends Destroy$ {
       secondPage: new FormGroup({
         proposer: new FormControl(""),
         role: new FormControl([], [Validators.required]),
+        siret: new FormControl([],[Validators.required]),
         company: new FormControl("", [
           Validators.required,
-          RequiredType(
-            "object",
-            "MESSAGE",
-            "Veuillez choisir une entreprise de la liste."
-          ),
-          TransferError("companyName"),
+          // RequiredType(
+          //   "object",
+          //   "MESSAGE",
+          //   "Veuillez choisir une entreprise de la liste."
+          // ),
+          // TransferError("companyName"),
         ]),
         companyName: new FormControl(""),
         jobs: new FormControl([], [Validators.required]),

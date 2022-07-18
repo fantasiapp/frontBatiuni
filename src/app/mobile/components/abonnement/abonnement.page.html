@@ -22,8 +22,32 @@
 </div>
 
 <slidemenu [(open)]="openEngagment" #engagment>
-    <h1 class="center-text full-width" header>Test</h1>  
-    <div class="modify-page hosted-page flex column center-cross space-children-margin" content>
-        <engagement [abonnementId]="currentAbonnementId" [abonnement]="abonnement[currentAbonnementId]"></engagement>
+    <h1 class="center-text full-width" header>Gérer mes abonnements</h1>  
+    <div *ngIf="openEngagment" class="modify-page hosted-page flex column center-cross space-children-margin" content>
+      <h4>Sélectionnez un plan : </h4>
+      <div class="plans-container">
+        <div class="plans__plan flex row" (click)="selectEngagement(3)">
+          <button class="radio" [ngClass]="{'radio-active': selectedEngagmentLength == 3}"></button>
+          <div class="plan__text">Engagement 3 mois pour <span class="highlight">{{+abonnement[currentAbonnementId].monthlyPrice}}€</span> / mois ({{+abonnement[currentAbonnementId].monthlyPrice / 2}}€ au premier engagement)</div>
+        </div>
+        <div class="plans__plan flex row"(click)="selectEngagement(6)">
+          <button class="radio "[ngClass]="{'radio-active': selectedEngagmentLength == 6 }"></button>
+          <div class="plan__text">Engagement 6 mois pour <span class="highlight">{{+abonnement[currentAbonnementId].monthlyPrice * .9 | number: '1.2-2'}}€</span> / mois ({{+abonnement[currentAbonnementId].monthlyPrice *.9/ 2 | number: '1.2-2'}}€ au premier engagement)</div>
+        </div>
+        <div class="plans__plan flex row"(click)="selectEngagement(12)">
+          <button class="radio"[ngClass]="{'radio-active': selectedEngagmentLength == 12}"></button>
+          <div class="plan__text">Engagement 12 mois pour <span class="highlight">{{+abonnement[currentAbonnementId].monthlyPrice * .8 | number: '1.2-2'}}€</span> / mois ({{+abonnement[currentAbonnementId].monthlyPrice *.8/ 2 | number: '1.2-2'}}€ au premier engagement)</div>
+        </div>
+      </div>
+      <footer class="sticky-footer">
+        <button class="button active full-width" (click)="(selectedEngagmentLength != -1) && openEngagmentPage = true" [ngClass]="{'disabled': selectedEngagmentLength === -1}">J'en profite</button>
+      </footer>
     </div>
-</slidemenu>
+  </slidemenu>
+  <slidemenu [(open)]="openEngagmentPage">
+    <h1 class="center-text full-width" header>Gérer mes abonnements</h1>  
+    <div class="modify-page hosted-page flex column center-cross space-children-margin" content>
+      <engagement *ngIf="openEngagmentPage && selectedEngagmentLength != -1" [abonnement]="abonnement[currentAbonnementId]" [abonnementLength]="selectedEngagmentLength"></engagement>
+    </div>
+  </slidemenu>
+

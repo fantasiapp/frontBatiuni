@@ -190,15 +190,19 @@
     <!-- Component Mission -->
     <slidemenu [(open)]="missionMenu.open" [header]="false" (openChange)="updatePage()" #slideMission>
       <header
-        class="clear-margin full-width sticky-header flex center-cross annonce"
+        class="clear-margin full-width sticky-header flex center-cross annonce header-border"
         customHeader
       >
         <img (click)="slideMissionClose()" src="assets/arrowlblack.svg" />
         <h1 class="grow center-text">Annonce validée</h1>
-        <img
+        <!-- <img
           (click)="swipeupMenu(); view == 'PME' && suiviChantier.submitAdFormDate(true)"
           [src]="view == 'PME' ? 'assets/Option.svg' : 'assets/phone.png'"
-        />
+        /> -->
+
+        <button class="option"
+          (click)="swipeupMenu(); view == 'PME' && suiviChantier.submitAdFormDate(true)"
+        >Option</button>
       </header>
 
       <suivi-chantier
