@@ -22,6 +22,7 @@ import { NotifService } from "./shared/services/notif.service";
 import { getMessaging, getToken, onMessage} from "firebase/messaging"
 import { initializeApp } from "firebase/app";
 import { BooleanService } from "./shared/services/boolean.service";
+import { StripeService } from "./shared/services/stripe";
 
 @Component({
   selector: "app-root",
@@ -50,9 +51,9 @@ export class AppComponent extends Destroy$ {
   isWhileOn: boolean = false;
   app: any
 
-  constructor(private store: Store, private mobile: Mobile, private notifService: NotifService, private booleanService: BooleanService) {
+  constructor(private store: Store, private mobile: Mobile, private notifService: NotifService, private booleanService: BooleanService, private stripeService: StripeService) {
     super();
-    this.mobile.init()
+    this.mobile.init();
     this.isConnected = booleanService.isConnected
     this.booleanService.getConnectedChangeEmitter().subscribe((value) => {
       this.isConnected = value
