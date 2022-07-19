@@ -15,7 +15,7 @@ import { AbstractControl, FormArray, FormControl, FormGroup, ValidationErrors, V
 import { Camera } from "@capacitor/camera";
 import { Option } from "src/models/option";
 import { SlidesDirective } from "../directives/slides.directive";
-import { defaultFileUIOuput } from "../components/filesUI/files.ui";
+import { defaultFileUIOuput, FileUI } from "../components/filesUI/files.ui";
 import { FieldType, MatchField } from "src/validators/verify";
 import { PopupService } from "../components/popup/popup.component";
 import { InfoService } from "../components/info/info.component";
@@ -43,6 +43,7 @@ import { Email } from "src/validators/persist";
 import { returnInputKeyboard } from '../common/classes'
 import { JsonpClientBackend } from "@angular/common/http";
 import { ActiveViewService } from "../services/activeView.service";
+import { take } from "rxjs/operators";
 
 @Component({
   selector: "modify-profile-form",
@@ -279,7 +280,9 @@ import { ActiveViewService } from "../services/activeView.service";
               
               <fileinput
                 [showtitle]="false"
+                name="Kbis"
                 filename="Kbis"
+                name="Kbis"
                 formControlName="Kbis"
                 (kill)="removeDocument($event)"
               >
@@ -288,7 +291,9 @@ import { ActiveViewService } from "../services/activeView.service";
 
               <fileinput
                 [showtitle]="false"
+                name="Attestation travail dissimulé"
                 filename="Attestation travail dissimulé"
+                name="Attestation travail dissimulé"
                 formControlName="Trav Dis"
                 (kill)="removeDocument($event)"
               >
@@ -297,7 +302,9 @@ import { ActiveViewService } from "../services/activeView.service";
 
               <fileinput
                 [showtitle]="false"
+                name="Attestation RC + DC"
                 filename="Attestation RC + DC"
+                name="Attestation RC + DC"
                 formControlName="RC + DC"
                 (kill)="removeDocument($event)"
               >
@@ -306,7 +313,9 @@ import { ActiveViewService } from "../services/activeView.service";
 
               <fileinput
                 [showtitle]="false"
+                name="URSSAF"
                 filename="URSSAF"
+                name="URSSAF"
                 formControlName="URSSAF"
                 (kill)="removeDocument($event)"
               >
@@ -315,7 +324,9 @@ import { ActiveViewService } from "../services/activeView.service";
 
               <fileinput
                 [showtitle]="false"
+                name="Impôts"
                 filename="Impôts"
+                name="Impôts"
                 formControlName="Impôts"
                 (kill)="removeDocument($event)"
               >
@@ -324,7 +335,9 @@ import { ActiveViewService } from "../services/activeView.service";
 
               <fileinput
                 [showtitle]="false"
+                name="Congés payés"
                 filename="Congés payés"
+                name="Congés payés"
                 formControlName="Congés Payés"
                 (kill)="removeDocument($event)"
               >
@@ -829,11 +842,21 @@ export class ModifyProfileForm {
     labelControl.markAsDirty();
   }
 
-  removeDocument(filename: string) {
+  removeDocument(e :any) {
     const documents = this.form.controls[ "UserProfile.Company.admin"]
-    let file = this.companyFiles.filter(file => file.name == filename)[0]
-    if (file?.id){ this.store.dispatch(new DeleteFile(file?.id))}
-    documents.get(filename)?.setValue({content: [""], expirationDate: '', ext: '???', name: 'Veuillez télécharger un document', nature: 'admin'})
+    console.log('this.company', this.companyFiles, e.filename);
+    let file = this.companyFiles.filter(file => file.name == e.filename)[0]
+    console.log('file;;', file);
+    if (file?.id){ this.store.dispatch(new DeleteFile(file?.id)).pipe(take(1)).subscribe(()=> {
+      documents.get(e.filename)?.setValue({content: [""], expirationDate: '', ext: '???', name: 'Veuillez télécharger un document', nature: 'admin'})
+      e.fileUI.value = {
+        content: [""],
+        expirationDate: "",
+        ext: "???",
+        name: "Veuillez télécharger un document",
+        nature: e.fileUI.value.nature,
+      }})}
+    documents.get(e.filename)?.setValue({content: [""], expirationDate: '', ext: '???', name: 'Veuillez télécharger un document', nature: 'admin'})
     this.form.controls["UserProfile.Company.admin"].markAsDirty()
   } 
 

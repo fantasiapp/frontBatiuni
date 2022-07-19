@@ -4,7 +4,7 @@ import { NavigationExtras, Router } from "@angular/router";
 import { Store } from "@ngxs/store";
 import { PopupService } from "src/app/shared/components/popup/popup.component";
 import { SlidemenuService } from "src/app/shared/components/slidemenu/slidemenu.component";
-import { productList } from "src/environments/environment";
+import { productList } from "src/app/stripeProducts";
 import { Post } from "src/models/new/data.interfaces";
 import { DataQueries } from "src/models/new/data.state";
 import { BoostPost } from "src/models/new/user/user.actions";
@@ -36,7 +36,11 @@ export class BoosterPage {
   }
 
   openPayment() {
-    let navigationExtras: NavigationExtras = {state: {post: this.post.id, duration: parseInt(this.selected)}};
+    let navigationExtras: NavigationExtras = {state: {
+      type: "boost", 
+      post: this.post.id, 
+      duration: parseInt(this.selected)
+    }};
     switch (this.selected){
       case "3":
         navigationExtras.state!.product = productList.boost3;

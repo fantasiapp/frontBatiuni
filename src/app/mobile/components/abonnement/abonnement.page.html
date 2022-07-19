@@ -1,15 +1,14 @@
 <span style="margin: 2rem 2rem; display: block;">Sélectionnez un service</span>
 
     <div class="caroussel ">
-      <div class="margleft"> 
-        <abonnement-card (openEngagment)="onOpenEngagement($event)" [subscriptionType]="0" [abonnement]="abonnement[0]"></abonnement-card>
+      <div class="margleft"*ngIf="abonnements[0].prices$ | async as prices"> 
+        <abonnement-card (openEngagment)="onOpenEngagement($event)" [subscriptionType]="0" [abonnement]="abonnements[0]" [prices]="prices"></abonnement-card>
       </div>
-      <div class="thiscenterclass"> 
-        <abonnement-card (openEngagment)="onOpenEngagement($event)" class="thischild" [subscriptionType]="1" [abonnement]="abonnement[1]"></abonnement-card>
-        
+      <div class="thiscenterclass"*ngIf="abonnements[1].prices$ | async as prices"> 
+        <abonnement-card (openEngagment)="onOpenEngagement($event)" class="thischild" [subscriptionType]="1" [abonnement]="abonnements[1]" [prices]="prices"></abonnement-card>
       </div>
-      <div>
-        <abonnement-card (openEngagment)="onOpenEngagement($event)" [subscriptionType]="2" [abonnement]="abonnement[2]"></abonnement-card>
+      <div *ngIf="abonnements[2].prices$ | async as prices">
+        <abonnement-card (openEngagment)="onOpenEngagement($event)" [subscriptionType]="2" [abonnement]="abonnements[2]" [prices]="prices"></abonnement-card>
       </div>
   </div>
 <div class="caroussel-button" >
@@ -25,29 +24,31 @@
     <h1 class="center-text full-width" header>Gérer mes abonnements</h1>  
     <div *ngIf="openEngagment" class="modify-page hosted-page flex column center-cross space-children-margin" content>
       <h4>Sélectionnez un plan : </h4>
-      <div class="plans-container">
-        <div class="plans__plan flex row" (click)="selectEngagement(0)">
-          <button class="radio" [ngClass]="{'radio-active': selectedEngagmentLength == 0}"></button>
-          <div class="plan__text">Engagement 3 mois pour {{abonnement[currentAbonnementId].monthlyPrice}}€ / mois ({{abonnement[currentAbonnementId].monthlyPrice / 2}}€ au premier engagement)</div>
+      <div class="plans-container" *ngIf="abonnements[currentAbonnementId].prices$ | async as prices">
+        <ng-container *ngFor="let price of prices">
+          <div class="plans__plan flex row" (click)="selectEngagement(price)">
+            <button class="radio" [ngClass]="{'radio-active': selectedPrice == price}"></button>
+            <div class="plan__text">Engagement {{price.intervalCount}} mois pour <span class="highlight">{{price.amount/price.intervalCount}}€</span> / mois ({{+price.amount/price.intervalCount/ 2}}€ au premier engagement)</div>
+          </div>
+        </ng-container>
+        <!-- <div class="plans__plan flex row"(click)="selectEngagement(6)">
+          <button class="radio "[ngClass]="{'radio-active': selectedEngagmentLength == 6 }"></button>
+          <div class="plan__text">Engagement 6 mois pour <span class="highlight">{{+abonnements[currentAbonnementId].monthlyPrice * .9 | number: '1.2-2'}}€</span> / mois ({{+abonnements[currentAbonnementId].monthlyPrice *.9/ 2 | number: '1.2-2'}}€ au premier engagement)</div>
         </div>
-        <div class="plans__plan flex row"(click)="selectEngagement(1)">
-          <button class="radio "[ngClass]="{'radio-active': selectedEngagmentLength == 1}"></button>
-          <div class="plan__text">Engagement 6 mois pour {{abonnement[currentAbonnementId].monthlyPrice * .9}}€ / mois ({{abonnement[currentAbonnementId].monthlyPrice *.9/ 2}}€ au premier engagement)</div>
-        </div>
-        <div class="plans__plan flex row"(click)="selectEngagement(2)">
-          <button class="radio"[ngClass]="{'radio-active': selectedEngagmentLength == 2}"></button>
-          <div class="plan__text">Engagement 12 mois pour {{abonnement[currentAbonnementId].monthlyPrice * .8}}€ / mois ({{abonnement[currentAbonnementId].monthlyPrice *.8/ 2}}€ au premier engagement)</div>
-        </div>
+        <div class="plans__plan flex row"(click)="selectEngagement(12)">
+          <button class="radio"[ngClass]="{'radio-active': selectedEngagmentLength == 12}"></button>
+          <div class="plan__text">Engagement 12 mois pour <span class="highlight">{{+abonnements[currentAbonnementId].monthlyPrice * .8 | number: '1.2-2'}}€</span> / mois ({{+abonnements[currentAbonnementId].monthlyPrice *.8/ 2 | number: '1.2-2'}}€ au premier engagement)</div>
+        </div> -->
       </div>
-      <footer>
-        <button class="button active" (click)="(selectedEngagmentLength != -1) && openEngagmentPage = true">J'en profite</button>
+      <footer class="sticky-footer">
+        <button class="button active full-width" (click)="selectedPrice && openEngagmentPage = true" [ngClass]="{'disabled': selectedPrice === undefined}">J'en profite</button>
       </footer>
     </div>
   </slidemenu>
   <slidemenu [(open)]="openEngagmentPage">
     <h1 class="center-text full-width" header>Gérer mes abonnements</h1>  
     <div class="modify-page hosted-page flex column center-cross space-children-margin" content>
-      <!-- <engagement [abonnement]="abonnement[currentAbonnementId]" [engagmentLength]="selectedEngagmentLength"></engagement> -->
+      <engagement *ngIf="openEngagmentPage && selectedPrice !=undefined" [abonnement]="abonnements[currentAbonnementId]" [selectPrice]="selectedPrice"></engagement>
     </div>
   </slidemenu>
 

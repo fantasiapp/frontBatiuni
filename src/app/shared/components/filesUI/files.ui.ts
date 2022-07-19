@@ -55,8 +55,7 @@ export function defaultFileUIOuput(
   ],
 })
 export class FileUI extends UIAsyncAccessor<FileUIOutput> {
-  @Input()
-  filename: string = "Kbis";
+  @Input() filename: string = "Kbis";
 
   @Input() name : string = 'Kbis'
   @Input() nature: string = ''
@@ -186,8 +185,8 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
   }
 
   deleteFile(){
-    if (this.value?.nature == "admin") {this.kill.emit(this.value?.name);}
-    else {this.kill.emit(this.filename);}
+    if (this.value?.nature == "admin") {this.kill.emit({filename: this.value?.name, fileUI: this});}
+    else {this.kill.emit({filename : this.filename, fileUI: this})}
     this.value = {
       content: [""],
       expirationDate: "",

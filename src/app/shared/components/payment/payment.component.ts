@@ -7,6 +7,7 @@ import { loadStripe } from "@stripe/stripe-js";
 import { HttpService } from "src/app/services/http.service";
 import { environment } from "src/environments/environment";
 import { DataQueries } from "src/models/new/data.state";
+import { StripeService } from "../../services/stripe";
 import { InfoService } from "../info/info.component";
 import { PopupService } from "../popup/popup.component";
 
@@ -54,11 +55,13 @@ export class Payment {
     private popup: PopupService,
     private location: Location,
     private info: InfoService,
+    private stripeService: StripeService,
   ) {
     const navigation = this.router.getCurrentNavigation();
     if (navigation) {
       this.state = navigation.extras.state;
     }
+    this.stripe = this.stripeService.stripe;
   }
 
   ngOnInit() {
@@ -66,44 +69,39 @@ export class Payment {
     if (!this.state) {
       this.router.navigate(['home']);
     } else {
-      this.enableStripe();
+      let req: any;
+      if (this.state.type == 'boost') {
+        req = this.createReqBoost();
+      } else if (this.state.type == 'subscription') {
+        req = this.createReqSubscription();
+      }
+      this.initialize(req)
     }
   }
 
-  async enableStripe() {
-    let stripePublicKey: string = "";
-    switch (environment.backUrl[environment.backUrl.length - 1]){
-      case '1': //work
-        stripePublicKey = "pk_test_51LI7VAENZMpowJJs4IU6aHmyl7zySnvOTAxPifeOOGoauUw7tnkc2kV2QIkhwuzTyD1Ck1yQfzLj8uj2b8FYO4Yd00PBR2hrwB";
-        break;
-      case '2': //current
-        stripePublicKey = "pk_test_51LI7eOIb3fLk25W9IACp2g2UCSAdGG3tE023c9TjXACEj3JC8tFjNMyOSDM42PjOJiMTR1Hv3oAg24Km0UwuvJ8900l1uh4TEq";
-        break;
-      case '3': //distrib
-        stripePublicKey = "pk_test_51LI7spCFcn8ExoZNdTcJOSmzMDsIJWNg6StjlFDWLBQB4PSc9zm4ynlaMkidpqrx3E5wGA1HyG7DdlyG5Z31eZgw00M1AOHpBJ";
-        break;
-      case '4': //temp
-        stripePublicKey = "pk_test_51LI7b7GPflszP2pB9SHmOB0ma7N1zgoX5W0uBCIF2j22I8lqE5WgqBFLJA34D75UHlJGHzZhfMfSiUm2R9wO0Aos000EW2okEq";
-        break;
-    }
-    console.log("stripe public key", stripePublicKey)
-    this.stripe = await loadStripe(stripePublicKey);
-    console.log("stripe loaded", this.stripe);
-    this.initialize();
-  }
-
-  // Fetches a payment intent and captures the client secret
-  initialize() {
-    const req = this.http.post("payment", {
+  createReqBoost(){
+    return this.http.post("payment", {
                       'action':'createPaymentIntent', 
                       'product': this.state.product,
                       'post': this.state.post,
                       'duration': this.state.duration
                     });
+  }
+
+  createReqSubscription(){
+    return this.http.post("subscription", {
+                      'action':'createSubscription', 
+                      'product': this.state.product,
+                      'priceId': this.state.priceId
+                    });
+  }
+
+  // Fetches a payment intent and captures the client secret
+  initialize(req: any) {
     console.log("requete")
     req.subscribe((response: any) => {
-      console.log("response", response.toString())
-      if (response['createPaymentIntent'] !== "OK") { 
+      console.log("response", JSON.stringify(response))
+      if (response['createPaymentIntent'] !== "OK" && response['createSubscription'] !== "OK") { 
         console.log("error, navigate home")
         this.info.show("error", "Un problème est survenu")
         this.router.navigate(['home'])
