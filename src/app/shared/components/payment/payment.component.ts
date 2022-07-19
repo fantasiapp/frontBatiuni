@@ -69,22 +69,39 @@ export class Payment {
     if (!this.state) {
       this.router.navigate(['home']);
     } else {
-      this.initialize();
+      let req: any;
+      if (this.state.type == 'boost') {
+        req = this.createReqBoost();
+      } else if (this.state.type == 'subscription') {
+        req = this.createReqSubscription();
+      }
+      this.initialize(req)
     }
   }
 
-  // Fetches a payment intent and captures the client secret
-  initialize() {
-    const req = this.http.post("payment", {
+  createReqBoost(){
+    return this.http.post("payment", {
                       'action':'createPaymentIntent', 
                       'product': this.state.product,
                       'post': this.state.post,
                       'duration': this.state.duration
                     });
+  }
+
+  createReqSubscription(){
+    return this.http.post("subscription", {
+                      'action':'createSubscription', 
+                      'product': this.state.product,
+                      'priceId': this.state.priceId
+                    });
+  }
+
+  // Fetches a payment intent and captures the client secret
+  initialize(req: any) {
     console.log("requete")
     req.subscribe((response: any) => {
-      console.log("response", response.toString())
-      if (response['createPaymentIntent'] !== "OK") { 
+      console.log("response", JSON.stringify(response))
+      if (response['createPaymentIntent'] !== "OK" && response['createSubscription'] !== "OK") { 
         console.log("error, navigate home")
         this.info.show("error", "Un problème est survenu")
         this.router.navigate(['home'])

@@ -36,7 +36,11 @@ export class BoosterPage {
   }
 
   openPayment() {
-    let navigationExtras: NavigationExtras = {state: {post: this.post.id, duration: parseInt(this.selected)}};
+    let navigationExtras: NavigationExtras = {state: {
+      type: "boost", 
+      post: this.post.id, 
+      duration: parseInt(this.selected)
+    }};
     switch (this.selected){
       case "3":
         navigationExtras.state!.product = productList.boost3;
