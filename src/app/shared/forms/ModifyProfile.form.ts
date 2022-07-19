@@ -282,6 +282,7 @@ import { take } from "rxjs/operators";
                 [showtitle]="false"
                 name="Kbis"
                 filename="Kbis"
+                name="Kbis"
                 formControlName="Kbis"
                 (kill)="removeDocument($event)"
               >
@@ -292,6 +293,7 @@ import { take } from "rxjs/operators";
                 [showtitle]="false"
                 name="Attestation travail dissimulé"
                 filename="Attestation travail dissimulé"
+                name="Attestation travail dissimulé"
                 formControlName="Trav Dis"
                 (kill)="removeDocument($event)"
               >
@@ -302,6 +304,7 @@ import { take } from "rxjs/operators";
                 [showtitle]="false"
                 name="Attestation RC + DC"
                 filename="Attestation RC + DC"
+                name="Attestation RC + DC"
                 formControlName="RC + DC"
                 (kill)="removeDocument($event)"
               >
@@ -312,6 +315,7 @@ import { take } from "rxjs/operators";
                 [showtitle]="false"
                 name="URSSAF"
                 filename="URSSAF"
+                name="URSSAF"
                 formControlName="URSSAF"
                 (kill)="removeDocument($event)"
               >
@@ -322,6 +326,7 @@ import { take } from "rxjs/operators";
                 [showtitle]="false"
                 name="Impôts"
                 filename="Impôts"
+                name="Impôts"
                 formControlName="Impôts"
                 (kill)="removeDocument($event)"
               >
@@ -332,6 +337,7 @@ import { take } from "rxjs/operators";
                 [showtitle]="false"
                 name="Congés payés"
                 filename="Congés payés"
+                name="Congés payés"
                 formControlName="Congés Payés"
                 (kill)="removeDocument($event)"
               >
