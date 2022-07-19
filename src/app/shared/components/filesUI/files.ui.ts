@@ -55,8 +55,7 @@ export function defaultFileUIOuput(
   ],
 })
 export class FileUI extends UIAsyncAccessor<FileUIOutput> {
-  @Input()
-  filename: string = "Kbis";
+  @Input() filename: string = "Kbis";
 
   @Input() name : string = 'Kbis'
   @Input() nature: string = ''
