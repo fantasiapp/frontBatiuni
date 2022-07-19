@@ -1,14 +1,15 @@
 <span style="margin: 2rem 2rem; display: block;">Sélectionnez un service</span>
-
-    <div class="caroussel ">
-      <div class="margleft"*ngIf="abonnements[0].prices$ | async as prices"> 
-        <abonnement-card (openEngagment)="onOpenEngagement($event)" [subscriptionType]="0" [abonnement]="abonnements[0]" [prices]="prices"></abonnement-card>
-      </div>
-      <div class="thiscenterclass"*ngIf="abonnements[1].prices$ | async as prices"> 
-        <abonnement-card (openEngagment)="onOpenEngagement($event)" class="thischild" [subscriptionType]="1" [abonnement]="abonnements[1]" [prices]="prices"></abonnement-card>
-      </div>
-      <div *ngIf="abonnements[2].prices$ | async as prices">
-        <abonnement-card (openEngagment)="onOpenEngagement($event)" [subscriptionType]="2" [abonnement]="abonnements[2]" [prices]="prices"></abonnement-card>
+  <div class="caroussel__wrapper">
+      <div class="caroussel">
+        <div class="caroussel-item"> 
+          <abonnement-card class="margleft"*ngIf="abonnements[0].prices$ | async as prices" (openEngagment)="onOpenEngagement($event)" [subscriptionType]="0" [abonnement]="abonnements[0]" [prices]="prices"></abonnement-card>
+        </div>
+        <div class="caroussel-item"> 
+          <abonnement-card class="margleft"*ngIf="abonnements[1].prices$ | async as prices" (openEngagment)="onOpenEngagement($event)" [subscriptionType]="1" [abonnement]="abonnements[1]" [prices]="prices"></abonnement-card>
+        </div>
+        <div class="caroussel-item">
+          <abonnement-card class="margleft"*ngIf="abonnements[2].prices$ | async as prices" (openEngagment)="onOpenEngagement($event)" [subscriptionType]="2" [abonnement]="abonnements[2]" [prices]="prices"></abonnement-card>
+        </div>
       </div>
   </div>
 <div class="caroussel-button" >
