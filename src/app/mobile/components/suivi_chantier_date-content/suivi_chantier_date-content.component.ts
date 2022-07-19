@@ -121,6 +121,7 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
       this.tasksGraphic = this.tasksGraphic.filter(task => task.selectedTask.checked)
 
 
+      this.updatePageOnlyDate()
       this.cd.markForCheck()
     })
   }
