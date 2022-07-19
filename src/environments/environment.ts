@@ -1,6 +1,6 @@
 export const environment = {
   production: false,
-  backUrl: "https://batiuni.fantasiapp.tech:5004",
+  backUrl: "https://batiuni.fantasiapp.tech:5002",
   // backUrl: 'http://localhost:8000',
   version: "current",
   firebase: {
@@ -15,10 +15,11 @@ export const environment = {
   }
 };
 
-let temp = {boost3: "",
-boost7: "",
-boost0: "",};
-
+let temp = {
+  boost3: "prod_M0BtJQKNIQBjvF",
+  boost7: "prod_M0BuvRUprcxujw",
+  boost0: "prod_M0BuUhllo4RnKr",
+};
 switch (environment.backUrl[environment.backUrl.length - 1]) {
   case "1":
     temp = {

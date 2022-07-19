@@ -140,7 +140,10 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
       name = fullname.slice(0, lastDot),
       ext = fullname.slice(lastDot + 1);
 
-    if (this.value?.nature == "admin" || this.value?.nature.includes('Quali')) {this.popup.newFile(this.filename, this);}
+    if (this.value?.nature == "admin" || this.value?.nature.includes('Quali')) {
+      // this.popup.newFile(this.filename, this);
+      this.info.show("error", "Veuillez ajouter une date pour le document "+ this.filename, 5000 )
+    }
     return {
       ...this.value,
       content: [base64.slice(getFileType(ext).length + 13)],
@@ -216,7 +219,11 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
         content: [scannedImages[0] as string],
       };
     }
-    if (this.value?.nature == "admin") {this.popup.newFile(this.filename, this);}
+    if (this.value?.nature == "admin") {
+      // this.popup.newFile(this.filename, this);
+      this.info.show("error", "Veuillez ajouter une date pour le document "+ this.filename, 5000 )
+
+    }
   }
 
   onFileInputClicked(e: Event) {

@@ -43,6 +43,7 @@ export class InfoHandler extends Destroy$ {
   time: number = 5000;
 
   type: string = '';
+  isOverflowing: boolean = false;
 
   @Input()
   fromService: boolean = false;
@@ -96,6 +97,7 @@ export class InfoHandler extends Destroy$ {
   }
 
   private show(info: Info) {
+    this.textOverflow(info.content.length)
     if ( !info.content ) return;
     this.resetTimer();
     this.content = info.content;
@@ -119,6 +121,18 @@ export class InfoHandler extends Destroy$ {
     this.content = '';
     this.resetTimer();
     this.cd.markForCheck();
+  }
+
+  textOverflow(textLength: number) {
+    let textPixel = textLength*7.5
+    let screenSize = window.screen.width
+    console.log("e", screenSize, textPixel)
+    if (textPixel > screenSize){
+      this.isOverflowing = true;
+    }
+    else {
+      this.isOverflowing = false;
+    }
   }
 };
 
