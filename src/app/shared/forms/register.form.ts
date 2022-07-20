@@ -92,6 +92,7 @@ import { InfoService } from "../components/info/info.component";
 
         <div class="form-input">
           <label>Mot de passe</label>
+          <div class="form-input flex">
           <input
           #input5 (click)="onClickInputScroll(input5)"
             class="form-element"
@@ -99,8 +100,9 @@ import { InfoService } from "../components/info/info.component";
             formControlName="password"
             id="idPassword"
           />
-          <div (click)="togglePassword()" style="position: absolute; cursor: pointer; bottom: 0; right: 0; z=100">
+          <div (click)="togglePassword()" style="position: absolute; cursor: pointer; top:0; right: 0; z=100">
             <img class="eye" src="assets/Oeil_ferme.svg" id="togglePassword">
+          </div>
           </div>
           </div>
         <div class="form-action">
@@ -252,6 +254,11 @@ import { InfoService } from "../components/info/info.component";
       .form-title {
         font-size: 1.25rem;
         font-weight: 600
+      }
+
+      img {
+        width: 75%;
+        height: auto;
       }
 
       .title-subtitle {
