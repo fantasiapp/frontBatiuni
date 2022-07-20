@@ -8,7 +8,7 @@ import {
   SimpleChanges,
   ViewChild,
 } from "@angular/core";
-import { Store } from "@ngxs/store";
+import { MyStore } from "src/app/shared/common/classes";
 import * as UserActions from "src/models/new/user/user.actions";
 import { filter, take } from "rxjs/operators";
 import { PopupService } from "src/app/shared/components/popup/popup.component";
@@ -72,7 +72,7 @@ export class ExtendedProfileComponent extends Destroy$ {
   showStar: boolean = true;
   
   constructor(
-    private store: Store,
+    private store: MyStore,
     private popup: PopupService,
     private cd: ChangeDetectorRef,
     private appComponent: AppComponent,

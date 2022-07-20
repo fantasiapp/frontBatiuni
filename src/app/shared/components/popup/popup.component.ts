@@ -16,7 +16,7 @@ import {
   ViewContainerRef,
 } from "@angular/core";
 import { SafeResourceUrl } from "@angular/platform-browser";
-import { Store } from "@ngxs/store";
+import { MyStore } from "src/app/shared/common/classes";
 import { combineLatest, Subject } from "rxjs";
 import {
   distinct,
@@ -93,7 +93,7 @@ export class UIPopup extends DimensionMenu {
     private cd: ChangeDetectorRef,
     private componentFactoryResolver: ComponentFactoryResolver,
     private popupService: PopupService,
-    private store: Store
+    private store: MyStore
   ) {
     super();
   }
@@ -336,7 +336,7 @@ export class PopupService {
     height: "calc(100% - 60px)",
   };
 
-  constructor(private store: Store, private downloader: FileDownloader) {}
+  constructor(private store: MyStore, private downloader: FileDownloader) {}
 
   show(view: PopupView, dimension?: Dimension) {
     this.popups$.next(view);

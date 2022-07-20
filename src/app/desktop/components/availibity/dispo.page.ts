@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, ViewChild } from "@angular/core";
-import { Select, Store } from "@ngxs/store";
+import { Select } from "@ngxs/store";
 import { Observable } from "rxjs";
 import { AppComponent } from "src/app/app.component";
 import { Destroy$ } from "src/app/shared/common/classes";
@@ -8,6 +8,7 @@ import { TooltipDimension, UITooltipService } from "src/app/shared/components/to
 import { Disponibility, Profile } from "src/models/new/data.interfaces";
 import { nameToAvailability } from "src/models/new/data.mapper";
 import { DataQueries, SnapshotArray } from "src/models/new/data.state";
+import { MyStore } from "src/app/shared/common/classes";
 import { ModifyAvailability } from "src/models/new/user/user.actions";
 
 @Component({
@@ -56,7 +57,7 @@ export class DispoPage extends Destroy$ {
     width: '300px', height: '150px' 
   };
 
-  constructor(private store: Store, private tooltipService: UITooltipService, private appComponent: AppComponent) {
+  constructor(private store: MyStore, private tooltipService: UITooltipService, private appComponent: AppComponent) {
     super(); 
   }
 

@@ -2,7 +2,7 @@ import { Component, ChangeDetectorRef} from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { ChangeDetectionStrategy } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { Store } from "@ngxs/store";
+import { MyStore } from "src/app/shared/common/classes";
 import { ForgotPassword } from "src/models/auth/auth.actions";
 import { take } from "rxjs/operators";
 import { ComplexPassword, MatchField, setErrors } from "src/validators/verify";
@@ -46,7 +46,7 @@ import { ComplexPassword, MatchField, setErrors } from "src/validators/verify";
 
 export class ForgotPasswordForm {
 
-  constructor(private route: ActivatedRoute, private router: Router,private cd: ChangeDetectorRef, private store: Store) { }
+  constructor(private route: ActivatedRoute, private router: Router,private cd: ChangeDetectorRef, private store: MyStore) { }
   token: any;
 
   forgotPassword = new FormGroup({

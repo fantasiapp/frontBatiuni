@@ -1,4 +1,5 @@
-import { Select, Store } from "@ngxs/store";
+import { MyStore } from "src/app/shared/common/classes";
+import { Select } from "@ngxs/store";
 import { ChangeDetectionStrategy, Component, ChangeDetectorRef, Input, ViewChild, EventEmitter, Output, ViewEncapsulation} from "@angular/core";
 import { Destroy$ } from "src/app/shared/common/classes";
 import { Mission, DatePost } from "src/models/new/data.interfaces";
@@ -19,7 +20,7 @@ export class SuiviChantierDate extends Destroy${
 
 
   
-  constructor(private cd: ChangeDetectorRef, private store: Store, private popup: PopupService) {
+  constructor(private cd: ChangeDetectorRef, private store: MyStore, private popup: PopupService) {
     super()
   }
     

@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewChild, } from "@angular/core";
-import { Select, Store } from "@ngxs/store";
+import { Select } from "@ngxs/store";
 import { Company, Profile } from "src/models/new/data.interfaces";
 import { DataQueries, DataState, QueryAll } from "src/models/new/data.state";
 import { Destroy$ } from "src/app/shared/common/classes";
@@ -13,6 +13,7 @@ import { BlockCompany } from "src/models/new/user/user.actions";
 import { take } from "rxjs/operators";
 import { PopupService } from "src/app/shared/components/popup/popup.component";
 import { UIAnnonceResume } from "../../ui/annonce-resume/annonce-resume.ui";
+import { MyStore } from "src/app/shared/common/classes";
 
 @Component({
     selector: "blocked_contacts",
@@ -35,7 +36,7 @@ export class BlockedContactsComponent extends Destroy$ {
     profile$!: Observable<Profile>;
 
     constructor(
-        private store: Store, 
+        private store: MyStore, 
         private slides: SlidemenuService,
         private info: InfoService, 
         private appComponent: AppComponent, 

@@ -1,11 +1,12 @@
 import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
-import { Select, Store } from "@ngxs/store";
+import { Select } from "@ngxs/store";
 import * as UserActions from "src/models/new/user/user.actions";
 import { Logout } from "src/models/auth/auth.actions";
 import { ImageGenerator } from "src/app/shared/services/image-generator.service";
 import { Profile } from "src/models/new/data.interfaces";
 import { DataQueries, DataState } from "src/models/new/data.state";
 import { Observable } from "rxjs";
+import { MyStore } from "src/app/shared/common/classes";
 @Component({
   selector: 'desktop-stickyH',
   templateUrl: 'header.desktop.html',
@@ -13,7 +14,7 @@ import { Observable } from "rxjs";
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HeaderDesktop {
-  constructor(private store : Store,private imageGenerator: ImageGenerator){
+  constructor(private store : MyStore,private imageGenerator: ImageGenerator){
 
   }
 

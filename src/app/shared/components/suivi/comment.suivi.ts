@@ -11,7 +11,7 @@ import {
   ViewChildren,
 } from "@angular/core";
 import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser";
-import { Store } from "@ngxs/store";
+import { MyStore } from "src/app/shared/common/classes";
 import { map, take } from "rxjs/operators";
 import { Supervision, File } from "src/models/new/data.interfaces";
 import { DownloadFile } from "src/models/new/user/user.actions";
@@ -44,7 +44,7 @@ export class SuiviComments {
     private imageGenerator: ImageGenerator,
     private downloader: FileDownloader,
     private sanitizer: DomSanitizer,
-    private store: Store
+    private store: MyStore
   ) {}
 
   ngOnInit() {

@@ -1,5 +1,5 @@
 import { EventEmitter, Injectable } from '@angular/core';
-import { Store } from '@ngxs/store';
+import { MyStore } from "src/app/shared/common/classes";
 
 @Injectable({
   providedIn: 'root'
@@ -7,7 +7,7 @@ import { Store } from '@ngxs/store';
 
 
 export class BooleanService {
-  constructor(private store: Store) {}
+  constructor(private store: MyStore) {}
 
   isLoadingNavChange: EventEmitter<boolean> = new EventEmitter();
 

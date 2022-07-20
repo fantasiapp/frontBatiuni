@@ -10,7 +10,7 @@ import {
   ViewChildren,
 } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
-import { Select, Store } from "@ngxs/store";
+import { Select } from "@ngxs/store";
 import { combineLatest, Observable } from "rxjs";
 import { take, takeUntil } from "rxjs/operators";
 import { Destroy$ } from "src/app/shared/common/classes";
@@ -43,6 +43,7 @@ import {
 import { ApplyForm } from "src/app/mobile/ui/annonce-resume/annonce-resume.ui";
 import { InitialState } from "@ngxs/store/internals";
 import { getUserDataService } from "src/app/shared/services/getUserData.service";
+import { MyStore } from "src/app/shared/common/classes";
 
 type PostMenu = { open: boolean; post: Post | null };
 
@@ -89,7 +90,7 @@ export class HomePageComponent extends Destroy$ {
 
   constructor(
     private cd: ChangeDetectorRef,
-    private store: Store,
+    private store: MyStore,
     private info: InfoService,
     private popup: PopupService,
     private getUserDataService: getUserDataService

@@ -1,5 +1,5 @@
 import { EventEmitter, Injectable } from '@angular/core';
-import { Store } from '@ngxs/store';
+import { MyStore } from "src/app/shared/common/classes";
 import { DataQueries, DataState } from 'src/models/new/data.state';
 import { Notification } from "src/models/new/data.interfaces";
 
@@ -17,7 +17,7 @@ export class NotifService {
   token: string = 'y\'a pas de token'
   notifications: Notification[] = [];
 
-  constructor(private store: Store) {}
+  constructor(private store: MyStore) {}
   emitNotifChangeEvent(num?: number) {
     this.checkNotif()
     if (num !== undefined) {

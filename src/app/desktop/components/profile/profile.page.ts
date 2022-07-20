@@ -4,7 +4,7 @@ import {
   Component,
 } from "@angular/core";
 import { FormGroup } from "@angular/forms";
-import { Select, Store } from "@ngxs/store";
+import { Select } from "@ngxs/store";
 import { Observable } from "rxjs";
 import { Logout } from "src/models/auth/auth.actions";
 import { Profile } from "src/models/new/data.interfaces";
@@ -14,6 +14,7 @@ import { InfoService } from "src/app/shared/components/info/info.component";
 import { take } from "rxjs/operators";
 import { animate, style, transition, trigger } from "@angular/animations";
 import { AppComponent } from "src/app/app.component";
+import { MyStore } from "src/app/shared/common/classes";
 
 @Component({
   selector: "profile",
@@ -48,7 +49,7 @@ export class ProfilePageComponent {
   profile$!: Observable<Profile>;
 
   constructor(
-    private store: Store,
+    private store: MyStore,
     private cd: ChangeDetectorRef,
     private info: InfoService,
     private appComponent: AppComponent

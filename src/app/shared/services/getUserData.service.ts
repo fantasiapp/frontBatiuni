@@ -1,6 +1,6 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { Store } from '@ngxs/store';
+import { MyStore } from "src/app/shared/common/classes";
 import { RegisterForm } from '../forms/register.form';
 
 @Injectable({
@@ -17,7 +17,7 @@ export class getUserDataService {
   hasNewResponse: boolean = false;
   registerForm: FormGroup | undefined;
 
-  constructor(private store: Store) {}
+  constructor(private store: MyStore) {}
 
   emitDataChangeEvent(timestamp?: number) {
     if (timestamp){

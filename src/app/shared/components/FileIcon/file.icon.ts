@@ -1,6 +1,6 @@
 import { i18nMetaToJSDoc } from "@angular/compiler/src/render3/view/i18n/meta";
 import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
-import { Store } from "@ngxs/store";
+import { MyStore } from "src/app/shared/common/classes";
 import { shadeColor } from "src/app/shared/common/functions";
 import { Label } from "src/models/new/data.interfaces";
 import { DataQueries, SnapshotAll } from "src/models/new/data.state";
@@ -84,7 +84,7 @@ export class FileIcon {
   public originalName: string = '';
   public allLabels: Label[];
 
-  constructor(private store: Store) {
+  constructor(private store: MyStore) {
     this.allLabels = this.store.selectSnapshot(DataQueries.getAll("Label"))
   }
 

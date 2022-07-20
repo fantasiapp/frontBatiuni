@@ -3,7 +3,7 @@ import { UIDefaultAccessor } from "src/app/shared/common/classes";
 import {Profile, Post, Mission, PostMenu, Candidate, User } from "src/models/new/data.interfaces";
 import { DataQueries } from "src/models/new/data.state";
 import { FormControl, FormGroup } from "@angular/forms";
-import { Store } from "@ngxs/store";
+import { MyStore } from "src/app/shared/common/classes";
 
 @Component({
   selector: 'searchbar',
@@ -27,7 +27,7 @@ export class SearchbarComponent  implements OnInit{
   }
   );
 
-  constructor(private store: Store, private cd: ChangeDetectorRef){
+  constructor(private store: MyStore, private cd: ChangeDetectorRef){
     
   }
 

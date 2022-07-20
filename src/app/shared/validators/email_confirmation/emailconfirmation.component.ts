@@ -1,6 +1,6 @@
 import {  ChangeDetectionStrategy, ChangeDetectorRef, Component } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { Store } from "@ngxs/store";
+import { MyStore } from "src/app/shared/common/classes";
 import { interval, race } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { Destroy$ } from "src/app/shared/common/classes";
@@ -17,7 +17,7 @@ export class EmailConfirmation extends Destroy$ {
   content = 'Confirmation en cours';
   points: string = '.';
 
-  constructor(private store: Store, private cd: ChangeDetectorRef, private route: ActivatedRoute) {
+  constructor(private store: MyStore, private cd: ChangeDetectorRef, private route: ActivatedRoute) {
     super();
     const token = this.route.snapshot.params.token;
     const reply = this.store.dispatch(new ConfirmAccount(token));

@@ -8,7 +8,7 @@ import {
   ViewChildren,
 } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
-import { Store } from "@ngxs/store";
+import { MyStore } from "src/app/shared/common/classes";
 import {
   DistanceSliderConfig,
   SalarySliderConfig,
@@ -156,7 +156,7 @@ export class MissionFilterForm extends Filter<Mission> {
 
   ngAfterViewInit(): void {}
 
-  constructor(service: FilterService, private store: Store) {
+  constructor(service: FilterService, private store: MyStore) {
     super(service);
   }
 

@@ -2,7 +2,7 @@ import { i18nMetaToJSDoc } from '@angular/compiler/src/render3/view/i18n/meta';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Camera, CameraResultType, CameraSource, Photo } from '@capacitor/camera';
-import { Store } from '@ngxs/store';
+import { MyStore } from "src/app/shared/common/classes";
 import * as moment from 'moment';
 import { take, takeUntil } from 'rxjs/operators';
 import { Destroy$ } from 'src/app/shared/common/classes';
@@ -38,7 +38,7 @@ export class SupervisionWrapperComponent extends Destroy$ {
   @Output() closeSwipe = new EventEmitter<Supervision[] | null>()
 
 
-  constructor(public mobile: Mobile, private cd: ChangeDetectorRef, private store: Store, private info: InfoService) {
+  constructor(public mobile: Mobile, private cd: ChangeDetectorRef, private store: MyStore, private info: InfoService) {
     super()
   }
   

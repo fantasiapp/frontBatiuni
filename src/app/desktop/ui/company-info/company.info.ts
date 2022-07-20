@@ -1,8 +1,8 @@
 import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core';
-import { Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { Profile } from 'src/models/new/data.interfaces';
 import { QueryProfile } from 'src/models/new/data.state';
+import { MyStore } from "src/app/shared/common/classes";
 
 type annonceType = 'makead' | 'viewad';
 
@@ -13,7 +13,7 @@ type annonceType = 'makead' | 'viewad';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CompanyInfo implements OnInit {
-  constructor(private store: Store) { }
+  constructor(private store: MyStore) { }
 
   @Input()
   type: annonceType = 'makead';

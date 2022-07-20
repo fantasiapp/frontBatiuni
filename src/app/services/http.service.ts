@@ -1,6 +1,6 @@
 import { HttpClient, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Store } from "@ngxs/store";
+import { MyStore } from "src/app/shared/common/classes";
 import { Observable } from "rxjs";
 import { environment } from "src/environments/environment";
 import { AuthState } from 'src/models/auth/auth.state';
@@ -10,7 +10,7 @@ type API = 'api-token-auth' | 'initialize' | 'register' | 'data' | 'payment';
 @Injectable()
 export class HttpService implements HttpInterceptor {
 
-  constructor(private store: Store, private http: HttpClient) {}
+  constructor(private store: MyStore, private http: HttpClient) {}
 
   post(api: API, body: any) {
     return this.http.post(`${environment.backUrl}/${api}/`, body, {

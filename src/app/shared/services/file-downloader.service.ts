@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { DomSanitizer } from "@angular/platform-browser";
-import { Store } from "@ngxs/store";
+import { MyStore } from "src/app/shared/common/classes";
 import { Observable, of } from "rxjs";
 import { map, take } from "rxjs/operators";
 import { File } from "src/models/new/data.interfaces";
@@ -13,7 +13,7 @@ import { Content } from "@angular/compiler/src/render3/r3_ast";
 
 @Injectable()
 export class FileDownloader {
-  constructor(private sanitizer: DomSanitizer, private store: Store) {}
+  constructor(private sanitizer: DomSanitizer, private store: MyStore) {}
 
   toSecureBase64(file: BasicFile) {
     //assume downloaded

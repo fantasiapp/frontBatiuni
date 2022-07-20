@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
-import { Store } from "@ngxs/store";
+import { MyStore } from "src/app/shared/common/classes";
 
 
 @Component({
@@ -10,7 +10,7 @@ import { Store } from "@ngxs/store";
 })
 
 export class AnnonceValidePage {
-  constructor(private store: Store){}
+  constructor(private store: MyStore){}
     
   ngOnInit() {
       

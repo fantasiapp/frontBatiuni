@@ -6,7 +6,7 @@ import { Filter } from "../directives/filter.directive";
 import { DataQueries, SnapshotAll } from "src/models/new/data.state";
 import { UISwitchComponent } from "../components/switch/switch.component";
 import { FilterService } from "../services/filter.service";
-import { Store } from "@ngxs/store";
+import { MyStore } from "src/app/shared/common/classes";
 import { FormArray, FormControl, FormGroup } from "@angular/forms";
 import { returnInputKeyboard } from '../common/classes'
 import "hammerjs"
@@ -99,7 +99,7 @@ export class SOSFilterForm implements OnInit {
     {}
   );
 
-  constructor(private store: Store, private cd: ChangeDetectorRef){}
+  constructor(private store: MyStore, private cd: ChangeDetectorRef){}
 
   @SnapshotAll('Job')
   allJobs!: Job[];

@@ -19,7 +19,7 @@ import {
   Validators,
 } from "@angular/forms";
 import { Router } from "@angular/router";
-import { Store } from "@ngxs/store";
+import { MyStore } from "src/app/shared/common/classes";
 import * as moment from "moment";
 import { take, takeLast } from "rxjs/operators";
 import { footerTranslate } from "src/animations/footer.animation";
@@ -501,7 +501,7 @@ export class MakeAdForm {
   showFooter: boolean = true;
 
   constructor(
-    private store: Store,
+    private store: MyStore,
     private info: InfoService,
     public mobile: Mobile,
     private cd: ChangeDetectorRef,

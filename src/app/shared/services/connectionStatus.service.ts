@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Store } from '@ngxs/store';
+import { MyStore } from "src/app/shared/common/classes";
 import { fromEvent, Observable, Subscription } from 'rxjs';
 
 @Injectable({
@@ -9,7 +9,7 @@ import { fromEvent, Observable, Subscription } from 'rxjs';
 
 export class ConnectionStatusService {
     
-  constructor(private store: Store) {
+  constructor(private store: MyStore) {
     this.init()
   }
 
@@ -27,6 +27,7 @@ export class ConnectionStatusService {
     this.subscriptions.push(this.onlineEvent.subscribe(e => {
         this.isOnline = true
         console.log("je suis connecté", this.isOnline)
+
     }))
     this.subscriptions.push(this.offlineEvent.subscribe(e => {
         this.isOnline = false

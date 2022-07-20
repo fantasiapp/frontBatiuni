@@ -9,7 +9,7 @@ import {
   Output,
   ViewChild,
 } from "@angular/core";
-import { Select, Store } from "@ngxs/store";
+import { Select } from "@ngxs/store";
 import { combineLatest, Observable } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { Post, PostMenu, Profile } from "src/models/new/data.interfaces";
@@ -24,6 +24,7 @@ import { InfoService } from "src/app/shared/components/info/info.component";
 import { SearchbarComponent } from "src/app/shared/components/searchbar/searchbar.component";
 import { SlidemenuService, UISlideMenuComponent } from "src/app/shared/components/slidemenu/slidemenu.component";
 import { PopupService } from "src/app/shared/components/popup/popup.component";
+import { MyStore } from "src/app/shared/common/classes";
 
 // import { UISlideMenuComponent } from 'src/app/shared/components/slidemenu/slidemenu.component';
 
@@ -62,7 +63,7 @@ export class ApplicationsComponent extends Destroy$ {
   time: number = 0;
   searchbar!: SearchbarComponent;
 
-  constructor(private cd: ChangeDetectorRef, private info: InfoService, private store: Store, private appComponent: AppComponent, private slideService: SlidemenuService, private popup: PopupService) {
+  constructor(private cd: ChangeDetectorRef, private info: InfoService, private store: MyStore, private appComponent: AppComponent, private slideService: SlidemenuService, private popup: PopupService) {
     super();
     this.searchbar = new SearchbarComponent(store, cd);
   }

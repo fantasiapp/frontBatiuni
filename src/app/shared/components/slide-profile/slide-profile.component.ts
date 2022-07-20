@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { Store } from '@ngxs/store';
+import { MyStore } from "src/app/shared/common/classes";
 import { Company, Post, Profile, User } from 'src/models/new/data.interfaces';
 import { DataQueries } from 'src/models/new/data.state';
 import { UIOpenMenu } from '../../common/classes';
@@ -34,7 +34,7 @@ export class SlideProfileComponent extends UIOpenMenu {
 
   subContractor: Company | null = null;
   
-  constructor(private store: Store) {
+  constructor(private store: MyStore) {
     super();
     
   }

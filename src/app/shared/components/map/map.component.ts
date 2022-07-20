@@ -1,11 +1,12 @@
 import { Component, ChangeDetectionStrategy, Input, ViewChild, ElementRef, Output, EventEmitter, NgZone, asNativeElements, ChangeDetectorRef } from '@angular/core';
-import { Select, Store } from '@ngxs/store';
+import { Select } from '@ngxs/store';
 import * as mapboxgl from 'mapbox-gl';
 import { Observable, Subscription } from 'rxjs';
 import { availableCompanies } from 'src/app/mobile/components/SOS_page/sos-page.component';
 import { Company, Job, Mission, Post } from 'src/models/new/data.interfaces';
 import { DataQueries, DataState } from 'src/models/new/data.state';
 import { Availability } from '../calendar/calendar.ui';
+import { MyStore } from "src/app/shared/common/classes";
 
 export type MarkerData = {
   latitude: number;
@@ -86,7 +87,7 @@ export class UIMapComponent {
   mapbox: any;
   mapboxStyles = 'mapbox://styles/zeuschatoui/ckxj0zqovi9lf15p5gysrfax4';
 
-  constructor(private store: Store, private cd: ChangeDetectorRef) {}
+  constructor(private store: MyStore, private cd: ChangeDetectorRef) {}
 
   popupContent!: HTMLElement;
 

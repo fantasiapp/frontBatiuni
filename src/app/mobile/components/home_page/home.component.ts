@@ -11,7 +11,7 @@ import {
   Output,
   HostBinding,
 } from "@angular/core";
-import { Select, Store } from "@ngxs/store";
+import { Select } from "@ngxs/store";
 import { combineLatest, Observable, Subject, throwError } from "rxjs";
 import { catchError, take, takeUntil } from "rxjs/operators";
 import { Destroy$ } from "src/app/shared/common/classes";
@@ -68,6 +68,7 @@ import { getUserDataService } from "src/app/shared/services/getUserData.service"
 import { Router } from "@angular/router";
 import { NotifService } from "src/app/shared/services/notif.service";
 import { ActiveViewService } from "src/app/shared/services/activeView.service";
+import { MyStore } from "src/app/shared/common/classes";
 
 @Component({
   selector: "home",
@@ -160,7 +161,7 @@ export class HomeComponent extends Destroy$ {
   constructor(
     private cd: ChangeDetectorRef,
     private appComponent: AppComponent,
-    private store: Store,
+    private store: MyStore,
     private info: InfoService,
     private popup: PopupService,
     private swipeupService: SwipeupService,

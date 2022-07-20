@@ -2,7 +2,7 @@ import { DOCUMENT, Location } from "@angular/common";
 import { Component, ChangeDetectionStrategy, Input, Inject, ChangeDetectorRef } from "@angular/core";
 import { Router } from "@angular/router";
 import { Navigate } from "@ngxs/router-plugin";
-import { Store } from "@ngxs/store";
+import { MyStore } from "src/app/shared/common/classes";
 import { loadStripe } from "@stripe/stripe-js";
 import { HttpService } from "src/app/services/http.service";
 import { environment } from "src/environments/environment";
@@ -50,7 +50,7 @@ export class Payment {
     @Inject(DOCUMENT) private document: Document,
     private router: Router,
     private cd: ChangeDetectorRef,
-    private store: Store,
+    private store: MyStore,
     private popup: PopupService,
     private location: Location,
     private info: InfoService,

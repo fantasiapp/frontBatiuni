@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, Input,} from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { NavigationExtras, Router } from "@angular/router";
-import { Store } from "@ngxs/store";
+import { MyStore } from "src/app/shared/common/classes";
 import { PopupService } from "src/app/shared/components/popup/popup.component";
 import { SlidemenuService } from "src/app/shared/components/slidemenu/slidemenu.component";
 import { productList } from "src/environments/environment";
@@ -25,7 +25,7 @@ export class BoosterPage {
   });
 
   constructor(
-    private store: Store,
+    private store: MyStore,
     private slideService: SlidemenuService,
     private cd: ChangeDetectorRef, 
     private popup: PopupService,

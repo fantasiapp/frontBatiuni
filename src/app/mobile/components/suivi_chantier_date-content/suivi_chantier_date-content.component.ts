@@ -8,7 +8,7 @@ import {
 } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { Camera, CameraResultType, CameraSource } from "@capacitor/camera";
-import { Store } from "@ngxs/store";
+import { MyStore } from "src/app/shared/common/classes";
 import { take } from "rxjs/internal/operators/take";
 import { takeUntil } from "rxjs/operators";
 import { Destroy$ } from "src/app/shared/common/classes";
@@ -86,7 +86,7 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
 
   user!: User;
 
-  constructor(public mobile: Mobile, private cd: ChangeDetectorRef, private store: Store, private popup: PopupService, private getUserDataService: getUserDataService, private info: InfoService) {
+  constructor(public mobile: Mobile, private cd: ChangeDetectorRef, private store: MyStore, private popup: PopupService, private getUserDataService: getUserDataService, private info: InfoService) {
     super();
   }
 

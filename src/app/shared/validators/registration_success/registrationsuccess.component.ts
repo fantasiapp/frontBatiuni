@@ -1,7 +1,7 @@
 import {  ChangeDetectionStrategy, ChangeDetectorRef, Component, Input,} from "@angular/core";
 import { FormGroup } from "@angular/forms";
 import { Router } from "@angular/router";
-import { Store } from "@ngxs/store";
+import { MyStore } from "src/app/shared/common/classes";
 import { take } from "rxjs/operators";
 import { AppState } from "src/app/app.state";
 import { Register } from "src/models/auth/auth.actions";
@@ -21,7 +21,7 @@ export class RegistrationSuccess {
 
   registerForm: FormGroup;
 
-  constructor(private store: Store,private cd: ChangeDetectorRef, private getUserDataService: getUserDataService) {
+  constructor(private store: MyStore,private cd: ChangeDetectorRef, private getUserDataService: getUserDataService) {
     const auth = this.store.selectSnapshot(AuthState);
     this.userEmail = auth.pendingEmail; //must delete later
     this.registerForm = this.getUserDataService.getRegisterForm()!

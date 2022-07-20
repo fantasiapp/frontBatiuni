@@ -11,7 +11,7 @@ import {
   ViewChildren,
 } from "@angular/core";
 import { FormArray, FormControl, FormGroup } from "@angular/forms";
-import { Store } from "@ngxs/store";
+import { MyStore } from "src/app/shared/common/classes";
 import { Control } from "mapbox-gl";
 import { DistanceSliderConfig, SalarySliderConfig, EmployeesSliderConfig } from "src/app/shared/common/sliderConfig";
 import { Candidate, Job, Post } from "src/models/new/data.interfaces";
@@ -207,7 +207,7 @@ export class STFilterForm {
     });
   }
 
-  constructor(private store: Store, private cd: ChangeDetectorRef, private filterService: FilterService, private info: InfoService) {}
+  constructor(private store: MyStore, private cd: ChangeDetectorRef, private filterService: FilterService, private info: InfoService) {}
 
   ngOnInit() {
 
