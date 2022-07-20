@@ -10,20 +10,17 @@ import {
   ViewChild,
   ViewChildren,
 } from "@angular/core";
-import { FormArray, FormControl, FormGroup } from "@angular/forms";
+import {  FormControl, FormGroup } from "@angular/forms";
 import { Store } from "@ngxs/store";
-import { Control } from "mapbox-gl";
 import { DistanceSliderConfig, SalarySliderConfig, EmployeesSliderConfig } from "src/app/shared/common/sliderConfig";
 import { Candidate, Job, Post } from "src/models/new/data.interfaces";
 import { DataQueries, SnapshotAll } from "src/models/new/data.state";
 import { OptionsModel } from "../components/options/options";
 import { UISwitchComponent } from "../components/switch/switch.component";
-import { Filter } from "../directives/filter.directive";
 import { FilterService } from "../services/filter.service";
 import { getLevenshteinDistance } from "src/app/shared/services/levenshtein";
 import { InfoService } from "../components/info/info.component";
-import { returnInputKeyboard } from '../common/classes'
-import "hammerjs"
+import { returnInputKeyboard } from "../common/classes";
 
 @Component({
   selector: "st-filter-form",
@@ -46,10 +43,11 @@ import "hammerjs"
     <div class="form-input">
       <label>Adresse de chantier</label>
       <input
+        #inputAddress
         type="text"
         class="form-element"
         formControlName="address"
-        (keyup)="returnInputKeyboard($event, inputAddress)" #inputAddress
+        (keyup)="returnInputKeyboard($event, inputAddress)" 
       />
     </div>
 
@@ -416,7 +414,12 @@ export class STFilterForm {
     this.cd.detectChanges();
   }
 
-  returnInputKeyboard = returnInputKeyboard
-  
+  // returnInputKeyboard = returnInputKeyboard
+  returnInputKeyboard(e: any, input: HTMLInputElement){
+    e.preventDefault()
+    if(e.keyCode == 13){
+      input.blur()
+    }
+  } 
 }
 
