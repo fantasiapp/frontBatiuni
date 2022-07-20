@@ -91,7 +91,6 @@ export interface BlockedCandidate {
 
 export interface PostDetail {
   id: Ref<PostDetail>;
-  date: string
   content: string
   validated : boolean
   refused : boolean
@@ -112,7 +111,6 @@ export interface Supervision {
   id: Ref<Supervision>;
   author: string;
   companyId: number;
-  date: string;
   comment: string;
   timestamp: number;
   files: Ref<File>[];
