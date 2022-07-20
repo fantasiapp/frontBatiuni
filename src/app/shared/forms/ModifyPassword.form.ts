@@ -3,6 +3,7 @@ import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { take } from "rxjs/operators";
 import { ComplexPassword, MatchField } from "src/validators/verify";
 import { returnInputKeyboard } from '../common/classes'
+import { Mobile } from "../services/mobile-footer.service";
 
 @Component({
   selector: 'modify-password-form',
@@ -37,7 +38,7 @@ import { returnInputKeyboard } from '../common/classes'
     </div>
   </form>
 
-  <div class="sticky-footer">
+  <div class="sticky-footer" *ngIf="showFooter">
     <button class="button gradient full-width" (click)="onSubmit()" [disabled]="form.invalid || null || disableBoutton">Enregistrer </button>
   </div>
   `,
@@ -66,7 +67,7 @@ import { returnInputKeyboard } from '../common/classes'
 export class ModifyPasswordForm {
 
   returnInputKeyboard = returnInputKeyboard
-  constructor(private cd: ChangeDetectorRef) {}
+  constructor(private cd: ChangeDetectorRef, private mobile:Mobile) {}
 
   @Output() submit = new EventEmitter<FormGroup>();
 
@@ -84,6 +85,15 @@ export class ModifyPasswordForm {
       MatchField('newPwd')
     ])
   }, {})
+
+  showFooter: boolean = false
+
+  ngOnInit(){
+    this.mobile.footerStateSubject.subscribe(b=>{
+      this.showFooter = b;
+      this.cd.detectChanges()
+    })
+  }
 
   onSubmit() { 
     this.submit.emit(this.form);
