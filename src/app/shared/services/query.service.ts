@@ -28,12 +28,15 @@ export class QueryManager {
   query(actionOrActions: any, name: string, existingTimestamp?: string){
     if (this.connectionService.isOnline){
       if (existingTimestamp){
-        this.localService.removeData(this.localService.createKey(existingTimestamp, name))
+        this.localService.removeData(existingTimestamp)
       }
       return this.store.dispatch(actionOrActions)}
+    else if (existingTimestamp) {
+      return null
+    }
     else{
       let timestamp = getTimeStamp().toString()
-      this.localService.saveData(this.localService.createKey(timestamp, name), JSON.stringify(actionOrActions))
+      this.localService.saveData(timestamp, this.localService.createKey(actionOrActions, name), true)
       return null
     }
   }
@@ -42,12 +45,12 @@ export class QueryManager {
       let keepGoing = true
       let allTimestampValues: string[] = this.localService.getAllTimestampValues();
       allTimestampValues.forEach((value: string) => {
-        let valueSplit = value.split('/')
-        let timestamp = valueSplit[0]
-        let name = valueSplit[1]
         if (keepGoing){
           if (this.connectionService.isOnline){
-            this.emitQueryEvent([name, this.localService.getData(value)!])
+            let params = this.localService.getData(value)!.split('/')
+            let actionOrActions = JSON.parse(params[0])
+            let name = params[1]
+            this.emitQueryEvent([name, actionOrActions])
           }
           else{
             keepGoing = false

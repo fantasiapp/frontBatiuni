@@ -9,10 +9,17 @@ export class LocalService {
 
   generalKeys: string[] = ['getUserData', 'getGeneralData']
 
-  constructor() {}
+  constructor() {
+    if (!localStorage.getItem('allTimestamps')){
+      localStorage.setItem('allTimestamps', '')
+    }
+  }
 
-  public saveData(key: string, value: string){
+  public saveData(key: string, value: string, isTimestamp?: boolean){
       localStorage.setItem(key, value)
+      if (isTimestamp){
+        this.addTimestamp(key)
+      }
   }
 
   public getData(key: string): string | null {
@@ -32,11 +39,10 @@ export class LocalService {
   }
 
   public getAllTimestampValues(): string[]{
-    let allTimestampValues: string[] = []
-    this.getAllData().forEach((key: string) => {
-      allTimestampValues.push(localStorage.getItem(key)!)
+    let allTimestamps = localStorage.getItem("allTimestamps")
+    return allTimestamps!.split('/').map<string>((value: string) => {
+      return localStorage.getItem(value)!
     })
-    return allTimestampValues
   }
 
   public removeData(key: string){
@@ -47,8 +53,31 @@ export class LocalService {
     localStorage.clear()
   }
 
-  public createKey(timestamp: string, name: string) {
-    return timestamp + '/' + name
+  public createKey(actionOrActions: any, name: string) {
+    return JSON.stringify(actionOrActions) + '/' + name
+  }
+
+  public addTimestamp(timestamp: string) {
+    let allTimestamps = localStorage.getItem("allTimestamps")
+    if (!allTimestamps){
+      allTimestamps = ''
+    }
+    this.saveData('allTimestamps', allTimestamps + timestamp + '/')
+  }
+
+  public removeFirstTimestamp() {
+    let allTimestamps = localStorage.getItem("allTimestamps")
+    if (allTimestamps){
+      let keepGoing = true
+      while(keepGoing && allTimestamps != ''){
+        if (allTimestamps[0] != '/') {
+          allTimestamps = allTimestamps.substring(1)
+        }
+        else{
+          keepGoing = false
+        }
+      }
+    }
   }
 }
 
