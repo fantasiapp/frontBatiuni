@@ -1,61 +1,16 @@
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  ComponentFactoryResolver,
-  ElementRef,
-  EventEmitter,
-  HostListener,
-  Injectable,
-  Input,
-  Sanitizer,
-  SimpleChange,
-  SimpleChanges,
-  TemplateRef,
-  ViewChild,
-  ViewContainerRef,
-} from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, EventEmitter, HostListener, Injectable, Input, Sanitizer, SimpleChange, SimpleChanges, TemplateRef, ViewChild, ViewContainerRef } from "@angular/core";
 import { SafeResourceUrl } from "@angular/platform-browser";
 import { MyStore } from "src/app/shared/common/classes";
 import { combineLatest, Subject } from "rxjs";
-import {
-  distinct,
-  map,
-  switchMap,
-  take,
-  takeLast,
-  takeUntil,
-} from "rxjs/operators";
+import { distinct, map, switchMap, take, takeLast, takeUntil } from "rxjs/operators";
 import { Dimension, DimensionMenu } from "src/app/shared/common/classes";
-import {
-  ContextUpdate,
-  TemplateContext,
-  ViewComponent,
-  ViewTemplate,
-} from "../../common/types";
+import { ContextUpdate, TemplateContext, ViewComponent, ViewTemplate } from "../../common/types";
 import { FileDownloader } from "../../services/file-downloader.service";
 import { BasicFile, FileUI } from "../filesUI/files.ui";
-import {
-  File,
-  Company,
-  Mission,
-  DateG,
-  PostDetailGraphic,
-  Task,
-  Ref,
-  DatePost,
-  PostDateAvailableTask,
-  PostDetail,
-  User,
-  Post,
-} from "src/models/new/data.interfaces";
+import { File, Company, Mission, DateG, PostDetailGraphic, Task, Ref, DatePost, PostDateAvailableTask, PostDetail, User, Post } from "src/models/new/data.interfaces";
 import { DataQueries, DataState } from "src/models/new/data.state";
 import { FileContext, FileViewer } from "../file-viewer/file-viewer.component";
-import {
-  SignContract,
-  ModifyDetailedPost,
-  CreateDetailedPost,
-} from "src/models/new/user/user.actions";
+import { SignContract, ModifyDetailedPost, CreateDetailedPost } from "src/models/new/user/user.actions";
 import { SuiviPME } from "src/app/mobile/components/suivi_pme/suivi-pme.page";
 import { assignDateType, SuiviChantierDateContentComponent } from "src/app/mobile/components/suivi_chantier_date-content/suivi_chantier_date-content.component";
 import { UICheckboxComponent } from "../box/checkbox.component";
