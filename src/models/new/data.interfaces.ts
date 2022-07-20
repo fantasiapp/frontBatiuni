@@ -112,7 +112,6 @@ export interface Supervision {
   id: Ref<Supervision>;
   author: string;
   companyId: number;
-  date: string;
   comment: string;
   timestamp: number;
   files: Ref<File>[];

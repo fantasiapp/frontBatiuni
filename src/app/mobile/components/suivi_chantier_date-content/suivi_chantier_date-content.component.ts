@@ -343,6 +343,7 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
           // this.updatePageOnlyDate()
           let supervisions: Supervision[];
           if(detailPostId){
+            console.log('detailPostID', detailPostId);
             let postDetail = this.store.selectSnapshot(DataQueries.getById('DetailedPost', detailPostId))!
             supervisions = this.store.selectSnapshot(DataQueries.getMany('Supervision', postDetail.supervisions))
             taskGraphic!.selectedTask.supervisions = supervisions
@@ -356,6 +357,7 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
             this.swipeMenuImage = false;
             console.log('NEW SUPERVISION ', supervisions);
             supervisions[supervisions.length - 1] = this.store.selectSnapshot(DataQueries.getById('Supervision', supervisions[supervisions.length - 1].id))! 
+            this.updatePageOnlyDate()
             this.cd.detectChanges()
           });
         })
@@ -363,7 +365,7 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
         this.getUserDataService.emitDataChangeEvent()
       }
     }
-    this.updatePageOnlyDate()
+
   }
 
   currentSupervisionId: Ref<Supervision> | null = null

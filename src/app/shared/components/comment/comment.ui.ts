@@ -40,9 +40,7 @@ export class UIComment {
     id: -1,
     author: "Gabriel Dubois",
     companyId: 1,
-    // Supervisions: [],
     comment: "Lorem ipsum dolor sit amet",
-    date: '11-11-2022',
     files: [],
     timestamp: 0
   };
