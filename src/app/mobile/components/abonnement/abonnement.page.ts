@@ -71,25 +71,25 @@ export class AbonnementPage {
 
 
     ngAfterViewInit(){
-        let scroll = document.getElementsByClassName('caroussel')
+        let scroll = document.getElementsByClassName('caroussel__wrapper')
         scroll[0].scrollTo({
             top:0,
-            left:310
+            left: 326
         })
     }
     scrollLeft() {
-        let scroll = document.getElementsByClassName('caroussel')
+        let scroll = document.getElementsByClassName('caroussel__wrapper')
         scroll[0].scrollTo({
             top:0,
-            left:310 + scroll[0].scrollLeft,
+            left:326 + scroll[0].scrollLeft,
             behavior:'smooth'
         })
     }
     scrollRight() {
-        let scroll = document.getElementsByClassName('caroussel')
+        let scroll = document.getElementsByClassName('caroussel__wrapper')
         scroll[0].scrollTo({
             top:0,
-            left: -310 + scroll[0].scrollLeft,
+            left: -326 + scroll[0].scrollLeft,
             behavior:'smooth'
         })
     }
