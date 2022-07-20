@@ -7,7 +7,7 @@ import { CalendarUI, DayState } from "src/app/shared/components/calendar/calenda
 import { availabilityToName } from "../data.mapper";
 import { ApplyForm } from "src/app/mobile/ui/annonce-resume/annonce-resume.ui";
 import { DataQueries } from "../data.state";
-import { Store } from "@ngxs/store";
+import { MyStore } from "src/app/shared/common/classes";
 
 export class ChangeProfileType {
   static readonly type = '[User] Change Profile Type';

@@ -1,4 +1,4 @@
-import { Action, Selector, State, StateContext, Store } from "@ngxs/store";
+import { Action, Selector, State, StateContext } from "@ngxs/store";
 import {
   HttpClient,
   HttpErrorResponse,
@@ -19,7 +19,7 @@ import { Observable, of, throwError } from "rxjs";
 import * as strings from "../../app/shared/common/strings";
 import { Router } from "@angular/router";
 import { HttpService } from "src/app/services/http.service";
-import { RESOURCE_CACHE_PROVIDER } from "@angular/platform-browser-dynamic";
+import { MyStore } from "src/app/shared/common/classes";
 
 @State<AuthModel>({
   name: "auth",
