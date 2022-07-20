@@ -46,10 +46,15 @@ import "hammerjs"
         <span class="criteria">Les profils affichés comme disponibles</span> 
         <switch class="default" formControlName="sortDisponibleProfils"></switch>
       </div>
+
+      <footer
+        class="flex row space-between sticky-footer full-width submit-container background-white"
+        style="z-index: 2;">
         <div class="action-button-filter flex row space space-between full-width">
-          <button class="button passive" (click)="onResetFilter()">Reinitialiser</button>
+          <button class="button passive" (click)="onResetFilter()">Réinitialiser</button>
           <button class="button active" (click)="onCloseFilter()">Valider</button>
         </div>
+      </footer>
     </div>
   </form>
 </ng-container>
@@ -58,7 +63,8 @@ import "hammerjs"
     :host {
       display: block;
       width: 100%;
-      height: 100%;    
+      height: 100%; 
+      padding-bottom: 3rem;   
     }
     
     switch::ng-deep .slider {

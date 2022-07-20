@@ -125,10 +125,15 @@ import "hammerjs"
             #switch2
           ></switch>
         </div>
-        <div class="action-button-filter  flex row space space-between full-width">
-          <button class="button passive" (click)="resetFilter()">Reinitialiser</button>
-          <button class="button active" (click)="onCloseFilter()">Valider</button>
-        </div>
+
+        <footer
+        class="flex row space-between sticky-footer full-width submit-container background-white"
+        style="z-index: 3;">
+          <div class="action-button-filter  flex row space space-between full-width">
+            <button class="button passive" (click)="resetFilter()">Réinitialiser</button>
+            <button class="button active" (click)="onCloseFilter()">Valider</button>
+          </div>
+        </footer>
       </div>
     </form>
   `,
@@ -138,6 +143,7 @@ import "hammerjs"
         display: block;
         width: 100%;
         height: 100%;
+        padding-bottom: 3rem;
       }
 
       switch::ng-deep .slider {
