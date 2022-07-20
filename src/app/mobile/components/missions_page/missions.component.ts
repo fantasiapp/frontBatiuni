@@ -135,12 +135,12 @@ export class MissionsComponent extends Destroy$ {
             title: 'Chantier de ' + contractor.name,
             tasks: this.store.selectSnapshot(DataQueries.getMany('DetailedPost', date!.details))
           })
-          for (const task of tasks) {
-            if(date!.date == task.date){
-              let lenght = this.detailedDays.length
-              if (lenght != 0) this.detailedDays[lenght -1].tasks.push(task)  
-            }
-          }
+          // for (const task of tasks) {
+          //   if(date!.date == task.date){
+          //     let lenght = this.detailedDays.length
+          //     if (lenght != 0) this.detailedDays[lenght -1].tasks.push(task)  
+          //   }
+          // }
         }
     }});
     this.missionToRate = this.allMyMissions.filter((mission) => mission.isClosed && (mission.vibeST == 0 || mission.securityST == 0 || mission.organisationST == 0))

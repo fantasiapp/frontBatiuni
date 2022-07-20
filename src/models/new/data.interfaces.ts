@@ -91,7 +91,6 @@ export interface BlockedCandidate {
 
 export interface PostDetail {
   id: Ref<PostDetail>;
-  date: string
   content: string
   validated : boolean
   refused : boolean
