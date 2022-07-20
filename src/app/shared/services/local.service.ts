@@ -46,5 +46,9 @@ export class LocalService {
   public clearData() {
     localStorage.clear()
   }
+
+  public createKey(timestamp: string, name: string) {
+    return timestamp + '/' + name
+  }
 }
 
