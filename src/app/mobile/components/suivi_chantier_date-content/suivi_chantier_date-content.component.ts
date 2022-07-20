@@ -245,7 +245,7 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
   
   swipePhoto?: {
     task: PostDetailGraphic | null,
-    taskGraphic: TaskGraphic
+    taskGraphic: TaskGraphic | null
   }
 
   async takePhoto() {
@@ -332,7 +332,7 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
     }
   }
   
-  mainComment(task:PostDetailGraphic | null, taskGraphic: TaskGraphic, photo: Photo) {
+  mainComment(task:PostDetailGraphic | null, taskGraphic: TaskGraphic | null, photo: Photo) {
     if (!this.mission!.isClosed) {
       let detailPostId: number | null = task ? task.id : null
       let datePostId: number | null = null;
@@ -360,8 +360,6 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
             supervisions[supervisions.length - 1] = this.store.selectSnapshot(DataQueries.getById('Supervision', supervisions[supervisions.length - 1].id))! 
             console.log('NEW SUPERVISION ', supervisions);
 
-            let postDetail = this.store.selectSnapshot(DataQueries.getById('DetailedPost', detailPostId!))!
-            console.log('postDetail', postDetail);
             if(detailPostId){
               this.date.postDetails.forEach(Detail =>{
                 console.log('detail', Detail);
@@ -496,9 +494,11 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
   }
 
   modifyDetailedPostDate(detailedPost: PostDetailGraphic) {
-    this.store.dispatch(new ModifyDetailedPost(detailedPost, false, this.dateId)).pipe(take(1)).subscribe(result => {
+    this.store.dispatch(new ModifyDetailedPost(detailedPost, false, this.dateId)).pipe(take(1)).subscribe(_ => {
+      this.dateOrigin = this.store.selectSnapshot(DataQueries.getById('DatePost', this.dateId))!
       detailedPost.checked = true
       detailedPost.date = this.dateOrigin.date
+      detailedPost.id = this.dateOrigin.details[this.dateOrigin.details.length - 1]
 
       this.updateTaskGraphic(detailedPost)
       
