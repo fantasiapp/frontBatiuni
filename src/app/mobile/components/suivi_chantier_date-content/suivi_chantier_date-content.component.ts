@@ -494,9 +494,11 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
   }
 
   modifyDetailedPostDate(detailedPost: PostDetailGraphic) {
-    this.store.dispatch(new ModifyDetailedPost(detailedPost, false, this.dateId)).pipe(take(1)).subscribe(result => {
+    this.store.dispatch(new ModifyDetailedPost(detailedPost, false, this.dateId)).pipe(take(1)).subscribe(_ => {
+      this.dateOrigin = this.store.selectSnapshot(DataQueries.getById('DatePost', this.dateId))!
       detailedPost.checked = true
       detailedPost.date = this.dateOrigin.date
+      detailedPost.id = this.dateOrigin.details[this.dateOrigin.details.length - 1]
 
       this.updateTaskGraphic(detailedPost)
       
