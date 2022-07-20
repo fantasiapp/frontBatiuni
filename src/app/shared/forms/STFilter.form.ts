@@ -128,7 +128,7 @@ import "hammerjs"
 
         <footer
         class="flex row space-between sticky-footer full-width submit-container background-white"
-        style="z-index: 3;">
+        style="z-index: 100;">
           <div class="action-button-filter  flex row space space-between full-width">
             <button class="button passive" (click)="resetFilter()">Réinitialiser</button>
             <button class="button active" (click)="onCloseFilter()">Valider</button>
@@ -227,18 +227,18 @@ export class STFilterForm {
   }
 
   updateFilteredPosts(filter: any) {
+    console.log("ALL POSTS", this.posts)
     this.filteredPosts = [];
     const user = this.store.selectSnapshot(DataQueries.currentUser);
     const now = new Date().toISOString().slice(0, 10);
-    let allPosts = this.posts.filter((post) => post.dueDate > now)
+    this.posts = this.posts.filter((post) => post.dueDate > now)
+    const profile = this.store.selectSnapshot(DataQueries.currentProfile);
+    this.posts = this.posts.filter(post => post.company != profile.company.id)
+    console.log("ALL POSTS NOW", this.posts)
 
     // Filter
-    for (let post of allPosts) {
+    for (let post of this.posts) {
       const company = this.store.selectSnapshot(DataQueries.getById('Company', post.company))!;
-      const profile = this.store.selectSnapshot(DataQueries.currentProfile);
-
-      // Pour ne pas voir nos propres annonces dans BOTH
-      let isSameCompany = (post.company == profile.company.id)
       
       //Date de mission
       let isDifferentDate = (filter.date && post.startDate < filter.date)
@@ -250,8 +250,7 @@ export class STFilterForm {
       let postLatitude = post.latitude*(Math.PI/180);
       let postLongitude = post.longitude*(Math.PI/180);
       let distance = 6371*Math.acos(Math.sin(userLatitude)*Math.sin(postLatitude) + Math.cos(userLatitude)*Math.cos(postLatitude)*Math.cos(postLongitude-userLongitude))
-
-      let isNotInRadius = ((filter.radius || filter.radius == 0) && distance > filter.radius)
+      let isNotInRadius = (((filter.radius && userLongitude && userLatitude) || filter.radius == 0) && distance > filter.radius)
 
       //Manpower
       let isDifferentManPower = (filter.manPower && post.manPower != (filter.manPower === "true"))
@@ -285,8 +284,7 @@ export class STFilterForm {
       //CounterOffer
       let isNotCounterOffer = (filter.counterOffer && !post.counterOffer);
       
-      if ( isSameCompany ||
-          isDifferentDate || 
+      if (isDifferentDate || 
           isDifferentManPower || 
           isNotIncludedJob || 
           isNotInRadius || 
@@ -300,6 +298,7 @@ export class STFilterForm {
 
       this.filteredPosts.push(post)
     }
+    console.log("POSTS", this.filteredPosts)
 
     // Sort
 
