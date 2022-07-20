@@ -1,9 +1,9 @@
 import { environment } from "../environments/environment";
 
 let temp = {
-    boost3: "prod_M0BtJQKNIQBjvF",
-    boost7: "prod_M0BuvRUprcxujw",
-    boost0: "prod_M0BuUhllo4RnKr",
+    boost3: "",
+    boost7: "",
+    boost0: "",
     subscriptionST: "",
     subscriptionPME: "",
     subscriptionSTPME: "",
@@ -24,9 +24,9 @@ let temp = {
         boost3: "prod_M0V2RzWQAHxQtX",
         boost7: "prod_M0V3Ao15zvtPjL",
         boost0: "prod_M0V3LGtyd1G8QX",
-        subscriptionST: "prod_M0wwP5ZavsuY90",
-        subscriptionPME: "prod_M0wLzHMEIAgYlP",
-        subscriptionSTPME: "prod_M53uZdeJXKtOBm",
+        subscriptionST: "prod_M5jxsLfSFiLF5F",
+        subscriptionPME: "prod_M5jyKu2Ws2WlHA",
+        subscriptionSTPME: "prod_M5k2y2IbTz0GzA",
       };
       break;
     case "3":
@@ -34,9 +34,9 @@ let temp = {
         boost3: "prod_M0V7ybe5P6pl7Q",
         boost7: "prod_M0V7dhGlCfSemw",
         boost0: "prod_M0V8V6gkS4484n",
-        subscriptionST: "prod_M0wwP5ZavsuY90",
-        subscriptionPME: "prod_M0wLzHMEIAgYlP",
-        subscriptionSTPME: "prod_M53uZdeJXKtOBm",
+        subscriptionST: "",
+        subscriptionPME: "",
+        subscriptionSTPME: "",
       };
       break;
     case "4":
@@ -44,9 +44,9 @@ let temp = {
         boost3: "prod_M0BtJQKNIQBjvF",
         boost7: "prod_M0BuvRUprcxujw",
         boost0: "prod_M0BuUhllo4RnKr",
-        subscriptionST: "prod_M0wwP5ZavsuY90",
-        subscriptionPME: "prod_M0wLzHMEIAgYlP",
-        subscriptionSTPME: "prod_M53uZdeJXKtOBm",
+        subscriptionST: "",
+        subscriptionPME: "",
+        subscriptionSTPME: "",
       };
       break;
   }
