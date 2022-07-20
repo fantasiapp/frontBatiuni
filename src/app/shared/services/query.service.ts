@@ -43,20 +43,18 @@ export class QueryManager {
 
   backOnline() {
       let keepGoing = true
-      let allTimestampValues: string[] = this.localService.getAllTimestampValues();
-      allTimestampValues.forEach((value: string) => {
-        if (keepGoing){
-          if (this.connectionService.isOnline){
-            let params = this.localService.getData(value)!.split('/')
-            let actionOrActions = JSON.parse(params[0])
-            let name = params[1]
-            this.emitQueryEvent([name, actionOrActions])
-          }
-          else{
-            keepGoing = false
-          }
+      let allTimestampValues: string[] = this.localService.getAllTimestampValues()
+      while(keepGoing) {
+        if (this.connectionService.isOnline){
+          let params = this.localService.getData(allTimestampValues[0])!.split('/')
+          let actionOrActions = JSON.parse(params[0])
+          let name = params[1]
+          this.emitQueryEvent([name, actionOrActions])
         }
-      })
+        else{
+          keepGoing = false
+        }
+      }
   }
   }
 
