@@ -25,13 +25,12 @@ export class ConnectionStatusService {
     this.offlineEvent = fromEvent(window, 'offline')
 
     this.subscriptions.push(this.onlineEvent.subscribe(e => {
-        this.isOnline = true
-        console.log("je suis connecté", this.isOnline)
-
+      this.isOnline = true
+      console.log("je suis connecté", this.isOnline)
     }))
     this.subscriptions.push(this.offlineEvent.subscribe(e => {
-        this.isOnline = false
-        console.log("je ne suis pas connecté", this.isOnline)
+      this.isOnline = false
+      console.log("je ne suis pas connecté", this.isOnline)
     }))
   }
 
