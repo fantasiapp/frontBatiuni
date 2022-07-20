@@ -304,7 +304,6 @@ import { take } from "rxjs/operators";
                 [showtitle]="false"
                 name="Attestation RC + DC"
                 filename="Attestation RC + DC"
-                name="Attestation RC + DC"
                 formControlName="RC + DC"
                 (kill)="removeDocument($event)"
               >
@@ -315,7 +314,6 @@ import { take } from "rxjs/operators";
                 [showtitle]="false"
                 name="URSSAF"
                 filename="URSSAF"
-                name="URSSAF"
                 formControlName="URSSAF"
                 (kill)="removeDocument($event)"
               >
@@ -326,7 +324,6 @@ import { take } from "rxjs/operators";
                 [showtitle]="false"
                 name="Impôts"
                 filename="Impôts"
-                name="Impôts"
                 formControlName="Impôts"
                 (kill)="removeDocument($event)"
               >
@@ -337,7 +334,6 @@ import { take } from "rxjs/operators";
                 [showtitle]="false"
                 name="Congés payés"
                 filename="Congés payés"
-                name="Congés payés"
                 formControlName="Congés Payés"
                 (kill)="removeDocument($event)"
               >

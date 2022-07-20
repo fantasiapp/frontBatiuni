@@ -133,6 +133,10 @@ body {
   @include desktop-only { overflow: hidden; }
 }
 
+.pointer-none {
+  pointer-events: none;
+}
+
 button {
   font-size: inherit;
   display: inline-block;

@@ -1,14 +1,15 @@
 <span style="margin: 2rem 2rem; display: block;">Sélectionnez un service</span>
-
-    <div class="caroussel ">
-      <div class="margleft"*ngIf="abonnements[0].prices$ | async as prices"> 
-        <abonnement-card (openEngagment)="onOpenEngagement($event)" [subscriptionType]="0" [abonnement]="abonnements[0]" [prices]="prices"></abonnement-card>
-      </div>
-      <div class="thiscenterclass"*ngIf="abonnements[1].prices$ | async as prices"> 
-        <abonnement-card (openEngagment)="onOpenEngagement($event)" class="thischild" [subscriptionType]="1" [abonnement]="abonnements[1]" [prices]="prices"></abonnement-card>
-      </div>
-      <div *ngIf="abonnements[2].prices$ | async as prices">
-        <abonnement-card (openEngagment)="onOpenEngagement($event)" [subscriptionType]="2" [abonnement]="abonnements[2]" [prices]="prices"></abonnement-card>
+  <div class="caroussel__wrapper">
+      <div class="caroussel">
+        <div class="caroussel-item"> 
+          <abonnement-card class="margleft"*ngIf="abonnements[0].prices$ | async as prices" (openEngagment)="onOpenEngagement($event)" [subscriptionType]="0" [abonnement]="abonnements[0]" [prices]="prices"></abonnement-card>
+        </div>
+        <div class="caroussel-item"> 
+          <abonnement-card class="margleft"*ngIf="abonnements[1].prices$ | async as prices" (openEngagment)="onOpenEngagement($event)" [subscriptionType]="1" [abonnement]="abonnements[1]" [prices]="prices"></abonnement-card>
+        </div>
+        <div class="caroussel-item">
+          <abonnement-card class="margleft"*ngIf="abonnements[2].prices$ | async as prices" (openEngagment)="onOpenEngagement($event)" [subscriptionType]="2" [abonnement]="abonnements[2]" [prices]="prices"></abonnement-card>
+        </div>
       </div>
   </div>
 <div class="caroussel-button" >
@@ -24,22 +25,26 @@
     <h1 class="center-text full-width" header>Gérer mes abonnements</h1>  
     <div *ngIf="openEngagment" class="modify-page hosted-page flex column center-cross space-children-margin" content>
       <h4>Sélectionnez un plan : </h4>
-      <div class="plans-container" *ngIf="abonnements[currentAbonnementId].prices$ | async as prices">
+      <div class="plans-container" *ngIf="abonnements[currentAbonnementId].prices$ | async as prices; else fakeEngagement__wrapper">
         <ng-container *ngFor="let price of prices">
           <div class="plans__plan flex row" (click)="selectEngagement(price)">
             <button class="radio" [ngClass]="{'radio-active': selectedPrice == price}"></button>
             <div class="plan__text">Engagement {{price.intervalCount}} mois pour <span class="highlight">{{price.amount/price.intervalCount}}€</span> / mois ({{+price.amount/price.intervalCount/ 2}}€ au premier engagement)</div>
           </div>
         </ng-container>
-        <!-- <div class="plans__plan flex row"(click)="selectEngagement(6)">
-          <button class="radio "[ngClass]="{'radio-active': selectedEngagmentLength == 6 }"></button>
-          <div class="plan__text">Engagement 6 mois pour <span class="highlight">{{+abonnements[currentAbonnementId].monthlyPrice * .9 | number: '1.2-2'}}€</span> / mois ({{+abonnements[currentAbonnementId].monthlyPrice *.9/ 2 | number: '1.2-2'}}€ au premier engagement)</div>
-        </div>
-        <div class="plans__plan flex row"(click)="selectEngagement(12)">
-          <button class="radio"[ngClass]="{'radio-active': selectedEngagmentLength == 12}"></button>
-          <div class="plan__text">Engagement 12 mois pour <span class="highlight">{{+abonnements[currentAbonnementId].monthlyPrice * .8 | number: '1.2-2'}}€</span> / mois ({{+abonnements[currentAbonnementId].monthlyPrice *.8/ 2 | number: '1.2-2'}}€ au premier engagement)</div>
-        </div> -->
       </div>
+      <ng-template #fakeEngagement__wrapper>
+        <div class="plans-container">
+          <div class="plans__plan flex row fake" >
+            <button class="radio" ></button>
+            <div class="plan__text"></div>
+          </div>
+          <div class="plans__plan flex row fake" >
+            <button class="radio" ></button>
+            <div class="plan__text"></div>
+          </div>
+        </div>
+        </ng-template>
       <footer class="sticky-footer">
         <button class="button active full-width" (click)="selectedPrice && openEngagmentPage = true" [ngClass]="{'disabled': selectedPrice === undefined}">J'en profite</button>
       </footer>
