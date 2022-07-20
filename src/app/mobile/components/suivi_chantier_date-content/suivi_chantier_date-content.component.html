@@ -69,9 +69,9 @@
           <div *ngFor="let supervision of date.supervisions; let isLast = last">
             <comment-suivi  [supervision]="supervision" #commentSuivi></comment-suivi>
           </div>
-          <div *ngIf="!mission!.isClosed" (click)="slideComment(null, $event, date.supervisions, null)" class="comment-action-box comment-action-box-task">
-            <span>Ajouter une photo ou un commentaire
-            </span>
+          <div *ngIf="!mission!.isClosed"  class="comment-action-box flex center-cross space-between full-width">
+            <button class="button passive" (click)="slideComment(null, $event, date.supervisions, null)">Commenter</button>
+            <button class="button active" (click)="swipePhoto = {task: null, taskGraphic: null}; swipeMenuImage = true">Ajouter une image</button>
           </div>
       </div>
     </div>
