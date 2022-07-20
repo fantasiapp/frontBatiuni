@@ -6,7 +6,7 @@
       <h3>
         Le contrat
       </h3>
-      <img class="warningImg" [src]="'assets/warning.svg'"/>
+      <img *ngIf="isNotSignedByUser" class="warningImg" [src]="'assets/warning.svg'"/>
     </div>
     <div class="flex center-cross space-around" (click)=" isNotSignedByUser ? verifyKbis() : signContract()">
       <file-svg name="Contrat" color="red"></file-svg>
