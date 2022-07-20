@@ -36,8 +36,13 @@ page-header::ng-deep .tabs {
     padding: 1rem 310px 0 310px;
 
     overflow: auto;
-    width: 310px;
+    width: 930px;
     height: 32rem;
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+    &::-webkit-scrollbar {
+        display: none;
+    }
 }
 
 .caroussel {
@@ -84,6 +89,7 @@ h4 {
     flex-direction: column;
     row-gap: 2rem;
     font-weight: 300;
+    align-items: center;
 }
 
 .plans__plan {
