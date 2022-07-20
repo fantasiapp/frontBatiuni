@@ -21,6 +21,14 @@ switch::ng-deep .slider {
   }
 }
 
+#rectangle{
+  width:100%;
+  height:1rem;
+  background-color: white;
+  box-shadow: 0 3px 3px -3px grey;
+}
+
+
 .submitActivated {
   background-color: #0D6191;
   color:white;
