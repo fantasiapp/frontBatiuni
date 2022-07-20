@@ -10,24 +10,30 @@ import { returnInputKeyboard } from '../common/classes'
   <form class="form-control" style="height: 100%;" [formGroup]="form" id="form" >
     <div class="form-input">
       <label>Ancien mot de passe</label>
+      <div class="form-input flex">
       <input class="form-element" type="password" formControlName="oldPwd" id="idPassword" (keyup)="returnInputKeyboard($event, input1)" (click)="onClickInputScroll(input1)" #input1/>
-      <div (click)="togglePassword()" style="position: absolute; cursor: pointer; bottom: 0; right: 0; z=100">
+      <div (click)="togglePassword()" style="position: absolute; cursor: pointer; top: 0; right: 0; z=100">
         <img class="eye" src="assets/Oeil_ferme.svg" id="togglePassword">
+      </div>
       </div>
     </div>
     <div class="form-input">
       <label>Nouveau mot de passe</label>
+      <div class="form-input flex">
       <input class="form-element" type="password" formControlName="newPwd" id="idPassword" (keyup)="returnInputKeyboard($event, input2)" (click)="onClickInputScroll(input2)" #input2/>
-      <div (click)="togglePassword()" style="position: absolute; cursor: pointer; bottom: 0; right: 0; z=100">
+      <div (click)="togglePassword()" style="position: absolute; cursor: pointer; top: 0; right: 0; z=100">
         <img class="eye" src="assets/Oeil_ferme.svg" id="togglePassword">
+      </div>
       </div>
     </div>
     <div class="form-input">
       <label>Confirmation nouveau mot de passe</label>
+      <div class="form-input flex">
       <input class="form-element" type="password" formControlName="newPwdConfirmation" id="idPassword" (click)="onClickInputScroll(input3)" (keyup)="returnInputKeyboard($event, input3)" #input3/>
-      <div (click)="togglePassword()" style="position: absolute; cursor: pointer; bottom: 0; right: 0; z=100">
+      <div (click)="togglePassword()" style="position: absolute; cursor: pointer; top: 0; right: 0; z=100">
         <img class="eye" src="assets/Oeil_ferme.svg" id="togglePassword">
       </div>
+    </div>
     </div>
   </form>
 
@@ -48,6 +54,11 @@ import { returnInputKeyboard } from '../common/classes'
       background-color: white;
       @extend %sticky-footer;
     }
+
+    img {
+        width: 75%;
+        height: auto;
+      }
 
   `],
   changeDetection: ChangeDetectionStrategy.OnPush
