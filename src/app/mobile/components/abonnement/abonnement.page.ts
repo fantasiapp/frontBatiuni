@@ -1,5 +1,5 @@
 import { Component, ChangeDetectionStrategy, ChangeDetectorRef } from "@angular/core";
-import { Observable, Observer, Subscriber } from "rxjs";
+import { Observable, Observer } from "rxjs";
 import { HttpService } from "src/app/services/http.service";
 import { StripeService } from "src/app/shared/services/stripe";
 import { productList } from "src/app/stripeProducts";
