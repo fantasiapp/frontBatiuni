@@ -13,7 +13,6 @@
       <span tab_1>{{ view == "PME" ? "En ligne" : "Carte" }}</span>
       <span tab_2>Validées</span>
     </page-header>
-    <div class="space-children-margin page-content-with-tabs sticky-header" [ngClass]="{'footerHide': !showFooter, 'page-content-with-tabs-with-switch': profile.company && profile.company.role == 3}" id="rectangle"></div>
     <div class="wrapper__searchbar__clickcatcher page-content-with-tabs" *ngIf="!showFooter"></div>
 
     <div  class="hosted-page space-children-margin page-content-with-tabs" [ngClass]="{'footerHide': !showFooter, 'page-content-with-tabs-with-switch': profile.company && profile.company.role == 3}">
