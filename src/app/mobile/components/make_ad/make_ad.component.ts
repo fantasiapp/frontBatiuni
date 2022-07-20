@@ -33,11 +33,11 @@ export class MakeAdComponent {
 
   ngOnInit(){
     this.profile$.subscribe((profile) => {
-      if( profile.company && profile.company.role == 3) {
-        this.info.alignWith('paging_switch')
-      } else {
+      // if( profile.company && profile.company.role == 3) {
+      //   this.info.alignWith('paging_switch')
+      // } else {
         this.info.alignWith('header')
-      }
+      // }
     })
 
     this.mobile.footerStateSubject.subscribe(b => {

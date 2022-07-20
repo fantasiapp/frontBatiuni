@@ -172,7 +172,7 @@ export class HomeComponent extends Destroy$ {
     private getUserDataService: getUserDataService,
     private router: Router,
     private notifService: NotifService,
-    private activeViewService: ActiveViewService
+    private activeViewService: ActiveViewService,
   ) {
     super();
     this.isLoading = this.booleanService.isLoading
@@ -201,12 +201,9 @@ export class HomeComponent extends Destroy$ {
       this.activeView = num
     })
     this.profile$.pipe(takeUntil(this.destroy$)).subscribe((profile) => {
-      if(profile.company && profile.company.role == 3){
-        this.info.alignWith('header_search_switch')
-        console.log('info switch');
-      } else {
+        this.info.enableBothOverlay(profile.company && profile.company.role == 3)
         this.info.alignWith('header_search')
-      }
+      // }
     })
 
     this.view$.pipe(takeUntil(this.destroy$)).subscribe((view) => {

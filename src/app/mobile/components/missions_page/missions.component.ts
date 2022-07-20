@@ -88,7 +88,9 @@ export class MissionsComponent extends Destroy$ {
     });
     this.info.alignWith('header_search');
 
+
     combineLatest([this.profile$, this.missions$]).pipe(takeUntil(this.destroy$)).subscribe(([profile, missions]) => {
+      this.info.enableBothOverlay(profile.company && profile.company.role == 3)
       //filter own missions
       //for now accept all missions
       this.allMyMissions = missions.filter(mission => mission.subContractor == profile.company.id);

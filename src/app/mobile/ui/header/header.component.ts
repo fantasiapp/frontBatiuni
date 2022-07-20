@@ -88,12 +88,12 @@ export class HeaderComponent {
   }
 
   ngOnInit(){
-    if(this.profile.company && this.profile.company.role == 3){
-      this.info.alignWith('header_search_switch')
-      console.log('info switch');
-    } else {
+    // if(this.profile.company && this.profile.company.role == 3){
+    //   this.info.alignWith('header_search_switch')
+    //   console.log('info switch');
+    // } else {
       this.info.alignWith('header_search')
-    }
+    // }
     console.log('profile', this.profile);
     this.view$.subscribe((view)=>{
       this.isPmeSwitch = view === 'PME'
