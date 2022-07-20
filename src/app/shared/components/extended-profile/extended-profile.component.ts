@@ -138,6 +138,11 @@ export class ExtendedProfileComponent extends Destroy$ {
   @Output()
   profileChanged = new EventEmitter<boolean>();
 
+  @Output() viewChanged = new EventEmitter()
+  onViewChanged(view: 'PME' | 'ST'){
+    this.viewChanged.emit(view)
+  }
+
   computeWebSite(websiteUrl: string){
     if(websiteUrl.substring(0, 4) && websiteUrl.substring(0, 4) == 'http') return websiteUrl
     return 'https://' + websiteUrl

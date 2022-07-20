@@ -124,6 +124,11 @@ export class ProfileComponent extends Destroy$ {
 
   }
 
+  onViewChanged(view: 'PME' | 'ST'){
+    this.view = view
+    this.cd.markForCheck()
+  }
+
   slideModifyMenu(modifyPassword: boolean) {
     this.openMenu = false;
     this.openModifyMenu = true;
