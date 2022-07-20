@@ -4,8 +4,7 @@ import {
   Component,
   ViewChild,
 } from "@angular/core";
-import { MyStore } from "src/app/shared/common/classes";
-import { Select } from "@ngxs/store";
+import { Select, Store } from "@ngxs/store";
 import { combineLatest, Observable } from "rxjs";
 import { take, takeUntil } from "rxjs/operators";
 import { Destroy$ } from "src/app/shared/common/classes";
@@ -70,7 +69,7 @@ export class MissionsComponent extends Destroy$ {
   showFooter: boolean = false;
 
   constructor(
-    private store: MyStore,
+    private store: Store,
     private info: InfoService,
     private cd: ChangeDetectorRef,
     private appComponent: AppComponent,

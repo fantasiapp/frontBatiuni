@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
+import { Store } from "@ngxs/store";
 import { Observable } from "rxjs";
 import { Profile } from "src/models/new/data.interfaces";
 import { DataQueries, QueryProfile } from "src/models/new/data.state";
-import { MyStore } from "src/app/shared/common/classes";
 
 @Component({
   selector: "reponse-card",
@@ -15,7 +15,7 @@ export class ReponseCard {
   @Input("profile")
   profile$!: number | Profile | Observable<Profile>;
 
-  constructor(private store: MyStore) {}
+  constructor(private store: Store) {}
 
   ngOnInit() {
     const profile = this.store.selectSnapshot(DataQueries.currentProfile);

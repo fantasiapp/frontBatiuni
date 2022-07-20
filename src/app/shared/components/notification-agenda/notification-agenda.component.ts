@@ -10,7 +10,7 @@ import {
   ModifyDetailedPost,
   ValidateMissionDate,
 } from "src/models/new/user/user.actions";
-import { MyStore } from "src/app/shared/common/classes";
+import { Store } from "@ngxs/store";
 import { DataQueries } from "src/models/new/data.state";
 
 @Component({
@@ -25,7 +25,7 @@ export class NotificationAgendaComponent {
 
   @Output() cardUpdate: EventEmitter<any> = new EventEmitter();
 
-  constructor(private cd: ChangeDetectorRef, private store: MyStore) {}
+  constructor(private cd: ChangeDetectorRef, private store: Store) {}
 
   ngOnInit(): void {
   }

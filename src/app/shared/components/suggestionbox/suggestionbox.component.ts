@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, HostBinding, Input, Output } from "@angular/core";
-import { MyStore } from "src/app/shared/common/classes";
-import { Select } from "@ngxs/store";
+import { Select, Store } from "@ngxs/store";
 import { Observable } from "rxjs";
 import { Establishement } from "src/models/new/data.interfaces";
 import { Clear, Query, QueryAll } from "src/models/new/data.state";
@@ -53,7 +52,7 @@ export class UISuggestionBox {
   @QueryAll('Establishments')
   suggestions$!: Observable<Establishement[]>;
 
-  constructor(private store: MyStore, private cd: ChangeDetectorRef) {}
+  constructor(private store: Store, private cd: ChangeDetectorRef) {}
 
   @Input('query')
   set setQuery(query: string | null) {

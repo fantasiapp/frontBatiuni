@@ -1,7 +1,6 @@
 import { Component, EventEmitter, ChangeDetectionStrategy, Output, ChangeDetectorRef, Injectable } from "@angular/core";
 import { NavigationEnd, Router } from "@angular/router";
-import { MyStore } from "src/app/shared/common/classes";
-import { Select } from "@ngxs/store";
+import { Select, Store } from "@ngxs/store";
 import { BehaviorSubject, Observable, Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { Destroy$ } from "src/app/shared/common/classes";
@@ -71,7 +70,7 @@ export class NavigationMenu extends Destroy$ {
   }
   
 
-  constructor(private router: Router, private store: MyStore, info: InfoService, private notifService: NotifService, private cd: ChangeDetectorRef, private popup: PopupService, private service: NavService) {
+  constructor(private router: Router, private store: Store, info: InfoService, private notifService: NotifService, private cd: ChangeDetectorRef, private popup: PopupService, private service: NavService) {
     super();
     this.menu = new BehaviorSubject(this.store.selectSnapshot(DataState.view) == 'PME' ? PMEMenu : STMenu);
     this.router.events.pipe(takeUntil(this.destroy$)).subscribe((event) => {

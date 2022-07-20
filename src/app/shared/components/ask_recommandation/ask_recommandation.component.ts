@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, ChangeDetectorRef, Input } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, Validators } from "@angular/forms";
-import { MyStore } from "src/app/shared/common/classes";
+import { Store } from "@ngxs/store";
 import { take } from "rxjs/operators";
 import { AskRecommandation } from "src/models/new/user/user.actions";
 import { Destroy$, returnInputKeyboard } from "src/app/shared/common/classes";
@@ -26,7 +26,7 @@ export class AskRecommandationComponent extends Destroy$ {
   })()
   ])}, {})
 
-  constructor(private store: MyStore, private cd: ChangeDetectorRef, private info: InfoService) {
+  constructor(private store: Store, private cd: ChangeDetectorRef, private info: InfoService) {
     super()
   }
 

@@ -8,7 +8,7 @@ import {
   ViewChildren,
 } from "@angular/core";
 import { FormArray, FormGroup } from "@angular/forms";
-import { MyStore } from "src/app/shared/common/classes";
+import { Store } from "@ngxs/store";
 import { Control } from "mapbox-gl";
 import { DistanceSliderConfig, SalarySliderConfig } from "src/app/shared/common/sliderConfig";
 import { Job, Post } from "src/models/new/data.interfaces";
@@ -204,7 +204,7 @@ export class STFilterFormOld extends Filter<Post> {
     });
   }
 
-  constructor(service: FilterService, private store: MyStore) {
+  constructor(service: FilterService, private store: Store) {
     super(service);
   }
 

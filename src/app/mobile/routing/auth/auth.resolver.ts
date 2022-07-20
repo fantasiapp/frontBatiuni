@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Resolve, Router } from "@angular/router";
-import { MyStore } from "src/app/shared/common/classes";
+import { Store } from "@ngxs/store";
 import { throwError } from "rxjs";
 import { catchError } from "rxjs/operators";
 import { Logout } from "src/models/auth/auth.actions";
@@ -10,7 +10,7 @@ import { GetUserData } from "src/models/new/user/user.actions";
 
 @Injectable()
 export class AuthResolver implements Resolve<any> {
-  constructor(private store: MyStore, private router: Router) {}
+  constructor(private store: Store, private router: Router) {}
 
   resolve() {
     let token = this.store.selectSnapshot(AuthState.token),

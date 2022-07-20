@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, Input, ViewChild } from "@angular/core";
-import { MyStore } from "src/app/shared/common/classes";
-import { Select } from "@ngxs/store";
+import { Select, Store } from "@ngxs/store";
 import { Observable, Subscriber } from "rxjs";
 import * as UserActions from "src/models/new/user/user.actions";
 import { Camera, CameraResultType, CameraSource, Photo } from "@capacitor/camera";
@@ -92,7 +91,7 @@ export class ProfileComponent extends Destroy$ {
   @Select(DataQueries.currentProfile) 
   profile$!: Observable<Profile>;
 
-  constructor(private store: MyStore, private cd: ChangeDetectorRef, private info: InfoService, private popup: PopupService, private notifService: NotifService, private getUserDataService: getUserDataService) {
+  constructor(private store: Store, private cd: ChangeDetectorRef, private info: InfoService, private popup: PopupService, private notifService: NotifService, private getUserDataService: getUserDataService) {
     super();
     this.profile$.subscribe(profile => {
       this.updateProfile(profile)

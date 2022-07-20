@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output, QueryList, ViewChildren } from "@angular/core";
 import { FormControl, FormGroup} from "@angular/forms";
-import { MyStore } from "src/app/shared/common/classes";
+import { Store } from "@ngxs/store";
 import { Job, Post } from "src/models/new/data.interfaces";
 import { SnapshotAll } from "src/models/new/data.state";
 import { FilterService } from "../services/filter.service";
@@ -119,7 +119,7 @@ export class ApplicationForm extends Filter<Post>  {
   
     ngAfterViewInit(): void {}
 
-    constructor(service: FilterService, private store: MyStore) {
+    constructor(service: FilterService, private store: Store) {
         super(service);
     }
   

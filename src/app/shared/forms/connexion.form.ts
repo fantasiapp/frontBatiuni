@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostBinding } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
-import { MyStore } from "src/app/shared/common/classes";
+import { Store } from "@ngxs/store";
 import { take } from "rxjs/operators";
 import { Destroy$ } from "src/app/shared/common/classes";
 import { Login } from "src/models/auth/auth.actions";
@@ -82,7 +82,7 @@ export class ConnexionForm extends Destroy$ {
   private _errors: string[] = [];
   get errors() { return this._errors; }
 
-  constructor(private router: Router, private store: MyStore, private cd: ChangeDetectorRef, private isLoadingService: BooleanService, private notifService: NotifService, private mobileFooterService: Mobile) {
+  constructor(private router: Router, private store: Store, private cd: ChangeDetectorRef, private isLoadingService: BooleanService, private notifService: NotifService, private mobileFooterService: Mobile) {
     super();
   }
 

@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, HostBinding, Input } from "@angular/core";
-import { MyStore } from "src/app/shared/common/classes";
+import { Store } from "@ngxs/store";
 import { Observable } from "rxjs";
 import { Job, Profile } from "src/models/new/data.interfaces";
 import { DataQueries, QueryProfile } from "src/models/new/data.state";
@@ -33,7 +33,7 @@ export class UIBlockedContactCard {
 
   starsST: string = ''
 
-  constructor(private store: MyStore) {}
+  constructor(private store: Store) {}
 
   ngOnInit() {
     (this.profile$ as Observable<Profile>).subscribe(profile => {

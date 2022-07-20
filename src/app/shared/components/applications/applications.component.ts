@@ -1,6 +1,5 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import { MyStore } from "src/app/shared/common/classes";
-import { Select } from "@ngxs/store";
+import { Select, Store } from "@ngxs/store";
 import { combineLatest, Observable } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { Post, PostMenu, Profile } from "src/models/new/data.interfaces";
@@ -36,7 +35,7 @@ export class ApplicationsComponent extends Destroy$ implements OnInit {
   userOnlinePosts: Post[] = [];
   allOnlinePosts: Post[] = [];
   hasCombinedLatest: boolean = false;
-  constructor(private store: MyStore, private getUserDataService: getUserDataService) {
+  constructor(private store: Store, private getUserDataService: getUserDataService) {
     super();
   }
 

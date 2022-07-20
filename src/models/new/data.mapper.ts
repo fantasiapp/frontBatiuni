@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { MyStore } from "src/app/shared/common/classes";
+import { Store } from "@ngxs/store";
 import { DataTypes } from "./data.interfaces";
 import { addValues, addRecord, update } from "./state.operators";
 import { patch } from "@ngxs/store/operators";
@@ -80,7 +80,7 @@ export function nameToAvailability(
   providedIn: "root",
 })
 export class DataReader {
-  constructor(private store: MyStore) {}
+  constructor(private store: Store) {}
 
   getFieldIndex(data: any, type: DataTypes, child: DataTypes) {
     //HACK

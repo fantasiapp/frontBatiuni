@@ -7,7 +7,7 @@ import {
   Output,
 } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
-import { Action } from "@ngxs/store";
+import { Action, Store } from "@ngxs/store";
 import { PopupService } from "src/app/shared/components/popup/popup.component";
 import {
   Company,
@@ -25,8 +25,6 @@ import { Destroy$ } from "src/app/shared/common/classes";
 import { InfoService } from "src/app/shared/components/info/info.component";
 import { FieldType } from "src/validators/verify";
 import { Observable } from "rxjs";
-import { MyStore } from "src/app/shared/common/classes";
-
 
 export type ApplyForm = {
   amount: number;
@@ -291,7 +289,7 @@ export class UIAnnonceResume extends Destroy$ {
   }
 
   constructor(
-    private store: MyStore,
+    private store: Store,
     private popup: PopupService,
     private info: InfoService
   ) {

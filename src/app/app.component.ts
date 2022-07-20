@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component } from "@angular/core";
+import { Select, Store } from "@ngxs/store";
 import { Destroy$ } from "./shared/common/classes";
 import { SplashScreen } from "@capacitor/splash-screen";
 import { Load } from "./app.actions";
@@ -21,7 +22,6 @@ import { NotifService } from "./shared/services/notif.service";
 import { getMessaging, getToken, onMessage} from "firebase/messaging"
 import { initializeApp } from "firebase/app";
 import { BooleanService } from "./shared/services/boolean.service";
-import { MyStore } from "src/app/shared/common/classes";
 
 @Component({
   selector: "app-root",
@@ -50,7 +50,7 @@ export class AppComponent extends Destroy$ {
   isWhileOn: boolean = false;
   app: any
 
-  constructor(private store: MyStore, private mobile: Mobile, private notifService: NotifService, private booleanService: BooleanService) {
+  constructor(private store: Store, private mobile: Mobile, private notifService: NotifService, private booleanService: BooleanService) {
     super();
     this.mobile.init()
     this.isConnected = booleanService.isConnected

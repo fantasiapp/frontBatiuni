@@ -4,8 +4,7 @@ import {
   Component,
   Input,
 } from "@angular/core";
-import { MyStore } from "src/app/shared/common/classes";
-import { Select } from "@ngxs/store";
+import { Select, Store } from "@ngxs/store";
 import * as moment from "moment";
 import {
   Company,
@@ -48,7 +47,7 @@ export class Notifications {
   notificationsDisplay: NotificationDisplay[] = [];
 
   constructor(
-    private store: MyStore,
+    private store: Store,
     private downloader: FileDownloader,
     private imageGenerator: ImageGenerator,
     private cd: ChangeDetectorRef,

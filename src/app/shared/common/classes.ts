@@ -1,16 +1,8 @@
 import { HttpClient } from "@angular/common/http";
 import { Attribute, ChangeDetectorRef, ComponentFactoryResolver, Directive, EventEmitter, HostBinding, HostListener, Injector, Input, Optional, Output, ViewContainerRef } from "@angular/core";
 import { ControlValueAccessor } from "@angular/forms";
-import { StateStream, Store } from "@ngxs/store";
-import { InternalNgxsExecutionStrategy } from "@ngxs/store/src/execution/internal-ngxs-execution-strategy";
-import { StateFactory } from "@ngxs/store/src/internal/state-factory";
-import { InternalStateOperations } from "@ngxs/store/src/internal/state-operations";
-import { NgxsConfig } from "@ngxs/store/src/symbols";
-import { Observable, Subject } from "rxjs";
+import { Subject } from "rxjs";
 import { environment } from "src/environments/environment";
-import { ConnectionStatusService } from "../services/connectionStatus.service";
-import { LocalService } from "../services/local.service";
-import { getTimeStamp } from "./functions";
 import { Ref } from "./types";
 
 @Directive()
@@ -270,22 +262,5 @@ export const PropertyTrap: ProxyHandler<any> = {
 export function returnInputKeyboard(e: any, input: HTMLInputElement){
   if(e.keyCode == 13){
     input.blur()
-  }
-}
-
-export class MyStore extends Store {
-
-  constructor(_stateStream: StateStream, _internalStateOperations: InternalStateOperations, _config: NgxsConfig, _internalExecutionStrategy: InternalNgxsExecutionStrategy, _stateFactory: StateFactory, initialStateValue: any, private connectionService: ConnectionStatusService, private localService: LocalService){
-    super(_stateStream, _internalStateOperations, _config, _internalExecutionStrategy, _stateFactory, initialStateValue)
-  }
-
-  query(actionOrActions: any ){
-    if (this.connectionService.isOnline){
-      return this.dispatch(actionOrActions)}
-    else{
-      let timestamp = getTimeStamp()
-      this.localService.saveData(timestamp.toString(), JSON.stringify(actionOrActions))
-      return null
-    }
   }
 }

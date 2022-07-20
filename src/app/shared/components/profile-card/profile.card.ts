@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
-import { MyStore } from "src/app/shared/common/classes";
+import { Store } from "@ngxs/store";
 import { Observable } from "rxjs";
 import {
   Candidate,
@@ -105,7 +105,7 @@ export class ProfileCardComponent {
   //   return 3
   // }
 
-  constructor(private store: MyStore) {}
+  constructor(private store: Store) {}
 
   ngOnInit() {
     if (this.profile$ == void 0) return;

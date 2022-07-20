@@ -1,5 +1,5 @@
 import { EventEmitter, Injectable } from '@angular/core';
-import { MyStore } from "src/app/shared/common/classes";
+import { Store } from '@ngxs/store';
 import { DataQueries, DataState } from 'src/models/new/data.state';
 import { Notification } from "src/models/new/data.interfaces";
 
@@ -13,7 +13,7 @@ export class ActiveViewService {
 
     activeView: number = 0;
 
-  constructor(private store: MyStore) {}
+  constructor(private store: Store) {}
 
   emitActiveViewChangeEvent(num: number) {
     this.activeView = num

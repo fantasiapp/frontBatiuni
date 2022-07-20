@@ -8,8 +8,7 @@ import {
   Output,
 } from "@angular/core";
 import { SafeResourceUrl } from "@angular/platform-browser";
-import { MyStore } from "src/app/shared/common/classes";
-import { Select } from "@ngxs/store";
+import { Select, Store } from "@ngxs/store";
 import { Observable, Subject } from "rxjs";
 import { take } from "rxjs/operators";
 import {
@@ -34,7 +33,7 @@ import { PopupService } from "../popup/popup.component";
 })
 export class OfferMapComponent {
   constructor(
-    private store: MyStore,
+    private store: Store,
     private popup: PopupService,
     private cd: ChangeDetectorRef,
     private imageGenerator: ImageGenerator,

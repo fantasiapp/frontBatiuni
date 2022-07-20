@@ -6,8 +6,7 @@ import {
   ViewChild,
 } from "@angular/core";
 import { FormArray, FormControl, FormGroup, Validators } from "@angular/forms";
-import { MyStore } from "src/app/shared/common/classes";
-import { Select } from "@ngxs/store";
+import { Select, Store } from "@ngxs/store";
 import { Observable } from "rxjs";
 import { take, takeUntil } from "rxjs/operators";
 import { PopupService } from "src/app/shared/components/popup/popup.component";
@@ -66,7 +65,7 @@ export class SuiviPME extends Destroy${
   alert: string = "";
 
   constructor(
-    private store: MyStore,
+    private store: Store,
     private popup: PopupService,
     private cd: ChangeDetectorRef,
     private activeViewService: ActiveViewService,

@@ -1,5 +1,5 @@
 import { EventEmitter, Injectable } from '@angular/core';
-import { MyStore } from "src/app/shared/common/classes";
+import { Store } from '@ngxs/store';
 
 @Injectable({
   providedIn: 'root'
@@ -8,7 +8,7 @@ import { MyStore } from "src/app/shared/common/classes";
 
 export class LocalService {
 
-  constructor(private store: MyStore) {}
+  constructor(private store: Store) {}
 
   public saveData(key: string, value: string){
       localStorage.setItem(key, value)

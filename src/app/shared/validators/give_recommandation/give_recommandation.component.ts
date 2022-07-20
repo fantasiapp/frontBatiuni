@@ -1,7 +1,7 @@
 import {  ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
-import { MyStore } from "src/app/shared/common/classes";
+import { Store } from "@ngxs/store";
 import { interval, race } from "rxjs";
 import { take, takeUntil } from "rxjs/operators";
 import { Destroy$ } from "src/app/shared/common/classes";
@@ -48,7 +48,7 @@ export class GiveARecommandation extends Destroy$ {
     
   }
 
-  constructor(private store: MyStore, private cd: ChangeDetectorRef, private route: ActivatedRoute) {
+  constructor(private store: Store, private cd: ChangeDetectorRef, private route: ActivatedRoute) {
     super();
     this.companyId = this.route.snapshot.params.companyId;
     this.recommandation.companyRecommanded = this.companyId

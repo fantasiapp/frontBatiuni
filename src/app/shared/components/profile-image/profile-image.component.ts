@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostBinding, Input, Sanitizer, SimpleChanges } from "@angular/core";
 import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser";
-import { MyStore } from "src/app/shared/common/classes";
+import { Store } from "@ngxs/store";
 import { Observable } from "rxjs";
 import { single, take } from "rxjs/operators";
 import { File, Company, Profile, User } from "src/models/new/data.interfaces";
@@ -149,7 +149,7 @@ export class UIProfileImageComponent extends Destroy$ {
     }
   }
   
-  constructor(private cd: ChangeDetectorRef, private store: MyStore, private imageGenerator: ImageGenerator, private downloader: FileDownloader) {
+  constructor(private cd: ChangeDetectorRef, private store: Store, private imageGenerator: ImageGenerator, private downloader: FileDownloader) {
     super();
   }
 

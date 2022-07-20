@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, EventEmitter, HostListener, Injectable, Input, Sanitizer, SimpleChange, SimpleChanges, TemplateRef, ViewChild, ViewContainerRef } from "@angular/core";
 import { SafeResourceUrl } from "@angular/platform-browser";
-import { MyStore } from "src/app/shared/common/classes";
+import { Store } from "@ngxs/store";
 import { combineLatest, Subject } from "rxjs";
 import { distinct, map, switchMap, take, takeLast, takeUntil } from "rxjs/operators";
 import { Dimension, DimensionMenu } from "src/app/shared/common/classes";
@@ -48,7 +48,7 @@ export class UIPopup extends DimensionMenu {
     private cd: ChangeDetectorRef,
     private componentFactoryResolver: ComponentFactoryResolver,
     private popupService: PopupService,
-    private store: MyStore
+    private store: Store
   ) {
     super();
   }
@@ -291,7 +291,7 @@ export class PopupService {
     height: "calc(100% - 60px)",
   };
 
-  constructor(private store: MyStore, private downloader: FileDownloader) {}
+  constructor(private store: Store, private downloader: FileDownloader) {}
 
   show(view: PopupView, dimension?: Dimension) {
     this.popups$.next(view);

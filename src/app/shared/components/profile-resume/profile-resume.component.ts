@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, Output, ViewChild } from "@angular/core";
-import { MyStore } from "src/app/shared/common/classes";
-import { Select } from "@ngxs/store";
+import { Select, Store } from "@ngxs/store";
 import { Observable } from "rxjs";
 import { Profile, File, Company, User } from "src/models/new/data.interfaces";
 import { DataQueries, DataState } from "src/models/new/data.state";
@@ -21,7 +20,7 @@ export class ProfileResume {
   showRecomandation: boolean = true;
   hasRatings: boolean
 
-  constructor(private store: MyStore, private booleanService: BooleanService, private cd: ChangeDetectorRef) {
+  constructor(private store: Store, private booleanService: BooleanService, private cd: ChangeDetectorRef) {
     this.hasRatings = booleanService.hasRatings
   }
 

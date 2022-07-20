@@ -1,12 +1,11 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from "@angular/core";
-import { Select } from "@ngxs/store";
+import { Select, Store } from "@ngxs/store";
 import { Observable } from "rxjs/internal/Observable";
 import { InfoService } from "src/app/shared/components/info/info.component";
 import { Mobile } from "src/app/shared/services/mobile-footer.service";
 import { Profile } from "src/models/new/data.interfaces";
 import { DataQueries, DataState } from "src/models/new/data.state";
 import { ChangeProfileType } from "src/models/new/user/user.actions";
-import { MyStore } from "src/app/shared/common/classes";
 
 @Component({
   selector: 'post',
@@ -29,7 +28,7 @@ export class MakeAdComponent {
   @Input() withSubmit: boolean = false;
   showFooter: boolean = true;
 
-  constructor(public mobile: Mobile, private cd: ChangeDetectorRef, private store: MyStore, private info: InfoService){
+  constructor(public mobile: Mobile, private cd: ChangeDetectorRef, private store: Store, private info: InfoService){
   }
 
   ngOnInit(){

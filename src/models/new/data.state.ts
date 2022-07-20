@@ -1,5 +1,5 @@
 import { Injectable, NgZone } from "@angular/core";
-import { Action,createSelector,Selector,State,StateContext } from "@ngxs/store";
+import { Action,createSelector,Selector,State,StateContext,Store } from "@ngxs/store";
 import { Observable, of, Subject } from "rxjs";
 import { concatMap, map, tap } from "rxjs/operators";
 import { HttpService } from "src/app/services/http.service";
@@ -23,7 +23,6 @@ import { SingleCache } from "src/app/shared/services/SingleCache";
 import { NotifService } from "src/app/shared/services/notif.service";
 import { LocalService } from "src/app/shared/services/local.service";
 import { ConnectionStatusService } from "src/app/shared/services/connectionStatus.service";
-import { MyStore } from "src/app/shared/common/classes";
 
 export interface DataModel {
   fields: Record<string[]>;
@@ -55,7 +54,7 @@ export class Clear {
 export class DataState {
   flagUpdate = true;
   isFirstTime = true
-  constructor(private store: MyStore,private reader: DataReader,private http: HttpService,private info: InfoService,private slide: SlidemenuService,private swipeup: SwipeupService,private zone: NgZone,private booleanService: BooleanService,private getUserDataService: getUserDataService,private notifService: NotifService, private localService: LocalService, private connectionStatusService: ConnectionStatusService) {}
+  constructor(private store: Store,private reader: DataReader,private http: HttpService,private info: InfoService,private slide: SlidemenuService,private swipeup: SwipeupService,private zone: NgZone,private booleanService: BooleanService,private getUserDataService: getUserDataService,private notifService: NotifService, private localService: LocalService, private connectionStatusService: ConnectionStatusService) {}
 
   private pending$: Record<Subject<any>> = {};
 

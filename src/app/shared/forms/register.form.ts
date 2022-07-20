@@ -10,7 +10,7 @@ import {
 } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
-import { MyStore } from "src/app/shared/common/classes";
+import { Store } from "@ngxs/store";
 import {
   bufferCount,
   debounceTime,
@@ -316,7 +316,7 @@ export class RegisterForm extends Destroy$ {
 
   onMobile: boolean = window.innerWidth <= 768;
   constructor(
-    private store: MyStore,
+    private store: Store,
     private router: Router,
     private cd: ChangeDetectorRef,
     private getUserDataService: getUserDataService,

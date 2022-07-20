@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, ChangeDetectorRef } from '@angular/core';
 import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { MyStore } from "src/app/shared/common/classes";
+import { Store } from "@ngxs/store";
 import { take } from "rxjs/operators";
 import { InviteFriend } from "src/models/new/user/user.actions";
 import { Destroy$ } from "src/app/shared/common/classes";
@@ -25,7 +25,7 @@ export class InviteFriendsComponent extends Destroy$ {
    {})
 
 
-  constructor(private store: MyStore, private cd: ChangeDetectorRef) {
+  constructor(private store: Store, private cd: ChangeDetectorRef) {
     super()
   }
 

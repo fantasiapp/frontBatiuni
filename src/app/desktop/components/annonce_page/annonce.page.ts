@@ -1,10 +1,9 @@
 import { ChangeDetectionStrategy, Component, ElementRef, ViewChild } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { Select } from "@ngxs/store";
+import { Select, Store } from "@ngxs/store";
 import { Observable } from "rxjs";
 import { Post, Profile } from "src/models/new/data.interfaces";
 import { DataQueries } from "src/models/new/data.state";
-import { MyStore } from "src/app/shared/common/classes";
 
 
 @Component({
@@ -16,7 +15,7 @@ import { MyStore } from "src/app/shared/common/classes";
 export class AnnoncePage {
   @ViewChild('addForm') public structure! : ElementRef;
   activeView: number = 0;
-  constructor(private store: MyStore, private router: ActivatedRoute) {
+  constructor(private store: Store, private router: ActivatedRoute) {
 
   }
 

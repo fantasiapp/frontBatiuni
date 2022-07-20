@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, HostBinding, Input } from "@angular/core";
-import { MyStore } from "src/app/shared/common/classes";
+import { Store } from "@ngxs/store";
 import { Observable } from "rxjs";
 import { UIProfileImageComponent } from "src/app/shared/components/profile-image/profile-image.component";
 import { Company, Job, Profile } from "src/models/new/data.interfaces";
@@ -43,7 +43,7 @@ export class UISOSCardMap {
 
   starsST: string = ''
 
-  constructor(private store: MyStore) {}
+  constructor(private store: Store) {}
 
   ngOnInit() {
     (this.profile$ as Observable<Profile>).subscribe(profile => {

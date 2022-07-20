@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, ViewChild } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
-import { Select } from "@ngxs/store";
+import { Select, Store } from "@ngxs/store";
 import { Observable } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { AppComponent } from "src/app/app.component";
@@ -13,7 +13,6 @@ import { Job, Profile } from "src/models/new/data.interfaces";
 import { nameToAvailability } from "src/models/new/data.mapper";
 import { DataQueries, DataState, SnapshotAll } from "src/models/new/data.state";
 import { ChangeProfileType, ModifyAvailability } from "src/models/new/user/user.actions";
-import { MyStore } from "src/app/shared/common/classes";
 
 @Component({
   selector: 'availabilities',
@@ -65,7 +64,7 @@ export class AvailabilitiesComponent extends Destroy$ {
     },
   }]
 
-  constructor(private store: MyStore, private swipeupService: SwipeupService, private appComponent: AppComponent, private getUserDataService: getUserDataService, private navService: NavService) {
+  constructor(private store: Store, private swipeupService: SwipeupService, private appComponent: AppComponent, private getUserDataService: getUserDataService, private navService: NavService) {
     super();
   }
 

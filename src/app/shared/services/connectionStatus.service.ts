@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { MyStore } from "src/app/shared/common/classes";
+import { Store } from '@ngxs/store';
 import { fromEvent, Observable, Subscription } from 'rxjs';
 
 @Injectable({
@@ -9,7 +9,7 @@ import { fromEvent, Observable, Subscription } from 'rxjs';
 
 export class ConnectionStatusService {
     
-  constructor(private store: MyStore) {
+  constructor(private store: Store) {
     this.init()
   }
 

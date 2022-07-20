@@ -19,7 +19,7 @@ import { defaultFileUIOuput } from "../components/filesUI/files.ui";
 import { FieldType, MatchField } from "src/validators/verify";
 import { PopupService } from "../components/popup/popup.component";
 import { InfoService } from "../components/info/info.component";
-import { MyStore } from "src/app/shared/common/classes";
+import { Store } from "@ngxs/store";
 import {
   DataQueries,
   DataState,
@@ -555,7 +555,7 @@ export class ModifyProfileForm {
   @Input() profile!: Profile;
   @Input() user: any;
 
-  constructor(private store: MyStore, private ref: ElementRef, private popup: PopupService) {}
+  constructor(private store: Store, private ref: ElementRef, private popup: PopupService) {}
 
   form: FormGroup = new FormGroup({
     // User

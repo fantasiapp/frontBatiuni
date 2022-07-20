@@ -1,10 +1,11 @@
 import { Component, Input, Output } from '@angular/core';
+import { Select, Store } from '@ngxs/store';
+import { Observable } from 'rxjs';
 import { UIOpenMenu } from 'src/app/shared/common/classes';
 import { InfoService } from 'src/app/shared/components/info/info.component';
 import { Company, Mission, Profile } from 'src/models/new/data.interfaces';
 import { DataQueries, DataState } from 'src/models/new/data.state';
 import { BooleanService } from '../../services/boolean.service';
-import { MyStore } from "src/app/shared/common/classes";
 
 interface ratingInfo {
   contactName: string;
@@ -64,7 +65,7 @@ export class RatingComponent extends UIOpenMenu {
   company: Company | undefined;
   openRecommandationMenu: boolean = false;
 
-    constructor(private info: InfoService, private store: MyStore, private booleanService: BooleanService) {
+    constructor(private info: InfoService, private store: Store, private booleanService: BooleanService) {
     super()
   }
 

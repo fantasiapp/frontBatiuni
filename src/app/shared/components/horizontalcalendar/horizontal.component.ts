@@ -29,7 +29,7 @@ import {
 import { DataQueries } from "src/models/new/data.state";
 import { ModifyDetailedPost } from "src/models/new/user/user.actions";
 import { take } from "rxjs/operators";
-import { MyStore } from "src/app/shared/common/classes";
+import { Store } from "@ngxs/store";
 
 export const HOURS_START = 8
 export const HOURS_END = 19
@@ -112,7 +112,7 @@ export class HorizontaleCalendar implements OnInit {
   @Input()
   detailedDays: MissionDetailedDay[] = [];
 
-  constructor(private cd: ChangeDetectorRef, private store: MyStore) {}
+  constructor(private cd: ChangeDetectorRef, private store: Store) {}
 
   ngOnInit(): void {
     const profile = this.store.selectSnapshot(DataQueries.currentProfile);

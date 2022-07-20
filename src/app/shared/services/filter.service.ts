@@ -1,5 +1,5 @@
 import { EventEmitter, Injectable } from "@angular/core";
-import { MyStore } from "src/app/shared/common/classes";
+import { Store } from "@ngxs/store";
 import { Post } from "src/models/new/data.interfaces";
 import { Filter } from "../directives/filter.directive";
 
@@ -10,7 +10,7 @@ export class FilterService {
   navchange: EventEmitter<Post[]> = new EventEmitter();
 
 
-  constructor(private store: MyStore) {}
+  constructor(private store: Store) {}
   emitFilterChangeEvent(posts: Post[]) {
     this.navchange.emit(posts);
   }

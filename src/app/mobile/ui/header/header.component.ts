@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from "@angular/core";
 import { Router } from "@angular/router";
-import { MyStore } from "src/app/shared/common/classes";
-import { Select } from "@ngxs/store";
+import { Select, Store } from "@ngxs/store";
 import { Observable } from "rxjs/internal/Observable";
 import { InfoService } from "src/app/shared/components/info/info.component";
 import { NavService } from "src/app/shared/components/navigation/navigation.component";
@@ -84,7 +83,7 @@ export class HeaderComponent {
     return result;
   }
 
-  constructor(private store: MyStore, private router: Router, private navService: NavService, private info: InfoService){
+  constructor(private store: Store, private router: Router, private navService: NavService, private info: InfoService){
     
   }
 

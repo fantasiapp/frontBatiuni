@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
-import { MyStore } from "src/app/shared/common/classes";
+import { Store } from "@ngxs/store";
 import { Job } from "src/models/new/data.interfaces";
 import { SnapshotAll } from "src/models/new/data.state";
 
@@ -108,7 +108,7 @@ export class PMEFilterForm implements OnInit {
     {}
   );
 
-  constructor(private store: MyStore){}
+  constructor(private store: Store){}
 
   @SnapshotAll('Job')
   allJobs!: Job[];

@@ -3,8 +3,7 @@ import {
   ChangeDetectorRef,
   Component,
 } from "@angular/core";
-import { MyStore } from "src/app/shared/common/classes";
-import { Select } from "@ngxs/store";
+import { Select, Store } from "@ngxs/store";
 import { combineLatest, Observable, of, Subject } from "rxjs";
 import { switchMap, takeUntil } from "rxjs/operators";
 import { AppComponent } from "src/app/app.component";
@@ -65,7 +64,7 @@ export class SOSPageComponent extends Destroy$ {
   }
 
   constructor(
-    private store: MyStore, 
+    private store: Store, 
     private slides: SlidemenuService, 
     private info: InfoService, 
     private appComponent: AppComponent, 
