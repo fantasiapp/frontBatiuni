@@ -333,8 +333,7 @@ export class DataState {
 
         delete response[picture.action];
         let key = Object.keys(response)
-        let id = response.supervisionId
-        delete response.supervisionId;
+        let id = picture.supervisionId
         response[parseInt(key[0])].push(picture.fileBase64)
         this.getUserDataService.emitDataChangeEvent(response.timestamp)
         delete response["timestamp"];
