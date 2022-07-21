@@ -193,4 +193,8 @@ export class Payment {
     this.document.querySelector("#button-text")!.classList.remove("hidden");
   }
   }
+
+  close(){
+
+  }
 };

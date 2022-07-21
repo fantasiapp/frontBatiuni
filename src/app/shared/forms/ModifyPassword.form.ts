@@ -3,6 +3,7 @@ import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { take } from "rxjs/operators";
 import { ComplexPassword, MatchField } from "src/validators/verify";
 import { returnInputKeyboard } from '../common/classes'
+import { Mobile } from "../services/mobile-footer.service";
 
 @Component({
   selector: 'modify-password-form',
@@ -10,28 +11,34 @@ import { returnInputKeyboard } from '../common/classes'
   <form class="form-control" style="height: 100%;" [formGroup]="form" id="form" >
     <div class="form-input">
       <label>Ancien mot de passe</label>
+      <div class="form-input flex">
       <input class="form-element" type="password" formControlName="oldPwd" id="idPassword" (keyup)="returnInputKeyboard($event, input1)" (click)="onClickInputScroll(input1)" #input1/>
-      <div (click)="togglePassword()" style="position: absolute; cursor: pointer; bottom: 0; right: 0; z=100">
+      <div (click)="togglePassword()" style="position: absolute; cursor: pointer; top: 0; right: 0; z=100">
         <img class="eye" src="assets/Oeil_ferme.svg" id="togglePassword">
+      </div>
       </div>
     </div>
     <div class="form-input">
       <label>Nouveau mot de passe</label>
+      <div class="form-input flex">
       <input class="form-element" type="password" formControlName="newPwd" id="idPassword" (keyup)="returnInputKeyboard($event, input2)" (click)="onClickInputScroll(input2)" #input2/>
-      <div (click)="togglePassword()" style="position: absolute; cursor: pointer; bottom: 0; right: 0; z=100">
+      <div (click)="togglePassword()" style="position: absolute; cursor: pointer; top: 0; right: 0; z=100">
         <img class="eye" src="assets/Oeil_ferme.svg" id="togglePassword">
+      </div>
       </div>
     </div>
     <div class="form-input">
       <label>Confirmation nouveau mot de passe</label>
+      <div class="form-input flex">
       <input class="form-element" type="password" formControlName="newPwdConfirmation" id="idPassword" (click)="onClickInputScroll(input3)" (keyup)="returnInputKeyboard($event, input3)" #input3/>
-      <div (click)="togglePassword()" style="position: absolute; cursor: pointer; bottom: 0; right: 0; z=100">
+      <div (click)="togglePassword()" style="position: absolute; cursor: pointer; top: 0; right: 0; z=100">
         <img class="eye" src="assets/Oeil_ferme.svg" id="togglePassword">
       </div>
     </div>
+    </div>
   </form>
 
-  <div class="sticky-footer">
+  <div class="sticky-footer" *ngIf="showFooter">
     <button class="button gradient full-width" (click)="onSubmit()" [disabled]="form.invalid || null || disableBoutton">Enregistrer </button>
   </div>
   `,
@@ -49,13 +56,18 @@ import { returnInputKeyboard } from '../common/classes'
       @extend %sticky-footer;
     }
 
+    img {
+        width: 75%;
+        height: auto;
+      }
+
   `],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ModifyPasswordForm {
 
   returnInputKeyboard = returnInputKeyboard
-  constructor(private cd: ChangeDetectorRef) {}
+  constructor(private cd: ChangeDetectorRef, private mobile:Mobile) {}
 
   @Output() submit = new EventEmitter<FormGroup>();
 
@@ -73,6 +85,15 @@ export class ModifyPasswordForm {
       MatchField('newPwd')
     ])
   }, {})
+
+  showFooter: boolean = false
+
+  ngOnInit(){
+    this.mobile.footerStateSubject.subscribe(b=>{
+      this.showFooter = b;
+      this.cd.detectChanges()
+    })
+  }
 
   onSubmit() { 
     this.submit.emit(this.form);

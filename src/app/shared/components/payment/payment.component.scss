@@ -1,4 +1,7 @@
+@use 'src/styles/variables' as *;
+
 /* Variables */
+
 * {
     box-sizing: border-box;
   }
@@ -12,6 +15,15 @@
     align-content: center;
     height: 100%;
     width: 100%;
+  }
+
+  .widget__wrapper {
+    margin-top: calc(#{$sticky-header-height} + env(safe-area-inset-top)) ;
+    padding: 2rem 2rem 0;
+    h1 {
+      padding-bottom: 0.2rem;
+      border-bottom: 1px solid #00000029 ;
+    }
   }
   
   form {

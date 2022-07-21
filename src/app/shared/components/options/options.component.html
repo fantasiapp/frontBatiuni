@@ -17,7 +17,7 @@
         <ul *ngIf="_type[0] == 'checkbox'; else radioMenu">
           <li *ngFor="let option of availableOptions; let index = index" class="flex center-cross">
             <span (click)="checkbox.onChange($event)">{{option.name}}</span>
-            <checkbox (valueChange)="onChange(['toggle', option.id])" [value]="value!.includes(option)" #checkbox></checkbox>
+            <checkbox (valueChange)="onChange(['toggle', option.id])" [value]="dropdownIncludes(option,value)" #checkbox></checkbox>
           </li>
         </ul>
         <ng-template #radioMenu>
@@ -29,7 +29,7 @@
           </ul>
         </ng-template>
       </div>
-      <div class="option-action_wrapper">
+      <div class="option-action_wrapper" *ngIf="validateButton">
         <button class="button active" (click)="valideButton($event)">Valider</button>
       </div>
     </div>

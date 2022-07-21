@@ -82,6 +82,8 @@ export class OptionsModel extends UIDefaultAccessor<Option[]> {
   @Input()
   ifEmpty = '';
 
+  @Input() validateButton = true
+
   _type: ['checkbox' | 'radio', string] = ['checkbox', ''];
   
   @Input()
@@ -92,7 +94,7 @@ export class OptionsModel extends UIDefaultAccessor<Option[]> {
 
   filterOptions(e: Event) {
     this.search = (e.target as any).value;
-}
+  }
 
   get availableOptions() {
     return this.options.filter(option => option.name.toLowerCase().includes(this.search.toLowerCase()));
@@ -119,6 +121,10 @@ export class OptionsModel extends UIDefaultAccessor<Option[]> {
         return [...this.value!, option];
     }
   };
+
+  dropdownIncludes(option:any, value:any){
+    return !!value.filter((v:any)=> v.id ==option.id).length
+  }
 
   ngOnDestroy() {
     const index = OptionsModel.instances.indexOf(this);

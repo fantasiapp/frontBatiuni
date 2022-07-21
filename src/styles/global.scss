@@ -627,3 +627,8 @@ input[type=number] {
     height: 100%;
   }
 }
+
+
+.resetPadding.ios-platform {
+  padding-bottom: calc(3.5rem + env(safe-area-inset-bottom))!important;
+}

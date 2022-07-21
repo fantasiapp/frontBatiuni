@@ -33,9 +33,11 @@ export class UploadImageSupervision {
   static readonly type = '[User] Upload Supervision Picture';
   ext: string = '';
   fileBase64: string = '';
-  constructor(src: any, public supervisionId: number | null) {
+  supervisionId: number;
+  constructor(src: any, supervisionId: number) {
     this.ext = src.format;
     this.fileBase64 = src.base64String;
+    this.supervisionId = supervisionId
   }
   action = 'uploadImageSupervision';
 };

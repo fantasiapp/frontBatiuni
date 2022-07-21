@@ -186,8 +186,9 @@ import { take } from "rxjs/operators";
               <ng-template #addfield_tpl>
                 <label>Ajoutez des métiers</label>
                 <options
+                  [validateButton]='false'
                   [options]="allJobs"
-                  [value]="selectedJobs"
+                  [value]="selectedJobsForChecklist"
                   #jobOptions
                 ></options>
                 <div class="form-input center-text">
@@ -551,6 +552,9 @@ export class ModifyProfileForm {
 
   companyJobs!: JobForCompany[];
   selectedJobs!: Label[];
+  get selectedJobsForChecklist() {
+    return this.selectedJobs.map(job=> {return {id:job.id,name:job.name}})
+  }
   initialSelectedJobs!: Label[];
   view = this.store.selectSnapshot(DataState.view)
 

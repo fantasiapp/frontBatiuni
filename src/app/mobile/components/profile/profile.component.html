@@ -9,7 +9,7 @@
     <img src="assets/menu.svg" (click)="openMenu = true" alt="menu_button"/>
   </header>
 
-  <extended-profile class="page-content" [profile]="profile">
+  <extended-profile (viewChanged)="onViewChanged($event)" class="page-content" [profile]="profile">
   </extended-profile>
 
   <swipeup [(open)]="openMenu">

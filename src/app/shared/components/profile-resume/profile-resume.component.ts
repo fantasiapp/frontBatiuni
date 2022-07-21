@@ -59,7 +59,10 @@ export class ProfileResume {
 
   changeProfileType(type: boolean) {
     this.store.dispatch(new ChangeProfileType(type));
+    this.viewChanged.emit(type ? 'PME' : 'ST')
   }
+
+  @Output() viewChanged = new EventEmitter()
 
   ngOnInit() {
     this.booleanService.gethasRatingsChangeEmitter().subscribe((bool) => {

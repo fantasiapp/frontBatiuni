@@ -25,6 +25,8 @@ import { Destroy$ } from "src/app/shared/common/classes";
 import { InfoService } from "src/app/shared/components/info/info.component";
 import { FieldType } from "src/validators/verify";
 import { Observable } from "rxjs";
+import { Mobile } from "src/app/shared/services/mobile-footer.service";
+import { takeUntil } from "rxjs/operators";
 
 export type ApplyForm = {
   amount: number;
@@ -157,7 +159,7 @@ export type ApplyForm = {
             </div>
           </div>
         </form>
-        <footer class="sticky-footer">
+        <footer class="sticky-footer" [ngClass]="{'resetPadding': !showFooter, 'ios-platform': platform == 'ios'}">
           <button
             class="button full-width active"
             (click)="showPopUp()"
@@ -202,6 +204,8 @@ export class UIAnnonceResume extends Destroy$ {
   openRatings: boolean = false;
   profile = this.store.selectSnapshot(DataQueries.currentProfile);
   profileST: Profile | null = null
+  platform: string = ''
+  showFooter: boolean = false
 
   get disableValidation(): boolean {
     if (this.hasPostulated) {
@@ -291,7 +295,9 @@ export class UIAnnonceResume extends Destroy$ {
   constructor(
     private store: Store,
     private popup: PopupService,
-    private info: InfoService
+    private info: InfoService,
+    private mobile: Mobile,
+    private cd: ChangeDetectorRef
   ) {
     super();
   }
@@ -299,6 +305,13 @@ export class UIAnnonceResume extends Destroy$ {
   view: "ST" | "PME" = "ST";
   ngOnInit() {
     this.view = this.store.selectSnapshot(DataState.view);
+
+    this.mobile.footerStateSubject.pipe(takeUntil(this.destroy$)).subscribe(b => {
+      this.showFooter = b
+      this.cd.detectChanges()
+    })
+
+    this.platform = this.mobile.plateform
   }
 
   ngOnChanges() {

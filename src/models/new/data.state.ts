@@ -1,6 +1,6 @@
 import { Injectable, NgZone } from "@angular/core";
 import { Action,createSelector,Selector,State,StateContext,Store, } from "@ngxs/store";
-import { Observable, of, Subject } from "rxjs";
+import { Observable, of, Subject, throwError } from "rxjs";
 import { concatMap, map, tap } from "rxjs/operators";
 import { HttpService } from "src/app/services/http.service";
 import { GetGeneralData,HandleApplication,BlockCompany,SignContract,MarkViewed,ModifyAvailability,SetFavorite,TakePicture,InviteFriend,ValidateMissionDate,BoostPost,AskRecommandation,GiveRecommandation,GiveNotificationToken,ModifyFile,UnapplyPost,DeleteLabel,PostNotificationViewed } from "./user/user.actions";
@@ -179,10 +179,13 @@ export class DataState {
             this.updateLocalData(ctx, response)
           }
           this.flagUpdate = true
-    }, (error: any) => {
-      this.flagUpdate = true
-    })
-      );
+        }, (error: any) => {
+          this.flagUpdate = true
+          if (error.status == '401'){
+            this.store.dispatch(new Logout());
+          }
+          return throwError("GetUserData Failed.")
+        }))
     }
     else{
       return
@@ -333,8 +336,7 @@ export class DataState {
 
         delete response[picture.action];
         let key = Object.keys(response)
-        let id = response.supervisionId
-        delete response.supervisionId;
+        let id = picture.supervisionId
         response[parseInt(key[0])].push(picture.fileBase64)
         this.getUserDataService.emitDataChangeEvent(response.timestamp)
         delete response["timestamp"];

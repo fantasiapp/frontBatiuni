@@ -14,21 +14,22 @@ export type InfoAlignType = 'header' | 'paging' | 'header_search' | 'header_sear
 
 const TRANSITION_TIME = 150;
 const HEADER_HEIGHT = 4*16; // $sticky-header-height, header normal
-const HEADER_SWITCH_HEIGHT = 106; // header norma + switch
+// const HEADER_SWITCH_HEIGHT = 106; // header norma + switch
 const PAGING_HEIGHT = 75;
 const HEADER_SEARCH_HEIGHT = 150;
-const HEADER_SEARCH_HEIGHT_SWITCH = 192;
+// const HEADER_SEARCH_HEIGHT_SWITCH = 192;
+const SWITCH_HEADER_OVERLAY = 42
 
 function getHeight(top: InfoAlignType) {
   if ( top == 'header' )
     return HEADER_HEIGHT;
   else if ( top == 'paging' ) 
     return PAGING_HEIGHT;
-  else if ( top == 'paging_switch')
-    return HEADER_SWITCH_HEIGHT
-  else if ( top == 'header_search_switch'){
-    return HEADER_SEARCH_HEIGHT_SWITCH
-  }
+  // else if ( top == 'paging_switch')
+  //   return HEADER_SWITCH_HEIGHT
+  // else if ( top == 'header_search_switch'){
+  //   return HEADER_SEARCH_HEIGHT_SWITCH
+  // }
   return HEADER_SEARCH_HEIGHT;
 }
 
@@ -44,6 +45,7 @@ export class InfoHandler extends Destroy$ {
 
   type: string = '';
   isOverflowing: boolean = false;
+  bothOverlay: boolean = false
 
   @Input()
   fromService: boolean = false;
@@ -78,9 +80,12 @@ export class InfoHandler extends Destroy$ {
       else 
         this.alignStack.push(alignWith);
       
-      this.top = getHeight(alignWith);
+      this.top = getHeight(alignWith) + (this.bothOverlay ? SWITCH_HEADER_OVERLAY : 0)
       this.cd.markForCheck();
     });
+    this.service.bothOverlay$.pipe(takeUntil(this.destroy$)).subscribe((b)=> {
+      this.bothOverlay = b
+    })
   }
 
   private nextTimeout: any = null;
@@ -143,6 +148,7 @@ export class InfoService {
 
   infos$ = new Subject<Info | null>();
   alignWith$ = new Subject<InfoAlignType>();
+  bothOverlay$ = new Subject<boolean>();
 
   show(type: 'error' | 'success' | 'info', content: string, time: number = Infinity, alignWith?: InfoAlignType) {
     this.infos$.next({
@@ -150,6 +156,10 @@ export class InfoService {
     });
 
     if ( alignWith ) this.alignWith$.next(alignWith);
+  }
+
+  enableBothOverlay(b: boolean){
+    this.bothOverlay$.next(b)
   }
 
   alignWith(alignWith: InfoAlignType) {

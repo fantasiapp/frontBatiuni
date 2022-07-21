@@ -157,8 +157,9 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
     else postDetailsId = this.dateOrigin.details
     
     postDetails = this.store.selectSnapshot(DataQueries.getMany("DetailedPost", postDetailsId))
-
+    
     let postDetailsGraphic = postDetails.map((postDetail) => {
+      console.log('postDetail compute Field', postDetail);
       let supervisions:Supervision[]
       if ((typeof(postDetail.supervisions) === "object") && !Array.isArray(postDetail.supervisions)) {
         supervisions = Object.values(postDetail.supervisions) as unknown as Supervision[]
@@ -166,7 +167,7 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
         supervisions = this.store.selectSnapshot(DataQueries.getMany("Supervision", postDetail.supervisions as unknown as number[]))
       } return {
         "id": postDetail.id,
-        "date": postDetail.date,
+        "date": this.dateOrigin.date,
         "content": postDetail.content,
         "validated": postDetail.validated,
         "refused": postDetail.refused,
@@ -193,7 +194,7 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
       const id = selected && selected.hasOwnProperty(content) ? selected[content] : task.id
       return {
         "id": id,
-        "date":task.date,
+        "date": this.dateOrigin.date,
         "content": task.content,
         "validated": task.validated,
         "refused": task.refused,
@@ -212,6 +213,7 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
         formGroup: new FormGroup({comment: new FormControl()})
       }
       ))
+    console.log('this.tasksGraphic', this.tasksGraphic);
   }
 
   computeSupervisions(postDetail: PostDetailGraphic) {
@@ -243,7 +245,7 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
   
   swipePhoto?: {
     task: PostDetailGraphic | null,
-    taskGraphic: TaskGraphic
+    taskGraphic: TaskGraphic | null
   }
 
   async takePhoto() {
@@ -330,7 +332,7 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
     }
   }
   
-  mainComment(task:PostDetailGraphic | null, taskGraphic: TaskGraphic, photo: Photo) {
+  mainComment(task:PostDetailGraphic | null, taskGraphic: TaskGraphic | null, photo: Photo) {
     if (!this.mission!.isClosed) {
       let detailPostId: number | null = task ? task.id : null
       let datePostId: number | null = null;
@@ -355,10 +357,22 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
 
           this.store.dispatch(new UploadImageSupervision(photo, supervisions[supervisions.length - 1].id)).pipe(take(1)).subscribe(() => {
             this.swipeMenuImage = false;
-            console.log('NEW SUPERVISION ', supervisions);
             supervisions[supervisions.length - 1] = this.store.selectSnapshot(DataQueries.getById('Supervision', supervisions[supervisions.length - 1].id))! 
+            console.log('NEW SUPERVISION ', supervisions);
+
+            if(detailPostId){
+              this.date.postDetails.forEach(Detail =>{
+                console.log('detail', Detail);
+                if(Detail.id === detailPostId) Detail.supervisions = supervisions 
+              })
+            } else {
+              this.dateOrigin = this.store.selectSnapshot(DataQueries.getById('DatePost', this.dateOrigin.id))!
+              supervisions = this.store.selectSnapshot(DataQueries.getMany('Supervision', this.dateOrigin.supervisions))!
+              this.date.supervisions = supervisions
+            }
+
+            console.log('this.date;', this.date);
             this.updatePageOnlyDate()
-            this.cd.detectChanges()
           });
         })
       } catch {
@@ -480,9 +494,11 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
   }
 
   modifyDetailedPostDate(detailedPost: PostDetailGraphic) {
-    this.store.dispatch(new ModifyDetailedPost(detailedPost, false, this.dateId)).pipe(take(1)).subscribe(result => {
+    this.store.dispatch(new ModifyDetailedPost(detailedPost, false, this.dateId)).pipe(take(1)).subscribe(_ => {
+      this.dateOrigin = this.store.selectSnapshot(DataQueries.getById('DatePost', this.dateId))!
       detailedPost.checked = true
       detailedPost.date = this.dateOrigin.date
+      detailedPost.id = this.dateOrigin.details[this.dateOrigin.details.length - 1]
 
       this.updateTaskGraphic(detailedPost)
       
