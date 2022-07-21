@@ -30,6 +30,7 @@ export class FileDownloader {
       blobType = 'image/jpeg'
     }
 
+    console.log('createFileContext', file, type, blobType);
     
     let blob
     if(Array.isArray(file.content)){
@@ -40,9 +41,11 @@ export class FileDownloader {
       blob = [b64toBlob(Array.isArray(file.content) ? file.content[0] : file.content, blobType)]
     }
 
+    console.log('blob', blob);
     const url = blob.map((blob: Blob) => {
       return URL.createObjectURL(blob)
     })
+    console.log('url', url);
 
     const context: FileContext = {
       type,
@@ -52,6 +55,7 @@ export class FileDownloader {
       }),
     };
 
+    console.log('context', context);
     return context;
   }
 

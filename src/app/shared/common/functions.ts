@@ -122,6 +122,7 @@ export const b64toBlob = (
   contentType = "",
   sliceSize = 512
 ) => {
+  console.log('b64toBlob', contentType);
   const byteCharacters = atob(b64Data);
   const byteArrays = [];
 
