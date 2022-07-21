@@ -21,7 +21,7 @@ import {
   Profile,
 } from "src/models/new/data.interfaces";
 import { DataQueries, DataState, QueryProfile } from "src/models/new/data.state";
-import { Destroy$ } from "src/app/shared/common/classes";
+import { Destroy$, onClickInputScroll, returnInputKeyboard } from "src/app/shared/common/classes";
 import { InfoService } from "src/app/shared/components/info/info.component";
 import { FieldType } from "src/validators/verify";
 import { Observable } from "rxjs";
@@ -150,6 +150,10 @@ export type ApplyForm = {
             <label>Montant</label>
             <div class="flex row space-between remuneration">
               <input
+                #input
+                (click)="onClickInputScroll(input)"
+                (keyup)="returnInputKeyboard($event, input)"
+                type="number"
                 min="0"
                 style="max-height: 51px"
                 class="grow form-element"
@@ -384,4 +388,8 @@ export class UIAnnonceResume extends Destroy$ {
       return adress;
     }
   }
+
+  returnInputKeyboard = returnInputKeyboard
+
+  onClickInputScroll = onClickInputScroll
 }
