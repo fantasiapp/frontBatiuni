@@ -105,9 +105,9 @@ import { Mobile } from "../services/mobile-footer.service";
         </div>
 
         <div class="form-input">
-          <label class="position-relative"
+          <label class="flex row space-between center-cross position-relative"
             >Détail de la prestation *<img
-              class="position-absolute add-detail"
+              class="add-detail"
               src="assets/icons/add.svg"
               (click)="addDetail()"
           /></label>
@@ -390,6 +390,8 @@ import { Mobile } from "../services/mobile-footer.service";
       }
 
       .cancel-detail {
+        padding: 10px;
+        margin-top: -5px;
         position: absolute;
         top: 0px;
         right: 5px;

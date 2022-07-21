@@ -137,7 +137,7 @@ body {
   pointer-events: none;
 }
 
-button {
+button , .button{
   font-size: inherit;
   display: inline-block;
   outline: none;
@@ -147,36 +147,38 @@ button {
   font-family: inherit;
   font-weight: 200;
   
-  &.button {
-    padding: $spacer-75 $spacer-150;
-    color: white;
-    cursor: pointer;
-    &:disabled {
-      background: #aaa !important;
-    }
+}
+.button {
+  padding: $spacer-75 $spacer-150;
+  text-align: center;
+  color: white;
+  cursor: pointer;
 
-    &.gradient {
-      background: $primary;
-    }
+  &:disabled {
+    background: #aaa !important;
+  }
 
-    &.passive {
-      background: white;
-      color: #0C5E8D;
-      border: 2px solid #0C5E8D;
-      font-weight: 500;
+  &.gradient {
+    background: $primary;
+  }
 
-      &:disabled { background-color: white !important; color: $light; border-color: $light; }
-    }
+  &.passive {
+    background: white;
+    color: #0C5E8D;
+    border: 2px solid #0C5E8D;
+    font-weight: 500;
 
-    &.disabled, &.disabled.active {
-      background-color: $light;
-      color: $bg-white;
-      pointer-events: none;
-    }
-    &.active {
-      // background: #134C6C;
-      background: $primary;
-    }
+    &:disabled { background-color: white !important; color: $light; border-color: $light; }
+  }
+
+  &.disabled, &.disabled.active {
+    background-color: $light;
+    color: $bg-white;
+    pointer-events: none;
+  }
+  &.active {
+    // background: #134C6C;
+    background: $primary;
   }
 }
 

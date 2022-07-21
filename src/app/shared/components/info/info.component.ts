@@ -46,6 +46,7 @@ export class InfoHandler extends Destroy$ {
   type: string = '';
   isOverflowing: boolean = false;
   bothOverlay: boolean = false
+  bothOverlayStack: boolean[] = [false]
 
   @Input()
   fromService: boolean = false;
@@ -81,10 +82,20 @@ export class InfoHandler extends Destroy$ {
         this.alignStack.push(alignWith);
       
       this.top = getHeight(alignWith) + (this.bothOverlay ? SWITCH_HEADER_OVERLAY : 0)
+
+      console.log('info OVERLATY', alignWith, this.alignStack, this.top, this.bothOverlay);
       this.cd.markForCheck();
     });
     this.service.bothOverlay$.pipe(takeUntil(this.destroy$)).subscribe((b)=> {
-      this.bothOverlay = b
+      if(b == null){
+        this.bothOverlayStack.pop() 
+        this.bothOverlay = this.bothOverlayStack[this.bothOverlayStack.length - 1] || this.bothOverlay
+      } else {
+        this.bothOverlayStack.push(b)
+        this.bothOverlay = b
+
+      }
+      console.log('info OVERLATY', b, this.bothOverlay, this.bothOverlayStack);
     })
   }
 
@@ -102,6 +113,7 @@ export class InfoHandler extends Destroy$ {
   }
 
   private show(info: Info) {
+    console.log('info', info);
     this.textOverflow(info.content.length)
     if ( !info.content ) return;
     this.resetTimer();
@@ -148,7 +160,7 @@ export class InfoService {
 
   infos$ = new Subject<Info | null>();
   alignWith$ = new Subject<InfoAlignType>();
-  bothOverlay$ = new Subject<boolean>();
+  bothOverlay$ = new Subject<boolean | null>();
 
   show(type: 'error' | 'success' | 'info', content: string, time: number = Infinity, alignWith?: InfoAlignType) {
     this.infos$.next({
@@ -158,7 +170,7 @@ export class InfoService {
     if ( alignWith ) this.alignWith$.next(alignWith);
   }
 
-  enableBothOverlay(b: boolean){
+  enableBothOverlay(b: boolean | null){
     this.bothOverlay$.next(b)
   }
 

@@ -54,7 +54,8 @@ export class TaskAddComponent extends Destroy$ {
     formControl.reset()
   }
 
-  validate(){
+  validate(e: Event, form: HTMLFormElement){
+    this.submit(e, form)
     console.log('this.bewTasks' , this.newTasks);
     this.validateEmiter.next(this.newTasks)
   }

@@ -23,7 +23,16 @@
 }
 
 .notification {
-  @extend %has-notifications
+  @extend %has-notifications;
+  &.notification-header {
+    width: unset;
+    height: unset;
+  }
+  &.notification-option {
+    margin-left: 0.5rem;
+    width: unset;
+    height: unset;
+  }
 }
 .reponse {
   background-color: $bg-white !important;
@@ -85,7 +94,7 @@ header > div > img ~ span::after {
   color: #000000;
   font-size: 15px;
   height: 2.3rem;
-  width: 6rem;
+  padding: 0 1rem;
   border-radius: 1.15rem;
   filter: drop-shadow(0 0 0.2rem #00000029);
   box-shadow: 0 3px 6px 0 #00000029;
@@ -134,4 +143,13 @@ header > div > img ~ span::after {
   left: -2rem;
   top: -1rem;
   
+}
+
+.notificationMission {
+  @extend %has-notifications;
+
+  &::after {
+    left: -20px;
+    top: -20px
+  }
 }

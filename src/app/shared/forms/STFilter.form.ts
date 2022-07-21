@@ -128,8 +128,8 @@ import { returnInputKeyboard } from "../common/classes";
         class="flex row space-between sticky-footer full-width submit-container background-white"
         style="z-index: 100;">
           <div class="action-button-filter  flex row space space-between full-width">
-            <button class="button passive" (click)="resetFilter()">Réinitialiser</button>
-            <button class="button active" (click)="onCloseFilter()">Valider</button>
+            <div class="button passive" (click)="resetFilter()">Réinitialiser</div>
+            <div class="button active" (click)="onCloseFilter()">Valider</div>
           </div>
         </footer>
       </div>
@@ -215,12 +215,12 @@ export class STFilterForm {
 
   ngOnInit() {
 
-    // this.filterForm.valueChanges.subscribe((value) => {
-    //   this.updateFilteredPosts(value);
-    //   this.isFilterOn(value);
-    //   this.updateEvent.emit(this.filteredPosts);
-    //   this.filterService.emitFilterChangeEvent(this.filteredPosts)
-    // });
+    this.filterForm.valueChanges.subscribe((value) => {
+      this.updateFilteredPosts(value);
+      this.isFilterOn(value);
+      this.updateEvent.emit(this.filteredPosts);
+      this.filterService.emitFilterChangeEvent(this.filteredPosts)
+    });
 
   }
 
@@ -294,7 +294,6 @@ export class STFilterForm {
 
       this.filteredPosts.push(post)
     }
-    console.log("POSTS", this.filteredPosts)
 
     // Sort
 
@@ -412,12 +411,6 @@ export class STFilterForm {
     this.cd.detectChanges();
   }
 
-  // returnInputKeyboard = returnInputKeyboard
-  returnInputKeyboard(e: any, input: HTMLInputElement){
-    e.preventDefault()
-    if(e.keyCode == 13){
-      input.blur()
-    }
-  } 
+  returnInputKeyboard = returnInputKeyboard
 }
 
