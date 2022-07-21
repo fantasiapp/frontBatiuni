@@ -150,7 +150,6 @@ export class DataState {
     if(this.isFirstTime && this.connectionStatusService.isOnline){
       let localGetGeneralData: string | null = this.localService.getData("getGeneralData")
       if (localGetGeneralData){
-          console.log('getGeneralData local', localGetGeneralData);
           const operations = this.reader.readStaticData(JSON.parse(localGetGeneralData));
           ctx.setState(compose(...operations));
           return
