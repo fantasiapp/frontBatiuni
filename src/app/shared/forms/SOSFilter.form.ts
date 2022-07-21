@@ -51,8 +51,8 @@ import "hammerjs"
         class="flex row space-between sticky-footer full-width submit-container background-white"
         style="z-index: 2;">
         <div class="action-button-filter flex row space space-between full-width">
-          <button class="button passive" (click)="onResetFilter()">Réinitialiser</button>
-          <button class="button active" (click)="onCloseFilter()">Valider</button>
+          <div class="button passive" (click)="onResetFilter()">Réinitialiser</div>
+          <div class="button active" (click)="onCloseFilter()">Valider</div>
         </div>
       </footer>
     </div>

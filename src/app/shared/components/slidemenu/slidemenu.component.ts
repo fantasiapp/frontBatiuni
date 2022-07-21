@@ -54,6 +54,7 @@ export class UISlideMenuComponent extends UIOpenMenu {
   }
 
   set open(value: boolean) {
+    
     if ( this.initialized ) {
       if ( value )
         this.info.alignWith('header');
