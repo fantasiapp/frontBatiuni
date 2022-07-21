@@ -124,7 +124,7 @@ export type ApplyForm = {
       </div>
 
       <rating
-        [view]="'ST'"
+        [view]="view == 'ST' ? 'PME' : isSuiviPME ? 'ST' : 'PME' "
         [profile]="isSuiviPME ? profileST! : { company: company!, user: user }"
         [(open)]="openRatings"
         [ngClass]="{ open: openRatings }"
