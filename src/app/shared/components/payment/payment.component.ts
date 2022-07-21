@@ -125,11 +125,6 @@ export class Payment {
       console.log("before element")
       this.elements = this.stripe.elements({ appearance, clientSecret });
       console.log("after element")
-      //get redirect URL
-      const urlTree = this.router.createUrlTree(['home']);
-      const path = this.location.prepareExternalUrl(urlTree.toString());
-      let returnUrl = window.location.origin + path;
-      console.log("return url", returnUrl)
 
       const paymentElement = this.elements.create("payment");
       paymentElement.mount("#payment-element");
@@ -146,12 +141,11 @@ export class Payment {
     const urlTree = this.router.createUrlTree(['home']);
     const path = this.location.prepareExternalUrl(urlTree.toString());
     let returnUrl = window.location.origin + path;
-    console.log("return url", returnUrl)
 
     const { error } = await this.stripe.confirmPayment({
       elements: this.elements,
       confirmParams: {
-        return_url: returnUrl,
+        return_url: window.location.origin + "/payment-status",
         receipt_email: user.email,
       }
     })

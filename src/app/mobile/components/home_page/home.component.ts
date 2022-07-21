@@ -222,7 +222,6 @@ export class HomeComponent extends Destroy$ {
         .subscribe(([profile, posts]) => {
           const mapping = splitByOutput(posts, (post) => {
             //0 -> userOnlinePosts | 1 -> userDrafts
-            console.log("lateInit", post)
             if (profile.company.posts.includes(post.id))
               return post.draft
                 ? this.symbols.userDraft

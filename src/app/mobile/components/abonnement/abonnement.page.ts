@@ -111,8 +111,9 @@ export class AbonnementPage {
             "product": product,
         })
         let prices: SubscriptionPrice[];
+        console.log("request", req)
         req.subscribe((response: any) => {
-            console.log("fetchPrices", response)
+            console.log("fetchPrices", JSON.stringify(response))
             prices = response["prices"]["data"].map((price: any) => {
                 return {
                     "id": price["id"],
