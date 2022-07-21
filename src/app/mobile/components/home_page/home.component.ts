@@ -978,4 +978,13 @@ export class HomeComponent extends Destroy$ {
     })
     this.cd.markForCheck();
   }    
+
+  get notificationsUnseenMissions(){
+    console.log("yo les notif là", this.notifService.getNotificationUnseenMission())
+    return this.notifService.getNotificationUnseenMission()
+  }
+
+  get CandidateUnseen(){
+    return this.notifService.getCandidateUnseen(this.userOnlinePosts)
+  }
 }

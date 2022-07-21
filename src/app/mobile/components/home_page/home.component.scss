@@ -135,3 +135,12 @@ header > div > img ~ span::after {
   top: -1rem;
   
 }
+
+.notificationMission {
+  @extend %has-notifications;
+
+  &::after {
+    left: -20px;
+    top: -20px
+  }
+}
