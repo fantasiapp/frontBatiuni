@@ -189,6 +189,7 @@ import { take } from "rxjs/operators";
                   [validateButton]='false'
                   [options]="allJobs"
                   [value]="selectedJobsForChecklist"
+                  (valueChange)="updateSelectedJobs($event)"
                   #jobOptions
                 ></options>
                 <div class="form-input center-text">
@@ -881,4 +882,14 @@ export class ModifyProfileForm {
   addingField: boolean = false;
 
   returnInputKeyboard = returnInputKeyboard
+
+  updateSelectedJobs(event: any){
+    this.selectedJobs = event.map((e: any) => {
+      return ({
+        id: e.id,
+      name: e.name,
+      fileName: ''
+    } as Label)
+    })
+  }
 }
