@@ -130,13 +130,7 @@
         <img (click)="slideOnlinePostClose()" src="assets/arrowlblack.svg" />
         <h1 class="grow center-text">Annonce en ligne</h1>
         <div>
-          <!-- <img
-            *ngIf="view == 'PME'"
-            (click)="postMenu.swipeup = true"
-            src="assets/Option.svg"
-          /> -->
-          <span *ngIf="view == 'PME'" (click)="postMenu.swipeup = true">Options</span> 
-          <!-- A mettre en forme -->
+          <button *ngIf="view == 'PME'" (click)="postMenu.swipeup = true" class="optionButton">Options</button> 
           <span
             *ngIf="currentCandidates && view == 'PME'"
             [attr.data-notification-number]="currentCandidates"
@@ -190,15 +184,12 @@
     <!-- Component Mission -->
     <slidemenu [(open)]="missionMenu.open" [header]="false" (openChange)="updatePage()" #slideMission>
       <header
-        class="clear-margin full-width sticky-header flex center-cross annonce"
+        class="clear-margin full-width sticky-header flex center-cross annonce header-border"
         customHeader
       >
         <img (click)="slideMissionClose()" src="assets/arrowlblack.svg" />
         <h1 class="grow center-text">Annonce validée</h1>
-        <img
-          (click)="swipeupMenu(); view == 'PME' && suiviChantier.submitAdFormDate(true)"
-          [src]="view == 'PME' ? 'assets/Option.svg' : 'assets/phone.png'"
-        />
+        <button (click)="swipeupMenu(); view == 'PME' && suiviChantier.submitAdFormDate(true)"  class="optionButton">Options</button> 
       </header>
 
       <suivi-chantier

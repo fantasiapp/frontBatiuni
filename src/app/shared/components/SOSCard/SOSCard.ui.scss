@@ -11,7 +11,7 @@
   padding: $sos-card-padding;
   border-radius: 12px;
 
-  box-shadow: 0 5px 3px 0 rgba(149, 157, 165, 0.2);
+  filter: drop-shadow(0 0 0.3rem #00000029);
   @include desktop-only {
     border-left-width: 12px;
   }

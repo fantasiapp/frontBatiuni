@@ -80,6 +80,17 @@ header > div > img ~ span::after {
   z-index: 100;
 }
 
+.optionButton {
+  background-color: #FFFFFF;
+  color: #000000;
+  font-size: 15px;
+  height: 2.3rem;
+  width: 6rem;
+  border-radius: 1.15rem;
+  filter: drop-shadow(0 0 0.2rem #00000029);
+  box-shadow: 0 3px 6px 0 #00000029;
+}
+
 .custom-loading-spinner {
   cursor: progress;
   position: absolute;

@@ -5,7 +5,7 @@ import { Observable } from "rxjs";
 import { environment } from "src/environments/environment";
 import { AuthState } from 'src/models/auth/auth.state';
 
-type API = 'api-token-auth' | 'initialize' | 'register' | 'data' | 'payment';
+type API = 'api-token-auth' | 'initialize' | 'register' | 'data' | 'payment' | 'subscription';
 
 @Injectable()
 export class HttpService implements HttpInterceptor {

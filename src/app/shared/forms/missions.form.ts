@@ -97,10 +97,14 @@ import { returnInputKeyboard } from '../common/classes'
         </div>
       </div>
 
+      <footer
+        class="flex row space-between sticky-footer full-width submit-container"
+        style="background-color: white;">
         <div class="action-button-filter flex row space space-between full-width">
-          <button class="button passive" (click)="onResetFilter()">Reinitialiser</button>
+          <button class="button passive" (click)="onResetFilter()">Réinitialiser</button>
           <button class="button active" (click)="onCloseFilter()">Valider</button>
         </div>
+        </footer>
     </form>
   `,
   styles: [
@@ -109,6 +113,7 @@ import { returnInputKeyboard } from '../common/classes'
         display: block;
         width: 100%;
         height: 100%;
+        padding-bottom: 3rem;
       }
 
       switch::ng-deep .slider {

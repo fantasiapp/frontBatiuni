@@ -36,6 +36,7 @@ export class AskRecommandationComponent extends Destroy$ {
   disabled:boolean = true
   disableBoutton = false;
   token:string = ''
+  view = this.store.selectSnapshot(DataState.view);
 
   askRecommandation () {
     if (this.emailForm.valid) {

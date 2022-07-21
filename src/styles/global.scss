@@ -76,6 +76,29 @@ header {
     position: absolute;
   }
 }
+        
+.header-border {
+  border-bottom: 1px solid hsl(0deg 0% 81%);
+  box-shadow: 0px 0px 2px 0px hsl(0deg 0% 81%);
+
+  > img {
+    margin-left: -1rem;
+  }
+
+  > h1 {
+    text-align: start;
+    margin-left: 2rem;
+  }
+
+  > button.option {
+    background-color: white;
+    padding: 0 1.25rem;
+    height: 2rem;
+    font-weight: 400;
+    border-radius: 1rem;
+    box-shadow: 0 3px 6px 0 #00000029;
+  }
+}
 
 .page-content {
   @extend %overflow-y;
@@ -110,6 +133,10 @@ body {
   @include desktop-only { overflow: hidden; }
 }
 
+.pointer-none {
+  pointer-events: none;
+}
+
 button {
   font-size: inherit;
   display: inline-block;
@@ -141,6 +168,11 @@ button {
       &:disabled { background-color: white !important; color: $light; border-color: $light; }
     }
 
+    &.disabled, &.disabled.active {
+      background-color: $light;
+      color: $bg-white;
+      pointer-events: none;
+    }
     &.active {
       // background: #134C6C;
       background: $primary;

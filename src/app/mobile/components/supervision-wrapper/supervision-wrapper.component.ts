@@ -159,18 +159,6 @@ export class SupervisionWrapperComponent extends Destroy$ {
     console.log('photo exist');
     console.log('supervision old ', this.supervisions);
     this.onSubmit(task,formGroup,formControlName,input, true,photo)
-    // let acceptedFormat = ["jpeg", "png", "jpg", "bmp"];
-    // if (acceptedFormat.includes(photo.format)) {
-    //   this.store.dispatch(new UploadImageSupervision(photo, this.currentSupervisionId)).pipe(take(1)).subscribe(() => {
-    //     // let supervisions = this.store.selectSnapshot(DataQueries.getMany('Supervision', this.mission!.supervisions))
-    //     // this.updatePageOnlyDate();
-    //     this.swipeMenuImage = false;
-    //   });
-    // } else {
-    //   // this.updatePageOnlyDate();
-    //   this.swipeMenuImage = false;
-    //   this.info.show("error", "Format d'image non supporté", 3000);
-    // }
   }
 
   autosize(input: HTMLTextAreaElement){

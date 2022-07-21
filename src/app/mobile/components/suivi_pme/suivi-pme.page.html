@@ -2,9 +2,12 @@
   <annonce-resume [collapsed]="true" [application]="false" [post]="mission" [isSuiviPME]="view == 'PME'"></annonce-resume>
   <!-- CONTRAT DOCUSIGN URL -->
   <div *ngIf="isNotSigned" class="contrat">
-    <h3>
-      Le contrats
-    </h3>
+    <div class="flex center-cross">
+      <h3>
+        Le contrat
+      </h3>
+      <img class="warningImg" [src]="'assets/warning.svg'"/>
+    </div>
     <div class="flex center-cross space-around" (click)=" isNotSignedByUser ? verifyKbis() : signContract()">
       <file-svg name="Contrat" color="red"></file-svg>
       <h4 *ngIf="isNotSignedByUser" class="contrat-title font-Poppins">
