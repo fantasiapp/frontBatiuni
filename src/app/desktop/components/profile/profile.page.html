@@ -26,7 +26,7 @@
 
       <ng-container [ngSwitch]="activeView">
         <ng-container *ngSwitchCase="0">
-          <extended-profile [profile]="profile"></extended-profile>
+          <extended-profile [profile]="profile"  [hideExactAdress]="false"></extended-profile>
         </ng-container>
         <ng-container *ngSwitchCase="1">
           <profile-resume class="flex row center-cross space-around" 

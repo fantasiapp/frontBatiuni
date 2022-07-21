@@ -294,7 +294,6 @@ export class STFilterForm {
 
       this.filteredPosts.push(post)
     }
-    console.log("POSTS", this.filteredPosts)
 
     // Sort
 
