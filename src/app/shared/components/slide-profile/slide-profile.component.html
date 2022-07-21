@@ -2,11 +2,11 @@
     <header class="clear-margin full-width sticky-header flex center-cross white-header" header>
         <img src="assets/arrowlblack.svg" (click)="close()">
         <h1 class="grow center-text">
-          Les notes
+          Profil
         </h1>
     </header>
 
-    <extended-profile class="" [profile]="profile" [showContact]="true" [showSwitch]="false" [showView]="isSuiviPME ? 'ST' : 'PME'" content>
+    <extended-profile class="" [profile]="profile" [showContact]="true" [showSwitch]="false" [showView]="isSuiviPME ? 'ST' : 'PME'" [hideExactAdress]="false" content>
     </extended-profile>
 </slidemenu>
 
