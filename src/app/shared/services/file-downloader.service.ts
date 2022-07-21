@@ -35,6 +35,9 @@ export class FileDownloader {
     let blob
     if(Array.isArray(file.content)){
       blob = file.content.map((content: string) => {
+
+        // je sais pas pourquoi je fais cette ligne mais elle marche, le FileReader met un ',' au debut des .jpg qui fait planter
+        if(type == 'image/jpg' && content.charAt(0) == ',') content = content.slice(1)
         return b64toBlob(Array.isArray(content) ? content[0] : content, blobType)
       })
     } else {
