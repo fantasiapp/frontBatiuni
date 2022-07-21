@@ -9,7 +9,7 @@ import {
 } from "@angular/core";
 import { SafeResourceUrl } from "@angular/platform-browser";
 import { Select, Store } from "@ngxs/store";
-import { Observable, Subject } from "rxjs";
+import { Observable, Subject, Subscription } from "rxjs";
 import { take } from "rxjs/operators";
 import {
   Post,
@@ -50,6 +50,8 @@ export class OfferComponent {
   user$!: Observable<User>;
   favoritePost: boolean = false;
 
+  subscriber: Subscription | null = null
+  hasSubscribed: boolean = false
 
   @Input()
   showCandidate: boolean = false;
@@ -151,10 +153,15 @@ export class OfferComponent {
   }
 
   ngOnInit() {
-    this.notifService.getNotifChangeEmitter().subscribe(() => {
-      this.notificationsMissionUnseen = this.notifService.getNotificationUnseenMission(this._post!.id)
-      this.cd.markForCheck()
-    })
+    if(!this.hasSubscribed){  
+      this.subscriber = this.notifService.getNotifChangeEmitter().subscribe(() => {
+        console.log("subscribe notif")
+        this.notificationsMissionUnseen = this.notifService.getNotificationUnseenMission(this._post!.id)
+        this.cd.markForCheck()
+      })
+      this.hasSubscribed = true
+    }
+    console.log("juste après notif")
     this.notificationsMissionUnseen = this.notifService.getNotificationUnseenMission(this._post!.id)
     if (!this.src) {
       if (SingleCache.checkValueInCache("companyImage" + this.company!.id.toString())) {
@@ -202,4 +209,8 @@ export class OfferComponent {
     }
   }
 
+  ngOnDestroy(){
+    console.log("je me détruis")
+    this.subscriber?.unsubscribe()
+  }
 }

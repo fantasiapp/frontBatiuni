@@ -57,6 +57,9 @@ export class ExtendedProfileComponent extends Destroy$ {
   profile$!: number | Profile | Observable<Profile>;
 
   @Input()
+  hideExactAdress: boolean = false;
+
+  @Input()
   showContact: boolean = false;
 
   @Input()
@@ -130,6 +133,14 @@ export class ExtendedProfileComponent extends Destroy$ {
   //easier than requestFile, we can have direct access
   openFile(file: File) {
     this.popup.openFile(file);
+  }
+
+  hideAdress(adress?: string) {
+    if (adress && this.hideExactAdress) {
+      return adress!.replace(/\d+/, "").trim();
+    } else {
+      return adress;
+    }
   }
 
   @Output()

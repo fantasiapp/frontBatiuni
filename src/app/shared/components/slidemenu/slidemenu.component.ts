@@ -54,11 +54,16 @@ export class UISlideMenuComponent extends UIOpenMenu {
   }
 
   set open(value: boolean) {
+
     if ( this.initialized ) {
-      if ( value )
+      if ( value ) {
+        this.info.enableBothOverlay(false)
         this.info.alignWith('header');
-      else
+      }
+      else {
+        this.info.enableBothOverlay(null)
         this.info.alignWith('last');
+      }
     }
     
     super.open = value;    

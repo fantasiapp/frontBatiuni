@@ -215,12 +215,12 @@ export class STFilterForm {
 
   ngOnInit() {
 
-    // this.filterForm.valueChanges.subscribe((value) => {
-    //   this.updateFilteredPosts(value);
-    //   this.isFilterOn(value);
-    //   this.updateEvent.emit(this.filteredPosts);
-    //   this.filterService.emitFilterChangeEvent(this.filteredPosts)
-    // });
+    this.filterForm.valueChanges.subscribe((value) => {
+      this.updateFilteredPosts(value);
+      this.isFilterOn(value);
+      this.updateEvent.emit(this.filteredPosts);
+      this.filterService.emitFilterChangeEvent(this.filteredPosts)
+    });
 
   }
 
