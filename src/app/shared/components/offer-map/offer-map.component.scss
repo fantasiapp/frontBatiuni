@@ -5,7 +5,7 @@
 :host {
   display: flex;
   touch-action: unset !important;
-  -webkit-user-drag: unset !important
+  -webkit-user-drag: unset !important;
 }
 
 .entreprise, .metier {
@@ -43,7 +43,6 @@
   width: 100%;
   box-shadow: 10px 24px 54px #00000024; // x y spread outline color
   // overflow: hidden;
-  // position: relative;
 }
 
 .boosted {

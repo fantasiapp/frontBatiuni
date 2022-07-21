@@ -225,14 +225,12 @@ export class STFilterForm {
   }
 
   updateFilteredPosts(filter: any) {
-    console.log("ALL POSTS", this.posts)
     this.filteredPosts = [];
     const user = this.store.selectSnapshot(DataQueries.currentUser);
     const now = new Date().toISOString().slice(0, 10);
     this.posts = this.posts.filter((post) => post.dueDate > now)
     const profile = this.store.selectSnapshot(DataQueries.currentProfile);
     this.posts = this.posts.filter(post => post.company != profile.company.id)
-    console.log("ALL POSTS NOW", this.posts)
 
     // Filter
     for (let post of this.posts) {
