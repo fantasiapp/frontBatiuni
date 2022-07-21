@@ -3,7 +3,7 @@ import { AbstractControl, FormControl, FormGroup, Validators } from "@angular/fo
 import { Store } from "@ngxs/store";
 import { take } from "rxjs/operators";
 import { AskRecommandation } from "src/models/new/user/user.actions";
-import { Destroy$, returnInputKeyboard } from "src/app/shared/common/classes";
+import { Destroy$, onClickInputScroll, returnInputKeyboard } from "src/app/shared/common/classes";
 import { Email } from "src/validators/persist";
 import { DataQueries, DataState } from "src/models/new/data.state";
 import { email } from 'src/validators/regex';
@@ -52,4 +52,5 @@ export class AskRecommandationComponent extends Destroy$ {
   }
   
   returnInputKeyboard = returnInputKeyboard
+  onClickInputScroll = onClickInputScroll  
 }
