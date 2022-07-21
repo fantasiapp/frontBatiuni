@@ -31,7 +31,7 @@ import { SlidesDirective } from "../directives/slides.directive";
 import { Email } from "src/validators/persist";
 import { merge, Subject } from "rxjs";
 import { UISuggestionBox } from "../components/suggestionbox/suggestionbox.component";
-import { Destroy$ } from "../common/classes";
+import { Destroy$, returnInputKeyboard } from "../common/classes";
 import { SnapshotAll } from "src/models/new/data.state";
 import { Establishement, Job, Role } from "src/models/new/data.interfaces";
 import { GetCompanies } from "src/models/new/search/search.actions";
@@ -182,6 +182,9 @@ import { InfoService } from "../components/info/info.component";
             type="text"
             class="form-element"
             formControlName="proposer"
+            (click)="onClickInputScroll(inputParrain)"
+            (keyup)="returnInputKeyboard($event, inputParrain)"
+            #inputParrain
           />
         </div>
 
@@ -474,4 +477,6 @@ export class RegisterForm extends Destroy$ {
     password?.setAttribute('type', type)
     togglePassword?.setAttribute('src', toggleClass)
   }
+
+  returnInputKeyboard = returnInputKeyboard
 }
