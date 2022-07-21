@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, Input } from "@angular/core";
+import { Component, ChangeDetectionStrategy, Input, ChangeDetectorRef } from "@angular/core";
 import { Router } from "@angular/router";
 import { StripeService } from "../../services/stripe";
 
@@ -9,10 +9,11 @@ import { StripeService } from "../../services/stripe";
   styleUrls: ['./paymentStatus.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class paymentStatus {
+export class PaymentStatus {
 
   stripe: any;
 
+  message: string = "";
   @Input()
   items = [{id: "booster"}]
 
@@ -27,33 +28,17 @@ export class paymentStatus {
   constructor(
     private router: Router,
     private stripeService: StripeService,
+    private cd: ChangeDetectorRef,
   ) {
     const navigation = this.router.getCurrentNavigation();
+    this.stripe = this.stripeService.stripe;
   }
 
   ngOnInit() {
     this.stripe.retrievePaymentIntent(this.clientSecret).then(({paymentIntent}: any) => {
       const message = document.querySelector('#message')!;
-
-      switch (paymentIntent.status) {
-        case 'succeeded':
-          message.textContent = 'Success! Payment received.';
-          break;
-
-        case 'processing':
-          message.textContent = "Payment processing. We'll update you when payment is received.";
-          break;
-
-        case 'requires_payment_method':
-          message.textContent = 'Payment failed. Please try another payment method.';
-          // Redirect your user back to your payment page to attempt collecting
-          // payment again
-          break;
-
-        default:
-          message.textContent = 'Something went wrong.';
-          break;
-      }
+      this.message = paymentIntent.status;
+      this.cd.markForCheck();
 
     })
   }

@@ -1,8 +1,16 @@
-<div class="menu cover-parent background-white flex column center space-children-margin center-text" >
-    <div id="message">
-    
+<ng-container [ngSwitch]="message">
+    <div class="menu cover-parent background-white flex column center space-children-margin center-text">
+        <div *ngSwitchCase="'succeeded'">
+            <img src="assets/valider.svg" class="validateImage">
+            <label>Success! Payment received.</label>
+            <div class="cloture" *ngIf="message">
+                <button class="button active" (click)="navigateHome()">
+                    Télécharger la facture
+                </button>
+                <button class="button passive" (click)="navigateHome()">
+                    Retour
+                </button>
+            </div>
+        </div>
     </div>
-    <button class="button passive" (click)="navigateHome()">
-        Retour
-    </button>
-</div>
+</ng-container>
