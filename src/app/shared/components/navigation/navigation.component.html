@@ -1,11 +1,13 @@
 <nav class="full-width  flex center-cross">
   <ul class="flex row center-cross grow">
-    <li *ngFor="let button of (menu | async); let index = index" [class.active]="index == (currentIndex | async)" (click)="changeRoute(index)" class="flex center">
-      <a class="flex center">
-        <img [src]="button.src" [alt]="button.name" [title]="button.name"/>
-        {{ mobileView ? '' : button.name }} 
-        <span *ngIf="notificationUnseen && index === 3" [attr.data-notification-number]="notificationUnseen" class="notification"></span>
-    </a>
-    </li>
+    <ng-container *ngIf="menu | async as menu">
+      <li *ngFor="let button of menu; let index = index" [class.active]="index == (currentIndex | async)" (click)="changeRoute(index)" class="flex center">
+        <a class="flex center">
+          <img [src]="button.src" [alt]="button.name" [title]="button.name"/>
+          {{ mobileView ? '' : button.name }} 
+          <span *ngIf="notificationUnseen && index === 3" [attr.data-notification-number]="notificationUnseen" class="notification"></span>
+      </a>
+      </li>
+    </ng-container>
   </ul>
 </nav> 
