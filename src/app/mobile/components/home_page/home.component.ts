@@ -200,7 +200,7 @@ export class HomeComponent extends Destroy$ {
       this.slideMissionClose()
       this.activeView = num
     })
-    this.profile$.pipe(takeUntil(this.destroy$)).subscribe((profile) => {
+    this.profile$.pipe(take(1)).subscribe((profile) => {
         this.info.enableBothOverlay(profile.company && profile.company.role == 3)
         this.info.alignWith('header_search')
       // }
@@ -222,7 +222,6 @@ export class HomeComponent extends Destroy$ {
         .subscribe(([profile, posts]) => {
           const mapping = splitByOutput(posts, (post) => {
             //0 -> userOnlinePosts | 1 -> userDrafts
-            console.log("lateInit", post)
             if (profile.company.posts.includes(post.id))
               return post.draft
                 ? this.symbols.userDraft
@@ -236,7 +235,6 @@ export class HomeComponent extends Destroy$ {
           this.allUserDrafts = mapping.get(this.symbols.userDraft) || [];
           this.allUserOnlinePosts = mapping.get(this.symbols.userOnlinePost) || [];
           this.allOnlinePosts = [...otherOnlinePost, ...this.userOnlinePosts];
-          console.log("allOnlinePosts", this.allOnlinePosts)
           this.allMissions = this.store.selectSnapshot(DataQueries.getMany("Mission", profile.company.missions));
           const now = (new Date).toISOString().slice(0, 10);
           this.allUserOnlinePosts = this.allUserOnlinePosts.filter((post) => post.dueDate > now)
@@ -317,7 +315,6 @@ export class HomeComponent extends Destroy$ {
       }
 
       for (let post of this.allUserDrafts) {
-        console.log(post, post.creationDate)
         let isDifferentDate = (filter.date && post.startDate < filter.date)
         let isDifferentManPower = (filter.manPower && post.manPower != (filter.manPower === "true"))
         let isNotIncludedJob = (filter.jobs && filter.jobs.length && filter.jobs.every((job: any) => {return job.id != post.job}))
@@ -332,9 +329,7 @@ export class HomeComponent extends Destroy$ {
   selectUserOnline(filter: any) {
     this.userOnlinePosts = [];
     const now = (new Date).toISOString().slice(0, 10);
-    console.log("selectUserOnline all", this.allUserOnlinePosts)
     this.allUserOnlinePosts = this.allUserOnlinePosts.filter((post) => post.dueDate > now)
-    console.log("selectUserOnline all dueDate", this.allUserOnlinePosts)
     this.allUserOnlinePosts.sort((post1, post2) => {
       let b1 = post1.boostTimestamp > this.time ? 1 : 0;
       let b2 = post2.boostTimestamp > this.time ? 1 : 0;

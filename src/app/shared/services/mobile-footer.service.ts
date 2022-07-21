@@ -22,7 +22,7 @@ export class Mobile {
         
         this.footerStateSubject.next(false);
       });
-      Keyboard.addListener("keyboardWillHide", () => {
+      Keyboard.addListener("keyboardDidHide", () => {
         this.footerStateSubject.next(true);
       });
     }
