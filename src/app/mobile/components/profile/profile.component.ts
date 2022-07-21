@@ -136,7 +136,10 @@ export class ProfileComponent extends Destroy$ {
 
     if ( !this.modifyPassword ) {
       this.fixScrollTop();
-      this.modifyForm?.reload();
+      this.modifyForm!.reload();
+      this.modifyForm!.slider.animate = false;
+      this.modifyForm!.slider.index = 0;
+      this.modifyForm!.slider.animate = true;
     }
   }
 
