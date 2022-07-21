@@ -11,10 +11,10 @@
       [callbackSearch]="view == 'PME' ? callbackSearch : callbackSearchST">
       <span tab_0>{{ view == "PME" ? "Brouillon" : "Vue liste" }}</span>
       <span tab_1>{{ view == "PME" ? "En ligne" : "Carte" }}
-        <span *ngIf="view == 'PME' && CandidateUnseen" [attr.data-notification-number]="CandidateUnseen" class="notification"></span>
+        <span *ngIf="view == 'PME' && CandidateUnseen" [attr.data-notification-number]="CandidateUnseen" class="notification notification-header"></span>
       </span>
       <span tab_2>Validées
-        <span *ngIf="view == 'PME' && notificationsUnseenMissions" [attr.data-notification-number]="notificationsUnseenMissions" class="notification"></span>
+        <span *ngIf="view == 'PME' && notificationsUnseenMissions" [attr.data-notification-number]="notificationsUnseenMissions" class="notification notification-header"></span>
       </span>
     </page-header>
     <div class="wrapper__searchbar__clickcatcher page-content-with-tabs" *ngIf="!showFooter"></div>

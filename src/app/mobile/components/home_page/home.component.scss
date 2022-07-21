@@ -23,7 +23,11 @@
 }
 
 .notification {
-  @extend %has-notifications
+  @extend %has-notifications;
+  &.notification-header {
+    width: unset;
+    height: unset;
+  }
 }
 .reponse {
   background-color: $bg-white !important;
