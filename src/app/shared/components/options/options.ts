@@ -123,7 +123,7 @@ export class OptionsModel extends UIDefaultAccessor<Option[]> {
   };
 
   dropdownIncludes(option:any, value:any){
-    return !!value.filter((v:any)=> v.id ==option.id).length
+    return !!value.filter((v:any)=> v.id == option.id).length
   }
 
   ngOnDestroy() {

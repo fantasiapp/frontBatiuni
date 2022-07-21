@@ -43,14 +43,15 @@ import { Mobile } from "../services/mobile-footer.service";
     <form class="full-width form-control section-host" [formGroup]="makeAdForm">
       <section class="form-section">
         <h2 class="form-section-title" #0>Besoins de l'entreprise *</h2>
+        <h4 class="champs">Champs obligatoire pour passer votre annonce en ligne *</h4>
 
         <div class="form-input">
-          <label>Métier</label>
+          <label>Métier *</label>
           <options type="radio" [options]="allJobs" formControlName="job"></options>
         </div>
 
         <div class="form-input">
-          <label>Type</label>
+          <label>Type *</label>
           <div class="flex row radio-container">
             <div class="radio-item">
               <radiobox
@@ -71,7 +72,7 @@ import { Mobile } from "../services/mobile-footer.service";
           </div>
         </div>
         <div class="form-input">
-          <label>Annonce valable jusqu'au :</label>
+          <label>Annonce valable jusqu'au : *</label>
           <input class="form-element" type="date" formControlName="dueDate" />
           <img src="assets/calendar.png" style='pointer-events: none'/>
         </div>
@@ -80,12 +81,12 @@ import { Mobile } from "../services/mobile-footer.service";
       <section class="form-section">
         <h2 class="form-section-title" #1>Infos chantiers *</h2>
         <div class="form-input">
-          <label>Adresse</label>
+          <label>Adresse *</label>
           <input type="text" class="form-element" formControlName="address" />
         </div>
 
         <div class="form-input">
-          <label>Description du chantier</label>
+          <label>Description du chantier *</label>
           <textarea
             class="form-element"
             id='descriptionChantier'
@@ -95,7 +96,7 @@ import { Mobile } from "../services/mobile-footer.service";
         </div>
 
         <div class="form-input">
-          <label>Effectif minimum du chantier</label>
+          <label>Effectif minimum du chantier *</label>
           <input
             min="0"
             class="form-element"
@@ -105,7 +106,7 @@ import { Mobile } from "../services/mobile-footer.service";
 
         <div class="form-input">
           <label class="position-relative"
-            >Détail de la prestation<img
+            >Détail de la prestation *<img
               class="position-absolute add-detail"
               src="assets/icons/add.svg"
               (click)="addDetail()"
@@ -134,7 +135,7 @@ import { Mobile } from "../services/mobile-footer.service";
         </div>
 
         <div class="form-input">
-          <label>Dates du chantier</label>
+          <label>Dates du chantier *</label>
           <div class="center-text">
             <switch
               (click)="eraseDateIfNecessary()"
@@ -153,7 +154,7 @@ import { Mobile } from "../services/mobile-footer.service";
         </div>
 
         <div class="form-input">
-          <label>Horaires du chantier</label>
+          <label>Horaires du chantier *</label>
           <div class="flex row space-between">
             <span class="flex row">
               De:
@@ -177,7 +178,7 @@ import { Mobile } from "../services/mobile-footer.service";
       <section class="form-section">
         <h2 class="form-section-title" #2>Rémunération pour la mission *</h2>
         <div class="form-input">
-          <label>Montant</label>
+          <label>Montant *</label>
           <div class="flex row remuneration">
             <input
               type='number'
@@ -294,6 +295,11 @@ import { Mobile } from "../services/mobile-footer.service";
     input{
       /* margin-top: 20px; */
     }
+
+    .champs {
+        font-size: small;
+        color: #A2A2A2;
+      }
 
     switch{
       margin-top: 20px;
