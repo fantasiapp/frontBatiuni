@@ -134,12 +134,13 @@
         <img (click)="slideOnlinePostClose()" src="assets/arrowlblack.svg" />
         <h1 class="grow center-text">Annonce en ligne</h1>
         <div>
-          <button *ngIf="view == 'PME'" (click)="postMenu.swipeup = true" class="optionButton">Options</button> 
-          <span
-            *ngIf="currentCandidates && view == 'PME'"
-            [attr.data-notification-number]="currentCandidates"
-            class="notification"
-          ></span>
+          <button *ngIf="view == 'PME'" (click)="postMenu.swipeup = true" class="optionButton">Options
+            <span
+              *ngIf="currentCandidates && view == 'PME'"
+              [attr.data-notification-number]="currentCandidates"
+              class="notification notification-option"
+            ></span>
+          </button> 
         </div>
       </header>
 
