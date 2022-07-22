@@ -108,7 +108,6 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
       name: this.nature == 'labels' ? this.filename : "Veuillez télécharger un document",
       nature: this.nature,
     };
-    console.log('value', this.value);
   }
 
   private getBase64(files: FileList, index: number = 0) {
@@ -139,7 +138,7 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
       name = fullname.slice(0, lastDot),
       ext = fullname.slice(lastDot + 1);
 
-    if (this.value?.nature == "admin" || this.value?.nature.includes('Quali')) {
+    if ((this.value?.nature == "admin" || this.value?.nature.includes('Quali') )&& this.filename !== 'Kbis') {
       // this.popup.newFile(this.filename, this);
       this.info.show("error", "Veuillez ajouter une date pour le document "+ this.filename, 5000 )
     }
