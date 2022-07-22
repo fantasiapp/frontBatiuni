@@ -232,7 +232,6 @@ export class HomeComponent extends Destroy$ {
               ? this.symbols.discard
               : this.symbols.otherOnlinePost;
           });
-          console.error('CAACACACACACA');
           const otherOnlinePost = mapping.get(this.symbols.otherOnlinePost) || [];
           this.allUserDrafts = mapping.get(this.symbols.userDraft) || [];
           this.allUserOnlinePosts = mapping.get(this.symbols.userOnlinePost) || [];
