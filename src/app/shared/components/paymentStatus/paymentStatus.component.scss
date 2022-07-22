@@ -1,0 +1,29 @@
+@use 'src/styles/variables' as *;
+@use 'src/styles/mixins' as *;
+
+
+* {
+  display: block;
+  align-items: center; 
+  justify-content: center;
+  color: $dark;
+  font-family: "Poppins";
+  z-index: 200000;
+}
+
+
+.cloture {
+  display: flex;
+  flex-direction: column;
+  row-gap: $spacer-150;
+  width: 100%;
+}
+
+.validateImage{
+  padding-bottom: 5rem;
+  margin: auto;
+}
+
+button{
+    width: 100%;
+}

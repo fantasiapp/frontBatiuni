@@ -975,7 +975,7 @@ export class HomeComponent extends Destroy$ {
   }    
 
   get notificationsUnseenMissions(){
-    console.log("yo les notif là", this.notifService.getNotificationUnseenMission())
+    console.log("Home notif")
     return this.notifService.getNotificationUnseenMission()
   }
 
