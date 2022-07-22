@@ -20,8 +20,13 @@ export class AskRecommandationComponent extends Destroy$ {
   emailForm = new FormGroup({email: new FormControl('', [Validators.required, Email(), 
   (() => {
     return (control: AbstractControl) => {
-      control.value == this.profileEmail ? this.disableBoutton = true : this.disableBoutton = false
-      return control.value == this.profileEmail ? {SELF_RECOMMANDATION: ['profile-email']} : null    
+      if (typeof control.value == 'string' && this.profileEmail){
+        control.value.toLowerCase() == this.profileEmail.toLowerCase() ? this.disableBoutton = true : this.disableBoutton = false
+        return control.value.toLowerCase() == this.profileEmail.toLowerCase() ? {SELF_RECOMMANDATION: ['profile-email']} : null
+      }
+      else{
+        return null
+      }
     }
   })()
   ])}, {})
