@@ -57,7 +57,7 @@ export class SuiviComments {
     const timestampMoment = moment(this.supervision.timestamp * 1000)
     this.timestamp.date = timestampMoment.format('DD/MM/YYYY')
     this.timestamp.hour = timestampMoment.format('HH:mm')
-    
+    moment.locale('en')
   }
 
   images: SafeResourceUrl[] = [];
