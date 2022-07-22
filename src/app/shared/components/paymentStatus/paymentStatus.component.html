@@ -12,5 +12,14 @@
                 </button>
             </div>
         </div>
+        <div *ngSwitchCase="'requires_payment_method'">
+            <img src="assets/warning.svg" class="validateImage">
+            <label>Payment failed.</label>
+            <div class="cloture" *ngIf="message">
+                <button class="button passive" (click)="navigateHome()">
+                    Retour
+                </button>
+            </div>
+        </div>
     </div>
 </ng-container>
