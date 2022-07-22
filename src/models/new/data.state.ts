@@ -380,6 +380,11 @@ export class DataState {
         const assignedId = +Object.keys(response)[0],
         fields = ctx.getState()["fields"],
         contentIndex = fields["File"].indexOf("content");
+      
+        if(response.hasOwnProperty('Company')) {
+          ctx.setState(update('Company',response['Company']))
+          delete response['Company']
+        }
 
         upload.assignedId = assignedId;
         response[assignedId][contentIndex] = "";
