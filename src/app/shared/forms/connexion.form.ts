@@ -37,9 +37,11 @@ import { NotifService } from "../services/notif.service";
           <!-- <div *ngIf="loginForm.get('password')!.touched && loginForm.get('password')!.errors?.uppercase" class="error">Doit contenir au moins une lettre en majuscule</div> -->
           <!-- <div *ngIf="loginForm.get('password')!.touched && loginForm.get('password')!.errors?.lowercase" class="error">Doit contenir au moins une lettre en miniscule</div> -->
       </div>
-      <a class="external-links form-links block text-right" [routerLink]="['', 'mail']">
+      <div class="lost-password ">
+      <a class="external-links form-links block " [routerLink]="['', 'mail']">
         Mot de passe oublié !
       </a>
+      </div>
     </section>
     <div class="form-action" style="margin-top: auto; margin-bottom: unset">
       <div *ngIf="loginForm.errors?.server" class="server-error">
@@ -62,6 +64,15 @@ import { NotifService } from "../services/notif.service";
     form {
       height: fit-content;
       min-height: 100%;
+    }
+    .lost-password {
+      position: relative;
+      width: 100%;
+
+      a {
+        position: absolute;
+        right: 0;
+      }
     }
 
   `],

@@ -76,7 +76,6 @@ export class Notifications {
     let todayDate = new Date(Date.now());
     const todayConst: NotificationDisplay[] = this.notificationsDisplay.filter(
       (notif) => {
-        return moment(moment(todayDate).format("L")).isSame(moment(notif.date).format("L"))
       });
     this.today = todayConst.sort((not1:NotificationDisplay, not2:NotificationDisplay) => not1.date < not2.date ? 1 : -1)
     console.log("le today", this.today)
