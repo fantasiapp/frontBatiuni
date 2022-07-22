@@ -36,6 +36,8 @@ textarea{
 }
 
 .slideMenu__comment__wrapper {
+  position: relative;
+  z-index: 10;
   height: calc(100% - $supervision-input-height - env(safe-area-inset-bottom));
 
     overflow: scroll;
@@ -79,6 +81,7 @@ textarea{
   }
 
   .slideMenu__comment__input__wrapper{
+    z-index: 50;
     display: block;
     position: fixed;
     bottom: 0;
