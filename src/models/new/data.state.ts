@@ -160,15 +160,12 @@ export class DataState {
 
   @Action(GetUserData)
   getUserData(ctx: StateContext<DataModel>, action: GetUserData) {
-    console.log("les reco", this.store.selectSnapshot(DataQueries.getAll("Recommandation")))
     const req = this.http.get("data", { action: action.action });
-    console.log(this.store.selectSnapshot(DataQueries.getAll("Recommandation")))
     if (this.isFirstTime) {
     }
     if (this.flagUpdate){
       this.flagUpdate = false
       return req.pipe(tap((response: any) => {
-        console.log("getUserData response", response);
           this.getUserDataService.setNewResponse(response)
           if (this.isFirstTime) {
             this.booleanService.emitLoadingChangeEvent(true)

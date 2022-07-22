@@ -73,7 +73,6 @@ export class NotifService {
     else{
       notificationsMissionUnseen = this.notificationsMission.filter((notif) => !notif.hasBeenViewed && notif.missions) // !notif.hasBeenViewed && (à rajouter)
     }
-    console.log("la liste", notificationsMissionUnseen)
     return notificationsMissionUnseen.length
   }
 

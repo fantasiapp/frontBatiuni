@@ -155,13 +155,11 @@ export class OfferComponent {
   ngOnInit() {
     if(!this.hasSubscribed){  
       this.subscriber = this.notifService.getNotifChangeEmitter().subscribe(() => {
-        console.log("subscribe notif")
         this.notificationsMissionUnseen = this.notifService.getNotificationUnseenMission(this._post!.id)
         this.cd.markForCheck()
       })
       this.hasSubscribed = true
     }
-    console.log("juste après notif")
     this.notificationsMissionUnseen = this.notifService.getNotificationUnseenMission(this._post!.id)
     if (!this.src) {
       if (SingleCache.checkValueInCache("companyImage" + this.company!.id.toString())) {
@@ -210,7 +208,6 @@ export class OfferComponent {
   }
 
   ngOnDestroy(){
-    console.log("je me détruis")
     this.subscriber?.unsubscribe()
   }
 }
