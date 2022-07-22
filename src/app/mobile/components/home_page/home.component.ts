@@ -12,7 +12,7 @@ import {
   HostBinding,
 } from "@angular/core";
 import { Select, Store } from "@ngxs/store";
-import { combineLatest, Observable, Subject, throwError } from "rxjs";
+import { combineLatest, Observable, Subject, Subscription, throwError } from "rxjs";
 import { catchError, take, takeUntil } from "rxjs/operators";
 import { Destroy$ } from "src/app/shared/common/classes";
 import {
@@ -153,6 +153,7 @@ export class HomeComponent extends Destroy$ {
   draftMenu = new PostMenu();
   postMenu = new PostMenu();
   missionMenu = new PostMenu<Mission>();
+  lateInitSubscriber: Subscription | null = null
 
   searchBarEmpty: boolean = true;
 
@@ -216,8 +217,8 @@ export class HomeComponent extends Destroy$ {
 
   async lateInit() {
     this.activeViewService.setActiveView(0)
-    if (!this.isLoading && this.isStillOnPage) {
-      combineLatest([this.profile$, this.store.select(DataQueries.getAll('Post'))])
+    if (!this.isLoading && this.isStillOnPage && !this.lateInitSubscriber) {
+      this.lateInitSubscriber = combineLatest([this.profile$, this.store.select(DataQueries.getAll('Post'))])
         .pipe(takeUntil(this.destroy$))
         .subscribe(([profile, posts]) => {
           const mapping = splitByOutput(posts, (post) => {
@@ -231,6 +232,7 @@ export class HomeComponent extends Destroy$ {
               ? this.symbols.discard
               : this.symbols.otherOnlinePost;
           });
+          console.error('CAACACACACACA');
           const otherOnlinePost = mapping.get(this.symbols.otherOnlinePost) || [];
           this.allUserDrafts = mapping.get(this.symbols.userDraft) || [];
           this.allUserOnlinePosts = mapping.get(this.symbols.userOnlinePost) || [];
@@ -263,6 +265,8 @@ export class HomeComponent extends Destroy$ {
     this.isStillOnPage = false
     this.info.alignWith("last");
     this.getUserDataService.emitDataChangeEvent();
+    this.lateInitSubscriber?.unsubscribe()
+    this.lateInitSubscriber = null
     super.ngOnDestroy();
   }
 
