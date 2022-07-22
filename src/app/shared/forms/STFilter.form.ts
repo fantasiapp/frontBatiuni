@@ -261,9 +261,7 @@ export class STFilterForm {
       }
 
       //Employees
-      const jobsForCompany = this.store.selectSnapshot(DataQueries.getMany('JobForCompany', company.jobs));
-      let count = jobsForCompany.reduce((acc, {number}) => acc + number, 0);
-      let isNotInRangeEmployees = filter.employees[0] >= count || (filter.employees[1] != 100 && filter.employees[1] <= count);
+      let isNotInRangeEmployees = filter.employees[0] >= company.size || (filter.employees[1] != 100 && filter.employees[1] <= company.size);
 
 
       //Favorite

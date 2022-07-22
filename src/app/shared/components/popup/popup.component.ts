@@ -344,6 +344,7 @@ export class PopupService {
   }
 
   openFile(file: BasicFile | File, canOpenPDF: boolean = true) {
+    console.log('Oopen File', file, canOpenPDF);
     if (!file.content) {
       let name: string = "File" + (file as File).id!.toString()
       if (SingleCache.checkValueInCache(name)) {
@@ -358,7 +359,9 @@ export class PopupService {
         })}
       return;
     }
+    console.log('context pre');
     let context = this.downloader.createFileContext(file);
+    console.log('context', context);
     this.popups$.next({
       type: "component",
       component: FileViewer,
