@@ -75,13 +75,12 @@ export class Notifications {
   updateToday() {
     let todayDate = new Date(Date.now());
     const todayConst: NotificationDisplay[] = this.notificationsDisplay.filter(
-      (notif) =>
-        moment(moment(todayDate).format("L")).isSame(
-          moment(notif.date).format("L")
-        )
-
-    );
+      (notif) => {
+        moment(moment(todayDate).format("L")).isSame(moment(notif.date).format("L"))
+        console.log(moment(moment(todayDate).format("L")), "et", moment(notif.date).format("L"))
+      });
     this.today = todayConst.sort((not1:NotificationDisplay, not2:NotificationDisplay) => not1.date < not2.date ? 1 : -1)
+    console.log("le today", this.today)
 
   }
 
@@ -90,12 +89,13 @@ export class Notifications {
   updateMonth() {
     let monthDate = new Date(Date.now());
     const monthConst: NotificationDisplay[] = this.notificationsDisplay.filter(
-      (notif) =>
-        moment(moment(monthDate).format("L")).isAfter(
-          moment(notif.date).format("L")
-        )
-    );
+      (notif) => {
+        console.log(moment(moment(monthDate).format("L")), "et", moment(notif.date).format("L"))
+        console.log("donc le résultat", moment(moment(monthDate).format("L")).isAfter(moment(notif.date).format("L")))
+        return moment(moment(monthDate).format("L")).isAfter(moment(notif.date).format("L"))
+      });
     this.month = monthConst.sort((not1:NotificationDisplay, not2:NotificationDisplay) => not1.date < not2.date ? 1 : -1)
+    console.log("le month", this.month)
   }
 
   get timerToday(): any[] {
@@ -133,6 +133,7 @@ export class Notifications {
       this.month = []
       this.notifService.checkNotif()
       this.notifications = this.notifService.notifications
+      console.log("les notifs", this.notifications)
       this.lateInit()
     })
     this.lateInit()
