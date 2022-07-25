@@ -79,5 +79,13 @@ export class LocalService {
       }
     }
   }
+
+  public getLastEmail(){
+    return localStorage.getItem('lastEmail')
+  }
+
+  public setLastEmail(lastEmail: string){
+    localStorage.setItem('lastEmail', lastEmail)
+  }
 }
 
