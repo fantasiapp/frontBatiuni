@@ -1380,11 +1380,7 @@ export class DataQueries {
     );
   }
 
-  static contentOf<K extends DataTypes, V extends DataTypes>(
-    parent: K,
-    parentId: number,
-    child: V
-  ) {
+  static contentOf<K extends DataTypes, V extends DataTypes>(parent: K, parentId: number, child: V) {
     return createSelector(
       [
         DataState.fields,
