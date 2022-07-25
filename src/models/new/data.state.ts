@@ -147,14 +147,11 @@ export class DataState {
   //------------------------------------------------------------------------
   @Action(GetGeneralData)
   getGeneralData(ctx: StateContext<DataModel>) {
-    console.log("les données", this.isFirstTime, this.connectionStatusService)
     if(this.connectionStatusService.isOnline){
       let localGetGeneralData: string | null = this.localService.getData("getGeneralData")
-      console.log("mais attendez là le local il est là nan ?", localGetGeneralData)
       if (localGetGeneralData){
           const operations = this.reader.readStaticData(JSON.parse(localGetGeneralData));
           ctx.setState(compose(...operations));
-          console.log("les labels pour voir", this.store.selectSnapshot(DataQueries.getAll('Label')))
           return
       }
       else{
