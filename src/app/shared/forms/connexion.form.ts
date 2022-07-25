@@ -38,7 +38,7 @@ import { NotifService } from "../services/notif.service";
           <!-- <div *ngIf="loginForm.get('password')!.touched && loginForm.get('password')!.errors?.lowercase" class="error">Doit contenir au moins une lettre en miniscule</div> -->
       </div>
       <div class="lost-password ">
-      <a class="external-links form-links block " [routerLink]="['', 'mail']">
+      <a class="external-links form-links block " [routerLink]="['', 'mail']" style="margin-top: 4rem;">
         Mot de passe oublié !
       </a>
       </div>
