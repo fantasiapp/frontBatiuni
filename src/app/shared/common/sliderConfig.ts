@@ -4,8 +4,43 @@ import { footerTranslate } from "src/animations/footer.animation";
 export const DistanceSliderConfig: Options = {
     floor: 0,
     ceil: 2000,
-    step: 10,
     showSelectionBar: true,
+
+    // Hard coded for now
+    customPositionToValue(position: number): number {
+
+      let subdivisionPosition = Math.ceil(position*4);
+      
+      if (subdivisionPosition == 1) {
+        return 10*position/0.25
+      }
+      
+      if (subdivisionPosition == 2){
+        let m = 90/0.25
+        let p = 100 - m * 0.5
+        return m*position + p
+      }
+      
+      let m = 1900/0.5
+      let p = 2000 - m
+      return Math.round((m*position + p)/10)*10
+    },
+
+    customValueToPosition(value: number): number {
+      if (value <= 10) {
+        return 0.25 * value / 10;
+      }
+      if (value <= 100) {
+        let m = 0.25/90
+        let p = 0.5 - m * 100
+        return m * value + p;
+      }
+
+      let m = 0.5/1900
+      let p = 1 - m*2000
+      return m * value + p;
+    },
+    
     translate(value: number): string {
       return value + ' KM';
     }
