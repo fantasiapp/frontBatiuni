@@ -228,7 +228,7 @@ export class DataState {
   @Action(Logout)
   logout(ctx: StateContext<DataModel>) {
     console.log("logout")
-    this.flagUpdate = true
+    this.flagUpdate = true 
     this.isFirstTime = true
     this.booleanService.emitConnectedChangeEvent(false)
     this.booleanService.emitLoadingChangeEvent(false)

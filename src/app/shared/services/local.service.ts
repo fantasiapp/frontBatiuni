@@ -50,7 +50,10 @@ export class LocalService {
   }
 
   public clearData() {
+    let email = this.getLastEmail()
     localStorage.clear()
+    if(email)
+      this.setLastEmail(email)
   }
 
   public createKey(actionOrActions: any, name: string) {
@@ -77,7 +80,7 @@ export class LocalService {
           keepGoing = false
         }
       }
-    }
+    } 
   }
 
   public getLastEmail(){
