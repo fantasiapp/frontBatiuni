@@ -161,7 +161,7 @@ export class OptionsModel extends UIDefaultAccessor<Option[]> {
     setTimeout(() => {
       setTimeout(() => {
         input.scrollIntoView({behavior: 'smooth', block: 'start', inline: 'start'})
-      }, 500)
+      }, 600)
     }, 100)
   }
   returnInputKeyboard = returnInputKeyboard

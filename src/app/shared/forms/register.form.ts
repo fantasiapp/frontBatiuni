@@ -424,12 +424,12 @@ export class RegisterForm extends Destroy$ {
 
 
   onClickInputScroll(input: HTMLElement){
-    setTimeout(() => {
-      input.scrollIntoView({behavior: 'smooth', block: 'center', inline: 'nearest'})
+    // setTimeout(() => {
+      // input.scrollIntoView({behavior: 'smooth', block: 'center', inline: 'nearest'})
       setTimeout(() => {
         input.scrollIntoView({behavior: 'smooth', block: 'center', inline: 'nearest'})
-      }, 500)
-    }, 100)
+      }, 600)
+    // }, 100)
   }
 
   onNavigate(dx: number, done?: Function) {
