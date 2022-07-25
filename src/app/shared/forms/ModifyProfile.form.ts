@@ -619,7 +619,6 @@ export class ModifyProfileForm {
   }
 
   async ngOnInit() {
-    // console.log('alllabel', this.allLabels); 
     let permissions = await Camera.checkPermissions();
     if (permissions.camera != "granted" || permissions.photos != "granted"){
       try {
@@ -643,7 +642,6 @@ export class ModifyProfileForm {
     const { user, company } = this.profile as { user: User; company: Company };
     this.companyFiles = this.store.selectSnapshot(DataQueries.getMany("File", this.profile.company.files));
     this.companyLabels = this.store.selectSnapshot(DataQueries.getMany("LabelForCompany", this.profile.company.labels));
-    console.log('blah blah ', this.companyLabels)
     this.companyJobs = this.store.selectSnapshot(DataQueries.getMany("JobForCompany", this.profile.company.jobs));
 
     const jobMapping = new Map(),
@@ -670,11 +668,9 @@ export class ModifyProfileForm {
       this.allLabels.forEach((label) => {
         const used = this.companyLabels.find(
           (labelForCompany) => {
-            console.log("je find")
             return labelForCompany.label == label.id
           }
         );
-        console.log("est ce que used ?", used)
         if (used) {
           labelMapping.set(used.id, label);
           this.selectedLabels.push(label);
@@ -735,9 +731,7 @@ export class ModifyProfileForm {
     labelControl.clear();
 
     for (let labelForCompany of this.companyLabels) {
-      console.log('labelObject', labelForCompany, labelMapping);
       const labelObject = labelMapping.get(labelForCompany.id)!;
-      console.log('labelObject', labelObject);
       labelControl.push(
         new FormGroup({
           label: new FormControl(labelObject),
@@ -849,9 +843,7 @@ export class ModifyProfileForm {
 
   removeDocument(e :any) {
     const documents = this.form.controls[ "UserProfile.Company.admin"]
-    console.log('this.company', this.companyFiles, e.filename);
     let file = this.companyFiles.filter(file => file.name == e.filename)[0]
-    console.log('file;;', file);
     if (file?.id){ this.store.dispatch(new DeleteFile(file?.id)).pipe(take(1)).subscribe(()=> {
       documents.get(e.filename)?.setValue({content: [""], expirationDate: '', ext: '???', name: 'Veuillez télécharger un document', nature: 'admin'})
       e.fileUI.value = {
@@ -866,7 +858,6 @@ export class ModifyProfileForm {
   } 
 
   removeLabel(filename: string) {
-    console.log("company file", this.companyFiles)
     let labelId = this.store.selectSnapshot(DataQueries.getAll("Label")).filter((label) => label.name == filename)[0].id;
     let labelForCompanyId = this.companyLabels.filter((labelForCompany) => labelForCompany.label == labelId)[0].id
     const documents = this.form.controls[ "UserProfile.Company.LabelForCompany"] as FormArray;

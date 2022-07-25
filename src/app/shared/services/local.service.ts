@@ -50,6 +50,7 @@ export class LocalService {
   }
 
   public clearData() {
+    console.error("JE CLEAR")
     let email = this.getLastEmail()
     localStorage.clear()
     if(email)
