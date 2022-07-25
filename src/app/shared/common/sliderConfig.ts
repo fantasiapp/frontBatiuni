@@ -26,13 +26,13 @@ export const SalarySliderConfig: Options = {
     let numSubdivisions = Math.ceil(Math.log10(salaryCeil)) - 2;
 
     if (position <= 1/numSubdivisions) {
-      return position * (1000)/(1/numSubdivisions);
+      return Math.round((position * (1000)/(1/numSubdivisions))/10)*10;
     }
     else {
       let subdivisionPosition = Math.floor(position * (numSubdivisions)) + 1;
       let m = numSubdivisions * (10**(subdivisionPosition+2) - 10**(subdivisionPosition+1));
       let p = 10**(subdivisionPosition+1) - m * (subdivisionPosition-1)/numSubdivisions ;
-      return m*position + p;
+      return Math.round((m*position + p)/(10**(subdivisionPosition))) * (10**(subdivisionPosition));
     }
   },
 
