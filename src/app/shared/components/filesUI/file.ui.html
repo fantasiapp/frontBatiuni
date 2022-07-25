@@ -25,8 +25,10 @@
       <ng-content select='[image]'></ng-content>
     </div>
   </ng-template>
-  <div class="date grow flex column center-main">
-    <label class="label-input text-emphasis">{{value?.nature == 'admin' ? 'Date du document' : 'Date de fin de validité'}}</label>
-    <input class="full-width" [ngClass]="{'pointer-none': name === 'Kbis'}" [value]="value!.expirationDate" (change)="onChange({origin: 'date', event: $event})" type="date"/>
+  <div class="date grow flex column center-main" >
+    <ng-container *ngIf="(name == 'Kbis' && value?.expirationDate) || name != 'Kbis'">
+      <label class="label-input text-emphasis">{{value?.nature == 'admin' ? 'Date du document' : 'Date de fin de validité'}}</label>
+      <input class="full-width" [ngClass]="{'pointer-none': name === 'Kbis'}" [value]="value!.expirationDate" (change)="onChange({origin: 'date', event: $event})" type="date"/>
+    </ng-container>
   </div>
 </div>
