@@ -90,5 +90,9 @@ export class LocalService {
   public setLastEmail(lastEmail: string){
     localStorage.setItem('lastEmail', lastEmail)
   }
+
+  public dumpLocalStorage(){
+    
+  }
 }
 
