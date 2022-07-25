@@ -643,6 +643,7 @@ export class ModifyProfileForm {
     const { user, company } = this.profile as { user: User; company: Company };
     this.companyFiles = this.store.selectSnapshot(DataQueries.getMany("File", this.profile.company.files));
     this.companyLabels = this.store.selectSnapshot(DataQueries.getMany("LabelForCompany", this.profile.company.labels));
+    console.log('blah blah ', this.companyLabels)
     this.companyJobs = this.store.selectSnapshot(DataQueries.getMany("JobForCompany", this.profile.company.jobs));
 
     const jobMapping = new Map(),
@@ -669,9 +670,11 @@ export class ModifyProfileForm {
       this.allLabels.forEach((label) => {
         const used = this.companyLabels.find(
           (labelForCompany) => {
+            console.log("je find")
             return labelForCompany.label == label.id
           }
         );
+        console.log("est ce que used ?", used)
         if (used) {
           labelMapping.set(used.id, label);
           this.selectedLabels.push(label);
@@ -732,6 +735,7 @@ export class ModifyProfileForm {
     labelControl.clear();
 
     for (let labelForCompany of this.companyLabels) {
+      console.log('labelObject', labelForCompany, labelMapping);
       const labelObject = labelMapping.get(labelForCompany.id)!;
       console.log('labelObject', labelObject);
       labelControl.push(
