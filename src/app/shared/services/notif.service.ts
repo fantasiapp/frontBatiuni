@@ -1,7 +1,7 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { DataQueries, DataState } from 'src/models/new/data.state';
-import { Notification } from "src/models/new/data.interfaces";
+import { Notification, Post } from "src/models/new/data.interfaces";
 
 @Injectable({
   providedIn: 'root'
@@ -58,17 +58,34 @@ export class NotifService {
           if(notification!.category == "supervision") {
             this.notificationsMission.push(notification!)
           }
-          
         }
 
     }
   }
 
-  getNotificationUnseenMission(idMission: number){
+  getNotificationUnseenMission(idMission?: number){
     this.checkNotif()
-    let notificationsMissionUnseen = this.notificationsMission.filter((notif) => !notif.hasBeenViewed && notif.missions == idMission) // !notif.hasBeenViewed && (à rajouter)
+    let notificationsMissionUnseen = []
+    if(idMission){
+      notificationsMissionUnseen = this.notificationsMission.filter((notif) => !notif.hasBeenViewed && notif.missions == idMission) // !notif.hasBeenViewed && (à rajouter)
+    }
+    else{
+      notificationsMissionUnseen = this.notificationsMission.filter((notif) => !notif.hasBeenViewed && notif.missions) // !notif.hasBeenViewed && (à rajouter)
+    }
     return notificationsMissionUnseen.length
   }
 
+  getCandidateUnseen(userOnlinePosts: Post[]){
+    let possibleCandidates: number = 0;
+    userOnlinePosts.forEach((post: Post) => {
+      const candidatesIds = post.candidates || [],
+        candidates = this.store.selectSnapshot(DataQueries.getMany("Candidate", candidatesIds));
+      candidates.forEach((candidate) => {
+        if(candidate.isRefused) candidate.isViewed = true
+        if (!candidate.isViewed) possibleCandidates++;
+      });
+    })
+    return possibleCandidates;
+  }
 }
 

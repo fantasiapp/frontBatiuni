@@ -31,7 +31,7 @@ import { SlidesDirective } from "../directives/slides.directive";
 import { Email } from "src/validators/persist";
 import { merge, Subject } from "rxjs";
 import { UISuggestionBox } from "../components/suggestionbox/suggestionbox.component";
-import { Destroy$ } from "../common/classes";
+import { Destroy$, returnInputKeyboard } from "../common/classes";
 import { SnapshotAll } from "src/models/new/data.state";
 import { Establishement, Job, Role } from "src/models/new/data.interfaces";
 import { GetCompanies } from "src/models/new/search/search.actions";
@@ -92,6 +92,7 @@ import { InfoService } from "../components/info/info.component";
 
         <div class="form-input">
           <label>Mot de passe</label>
+          <div class="form-input flex">
           <input
           #input5 (click)="onClickInputScroll(input5)"
             class="form-element"
@@ -99,8 +100,9 @@ import { InfoService } from "../components/info/info.component";
             formControlName="password"
             id="idPassword"
           />
-          <div (click)="togglePassword()" style="position: absolute; cursor: pointer; bottom: 0; right: 0; z=100">
+          <div (click)="togglePassword()" style="position: absolute; cursor: pointer; top:0; right: 0; z=100">
             <img class="eye" src="assets/Oeil_ferme.svg" id="togglePassword">
+          </div>
           </div>
           </div>
         <div class="form-action">
@@ -146,38 +148,22 @@ import { InfoService } from "../components/info/info.component";
         </div>
 
         <div class="form-input">
-          <label>Nom de l'entreprise</label>
+          <label>N SIRET</label>
           <input
           #input6 (click)="onClickInputScroll(input6)"
             class="form-element"
             type="text"
-            class="form-element"
-            formControlName="company"
-            style="display: none"
+            formControlName="siret"
           />
-          <span class="position-relative">
-            <input
-
-              type="text"
-              class="form-element"
-              autocomplete="off"
-              formControlName="companyName"
-              [novalidate]="true"
-              (input)="onCompanySearch($event)"
-              #search
-            />
-            <img
-              *ngIf="suggestionBox && suggestionBox.picked"
-              src="assets/X.svg"
-              class="cancel-company"
-              (click)="cancelCompany() && search.focus()"
-            />
-          </span>
-          <suggestion-box
-            [query]="searchQuery | async"
-            [action]="actions.GetCompanies"
-            (choice)="onChoice($event)"
-          ></suggestion-box>
+        </div>
+        <div class="form-input">
+          <label>Nom de l'entreprise</label>
+          <input
+          #input7 (click)="onClickInputScroll(input7)"
+            class="form-element"
+            type="text"
+            formControlName="company"
+          />
         </div>
 
         <div class="form-input">
@@ -196,6 +182,9 @@ import { InfoService } from "../components/info/info.component";
             type="text"
             class="form-element"
             formControlName="proposer"
+            (click)="onClickInputScroll(inputParrain)"
+            (keyup)="returnInputKeyboard($event, inputParrain)"
+            #inputParrain
           />
         </div>
 
@@ -268,6 +257,11 @@ import { InfoService } from "../components/info/info.component";
       .form-title {
         font-size: 1.25rem;
         font-weight: 600
+      }
+
+      img {
+        width: 75%;
+        height: auto;
       }
 
       .title-subtitle {
@@ -380,14 +374,15 @@ export class RegisterForm extends Destroy$ {
       secondPage: new FormGroup({
         proposer: new FormControl(""),
         role: new FormControl([], [Validators.required]),
+        siret: new FormControl([],[Validators.required]),
         company: new FormControl("", [
           Validators.required,
-          RequiredType(
-            "object",
-            "MESSAGE",
-            "Veuillez choisir une entreprise de la liste."
-          ),
-          TransferError("companyName"),
+          // RequiredType(
+          //   "object",
+          //   "MESSAGE",
+          //   "Veuillez choisir une entreprise de la liste."
+          // ),
+          // TransferError("companyName"),
         ]),
         companyName: new FormControl(""),
         jobs: new FormControl([], [Validators.required]),
@@ -429,12 +424,12 @@ export class RegisterForm extends Destroy$ {
 
 
   onClickInputScroll(input: HTMLElement){
-    setTimeout(() => {
-      input.scrollIntoView({behavior: 'smooth', block: 'center', inline: 'nearest'})
+    // setTimeout(() => {
+      // input.scrollIntoView({behavior: 'smooth', block: 'center', inline: 'nearest'})
       setTimeout(() => {
         input.scrollIntoView({behavior: 'smooth', block: 'center', inline: 'nearest'})
-      }, 500)
-    }, 100)
+      }, 600)
+    // }, 100)
   }
 
   onNavigate(dx: number, done?: Function) {
@@ -482,4 +477,6 @@ export class RegisterForm extends Destroy$ {
     password?.setAttribute('type', type)
     togglePassword?.setAttribute('src', toggleClass)
   }
+
+  returnInputKeyboard = returnInputKeyboard
 }

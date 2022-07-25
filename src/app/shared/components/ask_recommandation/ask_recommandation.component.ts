@@ -3,7 +3,7 @@ import { AbstractControl, FormControl, FormGroup, Validators } from "@angular/fo
 import { Store } from "@ngxs/store";
 import { take } from "rxjs/operators";
 import { AskRecommandation } from "src/models/new/user/user.actions";
-import { Destroy$, returnInputKeyboard } from "src/app/shared/common/classes";
+import { Destroy$, onClickInputScroll, returnInputKeyboard } from "src/app/shared/common/classes";
 import { Email } from "src/validators/persist";
 import { DataQueries, DataState } from "src/models/new/data.state";
 import { email } from 'src/validators/regex';
@@ -20,8 +20,13 @@ export class AskRecommandationComponent extends Destroy$ {
   emailForm = new FormGroup({email: new FormControl('', [Validators.required, Email(), 
   (() => {
     return (control: AbstractControl) => {
-      control.value == this.profileEmail ? this.disableBoutton = true : this.disableBoutton = false
-      return control.value == this.profileEmail ? {SELF_RECOMMANDATION: ['profile-email']} : null    
+      if (typeof control.value == 'string' && this.profileEmail){
+        control.value.toLowerCase() == this.profileEmail.toLowerCase() ? this.disableBoutton = true : this.disableBoutton = false
+        return control.value.toLowerCase() == this.profileEmail.toLowerCase() ? {SELF_RECOMMANDATION: ['profile-email']} : null
+      }
+      else{
+        return null
+      }
     }
   })()
   ])}, {})
@@ -36,6 +41,7 @@ export class AskRecommandationComponent extends Destroy$ {
   disabled:boolean = true
   disableBoutton = false;
   token:string = ''
+  view = this.store.selectSnapshot(DataState.view);
 
   askRecommandation () {
     if (this.emailForm.valid) {
@@ -51,4 +57,5 @@ export class AskRecommandationComponent extends Destroy$ {
   }
   
   returnInputKeyboard = returnInputKeyboard
+  onClickInputScroll = onClickInputScroll  
 }

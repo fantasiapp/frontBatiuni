@@ -288,3 +288,11 @@ export class QueryManager {
     }
     }
 }
+export function onClickInputScroll(input: HTMLElement){
+    setTimeout(() => {
+      input.scrollIntoView({behavior: 'smooth', block: 'center', inline: 'nearest'})
+      setTimeout(() => {
+        input.scrollIntoView({behavior: 'smooth', block: 'center', inline: 'nearest'})
+      }, 500)
+    }, 100)
+  }

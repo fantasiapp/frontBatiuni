@@ -13,6 +13,20 @@ header {
   &.header-search-with-switch{
     height: calc(#{$mission-header-height} + #{$switch-header-size} + env(safe-area-inset-top))
   }
+
+  &::after{
+    content: '';
+    display: block;
+    position: absolute;
+    bottom: -1.5rem;
+    width: 100vw;
+    height: 1.5rem;
+    margin-top: -1.5rem;
+    
+    background-color: white;
+    margin-left: -2rem;
+    box-shadow: 0 3px 3px -3px grey;
+  }
 }
 
 .pick > img {

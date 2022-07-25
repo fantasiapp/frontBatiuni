@@ -57,6 +57,7 @@ export class ProfileComponent extends Destroy$ {
   openBlockedContact: boolean = false;
   openCandidature: boolean = false;
   openRecommandationMenu: boolean = false;
+  openSubscription: boolean = false;
 
 
   @Input()
@@ -106,6 +107,7 @@ export class ProfileComponent extends Destroy$ {
     this.notifService.checkNotif()
     this.notifications = this.notifService.notifications
     this.notificationsUnseen = this.notifService.notificationsUnseen
+    this.info.enableBothOverlay(false)
   }
 
 
@@ -123,6 +125,11 @@ export class ProfileComponent extends Destroy$ {
 
   }
 
+  onViewChanged(view: 'PME' | 'ST'){
+    this.view = view
+    this.cd.markForCheck()
+  }
+
   slideModifyMenu(modifyPassword: boolean) {
     this.openMenu = false;
     this.openModifyMenu = true;
@@ -130,7 +137,10 @@ export class ProfileComponent extends Destroy$ {
 
     if ( !this.modifyPassword ) {
       this.fixScrollTop();
-      this.modifyForm?.reload();
+      this.modifyForm!.reload();
+      this.modifyForm!.slider.animate = false;
+      this.modifyForm!.slider.index = 0;
+      this.modifyForm!.slider.animate = true;
     }
   }
 
@@ -175,7 +185,7 @@ export class ProfileComponent extends Destroy$ {
   }
   
   modifyProfile(form: any /*FormGroup*/) {
-    console.log("modifyProfile", form.value)
+    console.log("modifyProfile", form.value, form, form.value['UserProfile.Company.LabelForCompany'])
     this.profile$.pipe(take(1)).subscribe(profile => {
       const action = this.store.dispatch(new UserActions.ModifyUserProfile({profile: profile, form}))
       this.info.show("info", "Mise à jour en cours...", Infinity);

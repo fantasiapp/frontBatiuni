@@ -10,14 +10,14 @@
     <div *ngIf="showDropDown" class="dropdown">
       <div *ngIf="searchable" class="dropdown-choices full-width flex row center-cross">
           <img src="assets/Rechercher.svg" (click)="showDropDown = false">
-          <input class="form-search" (input)="filterOptions($event)" type="text" placeholder="Rechercher un métier"/>
+          <input class="form-search" (input)="filterOptions($event)" (click)="onClickInputScroll(input); returnInputKeyboard($event,input)" #input type="text" placeholder="Rechercher un métier"/>
       </div>
      
       <div *ngIf="options.length" class="dropdown-content">
         <ul *ngIf="_type[0] == 'checkbox'; else radioMenu">
           <li *ngFor="let option of availableOptions; let index = index" class="flex center-cross">
             <span (click)="checkbox.onChange($event)">{{option.name}}</span>
-            <checkbox (valueChange)="onChange(['toggle', option.id])" [value]="value!.includes(option)" #checkbox></checkbox>
+            <checkbox (valueChange)="onChange(['toggle', option.id])" [value]="dropdownIncludes(option,value)" #checkbox></checkbox>
           </li>
         </ul>
         <ng-template #radioMenu>
@@ -29,7 +29,7 @@
           </ul>
         </ng-template>
       </div>
-      <div class="option-action_wrapper">
+      <div class="option-action_wrapper" *ngIf="validateButton">
         <button class="button active" (click)="valideButton($event)">Valider</button>
       </div>
     </div>

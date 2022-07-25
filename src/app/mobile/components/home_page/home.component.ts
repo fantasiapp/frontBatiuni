@@ -12,7 +12,7 @@ import {
   HostBinding,
 } from "@angular/core";
 import { Select, Store } from "@ngxs/store";
-import { combineLatest, Observable, Subject, throwError } from "rxjs";
+import { combineLatest, Observable, Subject, Subscription, throwError } from "rxjs";
 import { catchError, take, takeUntil } from "rxjs/operators";
 import { Destroy$ } from "src/app/shared/common/classes";
 import {
@@ -153,6 +153,7 @@ export class HomeComponent extends Destroy$ {
   draftMenu = new PostMenu();
   postMenu = new PostMenu();
   missionMenu = new PostMenu<Mission>();
+  lateInitSubscriber: Subscription | null = null
 
   searchBarEmpty: boolean = true;
 
@@ -172,7 +173,7 @@ export class HomeComponent extends Destroy$ {
     private getUserDataService: getUserDataService,
     private router: Router,
     private notifService: NotifService,
-    private activeViewService: ActiveViewService
+    private activeViewService: ActiveViewService,
   ) {
     super();
     this.isLoading = this.booleanService.isLoading
@@ -200,13 +201,10 @@ export class HomeComponent extends Destroy$ {
       this.slideMissionClose()
       this.activeView = num
     })
-    this.profile$.pipe(takeUntil(this.destroy$)).subscribe((profile) => {
-      if(profile.company && profile.company.role == 3){
-        this.info.alignWith('header_search_switch')
-        console.log('info switch');
-      } else {
+    this.profile$.pipe(take(1)).subscribe((profile) => {
+        this.info.enableBothOverlay(profile.company && profile.company.role == 3)
         this.info.alignWith('header_search')
-      }
+      // }
     })
 
     this.view$.pipe(takeUntil(this.destroy$)).subscribe((view) => {
@@ -219,8 +217,8 @@ export class HomeComponent extends Destroy$ {
 
   async lateInit() {
     this.activeViewService.setActiveView(0)
-    if (!this.isLoading && this.isStillOnPage) {
-      combineLatest([this.profile$, this.store.select(DataQueries.getAll('Post'))])
+    if (!this.isLoading && this.isStillOnPage && !this.lateInitSubscriber) {
+      this.lateInitSubscriber = combineLatest([this.profile$, this.store.select(DataQueries.getAll('Post'))])
         .pipe(takeUntil(this.destroy$))
         .subscribe(([profile, posts]) => {
           const mapping = splitByOutput(posts, (post) => {
@@ -266,6 +264,8 @@ export class HomeComponent extends Destroy$ {
     this.isStillOnPage = false
     this.info.alignWith("last");
     this.getUserDataService.emitDataChangeEvent();
+    this.lateInitSubscriber?.unsubscribe()
+    this.lateInitSubscriber = null
     super.ngOnDestroy();
   }
 
@@ -318,7 +318,6 @@ export class HomeComponent extends Destroy$ {
       }
 
       for (let post of this.allUserDrafts) {
-        console.log(post, post.creationDate)
         let isDifferentDate = (filter.date && post.startDate < filter.date)
         let isDifferentManPower = (filter.manPower && post.manPower != (filter.manPower === "true"))
         let isNotIncludedJob = (filter.jobs && filter.jobs.length && filter.jobs.every((job: any) => {return job.id != post.job}))
@@ -977,4 +976,13 @@ export class HomeComponent extends Destroy$ {
     })
     this.cd.markForCheck();
   }    
+
+  get notificationsUnseenMissions(){
+    console.log("Home notif")
+    return this.notifService.getNotificationUnseenMission()
+  }
+
+  get CandidateUnseen(){
+    return this.notifService.getCandidateUnseen(this.userOnlinePosts)
+  }
 }

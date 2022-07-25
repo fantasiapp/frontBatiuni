@@ -10,20 +10,17 @@ import {
   ViewChild,
   ViewChildren,
 } from "@angular/core";
-import { FormArray, FormControl, FormGroup } from "@angular/forms";
+import {  FormControl, FormGroup } from "@angular/forms";
 import { Store } from "@ngxs/store";
-import { Control } from "mapbox-gl";
 import { DistanceSliderConfig, SalarySliderConfig, EmployeesSliderConfig } from "src/app/shared/common/sliderConfig";
 import { Candidate, Job, Post } from "src/models/new/data.interfaces";
 import { DataQueries, SnapshotAll } from "src/models/new/data.state";
 import { OptionsModel } from "../components/options/options";
 import { UISwitchComponent } from "../components/switch/switch.component";
-import { Filter } from "../directives/filter.directive";
 import { FilterService } from "../services/filter.service";
 import { getLevenshteinDistance } from "src/app/shared/services/levenshtein";
 import { InfoService } from "../components/info/info.component";
-import { returnInputKeyboard } from '../common/classes'
-import "hammerjs"
+import { returnInputKeyboard } from "../common/classes";
 
 @Component({
   selector: "st-filter-form",
@@ -46,10 +43,11 @@ import "hammerjs"
     <div class="form-input">
       <label>Adresse de chantier</label>
       <input
+        #inputAddress
         type="text"
         class="form-element"
         formControlName="address"
-        (keyup)="returnInputKeyboard($event, inputAddress)" #inputAddress
+        (keyup)="returnInputKeyboard($event, inputAddress)" 
       />
     </div>
 
@@ -125,10 +123,15 @@ import "hammerjs"
             #switch2
           ></switch>
         </div>
-        <div class="action-button-filter  flex row space space-between full-width">
-          <button class="button passive" (click)="resetFilter()">Reinitialiser</button>
-          <button class="button active" (click)="onCloseFilter()">Valider</button>
-        </div>
+
+        <footer
+        class="flex row space-between sticky-footer full-width submit-container background-white"
+        style="z-index: 100;">
+          <div class="action-button-filter  flex row space space-between full-width">
+            <div class="button passive" (click)="resetFilter()">Réinitialiser</div>
+            <div class="button active" (click)="onCloseFilter()">Valider</div>
+          </div>
+        </footer>
       </div>
     </form>
   `,
@@ -138,6 +141,7 @@ import "hammerjs"
         display: block;
         width: 100%;
         height: 100%;
+        padding-bottom: 3rem;
       }
 
       switch::ng-deep .slider {
@@ -211,12 +215,12 @@ export class STFilterForm {
 
   ngOnInit() {
 
-    // this.filterForm.valueChanges.subscribe((value) => {
-    //   this.updateFilteredPosts(value);
-    //   this.isFilterOn(value);
-    //   this.updateEvent.emit(this.filteredPosts);
-    //   this.filterService.emitFilterChangeEvent(this.filteredPosts)
-    // });
+    this.filterForm.valueChanges.subscribe((value) => {
+      this.updateFilteredPosts(value);
+      this.isFilterOn(value);
+      this.updateEvent.emit(this.filteredPosts);
+      this.filterService.emitFilterChangeEvent(this.filteredPosts)
+    });
 
   }
 
@@ -224,15 +228,13 @@ export class STFilterForm {
     this.filteredPosts = [];
     const user = this.store.selectSnapshot(DataQueries.currentUser);
     const now = new Date().toISOString().slice(0, 10);
-    let allPosts = this.posts.filter((post) => post.dueDate > now)
+    this.posts = this.posts.filter((post) => post.dueDate > now)
+    const profile = this.store.selectSnapshot(DataQueries.currentProfile);
+    this.posts = this.posts.filter(post => post.company != profile.company.id)
 
     // Filter
-    for (let post of allPosts) {
+    for (let post of this.posts) {
       const company = this.store.selectSnapshot(DataQueries.getById('Company', post.company))!;
-      const profile = this.store.selectSnapshot(DataQueries.currentProfile);
-
-      // Pour ne pas voir nos propres annonces dans BOTH
-      let isSameCompany = (post.company == profile.company.id)
       
       //Date de mission
       let isDifferentDate = (filter.date && post.startDate < filter.date)
@@ -244,8 +246,7 @@ export class STFilterForm {
       let postLatitude = post.latitude*(Math.PI/180);
       let postLongitude = post.longitude*(Math.PI/180);
       let distance = 6371*Math.acos(Math.sin(userLatitude)*Math.sin(postLatitude) + Math.cos(userLatitude)*Math.cos(postLatitude)*Math.cos(postLongitude-userLongitude))
-
-      let isNotInRadius = ((filter.radius || filter.radius == 0) && distance > filter.radius)
+      let isNotInRadius = (((filter.radius && userLongitude && userLatitude) || filter.radius == 0) && distance > filter.radius)
 
       //Manpower
       let isDifferentManPower = (filter.manPower && post.manPower != (filter.manPower === "true"))
@@ -260,9 +261,7 @@ export class STFilterForm {
       }
 
       //Employees
-      const jobsForCompany = this.store.selectSnapshot(DataQueries.getMany('JobForCompany', company.jobs));
-      let count = jobsForCompany.reduce((acc, {number}) => acc + number, 0);
-      let isNotInRangeEmployees = filter.employees[0] >= count || (filter.employees[1] != 100 && filter.employees[1] <= count);
+      let isNotInRangeEmployees = filter.employees[0] >= company.size || (filter.employees[1] != 100 && filter.employees[1] <= company.size);
 
 
       //Favorite
@@ -279,8 +278,7 @@ export class STFilterForm {
       //CounterOffer
       let isNotCounterOffer = (filter.counterOffer && !post.counterOffer);
       
-      if ( isSameCompany ||
-          isDifferentDate || 
+      if (isDifferentDate || 
           isDifferentManPower || 
           isNotIncludedJob || 
           isNotInRadius || 
@@ -412,6 +410,5 @@ export class STFilterForm {
   }
 
   returnInputKeyboard = returnInputKeyboard
-  
 }
 

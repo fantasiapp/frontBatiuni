@@ -8,14 +8,17 @@
       [showRecomandation]="showRecomandation"
       [showView]="showView"
       [star]="showStar"
+      (viewChanged)="onViewChanged($event)"
     ></profile-resume>
   
     <section class="job-description full-width flex column space-children-margin">
       <h4 class="text-light-emphasis">Nom de l'entreprise : <span class="value">{{profile.company.name}}</span></h4>
 
-      <h4 class="text-light-emphasis">Fonction dans l'entreprise : <span class="value">{{profile.user?.function}}</span></h4>
+      <h4 class="text-light-emphasis" *ngIf="profile.company.address">Adresse de l'entreprise : <span class="value">{{hideAdress(profile.company.address)}}</span></h4>
 
-      <h4 class="text-light-emphasis">Téléphone fixe : <span class="value">{{profile.company.companyPhone | space: 2:1 }}</span></h4>
+      <h4 class="text-light-emphasis" *ngIf="profile.user?.function">Fonction dans l'entreprise : <span class="value">{{profile.user?.function}}</span></h4>
+
+      <h4 class="text-light-emphasis" *ngIf="profile.user?.cellPhone"> Téléphone portable : <a [href]="'tel:+33' + profile.user?.cellPhone"> <span class="value" >{{profile.user?.cellPhone | space: 2:1 }}</span></a></h4>
       
       <h4 class="text-light-emphasis" *ngIf="profile.company.webSite">Site internet : <span class="value link"><a [href]="computeWebSite(profile.company.webSite)">{{profile.company.webSite}}</a></span></h4>
 

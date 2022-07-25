@@ -5,7 +5,7 @@ export type Record<T = any> = {
 export type DataTypes = 'Job' | 'Label' | 'Role' | 'UserProfile' | 'Company' | 'BlockedCandidate' |
   'Post' | 'DetailedPost' | 'Supervision' | 'Disponibility' | 'File' |
   'JobForCompany' | 'LabelForCompany' | 'Candidate' | 'Mission' |
-  'Establishments'| 'DatePost' | 'Notification' | 'Recommandation' ; //..
+  'Establishments'| 'DatePost' | 'Notification' | 'Recommandation' | 'LabelNew'; //..
 
 //just to indicate
 export type Ref<T> = number;
@@ -26,6 +26,11 @@ export interface Label {
   fileName: string;
 };
 
+export interface LabelNew {
+  id: Ref<LabelNew>;
+  name: string;
+  fileName: string
+}
 export interface User {
   id: Ref<User>;
   email: string;
@@ -86,7 +91,6 @@ export interface BlockedCandidate {
 
 export interface PostDetail {
   id: Ref<PostDetail>;
-  date: string
   content: string
   validated : boolean
   refused : boolean
@@ -107,7 +111,6 @@ export interface Supervision {
   id: Ref<Supervision>;
   author: string;
   companyId: number;
-  date: string;
   comment: string;
   timestamp: number;
   files: Ref<File>[];
@@ -306,6 +309,7 @@ export type Interface<K extends DataTypes> =
   K extends 'Notification' ? Notification :
   K extends 'BlockedCandidate' ? BlockedCandidate :
   K extends 'Recommandation' ? Recommandation :
+  K extends 'LabelNew' ? LabelNew : 
   K;
 
 export type Profile = {

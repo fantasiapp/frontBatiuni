@@ -1,7 +1,17 @@
-<head>
+<header class="clear-margin full-width sticky-header flex center-cross white-header">
+    <img src="assets/arrowlblack.svg" (click)="close()">
+    <h1 class="grow center-text">Passer votre commande</h1>
+</header>
+
+<div class="widget-container">
     <script src="https://js.stripe.com/v3/"></script>
-</head>
-<div *ngIf="this.state">
+</div>
+<div class="widget__wrapper" *ngIf="this.state">
+    <h1>Votre commande</h1>
+    <div class="flex full-width space-between">
+        <div>Acces PME engagement x mois</div>
+        <div>XX / mois</div>
+    </div>
     <div *ngIf="this.product">
         <span>Produit : {{product}} </span>
     </div>

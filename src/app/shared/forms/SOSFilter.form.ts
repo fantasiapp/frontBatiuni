@@ -32,12 +32,6 @@ import "hammerjs"
     </div>
 
 
-    <div class="form-input">
-      <label>Estimation de salaire</label>
-      <ngx-slider [options]="imports.SOSSalarySliderConfig" [(highValue)]=valueSalary formControlName="amount" (userChange)="detectChange()"></ngx-slider>
-    </div>
-
-
     <div class="form-input space-children-margin">
       <label class="form-title">Réorganiser la liste selon</label>
       <div class="switch-container flex center-cross">
@@ -52,10 +46,15 @@ import "hammerjs"
         <span class="criteria">Les profils affichés comme disponibles</span> 
         <switch class="default" formControlName="sortDisponibleProfils"></switch>
       </div>
+
+      <footer
+        class="flex row space-between sticky-footer full-width submit-container background-white"
+        style="z-index: 2;">
         <div class="action-button-filter flex row space space-between full-width">
-          <button class="button passive" (click)="onResetFilter()">Reinitialiser</button>
-          <button class="button active" (click)="onCloseFilter()">Valider</button>
+          <div class="button passive" (click)="onResetFilter()">Réinitialiser</div>
+          <div class="button active" (click)="onCloseFilter()">Valider</div>
         </div>
+      </footer>
     </div>
   </form>
 </ng-container>
@@ -64,7 +63,8 @@ import "hammerjs"
     :host {
       display: block;
       width: 100%;
-      height: 100%;    
+      height: 100%; 
+      padding-bottom: 3rem;   
     }
     
     switch::ng-deep .slider {
@@ -91,7 +91,6 @@ export class SOSFilterForm implements OnInit {
     address: new FormControl(""),
     jobs: new FormControl([]),
     radius: new FormControl(2000),
-    amount: new FormControl(),
     sortNotation: new FormControl(false),
     sortFullProfils: new FormControl(false),
     sortDisponibleProfils: new FormControl(false),
@@ -127,7 +126,6 @@ export class SOSFilterForm implements OnInit {
    this.filterForm.get('address')?.patchValue('') 
    this.filterForm.get('jobs')?.patchValue([]) 
    this.filterForm.get('radius')?.patchValue(2000) 
-   this.filterForm.get('amount')?.patchValue([0,400]) 
    this.filterForm.get('sortNotation')?.patchValue(false) 
    this.filterForm.get('sortFullProfils')?.patchValue(false) 
    this.filterForm.get('sortDisponibleProfils')?.patchValue(false) 

@@ -19,5 +19,5 @@
 
 
 <div class="button-validate-wrapper" [ngClass]="{'resetPadding': !showFooter, 'ios-platform': platform == 'ios'}">
-    <button class="button active validate" (click)="validate()">Valider</button>
+    <button class="button active validate" (click)="validate($event, formTask)">Valider</button>
 </div>

@@ -79,7 +79,7 @@ export class SupervisionWrapperComponent extends Destroy$ {
         datePostId = this.dateOrigin.id
       }
       try {
-        await this.store.dispatch(new CreateSupervision(detailPostId, datePostId, comment)).pipe(take(1)).subscribe((response) => {
+        this.store.dispatch(new CreateSupervision(detailPostId, datePostId, comment)).pipe(take(1)).subscribe((response) => {
           formControl.reset()
           let supervisions: Supervision[];
           if(this.selectedTask){
@@ -98,11 +98,11 @@ export class SupervisionWrapperComponent extends Destroy$ {
 
           if(uploadImageAfter && photo){
             this.store.dispatch(new UploadImageSupervision(photo, this.supervisions[this.supervisions.length - 1].id)).pipe(take(1)).subscribe(() => {
-              
               // this.updatePageOnlyDate();
               this.swipeMenuImage = false;
               console.log('NEW SUPERVISION ', this.supervisions);
               this.supervisions[this.supervisions.length - 1] = this.store.selectSnapshot(DataQueries.getById('Supervision', this.supervisions[this.supervisions.length - 1].id))! 
+              this.cd.detectChanges()
             });
           }
         })
@@ -159,18 +159,6 @@ export class SupervisionWrapperComponent extends Destroy$ {
     console.log('photo exist');
     console.log('supervision old ', this.supervisions);
     this.onSubmit(task,formGroup,formControlName,input, true,photo)
-    // let acceptedFormat = ["jpeg", "png", "jpg", "bmp"];
-    // if (acceptedFormat.includes(photo.format)) {
-    //   this.store.dispatch(new UploadImageSupervision(photo, this.currentSupervisionId)).pipe(take(1)).subscribe(() => {
-    //     // let supervisions = this.store.selectSnapshot(DataQueries.getMany('Supervision', this.mission!.supervisions))
-    //     // this.updatePageOnlyDate();
-    //     this.swipeMenuImage = false;
-    //   });
-    // } else {
-    //   // this.updatePageOnlyDate();
-    //   this.swipeMenuImage = false;
-    //   this.info.show("error", "Format d'image non supporté", 3000);
-    // }
   }
 
   autosize(input: HTMLTextAreaElement){

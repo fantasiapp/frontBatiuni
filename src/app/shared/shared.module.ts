@@ -74,7 +74,7 @@ import { GiveARecommandation } from "./validators/give_recommandation/give_recom
 import { FaqComponent } from "./components/faq/faq.component";
 import { Payment } from "./components/payment/payment.component";
 import { MentionLegalComponent } from "../mobile/components/mention-legal/mention-legal.component";
-
+import { PaymentStatus } from "./components/paymentStatus/paymentStatus.component";
 @NgModule({
   declarations: [
     UICheckboxComponent,
@@ -148,7 +148,8 @@ import { MentionLegalComponent } from "../mobile/components/mention-legal/mentio
     GiveARecommandation,
     FaqComponent,
     Payment,
-    MentionLegalComponent
+    MentionLegalComponent,
+    PaymentStatus
   ],
   imports: [
     CommonModule,

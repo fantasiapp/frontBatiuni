@@ -10,8 +10,12 @@
       [filterOpen]="view == 'PME' ? filterOn : filterOnST"
       [callbackSearch]="view == 'PME' ? callbackSearch : callbackSearchST">
       <span tab_0>{{ view == "PME" ? "Brouillon" : "Vue liste" }}</span>
-      <span tab_1>{{ view == "PME" ? "En ligne" : "Carte" }}</span>
-      <span tab_2>Validées</span>
+      <span tab_1>{{ view == "PME" ? "En ligne" : "Carte" }}
+        <span *ngIf="view == 'PME' && CandidateUnseen" [attr.data-notification-number]="CandidateUnseen" class="notification notification-header"></span>
+      </span>
+      <span tab_2>Validées
+        <span *ngIf="view == 'PME' && notificationsUnseenMissions" [attr.data-notification-number]="notificationsUnseenMissions" class="notification notification-header"></span>
+      </span>
     </page-header>
     <div class="wrapper__searchbar__clickcatcher page-content-with-tabs" *ngIf="!showFooter"></div>
 
@@ -130,16 +134,13 @@
         <img (click)="slideOnlinePostClose()" src="assets/arrowlblack.svg" />
         <h1 class="grow center-text">Annonce en ligne</h1>
         <div>
-          <img
-            *ngIf="view == 'PME'"
-            (click)="postMenu.swipeup = true"
-            src="assets/Option.svg"
-          />
-          <span
-            *ngIf="currentCandidates && view == 'PME'"
-            [attr.data-notification-number]="currentCandidates"
-            class="notification"
-          ></span>
+          <button *ngIf="view == 'PME'" (click)="postMenu.swipeup = true" class="optionButton">Options
+            <span
+              *ngIf="currentCandidates && view == 'PME'"
+              [attr.data-notification-number]="currentCandidates"
+              class="notification notification-option"
+            ></span>
+          </button> 
         </div>
       </header>
 
@@ -188,15 +189,12 @@
     <!-- Component Mission -->
     <slidemenu [(open)]="missionMenu.open" [header]="false" (openChange)="updatePage()" #slideMission>
       <header
-        class="clear-margin full-width sticky-header flex center-cross annonce"
+        class="clear-margin full-width sticky-header flex center-cross annonce header-border"
         customHeader
       >
         <img (click)="slideMissionClose()" src="assets/arrowlblack.svg" />
         <h1 class="grow center-text">Annonce validée</h1>
-        <img
-          (click)="swipeupMenu(); view == 'PME' && suiviChantier.submitAdFormDate(true)"
-          [src]="view == 'PME' ? 'assets/Option.svg' : 'assets/phone.png'"
-        />
+        <button (click)="swipeupMenu(); view == 'PME' && suiviChantier.submitAdFormDate(true)"  class="optionButton">Options</button> 
       </header>
 
       <suivi-chantier
@@ -265,6 +263,7 @@
     [showRecomandation]="false"
     [showView]="'ST'"
     style="position: relative; z-index: 1;"
+    [hideExactAdress]="true"
   ></extended-profile>
   <footer class="sticky-footer flex center-cross application background-white" style="z-index: 2;">
     <button

@@ -24,6 +24,17 @@
 
   }
 
+  .optionButton {
+    background-color: #FFFFFF;
+    color: #000000;
+    font-size: 15px;
+    height: 2.3rem;
+    width: 6rem;
+    border-radius: 30px;
+    filter: drop-shadow(0 0 0.2rem #00000029);
+  }
+  
+
   .left {
     left: 8px;
   }

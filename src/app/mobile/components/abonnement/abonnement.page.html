@@ -1,41 +1,18 @@
-<page-header name="Annonces qui peuvent vous intéresser " class=""
-[customHeader]='true'
-[(activeView)]="activeView"
->
-  <div *ngIf="engagmentClicked" class="clear-margin full-width sticky-header flex center-cross abonnement" headerBar>
-      <img [routerLink]="['','home','profile']" src="assets/arrowlblack.svg" class="position-absolute"/>
-      <h1 class="grow center-text">Gérer mes abonnement</h1>
-  </div>
-  <span tab_0>PME</span>
-  <span tab_1>Sous-traitance</span>
-</page-header>
-
-  <div *ngIf="engagmentClicked" class=" space-children-margin page-content-with-tabs flex center ">
-    <ng-container [ngSwitch]="activeView">
-      <ng-container *ngSwitchCase="0">
-          <div class="caroussel ">
-              <div class="margleft"> 
-                <abonnement-card  [duration]="55"></abonnement-card>
-              </div>
-              <div class="thiscenterclass"> 
-                <abonnement-card class="thischild"></abonnement-card>
-
-              </div>
-              <div>
-
-                  <abonnement-card></abonnement-card>
-              </div>
+<span style="margin: 2rem 2rem; display: block;">Sélectionnez un service</span>
+  <div class="caroussel__wrapper">
+      <div class="caroussel">
+        <div class="caroussel-item"> 
+          <abonnement-card class="margleft"*ngIf="abonnements[0].prices$ | async as prices" (openEngagment)="onOpenEngagement($event)" [subscriptionType]="0" [abonnement]="abonnements[0]" [prices]="prices"></abonnement-card>
         </div>
-      </ng-container>
-      <ng-container *ngSwitchCase="1" >
-<div class="hosted-page  flex center clear-margin full-width">
-          <abonnement-card class="" ></abonnement-card>
+        <div class="caroussel-item"> 
+          <abonnement-card class="margleft"*ngIf="abonnements[1].prices$ | async as prices" (openEngagment)="onOpenEngagement($event)" [subscriptionType]="1" [abonnement]="abonnements[1]" [prices]="prices"></abonnement-card>
         </div>
-      </ng-container>
-    </ng-container>
-
+        <div class="caroussel-item">
+          <abonnement-card class="margleft"*ngIf="abonnements[2].prices$ | async as prices" (openEngagment)="onOpenEngagement($event)" [subscriptionType]="2" [abonnement]="abonnements[2]" [prices]="prices"></abonnement-card>
+        </div>
+      </div>
   </div>
-<div class="caroussel-button" *ngIf="engagmentClicked" >
+<div class="caroussel-button" >
   <button class="flex center"
   (click)="scrollRight()"
   ><img src="assets/arrowleft.svg" alt=""></button>
@@ -43,3 +20,40 @@
   (click)="scrollLeft()"
   ><img src="assets/arrowright.svg" alt=""></button>
 </div>
+
+<slidemenu [(open)]="openEngagment" #engagment>
+    <h1 class="center-text full-width" header>Gérer mes abonnements</h1>  
+    <div *ngIf="openEngagment" class="modify-page hosted-page flex column center-cross space-children-margin" content>
+      <h4>Sélectionnez un plan : </h4>
+      <div class="plans-container" *ngIf="abonnements[currentAbonnementId].prices$ | async as prices; else fakeEngagement__wrapper">
+        <ng-container *ngFor="let price of prices">
+          <div class="plans__plan flex row" (click)="selectEngagement(price)">
+            <button class="radio" [ngClass]="{'radio-active': selectedPrice == price}"></button>
+            <div class="plan__text">Engagement {{price.intervalCount}} mois pour <span class="highlight">{{price.amount/price.intervalCount}}€</span> / mois ({{+price.amount/price.intervalCount/ 2}}€ au premier engagement)</div>
+          </div>
+        </ng-container>
+      </div>
+      <ng-template #fakeEngagement__wrapper>
+        <div class="plans-container">
+          <div class="plans__plan flex row fake" >
+            <button class="radio" ></button>
+            <div class="plan__text"></div>
+          </div>
+          <div class="plans__plan flex row fake" >
+            <button class="radio" ></button>
+            <div class="plan__text"></div>
+          </div>
+        </div>
+        </ng-template>
+      <footer class="sticky-footer">
+        <button class="button active full-width" (click)="selectedPrice && openEngagmentPage = true" [ngClass]="{'disabled': selectedPrice === undefined}">J'en profite</button>
+      </footer>
+    </div>
+  </slidemenu>
+  <slidemenu [(open)]="openEngagmentPage">
+    <h1 class="center-text full-width" header>Gérer mes abonnements</h1>  
+    <div class="modify-page hosted-page flex column center-cross space-children-margin" content>
+      <engagement *ngIf="openEngagmentPage && selectedPrice !=undefined" [abonnement]="abonnements[currentAbonnementId]" [selectPrice]="selectedPrice"></engagement>
+    </div>
+  </slidemenu>
+

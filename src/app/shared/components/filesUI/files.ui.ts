@@ -55,9 +55,10 @@ export function defaultFileUIOuput(
   ],
 })
 export class FileUI extends UIAsyncAccessor<FileUIOutput> {
-  @Input()
-  filename: string = "Kbis";
+  @Input() filename: string = "Kbis";
 
+  @Input() name : string = 'Kbis'
+  @Input() nature: string = ''
   @Output()
   filenameChange = new EventEmitter<string>();
 
@@ -104,8 +105,8 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
       content: [""],
       expirationDate: "",
       ext: "???",
-      name: "Veuillez télécharger un document",
-      nature: this.filename,
+      name: this.nature == 'labels' ? this.filename : "Veuillez télécharger un document",
+      nature: this.nature,
     };
   }
 
@@ -130,7 +131,6 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
 
     if (!input.files) return this.value as FileUIOutput;
 
-    console.log('input.files', input.files);
     
     const base64 = (await this.getBase64(input.files!)) as string,
       fullname = input.files.item(0)!.name,
@@ -138,7 +138,10 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
       name = fullname.slice(0, lastDot),
       ext = fullname.slice(lastDot + 1);
 
-    if (this.value?.nature == "admin" || this.value?.nature.includes('Quali')) {this.popup.newFile(this.filename, this);}
+    if ((this.value?.nature == "admin" || this.value?.nature.includes('Quali') )&& this.filename !== 'Kbis') {
+      // this.popup.newFile(this.filename, this);
+      this.info.show("error", "Veuillez ajouter une date pour le document "+ this.filename, 5000 )
+    }
     return {
       ...this.value,
       content: [base64.slice(getFileType(ext).length + 13)],
@@ -180,14 +183,14 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
   }
 
   deleteFile(){
-    if (this.value?.nature == "admin") {this.kill.emit(this.value?.name);}
-    else {this.kill.emit(this.filename);}
+    if (this.value?.nature == "admin") {this.kill.emit({filename: this.value?.name, fileUI: this});}
+    else {this.kill.emit({filename : this.filename, fileUI: this})}
     this.value = {
       content: [""],
       expirationDate: "",
       ext: "???",
-      name: "Veuillez télécharger un document",
-      nature: this.filename,
+      name: this.nature == 'labels'? this.filename : "Veuillez télécharger un document",
+      nature: this.nature,
     };
     this.cd.markForCheck()
     
@@ -214,7 +217,11 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
         content: [scannedImages[0] as string],
       };
     }
-    if (this.value?.nature == "admin") {this.popup.newFile(this.filename, this);}
+    if (this.value?.nature == "admin") {
+      // this.popup.newFile(this.filename, this);
+      this.info.show("error", "Veuillez ajouter une date pour le document "+ this.filename, 5000 )
+
+    }
   }
 
   onFileInputClicked(e: Event) {
@@ -271,6 +278,7 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
         {
           name: "Visualiser un fichier",
           click: () => {
+            console.log('value file', this.value)
             if (!this.value || (!this.value.content && this.value.id == void 0))
               return this.info.show("error", "Aucun fichier à affichier", 3000);
 

@@ -175,6 +175,8 @@ export class SOSPageComponent extends Destroy$ {
   }
 
   selectCompany(filter: any) {
+    const profile = this.store.selectSnapshot(DataQueries.currentProfile);
+    this.allAvailableCompanies = this.allAvailableCompanies.filter(company => company.id != profile.company.id)
     this.availableCompanies = []
     if (filter == null) { 
       for (const company of this.allAvailableCompanies) {
@@ -217,10 +219,6 @@ export class SOSPageComponent extends Destroy$ {
 
       for (let company of this.allAvailableCompanies) {
 
-        const profile = this.store.selectSnapshot(DataQueries.currentProfile);
-
-        let isSameCompany = (company.id == profile.company.id)
-
         let includedJob = false;
         if (filter.jobs){
           let Jobs = this.store.selectSnapshot(DataQueries.getMany("JobForCompany", company.jobs));
@@ -249,7 +247,7 @@ export class SOSPageComponent extends Destroy$ {
         if (availableToday[0] === "Disponible") { available = true}
         let isNotDisponible = (filter.sortDisponibleProfils && !available)
 
-        if (isSameCompany || isNotRightAmount || isNotRightRadius || isNotIncludedJob || isNotDisponible) {continue}
+        if (isNotRightAmount || isNotRightRadius || isNotIncludedJob || isNotDisponible) {continue}
         this.isCompanyAvailable(company)
       }
     }

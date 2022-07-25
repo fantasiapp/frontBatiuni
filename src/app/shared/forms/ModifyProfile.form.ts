@@ -15,7 +15,7 @@ import { AbstractControl, FormArray, FormControl, FormGroup, ValidationErrors, V
 import { Camera } from "@capacitor/camera";
 import { Option } from "src/models/option";
 import { SlidesDirective } from "../directives/slides.directive";
-import { defaultFileUIOuput } from "../components/filesUI/files.ui";
+import { defaultFileUIOuput, FileUI } from "../components/filesUI/files.ui";
 import { FieldType, MatchField } from "src/validators/verify";
 import { PopupService } from "../components/popup/popup.component";
 import { InfoService } from "../components/info/info.component";
@@ -43,6 +43,7 @@ import { Email } from "src/validators/persist";
 import { returnInputKeyboard } from '../common/classes'
 import { JsonpClientBackend } from "@angular/common/http";
 import { ActiveViewService } from "../services/activeView.service";
+import { take } from "rxjs/operators";
 
 @Component({
   selector: "modify-profile-form",
@@ -105,7 +106,7 @@ import { ActiveViewService } from "../services/activeView.service";
               />
             </div>
             <div class="form-input">
-              <label>Téléphone de l'entreprise <span class='star'>*</span></label>
+              <label>Téléphone de l'entreprise </label>
               <input
                 #input4
                 (click)="onClickInputScroll(input4)"
@@ -116,7 +117,7 @@ import { ActiveViewService } from "../services/activeView.service";
               />
             </div>
             <div class="form-input">
-              <label>Téléphone portable</label>
+              <label>Téléphone portable <span class='star'>*</span></label>
               <input
                 #input5
                 (click)="onClickInputScroll(input5)"
@@ -185,8 +186,10 @@ import { ActiveViewService } from "../services/activeView.service";
               <ng-template #addfield_tpl>
                 <label>Ajoutez des métiers</label>
                 <options
+                  [validateButton]='false'
                   [options]="allJobs"
-                  [value]="selectedJobs"
+                  [value]="selectedJobsForChecklist"
+                  (valueChange)="updateSelectedJobs($event)"
                   #jobOptions
                 ></options>
                 <div class="form-input center-text">
@@ -271,23 +274,17 @@ import { ActiveViewService } from "../services/activeView.service";
               />
             </div>
 
-            <div class="form-input" *ngIf="view == 'ST'">
-              <label>Taux horaire moyen</label>
-              <input
-                #input12
-                (click)="onClickInputScroll(input12)"
-                (keyup)="returnInputKeyboard($event, input12)"
-                class="form-element"
-                maxlength="11"
-                formControlName="UserProfile.Company.amount"
-              />
-            </div>
+
+            <h3 class="form-title">Documents importants</h3>
+            <h4 class="champs">Champs obligatoire pour optimiser votre profil <span class='starGreen'>*</span></h4>
 
             <ng-container formGroupName="UserProfile.Company.admin">
               
               <fileinput
                 [showtitle]="false"
+                name="Kbis"
                 filename="Kbis"
+                name="Kbis"
                 formControlName="Kbis"
                 (kill)="removeDocument($event)"
               >
@@ -296,7 +293,9 @@ import { ActiveViewService } from "../services/activeView.service";
 
               <fileinput
                 [showtitle]="false"
+                name="Attestation travail dissimulé"
                 filename="Attestation travail dissimulé"
+                name="Attestation travail dissimulé"
                 formControlName="Trav Dis"
                 (kill)="removeDocument($event)"
               >
@@ -305,6 +304,7 @@ import { ActiveViewService } from "../services/activeView.service";
 
               <fileinput
                 [showtitle]="false"
+                name="Attestation RC + DC"
                 filename="Attestation RC + DC"
                 formControlName="RC + DC"
                 (kill)="removeDocument($event)"
@@ -314,6 +314,7 @@ import { ActiveViewService } from "../services/activeView.service";
 
               <fileinput
                 [showtitle]="false"
+                name="URSSAF"
                 filename="URSSAF"
                 formControlName="URSSAF"
                 (kill)="removeDocument($event)"
@@ -323,6 +324,7 @@ import { ActiveViewService } from "../services/activeView.service";
 
               <fileinput
                 [showtitle]="false"
+                name="Impôts"
                 filename="Impôts"
                 formControlName="Impôts"
                 (kill)="removeDocument($event)"
@@ -332,6 +334,7 @@ import { ActiveViewService } from "../services/activeView.service";
 
               <fileinput
                 [showtitle]="false"
+                name="Congés payés"
                 filename="Congés payés"
                 formControlName="Congés Payés"
                 (kill)="removeDocument($event)"
@@ -367,12 +370,15 @@ import { ActiveViewService } from "../services/activeView.service";
                 <ng-container [formGroupName]="i">
                   <fileinput
                     [showtitle]="false"
-                    [filename]="control.get('label')!.value.name"
+                    [nature]="'labels'"
+                    [filename]="control.get('label')!.value.fileName"
+                    [name]="control.get('label')!.value.name"
                     formControlName="fileData"
                     (kill)="removeLabel($event)"
                   >
                     <file-svg
-                      [name]="control.get('label')!.value.name"
+                      [name]="control.get('label')!.value.fileName"
+                      [isLabel]="true"
                       image
                     ></file-svg>
                   </fileinput>
@@ -547,6 +553,9 @@ export class ModifyProfileForm {
 
   companyJobs!: JobForCompany[];
   selectedJobs!: Label[];
+  get selectedJobsForChecklist() {
+    return this.selectedJobs.map(job=> {return {id:job.id,name:job.name}})
+  }
   initialSelectedJobs!: Label[];
   view = this.store.selectSnapshot(DataState.view)
 
@@ -834,11 +843,21 @@ export class ModifyProfileForm {
     labelControl.markAsDirty();
   }
 
-  removeDocument(filename: string) {
+  removeDocument(e :any) {
     const documents = this.form.controls[ "UserProfile.Company.admin"]
-    let file = this.companyFiles.filter(file => file.name == filename)[0]
-    if (file?.id){ this.store.dispatch(new DeleteFile(file?.id))}
-    documents.get(filename)?.setValue({content: [""], expirationDate: '', ext: '???', name: 'Veuillez télécharger un document', nature: 'admin'})
+    console.log('this.company', this.companyFiles, e.filename);
+    let file = this.companyFiles.filter(file => file.name == e.filename)[0]
+    console.log('file;;', file);
+    if (file?.id){ this.store.dispatch(new DeleteFile(file?.id)).pipe(take(1)).subscribe(()=> {
+      documents.get(e.filename)?.setValue({content: [""], expirationDate: '', ext: '???', name: 'Veuillez télécharger un document', nature: 'admin'})
+      e.fileUI.value = {
+        content: [""],
+        expirationDate: "",
+        ext: "???",
+        name: "Veuillez télécharger un document",
+        nature: e.fileUI.value.nature,
+      }})}
+    documents.get(e.filename)?.setValue({content: [""], expirationDate: '', ext: '???', name: 'Veuillez télécharger un document', nature: 'admin'})
     this.form.controls["UserProfile.Company.admin"].markAsDirty()
   } 
 
@@ -863,4 +882,14 @@ export class ModifyProfileForm {
   addingField: boolean = false;
 
   returnInputKeyboard = returnInputKeyboard
+
+  updateSelectedJobs(event: any){
+    this.selectedJobs = event.map((e: any) => {
+      return ({
+        id: e.id,
+      name: e.name,
+      fileName: ''
+    } as Label)
+    })
+  }
 }

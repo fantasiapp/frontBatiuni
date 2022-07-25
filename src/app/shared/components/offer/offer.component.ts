@@ -9,8 +9,8 @@ import {
 } from "@angular/core";
 import { SafeResourceUrl } from "@angular/platform-browser";
 import { Select, Store } from "@ngxs/store";
-import { Observable, Subject } from "rxjs";
-import { take } from "rxjs/operators";
+import { Observable, Subject, Subscription } from "rxjs";
+import { take, takeUntil } from "rxjs/operators";
 import {
   Post,
   Mission,
@@ -20,6 +20,7 @@ import {
 } from "src/models/new/data.interfaces";
 import { DataQueries } from "src/models/new/data.state";
 import { DeletePost, SetFavorite } from "src/models/new/user/user.actions";
+import { Destroy$ } from "../../common/classes";
 import { FileDownloader } from "../../services/file-downloader.service";
 import { ImageGenerator } from "../../services/image-generator.service";
 import { NotifService } from "../../services/notif.service";
@@ -32,7 +33,7 @@ import { PopupService } from "../popup/popup.component";
   styleUrls: ["./offer.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class OfferComponent {
+export class OfferComponent extends Destroy${
   constructor(
     private store: Store,
     private popup: PopupService,
@@ -40,7 +41,7 @@ export class OfferComponent {
     private imageGenerator: ImageGenerator,
     private downloader: FileDownloader,
     private notifService: NotifService
-  ) {}
+  ) {super()}
 
   @Input() view: "ST" | "PME" = "PME";
 
@@ -50,6 +51,8 @@ export class OfferComponent {
   user$!: Observable<User>;
   favoritePost: boolean = false;
 
+  subscriber: Subscription | null = null
+  hasSubscribed: boolean = false
 
   @Input()
   showCandidate: boolean = false;
@@ -147,14 +150,19 @@ export class OfferComponent {
   }
 
   toLocateDate(date?: string) {
-    return date ? new Date(date).toLocaleDateString("fr") : "(Non renseigné)";
+    return date ? new Date(date).toLocaleDateString("fr") : "...";
   }
 
   ngOnInit() {
-    this.notifService.getNotifChangeEmitter().subscribe(() => {
-      this.notificationsMissionUnseen = this.notifService.getNotificationUnseenMission(this._post!.id)
-      this.cd.markForCheck()
-    })
+    if(!this.hasSubscribed){  
+      this.subscriber = this.notifService.getNotifChangeEmitter().pipe(takeUntil(this.destroy$)).subscribe(() => {
+        // console.log("subscribe notif")
+        this.notificationsMissionUnseen = this.notifService.getNotificationUnseenMission(this._post!.id)
+        this.cd.markForCheck()
+      })
+      this.hasSubscribed = true
+    }
+    // console.log("juste après notif")
     this.notificationsMissionUnseen = this.notifService.getNotificationUnseenMission(this._post!.id)
     if (!this.src) {
       if (SingleCache.checkValueInCache("companyImage" + this.company!.id.toString())) {
@@ -202,4 +210,7 @@ export class OfferComponent {
     }
   }
 
+  ngOnDestroy(){
+    this.subscriber?.unsubscribe()
+  }
 }

@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostBinding, HostListener, Input, NgZone, Output, QueryList, SimpleChanges } from "@angular/core";
 import { NG_VALUE_ACCESSOR } from "@angular/forms";
-import { UIDefaultAccessor } from "src/app/shared/common/classes";
+import { onClickInputScroll, returnInputKeyboard, UIDefaultAccessor } from "src/app/shared/common/classes";
 import { delay, filterMap, focusOutside, getTopmostElement, makeid } from "src/app/shared/common/functions";
 import { Option } from "src/models/option";
 import { UIRadioboxComponent } from "../box/radiobox.component";
@@ -82,6 +82,8 @@ export class OptionsModel extends UIDefaultAccessor<Option[]> {
   @Input()
   ifEmpty = '';
 
+  @Input() validateButton = true
+
   _type: ['checkbox' | 'radio', string] = ['checkbox', ''];
   
   @Input()
@@ -92,7 +94,7 @@ export class OptionsModel extends UIDefaultAccessor<Option[]> {
 
   filterOptions(e: Event) {
     this.search = (e.target as any).value;
-}
+  }
 
   get availableOptions() {
     return this.options.filter(option => option.name.toLowerCase().includes(this.search.toLowerCase()));
@@ -119,6 +121,10 @@ export class OptionsModel extends UIDefaultAccessor<Option[]> {
         return [...this.value!, option];
     }
   };
+
+  dropdownIncludes(option:any, value:any){
+    return !!value.filter((v:any)=> v.id == option.id).length
+  }
 
   ngOnDestroy() {
     const index = OptionsModel.instances.indexOf(this);
@@ -150,4 +156,13 @@ export class OptionsModel extends UIDefaultAccessor<Option[]> {
     e.preventDefault()
     this.onToggle(e)
   }
+
+  onClickInputScroll(input: HTMLElement){
+    setTimeout(() => {
+      setTimeout(() => {
+        input.scrollIntoView({behavior: 'smooth', block: 'start', inline: 'start'})
+      }, 600)
+    }, 100)
+  }
+  returnInputKeyboard = returnInputKeyboard
 };

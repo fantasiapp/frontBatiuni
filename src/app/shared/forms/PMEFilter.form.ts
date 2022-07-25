@@ -62,10 +62,15 @@ import { SnapshotAll } from "src/models/new/data.state";
             </div>
           </ng-container>
         </div>
-        <div class="action-button-filter flex row space space-between full-width">
-          <button class="button passive" (click)="onResetFilter()">Reinitialiser</button>
-          <button class="button active" (click)="onCloseFilter()">Valider</button>
-        </div>
+
+        <footer
+        class="flex row space-between sticky-footer full-width submit-container"
+        style="background-color: white;">
+          <div class="action-button-filter flex row space space-between full-width">
+            <div class="button passive" (click)="onResetFilter()">Réinitialiser</div>
+            <div class="button active" (click)="onCloseFilter()">Valider</div>
+          </div>
+        </footer>
       </form>
       <!-- <online-filter-form [target]="activeView == 1 ? 'réponses' : 'notifications'" *ngSwitchDefault></online-filter-form> -->
     </ng-container>
@@ -76,6 +81,7 @@ import { SnapshotAll } from "src/models/new/data.state";
     :host {
       display: block;
       width: 100%;
+      padding-bottom: 3rem;
     }
 
     .form-title {

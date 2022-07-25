@@ -48,12 +48,16 @@ export class ExtendedProfileComponent extends Destroy$ {
   @SnapshotArray("Job")
   jobs!: Job[];
 
-  @SnapshotArray("File")
+  // @SnapshotArray("File")
   files!: File[]; //only responsive to profile changes
-
+  labelFiles: File[] = []
+  attachedFiles: File[] = []
   @QueryProfile()
   @Input("profile")
   profile$!: number | Profile | Observable<Profile>;
+
+  @Input()
+  hideExactAdress: boolean = false;
 
   @Input()
   showContact: boolean = false;
@@ -93,25 +97,32 @@ export class ExtendedProfileComponent extends Destroy$ {
     this.initSubscribeProfile()
   }
 
+  
+  // get attachedFiles(): any[] {
+  // }
 
-  get attachedFiles(): any[] {
-    return this.files.filter(
-      (file) => file.nature == "admin" 
-    );
-  }
+  // get labelFiles(): any[] {
+  // }
 
-  get labelFiles(): any[] {
-    return this.files.filter((file) => file.nature == "labels")
-  }
-
-
+  
   initSubscribeProfile() {
     (this.profile$ as Observable<Profile>)
-      .pipe(take(1))
-      .subscribe((profile) => {
-        this.files = profile.company.files as any;
-        this.companyJobs = profile.company.jobs as any;
-        this.jobs = this.companyJobs.map(({ job }) => job) as any;
+    .pipe(take(1))
+    .subscribe((profile) => {
+      console.log('profile', profile.company);
+      this.files = this.store.selectSnapshot(DataQueries.getMany('File', profile.company.files))
+      console.log('files', this.files);
+      // this.files = profile.company.files as any;
+      this.labelFiles =  this.files.filter((file) => file.nature == "labels")
+      this.attachedFiles = this.files.filter(
+        (file) => file.nature == "admin" 
+      );
+
+      console.log('filesLabel', this.labelFiles);
+      this.companyJobs = profile.company.jobs as any;
+      this.jobs = this.companyJobs.map(({ job }) => job) as any;
+
+      this.cd.markForCheck()
   })
   }
 
@@ -124,11 +135,24 @@ export class ExtendedProfileComponent extends Destroy$ {
     this.popup.openFile(file);
   }
 
+  hideAdress(adress?: string) {
+    if (adress && this.hideExactAdress) {
+      return adress!.replace(/\d+/, "").trim();
+    } else {
+      return adress;
+    }
+  }
+
   @Output()
   ratingsClicked = new EventEmitter();
 
   @Output()
   profileChanged = new EventEmitter<boolean>();
+
+  @Output() viewChanged = new EventEmitter()
+  onViewChanged(view: 'PME' | 'ST'){
+    this.viewChanged.emit(view)
+  }
 
   computeWebSite(websiteUrl: string){
     if(websiteUrl.substring(0, 4) && websiteUrl.substring(0, 4) == 'http') return websiteUrl

@@ -1,6 +1,6 @@
 import { Injectable, NgZone } from "@angular/core";
-import { Action,createSelector,Selector,State,StateContext,Store } from "@ngxs/store";
-import { Observable, of, Subject } from "rxjs";
+import { Action,createSelector,Selector,State,StateContext,Store, } from "@ngxs/store";
+import { Observable, of, Subject, throwError } from "rxjs";
 import { concatMap, map, tap } from "rxjs/operators";
 import { HttpService } from "src/app/services/http.service";
 import { GetGeneralData,HandleApplication,BlockCompany,SignContract,MarkViewed,ModifyAvailability,SetFavorite,TakePicture,InviteFriend,ValidateMissionDate,BoostPost,AskRecommandation,GiveRecommandation,GiveNotificationToken,ModifyFile,UnapplyPost,DeleteLabel,PostNotificationViewed } from "./user/user.actions";
@@ -183,21 +183,23 @@ export class DataState {
     else if (this.flagUpdate && this.connectionStatusService.isOnline){
       this.flagUpdate = false
       return req.pipe(tap((response: any) => {
-        console.log("getUserData response", response);
-        this.getUserDataService.setNewResponse(response)
-        if (this.isFirstTime) {
-          this.booleanService.emitLoadingChangeEvent(true)
-          this.booleanService.emitConnectedChangeEvent(true)
-          this.getUserDataService.getDataChangeEmitter().subscribe((value) => {
-            this.updateLocalData(ctx, value)
-          })
-          this.updateLocalData(ctx, response)
-        }
-        this.flagUpdate = true
-    }, (error: any) => {
-      this.flagUpdate = true
-    })
-      );
+          this.getUserDataService.setNewResponse(response)
+          if (this.isFirstTime) {
+            this.booleanService.emitLoadingChangeEvent(true)
+            this.booleanService.emitConnectedChangeEvent(true)
+            this.getUserDataService.getDataChangeEmitter().subscribe((value) => {
+              this.updateLocalData(ctx, value)
+            })
+            this.updateLocalData(ctx, response)
+          }
+          this.flagUpdate = true
+        }, (error: any) => {
+          this.flagUpdate = true
+          if (error.status == '401'){
+            this.store.dispatch(new Logout());
+          }
+          return throwError("GetUserData Failed.")
+        }))
     }
     else{
       return
@@ -283,11 +285,12 @@ export class DataState {
       }),
       concatMap(() => {
         this.getUserDataService.emitDataChangeEvent()
+        console.log('UPLOAD FILE', labelFiles);
         labelFiles.forEach((file) =>
         // {
         // // if (companyLabels.some(label => label.name != file.nature)) {
         // //   console.log("file", file, "labelFile", labelFiles)
-          ctx.dispatch(new UploadFile(file, "labels", file.nature, "Company"))
+          ctx.dispatch(new UploadFile(file, "labels", file.name, "Company"))
         // } else {
 
         //   ctx.dispatch(new ModifyFile(file, "labels", response.LabelForCompany.id, file.name, "Company"))
@@ -341,9 +344,8 @@ export class DataState {
 
         delete response[picture.action];
         let key = Object.keys(response)
-        let id = response.supervisionId
-        delete response.supervisionId;
-        response[parseInt(key[0])].push(picture.imageBase64)
+        let id = picture.supervisionId
+        response[parseInt(key[0])].push(picture.fileBase64)
         this.getUserDataService.emitDataChangeEvent(response.timestamp)
         delete response["timestamp"];
         ctx.setState(compose(addComplexChildren("Supervision", id, "File", response)))
@@ -389,6 +391,11 @@ export class DataState {
         const assignedId = +Object.keys(response)[0],
         fields = ctx.getState()["fields"],
         contentIndex = fields["File"].indexOf("content");
+      
+        if(response.hasOwnProperty('Company')) {
+          ctx.setState(update('Company',response['Company']))
+          delete response['Company']
+        }
 
         upload.assignedId = assignedId;
         response[assignedId][contentIndex] = "";

@@ -57,7 +57,7 @@ export class SuiviComments {
     const timestampMoment = moment(this.supervision.timestamp * 1000)
     this.timestamp.date = timestampMoment.format('DD/MM/YYYY')
     this.timestamp.hour = timestampMoment.format('HH:mm')
-    
+    moment.locale('en')
   }
 
   images: SafeResourceUrl[] = [];
@@ -82,7 +82,6 @@ export class SuiviComments {
     // Supervisions: [],
     author: "Gabriel Dubois", //maybe this should be a UserProfile ?
     companyId: 1,
-    date: "13-11-2021",
     comment:
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
     files: [],
