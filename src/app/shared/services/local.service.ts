@@ -92,6 +92,7 @@ export class LocalService {
   }
 
   public dumpLocalStorage(){
+    let getUserDataString: string = ""
     
   }
 }

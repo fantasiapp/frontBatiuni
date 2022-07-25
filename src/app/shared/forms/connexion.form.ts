@@ -98,6 +98,11 @@ export class ConnexionForm extends Destroy$ {
     super();
   }
 
+  ngOnInit(){
+    if(this.lastEmail)
+      this.loginForm.get("email")!.markAsTouched()
+  }
+
   async onSubmit(e: any) {
     this.mobileFooterService.hide()
     this.isLoadingService.emitLoadingChangeEvent(true)
