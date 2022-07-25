@@ -248,9 +248,7 @@ export class DataState {
     else req = this.http.post("data", modifyAction);
 
 
-    return req.pipe(
-      tap((response: any) => {
-
+    return req.pipe(tap((response: any) => {
         const rep = response
         this.getUserDataService.emitDataChangeEvent(response.timestamp)
         delete response["timestamp"];
@@ -260,31 +258,25 @@ export class DataState {
           throw response.messages;
         }
         delete response[modify.action];
-
         if(response.hasOwnProperty('JobForCompany') && Array.isArray(response['JobForCompany'])){
           for (let job of response.JobForCompany) {
             ctx.setState(addValues('JobForCompany', job))            
           }
         }
-
-
         if (response.hasOwnProperty('LabelForCompany') && Array.isArray(response['LabelForCompany'])){
           for (let label of response.LabelForCompany) {
             ctx.setState(addValues('LabelForCompany', label))
           }
         }
-
         // delete response['LabelForCompany']
         // delete response['JobForCompany']
         // ctx.setState(compose(...this.reader.readUpdates(response)));
-
         if (response.hasOwnProperty('Company')){
           ctx.setState(update('Company', response.Company))
         }
         if (response.hasOwnProperty('UserProfile')){
           ctx.setState(update('UserProfile', response.UserProfile))
         }
-
         this.inZone(() =>
           this.info.show("success", "Profil modifié avec succès", 2000)
         );
