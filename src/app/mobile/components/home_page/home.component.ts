@@ -506,7 +506,7 @@ export class HomeComponent extends Destroy$ {
       return b2 - b1
     });
     if (searchForm == "" || searchForm == null)  {
-      this.userDrafts = this.allUserDrafts
+      if (this.filterPME) { this.filterPME.callbackFilter(this.filterPME.filterForm.value) }
     } else {
       let levenshteinDist: any = [];
       for (let post of this.allUserDrafts) {
@@ -544,6 +544,7 @@ export class HomeComponent extends Destroy$ {
     this.allUserOnlinePosts.sort((a: any,b: any)=>keys.indexOf(a) - keys.indexOf(b));
     
     if (searchForm == "" || searchForm == null)  {
+      if (this.filterPME) { this.filterPME.callbackFilter(this.filterPME.filterForm.value) }
     } else {
       let levenshteinDist: any = [];
       for (let post of this.userOnlinePosts) {
@@ -561,7 +562,7 @@ export class HomeComponent extends Destroy$ {
     this.missions = [];
     this.allMissions.sort((a, b) => {return Number(a["isClosed"]) - Number(b["isClosed"]);});
     if (searchForm == "" || searchForm == null)  {
-      this.missions = this.allMissions
+      if (this.filterPME) { this.filterPME.callbackFilter(this.filterPME.filterForm.value) }
     } else {
       let levenshteinDist: any = [];
       for (let mission of this.allMissions) {
@@ -586,7 +587,7 @@ export class HomeComponent extends Destroy$ {
       return b2 - b1
     });
     if (searchForm == "" || searchForm == null)  {
-      this.displayOnlinePosts = this.allOnlinePosts
+      if (this.filterST) { console.log("filterST"), this.filterST.updatePosts(this.allOnlinePosts) }
     } else {
       let levenshteinDist: any = [];
       for (let post of this.allOnlinePosts) {
