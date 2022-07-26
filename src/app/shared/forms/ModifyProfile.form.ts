@@ -106,17 +106,6 @@ import { take } from "rxjs/operators";
               />
             </div>
             <div class="form-input">
-              <label>Téléphone de l'entreprise </label>
-              <input
-                #input4
-                (click)="onClickInputScroll(input4)"
-                (keyup)="returnInputKeyboard($event, input4)"
-                class="form-element"
-                type="tel"
-                formControlName="UserProfile.Company.companyPhone"
-              />
-            </div>
-            <div class="form-input">
               <label>Téléphone portable <span class='star'>*</span></label>
               <input
                 #input5
@@ -125,6 +114,17 @@ import { take } from "rxjs/operators";
                 class="form-element"
                 type="tel"
                 formControlName="UserProfile.cellPhone"
+              />
+            </div>
+            <div class="form-input">
+              <label>Téléphone de l'entreprise </label>
+              <input
+                #input4
+                (click)="onClickInputScroll(input4)"
+                (keyup)="returnInputKeyboard($event, input4)"
+                class="form-element"
+                type="tel"
+                formControlName="UserProfile.Company.companyPhone"
               />
             </div>
           </div>

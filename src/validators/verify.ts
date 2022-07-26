@@ -57,7 +57,7 @@ export const Regexp = (regexp: RegExp, error: string, args: any[]) => {
   }
 };
 
-export const FieldType = (type: 'phone' | 'number' | 'url', messages?: string[]) => {
+export const FieldType = (type: 'phone' | 'number' | 'url' | 'positiveNumber', messages?: string[]) => {
   return (control: AbstractControl) => {
     let content = control.value,
     errors: ValidationErrors = {};
@@ -65,10 +65,12 @@ export const FieldType = (type: 'phone' | 'number' | 'url', messages?: string[])
 
     if ( !content ) return {};
 
-    if ( type == 'number' ) {
+    if ( type == 'number' || type == "positiveNumber" ) {
       if ( !((typeof content == 'number') || !content.match(regexNumber)) )
         errors['FIELD_TYPE'] = messages || ['un nombre'];
-
+      if ( type == "positiveNumber" && content == 0){
+        errors['FIELD_TYPE'] = messages || ['un nombre non nul'];
+      }
       if(messages && messages[0] == "un numéro de SIRET" && content.length != 14) errors['FIELD_TYPE'] = ['un numéro de SIRET']
     } else if ( type == 'phone' ) {
       if ( !content.replace(/\s/g, '').match(phone))
