@@ -585,7 +585,7 @@ export class ModifyProfileForm {
     ]),
     "UserProfile.Company.capital": new FormControl("", [FieldType("number")]),
     "UserProfile.Company.revenue": new FormControl("", [FieldType("number")]),
-    "UserProfile.Company.size": new FormControl("", [FieldType("number")]),
+    "UserProfile.Company.size": new FormControl("", [FieldType("positiveNumber")]),
     "UserProfile.Company.amount": new FormControl("", [FieldType("number")]),
     "UserProfile.Company.allQualifications": new FormControl("", []),
     "UserProfile.Company.saturdayDisponibility": new FormControl("", []),
