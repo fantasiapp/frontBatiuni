@@ -138,7 +138,7 @@ export class AppComponent extends Destroy$ {
     const messaging: any = getMessaging(this.app)
     if ("serviceWorker" in navigator) {
       // this.info.show('success', navigator.serviceWorker.toString())
-      await navigator.serviceWorker.register("/firebase-messaging-sw.js").then((registration) => {
+      await navigator.serviceWorker.register("firebase-messaging-sw.js").then((registration) => {
         this.info.show('info','wiwi')
         getToken(messaging, {vapidKey : environment.firebase.vapidKey, serviceWorkerRegistration: registration}).then((currentToken) => {
           if (currentToken) {
