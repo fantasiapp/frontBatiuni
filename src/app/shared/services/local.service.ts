@@ -1,4 +1,7 @@
 import { Injectable } from '@angular/core';
+import { Store } from '@ngxs/store';
+import { DataTypes } from 'src/models/new/data.interfaces';
+import { DataQueries } from 'src/models/new/data.state';
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +12,7 @@ export class LocalService {
 
   generalKeys: string[] = ['getUserData', 'getGeneralData']
 
-  constructor() {
+  constructor(private store: Store) {
     if (!localStorage.getItem('allTimestamps')){
       localStorage.setItem('allTimestamps', '')
     }
@@ -23,7 +26,7 @@ export class LocalService {
   }
 
   public getData(key: string): string | null {
-      return localStorage.getItem(key)
+    return localStorage.getItem(key)
   }
 
   public getAllData() : string[] {
@@ -50,7 +53,7 @@ export class LocalService {
   }
 
   public clearData() {
-    console.error("JE CLEAR")
+    this.dumpLocalStorage()
     let email = this.getLastEmail()
     localStorage.clear()
     if(email)
@@ -94,7 +97,35 @@ export class LocalService {
 
   public dumpLocalStorage(){
     let getUserDataString: string = ""
-    
+    let localUserData = JSON.parse(localStorage.getItem('getUserData')!)
+    let newLocalUserData: any = localUserData
+    let list = Object.keys(localUserData).filter((value) => {
+      if(value.includes('Values')){
+        return value
+      }
+      return
+    })
+    let DataTypeslist = list.map((value) => {
+        let newValue: DataTypes = value.substring(0,value.length-6) as DataTypes
+        // console.log(this.store.selectSnapshot(DataQueries.getAll(newValue)))
+        return newValue
+    }) as DataTypes[]
+    DataTypeslist.forEach((value) => {
+      let getUserDataQuery: any = {}
+      let localquery = this.store.selectSnapshot(DataQueries.getAll(value))
+      localquery.forEach((element: any) => {
+        let id = element["id"] 
+        delete element["id"]
+        // console.log(element)
+        getUserDataQuery[String(id)] = element
+        // console.log(getUserDataQuery)
+      })
+      newLocalUserData[value + "Values"] = getUserDataQuery
+    })
+    // console.log("le fameux local user data", list)
+    // console.log("les select les réponses sur différents types")
+    // console.log("select snapshot", this.store.selectSnapshot(DataQueries.getAll("Company")))
+    console.log("LA FIIIIIIIIIIIIIN", newLocalUserData)
   }
 }
 
