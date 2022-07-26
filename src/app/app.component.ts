@@ -23,6 +23,7 @@ import { getMessaging, getToken, onMessage} from "firebase/messaging"
 import { initializeApp } from "firebase/app";
 import { BooleanService } from "./shared/services/boolean.service";
 import { StripeService } from "./shared/services/stripe";
+import { InfoService } from "./shared/components/info/info.component";
 
 @Component({
   selector: "app-root",
@@ -51,7 +52,7 @@ export class AppComponent extends Destroy$ {
   isWhileOn: boolean = false;
   app: any
 
-  constructor(private store: Store, private mobile: Mobile, private notifService: NotifService, private booleanService: BooleanService, private stripeService: StripeService) {
+  constructor(private store: Store, private mobile: Mobile, private notifService: NotifService, private booleanService: BooleanService, private stripeService: StripeService, private info: InfoService) {
     super();
     this.mobile.init();
     this.isConnected = booleanService.isConnected
@@ -76,7 +77,7 @@ export class AppComponent extends Destroy$ {
     this.ready$.next(true);
     this.ready$.complete();
     this.app = initializeApp(environment.firebase)
-    this.requestPermission()
+    await this.requestPermission()
     this.listen()
   }
 
@@ -132,12 +133,16 @@ export class AppComponent extends Destroy$ {
     }
   }
 
-  requestPermission() {
+  async requestPermission() {
+    await delay(3000)
     const messaging: any = getMessaging(this.app)
     if ("serviceWorker" in navigator) {
-      navigator.serviceWorker.register("./firebase-messaging-sw.js").then((registration) => {
+      // this.info.show('success', navigator.serviceWorker.toString())
+      await navigator.serviceWorker.register("/firebase-messaging-sw.js").then((registration) => {
+        this.info.show('info','wiwi')
         getToken(messaging, {vapidKey : environment.firebase.vapidKey, serviceWorkerRegistration: registration}).then((currentToken) => {
           if (currentToken) {
+            this.info.show('error', currentToken)
             this.notifService.setToken(currentToken)
             console.log("we got the token", currentToken, "and sent it to ", this.notifService)
           }
@@ -145,6 +150,8 @@ export class AppComponent extends Destroy$ {
         }).catch((err) => {
           console.log('An error occurred while retrieving token. ', err)
         })
+      }).catch((err)=>{
+        this.info.show('error', err)
       })
     }
 

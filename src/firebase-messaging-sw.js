@@ -7,7 +7,7 @@ firebase.initializeApp({
     projectId: "batiuni-8cd43",
     storageBucket: "batiuni-8cd43.appspot.com",
     messagingSenderId: "22329345218",
-    appId: "1:22329345218:web:03e1d61a808b6d4364a75b",
+    appId: "1:22329345218:android:82e662a5affbbdbd64a75b",
     measurementId: "G-5T8VEBRJ80"
    });
    const messaging = firebase.messaging();
