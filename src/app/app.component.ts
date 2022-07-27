@@ -24,6 +24,7 @@ import { initializeApp } from "firebase/app";
 import { BooleanService } from "./shared/services/boolean.service";
 import { StripeService } from "./shared/services/stripe";
 import { LocalService } from "./shared/services/local.service";
+import { App } from "@capacitor/app"
 
 @Component({
   selector: "app-root",
@@ -166,6 +167,13 @@ export class AppComponent extends Destroy$ {
   // }
 
   ngOnDestroy(): void {
-    this.localService.dumpLocalStorage()
+  }
+
+  initBackGroundTask(){
+    App.addListener("appStateChange", (isActive) => {
+      if(!isActive){
+        this.localService.dumpLocalStorage()
+      }
+    })
   }
 }

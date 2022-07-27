@@ -24,6 +24,7 @@
     "@angular/router": "~13.3.11",
     "@angular/service-worker": "~13.3.11",
     "@capacitor/android": "^3.3.2",
+    "@capacitor/app": "^1.1.1",
     "@capacitor/camera": "^1.2.2",
     "@capacitor/core": "^3.3.2",
     "@capacitor/device": "^1.1.0",
