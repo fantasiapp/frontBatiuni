@@ -158,50 +158,44 @@ export class AppComponent extends Destroy$ {
       }
     } else {
       console.log('GET PLATFORM MESSAGE : NOT WEB');
-      const addListeners =  () => {
-        console.log('ADD LISTENERS');
-         PushNotifications.addListener('registration', token => {
-         console.info('Registration token: ', token.value);
-          this.info.show('info', token.value)
 
-          // this.notifService.setToken(token.value)
-        });
+      await PushNotifications.addListener('registration', token => {
+        console.info('Registration token: ', token.value);
 
-        PushNotifications.addListener('registrationError', err => {
-          console.error('Registration error: ', err.error);
-          this.info.show('error', err)
-        });
+        this.notifService.setToken(token.value)
 
-        PushNotifications.addListener('pushNotificationReceived', notification => {
-          console.log('Push notification received: ', notification);
-          this.info.show('success', JSON.stringify(notification))
-        });
+        console.log('SET TOKEN', token.value);
+      });
 
-        PushNotifications.addListener('pushNotificationActionPerformed', notification => {
-          console.log('Push notification action performed', notification.actionId, notification.inputValue);
-        });
-      }
+      await PushNotifications.addListener('registrationError', err => {
+        console.error('Registration error: ', err.error);
+        this.info.show('error', err)
+      });
+
+      await PushNotifications.addListener('pushNotificationReceived', notification => {
+        console.log('Push notification received: ', notification);
+        this.info.show('success', JSON.stringify(notification))
+      });
+
+      await PushNotifications.addListener('pushNotificationActionPerformed', notification => {
+        console.log('Push notification action performed', notification.actionId, notification.inputValue);
+      });
 
 
       const registerNotifications = async () => {
-        PushNotifications.checkPermissions().then((s)=> {
+        PushNotifications.checkPermissions().then(async (s)=> {
         console.log('REQUEST NOTIFICICATION', s.receive);
-        // this.info.show('info', permStatus.receive)
           if(s.receive === 'prompt'){
-            PushNotifications.requestPermissions().then(permStatus => {
-              if(permStatus.receive !== 'granted') {
-                console.error('REQUEST FAILED')
-              }
-              console.log('REQUEST DANS LA POCHE', permStatus.receive);
-              PushNotifications.register()
-            })
+            const permStatus = await PushNotifications.requestPermissions()
+              s = permStatus
           } 
 
+          if(s.receive === 'granted'){
+            await PushNotifications.register()
+          }
         })
-
       }
 
-      addListeners()
       await registerNotifications()
     }
 
