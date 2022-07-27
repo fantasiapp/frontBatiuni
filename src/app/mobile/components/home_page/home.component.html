@@ -72,15 +72,23 @@
                   [hideExactAdress]="true"
                   ></offer>
               </ng-container>
-    
-              <mapbox-batiuni
+
+              <ng-container *ngIf="isOnline; else noMap">
+                <mapbox-batiuni
                 [refreshEvent]="refreshSubject.asObservable()"
                 [posts]="displayOnlinePosts" 
                 [searchBarEmptyEvent]="searchBarEmptySubject.asObservable()"
                 class="map-container space-children-margin" 
                 (postClick)="openPost($event.post, $event.hideExactAdress)" 
                 *ngSwitchCase="1" 
-              ></mapbox-batiuni>
+                ></mapbox-batiuni>
+              </ng-container>
+              <ng-template #noMap>
+                <div *ngSwitchCase="1" >
+                  no connexion
+                </div>
+              </ng-template>
+
             </ng-container>
           </ng-template>
     </div>

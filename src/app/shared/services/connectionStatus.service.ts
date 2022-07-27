@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { fromEvent, Observable, Subscription } from 'rxjs';
+import { LocalService } from './local.service';
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +10,7 @@ import { fromEvent, Observable, Subscription } from 'rxjs';
 
 export class ConnectionStatusService {
     
-  constructor(private store: Store) {
+  constructor(private store: Store, private localService: LocalService) {
     this.init()
   }
 
@@ -31,6 +32,7 @@ export class ConnectionStatusService {
     this.subscriptions.push(this.offlineEvent.subscribe(e => {
       this.isOnline = false
       console.log("je ne suis pas connecté", this.isOnline)
+      this.localService.dumpLocalStorage()
     }))
   }
 
