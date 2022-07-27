@@ -1,8 +1,16 @@
 import { HttpClient } from "@angular/common/http";
 import { Attribute, ChangeDetectorRef, ComponentFactoryResolver, Directive, EventEmitter, HostBinding, HostListener, Injector, Input, Optional, Output, ViewContainerRef } from "@angular/core";
 import { ControlValueAccessor } from "@angular/forms";
-import { Subject } from "rxjs";
+import { StateStream, Store } from "@ngxs/store";
+import { InternalNgxsExecutionStrategy } from "@ngxs/store/src/execution/internal-ngxs-execution-strategy";
+import { StateFactory } from "@ngxs/store/src/internal/state-factory";
+import { InternalStateOperations } from "@ngxs/store/src/internal/state-operations";
+import { NgxsConfig } from "@ngxs/store/src/symbols";
+import { Observable, Subject } from "rxjs";
 import { environment } from "src/environments/environment";
+import { ConnectionStatusService } from "../services/connectionStatus.service";
+import { LocalService } from "../services/local.service";
+import { getTimeStamp } from "./functions";
 import { Ref } from "./types";
 
 @Directive()
@@ -265,6 +273,21 @@ export function returnInputKeyboard(e: any, input: HTMLInputElement){
   }
 }
 
+export class QueryManager {
+
+  constructor(private store: Store, private connectionService: ConnectionStatusService, private localService: LocalService){}
+
+  query(actionOrActions: any ){
+    if (this.connectionService.isOnline){
+      return this.store.dispatch(actionOrActions)}
+    else{
+      let timestamp = getTimeStamp()
+      this.localService.saveData(timestamp.toString(), JSON.stringify(actionOrActions))
+      let queriesQueue = this.localService.getData("queriesQueue")
+      return null
+    }
+    }
+}
 export function onClickInputScroll(input: HTMLElement){
     setTimeout(() => {
       input.scrollIntoView({behavior: 'smooth', block: 'center', inline: 'nearest'})

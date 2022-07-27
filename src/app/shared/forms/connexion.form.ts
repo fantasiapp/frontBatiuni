@@ -9,6 +9,7 @@ import { GiveNotificationToken } from "src/models/new/user/user.actions";
 import { Email } from "src/validators/persist";
 import { ComplexPassword, setErrors } from "src/validators/verify";
 import { BooleanService } from "../services/boolean.service";
+import { LocalService } from "../services/local.service";
 import { Mobile } from "../services/mobile-footer.service";
 import { NotifService } from "../services/notif.service";
 
@@ -80,7 +81,7 @@ import { NotifService } from "../services/notif.service";
 })
 export class ConnexionForm extends Destroy$ {
   loginForm = new FormGroup({
-    email: new FormControl('', [
+    email: new FormControl(this.lastEmail, [
       Validators.required,
       // Email()
     ]),
@@ -93,8 +94,13 @@ export class ConnexionForm extends Destroy$ {
   private _errors: string[] = [];
   get errors() { return this._errors; }
 
-  constructor(private router: Router, private store: Store, private cd: ChangeDetectorRef, private isLoadingService: BooleanService, private notifService: NotifService, private mobileFooterService: Mobile) {
+  constructor(private router: Router, private store: Store, private cd: ChangeDetectorRef, private isLoadingService: BooleanService, private notifService: NotifService, private mobileFooterService: Mobile, private localService: LocalService) {
     super();
+  }
+
+  ngOnInit(){
+    if(this.lastEmail)
+      this.loginForm.get("email")!.markAsTouched()
   }
 
   async onSubmit(e: any) {
@@ -105,6 +111,7 @@ export class ConnexionForm extends Destroy$ {
     .pipe(take(1)).subscribe(
       (success) => {
         if(success){
+          this.localService.setLastEmail(email)
           const result = this.router.navigate(['', 'home']);
           this.store.dispatch(new GiveNotificationToken(this.notifService.getToken()))
           // if ( !result ) {
@@ -132,5 +139,9 @@ export class ConnexionForm extends Destroy$ {
 
   hide(){
     this.mobileFooterService.hide()
+  }
+
+  get lastEmail(){
+    return this.localService.getLastEmail()
   }
 };

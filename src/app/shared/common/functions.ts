@@ -166,3 +166,7 @@ export function getFileColor(name: string) {
 export function delay(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
+
+export function getTimeStamp(){
+  return Math.floor(Date.now() / 1000)
+}

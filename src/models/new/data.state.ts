@@ -21,6 +21,8 @@ import { getUserDataService } from "src/app/shared/services/getUserData.service"
 import { AppComponent } from "src/app/app.component";
 import { SingleCache } from "src/app/shared/services/SingleCache";
 import { NotifService } from "src/app/shared/services/notif.service";
+import { LocalService } from "src/app/shared/services/local.service";
+import { ConnectionStatusService } from "src/app/shared/services/connectionStatus.service";
 
 export interface DataModel {
   fields: Record<string[]>;
@@ -52,7 +54,7 @@ export class Clear {
 export class DataState {
   flagUpdate = true;
   isFirstTime = true
-  constructor(private store: Store,private reader: DataReader,private http: HttpService,private info: InfoService,private slide: SlidemenuService,private swipeup: SwipeupService,private zone: NgZone,private booleanService: BooleanService,private getUserDataService: getUserDataService,private notifService: NotifService) {}
+  constructor(private store: Store,private reader: DataReader,private http: HttpService,private info: InfoService,private slide: SlidemenuService,private swipeup: SwipeupService,private zone: NgZone,private booleanService: BooleanService,private getUserDataService: getUserDataService,private notifService: NotifService, private localService: LocalService, private connectionStatusService: ConnectionStatusService) {}
 
   private pending$: Record<Subject<any>> = {};
 
@@ -145,25 +147,40 @@ export class DataState {
   //------------------------------------------------------------------------
   @Action(GetGeneralData)
   getGeneralData(ctx: StateContext<DataModel>) {
-    if(this.isFirstTime){
-      const req = this.http.get("initialize", {action: "getGeneralData",})
+    if(this.connectionStatusService.isOnline){
+      let localGetGeneralData: string | null = this.localService.getData("getGeneralData")
+      if (localGetGeneralData){
+          const operations = this.reader.readStaticData(JSON.parse(localGetGeneralData));
+          ctx.setState(compose(...operations));
+          return
+      }
+      else{
+        const req = this.http.get("initialize", {action: "getGeneralData",})
 
-      return req.pipe(tap((response: any) => {
-        console.log('getGeneralData', response);
-        const operations = this.reader.readStaticData(response);
-        // ctx.setState(compose(...operations));
-        ctx.setState(compose(...operations));
-      }))
-    }
+        return req.pipe(tap((response: any) => {
+          console.log('getGeneralData', response);
+          this.localService.saveData('getGeneralData', JSON.stringify(response))
+          const operations = this.reader.readStaticData(response);
+          ctx.setState(compose(...operations));
+        }))
+    }}
     else return
   }
 
   @Action(GetUserData)
   getUserData(ctx: StateContext<DataModel>, action: GetUserData) {
     const req = this.http.get("data", { action: action.action });
-    if (this.isFirstTime) {
+    let localGetUserData: string | null = this.localService.getData("getUserData")
+    if (this.isFirstTime && localGetUserData) {
+      this.booleanService.emitLoadingChangeEvent(true)
+      this.booleanService.emitConnectedChangeEvent(true)
+      this.getUserDataService.getDataChangeEmitter().subscribe((value) => {
+        this.updateLocalData(ctx, value)
+      })
+      this.updateLocalData(ctx, JSON.parse(localGetUserData))
+      return
     }
-    if (this.flagUpdate){
+    else if (this.flagUpdate && this.connectionStatusService.isOnline){
       this.flagUpdate = false
       return req.pipe(tap((response: any) => {
           this.getUserDataService.setNewResponse(response)
@@ -195,6 +212,7 @@ export class DataState {
       console.log("update local data response", response)
       const loadOperations = this.reader.readInitialData(response),
       sessionOperation = this.reader.readCurrentSession(response);
+      this.localService.saveData("getUserData", JSON.stringify(response))
       if (!this.isFirstTime) {
         let oldView = this.store.selectSnapshot(DataState.view)
           ctx.setState(compose(...loadOperations, sessionOperation));
@@ -212,13 +230,14 @@ export class DataState {
   @Action(Logout)
   logout(ctx: StateContext<DataModel>) {
     console.log("logout")
-    this.flagUpdate = true
+    this.flagUpdate = true 
     this.isFirstTime = true
     this.booleanService.emitConnectedChangeEvent(false)
     this.booleanService.emitLoadingChangeEvent(false)
     this.getUserDataService.resetTimestamp()
     ctx.setState({ fields: {}, session: { view: "ST", currentUser: -1 , time: 0} });
     ctx.dispatch(new GetGeneralData()); // a sign to decouple this from DataModel
+    this.localService.clearData()
   }
 
   @Action(ModifyUserProfile)
@@ -231,9 +250,7 @@ export class DataState {
     else req = this.http.post("data", modifyAction);
 
 
-    return req.pipe(
-      tap((response: any) => {
-
+    return req.pipe(tap((response: any) => {
         const rep = response
         this.getUserDataService.emitDataChangeEvent(response.timestamp)
         delete response["timestamp"];
@@ -243,31 +260,25 @@ export class DataState {
           throw response.messages;
         }
         delete response[modify.action];
-
         if(response.hasOwnProperty('JobForCompany') && Array.isArray(response['JobForCompany'])){
           for (let job of response.JobForCompany) {
             ctx.setState(addValues('JobForCompany', job))            
           }
         }
-
-
         if (response.hasOwnProperty('LabelForCompany') && Array.isArray(response['LabelForCompany'])){
           for (let label of response.LabelForCompany) {
             ctx.setState(addValues('LabelForCompany', label))
           }
         }
-
         // delete response['LabelForCompany']
         // delete response['JobForCompany']
         // ctx.setState(compose(...this.reader.readUpdates(response)));
-
         if (response.hasOwnProperty('Company')){
           ctx.setState(update('Company', response.Company))
         }
         if (response.hasOwnProperty('UserProfile')){
           ctx.setState(update('UserProfile', response.UserProfile))
         }
-
         this.inZone(() =>
           this.info.show("success", "Profil modifié avec succès", 2000)
         );
@@ -1369,11 +1380,7 @@ export class DataQueries {
     );
   }
 
-  static contentOf<K extends DataTypes, V extends DataTypes>(
-    parent: K,
-    parentId: number,
-    child: V
-  ) {
+  static contentOf<K extends DataTypes, V extends DataTypes>(parent: K, parentId: number, child: V) {
     return createSelector(
       [
         DataState.fields,
