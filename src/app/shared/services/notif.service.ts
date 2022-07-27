@@ -58,7 +58,6 @@ export class NotifService {
           if(notification!.category == "supervision") {
             this.notificationsMission.push(notification!)
           }
-          
         }
 
     }

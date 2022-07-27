@@ -89,8 +89,6 @@ export class Notifications {
     let monthDate = new Date(Date.now());
     const monthConst: NotificationDisplay[] = this.notificationsDisplay.filter(
       (notif) => {
-        console.log(moment(moment(monthDate).format("L")), "et", moment(notif.date).format("L"))
-        console.log("donc le résultat", moment(moment(monthDate).format("L")).isAfter(moment(notif.date).format("L")))
         return moment(moment(monthDate).format("L")).isAfter(moment(notif.date).format("L"))
       });
     this.month = monthConst.sort((not1:NotificationDisplay, not2:NotificationDisplay) => not1.date < not2.date ? 1 : -1)
