@@ -24,6 +24,8 @@ import { initializeApp } from "firebase/app";
 import { BooleanService } from "./shared/services/boolean.service";
 import { StripeService } from "./shared/services/stripe";
 import { InfoService } from "./shared/components/info/info.component";
+import { PushNotifications } from "@capacitor/push-notifications";
+import { Capacitor } from "@capacitor/core";
 
 @Component({
   selector: "app-root",
@@ -77,8 +79,8 @@ export class AppComponent extends Destroy$ {
     this.ready$.next(true);
     this.ready$.complete();
     this.app = initializeApp(environment.firebase)
-    await this.requestPermission()
-    this.listen()
+    this.requestPermission()
+    // this.listen()
   }
 
   prepareRoute(outlet: RouterOutlet) {
@@ -134,26 +136,75 @@ export class AppComponent extends Destroy$ {
   }
 
   async requestPermission() {
-    await delay(3000)
-    const messaging: any = getMessaging(this.app)
-    if ("serviceWorker" in navigator) {
-      // this.info.show('success', navigator.serviceWorker.toString())
-      await navigator.serviceWorker.register("firebase-messaging-sw.js").then((registration) => {
-        this.info.show('info','wiwi')
-        getToken(messaging, {vapidKey : environment.firebase.vapidKey, serviceWorkerRegistration: registration}).then((currentToken) => {
-          if (currentToken) {
-            this.info.show('error', currentToken)
-            this.notifService.setToken(currentToken)
-            console.log("we got the token", currentToken, "and sent it to ", this.notifService)
-          }
-          else {console.log('No registration token available. Request permission to generate one.')}
-        }).catch((err) => {
-          console.log('An error occurred while retrieving token. ', err)
+    if(Capacitor.getPlatform() === 'web'){
+      console.log('GET PLATFORM MESSAGE : WEB');
+      const messaging: any = getMessaging(this.app)
+      if ("serviceWorker" in navigator) {
+        await navigator.serviceWorker.register("/firebase-messaging-sw.js").then((registration) => {
+          this.info.show('info','wiwi')
+          getToken(messaging, {vapidKey : environment.firebase.vapidKey, serviceWorkerRegistration: registration}).then((currentToken) => {
+            if (currentToken) {
+              this.info.show('error', currentToken)
+              this.notifService.setToken(currentToken)
+              console.log("we got the token", currentToken, "and sent it to ", this.notifService)
+            }
+            else {console.log('No registration token available. Request permission to generate one.')}
+          }).catch((err) => {
+            console.log('An error occurred while retrieving token. ', err)
+          })
+        }).catch((err)=>{
+          this.info.show('error', err )
         })
-      }).catch((err)=>{
-        this.info.show('error', err)
-      })
+      }
+    } else {
+      console.log('GET PLATFORM MESSAGE : NOT WEB');
+      const addListeners =  () => {
+        console.log('ADD LISTENERS');
+         PushNotifications.addListener('registration', token => {
+         console.info('Registration token: ', token.value);
+          this.info.show('info', token.value)
+
+          // this.notifService.setToken(token.value)
+        });
+
+        PushNotifications.addListener('registrationError', err => {
+          console.error('Registration error: ', err.error);
+          this.info.show('error', err)
+        });
+
+        PushNotifications.addListener('pushNotificationReceived', notification => {
+          console.log('Push notification received: ', notification);
+          this.info.show('success', JSON.stringify(notification))
+        });
+
+        PushNotifications.addListener('pushNotificationActionPerformed', notification => {
+          console.log('Push notification action performed', notification.actionId, notification.inputValue);
+        });
+      }
+
+
+      const registerNotifications = async () => {
+        PushNotifications.checkPermissions().then((s)=> {
+        console.log('REQUEST NOTIFICICATION', s.receive);
+        // this.info.show('info', permStatus.receive)
+          if(s.receive === 'prompt'){
+            PushNotifications.requestPermissions().then(permStatus => {
+              if(permStatus.receive !== 'granted') {
+                console.error('REQUEST FAILED')
+              }
+              console.log('REQUEST DANS LA POCHE', permStatus.receive);
+              PushNotifications.register()
+            })
+          } 
+
+        })
+
+      }
+
+      addListeners()
+      await registerNotifications()
     }
+
 
   }
 
