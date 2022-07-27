@@ -106,3 +106,14 @@ img {
 .info {
   background-color: $info;
 }
+
+
+.debug {
+    width: 100%;
+    overflow-wrap: anywhere;
+    overflow: unset;
+    display: block;
+    line-height: unset;
+    white-space: unset;
+    text-align: unset;
+}

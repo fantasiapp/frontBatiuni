@@ -8,6 +8,9 @@ const config: CapacitorConfig = {
   bundledWebRuntime: false,
   backgroundColor: '#ffffffff',
   plugins: {
+    PushNotifications: {
+      presentationOptions: ['badge', 'sound','alert'] 
+    },
     Keyboard: {
       "resizeOnFullScreen": true,
       resize: KeyboardResize.Native

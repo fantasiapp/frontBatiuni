@@ -23,6 +23,9 @@ import { getMessaging, getToken, onMessage} from "firebase/messaging"
 import { initializeApp } from "firebase/app";
 import { BooleanService } from "./shared/services/boolean.service";
 import { StripeService } from "./shared/services/stripe";
+import { InfoService } from "./shared/components/info/info.component";
+import { PushNotifications } from "@capacitor/push-notifications";
+import { Capacitor } from "@capacitor/core";
 
 @Component({
   selector: "app-root",
@@ -51,7 +54,7 @@ export class AppComponent extends Destroy$ {
   isWhileOn: boolean = false;
   app: any
 
-  constructor(private store: Store, private mobile: Mobile, private notifService: NotifService, private booleanService: BooleanService, private stripeService: StripeService) {
+  constructor(private store: Store, private mobile: Mobile, private notifService: NotifService, private booleanService: BooleanService, private stripeService: StripeService, private info: InfoService) {
     super();
     this.mobile.init();
     this.isConnected = booleanService.isConnected
@@ -77,7 +80,7 @@ export class AppComponent extends Destroy$ {
     this.ready$.complete();
     this.app = initializeApp(environment.firebase)
     this.requestPermission()
-    this.listen()
+    // this.listen()
   }
 
   prepareRoute(outlet: RouterOutlet) {
@@ -132,21 +135,70 @@ export class AppComponent extends Destroy$ {
     }
   }
 
-  requestPermission() {
-    const messaging: any = getMessaging(this.app)
-    if ("serviceWorker" in navigator) {
-      navigator.serviceWorker.register("./firebase-messaging-sw.js").then((registration) => {
-        getToken(messaging, {vapidKey : environment.firebase.vapidKey, serviceWorkerRegistration: registration}).then((currentToken) => {
-          if (currentToken) {
-            this.notifService.setToken(currentToken)
-            console.log("we got the token", currentToken, "and sent it to ", this.notifService)
-          }
-          else {console.log('No registration token available. Request permission to generate one.')}
-        }).catch((err) => {
-          console.log('An error occurred while retrieving token. ', err)
+  async requestPermission() {
+    if(Capacitor.getPlatform() === 'web'){
+      console.log('GET PLATFORM MESSAGE : WEB');
+      const messaging: any = getMessaging(this.app)
+      if ("serviceWorker" in navigator) {
+        await navigator.serviceWorker.register("/firebase-messaging-sw.js").then((registration) => {
+          this.info.show('info','wiwi')
+          getToken(messaging, {vapidKey : environment.firebase.vapidKey, serviceWorkerRegistration: registration}).then((currentToken) => {
+            if (currentToken) {
+              this.info.show('error', currentToken)
+              this.notifService.setToken(currentToken)
+              console.log("we got the token", currentToken, "and sent it to ", this.notifService)
+            }
+            else {console.log('No registration token available. Request permission to generate one.')}
+          }).catch((err) => {
+            console.log('An error occurred while retrieving token. ', err)
+          })
+        }).catch((err)=>{
+          this.info.show('error', err )
         })
-      })
+      }
+    } else {
+      console.log('GET PLATFORM MESSAGE : NOT WEB');
+
+      await PushNotifications.addListener('registration', token => {
+        console.info('Registration token: ', token.value);
+
+        this.notifService.setToken(token.value)
+
+        console.log('SET TOKEN', token.value);
+      });
+
+      await PushNotifications.addListener('registrationError', err => {
+        console.error('Registration error: ', err.error);
+        this.info.show('error', err)
+      });
+
+      await PushNotifications.addListener('pushNotificationReceived', notification => {
+        console.log('Push notification received: ', notification);
+        this.info.show('success', JSON.stringify(notification))
+      });
+
+      await PushNotifications.addListener('pushNotificationActionPerformed', notification => {
+        console.log('Push notification action performed', notification.actionId, notification.inputValue);
+      });
+
+
+      const registerNotifications = async () => {
+        PushNotifications.checkPermissions().then(async (s)=> {
+        console.log('REQUEST NOTIFICICATION', s.receive);
+          if(s.receive === 'prompt'){
+            const permStatus = await PushNotifications.requestPermissions()
+              s = permStatus
+          } 
+
+          if(s.receive === 'granted'){
+            await PushNotifications.register()
+          }
+        })
+      }
+
+      await registerNotifications()
     }
+
 
   }
 
