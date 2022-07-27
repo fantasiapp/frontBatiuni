@@ -143,10 +143,8 @@ export class AppComponent extends Destroy$ {
       const messaging: any = getMessaging(this.app)
       if ("serviceWorker" in navigator) {
         await navigator.serviceWorker.register("/firebase-messaging-sw.js").then((registration) => {
-          this.info.show('info','wiwi')
           getToken(messaging, {vapidKey : environment.firebase.vapidKey, serviceWorkerRegistration: registration}).then((currentToken) => {
             if (currentToken) {
-              this.info.show('error', currentToken)
               this.notifService.setToken(currentToken)
               console.log("we got the token", currentToken, "and sent it to ", this.notifService)
             }
@@ -155,7 +153,6 @@ export class AppComponent extends Destroy$ {
             console.log('An error occurred while retrieving token. ', err)
           })
         }).catch((err)=>{
-          this.info.show('error', err )
         })
       }
     } else {
@@ -171,12 +168,10 @@ export class AppComponent extends Destroy$ {
 
       await PushNotifications.addListener('registrationError', err => {
         console.error('Registration error: ', err.error);
-        this.info.show('error', err)
       });
 
       await PushNotifications.addListener('pushNotificationReceived', notification => {
         console.log('Push notification received: ', notification);
-        this.info.show('success', JSON.stringify(notification))
       });
 
       await PushNotifications.addListener('pushNotificationActionPerformed', notification => {
