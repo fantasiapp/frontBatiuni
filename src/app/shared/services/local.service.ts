@@ -98,6 +98,12 @@ export class LocalService {
   public dumpLocalStorage(){
     let localUserData = JSON.parse(localStorage.getItem('getUserData')!)
     let newLocalUserData: any = localUserData
+    let DataTypeslist: DataTypes[] = this.getAllDataTypes(localUserData)
+    newLocalUserData = this.updateLocalUserData(DataTypeslist, newLocalUserData)
+    console.log("LA FIIIIIIIIIIIIIN", newLocalUserData)
+  }
+
+  public getAllDataTypes(localUserData: any){
     let list = Object.keys(localUserData).filter((value) => {
       if(value.includes('Values')){
         return value
@@ -105,26 +111,23 @@ export class LocalService {
       return
     })
     let DataTypeslist = list.map((value) => {
-        let newValue: DataTypes = value.substring(0,value.length-6) as DataTypes
-        // console.log(this.store.selectSnapshot(DataQueries.getAll(newValue)))
-        return newValue
+        return value.substring(0,value.length-6) as DataTypes
     }) as DataTypes[]
-    DataTypeslist.forEach((value) => {
+    return DataTypeslist
+  }
+
+  public updateLocalUserData(DataTypesList: DataTypes[], newLocalUserData: any){
+    DataTypesList.forEach((value) => {
       let getUserDataQuery: any = {}
       let localquery = this.store.selectSnapshot(DataQueries.getAll(value))
       localquery.forEach((element: any) => {
         let id = element["id"] 
         delete element["id"]
-        // console.log(element)
         getUserDataQuery[String(id)] = element
-        // console.log(getUserDataQuery)
       })
       newLocalUserData[value + "Values"] = getUserDataQuery
     })
-    // console.log("le fameux local user data", list)
-    // console.log("les select les réponses sur différents types")
-    // console.log("select snapshot", this.store.selectSnapshot(DataQueries.getAll("Company")))
-    console.log("LA FIIIIIIIIIIIIIN", newLocalUserData)
+    return newLocalUserData
   }
 }
 
