@@ -23,6 +23,7 @@ import { getMessaging, getToken, onMessage} from "firebase/messaging"
 import { initializeApp } from "firebase/app";
 import { BooleanService } from "./shared/services/boolean.service";
 import { StripeService } from "./shared/services/stripe";
+import { LocalService } from "./shared/services/local.service";
 
 @Component({
   selector: "app-root",
@@ -51,7 +52,7 @@ export class AppComponent extends Destroy$ {
   isWhileOn: boolean = false;
   app: any
 
-  constructor(private store: Store, private mobile: Mobile, private notifService: NotifService, private booleanService: BooleanService, private stripeService: StripeService) {
+  constructor(private store: Store, private mobile: Mobile, private notifService: NotifService, private booleanService: BooleanService, private stripeService: StripeService, private localService: LocalService) {
     super();
     this.mobile.init();
     this.isConnected = booleanService.isConnected
@@ -163,4 +164,8 @@ export class AppComponent extends Destroy$ {
   //     Keyboard.setAccessoryBarVisible({isVisible: true})
   //   }
   // }
+
+  ngOnDestroy(): void {
+    this.localService.dumpLocalStorage()
+  }
 }
