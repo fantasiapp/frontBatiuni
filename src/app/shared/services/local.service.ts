@@ -53,7 +53,7 @@ export class LocalService {
   }
 
   public clearData() {
-    this.dumpLocalStorage()
+    // this.dumpLocalStorage()
     let email = this.getLastEmail()
     localStorage.clear()
     if(email)
