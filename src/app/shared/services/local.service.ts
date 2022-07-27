@@ -101,6 +101,7 @@ export class LocalService {
     let DataTypeslist: DataTypes[] = this.getAllDataTypes(localUserData)
     newLocalUserData = this.updateLocalUserData(DataTypeslist, newLocalUserData)
     console.log("LA FIIIIIIIIIIIIIN", newLocalUserData)
+    localStorage.setItem('getUserData', newLocalUserData)
   }
 
   public getAllDataTypes(localUserData: any){
