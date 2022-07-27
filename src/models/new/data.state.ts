@@ -229,7 +229,6 @@ export class DataState {
 
   @Action(Logout)
   logout(ctx: StateContext<DataModel>) {
-    // this.localService.clearData()
     console.log("logout")
     this.flagUpdate = true 
     this.isFirstTime = true
@@ -238,6 +237,7 @@ export class DataState {
     this.getUserDataService.resetTimestamp()
     ctx.setState({ fields: {}, session: { view: "ST", currentUser: -1 , time: 0} });
     ctx.dispatch(new GetGeneralData()); // a sign to decouple this from DataModel
+    this.localService.clearData()
   }
 
   @Action(ModifyUserProfile)
