@@ -254,8 +254,8 @@ export class HomeComponent extends Destroy$ {
     }
     else {
       await delay(2000)
-      this.lateInit()
-      this.cd.markForCheck()
+      if (this.isLoading)
+        this.lateInit()
     }
   }
 

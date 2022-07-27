@@ -29,8 +29,7 @@ export class LocalService {
     return localStorage.getItem(key)
   }
 
-  public getAllData() : string[] {
-    let n = localStorage.length
+  public getAllLocalData() : string[] {
     let localKeys: string[] = []
     for (let index = 0; index < localStorage.length; index++) {
       let key = localStorage.key(index)!
