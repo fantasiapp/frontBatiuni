@@ -96,7 +96,6 @@ export class LocalService {
   }
 
   public dumpLocalStorage(){
-    let getUserDataString: string = ""
     let localUserData = JSON.parse(localStorage.getItem('getUserData')!)
     let newLocalUserData: any = localUserData
     let list = Object.keys(localUserData).filter((value) => {

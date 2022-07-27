@@ -229,7 +229,7 @@ export class DataState {
 
   @Action(Logout)
   logout(ctx: StateContext<DataModel>) {
-    this.localService.clearData()
+    // this.localService.clearData()
     console.log("logout")
     this.flagUpdate = true 
     this.isFirstTime = true
