@@ -1,8 +1,11 @@
 import { Component, ChangeDetectionStrategy, ChangeDetectorRef } from "@angular/core";
+import { Select } from "@ngxs/store";
 import { Observable, Observer } from "rxjs";
 import { HttpService } from "src/app/services/http.service";
 import { StripeService } from "src/app/shared/services/stripe";
 import { productList } from "src/app/stripeProducts";
+import { Profile } from "src/models/new/data.interfaces";
+import { DataQueries } from "src/models/new/data.state";
 
 export interface abonnementType{
     title: string,
@@ -25,6 +28,9 @@ export interface SubscriptionPrice{
 })
 export class AbonnementPage {
     
+    @Select(DataQueries.currentProfile)
+    profile$!: Observable<Profile>;
+
     abonnementOnView: number = 0;
     openEngagment: boolean = false
     openEngagmentPage: boolean = false

@@ -78,6 +78,8 @@ export interface Company {
   saturdayDisponibility: boolean
   allQualifications : boolean
   stripeCustomerId: string;
+  stripeSubsriptionID: string;
+  stripeSubscriptionStatus: string;
   Notification: Ref<Notification>[]
 };
 
