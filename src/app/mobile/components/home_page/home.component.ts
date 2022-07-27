@@ -243,9 +243,6 @@ export class HomeComponent extends Destroy$ {
           this.selectDraft(null);
           this.selectUserOnline(null);
           this.selectMission(null);
-          this.selectSearchDraft("");
-          this.selectSearchOnline("");
-          this.selectSearchMission("");
         });
       this.time = this.store.selectSnapshot(DataState.time);
       this.updatePage()
