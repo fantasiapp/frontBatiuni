@@ -463,7 +463,7 @@ export class InviteFriend {
   static readonly type = 'invite Friend';
   action = 'inviteFriend';
 
-  constructor(public mail: string, public register: boolean) {}
+  constructor(public mail: string, public register: boolean, public isParrain: boolean) {}
 }
 
 export class MarkViewed {
