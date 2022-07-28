@@ -2,7 +2,7 @@ import { Options } from "@angular-slider/ngx-slider";
 import { footerTranslate } from "src/animations/footer.animation";
 
 export const DistanceSliderConfig: Options = {
-    floor: 0,
+    floor: 1,
     ceil: 2000,
     showSelectionBar: true,
 
@@ -12,7 +12,9 @@ export const DistanceSliderConfig: Options = {
       let subdivisionPosition = Math.ceil(position*4);
       
       if (subdivisionPosition == 1) {
-        return 10*position/0.25
+        let m = 9/0.25
+        let p = 1
+        return m*position + p
       }
       
       if (subdivisionPosition == 2){
@@ -28,7 +30,9 @@ export const DistanceSliderConfig: Options = {
 
     customValueToPosition(value: number): number {
       if (value <= 10) {
-        return 0.25 * value / 10;
+        let m = 0.25/9
+        let p = 0.25 - m * 10
+        return m * value + p;
       }
       if (value <= 100) {
         let m = 0.25/90

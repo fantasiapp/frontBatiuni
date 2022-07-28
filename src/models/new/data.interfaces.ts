@@ -75,12 +75,12 @@ export interface Company {
   availabilities: Ref<Disponibility>[];
   unity: string;
   amount: number;
-  saturdayDisponibility: boolean
-  allQualifications : boolean
+  saturdayDisponibility: boolean;
+  allQualifications : boolean;
   stripeCustomerId: string;
-  stripeSubsriptionID: string;
+  stripeSubscriptionId: string;
   stripeSubscriptionStatus: string;
-  Notification: Ref<Notification>[]
+  Notification: Ref<Notification>[];
 };
 
 export interface BlockedCandidate {
