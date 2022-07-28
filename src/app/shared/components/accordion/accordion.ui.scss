@@ -10,6 +10,8 @@
 
 h3 {
   padding-inline: 2rem;
+  display: flex;
+  align-items: center;
 }
 
 img {
@@ -53,6 +55,7 @@ img {
 }
 
 .deleting {
+  margin-left: 1rem;
   width: 2rem;
   height: 2rem;
 }
