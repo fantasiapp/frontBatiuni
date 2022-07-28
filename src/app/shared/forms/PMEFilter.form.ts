@@ -81,7 +81,10 @@ import { SnapshotAll } from "src/models/new/data.state";
     :host {
       display: block;
       width: 100%;
+      max-height: calc(90vh - 50px - 3rem);
+      height: 100%;
       padding-bottom: 3rem;
+      overflow: scroll;
     }
 
     .form-title {

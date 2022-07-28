@@ -97,6 +97,7 @@ import { returnInputKeyboard } from '../common/classes'
         </div>
       </div>
 
+    </form>
       <footer
         class="flex row space-between sticky-footer full-width submit-container"
         style="background-color: white;">
@@ -105,7 +106,6 @@ import { returnInputKeyboard } from '../common/classes'
           <div class="button active" (click)="onCloseFilter()">Valider</div>
         </div>
         </footer>
-    </form>
   `,
   styles: [
     `
@@ -114,6 +114,7 @@ import { returnInputKeyboard } from '../common/classes'
         width: 100%;
         height: 100%;
         padding-bottom: 3rem;
+        overflow: scroll;
       }
 
       switch::ng-deep .slider {
