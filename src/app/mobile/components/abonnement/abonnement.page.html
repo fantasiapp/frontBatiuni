@@ -1,25 +1,31 @@
-<span style="margin: 2rem 2rem; display: block;">Sélectionnez un service</span>
-  <div class="caroussel__wrapper">
-      <div class="caroussel">
-        <div class="caroussel-item"> 
-          <abonnement-card class="margleft"*ngIf="abonnements[0].prices$ | async as prices" (openEngagment)="onOpenEngagement($event)" [subscriptionType]="0" [abonnement]="abonnements[0]" [prices]="prices"></abonnement-card>
+<ng-container *ngIf="(profile$ | async )!.company.stripeSubscriptionStatus == 'active'; else subscriptionManagement" >
+  <span style="margin: 2rem 2rem; display: block;">Sélectionnez un service</span>
+    <div class="caroussel__wrapper">
+        <div class="caroussel">
+          <div class="caroussel-item"> 
+            <abonnement-card class="margleft"*ngIf="abonnements[0].prices$ | async as prices" (openEngagment)="onOpenEngagement($event)" [subscriptionType]="0" [abonnement]="abonnements[0]" [prices]="prices"></abonnement-card>
+          </div>
+          <div class="caroussel-item"> 
+            <abonnement-card class="margleft"*ngIf="abonnements[1].prices$ | async as prices" (openEngagment)="onOpenEngagement($event)" [subscriptionType]="1" [abonnement]="abonnements[1]" [prices]="prices"></abonnement-card>
+          </div>
+          <div class="caroussel-item">
+            <abonnement-card class="margleft"*ngIf="abonnements[2].prices$ | async as prices" (openEngagment)="onOpenEngagement($event)" [subscriptionType]="2" [abonnement]="abonnements[2]" [prices]="prices"></abonnement-card>
+          </div>
         </div>
-        <div class="caroussel-item"> 
-          <abonnement-card class="margleft"*ngIf="abonnements[1].prices$ | async as prices" (openEngagment)="onOpenEngagement($event)" [subscriptionType]="1" [abonnement]="abonnements[1]" [prices]="prices"></abonnement-card>
-        </div>
-        <div class="caroussel-item">
-          <abonnement-card class="margleft"*ngIf="abonnements[2].prices$ | async as prices" (openEngagment)="onOpenEngagement($event)" [subscriptionType]="2" [abonnement]="abonnements[2]" [prices]="prices"></abonnement-card>
-        </div>
-      </div>
+    </div>
+  <div class="caroussel-button" >
+    <button class="flex center"
+    (click)="scrollRight()"
+    ><img src="assets/arrowleft.svg" alt=""></button>
+    <button class="flex center"
+    (click)="scrollLeft()"
+    ><img src="assets/arrowright.svg" alt=""></button>
   </div>
-<div class="caroussel-button" >
-  <button class="flex center"
-  (click)="scrollRight()"
-  ><img src="assets/arrowleft.svg" alt=""></button>
-  <button class="flex center"
-  (click)="scrollLeft()"
-  ><img src="assets/arrowright.svg" alt=""></button>
-</div>
+</ng-container>
+
+<ng-template #subscriptionManagement>
+  <div>Vous êtes déjà abonnés</div>
+</ng-template>
 
 <slidemenu [(open)]="openEngagment" #engagment>
     <h1 class="center-text full-width" header>Gérer mes abonnements</h1>  
