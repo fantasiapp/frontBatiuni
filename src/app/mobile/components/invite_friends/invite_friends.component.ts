@@ -31,6 +31,7 @@ export class InviteFriendsComponent extends Destroy$ {
 
   disabled:boolean = true
   token:string = ''
+  user = this.store.selectSnapshot(DataQueries.currentUser)
 
   inviteFriend () {
     if (this.emailForm.valid) {

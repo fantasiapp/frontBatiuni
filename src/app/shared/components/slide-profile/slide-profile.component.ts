@@ -52,7 +52,8 @@ export class SlideProfileComponent extends UIOpenMenu {
       function: '',
       tokenFriend: '',
       favoritePosts: [],
-      viewedPosts: []
+      viewedPosts: [],
+      isAdmin: false
     }
     this.profile.user = fakeUser
   }
