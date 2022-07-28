@@ -1,19 +1,19 @@
 <div class="center-text container">
   <img src="assets/codeImage.svg"/>
   <h1>Parrainer vos amis</h1>
-  <span>Invitez vos amis à rejoindre l'application BatiUni avec votre code parrain et gagnez des mois gratuit !</span>
+  <span>Invitez vos amis à rejoindre l'application BatiUni et gagnez des mois gratuit !</span>
   <ng-container >
-      <span>Quel type de code souhaitez vous envoyer:</span>
+    <span>
       <label>
         <input type="radio" id="parrain" name="code" value="parrain"
               checked>
-        <span for="parrain"> Code parrain </span>
+        <span for="parrain" style="margin-right: 10px; font-size: 16px"> Parrain </span>
       </label>
-  
       <label>
         <input type="radio" id="ambassadeur" name="code" value="ambassadeur">
-        <span for="ambassadeur"> Code Ambassadeur </span>
+        <span for="ambassadeur" style="font-size: 16px"> Ambassadeur </span>
       </label>
+    </span>
   </ng-container>
   <form [formGroup]="emailForm" style="width:90%">
     <p *ngIf="token">Faites attention de bien saisir le mail de l'utilisateur, il s'agira de son mail de connexion</p>
