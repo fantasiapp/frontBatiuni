@@ -165,6 +165,7 @@ export type ApplyForm = {
         </form>
         <footer class="sticky-footer" [ngClass]="{'resetPadding': !showFooter, 'ios-platform': platform == 'ios'}">
           <button
+            *ngIf="view == 'ST'"
             class="button full-width active"
             (click)="showPopUp()"
             [disabled]="disableValidation"
@@ -306,9 +307,11 @@ export class UIAnnonceResume extends Destroy$ {
     super();
   }
 
-  view: "ST" | "PME" = "ST";
+  get view(){
+    return this.store.selectSnapshot(DataState.view);
+  }
+
   ngOnInit() {
-    this.view = this.store.selectSnapshot(DataState.view);
 
     this.mobile.footerStateSubject.pipe(takeUntil(this.destroy$)).subscribe(b => {
       this.showFooter = b
