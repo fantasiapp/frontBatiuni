@@ -65,6 +65,7 @@ import "hammerjs"
       width: 100%;
       height: 100%; 
       max-height: calc(90vh - 50px - 3rem);
+        padding: 0 2rem;
       padding-bottom: 3rem;   
       overflow: scroll;
     }

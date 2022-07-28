@@ -113,6 +113,7 @@ import { returnInputKeyboard } from '../common/classes'
         display: block;
         width: 100%;
         height: 100%;
+        padding: 0 2rem;
         padding-bottom: 3rem;
         overflow: scroll;
       }
