@@ -98,6 +98,9 @@ export class UIPopup extends DimensionMenu {
   @ViewChild("missKbis", { read: TemplateRef, static: true })
   missKbis!: TemplateRef<any>;
 
+  @ViewChild("missSubscription", { read: TemplateRef, static: true })
+  missSubscription!: TemplateRef<any>;
+
   @ViewChild("signContractKbis", { read: TemplateRef, static: true })
   signContractKbis!: TemplateRef<any>;
 
@@ -263,7 +266,7 @@ export class UIPopup extends DimensionMenu {
 
 export type PredefinedPopups<T = any> = {
   readonly type: "predefined";
-  name: "deletePost" | "sign" | "setDate" | "closeMission" | "validateCandidate" | "refuseCandidate" | "blockCandidate" | "boostPost" | "onApply" | "onApplyConfirm" | "newFile" | "deleteFile" | "deleteCandidate" | "missKbis" | "signContractKbis" | "successPayment"; // | 'closeMission'
+  name: "deletePost" | "sign" | "setDate" | "closeMission" | "validateCandidate" | "refuseCandidate" | "blockCandidate" | "boostPost" | "onApply" | "onApplyConfirm" | "newFile" | "deleteFile" | "deleteCandidate" | "missKbis" | "missSubscription" | "signContractKbis" | "successPayment"; // | 'closeMission'
   context?: TemplateContext;
 };
 
@@ -727,6 +730,33 @@ export class PopupService {
       this.popups$.next({
         type: "predefined",
         name: "missKbis",
+        context,
+        close: () => {
+          closed$.next();
+        },
+      });
+
+      first = false;
+    }
+  }
+
+  missSubscription(phrase: string) {
+
+    let first: boolean = true;
+    const closed$ = new Subject<void>();
+
+    const context = {
+      $implicit: {
+        phrase: phrase,
+        isActive: false,
+      },
+    };
+
+    if (first) {
+      this.dimension$.next(this.defaultDimension);
+      this.popups$.next({
+        type: "predefined",
+        name: "missSubscription",
         context,
         close: () => {
           closed$.next();
