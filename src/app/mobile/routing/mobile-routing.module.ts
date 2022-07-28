@@ -121,7 +121,9 @@ const routes: Routes = [{
     component: Payment
   }, {
     path: 'payment-status',
-    component: PaymentStatus
+    component: PaymentStatus,
+    canActivate: [AuthGuard],
+    resolve: [AuthResolver],
   }, {
     path: '**',
     redirectTo: 'landing',

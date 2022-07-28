@@ -100,7 +100,6 @@ export class Payment {
   initialize(req: any) {
     console.log("requete")
     req.subscribe((response: any) => {
-      console.log("response", JSON.stringify(response))
       if (response['createPaymentIntent'] !== "OK" && response['createSubscription'] !== "OK") { 
         console.log("error, navigate home")
         this.info.show("error", "Un problème est survenu")
@@ -110,21 +109,13 @@ export class Payment {
       this.product = response['productName'];
       this.price = response['price']/100;
 
-
-      console.log("productName", this.product)
-      console.log("price", this.price)
-
       this.cd.markForCheck();
       let clientSecret = response.clientSecret
-
-      console.log("client secret", clientSecret);
   
       const appearance = {
         theme: 'flat',
       };
-      console.log("before element")
       this.elements = this.stripe.elements({ appearance, clientSecret });
-      console.log("after element")
 
       const paymentElement = this.elements.create("payment");
       paymentElement.mount("#payment-element");

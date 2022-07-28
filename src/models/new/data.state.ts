@@ -3,7 +3,7 @@ import { Action,createSelector,Selector,State,StateContext,Store, } from "@ngxs/
 import { Observable, of, Subject, throwError } from "rxjs";
 import { concatMap, map, tap } from "rxjs/operators";
 import { HttpService } from "src/app/services/http.service";
-import { GetGeneralData,HandleApplication,BlockCompany,SignContract,MarkViewed,ModifyAvailability,SetFavorite,TakePicture,InviteFriend,ValidateMissionDate,BoostPost,AskRecommandation,GiveRecommandation,GiveNotificationToken,ModifyFile,UnapplyPost,DeleteLabel,PostNotificationViewed } from "./user/user.actions";
+import { GetGeneralData,HandleApplication,BlockCompany,SignContract,MarkViewed,ModifyAvailability,SetFavorite,TakePicture,InviteFriend,ValidateMissionDate,BoostPost,AskRecommandation,GiveRecommandation,GiveNotificationToken,ModifyFile,UnapplyPost,DeleteLabel,PostNotificationViewed, SubscribeUser } from "./user/user.actions";
 import { ApplyPost,CandidateViewed,ChangePassword,ChangeProfilePicture,ChangeProfileType,DeleteFile,DeletePost,DownloadFile,DuplicatePost,GetUserData,ModifyUserProfile,CreateDetailedPost,ModifyDetailedPost,CreateSupervision,SwitchPostType,ModifyMissionDate,CloseMission,CloseMissionST,UploadFile,UploadPost,UploadImageSupervision,NotificationViewed } from "./user/user.actions";
 import { Company, Interface, User } from "./data.interfaces";
 import { DataReader, NameMapping, TranslatedName } from "./data.mapper";
@@ -183,7 +183,7 @@ export class DataState {
     else if (this.flagUpdate && this.connectionStatusService.isOnline){
       this.flagUpdate = false
       return req.pipe(tap((response: any) => {
-        console.log('getUserData effectué', response)
+          console.log("getUserData response", response)
           this.getUserDataService.setNewResponse(response)
           if (this.isFirstTime) {
             this.booleanService.emitLoadingChangeEvent(true)
@@ -690,8 +690,14 @@ export class DataState {
         //file is now downloaded
         pending!.next(response[contentIndex]);
         this.completePending(key);
+      }, (error: any) => {
+        this.flagUpdate = true
+        if (error.status == '401'){
+          console.log("ERREUR 401 mais on dit rien chuuuuuuut")
+        }
+        return throwError("DownloadFile failed Failed.")
       })
-    );
+    )
   }
 
   @Action(ApplyPost)
@@ -1235,7 +1241,17 @@ export class DataState {
       })
     )
   }
+
+  @Action(SubscribeUser)
+  subscribeUser(ctx: StateContext<DataModel>){
+    let company = this.store.selectSnapshot(DataQueries.currentCompany)
+    console.log("company", company);
+    ctx.setState(transformField("Company", company.id, "stripeSubscriptionStatus", () => "active"));
+    console.log("current user", this.store.selectSnapshot(DataQueries.currentProfile))
+  }
+
 }
+
 //make a deep version of toJSON
 export class DataQueries {
   static toJson<K extends DataTypes>(

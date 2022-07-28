@@ -119,6 +119,14 @@
   </div>
 </ng-template>
 
+<ng-template #missSubscription let-context>
+  <label class="postuleLabel">Veuillez vous <span class='boostStrong'>abonner</span> pour accéder à <span class='boostStrong'> {{context.phrase}} </span></label> 
+  <div style="height:5%;"></div>
+  <div class="controls cloture">
+    <button class="button active" (click)="close()">OK</button>
+  </div>
+</ng-template>
+
 <ng-template #signContractKbis let-context>
   <label class="postuleLabel">Veuillez vérifier que votre <span class='boostStrong'> Kbis </span>  est bien à jour.</label>  
   <div style="height:5%;"></div>
