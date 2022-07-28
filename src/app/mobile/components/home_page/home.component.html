@@ -175,7 +175,7 @@
           <li *ngIf="!postMenu.isBoosted(this.time)" (click)="slideBooster()">
             <img src="assets/booster.svg" />Booster mon annonce
           </li>
-          <li *ngIf="postMenu.isBoosted(this.time)" class="boosted">
+          <li *ngIf="postMenu.isBoosted(this.time)" (click)="true" class="boosted">
             <img src="assets/booster.svg" />Booster mon annonce
           </li>
           <li (click)="deletePost(postMenu.post!.id)">
