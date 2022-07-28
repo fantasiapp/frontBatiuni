@@ -1,8 +1,9 @@
-import { ChangeDetectorRef, Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { takeUntil } from 'rxjs/operators';
 import { Destroy$ } from 'src/app/shared/common/classes';
 import { Mobile } from 'src/app/shared/services/mobile-footer.service';
+import { SuiviChantierDateContentComponent } from '../suivi_chantier_date-content/suivi_chantier_date-content.component';
 
 @Component({
   selector: 'task-add',
@@ -16,6 +17,7 @@ export class TaskAddComponent extends Destroy$ {
     task: new FormControl("", [Validators.required]),
   });
 
+  @Input() parentComponent!: SuiviChantierDateContentComponent
 
   platform: string = ''
   showFooter: boolean = true;
@@ -38,7 +40,7 @@ export class TaskAddComponent extends Destroy$ {
     super.ngOnDestroy()
   }
 
-  @Output() validateEmiter = new EventEmitter()
+  // @Output() validateEmiter = new EventEmitter()
 
   submit(e:Event, form: HTMLFormElement){
     e.preventDefault()
@@ -56,7 +58,7 @@ export class TaskAddComponent extends Destroy$ {
 
   validate(e: Event, form: HTMLFormElement){
     this.submit(e, form)
-    console.log('this.bewTasks' , this.newTasks);
-    this.validateEmiter.next(this.newTasks)
+    this.parentComponent.computeNewTasks(this.newTasks)
+    // this.validateEmiter.next(this.newTasks)
   }
 }

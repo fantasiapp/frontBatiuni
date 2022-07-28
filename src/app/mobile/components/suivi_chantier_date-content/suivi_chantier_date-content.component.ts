@@ -37,6 +37,9 @@ import { getUserDataService } from "src/app/shared/services/getUserData.service"
 import { Mobile } from "src/app/shared/services/mobile-footer.service";
 import { UICheckboxComponent } from "src/app/shared/components/box/checkbox.component";
 import { delay } from "src/app/shared/common/functions";
+import { SlidemenuService } from "src/app/shared/components/slidemenu/slidemenu.component";
+import { SupervisionWrapperComponent } from "../supervision-wrapper/supervision-wrapper.component";
+import { TaskAddComponent } from "../task-add/task-add.component";
 
 
 export interface TaskGraphic {
@@ -86,7 +89,7 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
 
   user!: User;
 
-  constructor(public mobile: Mobile, private cd: ChangeDetectorRef, private store: Store, private popup: PopupService, private getUserDataService: getUserDataService, private info: InfoService) {
+  constructor(public mobile: Mobile, private cd: ChangeDetectorRef, private store: Store, private popup: PopupService, private getUserDataService: getUserDataService, private info: InfoService, private slides: SlidemenuService) {
     super();
   }
 
@@ -412,18 +415,27 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
 
   slideComment(taskGraphic: TaskGraphic | null, e: Event, supervisions: Supervision[], selectedTask: PostDetailGraphic | null){
     e.preventDefault()
-    this.slideCommentOpen = true
-    console.log('this.slideCommentOpen', this.slideCommentOpen);
-    this.slideCommentMenu = {
-      taskGraphic: taskGraphic,
-      slideCommentOpen: true,
-      supervisions: supervisions,
-      selectedTask: selectedTask
-    }
+    // this.slideCommentOpen = true
+    
+    let title = this.view == 'PME' ? this.mission?.subContractorName! : this.mission?.contactName!
+    this.slides.show(title, {
+      type: 'component',
+      component: SupervisionWrapperComponent,
+      init: (component: SupervisionWrapperComponent) => {
+        component.taskGraphic = taskGraphic,
+        component.selectedTask = selectedTask,
+        component.mission = this.mission!,
+        component.dateOrigin = this.dateOrigin!,
+        component.supervisions = supervisions,
+        component.component = this 
+      },
+    })
+
   }
   refreshMainComment(supervisions : Supervision[] | null){
     if(!supervisions) return
     this.date.supervisions = supervisions
+    this.cd.markForCheck()
   }
   
   taskMenuUp: boolean = false
@@ -446,6 +458,15 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
     }
   }
 
+  slideTaskManager(open: boolean) {
+    this.slides.show('Ajouter des tâches', {
+      type: 'component',
+      component: TaskAddComponent,
+      init: (component: TaskAddComponent) => {
+        component.parentComponent = this
+      }
+    })
+  }
   computeValidateTask(){
     for (const detailPost of this.pendingDetailedPost) {
       this.modifyDetailedPostDate(detailPost)
@@ -490,7 +511,7 @@ export class SuiviChantierDateContentComponent extends Destroy$ {
       })
     }
 
-    this.slideNewTaskManager = false
+    this.slides.hide()
   }
 
   modifyDetailedPostDate(detailedPost: PostDetailGraphic) {

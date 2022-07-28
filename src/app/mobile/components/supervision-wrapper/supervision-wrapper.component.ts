@@ -11,7 +11,7 @@ import { Mobile } from 'src/app/shared/services/mobile-footer.service';
 import { DatePost, Mission, PostDetail, PostDetailGraphic, Ref, Supervision } from 'src/models/new/data.interfaces';
 import { DataQueries } from 'src/models/new/data.state';
 import { CreateSupervision, UploadImageSupervision } from 'src/models/new/user/user.actions';
-import { TaskGraphic } from '../suivi_chantier_date-content/suivi_chantier_date-content.component';
+import { SuiviChantierDateContentComponent, TaskGraphic } from '../suivi_chantier_date-content/suivi_chantier_date-content.component';
 
 @Component({
   selector: 'app-supervision-wrapper',
@@ -34,6 +34,8 @@ export class SupervisionWrapperComponent extends Destroy$ {
   dateShow: string = ''
   taskShow: string = ''
   platform: string = ''
+
+  @Input() component!: SuiviChantierDateContentComponent 
 
   @Output() closeSwipe = new EventEmitter<Supervision[] | null>()
 
@@ -89,7 +91,8 @@ export class SupervisionWrapperComponent extends Destroy$ {
           } else {
             this.dateOrigin = this.store.selectSnapshot(DataQueries.getById('DatePost', this.dateOrigin.id))!
             supervisions = this.store.selectSnapshot(DataQueries.getMany('Supervision', this.dateOrigin.supervisions))!
-            this.closeSwipe.next(supervisions)
+            // this.closeSwipe.next(supervisions)
+            this.component.refreshMainComment(supervisions)
           }
           this.autosize(input)
           this.sendButtonShow = !!input.value.length

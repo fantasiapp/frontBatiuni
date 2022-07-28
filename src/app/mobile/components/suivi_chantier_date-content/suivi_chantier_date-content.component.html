@@ -31,7 +31,7 @@
                 </li>
               </ul>
               <div class="task-menu__action_container">
-                <button class="button passive" (click)="slideNewTaskManager = true">Ajouter une tache</button>
+                <button class="button passive" (click)="slideTaskManager(true)">Ajouter une tache</button>
                 <button class="button active" (click)="computeValidateTask()">Valider</button>
               </div>
             </div>
@@ -77,18 +77,18 @@
     </div>
 </div>
 
-<slidemenu [(open)]="slideCommentMenu.slideCommentOpen" #slideMenuComment>
-  <h1 class="center-text grow" header>{{ view == 'PME' ? mission?.subContractorName : mission?.contactName}}</h1>
+  <!-- <slidemenu class="slideMenu" [(open)]="slideCommentMenu.slideCommentOpen" #slideMenuComment>
+    <h1 class="center-text grow"  header>{{ view == 'PME' ? mission?.subContractorName : mission?.contactName}}</h1>
 
-  <app-supervision-wrapper *ngIf="slideCommentMenu.slideCommentOpen" [taskGraphic]="slideCommentMenu.taskGraphic" [selectedTask]="slideCommentMenu.selectedTask" [mission]="mission!" [dateOrigin]="dateOrigin!" [supervisions]="slideCommentMenu.supervisions" (closeSwipe)="refreshMainComment($event)" content></app-supervision-wrapper>
-</slidemenu>
-<slidemenu [(open)]="slideNewTaskManager" #slideNewTask>
-  <h1 class="center-text full-width" header>Ajouter des tâches</h1>
+    <app-supervision-wrapper *ngIf="slideCommentMenu.slideCommentOpen" [taskGraphic]="slideCommentMenu.taskGraphic" [selectedTask]="slideCommentMenu.selectedTask" [mission]="mission!" [dateOrigin]="dateOrigin!" [supervisions]="slideCommentMenu.supervisions" (closeSwipe)="refreshMainComment($event)" content></app-supervision-wrapper>
+  </slidemenu> -->
+  <!-- <slidemenu [(open)]="slideNewTaskManager" #slideNewTask>
+    <h1 class="center-text full-width" header>Ajouter des tâches</h1>
 
-  <task-add (validateEmiter)="computeNewTasks($event)" *ngIf="slideNewTaskManager" content></task-add>  
-</slidemenu>
+    <task-add (validateEmiter)="computeNewTasks($event)" *ngIf="slideNewTaskManager" content></task-add>  
+  </slidemenu> -->
 
-<swipeup [(open)]="swipeMenuImage" #modifyPicture>
-    <li (click)="takePhoto()">Accéder à l'appareil photo</li>
-    <li (click)="selectPhoto()">Télécharger une image</li>
-</swipeup>
+  <swipeup [(open)]="swipeMenuImage" #modifyPicture>
+      <li (click)="takePhoto()">Accéder à l'appareil photo</li>
+      <li (click)="selectPhoto()">Télécharger une image</li>
+  </swipeup>

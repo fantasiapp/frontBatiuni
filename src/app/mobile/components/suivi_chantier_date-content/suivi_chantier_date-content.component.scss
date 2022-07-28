@@ -296,3 +296,17 @@ $supervision-background: hsl(0deg 6% 94%);
     padding: unset;
   }
 }
+
+.slider__wrapper {
+  position: absolute
+}
+slidemenu {
+  display: block;
+  top: 3rem;
+}
+.slideMenu::ng-deep{
+  > header {
+    background-color: red!important;
+    z-index: 50;
+  }
+}
