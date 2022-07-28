@@ -690,8 +690,14 @@ export class DataState {
         //file is now downloaded
         pending!.next(response[contentIndex]);
         this.completePending(key);
+      }, (error: any) => {
+        this.flagUpdate = true
+        if (error.status == '401'){
+          console.log("ERREUR 401 mais on dit rien chuuuuuuut")
+        }
+        return throwError("DownloadFile failed Failed.")
       })
-    );
+    )
   }
 
   @Action(ApplyPost)
