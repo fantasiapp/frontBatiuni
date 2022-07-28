@@ -23,6 +23,9 @@ export class SuiviChantierDate extends Destroy${
     super()
   }
     
+  ngOnInit() {
+    console.log('datePOST', this.datePost);
+  }
   @Input()
   view: 'ST' | 'PME' = "PME";
 

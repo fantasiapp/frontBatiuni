@@ -1,4 +1,4 @@
-<accordion [title]="'Le ' + datePost.date" id="accordeon_{{datePost.date}}" [ngClass]="{'suppression': datePost.deleted}" #accordion>
+<accordion [title]="'Le ' + datePost.date" id="accordeon_{{datePost.date}}" [ngClass]="{'suppression': datePost.deleted}" [flavour]="datePost.deleted ? 'deleting' : ''" #accordion>
   <suivi-chantier-date-content [dateOrigin]="datePost" [dateId]="dateId" [view]="view" [mission]="mission" (computeDates)="onComputeDate()"></suivi-chantier-date-content>
 </accordion>
 <!-- <hr class="dashed" style="margin-left: 0 !important;"> -->

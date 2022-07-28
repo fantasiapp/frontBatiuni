@@ -31,6 +31,8 @@ export class UIAccordion {
     this._open = b
   }
 
+  @Input() flavour: string = ''
+
   get open() { 
     return this._open;
   }
