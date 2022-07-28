@@ -273,7 +273,7 @@
     style="position: relative; z-index: 1;"
     [hideExactAdress]="true"
   ></extended-profile>
-  <footer class="sticky-footer flex center-cross application background-white" style="z-index: 2;">
+  <footer class="sticky-footer flex center-cross application background-white" style="z-index: 2; height: calc(5rem + env(safe-area-inset-bottom));">
     <button
       class="button active full-width"
       (click)="handleApplication(post, application)"
