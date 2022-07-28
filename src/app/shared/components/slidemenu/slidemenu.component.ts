@@ -109,6 +109,7 @@ export class UISlideMenuComponent extends UIOpenMenu {
   }
 
   close() {
+    console.log('OSKUUUR');
     this.openChange.emit(this._open = false);
 
     this.info.hide()
