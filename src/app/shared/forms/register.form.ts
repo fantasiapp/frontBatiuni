@@ -176,18 +176,6 @@ import { InfoService } from "../components/info/info.component";
           <span style="font-size: 12px;">J'accepte les <span style="color: hsl(203deg 96% 48%); text-decoration: underline" (click)="openMentionLegal = true">Conditions Générales & les mentions légales</span> d'Utilisation BatiUni</span>
         </div>
 
-        <div class="form-input parrain">
-          <label>Code parrain ?</label>
-          <input
-            type="text"
-            class="form-element"
-            formControlName="proposer"
-            (click)="onClickInputScroll(inputParrain)"
-            (keyup)="returnInputKeyboard($event, inputParrain)"
-            #inputParrain
-          />
-        </div>
-
         <div
           *ngIf="showSubmitButton"
           class="form-action"

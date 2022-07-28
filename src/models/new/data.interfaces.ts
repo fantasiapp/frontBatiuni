@@ -44,6 +44,7 @@ export interface User {
   tokenFriend: string;
   favoritePosts: Ref<Post>[];
   viewedPosts: Ref<Post>[];
+  isAdmin: boolean;
 };
 
 export interface Company {
