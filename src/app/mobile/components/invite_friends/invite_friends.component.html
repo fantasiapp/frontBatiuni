@@ -2,7 +2,7 @@
   <img src="assets/codeImage.svg"/>
   <h1>Parrainer vos amis</h1>
   <span>Invitez vos amis à rejoindre l'application BatiUni et gagnez des mois gratuit !</span>
-  <ng-container >
+  <ng-container *ngIf="user.isAdmin">
     <span>
       <label>
         <input type="radio" id="parrain" name="code" value="parrain"
