@@ -68,6 +68,7 @@ import { getUserDataService } from "src/app/shared/services/getUserData.service"
 import { Router } from "@angular/router";
 import { NotifService } from "src/app/shared/services/notif.service";
 import { ActiveViewService } from "src/app/shared/services/activeView.service";
+import { ConnectionStatusService } from "src/app/shared/services/connectionStatus.service";
 
 @Component({
   selector: "home",
@@ -174,6 +175,7 @@ export class HomeComponent extends Destroy$ {
     private router: Router,
     private notifService: NotifService,
     private activeViewService: ActiveViewService,
+    private connectionService: ConnectionStatusService
   ) {
     super();
     this.isLoading = this.booleanService.isLoading
@@ -249,8 +251,8 @@ export class HomeComponent extends Destroy$ {
     }
     else {
       await delay(2000)
-      this.lateInit()
-      this.cd.markForCheck()
+      if (this.isLoading)
+        this.lateInit()
     }
   }
 
@@ -985,5 +987,9 @@ export class HomeComponent extends Destroy$ {
 
   get CandidateUnseen(){
     return this.notifService.getCandidateUnseen(this.userOnlinePosts)
+  }
+
+  get isOnline(){
+    return this.connectionService.isOnline
   }
 }

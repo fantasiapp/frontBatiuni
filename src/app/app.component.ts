@@ -26,6 +26,8 @@ import { StripeService } from "./shared/services/stripe";
 import { InfoService } from "./shared/components/info/info.component";
 import { PushNotifications } from "@capacitor/push-notifications";
 import { Capacitor } from "@capacitor/core";
+import { LocalService } from "./shared/services/local.service";
+import { App } from "@capacitor/app"
 
 @Component({
   selector: "app-root",
@@ -54,7 +56,7 @@ export class AppComponent extends Destroy$ {
   isWhileOn: boolean = false;
   app: any
 
-  constructor(private store: Store, private mobile: Mobile, private notifService: NotifService, private booleanService: BooleanService, private stripeService: StripeService, private info: InfoService) {
+  constructor(private store: Store, private mobile: Mobile, private notifService: NotifService, private booleanService: BooleanService, private stripeService: StripeService, private localService: LocalService, private info: InfoService) {
     super();
     this.mobile.init();
     this.isConnected = booleanService.isConnected
@@ -101,7 +103,7 @@ export class AppComponent extends Destroy$ {
         this.notifService.emitNotifChangeEvent()
       }}
       this.readyToUpdate = true
-      await delay(20000)
+      await delay(10000)
       
     }
   }
@@ -210,4 +212,15 @@ export class AppComponent extends Destroy$ {
   //     Keyboard.setAccessoryBarVisible({isVisible: true})
   //   }
   // }
+
+  ngOnDestroy(): void {
+  }
+
+  initBackGroundTask(){
+    App.addListener("appStateChange", (isActive) => {
+      if(!isActive){
+        this.localService.dumpLocalStorage()
+      }
+    })
+  }
 }

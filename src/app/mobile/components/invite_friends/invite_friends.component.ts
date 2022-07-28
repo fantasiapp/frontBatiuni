@@ -27,21 +27,34 @@ export class InviteFriendsComponent extends Destroy$ {
 
   constructor(private store: Store, private cd: ChangeDetectorRef) {
     super()
+    this.isParrain
   }
 
   disabled:boolean = true
   token:string = ''
+  user = this.store.selectSnapshot(DataQueries.currentUser)
 
   inviteFriend () {
     if (this.emailForm.valid) {
-      this.store.dispatch(new InviteFriend(this.emailForm.get('email')!.value, true)).pipe(take(1)).subscribe(
+      this.store.dispatch(new InviteFriend(this.emailForm.get('email')!.value, true, this.isParrain)).pipe(take(1)).subscribe(
         async (success) => {
           this.token = this.store.selectSnapshot(DataQueries.currentProfile).user.tokenFriend
           this.cd.markForCheck()
-          this.store.dispatch(new InviteFriend(this.emailForm.get('email')!.value, false))
+          this.store.dispatch(new InviteFriend(this.emailForm.get('email')!.value, false, this.isParrain))  // la deuxième sert à se débarrassé du token dans le back
         }
       )
     }
+  }
+
+  get isParrain(){
+    const radios = document.getElementsByName('code')
+    let bool: boolean = false
+    radios.forEach((radio: any) => {
+      if(radio.value == "parrain" && radio.checked){
+        bool = true
+      }
+    })
+    return bool
   }
 
 }
