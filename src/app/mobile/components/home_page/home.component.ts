@@ -245,9 +245,6 @@ export class HomeComponent extends Destroy$ {
           this.selectDraft(null);
           this.selectUserOnline(null);
           this.selectMission(null);
-          this.selectSearchDraft("");
-          this.selectSearchOnline("");
-          this.selectSearchMission("");
         });
       this.time = this.store.selectSnapshot(DataState.time);
       this.updatePage()
@@ -508,6 +505,7 @@ export class HomeComponent extends Destroy$ {
       return b2 - b1
     });
     if (searchForm == "" || searchForm == null)  {
+      this.userDrafts = this.allUserDrafts;
       if (this.filterPME) { this.filterPME.callbackFilter(this.filterPME.filterForm.value) }
     } else {
       let levenshteinDist: any = [];
@@ -546,6 +544,7 @@ export class HomeComponent extends Destroy$ {
     this.allUserOnlinePosts.sort((a: any,b: any)=>keys.indexOf(a) - keys.indexOf(b));
     
     if (searchForm == "" || searchForm == null)  {
+      this.userOnlinePosts = this.allUserOnlinePosts;
       if (this.filterPME) { this.filterPME.callbackFilter(this.filterPME.filterForm.value) }
     } else {
       let levenshteinDist: any = [];
@@ -564,6 +563,7 @@ export class HomeComponent extends Destroy$ {
     this.missions = [];
     this.allMissions.sort((a, b) => {return Number(a["isClosed"]) - Number(b["isClosed"]);});
     if (searchForm == "" || searchForm == null)  {
+      this.missions = this.allMissions;
       if (this.filterPME) { this.filterPME.callbackFilter(this.filterPME.filterForm.value) }
     } else {
       let levenshteinDist: any = [];

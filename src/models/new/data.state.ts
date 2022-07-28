@@ -183,6 +183,7 @@ export class DataState {
     else if (this.flagUpdate && this.connectionStatusService.isOnline){
       this.flagUpdate = false
       return req.pipe(tap((response: any) => {
+        console.log('getUserData effectué', response)
           this.getUserDataService.setNewResponse(response)
           if (this.isFirstTime) {
             this.booleanService.emitLoadingChangeEvent(true)

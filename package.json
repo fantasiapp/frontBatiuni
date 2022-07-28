@@ -32,6 +32,7 @@
     "@capacitor/ios": "^3.3.2",
     "@capacitor/keyboard": "^1.2.2",
     "@capacitor/local-notifications": "^1.0.9",
+    "@capacitor/push-notifications": "^1.0.9",
     "@capacitor/splash-screen": "^1.1.6",
     "@ngxs/router-plugin": "^3.7.2",
     "@ngxs/storage-plugin": "^3.7.2",
