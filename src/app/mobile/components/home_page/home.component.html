@@ -256,6 +256,26 @@
   </div>
 </ng-template>
 
+<ng-template #paymentStatus>
+  <ng-container [ngSwitch]="paymentStatusMessage">
+      <div *ngSwitchCase="'succeeded'">
+          <img src="assets/valider.svg" class="offres-logo">
+          <label>Success! Payment received.</label>
+          <div class="cloture" *ngIf="paymentStatusMessage">
+              <button class="button active">
+                  Télécharger la facture
+              </button>
+          </div>
+      </div>
+      <div *ngSwitchCase="'requires_payment_method'">
+          <img src="assets/warning.svg" class="validateImage">
+          <label>Payment failed.</label>
+          <div class="cloture" *ngIf="paymentStatusMessage">
+          </div>
+      </div>
+</ng-container>
+
+</ng-template>
 <ng-template
   #candidature
   let-company

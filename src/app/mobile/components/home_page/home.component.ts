@@ -39,6 +39,7 @@ import {
   SetFavorite,
   SwitchPostType,
   PostNotificationViewed,
+  SubscribeUser,
 } from "src/models/new/user/user.actions";
 import { DataQueries, DataState, QueryAll } from "src/models/new/data.state";
 import {
@@ -69,6 +70,7 @@ import { Router } from "@angular/router";
 import { NotifService } from "src/app/shared/services/notif.service";
 import { ActiveViewService } from "src/app/shared/services/activeView.service";
 import { ConnectionStatusService } from "src/app/shared/services/connectionStatus.service";
+import { StripeService } from "src/app/shared/services/stripe";
 
 @Component({
   selector: "home",
@@ -128,6 +130,9 @@ export class HomeComponent extends Destroy$ {
   @ViewChild("candidates", { read: TemplateRef, static: true })
   candidatesTemplate!: TemplateRef<any>;
 
+  @ViewChild("paymentStatus", { read: TemplateRef, static: true })
+  paymentStatusTemplate!: TemplateRef<any>;
+
   @ViewChild("candidature", { read: TemplateRef, static: true })
   candidature!: TemplateRef<any>;
 
@@ -159,6 +164,11 @@ export class HomeComponent extends Destroy$ {
   searchBarEmpty: boolean = true;
 
   showFooter: boolean = true;
+
+  stripe: any;
+
+  paymentStatusMessage: string = "";
+
   constructor(
     private cd: ChangeDetectorRef,
     private appComponent: AppComponent,
@@ -175,15 +185,36 @@ export class HomeComponent extends Destroy$ {
     private router: Router,
     private notifService: NotifService,
     private activeViewService: ActiveViewService,
-    private connectionService: ConnectionStatusService
+    private connectionService: ConnectionStatusService,
+    private stripeService: StripeService,
   ) {
     super();
-    this.isLoading = this.booleanService.isLoading
+    this.isLoading = this.booleanService.isLoading;
     this.searchbar = new SearchbarComponent(store, cd);
-    this.activeView = activeViewService.activeView
+    this.activeView = activeViewService.activeView;
+    this.stripe = this.stripeService.stripe;
   }
   
   ngOnInit() {
+
+    let clientSecret = new URLSearchParams(window.location.search).get('payment_intent_client_secret')
+    console.log("param", clientSecret)
+    if(clientSecret) {
+      console.log("hehehe")
+      this.popup.show({
+        type: "template",
+        template: this.paymentStatusTemplate,
+      })
+      this.stripe.retrievePaymentIntent(clientSecret).then(({paymentIntent}: any) => {
+        const message = document.querySelector('#message')!;
+        this.paymentStatusMessage = paymentIntent.status;
+        if (this.paymentStatusMessage == "succeeded" && paymentIntent.description == "Subscription creation") {
+          this.store.dispatch(new SubscribeUser())
+        } 
+        this.cd.markForCheck();
+  
+      })
+    }
     this.booleanService.getLoadingChangeEmitter().subscribe((bool : boolean) => {
       this.isLoading = bool
       this.cd.markForCheck()
