@@ -59,5 +59,6 @@ swipeup li{
 }
 
 .slideMenu__BigHeader__wrapper::ng-deep > div {
-  margin-top: env(safe-area-inset-top)
+  // margin-top: env(safe-area-inset-top)
+  margin-top: 0;
 }

@@ -80,7 +80,7 @@
         <img [src]="filterOn ? 'assets/filterBlue.svg':'assets/filterDarkBlue.svg'" (click)="openAdFilterMenu = true" style="margin-left: 1rem"/>
     </div> -->
 <!-- </header> -->
-    <div class="modify-page hosted-page flex column center-cross space-children-margin" content>
+    <div class="modify-page hosted-page flex column center-cross space-children-margin" style="height: calc(100vh - 4rem - env(safe-area-inset-bottom)); overflow: scroll;" content>
       <applications (closeEvent)="candidature.close()" *ngIf="openCandidature"></applications>
     </div>
   </slidemenu>
