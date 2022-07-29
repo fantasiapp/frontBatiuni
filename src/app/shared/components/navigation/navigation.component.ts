@@ -60,17 +60,17 @@ export class NavigationMenu extends Destroy$ {
       console.log(profile.company)
       let company = this.store.selectSnapshot(DataQueries.getById("Company", profile.company.id))
       console.log(company)
-      if (route == 'make') {this.popup.missSubscription('Créer une annonce')}
-      if (route == 'sos') {this.popup.missSubscription('SOS')}
-      route = menu[3].route
+      // if (route == 'make') {this.popup.missSubscription('Créer une annonce')}
+      // if (route == 'sos') {this.popup.missSubscription('SOS')}
+      // route = menu[3].route
     } else if (view == 'ST' && (route == '' || route == 'availabilities') && Kbis.length == 0){
       if (route == '') {this.popup.missKbis('Annonces qui peuvent vous intéresser')}
       if (route == 'availabilities') {this.popup.missKbis('Mes disponibilités')}
       route = menu[3].route
     } else if (view == 'ST' && (route == '' || route == 'availabilities') && profile.company.stripeSubscriptionStatus != "active"){
-      if (route == '') {this.popup.missSubscription('Annonces qui peuvent vous intéresser')}
-      if (route == 'availabilities') {this.popup.missSubscription('Mes disponibilités')}
-      route = menu[3].route
+      // if (route == '') {this.popup.missSubscription('Annonces qui peuvent vous intéresser')}
+      // if (route == 'availabilities') {this.popup.missSubscription('Mes disponibilités')}
+      // route = menu[3].route
     }
     this.routeChange.emit(route);
     this.router.navigate(route ? ['', 'home', route, ...this.segments] : ['', 'home']);
