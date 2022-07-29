@@ -363,27 +363,41 @@ export class HomeComponent extends Destroy$ {
     this.userOnlinePosts = [];
     const now = (new Date).toISOString().slice(0, 10);
     this.allUserOnlinePosts = this.allUserOnlinePosts.filter((post) => post.dueDate > now)
+
+    // Trie des posts
     this.allUserOnlinePosts.sort((post1, post2) => {
+      //Trie selon les boost
       let b1 = post1.boostTimestamp > this.time ? 1 : 0;
       let b2 = post2.boostTimestamp > this.time ? 1 : 0;
-      return b2 - b1
-    });
-
-    // Trie Posts selon leurs réponses
-    let responses = [];
-    for (let post of this.allUserOnlinePosts) {
-      const candidatesIds = post.candidates || [],
-      candidates = this.store.selectSnapshot(DataQueries.getMany("Candidate", candidatesIds));
-      let possCandidate = candidates.reduce((possibleCandidates: Candidate[], candidate: Candidate) => { 
-        if (!candidate.isRefused) {possibleCandidates.push(candidate)}
-        return possibleCandidates; 
+      if (b1 != b2) return b2 - b1
+      
+      //Si même état, trie selon les notifications 
+      const candidatesIds1 = post1.candidates || [];
+      const candidates1 = this.store.selectSnapshot(DataQueries.getMany("Candidate", candidatesIds1));
+      let unseenCandidates1 = candidates1.reduce((candidates: Candidate[], candidate: Candidate) => { 
+        if (!candidate.isViewed) {candidates.push(candidate)}
+        return candidates; 
       }, []);
-      responses.push([post, possCandidate.length])
-    }
-    responses.sort((a: any,b: any) => b[1] - a[1]);
-    let keys = responses.map((key: any) => { return key[0] });    
-    this.allUserOnlinePosts.sort((a: any,b: any)=>keys.indexOf(a) - keys.indexOf(b));
-    
+      const candidatesIds2 = post2.candidates || [];
+      const candidates2 = this.store.selectSnapshot(DataQueries.getMany("Candidate", candidatesIds2));
+      let unseenCandidates2 = candidates2.reduce((candidates: Candidate[], candidate: Candidate) => { 
+        if (!candidate.isViewed) {candidates.push(candidate)}
+        return candidates; 
+      }, []);
+      if (unseenCandidates1.length != unseenCandidates2.length) return unseenCandidates2.length - unseenCandidates1.length
+
+      //Si même nombre de notif, trie selon le nombre de candidats
+      let numberPossibleCandidate1 = candidates1.reduce((possibleCandidates: Candidate[], candidate: Candidate) => { 
+        if (!candidate.isViewed) {possibleCandidates.push(candidate)}
+        return possibleCandidates; 
+      }, []).length;
+      let numberPossibleCandidate2 = candidates2.reduce((possibleCandidates: Candidate[], candidate: Candidate) => { 
+        if (!candidate.isViewed) {possibleCandidates.push(candidate)}
+        return possibleCandidates; 
+      }, []).length;
+
+      return numberPossibleCandidate2 - numberPossibleCandidate1;
+    })
     if (filter == null) {
       this.userOnlinePosts = this.allUserOnlinePosts;
     } else {
@@ -413,21 +427,22 @@ export class HomeComponent extends Destroy$ {
   selectMission(filter: any) {
     this.missions = [];
 
-    // Trie missions selon leurs notifications
     let allNotifications = this.store.selectSnapshot(DataQueries.getAll("Notification"));
-    let missionsNotifications = allNotifications.map(notification => notification.missions);
-    let missionArray = [];
-    for (let mission of this.allMissions){
-      let missionNotifications = missionsNotifications.map(missionId => missionId === mission.id)
-      const countTrue = missionNotifications.filter(value => value === true).length;
-      missionArray.push([mission, countTrue]);
-    }
-    missionArray.sort((a: any, b: any) => b[1] - a[1]);
-    let keys = missionArray.map((key: any) => {return key[0]});
-    this.allMissions.sort((a: any, b: any) => keys.indexOf(a) - keys.indexOf(b));
-    
 
-    this.allMissions.sort((a, b) => {return Number(a["isClosed"]) - Number(b["isClosed"]);});
+    //Trie des missions
+    this.allMissions.sort((mission1, mission2) => {
+      //Trie selon les missions terminées 
+      let b1 = Number(mission1["isClosed"]);
+      let b2 = Number(mission2["isClosed"]);
+      if (b1!= b2) return b1-b2
+
+      if (filter != null && filter.sortMissionNotifications) {
+        let notificationsMission1 = allNotifications.filter(notification => !notification.hasBeenViewed && (notification.missions == mission1.id))
+        let notificationsMission2 = allNotifications.filter(notification => !notification.hasBeenViewed && (notification.missions == mission2.id))
+        return notificationsMission2.length - notificationsMission1.length
+      }
+      return 0
+    });
     if (filter == null) {
       this.missions = this.allMissions;
     } else {
@@ -439,20 +454,6 @@ export class HomeComponent extends Destroy$ {
         let keys = levenshteinDist.map((key: any) => {return key[0];});
         this.allMissions.sort((a: any, b: any) => keys.indexOf(a) - keys.indexOf(b));
       } 
-
-      if (filter.sortMissionNotifications === true) {
-        let allNotifications = this.store.selectSnapshot(DataQueries.getAll("Notification"));
-        let missionsNotifications = allNotifications.map(notification => notification.missions);
-        let missionArray = [];
-        for (let mission of this.allMissions){
-          let missionNotifications = missionsNotifications.map(missionId => missionId === mission.id)
-          const countTrue = missionNotifications.filter(value => value === true).length;
-          missionArray.push([mission, countTrue]);
-        }
-        missionArray.sort((a: any, b: any) => b[1] - a[1]);
-        let keys = missionArray.map((key: any) => {return key[0]});
-        this.allMissions.sort((a: any, b: any) => keys.indexOf(a) - keys.indexOf(b));
-      }  
 
       for (let mission of this.allMissions) {
 
