@@ -1,6 +1,8 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from "@angular/core";
 import { Select, Store } from "@ngxs/store";
 import { Observable } from "rxjs/internal/Observable";
+import { takeUntil } from "rxjs/operators";
+import { Destroy$ } from "src/app/shared/common/classes";
 import { InfoService } from "src/app/shared/components/info/info.component";
 import { Mobile } from "src/app/shared/services/mobile-footer.service";
 import { Profile } from "src/models/new/data.interfaces";
@@ -13,7 +15,7 @@ import { ChangeProfileType } from "src/models/new/user/user.actions";
   styleUrls: ['./make_ad.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MakeAdComponent {
+export class MakeAdComponent extends Destroy${
   imports = {
     currencies: ['$', '€', '£']
   }
@@ -29,6 +31,7 @@ export class MakeAdComponent {
   showFooter: boolean = true;
 
   constructor(public mobile: Mobile, private cd: ChangeDetectorRef, private store: Store, private info: InfoService){
+    super()
   }
 
   ngOnInit(){
@@ -40,7 +43,7 @@ export class MakeAdComponent {
       // }
     })
 
-    this.mobile.footerStateSubject.subscribe(b => {
+    this.mobile.footerStateSubject.pipe(takeUntil(this.destroy$)).subscribe(b => {
       this.showFooter = b;
       this.cd.detectChanges()
     })

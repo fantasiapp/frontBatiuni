@@ -90,19 +90,21 @@
   </slidemenu>
 
   <slidemenu [(open)]="openInviteFriendMenu" #inviteFriends>
+    <h1 class="center-text full-width" header>Parrainer vos amis</h1>
     <div class="modify-page hosted-page flex column center-cross space-children-margin" content>
-      <invite_friends class="flex column center-cross space-children-margin"></invite_friends>
+      <invite_friends *ngIf="openInviteFriendMenu" class="flex column center-cross space-children-margin"></invite_friends>
     </div>
   </slidemenu>
 
   <slidemenu [(open)]="openNotifications">
     <div class="full-width center-text text-emphasis" header>Notifications</div>
-    <notifications class="hosted-page flex column center-cross space-children-margin" [notifications]="notifications" content></notifications>
+    <notifications *ngIf="openNotifications" class="hosted-page flex column center-cross space-children-margin" [notifications]="notifications" content></notifications>
   </slidemenu>
 </ng-container>
 
 <slidemenu [(open)]="openRecommandationMenu" #askRecommandation>
+  <h1 class="center-text full-width" header>Demander une recommandation</h1>
   <div class="modify-page hosted-page flex column center-cross space-children-margin" content>
-    <ask_recommandation [profileEmail]="profileEmail" class="flex column center-cross space-children-margin"></ask_recommandation>
+    <ask_recommandation *ngIf="openRecommandationMenu" [profileEmail]="profileEmail" class="flex column center-cross space-children-margin"></ask_recommandation>
   </div>
 </slidemenu>

@@ -192,9 +192,10 @@ export class HomeComponent extends Destroy$ {
       this.displayOnlinePosts = posts
       this.cd.markForCheck()
     })
-    this.mobile.footerStateSubject.subscribe((b) => {
+    this.mobile.footerStateSubject.pipe(takeUntil(this.destroy$)).subscribe((b) => {
       this.showFooter = b;
-      this.cd.detectChanges()
+      console.log('5HEAD');
+      // this.cd.detectChanges()
       this.cd.markForCheck();
       this.cd.detectChanges()
     });
@@ -262,6 +263,7 @@ export class HomeComponent extends Destroy$ {
   get footerHide(){return !this.showFooter}
 
   ngOnDestroy(): void {
+    console.log('BONSOIR');
     this.isStillOnPage = false
     this.info.alignWith("last");
     this.getUserDataService.emitDataChangeEvent();

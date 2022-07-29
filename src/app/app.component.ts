@@ -194,6 +194,7 @@ export class AppComponent extends Destroy$ {
           } 
 
           if(s.receive === 'granted'){
+            console.log('NOTIFICATION REGISTER');
             await PushNotifications.register()
           }
         })

@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostBinding } fr
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
 import { Store } from "@ngxs/store";
-import { take } from "rxjs/operators";
+import { take, takeUntil } from "rxjs/operators";
 import { Destroy$ } from "src/app/shared/common/classes";
 import { Login } from "src/models/auth/auth.actions";
 import { GiveNotificationToken } from "src/models/new/user/user.actions";
@@ -106,7 +106,7 @@ export class ConnexionForm extends Destroy$ {
 
     this.mobileFooterService.init()
     
-    this.mobileFooterService.footerStateSubject.subscribe((b) => {
+    this.mobileFooterService.footerStateSubject.pipe(takeUntil(this.destroy$)).subscribe((b) => {
       this.showFooter = b;
       this.cd.detectChanges()
     });

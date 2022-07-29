@@ -1,4 +1,4 @@
 <div [@routeAnimation]="prepareRoute(outlet)" class="router" (click)="true" [ngClass]="{'footerHide': !showFooter}">
   <router-outlet #outlet="outlet"></router-outlet>
-  <navigation *ngIf="showFooter"></navigation>
+  <navigation [ngStyle]="{'visibility: hidden':showFooter}"></navigation>
 </div>

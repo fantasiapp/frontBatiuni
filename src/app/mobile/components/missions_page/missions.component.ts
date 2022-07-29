@@ -82,7 +82,7 @@ export class MissionsComponent extends Destroy$ {
   }
 
   ngOnInit() {
-    this.mobileFooterService.footerStateSubject.subscribe((b) => {
+    this.mobileFooterService.footerStateSubject.pipe(takeUntil(this.destroy$)).subscribe((b) => {
       this.showFooter = b;
       this.cd.markForCheck();
     });
