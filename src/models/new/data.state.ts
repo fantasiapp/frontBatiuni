@@ -642,17 +642,17 @@ export class DataState {
 
     //check if the file is already downloaded
     if (file && file[contentIndex] && !download.forceDownload) {
-      return file[contentIndex];
+      return file[contentIndex]
     }
 
     //check if we are currently downloading the file
-    let pending = this.getPending(key);
-    if (pending) return pending;
+    let pending = this.getPending(key)
+    if (pending) return pending
 
     //download the file and register that we downloading;
-    let req = this.http.get("data", download);
-    pending = new Subject<string>();
-    this.registerPending(key, pending);
+    let req = this.http.get("data", download)
+    pending = new Subject<string>()
+    this.registerPending(key, pending)
 
     if (download.notify)
       this.inZone(() => {
