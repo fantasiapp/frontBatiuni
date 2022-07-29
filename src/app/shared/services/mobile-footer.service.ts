@@ -8,6 +8,7 @@ export class Mobile {
   showFooter: boolean = true;
 
   footerStateSubject = new BehaviorSubject(true)
+  footerWillHideSubject = new BehaviorSubject(true)
   footerState = this.footerStateSubject.asObservable()
     
   isInited: boolean = false
@@ -22,6 +23,9 @@ export class Mobile {
         
         this.footerStateSubject.next(false);
       });
+      Keyboard.addListener('keyboardWillHide', ()=>{
+        this.footerWillHideSubject.next(true)
+      })
       Keyboard.addListener("keyboardDidHide", () => {
         this.footerStateSubject.next(true);
       });
@@ -38,6 +42,7 @@ export class Mobile {
       this.test1()
       setTimeout(()=>{
             this.test2()
+
         },1000)
     },2000)
   }

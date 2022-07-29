@@ -26,7 +26,7 @@ export class MainPage {
   ngOnInit(){
     this.mobile.footerStateSubject.subscribe(b => {
       this.showFooter = b
-      this.cd.detectChanges()
+      this.cd.markForCheck();
     })
     this.mobile.init()
   }

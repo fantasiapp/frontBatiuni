@@ -523,6 +523,9 @@ export class MakeAdForm {
   }
 
   ngOnInit() {
+  }
+
+  ngAfterViewInit() {
     this.mobile.footerStateSubject.subscribe((b) => {
       this.showFooter = b;
       this.cd.detectChanges();
