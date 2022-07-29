@@ -57,3 +57,8 @@ swipeup li{
   padding-bottom: 0.5rem;
   font-size: medium;
 }
+
+.slideMenu__BigHeader__wrapper::ng-deep > div {
+  // margin-top: env(safe-area-inset-top)
+  margin-top: 0;
+}

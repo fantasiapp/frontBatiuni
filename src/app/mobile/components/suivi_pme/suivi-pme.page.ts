@@ -320,22 +320,26 @@ export class SuiviPME extends Destroy${
 
     blockedDates.forEach((date) => {
       if (!datesSelected.includes(date)) {
-        this.alert += `La date ${date} doit obligatoirement être sélectionnée.\r\n`;
+      
         dateToBeSelected.push(date);
+        date = moment(date).format('DD-MM-YYYY')
+        this.alert += `La date ${date} doit obligatoirement être sélectionnée.\r\n`;
       }
     });
 
     pendingDates.pendingValidated.forEach((date) => {
       if(!datesSelected.includes(date)){
-        this.alert += `La date ${date} est en cours de validation.\r\n`
         dateToBeSelected.push(date)
+        date = moment(date).format('DD-MM-YYYY')
+        this.alert += `La date ${date} est en cours de validation.\r\n`
       }
     })
 
     pendingDates.pendingDeleted.forEach((date)=>{
       if(datesSelected.includes(date)){
-        this.alert += `La date ${date} est en cours de suppression.\r\n`
         dateToBeUnSelected.push(date)
+        date = moment(date).format('DD-MM-YYYY')
+        this.alert += `La date ${date} est en cours de suppression.\r\n`
       }
     })
 

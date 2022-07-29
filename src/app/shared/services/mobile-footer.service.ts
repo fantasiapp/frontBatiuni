@@ -38,6 +38,7 @@ export class Mobile {
       this.test1()
       setTimeout(()=>{
             this.test2()
+
         },1000)
     },2000)
   }

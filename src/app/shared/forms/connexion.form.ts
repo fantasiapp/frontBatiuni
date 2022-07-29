@@ -39,7 +39,7 @@ import { NotifService } from "../services/notif.service";
           <!-- <div *ngIf="loginForm.get('password')!.touched && loginForm.get('password')!.errors?.lowercase" class="error">Doit contenir au moins une lettre en miniscule</div> -->
       </div>
       <div class="lost-password ">
-      <a class="external-links form-links block " [routerLink]="['', 'mail']" style="margin-top: 1rem;">
+      <a class="external-links form-links block " [routerLink]="['', 'mail']" style="margin-top: 1rem;" *ngIf="showFooter">
         Mot de passe oublié !
       </a>
       </div>
@@ -93,6 +93,7 @@ export class ConnexionForm extends Destroy$ {
 
   private _errors: string[] = [];
   get errors() { return this._errors; }
+  showFooter: boolean = true 
 
   constructor(private router: Router, private store: Store, private cd: ChangeDetectorRef, private isLoadingService: BooleanService, private notifService: NotifService, private mobileFooterService: Mobile, private localService: LocalService) {
     super();
@@ -101,6 +102,14 @@ export class ConnexionForm extends Destroy$ {
   ngOnInit(){
     if(this.lastEmail)
       this.loginForm.get("email")!.markAsTouched()
+
+
+    this.mobileFooterService.init()
+    
+    this.mobileFooterService.footerStateSubject.subscribe((b) => {
+      this.showFooter = b;
+      this.cd.detectChanges()
+    });
   }
 
   async onSubmit(e: any) {

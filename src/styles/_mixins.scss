@@ -167,7 +167,7 @@
 
 %page {
   display: block;
-  height: calc(100vh - #{$navigation-height} - env(safe-area-inset-bottom));
+  height: calc(100vh  - env(safe-area-inset-bottom));
   @extend %overflow-y;
 }
 
@@ -227,11 +227,12 @@
   @extend %overflow-y;
   @include with-set-safe-area(margin, top, #{$mission-header-height});
   @include with-set-safe-area(margin, bottom);
-  height: calc(100vh - #{$mission-header-height} - #{$navigation-height} - env(safe-area-inset-bottom));
+  height: calc(100vh - #{$mission-header-height} - env(safe-area-inset-bottom));
+  padding-bottom: 70px;
   
-  &.footerHide {
-    height: calc(100vh - #{$mission-header-height} - #{$switch-header-size}) ;
-  }
+  // &.footerHide {
+    // height: calc(100vh - #{$mission-header-height} - #{$switch-header-size}) ;
+  // }
 }
 
 .page-content-with-tabs-with-switch {

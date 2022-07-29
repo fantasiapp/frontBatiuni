@@ -14,7 +14,11 @@ export class AuthGuard implements CanActivate {
       //if we want to access home
       return authenticated ? true : this.router.parseUrl('/connexion');
     };
-
+    if (route.url[0]?.path == "payment-status"){
+      //if we want to access payment-status
+      return authenticated ? true : this.router.parseUrl('/connexion');
+    };
+    
     //for other pages that shouldnt be seen if we're connected
     return !authenticated ? true : this.router.parseUrl('/home');
   }

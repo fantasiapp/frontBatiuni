@@ -1,4 +1,4 @@
-<ng-container *ngIf="(profile$ | async )!.company.stripeSubscriptionStatus == 'active'; else subscriptionManagement" >
+<ng-container *ngIf="(profile$ | async )!.company.stripeSubscriptionStatus != 'active'; else subscriptionManagement" >
   <span style="margin: 2rem 2rem; display: block;">Sélectionnez un service</span>
     <div class="caroussel__wrapper">
         <div class="caroussel">

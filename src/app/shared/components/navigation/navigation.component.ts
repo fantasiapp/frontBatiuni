@@ -44,6 +44,7 @@ export class NavigationMenu extends Destroy$ {
     console.log('ROUTE', route);
     let view = this.store.selectSnapshot(DataState.view);
     const user = this.store.selectSnapshot(DataQueries.currentUser);
+    const profile = this.store.selectSnapshot(DataQueries.currentProfile);
     let userFiles = this.store.selectSnapshot(DataQueries.getById('Company', user.company))?.files
     let Kbis = [];
     if (userFiles) {
@@ -54,11 +55,22 @@ export class NavigationMenu extends Destroy$ {
       if (route == 'make') {this.popup.missKbis('Créer une annonce')}
       if (route == 'sos') {this.popup.missKbis('SOS')}
       route = menu[3].route
-    } 
-    else if (view == 'ST' && (route == '' || route == 'availabilities') && Kbis.length == 0){
+    } else if ((route == 'make' || route == 'sos') && profile.company.stripeSubscriptionStatus != "active") {
+      console.log("unactive")
+      console.log(profile.company)
+      let company = this.store.selectSnapshot(DataQueries.getById("Company", profile.company.id))
+      console.log(company)
+      // if (route == 'make') {this.popup.missSubscription('Créer une annonce')}
+      // if (route == 'sos') {this.popup.missSubscription('SOS')}
+      // route = menu[3].route
+    } else if (view == 'ST' && (route == '' || route == 'availabilities') && Kbis.length == 0){
       if (route == '') {this.popup.missKbis('Annonces qui peuvent vous intéresser')}
       if (route == 'availabilities') {this.popup.missKbis('Mes disponibilités')}
       route = menu[3].route
+    } else if (view == 'ST' && (route == '' || route == 'availabilities') && profile.company.stripeSubscriptionStatus != "active"){
+      // if (route == '') {this.popup.missSubscription('Annonces qui peuvent vous intéresser')}
+      // if (route == 'availabilities') {this.popup.missSubscription('Mes disponibilités')}
+      // route = menu[3].route
     }
     this.routeChange.emit(route);
     this.router.navigate(route ? ['', 'home', route, ...this.segments] : ['', 'home']);

@@ -2,7 +2,7 @@ import { FormGroup } from "@angular/forms";
 import { FileUIOutput } from "src/app/shared/components/filesUI/files.ui";
 import { PropertyTrap } from "src/app/shared/common/classes";
 import { getDirtyValues } from "src/app/shared/common/functions";
-import { DataTypes, Post, PostDetail, PostDetailGraphic, Profile, Mission, DatePost, Ref } from "../data.interfaces";
+import { DataTypes, Post, PostDetail, PostDetailGraphic, Profile, Mission, DatePost, Ref, Company } from "../data.interfaces";
 import { CalendarUI, DayState } from "src/app/shared/components/calendar/calendar.ui";
 import { availabilityToName } from "../data.mapper";
 import { ApplyForm } from "src/app/mobile/ui/annonce-resume/annonce-resume.ui";
@@ -502,6 +502,11 @@ export class GiveNotificationToken {
   constructor(public token: string) {}
 }
 
+export class SubscribeUser {
+  static readonly type = 'subscribe current user';
+  action = 'subscribeUser';
+  constructor() {}
+}
 // export class ContractSignature {
 //   static readonly type = '[User] Contract Signature';
 //   action = 'downloadContract';

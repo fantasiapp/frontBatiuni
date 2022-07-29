@@ -22,6 +22,7 @@ import {
 import { Register } from "src/models/auth/auth.actions";
 import {
   ComplexPassword,
+  FieldType,
   MatchField,
   RequiredType,
   setErrors,
@@ -362,7 +363,9 @@ export class RegisterForm extends Destroy$ {
       secondPage: new FormGroup({
         proposer: new FormControl(""),
         role: new FormControl([], [Validators.required]),
-        siret: new FormControl([],[Validators.required]),
+        siret: new FormControl('',[Validators.required, 
+      FieldType("number", ["un numéro de SIRET"])
+]),
         company: new FormControl("", [
           Validators.required,
           // RequiredType(

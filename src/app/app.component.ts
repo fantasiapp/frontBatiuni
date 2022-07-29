@@ -58,7 +58,6 @@ export class AppComponent extends Destroy$ {
 
   constructor(private store: Store, private mobile: Mobile, private notifService: NotifService, private booleanService: BooleanService, private stripeService: StripeService, private localService: LocalService, private info: InfoService) {
     super();
-    this.mobile.init();
     this.isConnected = booleanService.isConnected
     this.booleanService.getConnectedChangeEmitter().subscribe((value) => {
       this.isConnected = value
@@ -83,6 +82,13 @@ export class AppComponent extends Destroy$ {
     this.app = initializeApp(environment.firebase)
     this.requestPermission()
     // this.listen()
+
+    // this.mobile.init();
+
+  }
+
+  ngAfterViewInit(){
+
   }
 
   prepareRoute(outlet: RouterOutlet) {

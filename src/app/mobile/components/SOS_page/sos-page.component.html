@@ -9,7 +9,7 @@
   
   <ng-container [ngSwitch]="activeView">
     <ng-container *ngSwitchCase="0">
-      <div class="hosted-page space-children-margin page-content-with-tabs" [ngClass]="{'footerHide': !showFooter, 'page-content-with-tabs-with-switch': profile.company && profile.company.role == 3}">
+      <div class="hosted-page space-children-margin page-content-with-tabs" style="margin-bottom: 1rem" [ngClass]="{'footerHide': !showFooter, 'page-content-with-tabs-with-switch': profile.company && profile.company.role == 3}">
         <sos-card 
         (click)="checkCompanyProfile(companyAvailable.company)" 
         *ngFor="let companyAvailable of availableCompanies" 

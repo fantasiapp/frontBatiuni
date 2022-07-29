@@ -1,5 +1,10 @@
+import { parseTemplate } from "@angular/compiler";
 import { Component, ChangeDetectionStrategy, Input, ChangeDetectorRef } from "@angular/core";
 import { Router } from "@angular/router";
+import { StateContext, Store } from "@ngxs/store";
+import { DataModel } from "src/models/new/data.state";
+import { SubscribeUser } from "src/models/new/user/user.actions";
+import { getUserDataService } from "../../services/getUserData.service";
 import { StripeService } from "../../services/stripe";
 
 
@@ -29,15 +34,20 @@ export class PaymentStatus {
     private router: Router,
     private stripeService: StripeService,
     private cd: ChangeDetectorRef,
+    private getUserDataService: getUserDataService,
+    private store: Store,
   ) {
     const navigation = this.router.getCurrentNavigation();
     this.stripe = this.stripeService.stripe;
   }
 
-  ngOnInit() {
+  ngOnInit(ctx: StateContext<DataModel>) {
     this.stripe.retrievePaymentIntent(this.clientSecret).then(({paymentIntent}: any) => {
       const message = document.querySelector('#message')!;
       this.message = paymentIntent.status;
+      if (this.message == "succeeded" && paymentIntent.description == "Subscription creation") {
+        this.store.dispatch(new SubscribeUser())
+      } 
       this.cd.markForCheck();
 
     })

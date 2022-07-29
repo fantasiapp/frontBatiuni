@@ -64,7 +64,10 @@ import "hammerjs"
       display: block;
       width: 100%;
       height: 100%; 
-      padding-bottom: 3rem;   
+      max-height: calc(90vh - 50px - 3rem);
+      padding: 0 2rem;
+      padding-bottom: calc(3rem + env(safe-area-inset-bottom));
+      overflow: scroll;
     }
     
     switch::ng-deep .slider {

@@ -3,7 +3,7 @@ import { Action,createSelector,Selector,State,StateContext,Store, } from "@ngxs/
 import { Observable, of, Subject, throwError } from "rxjs";
 import { concatMap, map, tap } from "rxjs/operators";
 import { HttpService } from "src/app/services/http.service";
-import { GetGeneralData,HandleApplication,BlockCompany,SignContract,MarkViewed,ModifyAvailability,SetFavorite,TakePicture,InviteFriend,ValidateMissionDate,BoostPost,AskRecommandation,GiveRecommandation,GiveNotificationToken,ModifyFile,UnapplyPost,DeleteLabel,PostNotificationViewed } from "./user/user.actions";
+import { GetGeneralData,HandleApplication,BlockCompany,SignContract,MarkViewed,ModifyAvailability,SetFavorite,TakePicture,InviteFriend,ValidateMissionDate,BoostPost,AskRecommandation,GiveRecommandation,GiveNotificationToken,ModifyFile,UnapplyPost,DeleteLabel,PostNotificationViewed, SubscribeUser } from "./user/user.actions";
 import { ApplyPost,CandidateViewed,ChangePassword,ChangeProfilePicture,ChangeProfileType,DeleteFile,DeletePost,DownloadFile,DuplicatePost,GetUserData,ModifyUserProfile,CreateDetailedPost,ModifyDetailedPost,CreateSupervision,SwitchPostType,ModifyMissionDate,CloseMission,CloseMissionST,UploadFile,UploadPost,UploadImageSupervision,NotificationViewed } from "./user/user.actions";
 import { Company, Interface, User } from "./data.interfaces";
 import { DataReader, NameMapping, TranslatedName } from "./data.mapper";
@@ -23,6 +23,7 @@ import { SingleCache } from "src/app/shared/services/SingleCache";
 import { NotifService } from "src/app/shared/services/notif.service";
 import { LocalService } from "src/app/shared/services/local.service";
 import { ConnectionStatusService } from "src/app/shared/services/connectionStatus.service";
+import { delay } from "src/app/shared/common/functions";
 
 export interface DataModel {
   fields: Record<string[]>;
@@ -169,8 +170,8 @@ export class DataState {
 
   @Action(GetUserData)
   getUserData(ctx: StateContext<DataModel>, action: GetUserData) {
-    const req = this.http.get("data", { action: action.action });
     let localGetUserData: string | null = this.localService.getData("getUserData")
+    const req = this.http.get("data", { action: action.action });
     if (this.isFirstTime && localGetUserData) {
       this.booleanService.emitLoadingChangeEvent(true)
       this.booleanService.emitConnectedChangeEvent(true)
@@ -183,7 +184,7 @@ export class DataState {
     else if (this.flagUpdate && this.connectionStatusService.isOnline){
       this.flagUpdate = false
       return req.pipe(tap((response: any) => {
-        console.log('getUserData effectué', response)
+          console.log("getUserData response", response)
           this.getUserDataService.setNewResponse(response)
           if (this.isFirstTime) {
             this.booleanService.emitLoadingChangeEvent(true)
@@ -229,9 +230,14 @@ export class DataState {
   }
 
   @Action(Logout)
-  logout(ctx: StateContext<DataModel>) {
+  async logout(ctx: StateContext<DataModel>) {
     console.log("logout")
-    this.flagUpdate = true 
+    await new Promise(async resolve => {
+      while(!this.flagUpdate){
+        await delay(1000)
+      }
+      resolve("yes")
+    })
     this.isFirstTime = true
     this.booleanService.emitConnectedChangeEvent(false)
     this.booleanService.emitLoadingChangeEvent(false)
@@ -239,6 +245,7 @@ export class DataState {
     ctx.setState({ fields: {}, session: { view: "ST", currentUser: -1 , time: 0} });
     ctx.dispatch(new GetGeneralData()); // a sign to decouple this from DataModel
     this.localService.clearData()
+    this.flagUpdate = true 
   }
 
   @Action(ModifyUserProfile)
@@ -642,17 +649,17 @@ export class DataState {
 
     //check if the file is already downloaded
     if (file && file[contentIndex] && !download.forceDownload) {
-      return file[contentIndex];
+      return file[contentIndex]
     }
 
     //check if we are currently downloading the file
-    let pending = this.getPending(key);
-    if (pending) return pending;
+    let pending = this.getPending(key)
+    if (pending) return pending
 
     //download the file and register that we downloading;
-    let req = this.http.get("data", download);
-    pending = new Subject<string>();
-    this.registerPending(key, pending);
+    let req = this.http.get("data", download)
+    pending = new Subject<string>()
+    this.registerPending(key, pending)
 
     if (download.notify)
       this.inZone(() => {
@@ -694,6 +701,7 @@ export class DataState {
         this.flagUpdate = true
         if (error.status == '401'){
           console.log("ERREUR 401 mais on dit rien chuuuuuuut")
+          this.store.dispatch(new Logout());
         }
         return throwError("DownloadFile failed Failed.")
       })
@@ -1241,7 +1249,17 @@ export class DataState {
       })
     )
   }
+
+  @Action(SubscribeUser)
+  subscribeUser(ctx: StateContext<DataModel>){
+    let company = this.store.selectSnapshot(DataQueries.currentCompany)
+    console.log("company", company);
+    ctx.setState(transformField("Company", company.id, "stripeSubscriptionStatus", () => "active"));
+    console.log("current user", this.store.selectSnapshot(DataQueries.currentProfile))
+  }
+
 }
+
 //make a deep version of toJSON
 export class DataQueries {
   static toJson<K extends DataTypes>(
