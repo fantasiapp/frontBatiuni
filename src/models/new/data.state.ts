@@ -23,6 +23,7 @@ import { SingleCache } from "src/app/shared/services/SingleCache";
 import { NotifService } from "src/app/shared/services/notif.service";
 import { LocalService } from "src/app/shared/services/local.service";
 import { ConnectionStatusService } from "src/app/shared/services/connectionStatus.service";
+import { delay } from "src/app/shared/common/functions";
 
 export interface DataModel {
   fields: Record<string[]>;
@@ -169,8 +170,8 @@ export class DataState {
 
   @Action(GetUserData)
   getUserData(ctx: StateContext<DataModel>, action: GetUserData) {
-    const req = this.http.get("data", { action: action.action });
     let localGetUserData: string | null = this.localService.getData("getUserData")
+    const req = this.http.get("data", { action: action.action });
     if (this.isFirstTime && localGetUserData) {
       this.booleanService.emitLoadingChangeEvent(true)
       this.booleanService.emitConnectedChangeEvent(true)
@@ -229,9 +230,14 @@ export class DataState {
   }
 
   @Action(Logout)
-  logout(ctx: StateContext<DataModel>) {
+  async logout(ctx: StateContext<DataModel>) {
     console.log("logout")
-    this.flagUpdate = true 
+    await new Promise(async resolve => {
+      while(!this.flagUpdate){
+        await delay(1000)
+      }
+      resolve("yes")
+    })
     this.isFirstTime = true
     this.booleanService.emitConnectedChangeEvent(false)
     this.booleanService.emitLoadingChangeEvent(false)
@@ -239,6 +245,7 @@ export class DataState {
     ctx.setState({ fields: {}, session: { view: "ST", currentUser: -1 , time: 0} });
     ctx.dispatch(new GetGeneralData()); // a sign to decouple this from DataModel
     this.localService.clearData()
+    this.flagUpdate = true 
   }
 
   @Action(ModifyUserProfile)
@@ -694,6 +701,7 @@ export class DataState {
         this.flagUpdate = true
         if (error.status == '401'){
           console.log("ERREUR 401 mais on dit rien chuuuuuuut")
+          this.store.dispatch(new Logout());
         }
         return throwError("DownloadFile failed Failed.")
       })
