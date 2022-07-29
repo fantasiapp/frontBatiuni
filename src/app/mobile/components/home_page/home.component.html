@@ -17,7 +17,7 @@
         <span *ngIf="view == 'PME' && notificationsUnseenMissions" [attr.data-notification-number]="notificationsUnseenMissions" class="notification notification-header"></span>
       </span>
     </page-header>
-    <div class="wrapper__searchbar__clickcatcher page-content-with-tabs" *ngIf="!showFooter"></div>
+    <div class="wrapper__searchbar__clickcatcher page-content-with-tabs" *ngIf="!showFooter" (click)="true"></div>
 
     <div  class="hosted-page space-children-margin page-content-with-tabs" [ngClass]="{'footerHide': !showFooter, 'page-content-with-tabs-with-switch': profile.company && profile.company.role == 3}">
           <!-- Page pour PME -->

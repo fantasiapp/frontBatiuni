@@ -27,6 +27,7 @@ export class MainPage {
     this.mobile.footerStateSubject.subscribe(b => {
       this.showFooter = b
       this.cd.markForCheck();
+      this.cd.detectChanges()
     })
     this.mobile.init()
   }

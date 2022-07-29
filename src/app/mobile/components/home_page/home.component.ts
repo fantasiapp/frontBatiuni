@@ -194,7 +194,9 @@ export class HomeComponent extends Destroy$ {
     })
     this.mobile.footerStateSubject.subscribe((b) => {
       this.showFooter = b;
+      this.cd.detectChanges()
       this.cd.markForCheck();
+      this.cd.detectChanges()
     });
     this.getUserDataService.getDataChangeEmitter().subscribe((value: boolean) => {
       this.lateInit()
