@@ -73,6 +73,7 @@ page-header::ng-deep .tabs {
     text-align: center;
     width: 100%;
     justify-content: space-evenly;
+    margin-bottom: calc(2* env(safe-area-inset-bottom));
     button {
         background: none !important;
     }

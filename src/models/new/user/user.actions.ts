@@ -29,6 +29,12 @@ export class ChangeProfilePicture {
   action = 'changeUserImage';
 };
 
+export class DeleteProfilePicture {
+  static readonly type = '[User] Delete Profile Picture';
+  constructor() {}
+  action = 'deleteUserImage';
+};
+
 export class UploadImageSupervision {
   static readonly type = '[User] Upload Supervision Picture';
   ext: string = '';

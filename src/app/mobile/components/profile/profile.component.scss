@@ -58,6 +58,10 @@ swipeup li{
   font-size: medium;
 }
 
+.slideMenu__BigHeader__wrapper {
+  min-height: unset;
+  height: calc(100vh - 4rem - env(safe-area-inset-bottom));
+}
 .slideMenu__BigHeader__wrapper::ng-deep > div {
   // margin-top: env(safe-area-inset-top)
   margin-top: 0;
