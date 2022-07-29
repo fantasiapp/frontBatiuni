@@ -14,7 +14,7 @@ import { DataQueries, DataState } from "src/models/new/data.state";
 import { Destroy$ } from "src/app/shared/common/classes";
 import { Profile } from "src/models/new/data.interfaces";
 import { Notification } from "src/models/new/data.interfaces";
-import { NotificationViewed } from "src/models/new/user/user.actions";
+import { DeleteProfilePicture, NotificationViewed } from "src/models/new/user/user.actions";
 import { AppComponent } from "src/app/app.component";
 import { NotifService } from "src/app/shared/services/notif.service";
 import { getUserDataService } from "src/app/shared/services/getUserData.service";
@@ -246,13 +246,8 @@ export class ProfileComponent extends Destroy$ {
   }
 
   async deletePhoto() {
-    const photo: Photo = {format:'jpeg', saved: false}
-
-    this.store.dispatch(new UserActions.ChangeProfilePicture(photo, 'image')).subscribe(() => {
-      this.updateProfile();
-      this.cd.markForCheck();
-    });
-    this.openModifyPicture = false;
+    this.store.dispatch(new DeleteProfilePicture())
+    this.cd.markForCheck()
     this.info.show("info", "Votre photo de profil a bien été supprimée", 3000)
   }
 
