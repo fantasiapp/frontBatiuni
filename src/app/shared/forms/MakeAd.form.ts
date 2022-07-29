@@ -21,7 +21,7 @@ import {
 import { Router } from "@angular/router";
 import { Store } from "@ngxs/store";
 import * as moment from "moment";
-import { take, takeLast } from "rxjs/operators";
+import { take, takeLast, takeUntil } from "rxjs/operators";
 import { footerTranslate } from "src/animations/footer.animation";
 import { Post, Job } from "src/models/new/data.interfaces";
 import { DataQueries, SnapshotAll } from "src/models/new/data.state";
@@ -31,6 +31,7 @@ import {
   UploadPost,
 } from "src/models/new/user/user.actions";
 import { FieldType, Required } from "src/validators/verify";
+import { Destroy$ } from "../common/classes";
 import { CalendarUI, DayState } from "../components/calendar/calendar.ui";
 import { defaultFileUIOuput } from "../components/filesUI/files.ui";
 import { InfoService } from "../components/info/info.component";
@@ -405,7 +406,7 @@ import { Mobile } from "../services/mobile-footer.service";
     DatePipe
   ]
 })
-export class MakeAdForm {
+export class MakeAdForm extends Destroy${
   @HostBinding("class.page")
   @Input()
   page: boolean = true;
@@ -517,6 +518,7 @@ export class MakeAdForm {
     private datePipe: DatePipe,
     private activeViewService: ActiveViewService
   ) {
+    super()
     // setInterval(()=>{
     //   this.mobile.test1()
     // }, 1000)
@@ -526,7 +528,7 @@ export class MakeAdForm {
   }
 
   ngAfterViewInit() {
-    this.mobile.footerStateSubject.subscribe((b) => {
+    this.mobile.footerStateSubject.pipe(takeUntil(this.destroy$)).subscribe((b) => {
       this.showFooter = b;
       this.cd.detectChanges();
     });

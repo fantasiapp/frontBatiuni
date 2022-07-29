@@ -39,6 +39,7 @@ import {
   SetFavorite,
   SwitchPostType,
   PostNotificationViewed,
+  SubscribeUser,
 } from "src/models/new/user/user.actions";
 import { DataQueries, DataState, QueryAll } from "src/models/new/data.state";
 import {
@@ -69,6 +70,7 @@ import { Router } from "@angular/router";
 import { NotifService } from "src/app/shared/services/notif.service";
 import { ActiveViewService } from "src/app/shared/services/activeView.service";
 import { ConnectionStatusService } from "src/app/shared/services/connectionStatus.service";
+import { StripeService } from "src/app/shared/services/stripe";
 
 @Component({
   selector: "home",
@@ -128,6 +130,9 @@ export class HomeComponent extends Destroy$ {
   @ViewChild("candidates", { read: TemplateRef, static: true })
   candidatesTemplate!: TemplateRef<any>;
 
+  @ViewChild("paymentStatus", { read: TemplateRef, static: true })
+  paymentStatusTemplate!: TemplateRef<any>;
+
   @ViewChild("candidature", { read: TemplateRef, static: true })
   candidature!: TemplateRef<any>;
 
@@ -159,6 +164,11 @@ export class HomeComponent extends Destroy$ {
   searchBarEmpty: boolean = true;
 
   showFooter: boolean = true;
+
+  stripe: any;
+
+  paymentStatusMessage: string = "";
+
   constructor(
     private cd: ChangeDetectorRef,
     private appComponent: AppComponent,
@@ -175,15 +185,36 @@ export class HomeComponent extends Destroy$ {
     private router: Router,
     private notifService: NotifService,
     private activeViewService: ActiveViewService,
-    private connectionService: ConnectionStatusService
+    private connectionService: ConnectionStatusService,
+    private stripeService: StripeService,
   ) {
     super();
-    this.isLoading = this.booleanService.isLoading
+    this.isLoading = this.booleanService.isLoading;
     this.searchbar = new SearchbarComponent(store, cd);
-    this.activeView = activeViewService.activeView
+    this.activeView = activeViewService.activeView;
+    this.stripe = this.stripeService.stripe;
   }
   
   ngOnInit() {
+
+    let clientSecret = new URLSearchParams(window.location.search).get('payment_intent_client_secret')
+    console.log("param", clientSecret)
+    if(clientSecret) {
+      console.log("hehehe")
+      this.popup.show({
+        type: "template",
+        template: this.paymentStatusTemplate,
+      })
+      this.stripe.retrievePaymentIntent(clientSecret).then(({paymentIntent}: any) => {
+        const message = document.querySelector('#message')!;
+        this.paymentStatusMessage = paymentIntent.status;
+        if (this.paymentStatusMessage == "succeeded" && paymentIntent.description == "Subscription creation") {
+          this.store.dispatch(new SubscribeUser())
+        } 
+        this.cd.markForCheck();
+  
+      })
+    }
     this.booleanService.getLoadingChangeEmitter().subscribe((bool : boolean) => {
       this.isLoading = bool
       this.cd.markForCheck()
@@ -192,9 +223,12 @@ export class HomeComponent extends Destroy$ {
       this.displayOnlinePosts = posts
       this.cd.markForCheck()
     })
-    this.mobile.footerStateSubject.subscribe((b) => {
+    this.mobile.footerStateSubject.pipe(takeUntil(this.destroy$)).subscribe((b) => {
       this.showFooter = b;
+      console.log('5HEAD');
+      // this.cd.detectChanges()
       this.cd.markForCheck();
+      this.cd.detectChanges()
     });
     this.getUserDataService.getDataChangeEmitter().subscribe((value: boolean) => {
       this.lateInit()
@@ -260,6 +294,7 @@ export class HomeComponent extends Destroy$ {
   get footerHide(){return !this.showFooter}
 
   ngOnDestroy(): void {
+    console.log('BONSOIR');
     this.isStillOnPage = false
     this.info.alignWith("last");
     this.getUserDataService.emitDataChangeEvent();
@@ -332,27 +367,41 @@ export class HomeComponent extends Destroy$ {
     this.userOnlinePosts = [];
     const now = (new Date).toISOString().slice(0, 10);
     this.allUserOnlinePosts = this.allUserOnlinePosts.filter((post) => post.dueDate > now)
+
+    // Trie des posts
     this.allUserOnlinePosts.sort((post1, post2) => {
+      //Trie selon les boost
       let b1 = post1.boostTimestamp > this.time ? 1 : 0;
       let b2 = post2.boostTimestamp > this.time ? 1 : 0;
-      return b2 - b1
-    });
-
-    // Trie Posts selon leurs réponses
-    let responses = [];
-    for (let post of this.allUserOnlinePosts) {
-      const candidatesIds = post.candidates || [],
-      candidates = this.store.selectSnapshot(DataQueries.getMany("Candidate", candidatesIds));
-      let possCandidate = candidates.reduce((possibleCandidates: Candidate[], candidate: Candidate) => { 
-        if (!candidate.isRefused) {possibleCandidates.push(candidate)}
-        return possibleCandidates; 
+      if (b1 != b2) return b2 - b1
+      
+      //Si même état, trie selon les notifications 
+      const candidatesIds1 = post1.candidates || [];
+      const candidates1 = this.store.selectSnapshot(DataQueries.getMany("Candidate", candidatesIds1));
+      let unseenCandidates1 = candidates1.reduce((candidates: Candidate[], candidate: Candidate) => { 
+        if (!candidate.isViewed) {candidates.push(candidate)}
+        return candidates; 
       }, []);
-      responses.push([post, possCandidate.length])
-    }
-    responses.sort((a: any,b: any) => b[1] - a[1]);
-    let keys = responses.map((key: any) => { return key[0] });    
-    this.allUserOnlinePosts.sort((a: any,b: any)=>keys.indexOf(a) - keys.indexOf(b));
-    
+      const candidatesIds2 = post2.candidates || [];
+      const candidates2 = this.store.selectSnapshot(DataQueries.getMany("Candidate", candidatesIds2));
+      let unseenCandidates2 = candidates2.reduce((candidates: Candidate[], candidate: Candidate) => { 
+        if (!candidate.isViewed) {candidates.push(candidate)}
+        return candidates; 
+      }, []);
+      if (unseenCandidates1.length != unseenCandidates2.length) return unseenCandidates2.length - unseenCandidates1.length
+
+      //Si même nombre de notif, trie selon le nombre de candidats
+      let numberPossibleCandidate1 = candidates1.reduce((possibleCandidates: Candidate[], candidate: Candidate) => { 
+        if (!candidate.isViewed) {possibleCandidates.push(candidate)}
+        return possibleCandidates; 
+      }, []).length;
+      let numberPossibleCandidate2 = candidates2.reduce((possibleCandidates: Candidate[], candidate: Candidate) => { 
+        if (!candidate.isViewed) {possibleCandidates.push(candidate)}
+        return possibleCandidates; 
+      }, []).length;
+
+      return numberPossibleCandidate2 - numberPossibleCandidate1;
+    })
     if (filter == null) {
       this.userOnlinePosts = this.allUserOnlinePosts;
     } else {
@@ -382,21 +431,22 @@ export class HomeComponent extends Destroy$ {
   selectMission(filter: any) {
     this.missions = [];
 
-    // Trie missions selon leurs notifications
     let allNotifications = this.store.selectSnapshot(DataQueries.getAll("Notification"));
-    let missionsNotifications = allNotifications.map(notification => notification.missions);
-    let missionArray = [];
-    for (let mission of this.allMissions){
-      let missionNotifications = missionsNotifications.map(missionId => missionId === mission.id)
-      const countTrue = missionNotifications.filter(value => value === true).length;
-      missionArray.push([mission, countTrue]);
-    }
-    missionArray.sort((a: any, b: any) => b[1] - a[1]);
-    let keys = missionArray.map((key: any) => {return key[0]});
-    this.allMissions.sort((a: any, b: any) => keys.indexOf(a) - keys.indexOf(b));
-    
 
-    this.allMissions.sort((a, b) => {return Number(a["isClosed"]) - Number(b["isClosed"]);});
+    //Trie des missions
+    this.allMissions.sort((mission1, mission2) => {
+      //Trie selon les missions terminées 
+      let b1 = Number(mission1["isClosed"]);
+      let b2 = Number(mission2["isClosed"]);
+      if (b1!= b2) return b1-b2
+
+      if (filter != null && filter.sortMissionNotifications) {
+        let notificationsMission1 = allNotifications.filter(notification => !notification.hasBeenViewed && (notification.missions == mission1.id))
+        let notificationsMission2 = allNotifications.filter(notification => !notification.hasBeenViewed && (notification.missions == mission2.id))
+        return notificationsMission2.length - notificationsMission1.length
+      }
+      return 0
+    });
     if (filter == null) {
       this.missions = this.allMissions;
     } else {
@@ -408,20 +458,6 @@ export class HomeComponent extends Destroy$ {
         let keys = levenshteinDist.map((key: any) => {return key[0];});
         this.allMissions.sort((a: any, b: any) => keys.indexOf(a) - keys.indexOf(b));
       } 
-
-      if (filter.sortMissionNotifications === true) {
-        let allNotifications = this.store.selectSnapshot(DataQueries.getAll("Notification"));
-        let missionsNotifications = allNotifications.map(notification => notification.missions);
-        let missionArray = [];
-        for (let mission of this.allMissions){
-          let missionNotifications = missionsNotifications.map(missionId => missionId === mission.id)
-          const countTrue = missionNotifications.filter(value => value === true).length;
-          missionArray.push([mission, countTrue]);
-        }
-        missionArray.sort((a: any, b: any) => b[1] - a[1]);
-        let keys = missionArray.map((key: any) => {return key[0]});
-        this.allMissions.sort((a: any, b: any) => keys.indexOf(a) - keys.indexOf(b));
-      }  
 
       for (let mission of this.allMissions) {
 

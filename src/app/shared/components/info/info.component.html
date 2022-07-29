@@ -1,8 +1,8 @@
 <div class="cover-parent " [class]="type">
-  {{content}}
-  <!-- <span *ngIf="!isOverflowing"> &nbsp; <img *ngIf="type" [src]="'assets/icons/' + type + '.png'"/> {{content}} </span>
+  <!-- {{content}} -->
+  <span *ngIf="!isOverflowing"> &nbsp; <img *ngIf="type" [src]="'assets/icons/' + type + '.png'"/> {{content}} </span>
 
   <span class="cover-child1" *ngIf="isOverflowing"> &nbsp; <img *ngIf="type" [src]="'assets/icons/' + type + '.png'"/> {{content}} </span>
 
-  <span class="cover-child2" *ngIf="isOverflowing"> &nbsp; <img *ngIf="type" [src]="'assets/icons/' + type + '.png'"/> {{content}} </span>  -->
+  <span class="cover-child2" *ngIf="isOverflowing"> &nbsp; <img *ngIf="type" [src]="'assets/icons/' + type + '.png'"/> {{content}} </span> 
 </div>
