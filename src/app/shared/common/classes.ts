@@ -233,6 +233,7 @@ export class UIAsyncAccessor<T> extends UIDefaultAccessor<T> {
 
   async onChange(e: any) {
     if ( this.isDisabled ) { e.preventDefault?.(); return; }
+    console.log('OLD');
     let next = await this.getInput(e);
     this.set(next);
   };

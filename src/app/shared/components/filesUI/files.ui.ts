@@ -121,34 +121,34 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
 
   //override
 
-  async getInput(e: { origin: string; event: any }): Promise<FileUIOutput> {
-    let input = e.event.target as HTMLInputElement;
-    if (e.origin == "date") {
-      if (!input.value) return this.value!;
-      const newDate = input.value.slice(0, 10);
-      return { ...this.value, expirationDate: newDate } as FileUIOutput;
-    }
+  // async getInput(e: { origin: string; event: any }): Promise<FileUIOutput> {
+  //   let input = e.event.target as HTMLInputElement;
+  //   if (e.origin == "date") {
+  //     if (!input.value) return this.value!;
+  //     const newDate = input.value.slice(0, 10);
+  //     return { ...this.value, expirationDate: newDate } as FileUIOutput;
+  //   }
 
-    if (!input.files) return this.value as FileUIOutput;
+  //   if (!input.files) return this.value as FileUIOutput;
 
     
-    const base64 = (await this.getBase64(input.files!)) as string,
-      fullname = input.files.item(0)!.name,
-      lastDot = fullname.lastIndexOf("."),
-      name = fullname.slice(0, lastDot),
-      ext = fullname.slice(lastDot + 1);
+  //   const base64 = (await this.getBase64(input.files!)) as string,
+  //     fullname = input.files.item(0)!.name,
+  //     lastDot = fullname.lastIndexOf("."),
+  //     name = fullname.slice(0, lastDot),
+  //     ext = fullname.slice(lastDot + 1);
 
-    if (((this.value?.nature == "admin" || this.value?.expirationDate )  || this.value?.nature.includes('Quali') ) && this.filename !== 'Kbis') {
-      // this.popup.newFile(this.filename, this);
-      this.info.show("error", "Veuillez ajouter une date pour le document "+ this.filename, 5000 )
-    }
-    return {
-      ...this.value,
-      content: [base64.slice(getFileType(ext).length + 13)],
-      name,
-      ext,
-    } as FileUIOutput;
-  }
+  //   if (((this.value?.nature == "admin" || this.value?.expirationDate )  || this.value?.nature.includes('Quali') ) && this.filename !== 'Kbis') {
+  //     // this.popup.newFile(this.filename, this);
+  //     this.info.show("error", "Veuillez ajouter une date pour le document "+ this.filename, 5000 )
+  //   }
+  //   return {
+  //     ...this.value,
+  //     content: [base64.slice(getFileType(ext).length + 13)],
+  //     name,
+  //     ext,
+  //   } as FileUIOutput;
+  // }
 
   onFilenameChange(e: Event) {
     const input = e.target as HTMLInputElement;
@@ -158,6 +158,13 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
   close() {
     this.kill.emit();
   }
+  
+  async onChange(e: any) {
+    // if ( this.isDisabled ) { e.preventDefault?.(); return; }
+    e.event.preventDefault()
+    console.log('OVERRIDE');
+    this.set(this.value!);
+  };
 
   openInput() {
     this.inputRef.nativeElement.click();
@@ -165,22 +172,34 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
   }
 
   private async takePhoto() {
+    console.log('takePhoto');
     const photo = await Camera.getPhoto({
-      allowEditing: false,
+      allowEditing: true,
       resultType: CameraResultType.Base64,
       source: CameraSource.Photos,
+      webUseInput: true,
       quality: 60
     });
 
-    console.log('take photo', photo.path);
+    console.log('take photo', photo.path, photo.format, photo.base64String);
     this.value = {
       expirationDate: "",
-      nature: "",
-      name: photo.path || "Image téléchargée depuis les photos",
+      // nature: "",
+      nature: this.value!.nature,
+      name: photo.path || "Image téléchargée depuis la gallerie",
       ext: photo.format,
       content: [photo.base64String as string],
     };
   }
+
+  // OVERRIDE
+  // async getInput(e: {origin: string; event:any}): Promise<FileUIOutput> {
+  //   e.event.preventDefault()
+
+  //   return {
+  //     ...this.value!
+  //   }
+  // }
 
   deleteFile(){
     if (this.value?.nature == "admin") {this.kill.emit({filename: this.value?.name, fileUI: this});}
@@ -271,8 +290,11 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
         },
         {
           name: "Télécharger un fichier",
-          click: () => {
-            this.openInput();
+          click: async () => {
+            // this.openInput();
+
+            await this.takePhoto()
+            this.openInput()
           },
         },
         {
