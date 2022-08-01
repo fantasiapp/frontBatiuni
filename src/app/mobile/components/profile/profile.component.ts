@@ -248,6 +248,7 @@ export class ProfileComponent extends Destroy$ {
   async deletePhoto() {
     this.store.dispatch(new DeleteProfilePicture())
     this.cd.markForCheck()
+    this.openModifyPicture = false;
     this.info.show("info", "Votre photo de profil a bien été supprimée", 3000)
   }
 
