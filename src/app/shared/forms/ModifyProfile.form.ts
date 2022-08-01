@@ -681,7 +681,6 @@ export class ModifyProfileForm {
     const filesInput = this.form.controls["UserProfile.Company.admin"];
     if (filesInput){
       this.companyFiles.forEach((file) => {
-        console.log("je te parle", file)
         filesInput.get(file.name)?.patchValue(file);
       });
     }

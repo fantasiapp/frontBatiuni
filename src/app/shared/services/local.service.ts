@@ -129,5 +129,25 @@ export class LocalService {
     })
     return newLocalUserData
   }
+
+  toResponse(type: DataTypes, data: any){
+    let arrayResponse: any[] = []
+    let response: any = {}
+    let id: number
+    const allKeys = Object.keys(data)
+    console.log("allKeys", allKeys)
+    allKeys.forEach((value) => {
+      if(value != "id"){
+        arrayResponse.push(data[value])
+      }
+      else{
+        id = data[value]
+      }
+    })
+    console.log("tout c'est bien passé", id!, response)
+    response[id!] = arrayResponse;
+    console.log("tout c'est bien passé après", id!, response)
+    return response
+  }
 }
 

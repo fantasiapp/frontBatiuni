@@ -13,8 +13,9 @@ namespace mutable {
 
   export function addValues(draft: any, target: DataTypes, values: Record<any>) {
     const record = draft[target] || (draft[target] = {});
-    for ( let key of Object.keys(values) )
+    for ( let key of Object.keys(values)){
       record[key] = values[key];
+    }
   };
 
   export function deleteIds(draft: any, target: DataTypes, ids: number[]) {
