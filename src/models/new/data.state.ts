@@ -361,8 +361,8 @@ export class DataState {
           console.log("les files ", files)
           console.log(files?.indexOf(fileIdDeleted))
           // files?.splice(files.indexOf(fileIdDeleted))
-          ctx.setState(deleteIds("File", [fileIdDeleted!]))
           ctx.setState(addComplexChildren("Company", profile.company.id, "File", files!))
+          ctx.setState(deleteIds("File", [fileIdDeleted!]))
           console.log(this.store.selectSnapshot(DataQueries.getById("Company", profile.company.id)))
         }
       })
