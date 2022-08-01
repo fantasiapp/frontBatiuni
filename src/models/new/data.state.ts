@@ -341,6 +341,20 @@ export class DataState {
     const profile = this.store.selectSnapshot(DataQueries.currentProfile),
       req = this.http.post("data", picture);
 
+    let files = this.store.selectSnapshot(DataQueries.getById("Company", profile.company.id))?.files
+    console.log("aaaaaaaaaa", files)
+    let fileIdDeleted: number | undefined
+    let newFiles = files?.filter((fileId) => {
+      let file = this.store.selectSnapshot(DataQueries.getById("File", fileId))
+      if (file?.nature == "userImage"){fileIdDeleted = fileId}
+      return file?.nature != "userImage"
+    })
+    if (fileIdDeleted){
+      ctx.setState(addComplexChildren("Company", profile.company.id, "File", newFiles!))
+      console.log("aaaaaa", newFiles)
+      ctx.setState(deleteIds("File", [fileIdDeleted!]))
+      console.log(this.store.selectSnapshot(DataQueries.getById("Company", profile.company.id)))
+    }
     return req.pipe(
       tap((response: any) => {
         console.log("delete profile picture response", response);
@@ -348,23 +362,7 @@ export class DataState {
         delete response[picture.action];
         this.getUserDataService.emitDataChangeEvent(response.timestamp)
         delete response["timestamp"];
-        let files = this.store.selectSnapshot(DataQueries.getById("Company", profile.company.id))?.files
-        let fileIdDeleted: number | undefined
-        files?.forEach((fileId) => {
-          let file = this.store.selectSnapshot(DataQueries.getById("File", fileId))
-          console.log(file)
-          if (file?.nature == "userImage"){
-            fileIdDeleted = fileId
-          }
-        })
-        if (fileIdDeleted){
-          console.log("les files ", files)
-          console.log(files?.indexOf(fileIdDeleted))
-          // files?.splice(files.indexOf(fileIdDeleted))
-          ctx.setState(addComplexChildren("Company", profile.company.id, "File", files!))
-          ctx.setState(deleteIds("File", [fileIdDeleted!]))
-          console.log(this.store.selectSnapshot(DataQueries.getById("Company", profile.company.id)))
-        }
+
       })
     );
   }
