@@ -165,7 +165,7 @@ export class AppComponent extends Destroy$ {
       console.log('GET PLATFORM MESSAGE : NOT WEB');
 
       await PushNotifications.addListener('registration', token => {
-        console.info('Registration token: ', token.value);
+        console.info('Registration token: ', token.value, token);
 
         this.notifService.setToken(token.value)
 
