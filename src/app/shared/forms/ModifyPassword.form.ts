@@ -75,9 +75,7 @@ export class ModifyPasswordForm {
 
   // Modify password 
   form = new FormGroup({
-    oldPwd: new FormControl('', [
-      ComplexPassword()
-    ]),
+    oldPwd: new FormControl('', []),
     newPwd: new FormControl('',[
       ComplexPassword()     
     ]),

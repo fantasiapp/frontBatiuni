@@ -600,13 +600,16 @@ export class DataState {
   @Action(SwitchPostType)
   switchPostType(ctx: StateContext<DataModel>, switchType: SwitchPostType) {
     console.log("switch post type", switchType)
-    ctx.setState(transformField("Post", switchType.id, "draft", (draft) => !draft));
+    const profile = this.store.selectSnapshot(DataQueries.currentProfile),
+      post = this.store.selectSnapshot(DataQueries.getById("Post", switchType.id))
+    if (post && profile.company.id == post.company)
+      ctx.setState(transformField("Post", switchType.id, "draft", (draft) => !draft));
     return this.http.get("data", switchType).pipe(
       tap((response: any) => {
         console.log("switch post type response", response)
         if (response[switchType.action] !== "OK") throw response["messages"];
-        
         delete response[switchType.action];
+        
         this.getUserDataService.emitDataChangeEvent(response.timestamp)
         delete response["timestamp"];
       })

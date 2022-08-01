@@ -212,7 +212,9 @@ export class ProfileComponent extends Destroy$ {
     let req = this.store.dispatch(new UserActions.ChangePassword(oldPwd, newPwd));
     req.subscribe(
       success => { this.info.show("success", "Mot de passe changé avec succès", 2000); },
-      error => { this.info.show("error", "Erreur lors du changement du mot de passe"); }
+      error => { 
+        this.info.show("error", error[0]); 
+      console.log("l'erreur", error)}
     )
   }
 
