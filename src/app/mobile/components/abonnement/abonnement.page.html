@@ -23,47 +23,59 @@
   </div>
 </ng-container>
 
-<ng-template #subscriptionManagement>
-  <div>Vous êtes déjà abonnés</div>
-</ng-template>
 
 <slidemenu  [(open)]="openEngagment" #engagment>
-    <h1 class="center-text full-width" header>Gérer mes abonnements</h1>  
-    <div *ngIf="openEngagment" class="modify-page hosted-page flex column center-cross space-children-margin" content>
-      <h4>Sélectionnez un plan : </h4>
-      <div class="plans-container" *ngIf="abonnements[selectedAbonnementId].prices$ | async as prices; else fakeEngagement__wrapper">
-        <ng-container *ngFor="let price of prices">
-          <div class="plans__plan flex row" (click)="selectEngagement(price)">
-            <button class="radio" [ngClass]="{'radio-active': selectedPrice == price}"></button>
-            <div class="plan__text">Engagement {{price.intervalCount}} mois pour <span class="highlight">{{price.amount/price.intervalCount}}€</span> / mois ({{+price.amount/price.intervalCount/ 2}}€ au premier engagement)</div>
-          </div>
-        </ng-container>
-      </div>
-      <ng-template #fakeEngagement__wrapper>
-        <div class="plans-container">
-          <div class="plans__plan flex row fake" >
-            <button class="radio" ></button>
-            <div class="plan__text"></div>
-          </div>
-          <div class="plans__plan flex row fake" >
-            <button class="radio" ></button>
-            <div class="plan__text"></div>
-          </div>
+  <h1 class="center-text full-width" header>Gérer mes abonnements</h1>  
+  <div *ngIf="openEngagment" class="modify-page hosted-page flex column center-cross space-children-margin" content>
+    <h4>Sélectionnez un plan : </h4>
+    <div class="plans-container" *ngIf="abonnements[selectedAbonnementId].prices$ | async as prices; else fakeEngagement__wrapper">
+      <ng-container *ngFor="let price of prices">
+        <div class="plans__plan flex row" (click)="selectEngagement(price)">
+          <button class="radio" [ngClass]="{'radio-active': selectedPrice == price}"></button>
+          <div class="plan__text">Engagement {{price.intervalCount}} mois pour <span class="highlight">{{price.amount/price.intervalCount}}€</span> / mois ({{+price.amount/price.intervalCount/ 2}}€ au premier engagement)</div>
         </div>
-        </ng-template>
-      <footer class="sticky-footer">
-        <button class="button active full-width" (click)="selectedPrice && openEngagmentPage = true" [ngClass]="{'disabled': selectedPrice === undefined}">J'en profite</button>
-      </footer>
+      </ng-container>
     </div>
-  </slidemenu>
-  <slidemenu [(open)]="openEngagmentPage">
-    <h1 class="center-text full-width" header>Gérer mes abonnements</h1>  
-    <div class="modify-page hosted-page flex column center-cross space-children-margin" content>
-      <engagement *ngIf="openEngagmentPage && selectedPrice != undefined" [abonnement]="abonnements[selectedAbonnementId]" [selectPrice]="selectedPrice"></engagement>
-    </div>
-  </slidemenu>
+    <ng-template #fakeEngagement__wrapper>
+      <div class="plans-container">
+        <div class="plans__plan flex row fake" >
+          <button class="radio" ></button>
+          <div class="plan__text"></div>
+        </div>
+        <div class="plans__plan flex row fake" >
+          <button class="radio" ></button>
+          <div class="plan__text"></div>
+        </div>
+      </div>
+      </ng-template>
+    <footer class="sticky-footer">
+      <button class="button active full-width" (click)="selectedPrice && openEngagmentPage = true" [ngClass]="{'disabled': selectedPrice === undefined}">J'en profite</button>
+    </footer>
+  </div>
+</slidemenu>
+
+<slidemenu [(open)]="openEngagmentPage">
+  <h1 class="center-text full-width" header>Gérer mes abonnements</h1>  
+  <div class="modify-page hosted-page flex column center-cross space-children-margin" content>
+    <engagement *ngIf="openEngagmentPage && selectedPrice != undefined" [abonnement]="abonnements[selectedAbonnementId]" [selectPrice]="selectedPrice"></engagement>
+  </div>
+</slidemenu>
+
+<ng-template #subscriptionManagement>
+  <div>Votre abonnement actuel</div>
+  <span>Abonné depuis le {{subscriptionDetails.startDate | date:"longDate"}}</span>
+
+  <span>Période actuel ({{subscriptionDetails.interval}} mois) :</span>
+  <span>{{subscriptionDetails.currentStart | date:"longDate"}} au {{subscriptionDetails.currentEnd | date:"longDate"}}</span>
+
+  <div>Informations sur le paiement</div>
+  <span>Prélèvement de {{subscriptionDetails.price/100}} € tous les {{subscriptionDetails.interval}} mois</span>
+</ng-template>
 
 <swipeup [(open)]="abonnementSwipeUp" (openChange)="updateAbonnementSwipeUp($event)">
+  <li>
+    Gérer mes options
+  </li>
   <li>
     Modifier mon abonnement actuel
   </li>

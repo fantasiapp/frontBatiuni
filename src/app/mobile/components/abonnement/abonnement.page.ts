@@ -1,6 +1,7 @@
 import { Component, ChangeDetectionStrategy, ChangeDetectorRef, Input, Output, EventEmitter } from "@angular/core";
 import { Select } from "@ngxs/store";
 import { Observable, Observer } from "rxjs";
+import { take } from "rxjs/operators";
 import { HttpService } from "src/app/services/http.service";
 import { delay } from "src/app/shared/common/functions";
 import { StripeService } from "src/app/shared/services/stripe";
@@ -64,7 +65,7 @@ export class AbonnementPage {
     ]
     stripe: any;
 
-    subscriptionDetails: any;
+    subscriptionDetails: any = {};
 
     @Input()
     abonnementSwipeUp!: boolean;
@@ -81,7 +82,11 @@ export class AbonnementPage {
 
     ngOnInit(){
         this.stripe = this.stripeService.stripe;
-        console.log("stripe abonnement", this.stripe);
+        this.profile$.pipe(take(1)).subscribe((profile) => {
+            if(profile.company.stripeSubscriptionStatus == "active"){
+                this.fetchSubscriptionDetails(profile.company.stripeSubscriptionId)
+            }
+        })
     }
 
 
@@ -114,7 +119,6 @@ export class AbonnementPage {
 
     updateAbonnementSwipeUp(event: any){
         this.abonnementSwipeUp = event
-        console.log("tu recois ?", event)
         this.abonnementSwipeUpChange.emit(this.abonnementSwipeUp)
     }
 
@@ -149,10 +153,29 @@ export class AbonnementPage {
         })
     }
 
+    fetchSubscriptionDetails(subscriptionId: string){
+        const req = this.http.post("subscription", {
+            "action": "fetchSubscriptionDetails",
+            "subscriptionId": subscriptionId
+        })
+
+        console.log("request", req)
+        req.subscribe((response: any) => {
+            console.log("fetch subcsription", response)
+            let data = response["subscriptionDetails"]
+            this.subscriptionDetails.startDate = new Date(data["start_date"] * 1000)
+            this.subscriptionDetails.currentStart = new Date(data["current_period_start"] * 1000)
+            this.subscriptionDetails.currentEnd = new Date(data["current_period_end"] * 1000)
+            this.subscriptionDetails.cancelAtPeriodEnd = data["cancel_at_period_end"]
+            this.subscriptionDetails.price = data["plan"]["amount"]
+            this.subscriptionDetails.interval = data["plan"]["interval_count"]
+            this.cd.markForCheck()
+        })
+    }
+
     unsuscribe(){
         const req = this.http.post("subscription", {
             "action": "cancelSubscription"
-
         })
     }
 }
