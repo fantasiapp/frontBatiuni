@@ -149,5 +149,25 @@ export class LocalService {
     console.log("tout c'est bien passé après", id!, response)
     return response
   }
+
+  generateId(type: DataTypes){
+    let idMax = parseInt(localStorage.getItem(type)!)
+    if (!idMax){
+      idMax = this.getIdMax(type)
+    }
+    localStorage.setItem(type, String(idMax!+1))
+    console.log("dans le geerae hqsfskhfqsdhjf", idMax)
+    return idMax!+1
+  }
+
+  getIdMax(type: DataTypes){
+    let idMax = 0
+    this.store.selectSnapshot(DataQueries.getAll(type)).map((value) => {
+      if (value.id > idMax){
+        idMax = value.id
+      }
+    })
+    return idMax
+  }
 }
 

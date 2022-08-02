@@ -123,10 +123,8 @@ export class OfferComponent extends Destroy${
     let companiesId;
     if (this._post) {
       companiesId = this._post.candidates?.map((id: number) => {
-        let candidate = this.store.selectSnapshot(
-          DataQueries.getById("Candidate", id)
-        );
-        
+        let candidate = this.store.selectSnapshot(DataQueries.getById("Candidate", id));
+        console.log("les éléments dans le offer.component", this._post?.candidates, candidate)
         return candidate!.company;
       });
     }

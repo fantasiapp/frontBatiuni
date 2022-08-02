@@ -1,7 +1,8 @@
 import { Injectable, NgZone } from "@angular/core";
 import { Action, createSelector, Selector, State, StateContext, Store } from "@ngxs/store";
 import produce from "immer";
-import { Observable, of, Subject, throwError } from "rxjs";
+import * as moment from "moment";
+import { generate, Observable, of, Subject, throwError } from "rxjs";
 import { concatMap, map, tap } from "rxjs/operators";
 import { HttpService } from "src/app/services/http.service";
 import { delay } from "src/app/shared/common/functions";
@@ -15,7 +16,7 @@ import { LocalService } from "src/app/shared/services/local.service";
 import { NotifService } from "src/app/shared/services/notif.service";
 import { SingleCache } from "src/app/shared/services/SingleCache";
 import { Logout } from "../auth/auth.actions";
-import { Company, DataTypes, Interface, Record, User } from "./data.interfaces";
+import { Candidate, Company, DataTypes, Interface, Post, Record, User } from "./data.interfaces";
 import { DataReader, NameMapping, TranslatedName } from "./data.mapper";
 import { GetCompanies } from "./search/search.actions";
 import { addComplexChildren, addSimpleChildren, addValues, compose, deleteIds, replaceChildren, transformField, update } from "./state.operators";
@@ -740,18 +741,53 @@ export class DataState {
   @Action(ApplyPost)
   applyPost(ctx: StateContext<DataModel>, application: ApplyPost) {
     console.log("apply post", application)
-    const profile = this.store.selectSnapshot(DataQueries.currentProfile)!;
-    //{Post: 1, amount: 500, devis: 'Par heure', action: 'applyPost'}
+    const profile = this.store.selectSnapshot(DataQueries.currentProfile)!,
+      subContractor = profile.company,
+      contact = profile.user.firstName + " " + profile.user.lastName
+    let post: Post = this.store.selectSnapshot(DataQueries.getById("Post", application.Post))!
+    const company = post.company
+    if (subContractor.id == company){
+      throw "Le sous-traitant " + subContractor.name + " ne peut pas être l'entreprise commanditaire."
+    }
+    if (subContractor.role == 1){
+      throw "La société " + subContractor.name + " n'est pas sous-traitante."
+    }
+    let newCandidates : number[] = []
+    post.candidates.map((candidateId) => {
+      newCandidates.push(candidateId)
+      let candidate = this.store.selectSnapshot(DataQueries.getById("Candidate", candidateId))
+      if (candidate?.company == subContractor.id){
+        throw "Le sous-traitant " + subContractor.name + " a déjà postulé."
+      }
+    })
+    if(!application.amount){ application.amount = 0.0 }
+    
+    const id = this.localService.generateId("Candidate")
+    const newCandidate: Candidate = {
+      amount: application.amount,
+      company: company!,
+      contact: contact,
+      date: moment(new Date(Date.now())).format("L"),
+      devis: application.devis,
+      id : id,
+      isChoosen: false,
+      isRefused: false,
+      isViewed: false
+    }
+    console.log("les élements qui bloquent", id, post)
+    newCandidates.push(id)
+    post.candidates = newCandidates
+    ctx.setState(addValues('Candidate', this.localService.toResponse("Candidate", newCandidate)))
+    ctx.setState(update("Post", this.localService.toResponse("Post", post)))
+
     return this.http.get("data", application).pipe(
       tap((response: any) => {
         console.log('ApplyPost response', response);
         if (response[application.action] != "OK") throw response["messages"];
-
         delete response[application.action];
+
         this.getUserDataService.emitDataChangeEvent(response.timestamp)
         delete response["timestamp"];
-        ctx.setState(addValues('Candidate', response['Candidate']))
-        ctx.setState(update('Post', response['Post']));
       })
     );
   }
