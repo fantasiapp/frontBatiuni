@@ -172,7 +172,6 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
   }
 
   private async takePhoto() {
-    console.log('takePhoto');
     const photo = await Camera.getPhoto({
       allowEditing: true,
       resultType: CameraResultType.Base64,
@@ -181,7 +180,6 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
       quality: 60
     });
 
-    console.log('take photo', photo.path, photo.format, photo.base64String);
     this.value = {
       expirationDate: "",
       // nature: "",
