@@ -1,29 +1,25 @@
 import { Injectable, NgZone } from "@angular/core";
-import { Action,createSelector,Selector,State,StateContext,Store, } from "@ngxs/store";
+import { Action, createSelector, Selector, State, StateContext, Store } from "@ngxs/store";
+import produce from "immer";
 import { Observable, of, Subject, throwError } from "rxjs";
 import { concatMap, map, tap } from "rxjs/operators";
 import { HttpService } from "src/app/services/http.service";
-import { GetGeneralData,HandleApplication,BlockCompany,SignContract,MarkViewed,ModifyAvailability,SetFavorite,TakePicture,InviteFriend,ValidateMissionDate,BoostPost,AskRecommandation,GiveRecommandation,GiveNotificationToken,ModifyFile,UnapplyPost,DeleteLabel,PostNotificationViewed, SubscribeUser } from "./user/user.actions";
-import { ApplyPost,CandidateViewed,ChangePassword,ChangeProfilePicture,ChangeProfileType,DeleteFile,DeletePost,DownloadFile,DuplicatePost,GetUserData,ModifyUserProfile,CreateDetailedPost,ModifyDetailedPost,CreateSupervision,SwitchPostType,ModifyMissionDate,CloseMission,CloseMissionST,UploadFile,UploadPost,UploadImageSupervision,NotificationViewed } from "./user/user.actions";
-import { Company, Interface, User } from "./data.interfaces";
-import { DataReader, NameMapping, TranslatedName } from "./data.mapper";
-import { Record, DataTypes } from "./data.interfaces";
-import { addValues,compose,deleteIds,addSimpleChildren,transformField,addComplexChildren,replaceChildren,update } from "./state.operators";
-import { Logout } from "../auth/auth.actions";
+import { delay } from "src/app/shared/common/functions";
 import { InfoService } from "src/app/shared/components/info/info.component";
-import { GetCompanies } from "./search/search.actions";
-import produce from "immer";
 import { SlidemenuService } from "src/app/shared/components/slidemenu/slidemenu.component";
 import { SwipeupService } from "src/app/shared/components/swipeup/swipeup.component";
-import { transformAll } from "@angular/compiler/src/render3/r3_ast";
 import { BooleanService } from "src/app/shared/services/boolean.service";
-import { getUserDataService } from "src/app/shared/services/getUserData.service";
-import { AppComponent } from "src/app/app.component";
-import { SingleCache } from "src/app/shared/services/SingleCache";
-import { NotifService } from "src/app/shared/services/notif.service";
-import { LocalService } from "src/app/shared/services/local.service";
 import { ConnectionStatusService } from "src/app/shared/services/connectionStatus.service";
-import { delay } from "src/app/shared/common/functions";
+import { getUserDataService } from "src/app/shared/services/getUserData.service";
+import { LocalService } from "src/app/shared/services/local.service";
+import { NotifService } from "src/app/shared/services/notif.service";
+import { SingleCache } from "src/app/shared/services/SingleCache";
+import { Logout } from "../auth/auth.actions";
+import { Company, DataTypes, Interface, Record, User } from "./data.interfaces";
+import { DataReader, NameMapping, TranslatedName } from "./data.mapper";
+import { GetCompanies } from "./search/search.actions";
+import { addComplexChildren, addSimpleChildren, addValues, compose, deleteIds, replaceChildren, transformField, update } from "./state.operators";
+import { ApplyPost, AskRecommandation, BlockCompany, BoostPost, CandidateViewed, ChangePassword, ChangeProfilePicture, ChangeProfileType, CloseMission, CloseMissionST, CreateDetailedPost, CreateSupervision, DeleteFile, DeleteLabel, DeletePost, DeleteProfilePicture, DownloadFile, DuplicatePost, GetGeneralData, GetUserData, GiveNotificationToken, GiveRecommandation, HandleApplication, InviteFriend, MarkViewed, ModifyAvailability, ModifyDetailedPost, ModifyFile, ModifyMissionDate, ModifyUserProfile, NotificationViewed, PostNotificationViewed, SetFavorite, SignContract, SubscribeUser, SwitchPostType, TakePicture, UnapplyPost, UploadFile, UploadImageSupervision, UploadPost, ValidateMissionDate } from "./user/user.actions";
 
 export interface DataModel {
   fields: Record<string[]>;
@@ -335,6 +331,40 @@ export class DataState {
         this.getUserDataService.emitDataChangeEvent(response.timestamp)
         delete response["timestamp"];
         ctx.setState(compose(addSimpleChildren("Company", profile.company.id, "File", response, "nature")));
+      })
+    );
+  }
+
+  @Action(DeleteProfilePicture)
+  deleteProfilePicture(ctx: StateContext<DataModel>, picture: DeleteProfilePicture) {
+    console.log("delete profile picture", picture)
+    const profile = this.store.selectSnapshot(DataQueries.currentProfile),
+      req = this.http.post("data", picture);
+
+    return req.pipe(
+      tap((response: any) => {
+        console.log("delete profile picture response", response);
+        if (response[picture.action] !== "OK") throw response["messages"];
+        delete response[picture.action];
+        this.getUserDataService.emitDataChangeEvent(response.timestamp)
+        delete response["timestamp"];
+        let files = this.store.selectSnapshot(DataQueries.getById("Company", profile.company.id))?.files
+        let fileIdDeleted: number | undefined
+        files?.forEach((fileId) => {
+          let file = this.store.selectSnapshot(DataQueries.getById("File", fileId))
+          console.log(file)
+          if (file?.nature == "userImage"){
+            fileIdDeleted = fileId
+          }
+        })
+        if (fileIdDeleted){
+          console.log("les files ", files)
+          console.log(files?.indexOf(fileIdDeleted))
+          // files?.splice(files.indexOf(fileIdDeleted))
+          ctx.setState(deleteIds("File", [fileIdDeleted!]))
+          ctx.setState(addComplexChildren("Company", profile.company.id, "File", files!))
+          console.log(this.store.selectSnapshot(DataQueries.getById("Company", profile.company.id)))
+        }
       })
     );
   }
