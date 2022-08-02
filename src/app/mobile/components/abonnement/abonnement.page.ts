@@ -1,7 +1,8 @@
-import { Component, ChangeDetectionStrategy, ChangeDetectorRef } from "@angular/core";
+import { Component, ChangeDetectionStrategy, ChangeDetectorRef, Input, Output, EventEmitter } from "@angular/core";
 import { Select } from "@ngxs/store";
 import { Observable, Observer } from "rxjs";
 import { HttpService } from "src/app/services/http.service";
+import { delay } from "src/app/shared/common/functions";
 import { StripeService } from "src/app/shared/services/stripe";
 import { productList } from "src/app/stripeProducts";
 import { Profile } from "src/models/new/data.interfaces";
@@ -34,7 +35,7 @@ export class AbonnementPage {
     abonnementOnView: number = 0;
     openEngagment: boolean = false
     openEngagmentPage: boolean = false
-    currentAbonnementId: number = -1
+    selectedAbonnementId: number = -1
     abonnements: abonnementType[] = [
         {
             title: 'Accès deux profil',
@@ -63,6 +64,14 @@ export class AbonnementPage {
     ]
     stripe: any;
 
+    subscriptionDetails: any;
+
+    @Input()
+    abonnementSwipeUp!: boolean;
+
+    @Output()
+    abonnementSwipeUpChange = new EventEmitter<boolean>();
+
     constructor(
         private http: HttpService,
         private cd: ChangeDetectorRef,
@@ -78,11 +87,14 @@ export class AbonnementPage {
 
     ngAfterViewInit(){
         let scroll = document.getElementsByClassName('caroussel__wrapper')
-        scroll[0].scrollTo({
-            top:0,
-            left: 326
-        })
+        if (scroll.length) {
+            scroll[0].scrollTo({
+                top:0,
+                left: 326
+            })
+        }
     }
+
     scrollLeft() {
         let scroll = document.getElementsByClassName('caroussel__wrapper')
         scroll[0].scrollTo({
@@ -100,9 +112,15 @@ export class AbonnementPage {
         })
     }
 
+    updateAbonnementSwipeUp(event: any){
+        this.abonnementSwipeUp = event
+        console.log("tu recois ?", event)
+        this.abonnementSwipeUpChange.emit(this.abonnementSwipeUp)
+    }
+
     onOpenEngagement(i:number) {
         this.openEngagment = true
-        this.currentAbonnementId = i
+        this.selectedAbonnementId = i
     }
 
     selectedPrice: SubscriptionPrice | undefined = undefined
@@ -128,6 +146,13 @@ export class AbonnementPage {
                 } as SubscriptionPrice
             })
             observer.next(prices);
+        })
+    }
+
+    unsuscribe(){
+        const req = this.http.post("subscription", {
+            "action": "cancelSubscription"
+
         })
     }
 }

@@ -31,7 +31,7 @@
     <h1 class="center-text full-width" header>Gérer mes abonnements</h1>  
     <div *ngIf="openEngagment" class="modify-page hosted-page flex column center-cross space-children-margin" content>
       <h4>Sélectionnez un plan : </h4>
-      <div class="plans-container" *ngIf="abonnements[currentAbonnementId].prices$ | async as prices; else fakeEngagement__wrapper">
+      <div class="plans-container" *ngIf="abonnements[selectedAbonnementId].prices$ | async as prices; else fakeEngagement__wrapper">
         <ng-container *ngFor="let price of prices">
           <div class="plans__plan flex row" (click)="selectEngagement(price)">
             <button class="radio" [ngClass]="{'radio-active': selectedPrice == price}"></button>
@@ -59,7 +59,18 @@
   <slidemenu [(open)]="openEngagmentPage">
     <h1 class="center-text full-width" header>Gérer mes abonnements</h1>  
     <div class="modify-page hosted-page flex column center-cross space-children-margin" content>
-      <engagement *ngIf="openEngagmentPage && selectedPrice !=undefined" [abonnement]="abonnements[currentAbonnementId]" [selectPrice]="selectedPrice"></engagement>
+      <engagement *ngIf="openEngagmentPage && selectedPrice != undefined" [abonnement]="abonnements[selectedAbonnementId]" [selectPrice]="selectedPrice"></engagement>
     </div>
   </slidemenu>
 
+<swipeup [(open)]="abonnementSwipeUp" (openChange)="updateAbonnementSwipeUp($event)">
+  <li>
+    Modifier mon abonnement actuel
+  </li>
+  <li>
+    Résilier mon aboonement
+  </li>
+  <li>
+    Modifier ma carte de paiement
+  </li>
+</swipeup>
