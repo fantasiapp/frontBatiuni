@@ -50,6 +50,17 @@ header {
   // background-color: white;
 }
 
+.carrousel__wrapper {
+  align-self: center;
+  padding-bottom: 20px;
+  width: 100vw;
+  overflow: scroll;
+}
+.carrousel {
+  display: flex;
+  column-gap: 2rem;
+
+}
 .intro {
   h1 { font-weight: 900; }
   img { @extend %pull-down; }
