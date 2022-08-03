@@ -604,17 +604,22 @@ export class DataState {
     const profile = this.store.selectSnapshot(DataQueries.currentProfile),
       post = this.store.selectSnapshot(DataQueries.getById("Post", switchType.id))
     if (post && profile.company.id == post.company)
-      ctx.setState(transformField("Post", switchType.id, "draft", (draft) => !draft));
-    return this.http.get("data", switchType).pipe(
-      tap((response: any) => {
-        console.log("switch post type response", response)
-        if (response[switchType.action] !== "OK") throw response["messages"];
-        delete response[switchType.action];
-        
-        this.getUserDataService.emitDataChangeEvent(response.timestamp)
-        delete response["timestamp"];
-      })
-    );
+      ctx.setState(transformField("Post", switchType.id, "draft", (draft) => !draft))
+    if (this.connectionStatusService.isOnline){
+      return this.http.get("data", switchType).pipe(
+        tap((response: any) => {
+          console.log("switch post type response", response)
+          if (response[switchType.action] !== "OK") throw response["messages"];
+          delete response[switchType.action];
+          
+          this.getUserDataService.emitDataChangeEvent(response.timestamp)
+          delete response["timestamp"];
+        })
+      )
+    }
+    else{
+      return 
+    }
   }
 
   @Action(DeletePost)

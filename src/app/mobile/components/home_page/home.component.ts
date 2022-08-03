@@ -728,22 +728,18 @@ export class HomeComponent extends Destroy$ {
   }
 
   pausePost(id: number) {
-    this.store
-      .dispatch(new SwitchPostType(id))
-      .pipe(take(1))
-      .subscribe(
-        () => {
-          this.openPost(null);
-          this.popup.show({
-            type: "template",
-            template: this.pausePostTemplate,
-          });
-          this.cd.markForCheck();
-        },
-        () => {
-          this.info.show("error", "Echec");
-        }
-      );
+    this.store.dispatch(new SwitchPostType(id)).pipe(take(1)).subscribe(() => {
+      this.openPost(null);
+      this.popup.show({
+        type: "template",
+        template: this.pausePostTemplate,
+      });
+      this.cd.markForCheck();
+    },
+      () => {
+        this.info.show("error", "Echec");
+      }
+    );
   }
 
   deletePost(id: number) {
