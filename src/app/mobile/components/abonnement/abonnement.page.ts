@@ -1,7 +1,10 @@
-import { Component, ChangeDetectionStrategy, ChangeDetectorRef } from "@angular/core";
+import { Component, ChangeDetectionStrategy, ChangeDetectorRef, Input, Output, EventEmitter } from "@angular/core";
 import { Select } from "@ngxs/store";
 import { Observable, Observer } from "rxjs";
+import { take } from "rxjs/operators";
 import { HttpService } from "src/app/services/http.service";
+import { delay } from "src/app/shared/common/functions";
+import { PopupService } from "src/app/shared/components/popup/popup.component";
 import { StripeService } from "src/app/shared/services/stripe";
 import { productList } from "src/app/stripeProducts";
 import { Profile } from "src/models/new/data.interfaces";
@@ -34,7 +37,7 @@ export class AbonnementPage {
     abonnementOnView: number = 0;
     openEngagment: boolean = false
     openEngagmentPage: boolean = false
-    currentAbonnementId: number = -1
+    selectedAbonnementId: number = -1
     abonnements: abonnementType[] = [
         {
             title: 'Accès deux profil',
@@ -63,26 +66,42 @@ export class AbonnementPage {
     ]
     stripe: any;
 
+    subscriptionDetails: any = {};
+
+    @Input()
+    abonnementSwipeUp!: boolean;
+
+    @Output()
+    abonnementSwipeUpChange = new EventEmitter<boolean>();
+
     constructor(
         private http: HttpService,
         private cd: ChangeDetectorRef,
-        private stripeService: StripeService
+        private stripeService: StripeService,
+        private popup: PopupService
         ){
     }
 
     ngOnInit(){
         this.stripe = this.stripeService.stripe;
-        console.log("stripe abonnement", this.stripe);
+        this.profile$.pipe(take(1)).subscribe((profile) => {
+            if(profile.company.stripeSubscriptionStatus == "active"){
+                this.fetchSubscriptionDetails(profile.company.stripeSubscriptionId)
+            }
+        })
     }
 
 
     ngAfterViewInit(){
         let scroll = document.getElementsByClassName('caroussel__wrapper')
-        scroll[0].scrollTo({
-            top:0,
-            left: 326
-        })
+        if (scroll.length) {
+            scroll[0].scrollTo({
+                top:0,
+                left: 326
+            })
+        }
     }
+
     scrollLeft() {
         let scroll = document.getElementsByClassName('caroussel__wrapper')
         scroll[0].scrollTo({
@@ -100,9 +119,14 @@ export class AbonnementPage {
         })
     }
 
+    updateAbonnementSwipeUp(event: any){
+        this.abonnementSwipeUp = event
+        this.abonnementSwipeUpChange.emit(this.abonnementSwipeUp)
+    }
+
     onOpenEngagement(i:number) {
         this.openEngagment = true
-        this.currentAbonnementId = i
+        this.selectedAbonnementId = i
     }
 
     selectedPrice: SubscriptionPrice | undefined = undefined
@@ -128,6 +152,46 @@ export class AbonnementPage {
                 } as SubscriptionPrice
             })
             observer.next(prices);
+        })
+    }
+
+    fetchSubscriptionDetails(subscriptionId: string){
+        const req = this.http.post("subscription", {
+            "action": "fetchSubscriptionDetails",
+            "subscriptionId": subscriptionId
+        })
+
+        console.log("request", req)
+        req.subscribe((response: any) => {
+            console.log("fetch subcsription", response)
+            let data = response["subscriptionDetails"]
+            this.subscriptionDetails.subscriptionId = subscriptionId
+            this.subscriptionDetails.startDate = new Date(data["start_date"] * 1000)
+            this.subscriptionDetails.currentStart = new Date(data["current_period_start"] * 1000)
+            this.subscriptionDetails.currentEnd = new Date(data["current_period_end"] * 1000)
+            this.subscriptionDetails.nextPayment = new Date(this.subscriptionDetails.currentEnd);
+            this.subscriptionDetails.nextPayment.setDate(this.subscriptionDetails.nextPayment.getDate() + 1)
+            console.log("current end", this.subscriptionDetails.nextPayment)
+            this.subscriptionDetails.cancelAtPeriodEnd = data["cancel_at_period_end"]
+            this.subscriptionDetails.price = data["plan"]["amount"]
+            this.subscriptionDetails.interval = data["plan"]["interval_count"]
+            this.cd.markForCheck()
+        })
+    }
+
+    openPopupCancelSubscription(){
+        this.popup.cancelSubscription(this)
+    }
+    
+    cancelSubscription(){
+        console.log("plop")
+        const req = this.http.post("subscription", {
+            "action": "cancelSubscription", 
+            'subscriptionId': this.subscriptionDetails.subscriptionId
+        })
+        
+        req.subscribe((response) => {
+            console.log("cancel subscription", response)
         })
     }
 }
