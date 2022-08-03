@@ -868,7 +868,7 @@ export class ModifyProfileForm {
     const documents = this.form.controls[ "UserProfile.Company.LabelForCompany"] as FormArray;
     for (let i=0; i< documents.value.length; i++){
       if(documents.value[i].label.name == e.filename) {
-        documents.value[i].fileData = {content: [""], expirationDate: '', ext: '???', name: 'Veuillez télécharger un document', nature: e.filename}
+        // documents.value[i].fileData = {content: [""], expirationDate: '', ext: '???', name: 'Veuillez télécharger un document', nature: e.filename}
         documents.removeAt(i)
       }
     }
