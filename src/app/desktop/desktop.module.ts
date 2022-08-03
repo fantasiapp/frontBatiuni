@@ -2,6 +2,7 @@ import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
 import { HammerModule } from "@angular/platform-browser";
 import { LandingPageComponent } from "./components/landing_page/landing.page";
+import { LandingCarrouselItemComponent } from "./components/landing_page/landing.carrousel";
 import { SharedModule } from "../shared/shared.module";
 import { AppRoutingModule } from "./routing/desktop-routing.module";
 import { RegisterPageComponent } from "./components/register/register.page";
@@ -30,6 +31,7 @@ import { CompanyInfo } from "./ui/company-info/company.info";
 @NgModule({
   declarations: [
     LandingPageComponent,
+    LandingCarrouselItemComponent,
     RegisterPageComponent,
     HeaderDesktop,
     HomePageComponent,
