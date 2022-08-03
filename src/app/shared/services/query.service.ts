@@ -33,7 +33,7 @@ export class QueryManager {
         this.localService.removeData(existingTimestamp)
       }
       return req.pipe(tap((response: any) => {
-          console.log('ApplyPost response', response);
+          console.log(name + ' response', response);
           if (response[argument.action] != "OK") throw response["messages"];
           delete response[argument.action];
   
@@ -46,7 +46,7 @@ export class QueryManager {
     }
     else{
       let timestamp = getTimeStamp().toString()
-      this.localService.saveData(timestamp, this.localService.createKey(actionOrActions, name), true)
+      this.localService.createPendingRequest(timestamp, req, name, argument)
       return null
     }
   }
@@ -54,12 +54,13 @@ export class QueryManager {
   backOnline() {
       let keepGoing = true
       let allTimestampValues: string[] = this.localService.getAllTimestampValues()
-      while(keepGoing) {
+      while(keepGoing && allTimestampValues) {
         if (this.connectionService.isOnline){
           let params = this.localService.getData(allTimestampValues[0])!.split('/')
-          let actionOrActions = JSON.parse(params[0])
-          let name = params[1]
-          this.emitQueryEvent([name, actionOrActions])
+          let request = JSON.parse(params[0])
+          let argument = params[1]
+          let name = params[2]
+          this.query(request, name, argument, allTimestampValues[0])
         }
         else{
           keepGoing = false

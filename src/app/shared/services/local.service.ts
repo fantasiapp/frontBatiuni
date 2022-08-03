@@ -18,11 +18,8 @@ export class LocalService {
     }
   }
 
-  public saveData(key: string, value: string, isTimestamp?: boolean){
+  public saveData(key: string, value: string){
       localStorage.setItem(key, value)
-      if (isTimestamp){
-        this.addTimestamp(key)
-      }
   }
 
   public getData(key: string): string | null {
@@ -52,15 +49,17 @@ export class LocalService {
   }
 
   public clearData() {
-    // this.dumpLocalStorage()
     let email = this.getLastEmail()
     localStorage.clear()
     if(email)
       this.setLastEmail(email)
   }
 
-  public createKey(actionOrActions: any, name: string) {
-    return JSON.stringify(actionOrActions) + '/' + name
+  public createPendingRequest(timestamp: string, req: any, name: string, argument: any) {
+    let key = timestamp
+    let value = JSON.stringify(req) + '/' + JSON.stringify(argument)
+    localStorage.setItem(key, value)
+    this.addTimestamp(timestamp) 
   }
 
   public addTimestamp(timestamp: string) {
@@ -144,9 +143,7 @@ export class LocalService {
         id = data[value]
       }
     })
-    console.log("tout c'est bien passé", id!, response)
     response[id!] = arrayResponse;
-    console.log("tout c'est bien passé après", id!, response)
     return response
   }
 
@@ -156,7 +153,6 @@ export class LocalService {
       idMax = this.getIdMax(type)
     }
     localStorage.setItem(type, String(idMax!+1))
-    console.log("dans le geerae hqsfskhfqsdhjf", idMax)
     return idMax!+1
   }
 
