@@ -75,7 +75,7 @@ export class QueryManager {
         let format = params[0]
         let api: API = <API> params[1]
         let argument = JSON.parse(params[2])
-        let name = params[2]
+        let name = params[3]
         this.query(format, api, name, argument, allTimestampValues[0])
       }
       else{
