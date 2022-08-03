@@ -606,7 +606,7 @@ export class DataState {
     if (post && profile.company.id == post.company)
       ctx.setState(transformField("Post", switchType.id, "draft", (draft) => !draft))
     let req = this.http.get("data", switchType)
-    this.queryService.query(req, "switchPost", switchType)
+    this.queryService.query("get", "data", "switchPost", switchType)
     // if (this.connectionStatusService.isOnline){
     //   return this.http.get("data", switchType).pipe(
     //     tap((response: any) => {
