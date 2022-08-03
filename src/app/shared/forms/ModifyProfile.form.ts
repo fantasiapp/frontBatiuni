@@ -830,7 +830,7 @@ export class ModifyProfileForm {
 
     for (let label of allCompanyLabels){
       if (!newLabels.some((newlabel) => newlabel.name == label.name)){
-        this.removeLabel(label.name)
+        this.removeLabel({filename: label.name})
       }
     }
 
@@ -860,19 +860,21 @@ export class ModifyProfileForm {
     this.form.controls["UserProfile.Company.admin"].markAsDirty()
   } 
 
-  removeLabel(filename: string) {
-    let labelId = this.store.selectSnapshot(DataQueries.getAll("Label")).filter((label) => label.name == filename)[0].id;
+  removeLabel(e: any) {
+    const allLabel = this.store.selectSnapshot(DataQueries.getAll("Label"))
+    console.log('All LABEL', allLabel, e);
+    let labelId = allLabel.filter((label) => label.fileName == e.filename)[0].id;
     let labelForCompanyId = this.companyLabels.filter((labelForCompany) => labelForCompany.label == labelId)[0].id
     const documents = this.form.controls[ "UserProfile.Company.LabelForCompany"] as FormArray;
     for (let i=0; i< documents.value.length; i++){
-      if(documents.value[i].label.name == filename) {
-        documents.value[i].fileData = {content: [""], expirationDate: '', ext: '???', name: 'Veuillez télécharger un document', nature: filename}
+      if(documents.value[i].label.name == e.filename) {
+        documents.value[i].fileData = {content: [""], expirationDate: '', ext: '???', name: 'Veuillez télécharger un document', nature: e.filename}
         documents.removeAt(i)
       }
     }
     if (labelForCompanyId) {this.store.dispatch(new DeleteLabel(labelForCompanyId))}
 
-    this.selectedLabels = this.selectedLabels.filter(label => label.name != filename)
+    this.selectedLabels = this.selectedLabels.filter(label => label.name != e.filename)
 
     this.form.controls["UserProfile.Company.LabelForCompany"].markAsDirty();
   }
