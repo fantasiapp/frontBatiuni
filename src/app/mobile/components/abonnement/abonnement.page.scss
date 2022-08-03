@@ -150,3 +150,7 @@ h4 {
     @extend %sticky-footer;
     border-top: 1px solid rgb(207, 207, 207);
 }
+
+.blue {
+    color: $primary;
+}

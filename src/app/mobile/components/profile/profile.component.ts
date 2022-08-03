@@ -59,6 +59,7 @@ export class ProfileComponent extends Destroy$ {
   openRecommandationMenu: boolean = false;
   openSubscription: boolean = false;
 
+  abonnementSwipeUp: boolean = false;
 
   @Input()
   showView!: 'ST' | 'PME';
@@ -261,4 +262,9 @@ export class ProfileComponent extends Destroy$ {
     super.ngOnDestroy();
   }
 
+  subscriptionSwipeUp(){
+    console.log("swipeup", this.abonnementSwipeUp)
+    this.abonnementSwipeUp = true;
+    this.cd.markForCheck();
+  }
 };

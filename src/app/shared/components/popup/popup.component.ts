@@ -21,6 +21,7 @@ import { BoosterPage } from "src/app/mobile/components/booster/booster.page";
 import { UIAnnonceResume } from "src/app/mobile/ui/annonce-resume/annonce-resume.ui";
 import { ApplicationsComponent } from "src/app/mobile/components/applications/applications.component"
 import { returnInputKeyboard } from '../../common/classes'
+import { AbonnementPage } from "src/app/mobile/components/abonnement/abonnement.page";
 
 const TRANSITION_DURATION = 200;
 
@@ -106,6 +107,9 @@ export class UIPopup extends DimensionMenu {
 
   @ViewChild("successPayment", { read: TemplateRef, static: true })
   successPayment!: TemplateRef<any>;
+
+  @ViewChild("cancelSubscription", { read: TemplateRef, static: true})
+  cancelSubscription!: TemplateRef<any>;
 
   @Input()
   content?: Exclude<PopupView, ContextUpdate>;
@@ -266,7 +270,7 @@ export class UIPopup extends DimensionMenu {
 
 export type PredefinedPopups<T = any> = {
   readonly type: "predefined";
-  name: "deletePost" | "sign" | "setDate" | "closeMission" | "validateCandidate" | "refuseCandidate" | "blockCandidate" | "boostPost" | "onApply" | "onApplyConfirm" | "newFile" | "deleteFile" | "deleteCandidate" | "missKbis" | "missSubscription" | "signContractKbis" | "successPayment"; // | 'closeMission'
+  name: "deletePost" | "sign" | "setDate" | "closeMission" | "validateCandidate" | "refuseCandidate" | "blockCandidate" | "boostPost" | "onApply" | "onApplyConfirm" | "newFile" | "deleteFile" | "deleteCandidate" | "missKbis" | "missSubscription" | "signContractKbis" | "successPayment" | "cancelSubscription"; // | 'closeMission'
   context?: TemplateContext;
 };
 
@@ -816,6 +820,36 @@ export class PopupService {
       });
 
       first = false;
+    }
+  }
+
+  cancelSubscription(object: AbonnementPage) {
+    let first: boolean = true;
+    const closed$ = new Subject<void>();
+
+    const context = {
+      $implicit: {
+        isActive: false,
+      },
+    };
+
+    if (first) {
+      this.dimension$.next(this.defaultDimension);
+      this.popups$.next({
+        type: "predefined",
+        name: "cancelSubscription",
+        context,
+        close: () => {
+          console.log("close cancel popup")
+          if (context.$implicit.isActive) {
+            console.log("cancel")
+            object.cancelSubscription()
+          }
+          closed$.next();
+        },
+      });
+
+      first = false
     }
   }
 

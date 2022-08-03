@@ -39,11 +39,17 @@
       <facture-page *ngIf="openFacture"></facture-page>
     </div>
   </slidemenu>
-
+  
   <slidemenu [(open)]="openSubscription" #subscription>
-    <h1 class="center-text full-width" header>Gérer mes abonnements</h1>
+    <header class="clear-margin full-width sticky-header flex center-cross white-header">
+      <h1 header>Gérer mes abonnements</h1>
+      <div>
+        <button *ngIf="view == 'PME'" (click)="subscriptionSwipeUp()" class="optionButton">Options
+        </button> 
+      </div>
+    </header>
     <div class="modify-page flex column center-cross space-children-margin" content>
-      <abonnement *ngIf="openSubscription"></abonnement>
+      <abonnement [abonnementSwipeUp]="abonnementSwipeUp" (abonnementSwipeUpChange)="abonnementSwipeUp=$event" *ngIf="openSubscription"></abonnement>
     </div>
   </slidemenu>
 
