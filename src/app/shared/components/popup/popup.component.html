@@ -142,3 +142,12 @@
     <button class="button active" (click)="close()">OK</button>
   </div>
 </ng-template>
+
+<ng-template #cancelSubscription let-context>
+  <label class="postuleLabel">Vous êtes sur le point de résilier votre abonnement</label>  
+  <div style="height:5%;"></div>
+  <div class="controls cloture">
+    <button class="button active" (click)="openActionClose(context)">Confirmer </button>
+    <button class="button passive" (click)="close()">Annuler</button>
+  </div>
+</ng-template>

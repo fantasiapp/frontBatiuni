@@ -62,14 +62,34 @@
 </slidemenu>
 
 <ng-template #subscriptionManagement>
-  <div>Votre abonnement actuel</div>
-  <span>Abonné depuis le {{subscriptionDetails.startDate | date:"longDate"}}</span>
+  <div class="space-children-margin">
+    <div class="space-children-margin">
+      <span class="highlight">Votre abonnement actuel</span>
+      <div>
+        <span>Abonné depuis le {{subscriptionDetails.startDate | date:"longDate"}}</span>
+      </div>
+      
+      <div class="blue">
+        <div>
+          <span>Période actuel ({{subscriptionDetails.interval}} mois)</span>
+        </div>
+        <div>
+          <span>{{subscriptionDetails.currentStart | date:"longDate"}} au {{subscriptionDetails.currentEnd | date:"longDate"}}</span><br>
+        </div>
+      </div>
+      <div>
+        <span>Renouvellement automatique le {{subscriptionDetails.nextPayment | date:"longDate"}}</span>
+      </div>
+    </div>
 
-  <span>Période actuel ({{subscriptionDetails.interval}} mois) :</span>
-  <span>{{subscriptionDetails.currentStart | date:"longDate"}} au {{subscriptionDetails.currentEnd | date:"longDate"}}</span>
-
-  <div>Informations sur le paiement</div>
-  <span>Prélèvement de {{subscriptionDetails.price/100}} € tous les {{subscriptionDetails.interval}} mois</span>
+    <div>
+      <span class="highlight">Informations sur le paiement</span>
+      <div>
+        <span>Prélèvement de {{subscriptionDetails.price/100}} € tous les {{subscriptionDetails.interval}} mois</span>
+      </div>
+    </div>
+    
+  </div>
 </ng-template>
 
 <swipeup [(open)]="abonnementSwipeUp" (openChange)="updateAbonnementSwipeUp($event)">
@@ -79,8 +99,8 @@
   <li>
     Modifier mon abonnement actuel
   </li>
-  <li>
-    Résilier mon aboonement
+  <li (click)="openPopupCancelSubscription()">
+    Résilier mon abonnement
   </li>
   <li>
     Modifier ma carte de paiement

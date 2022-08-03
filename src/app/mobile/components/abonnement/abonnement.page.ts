@@ -4,6 +4,7 @@ import { Observable, Observer } from "rxjs";
 import { take } from "rxjs/operators";
 import { HttpService } from "src/app/services/http.service";
 import { delay } from "src/app/shared/common/functions";
+import { PopupService } from "src/app/shared/components/popup/popup.component";
 import { StripeService } from "src/app/shared/services/stripe";
 import { productList } from "src/app/stripeProducts";
 import { Profile } from "src/models/new/data.interfaces";
@@ -76,7 +77,8 @@ export class AbonnementPage {
     constructor(
         private http: HttpService,
         private cd: ChangeDetectorRef,
-        private stripeService: StripeService
+        private stripeService: StripeService,
+        private popup: PopupService
         ){
     }
 
@@ -163,9 +165,13 @@ export class AbonnementPage {
         req.subscribe((response: any) => {
             console.log("fetch subcsription", response)
             let data = response["subscriptionDetails"]
+            this.subscriptionDetails.subscriptionId = subscriptionId
             this.subscriptionDetails.startDate = new Date(data["start_date"] * 1000)
             this.subscriptionDetails.currentStart = new Date(data["current_period_start"] * 1000)
             this.subscriptionDetails.currentEnd = new Date(data["current_period_end"] * 1000)
+            this.subscriptionDetails.nextPayment = new Date(this.subscriptionDetails.currentEnd);
+            this.subscriptionDetails.nextPayment.setDate(this.subscriptionDetails.nextPayment.getDate() + 1)
+            console.log("current end", this.subscriptionDetails.nextPayment)
             this.subscriptionDetails.cancelAtPeriodEnd = data["cancel_at_period_end"]
             this.subscriptionDetails.price = data["plan"]["amount"]
             this.subscriptionDetails.interval = data["plan"]["interval_count"]
@@ -173,9 +179,19 @@ export class AbonnementPage {
         })
     }
 
-    unsuscribe(){
+    openPopupCancelSubscription(){
+        this.popup.cancelSubscription(this)
+    }
+    
+    cancelSubscription(){
+        console.log("plop")
         const req = this.http.post("subscription", {
-            "action": "cancelSubscription"
+            "action": "cancelSubscription", 
+            'subscriptionId': this.subscriptionDetails.subscriptionId
+        })
+        
+        req.subscribe((response) => {
+            console.log("cancel subscription", response)
         })
     }
 }
