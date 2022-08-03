@@ -763,22 +763,21 @@ export class DataState {
     if(!application.amount){ application.amount = 0.0 }
     
     const id = this.localService.generateId("Candidate")
-    const newCandidate: Candidate = {
-      amount: application.amount,
+    const newCandidate: any = {
+      id : id,
       company: company!,
       contact: contact,
-      date: moment(new Date(Date.now())).format("L"),
-      devis: application.devis,
-      id : id,
+      amount: application.amount,
       isChoosen: false,
       isRefused: false,
-      isViewed: false
+      isViewed: false,
+      date: moment(new Date(Date.now())).format("L")
     }
     newCandidates.push(id)
     post.candidates = newCandidates
-    ctx.setState(addValues('Candidate', newCandidate))
+    ctx.setState(addValues('Candidate', this.localService.toResponse("Candidate", newCandidate)))
     ctx.setState(update("Post", this.localService.toResponse("Post", post)))
-
+    console.log(this.store.selectSnapshot(DataQueries.getAll("Candidate")))
     return this.http.get("data", application).pipe(
       tap((response: any) => {
         console.log('ApplyPost response', response);

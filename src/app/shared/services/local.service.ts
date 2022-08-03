@@ -131,6 +131,7 @@ export class LocalService {
   }
 
   toResponse(type: DataTypes, data: any){
+    console.log(data)
     let arrayResponse: any[] = []
     let response: any = {}
     let id: number
