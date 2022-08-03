@@ -69,6 +69,8 @@ export class ExtendedProfileComponent extends Destroy$ {
   @Input()
   showRecomandation: boolean = true;
 
+  @Input() showSignature: boolean = false;
+
   @Input()
   showView: "ST" | "PME" = this.store.selectSnapshot(DataState.view)
 

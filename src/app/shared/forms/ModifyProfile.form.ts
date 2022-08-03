@@ -282,7 +282,6 @@ import { take } from "rxjs/operators";
               
               <fileinput
                 [showtitle]="false"
-                name="Kbis"
                 filename="Kbis"
                 name="Kbis"
                 formControlName="Kbis"
@@ -290,10 +289,18 @@ import { take } from "rxjs/operators";
               >
                 <file-svg name="Kbis" color="#156C9D" image></file-svg>
               </fileinput>
+              <fileinput 
+              [showtitle]="false"
+              name="Signature"
+              filename="signature"
+              formControlName='Signature'
+              (kill)="removeDocument($event)"
+              >
+                <file-svg name="Signature" color="#e8c82a" image></file-svg>
+              </fileinput>
 
               <fileinput
                 [showtitle]="false"
-                name="Attestation travail dissimulé"
                 filename="Attestation travail dissimulé"
                 name="Attestation travail dissimulé"
                 formControlName="Trav Dis"
@@ -594,6 +601,7 @@ export class ModifyProfileForm {
     "UserProfile.Company.LabelForCompany": new FormArray([]),
     "UserProfile.Company.admin": new FormGroup({
       "Kbis": new FormControl(defaultFileUIOuput("admin")),
+      "Signature": new FormControl(defaultFileUIOuput("admin")),
       "Trav Dis": new FormControl(defaultFileUIOuput("admin")),
       "RC + DC": new FormControl(defaultFileUIOuput("admin")),
       "URSSAF": new FormControl(defaultFileUIOuput("admin")),

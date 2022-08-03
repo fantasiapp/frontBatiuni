@@ -41,6 +41,14 @@
       <h4 class="text-light-emphasis" *ngIf="profile.company.capital">Capital : <span class="value">{{profile.company.capital | currency: 'EUR':'symbol':'1.0-0' }}</span></h4>
     
       <span class="text-light-emphasis" *ngIf="profile.company.saturdayDisponibility">Disponible pour des missions les samedis</span>
+      
+      <ng-container *ngIf="showSignature">
+        <ng-container *ngFor="let file of attachedFiles">
+          <h4 *ngIf="file.name === 'Signature'" class="text-light-emphasis flex center-cross">Signature 
+            <file-svg class="mx-2" [name]="file.name" [date]="file.expirationDate" color="#e8c82a" (click)="openFile(file)"></file-svg>
+          </h4>
+        </ng-container>
+      </ng-container>
     </section>
     
     <hr class="dashed"/>
@@ -48,7 +56,9 @@
       <h3>Documents importants</h3>
       <h4 class="date">*date du document</h4>
       <div class="documents-grid">
-        <file-svg *ngFor="let file of attachedFiles" [name]="file.name" [date]="file.expirationDate" [color]="getFileColor(file.name)" (click)="openFile(file)"></file-svg>
+        <ng-container *ngFor="let file of attachedFiles">
+          <file-svg *ngIf="file.name !== 'Signature'" [name]="file.name" [date]="file.expirationDate" [color]="getFileColor(file.name)" (click)="openFile(file)"></file-svg>
+        </ng-container>
       </div>
       <div class="documents-grid">
         <file-svg *ngFor="let file of labelFiles" [name]="file.name" [date]="file.expirationDate" [color]="getFileColor(file.name)" (click)="openFile(file)"></file-svg>
