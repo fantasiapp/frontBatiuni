@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Store } from '@ngxs/store';
+import { StripeAffirmMessageElement } from '@stripe/stripe-js';
 import { DataTypes } from 'src/models/new/data.interfaces';
 import { DataQueries } from 'src/models/new/data.state';
 
@@ -39,9 +40,8 @@ export class LocalService {
 
   public getAllTimestampValues(): string[]{
     let allTimestamps = localStorage.getItem("allTimestamps")
-    return allTimestamps!.split('/').map<string>((value: string) => {
-      return localStorage.getItem(value)!
-    })
+    console.log("yooooooo", allTimestamps)
+    return allTimestamps!.split('/')
   }
 
   public removeData(key: string){
@@ -55,19 +55,21 @@ export class LocalService {
       this.setLastEmail(email)
   }
 
-  public createPendingRequest(timestamp: string, req: any, name: string, argument: any) {
+  public createPendingRequest(timestamp: string, format: string, api: string, name: string, argument: any) {
     let key = timestamp
-    let value = JSON.stringify(req) + '/' + JSON.stringify(argument) +'/' + name
+    let value = format + '/' + api + '/' + JSON.stringify(argument) +'/' + name
     localStorage.setItem(key, value)
     this.addTimestamp(timestamp) 
   }
 
   public addTimestamp(timestamp: string) {
+    console.log("add", timestamp)
     let allTimestamps = localStorage.getItem("allTimestamps")
     if (!allTimestamps){
       allTimestamps = ''
     }
     this.saveData('allTimestamps', allTimestamps + timestamp + '/')
+    console.log(this.getData('allTimestamps'))
   }
 
   public removeFirstTimestamp() {

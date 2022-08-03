@@ -6,6 +6,7 @@ import { Notification } from "src/models/new/data.interfaces";
 import { LocalService } from './local.service';
 import { getTimeStamp } from '../common/functions';
 import { tap } from 'rxjs/operators';
+import { HttpService, API } from "src/app/services/http.service";
 import { getUserDataService } from './getUserData.service';
 
 @Injectable({
@@ -17,7 +18,7 @@ export class QueryManager {
 
   QueryEmitter: EventEmitter<string[]> = new EventEmitter();
 
-  constructor(private store: Store, private localService: LocalService, private getUserDataService: getUserDataService){
+  constructor(private store: Store, private localService: LocalService, private getUserDataService: getUserDataService, private http: HttpService){
     this.init()
   }
 
@@ -37,11 +38,14 @@ export class QueryManager {
     return this.QueryEmitter;
   }
 
-  query(req: any, name: string, argument: any, existingTimestamp?: string){
+  query(format: string, api: API, name: string, argument: any, existingTimestamp?: string){
     if (this.isOnline){
       if (existingTimestamp){
         this.localService.removeData(existingTimestamp)
       }
+      console.log("la requête et les params en général", format, name, argument)
+      let req: any
+      if (format == "get") {let req = this.http.get(api, argument)}
       return req.pipe(tap((response: any) => {
           console.log(name + ' response', response);
           if (response[argument.action] != "OK") throw response["messages"];
@@ -56,7 +60,7 @@ export class QueryManager {
     }
     else{
       let timestamp = getTimeStamp().toString()
-      this.localService.createPendingRequest(timestamp, req, name, argument)
+      this.localService.createPendingRequest(timestamp, format,api, name, argument)
       return null
     }
   }
@@ -66,11 +70,13 @@ export class QueryManager {
     let allTimestampValues: string[] = this.localService.getAllTimestampValues()
     while(keepGoing && allTimestampValues) {
       if (this.isOnline){
+        console.log("je suis dedans", allTimestampValues)
         let params = this.localService.getData(allTimestampValues[0])!.split('/')
-        let request = JSON.parse(params[0])
-        let argument = params[1]
+        let format = params[0]
+        let api: API = <API> params[1]
+        let argument = JSON.parse(params[2])
         let name = params[2]
-        this.query(request, name, argument, allTimestampValues[0])
+        this.query(format, api, name, argument, allTimestampValues[0])
       }
       else{
         keepGoing = false
@@ -84,6 +90,8 @@ export class QueryManager {
 
     this.subscriptions.push(this.onlineEvent.subscribe(e => {
       if (!this.isOnline){
+        this.isOnline = true
+        console.log("je lance backOnline")
         this.backOnline()
       }
       this.isOnline = true
