@@ -42,6 +42,13 @@ header {
 .hero:nth-of-type(3) {
   background-color: #52D1BD;
 } 
+.hero:nth-child(5) {
+  background-color: #0F557C;
+  color: white;
+}
+.hero:nth-child(6) {
+  // background-color: white;
+}
 
 .intro {
   h1 { font-weight: 900; }
