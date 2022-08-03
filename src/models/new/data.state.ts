@@ -14,6 +14,7 @@ import { ConnectionStatusService } from "src/app/shared/services/connectionStatu
 import { getUserDataService } from "src/app/shared/services/getUserData.service";
 import { LocalService } from "src/app/shared/services/local.service";
 import { NotifService } from "src/app/shared/services/notif.service";
+import { QueryManager } from "src/app/shared/services/query.service";
 import { SingleCache } from "src/app/shared/services/SingleCache";
 import { Logout } from "../auth/auth.actions";
 import { Candidate, Company, DataTypes, Interface, Post, Record, User } from "./data.interfaces";
@@ -52,7 +53,7 @@ export class Clear {
 export class DataState {
   flagUpdate = true;
   isFirstTime = true
-  constructor(private store: Store,private reader: DataReader,private http: HttpService,private info: InfoService,private slide: SlidemenuService,private swipeup: SwipeupService,private zone: NgZone,private booleanService: BooleanService,private getUserDataService: getUserDataService,private notifService: NotifService, private localService: LocalService, private connectionStatusService: ConnectionStatusService) {}
+  constructor(private store: Store,private reader: DataReader,private http: HttpService,private info: InfoService,private slide: SlidemenuService,private swipeup: SwipeupService,private zone: NgZone,private booleanService: BooleanService,private getUserDataService: getUserDataService,private notifService: NotifService, private localService: LocalService, private connectionStatusService: ConnectionStatusService, private queryService: QueryManager) {}
 
   private pending$: Record<Subject<any>> = {};
 
@@ -605,21 +606,23 @@ export class DataState {
       post = this.store.selectSnapshot(DataQueries.getById("Post", switchType.id))
     if (post && profile.company.id == post.company)
       ctx.setState(transformField("Post", switchType.id, "draft", (draft) => !draft))
-    if (this.connectionStatusService.isOnline){
-      return this.http.get("data", switchType).pipe(
-        tap((response: any) => {
-          console.log("switch post type response", response)
-          if (response[switchType.action] !== "OK") throw response["messages"];
-          delete response[switchType.action];
+    let req = this.http.get("data", switchType)
+    this.queryService.query(req, "switchPost", switchType)
+    // if (this.connectionStatusService.isOnline){
+    //   return this.http.get("data", switchType).pipe(
+    //     tap((response: any) => {
+    //       console.log("switch post type response", response)
+    //       if (response[switchType.action] !== "OK") throw response["messages"];
+    //       delete response[switchType.action];
           
-          this.getUserDataService.emitDataChangeEvent(response.timestamp)
-          delete response["timestamp"];
-        })
-      )
-    }
-    else{
-      return 
-    }
+    //       this.getUserDataService.emitDataChangeEvent(response.timestamp)
+    //       delete response["timestamp"];
+    //     })
+    //   )
+    // }
+    // else{
+    //   return 
+    // }
   }
 
   @Action(DeletePost)

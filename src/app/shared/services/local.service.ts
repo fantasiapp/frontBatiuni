@@ -57,7 +57,7 @@ export class LocalService {
 
   public createPendingRequest(timestamp: string, req: any, name: string, argument: any) {
     let key = timestamp
-    let value = JSON.stringify(req) + '/' + JSON.stringify(argument)
+    let value = JSON.stringify(req) + '/' + JSON.stringify(argument) +'/' + name
     localStorage.setItem(key, value)
     this.addTimestamp(timestamp) 
   }
