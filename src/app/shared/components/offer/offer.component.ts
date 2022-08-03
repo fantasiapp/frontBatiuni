@@ -108,22 +108,22 @@ export class OfferComponent extends Destroy${
   }
 
   @Input()
-  isAppliedPage: boolean = false;
+  isAppliedPage: boolean = false
 
   @Input()
-  isMissionPage: boolean = false;
+  isMissionPage: boolean = false
 
   @Input()
-  isRefused: boolean = false;
+  isRefused: boolean = false
 
-  notificationsMissionUnseen: number = 0;
+  notificationsMissionUnseen: number = 0
 
   get hasPostulated() {
-    const profile = this.store.selectSnapshot(DataQueries.currentProfile);
+    const profile = this.store.selectSnapshot(DataQueries.currentProfile)
     let companiesId;
     if (this._post) {
       companiesId = this._post.candidates?.map((id: number) => {
-        let candidate = this.store.selectSnapshot(DataQueries.getById("Candidate", id));
+        let candidate = this.store.selectSnapshot(DataQueries.getById("Candidate", id))
         console.log("les éléments dans le offer.component", this._post?.candidates, candidate)
         return candidate!.company;
       });
@@ -138,9 +138,7 @@ export class OfferComponent extends Destroy${
 
   @Input() set post(p: Post | null) {
     this._post = p;
-    this.company = p
-      ? this.store.selectSnapshot(DataQueries.getById("Company", p.company))
-      : null;
+    this.company = p ? this.store.selectSnapshot(DataQueries.getById("Company", p.company)) : null;
   }
 
   deletePost() {
@@ -154,33 +152,30 @@ export class OfferComponent extends Destroy${
   ngOnInit() {
     if(!this.hasSubscribed){  
       this.subscriber = this.notifService.getNotifChangeEmitter().pipe(takeUntil(this.destroy$)).subscribe(() => {
-        // console.log("subscribe notif")
         this.notificationsMissionUnseen = this.notifService.getNotificationUnseenMission(this._post!.id)
         this.cd.markForCheck()
       })
       this.hasSubscribed = true
     }
-    // console.log("juste après notif")
     this.notificationsMissionUnseen = this.notifService.getNotificationUnseenMission(this._post!.id)
     if (!this.src) {
       if (SingleCache.checkValueInCache("companyImage" + this.company!.id.toString())) {
         this.src = SingleCache.getValueByName("companyImage" + this.company!.id.toString())
       }
       else {
-      let logo = this.store.selectSnapshot(
-        DataQueries.getProfileImage(this.company!.id)
-      );
+      let logo = this.store.selectSnapshot(DataQueries.getProfileImage(this.company!.id))
       if (!logo) {
-      const fullname = this.company!.name[0].toUpperCase();
-        this.src = this.imageGenerator.generate(fullname);
-          this.cd.markForCheck();
+        const fullname = this.company!.name[0].toUpperCase()
+        this.src = this.imageGenerator.generate(fullname)
+        this.cd.markForCheck()
       } else {
-              this.downloader.downloadFile(logo).subscribe((image) => {
+        this.downloader.downloadFile(logo).subscribe((image) => {
           this.src = this.downloader.toSecureBase64(image);
           SingleCache.setValueByName("companyImage" + this.company!.id.toString(), this.src)
           this.cd.markForCheck();
         });
-      }}
+      }
+    }
     }
 
     this.user$.pipe(take(1)).subscribe((usr) => {

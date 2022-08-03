@@ -777,7 +777,7 @@ export class DataState {
     console.log("les élements qui bloquent", id, post)
     newCandidates.push(id)
     post.candidates = newCandidates
-    ctx.setState(addValues('Candidate', this.localService.toResponse("Candidate", newCandidate)))
+    ctx.setState(addValues('Candidate', newCandidate))
     ctx.setState(update("Post", this.localService.toResponse("Post", post)))
 
     return this.http.get("data", application).pipe(
