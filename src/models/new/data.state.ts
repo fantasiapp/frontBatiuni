@@ -774,7 +774,6 @@ export class DataState {
       isRefused: false,
       isViewed: false
     }
-    console.log("les élements qui bloquent", id, post)
     newCandidates.push(id)
     post.candidates = newCandidates
     ctx.setState(addValues('Candidate', newCandidate))
