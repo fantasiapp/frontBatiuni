@@ -169,6 +169,7 @@ export class FileUI extends UIAsyncAccessor<FileUIOutput> {
   openInput() {
     this.inputRef.nativeElement.click();
     this.modified = true;
+    this.valueChange.emit(this.value)
   }
 
   private async takePhoto() {
