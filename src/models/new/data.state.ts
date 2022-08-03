@@ -10,7 +10,6 @@ import { InfoService } from "src/app/shared/components/info/info.component";
 import { SlidemenuService } from "src/app/shared/components/slidemenu/slidemenu.component";
 import { SwipeupService } from "src/app/shared/components/swipeup/swipeup.component";
 import { BooleanService } from "src/app/shared/services/boolean.service";
-import { ConnectionStatusService } from "src/app/shared/services/connectionStatus.service";
 import { getUserDataService } from "src/app/shared/services/getUserData.service";
 import { LocalService } from "src/app/shared/services/local.service";
 import { NotifService } from "src/app/shared/services/notif.service";
@@ -53,7 +52,7 @@ export class Clear {
 export class DataState {
   flagUpdate = true;
   isFirstTime = true
-  constructor(private store: Store,private reader: DataReader,private http: HttpService,private info: InfoService,private slide: SlidemenuService,private swipeup: SwipeupService,private zone: NgZone,private booleanService: BooleanService,private getUserDataService: getUserDataService,private notifService: NotifService, private localService: LocalService, private connectionStatusService: ConnectionStatusService, private queryService: QueryManager) {}
+  constructor(private store: Store,private reader: DataReader,private http: HttpService,private info: InfoService,private slide: SlidemenuService,private swipeup: SwipeupService,private zone: NgZone,private booleanService: BooleanService,private getUserDataService: getUserDataService,private notifService: NotifService, private localService: LocalService, private queryService: QueryManager) {}
 
   private pending$: Record<Subject<any>> = {};
 
@@ -146,7 +145,7 @@ export class DataState {
   //------------------------------------------------------------------------
   @Action(GetGeneralData)
   getGeneralData(ctx: StateContext<DataModel>) {
-    if(this.connectionStatusService.isOnline){
+    if(this.queryService.isOnline){
       let localGetGeneralData: string | null = this.localService.getData("getGeneralData")
       if (localGetGeneralData){
           const operations = this.reader.readStaticData(JSON.parse(localGetGeneralData));
@@ -179,7 +178,7 @@ export class DataState {
       this.updateLocalData(ctx, JSON.parse(localGetUserData))
       return
     }
-    else if (this.flagUpdate && this.connectionStatusService.isOnline){
+    else if (this.flagUpdate && this.queryService.isOnline){
       this.flagUpdate = false
       return req.pipe(tap((response: any) => {
           console.log("getUserData response", response)

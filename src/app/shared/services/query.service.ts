@@ -1,8 +1,8 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { Store } from '@ngxs/store';
+import { fromEvent, Observable, Subscription } from 'rxjs';
 import { DataQueries, DataState } from 'src/models/new/data.state';
 import { Notification } from "src/models/new/data.interfaces";
-import { ConnectionStatusService } from './connectionStatus.service';
 import { LocalService } from './local.service';
 import { getTimeStamp } from '../common/functions';
 import { tap } from 'rxjs/operators';
@@ -17,7 +17,17 @@ export class QueryManager {
 
   QueryEmitter: EventEmitter<string[]> = new EventEmitter();
 
-  constructor(private store: Store, private connectionService: ConnectionStatusService, private localService: LocalService, private getUserDataService: getUserDataService){}
+  constructor(private store: Store, private localService: LocalService, private getUserDataService: getUserDataService){
+    this.init()
+  }
+
+  onlineEvent: Observable<Event> | null = null
+  offlineEvent: Observable<Event> | null = null
+
+  subscriptions: Subscription[] = []
+
+  isOnline: boolean = true
+
 
   emitQueryEvent(params: string[]) {
     this.QueryEmitter.emit(params);
@@ -28,7 +38,7 @@ export class QueryManager {
   }
 
   query(req: any, name: string, argument: any, existingTimestamp?: string){
-    if (this.connectionService.isOnline){
+    if (this.isOnline){
       if (existingTimestamp){
         this.localService.removeData(existingTimestamp)
       }
@@ -52,20 +62,43 @@ export class QueryManager {
   }
 
   backOnline() {
-      let keepGoing = true
-      let allTimestampValues: string[] = this.localService.getAllTimestampValues()
-      while(keepGoing && allTimestampValues) {
-        if (this.connectionService.isOnline){
-          let params = this.localService.getData(allTimestampValues[0])!.split('/')
-          let request = JSON.parse(params[0])
-          let argument = params[1]
-          let name = params[2]
-          this.query(request, name, argument, allTimestampValues[0])
-        }
-        else{
-          keepGoing = false
-        }
+    let keepGoing = true
+    let allTimestampValues: string[] = this.localService.getAllTimestampValues()
+    while(keepGoing && allTimestampValues) {
+      if (this.isOnline){
+        let params = this.localService.getData(allTimestampValues[0])!.split('/')
+        let request = JSON.parse(params[0])
+        let argument = params[1]
+        let name = params[2]
+        this.query(request, name, argument, allTimestampValues[0])
       }
+      else{
+        keepGoing = false
+      }
+    }
   }
+
+  init(): void {
+    this.onlineEvent = fromEvent(window, 'online')
+    this.offlineEvent = fromEvent(window, 'offline')
+
+    this.subscriptions.push(this.onlineEvent.subscribe(e => {
+      if (!this.isOnline){
+        this.backOnline()
+      }
+      this.isOnline = true
+      console.log("je suis connecté", this.isOnline)
+    }))
+    this.subscriptions.push(this.offlineEvent.subscribe(e => {
+      this.isOnline = false
+      console.log("je ne suis pas connecté", this.isOnline)
+      this.localService.dumpLocalStorage()
+    }))
   }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach(subscription => subscription.unsubscribe())
+  }
+
+}
 

@@ -10,6 +10,7 @@ import {
   EventEmitter,
   Output,
   HostBinding,
+  QueryList,
 } from "@angular/core";
 import { Select, Store } from "@ngxs/store";
 import { combineLatest, Observable, Subject, Subscription, throwError } from "rxjs";
@@ -69,8 +70,8 @@ import { getUserDataService } from "src/app/shared/services/getUserData.service"
 import { Router } from "@angular/router";
 import { NotifService } from "src/app/shared/services/notif.service";
 import { ActiveViewService } from "src/app/shared/services/activeView.service";
-import { ConnectionStatusService } from "src/app/shared/services/connectionStatus.service";
 import { StripeService } from "src/app/shared/services/stripe";
+import { QueryManager } from "src/app/shared/services/query.service";
 
 @Component({
   selector: "home",
@@ -185,7 +186,7 @@ export class HomeComponent extends Destroy$ {
     private router: Router,
     private notifService: NotifService,
     private activeViewService: ActiveViewService,
-    private connectionService: ConnectionStatusService,
+    private queryService: QueryManager,
     private stripeService: StripeService,
   ) {
     super();
@@ -1022,6 +1023,6 @@ export class HomeComponent extends Destroy$ {
   }
 
   get isOnline(){
-    return this.connectionService.isOnline
+    return this.queryService.isOnline
   }
 }
